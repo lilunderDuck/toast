@@ -1,0 +1,5 @@
+.journal [root] {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  --window-titlebar-width: 35px;
+}

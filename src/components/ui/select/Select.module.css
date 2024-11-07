@@ -1,0 +1,7 @@
+#select > button {
+  gap: 20px
+}
+
+#select > button > * {
+  flex-shrink: 0;
+}

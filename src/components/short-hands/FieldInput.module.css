@@ -1,0 +1,7 @@
+#fieldInput {
+  user-select: none;
+}
+
+#fieldInput:not(:first-child) {
+  margin-top: 15px;
+}

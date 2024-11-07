@@ -1,0 +1,38 @@
+/**
+ *  .journal-list
+ *    #journal-grid (.active)
+ *      #journal-grid-edit-button
+**/
+
+.journal-list #journal-grid {
+  cursor: pointer;
+  background-color: var(--gray2);
+  transition: all 0.15s ease-out;
+}
+
+/**highlight the hovered journal, except for the one that has the ".active" class */
+.journal-list #journal-grid:not(.active):hover {
+  background-color: var(--gray3);
+  color: var(--gray12);
+}
+
+.journal-list #journal-grid.active {
+  background-color: var(--gray4);
+  color: var(--gray12);
+}
+
+/**gray out all journal grid under ".journal-list" on hover except the one
+ * which has the ".active" class or an child is hovered
+ */
+.journal-list:hover #journal-grid:not(:hover):not(.active) {
+  color: var(--gray10);
+}
+
+#journal-grid #journal-grid-edit-button {
+  opacity: 0;
+  transition: all 0.15s ease-out;
+}
+
+#journal-grid:hover #journal-grid-edit-button {
+  opacity: 1;
+}

@@ -1,0 +1,7 @@
+.sldt-active {
+  z-index: 9999;
+}
+
+.sldt-active > * {
+  pointer-events: auto;
+}

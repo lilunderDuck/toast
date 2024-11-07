@@ -1,0 +1,7 @@
+backup/*
+node_modules
+out
+*.lock
+
+logs
+*.log

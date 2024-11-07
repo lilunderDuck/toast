@@ -1,0 +1,7 @@
+#journal #button {
+  display: none !important;
+}
+
+#journal:hover #button {
+  display: block !important;
+}
