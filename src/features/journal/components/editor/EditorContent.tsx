@@ -33,9 +33,6 @@ export function EditorContent(props: ParentProps) {
       <Sidebar initialSize={0.3} />
       <ResizableHandle />
       <ResizablePanel 
-        app-scrollbar 
-        app-scrollbar-vertical 
-        app-invs-scrollbar
         initialSize={0.7} 
         {...stylex.attrs(style.content)}
       >

@@ -1,3 +1,5 @@
 export * from './codeBlockPrism'
 export * from './placeholderText'
 export * from './slashCommandsSuggestion'
+export * from './tableRelated'
+export * from './task'

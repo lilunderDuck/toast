@@ -5,7 +5,7 @@ import { IconTypes } from "solid-icons"
 // ...
 import { Button, ButtonSizeVariant, FlexCenterY, Spacer, Tooltip } from "~/components"
 import { createLazyLoadedDialog } from "~/utils"
-import { ThisEditor } from "~/features/editor"
+import { ThisEditor } from "~/libs/editor"
 // ...
 import { EditOrReadonlyIcon } from "../../shared"
 import { useJournalContext } from "../../context"
@@ -29,7 +29,7 @@ interface IButtonItemProps extends HTMLAttributes<"button"> {
 export function SidebarButtonsRow() {
   const { $currentlyOpenedJournal } = useJournalContext()
   const toggleEditOrReadonlyMode = () => {
-    ThisEditor.$setEditable(prev => !prev)
+    ThisEditor.$setIsEditable(prev => !prev)
   }
 
   const ButtonItem = (props: IButtonItemProps) => {

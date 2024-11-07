@@ -10,34 +10,3 @@
   height: 0;
   pointer-events: none;
 }
-
-/* ... */
-.taskList {
-  padding-left: 5px;
-}
-
-.taskList::before {
-  padding-left: 20px;
-}
-
-.taskItem {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding-inline: 10px;
-}
-
-.taskItem[data-checked=true] {
-  color: var(--gray11);
-  text-decoration: line-through;
-}
-
-.taskItem:not(:last-child) {
-  margin-bottom: 5px;
-}
-
-.taskItem input,
-.taskItem label {
-  width: 14px;
-  height: 14px;
-}

@@ -1,1 +1,0 @@
-import { editorInstance } from "../components"

@@ -59,7 +59,7 @@ function Content() {
     $setCurrentlyOpenedJournal(journal.name)
   })
 
-  ThisEditor.$onSwitching = (previous, current) => {
+  ThisEditor.$onSwitching = (previous) => {
     if (previous) {
       saveJournalData($currentGroup, previous.id, previous.content)
     }
