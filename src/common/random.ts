@@ -1,4 +1,4 @@
-import type { ArrayElement } from "~/api"
+import { ArrayElement } from "./array"
 
 export function getRandomNumber(bound: number) {
   return Math.floor(Math.random() * bound)

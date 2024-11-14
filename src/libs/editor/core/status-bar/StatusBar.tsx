@@ -25,7 +25,7 @@ const style = stylex.create({
   }
 })
 
-export function StatusBar() {
+export default function StatusBar() {
   const randomText = [
     '*the text just magically disappeared*',
     '[redacted]',

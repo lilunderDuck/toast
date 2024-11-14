@@ -12,8 +12,8 @@ import type { IEvent } from "~/utils"
 import { $event, JournalEventMap } from "./event"
 
 const Context = createContext<{
-  $currentlyOpenedJournal: Accessor<string | undefined>
-  $setCurrentlyOpenedJournal: Setter<string | undefined>
+  $currentlyOpenedJournal: Accessor<JournalData | undefined>
+  $setCurrentlyOpenedJournal: Setter<JournalData | undefined>
   $currentGroup: Accessor<JournalGroupData | undefined>
   $setCurrentGroup: Setter<JournalGroupData | undefined>
   // ...
@@ -22,7 +22,7 @@ const Context = createContext<{
 }>()
 
 export function JournalProvider(props: ParentProps) {
-  const [$currentlyOpenedJournal, $setCurrentlyOpenedJournal] = createSignal<string>()
+  const [$currentlyOpenedJournal, $setCurrentlyOpenedJournal] = createSignal<JournalData>()
   const [$currentGroup, $setCurrentGroup] = createSignal<JournalGroupData>()
 
   return (

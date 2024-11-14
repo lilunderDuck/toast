@@ -10,7 +10,7 @@ import {
   getJournalGroup, 
   isJournalGroupExist, 
   updateJournalGroup, 
-} from "~/server/features/journal"
+} from "~/features/journal-data"
 import { canHaveIdOrNot, getBodyAndQuery, mustHaveAnId, validate } from "~/server/utils"
 import { duck } from "~/entry-server"
 import { isEmptyObject } from '~/common'

@@ -7,7 +7,7 @@ import { Button, ButtonSizeVariant, FlexCenterY, Spacer, Tooltip } from "~/compo
 import { createLazyLoadedDialog } from "~/utils"
 import { ThisEditor } from "~/libs/editor"
 // ...
-import { EditOrReadonlyIcon } from "../../shared"
+import { EditOrReadonlyIcon } from "../../common"
 import { useJournalContext } from "../../context"
 
 const CreateJournalModal = lazy(() => import('./create-stuff/CreateJournalModal'))

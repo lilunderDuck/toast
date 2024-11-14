@@ -5,11 +5,18 @@ const style = stylex.create({
   welcome: {
     width: '100%',
     height: '100%',
-    userSelect: 'none'
+    userSelect: 'none',
+    backgroundColor: 'var(--gray2)',
+    // ahh, good ol' position trick to center a <div>
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    marginTop: 30
   }
 })
 
-export default function EditorWelcome() {
+export function EditorWelcome() {
   const walkthourgh = async() => {
     (await import('../../utils/tour')).default()
   }

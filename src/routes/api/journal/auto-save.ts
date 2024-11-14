@@ -5,7 +5,7 @@ import { object, string } from "valibot"
 import { JOURNAL_AUTO_SAVE_ROUTE } from "~/api"
 import { duck } from "~/entry-server"
 import { validate } from "~/server"
-import { updateJournal } from "~/server/features/journal"
+import { updateJournal } from "~/features/journal-data"
 
 const mustHaveIdAndJournalId = object({
   id: string(),

@@ -1,2 +1,1 @@
-export * from "./EditorContent"
-export * from "./EditorTitleBar"
+export * from "./EditorWelcome"

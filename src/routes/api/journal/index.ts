@@ -3,10 +3,9 @@ import { validator } from "hono/validator"
 import { JOURNAL_ROUTE, journalFormSchema } from "~/api"
 import { duck } from "~/entry-server"
 import { mustHaveAnId, validate } from "~/server"
-import { createJournal } from "~/server/features/journal"
+import { createJournal } from "~/features/journal-data"
 // ...
 import "./auto-save"
-import "./group"
 import "./content"
 
 duck.post(JOURNAL_ROUTE, validator('query', (value, context) => {

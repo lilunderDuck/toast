@@ -1,7 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import { For } from "solid-js"
 // ...
-import { Divider, ResizablePanel, type ResizablePanelProps } from "~/components"
+import { Divider } from "~/components"
 import type { JournalData } from "~/api"
 // ...
 import { useJournalContext } from "../../context"
@@ -10,7 +10,7 @@ import { Journal } from "./file-display"
 
 const style = stylex.create({
   sidebar: {
-    width: '40%',
+    width: '100%',
     paddingInline: 5,
     paddingTop: 5
   },
@@ -19,7 +19,7 @@ const style = stylex.create({
   }
 })
 
-export function Sidebar(props: ResizablePanelProps) {
+export function Sidebar(props: HTMLAttributes<"div">) {
   const { $tree, $event } = useJournalContext()
   const [tree] = $tree
 
@@ -31,7 +31,7 @@ export function Sidebar(props: ResizablePanelProps) {
   }
 
   return (
-    <ResizablePanel 
+    <div 
       {...props} 
       {...stylex.attrs(style.sidebar)} 
       editor-tour-sidebar
@@ -48,6 +48,6 @@ export function Sidebar(props: ResizablePanelProps) {
           {it => <Journal {...it} onClick={clickingOnJournal(it)} />}
         </For>
       </div>
-    </ResizablePanel>
+    </div>
   )
 }

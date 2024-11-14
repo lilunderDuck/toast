@@ -13,11 +13,19 @@ import type {
 } from "./events"
 import BubbleMenu from "./bubble-menu"
 import FloatingMenu from "./floating-menu"
+import StatusBar from "./status-bar"
+import { FlexCenter } from "~/components"
 
 const style = stylex.create({
   editor: {
     height: '100%',
     paddingInline: 10
+  },
+  titleBar: {
+    height: 30,
+    width: '100%',
+    fontSize: 13,
+    marginBottom: 10
   }
 })
 
@@ -89,7 +97,7 @@ export namespace ThisEditor {
       if (lastData) {
         const data = getEditorJSONData()!
         lastData.content = data
-        $onUpdate(lastData)
+        $onUpdate?.(lastData)
       }
     }
     
@@ -105,6 +113,8 @@ export namespace ThisEditor {
   
     onCleanup(() => {
       editorInstance?.destroy()
+      $onUpdate = undefined
+      $onSwitching = undefined
     })
     
     return (
@@ -129,6 +139,20 @@ export namespace ThisEditor {
     )
   }
 
+  export const $StatusBar = StatusBar
+
+  interface ITitleBarProps {
+    name?: string
+  }
+
+  export function $TitleBar(props: ITitleBarProps) {
+    return (
+      <FlexCenter {...stylex.attrs(style.titleBar)}>
+        {props.name ?? 'No file opened'}
+      </FlexCenter>
+    )
+  }
+
   /**Updates the word and character count based on the editor's content.
    * @private
    */
@@ -146,7 +170,7 @@ export namespace ThisEditor {
    * @see {@link $open()}
    * @event
    */
-  export let $onSwitching: OnEditorSwitchingEvent = () => {}
+  export let $onSwitching: OnEditorSwitchingEvent | undefined
   /**Fired everytime when you type something onto the editor.
    * 
    * This event existed to add the auto-save functionality. I have no idea how
@@ -154,13 +178,13 @@ export namespace ThisEditor {
    * @param data the editor JSON data
    * @event
    */
-  export let $onUpdate: OnEditorUpdateEvent = () => {}
+  export let $onUpdate: OnEditorUpdateEvent | undefined
 
   /**Opens a new editor with the specified data.
    * @param data the editor JSON data.
    */
   export function $open(data: EditorData) {
-    $onSwitching(lastData, data)
+    $onSwitching?.(lastData, data)
     editorInstance?.commands.setContent(data.content)
 
     lastData = data

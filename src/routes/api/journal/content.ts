@@ -3,7 +3,7 @@ import { validator } from "hono/validator"
 import { JOURNAL_CONTENT_ROUTE } from "~/api"
 import { duck } from "~/entry-server"
 import { isThisDirectoryExist, mustHaveAnId, validate } from "~/server"
-import { buildJournalGroupPath, getAllJournals } from "~/server/features/journal"
+import { buildJournalGroupPath, getAllJournals } from "~/features/journal-data"
 
 duck.get(JOURNAL_CONTENT_ROUTE, validator('query', (value, context) => {
   if (validate(mustHaveAnId, value)) {

@@ -5,3 +5,4 @@ out
 
 logs
 *.log
+vite-app.config.ts.timestamp-*.js
