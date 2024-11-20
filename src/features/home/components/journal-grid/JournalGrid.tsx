@@ -1,12 +1,12 @@
-import { createLazyLoadedDialog, inlineCssVar } from "../../../../utils"
+import { inlineCssVar } from "~/utils"
 import JournalGridWrap from "./JournalGridWrap"
 import { lazy, onCleanup } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "../JournalList.module.css"
 // ...
-import type { IJournalGroupData } from "~/api"
-import { Button, ButtonSizeVariant, Flex, Spacer } from "../../../../components"
+import type { JournalGroupData } from "~/api"
+import { Button, ButtonSizeVariant, Flex, Spacer, createLazyLoadedDialog } from "~/components"
 import { BsPencilFill } from "solid-icons/bs"
 
 interface IJournalGridProps extends IJournalGroupData {

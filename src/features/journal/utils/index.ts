@@ -1,2 +1,2 @@
 export * from "./showItOff"
-export * from "./auto"
+export * from "./journal"

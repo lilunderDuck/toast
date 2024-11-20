@@ -1,7 +1,0 @@
-/** 
- * #tippy-1: floating menu 
- * #tippy-2: bubble menu
- */
-body #tippy-1 {
-  margin-top: 56px !important; /* ah yes, hard-coded tippy position */
-}

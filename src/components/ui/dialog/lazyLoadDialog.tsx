@@ -1,5 +1,5 @@
 import { createSignal, ParentProps, Show } from "solid-js"
-import { Dialog } from "../components"
+import { Dialog } from "./Dialog"
 
 export interface IDialog {
   $close(): void

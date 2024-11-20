@@ -11,6 +11,10 @@
   overflow-y: scroll;
 }
 
+[app-scrollbar-horizontal] {
+  overflow-x: scroll;
+}
+
 /* you have to manually change the scroll bar size for yourself */
 [app-scrollbar]::-webkit-scrollbar {
   width: var(--sb-size);

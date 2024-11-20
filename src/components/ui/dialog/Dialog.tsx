@@ -6,8 +6,8 @@ import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import __style from './Dialog.module.css'
 import stylex from "@stylexjs/stylex"
 // ...
-import { FlexCenterX } from "./Flex"
-import { FadeInFadeOutAnimation } from "../animation"
+import { FlexCenterX } from "../Flex"
+import { FadeInFadeOutAnimation } from "../../animation"
 // ...
 import { mergeClassname } from "~/utils"
 

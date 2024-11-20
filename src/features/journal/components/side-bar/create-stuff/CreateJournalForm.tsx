@@ -7,17 +7,15 @@ import { createSignal } from "solid-js"
 // ...
 import { 
   type Journal,
-  type JournalData, 
-  JOURNAL_ROUTE, 
 } from "~/api"
-import { fetchIt } from "~/utils"
 import { 
   FieldInput,
   OpenAndCloseButton
 } from "~/components"
 import { toast } from "~/libs/toast"
 // ...
-import { useJournalContext } from "../../../context"
+import { useJournalContext } from "~/features/journal/context"
+import { createJournal } from "~/features/journal/utils"
 
 interface ICreateJournalFormProps {
   onClick: () => any
@@ -30,14 +28,10 @@ export default function CreateJournalForm(props: ICreateJournalFormProps) {
   const [_journalGroupForm, { Field, Form }] = createForm<Journal>()
   const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
 
-  const callApi = (data: Journal) => {
-    return fetchIt<JournalData>('POST', `${JOURNAL_ROUTE}?id=${$currentGroup()?.id}`, data)
-  }
-
   const submit: SubmitHandler<Journal> = async(data) => {
     setSubmitButtonDisabled(true)
     const dataReturned = await toast
-      .promise(callApi(data), {
+      .promise(createJournal($currentGroup()?.id!, data), {
         loading: 'Saving changes...',
         success: 'Done!',
         error: 'Failed to save changes :('

@@ -6,9 +6,9 @@ import { BsBoxFill, BsQuestionDiamondFill } from "solid-icons/bs"
 // ...
 import TagWithIcon from "./TagWithIcon"
 import { getRandomElement } from "~/common"
-import { ThisEditor } from "~/libs/editor"
 // ...
 import { FlexCenterY } from "~/components"
+import { useThisEditorContext } from "../ThisEditorProvider"
 
 const style = stylex.create({
   statusBar: {
@@ -25,7 +25,8 @@ const style = stylex.create({
   }
 })
 
-export default function StatusBar() {
+export function ThisEditorStatusBar() {
+  const {  } = useThisEditorContext()
   const randomText = [
     '*the text just magically disappeared*',
     '[redacted]',
@@ -36,7 +37,7 @@ export default function StatusBar() {
 
   return (
     <FlexCenterY {...stylex.attrs(style.statusBar)} editor-tour-status-bar>
-      <Show when={ThisEditor.$charsCount() > 0} fallback={
+      <Show when={0 > 0} fallback={
         <TagWithIcon
           name={<>{getRandomElement(randomText)}, there's nothing here...</>}
           icon={<BsQuestionDiamondFill />} 
@@ -45,13 +46,13 @@ export default function StatusBar() {
         />
       }>
         <TagWithIcon
-          name={<>{ThisEditor.$charsCount()} characters</>}
+          name={<>{0} characters</>}
           icon={<BsBoxFill />} 
           bgColor=' var(--crimson3)'
           color='var(--crimson9)'
         />
         <TagWithIcon
-          name={<>{ThisEditor.$wordsCount()} words</>}
+          name={<>{0} words</>}
           icon={<BsBoxFill />} 
           bgColor=' var(--crimson3)'
           color='var(--crimson9)'

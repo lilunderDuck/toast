@@ -1,9 +1,13 @@
-import { bodyClasslist } from '~/utils'
-import __style from './stuff.module.css'
 import { onCleanup, ParentProps } from 'solid-js'
-import { JournalProvider } from './context'
+// ...
+import { bodyClasslist } from '~/utils'
 import { Resizable } from '~/components'
+import { ThisEditorProvider } from '~/libs/editor'
+// ...
+import __style from './stuff.module.css'
 import stylex from '@stylexjs/stylex'
+// ...
+import { JournalProvider } from '../context'
 
 const style = stylex.create({
   thisThing: {
@@ -21,9 +25,11 @@ export function JournalRoot(props: ParentProps) {
  
   return (
     <JournalProvider>
-      <Resizable {...stylex.attrs(style.thisThing)}>
-        {props.children}
-      </Resizable>
+      <ThisEditorProvider>
+        <Resizable {...stylex.attrs(style.thisThing)}>
+          {props.children}
+        </Resizable>
+      </ThisEditorProvider>
     </JournalProvider>
   )
 }

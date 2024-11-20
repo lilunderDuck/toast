@@ -3,9 +3,8 @@ import { BsFolderFill, BsJournalPlus } from "solid-icons/bs"
 import { lazy, splitProps } from "solid-js"
 import { IconTypes } from "solid-icons"
 // ...
-import { Button, ButtonSizeVariant, FlexCenterY, Spacer, Tooltip } from "~/components"
-import { createLazyLoadedDialog } from "~/utils"
-import { ThisEditor } from "~/libs/editor"
+import { Button, ButtonSizeVariant, createLazyLoadedDialog, FlexCenterY, Spacer, Tooltip } from "~/components"
+import { ThisEditor, useThisEditorContext } from "~/libs/editor"
 // ...
 import { EditOrReadonlyIcon } from "../../common"
 import { useJournalContext } from "../../context"
@@ -28,8 +27,9 @@ interface IButtonItemProps extends HTMLAttributes<"button"> {
 
 export function SidebarButtonsRow() {
   const { $currentlyOpenedJournal } = useJournalContext()
+  const {  } = useThisEditorContext()
   const toggleEditOrReadonlyMode = () => {
-    ThisEditor.$setIsEditable(prev => !prev)
+    // ThisEditor.$setIsEditable(prev => !prev)
   }
 
   const ButtonItem = (props: IButtonItemProps) => {
@@ -69,7 +69,7 @@ export function SidebarButtonsRow() {
         onClick={toggleEditOrReadonlyMode}
         disabled={!$currentlyOpenedJournal()}
         $icon={EditOrReadonlyIcon}
-        $label={`Toggle ${ThisEditor.$isEditable() ? 'read-only' : 'edit'} mode`}
+        $label={`Toggle ${true ? 'read-only' : 'edit'} mode`}
       />
       {/* ... */}
       <createJournalModal.$Modal>

@@ -1,8 +1,0 @@
-#editor > div {
-  height: 100%;
-  outline: 0;
-}
-
-#editor > div > * {
-  margin-bottom: 15px;
-}

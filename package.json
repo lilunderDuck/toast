@@ -16,6 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "@corvu/resizable": "^0.2.3",
+    "@editorjs/editorjs": "^2.30.7",
     "@hono/node-server": "^1.13.3",
     "@kobalte/core": "^0.13.6",
     "@modular-forms/solid": "^0.23.0",
@@ -47,6 +48,7 @@
     "@tiptap/starter-kit": "^2.7.1",
     "@tiptap/suggestion": "^2.9.1",
     "bson": "^6.8.0",
+    "drag-tabs": "^2.3.1",
     "embla-carousel-solid": "^8.3.0",
     "hast-util-from-html": "^2.0.3",
     "hono": "^4.6.7",

@@ -1,4 +1,5 @@
-import type { JSONContent } from '@tiptap/core'
+import { OutputData } from '@editorjs/editorjs'
+
 import {
   object,
   optional,
@@ -37,5 +38,5 @@ export type JournalData = Journal & {
   id: string
   created: Date
   modified?: Date
-  data?: JSONContent
+  data?: OutputData
 }
