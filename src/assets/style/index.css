@@ -21,11 +21,6 @@ html, body, #duck {
   position: fixed;
 }
 
-#splash > div {
-  position: fixed;
-  z-index: 1000;
-}
-
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;

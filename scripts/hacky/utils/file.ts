@@ -1,17 +1,17 @@
 import { readFile } from "./fs"
 
-export type FileInfo = {
+export type FileInfo<T> = {
   path: string
-  content: string | Buffer
+  content: T
   fileName: string
 }
 
 const isJsCssOrHtmlFiles = (it: string) => it.endsWith('.js') || it.endsWith('.css') || it.endsWith('.html')
 
-export function categorizeFileType(allFiles: string[]) {
-  const mapIt = (filePath: string): FileInfo => {
-    const fullPath = `./out/client/${filePath}` as const
-    const content = readFile(fullPath, isJsCssOrHtmlFiles(fullPath) ? undefined : 'default')
+export function categorizeFileType(basePath: string, allFiles: string[]) {
+  const mapIt = <T>(filePath: string): FileInfo<T> => {
+    const fullPath = `${basePath}/${filePath}` as const
+    const content = readFile(fullPath, isJsCssOrHtmlFiles(fullPath) ? undefined : 'default') as T
     return {
       path: fullPath,
       content,
@@ -21,22 +21,22 @@ export function categorizeFileType(allFiles: string[]) {
 
   const jsFiles = allFiles
     .filter(it => it.endsWith('.js'))
-    .map(mapIt)
+    .map(mapIt<string>)
   // 
 
   const cssFiles = allFiles
     .filter(it => it.endsWith('.css'))
-    .map(mapIt)
+    .map(mapIt<string>)
   // 
 
   const htmlFiles = allFiles
     .filter(it => it.endsWith('.html'))
-    .map(mapIt)
+    .map(mapIt<string>)
   // 
 
-  const others = allFiles
-    .filter(it => !isJsCssOrHtmlFiles(it))
-    .map(mapIt)
+  // const others = allFiles
+  //   .filter(it => !isJsCssOrHtmlFiles(it))
+  //   .map(mapIt<Buffer>)
   // 
 
   console.log('Categolized', jsFiles.length, 'js files and', cssFiles.length, 'css files')
@@ -45,6 +45,6 @@ export function categorizeFileType(allFiles: string[]) {
     jsFiles,
     cssFiles,
     htmlFiles,
-    others
+    // others
   }
 }

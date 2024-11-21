@@ -6,19 +6,10 @@ import { stylex as stylexPlugin } from 'vite-plugin-stylex-dev'
 import { ViteImageOptimizer as imageOptimizer } from 'vite-plugin-image-optimizer'
 // ...
 import { getEsbuildConfig, getAliasPath, internals, outPutFilenameConfig } from './scripts/vite'
-import packageJson from './package.json'
-
-const dependencies = Object.values(packageJson.dependencies)
+import tsconfig from './tsconfig.json'
 
 const rollupOutputOptions: Rollup.OutputOptions = {
   ...outPutFilenameConfig,
-  manualChunks: {
-    editor: ["@tiptap/core"],
-    editorExtension: [
-      "@tiptap/starter-kit",
-      ...dependencies.filter(it => it.includes('@tiptap/extension'))
-    ]
-  }
 }
 
 const config = (devMode: boolean): InlineConfig => ({
@@ -37,7 +28,7 @@ const config = (devMode: boolean): InlineConfig => ({
     port: 1337
   },
   resolve: {
-    alias: getAliasPath(__dirname)
+    alias: getAliasPath(tsconfig, __dirname)
   },
   ...getEsbuildConfig(devMode),
   cacheDir: internals.outDir,

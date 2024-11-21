@@ -6,8 +6,9 @@
     "vite:app": "vite --config ./vite-app.config.ts",
     "vite:server": "vite --config ./vite-server.config.ts",
     "start": "vite",
-    "dev": "npm run vite:app",
+    "dev": "npm run dev:server & npm run vite:app",
     "dev:server": "npm run vite:server build -- --mode=development && node ./out/server/entry-server.mjs",
+    "build:script": "esbuild --bundle --minify --platform=node --external:esbuild --outfile=./out/hacky.cjs ./scripts/hacky/index.ts",
     "build:app": "npm run vite:app build",
     "build:server": "npm run vite:server build -- --mode=NOT-development",
     "build": "npm run build:server && npm run build:app",
@@ -37,9 +38,12 @@
     "valibot": "^0.42.1"
   },
   "devDependencies": {
+    "@types/html-minifier-terser": "^7.0.2",
     "@types/node": "^22.5.5",
     "@types/prismjs": "^1.26.4",
     "esbuild": "^0.24.0",
+    "html-minifier": "^4.0.0",
+    "html-minifier-terser": "^7.2.0",
     "sharp": "^0.33.5",
     "svgo": "^3.3.2",
     "typescript": "^5.2.2",

@@ -2,7 +2,8 @@ import { defineConfig, type InlineConfig } from 'vite'
 // ...
 import { VitePluginNode as nodePlugin } from 'vite-plugin-node'
 // ...
-import { getEsbuildConfig, getAliasPath, internals, /*outPutFilenameConfig*/ } from './scripts/vite'
+import { getEsbuildConfig, getAliasPath, internals } from './scripts/vite'
+import tsconfig from './tsconfig.json'
 
 const config = (devMode: boolean): InlineConfig => ({
   plugins: [
@@ -14,7 +15,7 @@ const config = (devMode: boolean): InlineConfig => ({
   ],
   publicDir: false,
   resolve: {
-    alias: getAliasPath(__dirname)
+    alias: getAliasPath(tsconfig, __dirname)
   },
   ...getEsbuildConfig(devMode),
   server: {
@@ -27,7 +28,6 @@ const config = (devMode: boolean): InlineConfig => ({
       "@hono/node-server",
       "hono"
     ],
-    // external: ['http']
   },
   cacheDir: internals.outDir,
   build: {
