@@ -5,6 +5,8 @@ import __style from "./Journal.module.css"
 // ...
 import type { JournalData } from "~/api"
 import { FlexCenterY, Spacer } from "~/components"
+import { useJournalContext } from "~/features/journal"
+import { onCleanup } from "solid-js"
 
 const style = stylex.create({
   journal: {
@@ -33,18 +35,34 @@ interface IJournalProps extends JournalData {
   onClick?: EventHandler<"div", "onClick">
 }
 
+let lastJournalId: string | undefined
 export function Journal(props: IJournalProps) {
+  const { $event, $localStorage } = useJournalContext()
+
+  onCleanup(() => {
+    lastJournalId = undefined
+  })
+
+  const clickOnDeleteButton = () => {
+    $event.$emit('journal__deletingJournal', $localStorage.$get('shouldShowDeleteConfirmationModal'), props)
+  }
+
   return (
     <FlexCenterY 
       {...stylex.attrs(style.journal)} 
       id={__style.journal} 
-      onClick={props.onClick}
+      onClick={() => {
+        const thisJournalId = props.id 
+        if (thisJournalId === lastJournalId) return
+        $event.$emit('journal__clickingJournal', props)
+        lastJournalId = thisJournalId
+      }}
     >
       <span>
         {props.name}
       </span>
       <Spacer />
-      <div {...stylex.attrs(style.button)}>
+      <div {...stylex.attrs(style.button)} onClick={clickOnDeleteButton}>
         <BsX size={15} id={__style.button} />
       </div>
     </FlexCenterY>

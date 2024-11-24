@@ -4,6 +4,7 @@ import { readFile } from "~/server"
 import { serveStatic } from 'hono/serve-static'
 import { fileURLToPath, resolve } from 'node:url'
 import { dirname } from 'node:path'
+import { apiRoute } from "~/common"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -17,6 +18,12 @@ duck.use('/*', serveStatic({
 }))
 
 duck.notFound(async(context) => {
+  const API_ROUTE = apiRoute('')
+  const isApiRoute = context.req.path.includes(API_ROUTE)
+  if (isApiRoute) {
+    return context.text('not found', 404)
+  }
+
   const content = await readFile(`${appResourcePath}/index.html`, {
     encoding: 'utf-8'
   }) as string

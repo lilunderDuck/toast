@@ -16,7 +16,7 @@ import { useThisEditorContext } from "~/libs/editor"
 import { EditOrReadonlyIcon } from "~/features/journal"
 import { useJournalContext } from "../../../context"
 
-const CreateJournalModal = lazy(() => import('./create-stuff/CreateJournalModal'))
+const CreateJournalModal = lazy(() => import('./create-stuff'))
 
 const style = stylex.create({
   buttonsRow: {
@@ -33,7 +33,7 @@ interface IButtonItemProps extends HTMLAttributes<"button"> {
 }
 
 export function SidebarButtonsRow() {
-  const { $currentlyOpenedJournal } = useJournalContext()
+  const { $journal } = useJournalContext()
   const {  } = useThisEditorContext()
   const toggleEditOrReadonlyMode = () => {
     // ThisEditor.$setIsEditable(prev => !prev)
@@ -74,7 +74,7 @@ export function SidebarButtonsRow() {
         rough-toggle-edit-or-readonly-button
         editor-tour-toggle-edit-or-readonly-button
         onClick={toggleEditOrReadonlyMode}
-        disabled={!$currentlyOpenedJournal()}
+        disabled={!$journal.$currentlyOpened()}
         $icon={EditOrReadonlyIcon}
         $label={`Toggle ${true ? 'read-only' : 'edit'} mode`}
       />

@@ -1,4 +1,3 @@
-import type { JSONContent } from "@tiptap/core"
 import { validator } from "hono/validator"
 import { object, string } from "valibot"
 // ...
@@ -6,6 +5,7 @@ import { JOURNAL_AUTO_SAVE_ROUTE } from "~/api"
 import { duck } from "~/entry-server"
 import { validate } from "~/server"
 import { updateJournal } from "~/features/journal-data"
+import { OutputData } from "@editorjs/editorjs"
 
 const mustHaveIdAndJournalId = object({
   id: string(),
@@ -25,7 +25,7 @@ duck.post(JOURNAL_AUTO_SAVE_ROUTE, validator('query', (value, context) => {
   const data = context.req.valid('json')
 
   await updateJournal(query.id, query.journal, {
-    data: data as JSONContent
+    data: data as OutputData
   })
 
   return context.text('okay', 201)

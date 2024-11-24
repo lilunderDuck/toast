@@ -1,37 +1,29 @@
 import { 
-  type Accessor, 
   createContext, 
-  createSignal, 
   type ParentProps, 
-  type Setter, 
-  type Signal, 
   useContext 
 } from "solid-js"
-import { JournalData, JournalGroupData } from "~/api"
-import type { IEvent } from "~/utils"
+import { createStorage, type IEvent, type IStorage } from "~/utils"
+// ...
 import { $event, JournalEventMap } from "./event"
+import { createJournal, IThisJournalContext } from "./journal"
 
-const Context = createContext<{
-  $currentlyOpenedJournal: Accessor<JournalData | undefined>
-  $setCurrentlyOpenedJournal: Setter<JournalData | undefined>
-  $currentGroup: Accessor<JournalGroupData | undefined>
-  $setCurrentGroup: Setter<JournalGroupData | undefined>
+interface IJournalContext {
+  $journal: IThisJournalContext
   // ...
-  $tree: Signal<JournalData[]>
+  $localStorage: IStorage<{
+    shouldShowDeleteConfirmationModal: boolean
+  }>
   $event: IEvent<JournalEventMap>
-}>()
+}
+
+const Context = createContext<IJournalContext>()
 
 export function JournalProvider(props: ParentProps) {
-  const [$currentlyOpenedJournal, $setCurrentlyOpenedJournal] = createSignal<JournalData>()
-  const [$currentGroup, $setCurrentGroup] = createSignal<JournalGroupData>()
-
   return (
     <Context.Provider value={{
-      $currentlyOpenedJournal, 
-      $setCurrentlyOpenedJournal,
-      $currentGroup,
-      $setCurrentGroup,
-      $tree: createSignal([] as JournalData[]),
+      $journal: createJournal(),
+      $localStorage: createStorage(localStorage),
       $event
     }}>
       {props.children}

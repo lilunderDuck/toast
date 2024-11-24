@@ -1,5 +1,5 @@
-import { Context } from "hono";
-import { BaseIssue, BaseSchema, InferInput, nullish, object, parse, string } from "valibot";
+import { Context } from "hono"
+import { BaseIssue, BaseSchema, InferInput, nullish, object, parse, string } from "valibot"
 
 export const mustHaveAnId = object({
   id: string()

@@ -1,6 +1,6 @@
 import { Journal, JournalData } from "~/api"
 import { buildJournalGroupPath } from "./journalGroup"
-import { bson_readFile, bson_writeFile, getEverythingFromDir } from "~/server"
+import { bson_readFile, bson_writeFile, deleteFile, getEverythingFromDir } from "~/server"
 import crypto from 'node:crypto'
 
 export async function createJournal(groupId: string, data: Journal) {
@@ -31,6 +31,12 @@ export async function updateJournal(groupId: string, journalId: string, data: Pa
 
   await bson_writeFile(whereToUpdate, newData)
   return newData
+}
+
+export async function deleteJournal(groupId: string, journalId: string) {
+  const whereToDelete = `${buildJournalGroupPath(groupId)}/${journalId}.dat` as const
+
+  await deleteFile(whereToDelete)
 }
 
 export async function getAllJournals(groupId: string) {

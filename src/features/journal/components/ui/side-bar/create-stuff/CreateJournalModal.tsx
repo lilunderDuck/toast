@@ -1,5 +1,4 @@
-import { DialogContent, DialogTitle } from "~/components"
-import type { IDialog } from "~/utils"
+import { DialogContent, DialogTitle, type IDialog } from "~/components"
 import CreateJournalForm from "./CreateJournalForm"
 import stylex from '@stylexjs/stylex'
 

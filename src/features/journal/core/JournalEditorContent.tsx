@@ -20,7 +20,7 @@ const style = stylex.create({
 })
 
 export function JournalEditorContent(props: ParentProps) {
-  const { $currentlyOpenedJournal } = useJournalContext()
+  const { $journal } = useJournalContext()
   const [item, setItem] = createSignal([
     { name: '1', active: false },
     { name: '4', active: true },
@@ -38,7 +38,7 @@ export function JournalEditorContent(props: ParentProps) {
     }>
       <div {...stylex.attrs(style.content)}>
         {props.children}
-        <Show when={!$currentlyOpenedJournal()}>
+        <Show when={!$journal.$currentlyOpened()}>
           <EditorWelcome />
         </Show>
       </div>

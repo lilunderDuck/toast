@@ -15,15 +15,14 @@ import {
 import { toast } from "~/libs/toast"
 // ...
 import { useJournalContext } from "~/features/journal/context"
-import { createJournal } from "~/features/journal/utils"
 
 interface ICreateJournalFormProps {
   onClick: () => any
 }
 
 export default function CreateJournalForm(props: ICreateJournalFormProps) {
-  const { $currentGroup, $tree } = useJournalContext()
-  const [, setTree] = $tree
+  const { $journal } = useJournalContext()
+  const [, setTree] = $journal.$fileTree
 
   const [_journalGroupForm, { Field, Form }] = createForm<Journal>()
   const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
@@ -31,7 +30,7 @@ export default function CreateJournalForm(props: ICreateJournalFormProps) {
   const submit: SubmitHandler<Journal> = async(data) => {
     setSubmitButtonDisabled(true)
     const dataReturned = await toast
-      .promise(createJournal($currentGroup()?.id!, data), {
+      .promise($journal.$create(data), {
         loading: 'Saving changes...',
         success: 'Done!',
         error: 'Failed to save changes :('

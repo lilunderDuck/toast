@@ -3,4 +3,5 @@ export * from "./event"
 export * from "./modularForms"
 export * from "./fetching"
 export * from './stuff'
+export * from './storage'
 // ...

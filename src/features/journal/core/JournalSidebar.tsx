@@ -12,13 +12,8 @@ const style = stylex.create({
 })
 
 export function JournalSidebar() {
-  const { 
-    $setCurrentlyOpenedJournal,
-    $event 
-  } = useJournalContext()
-  const {
-    $open
-  } = useThisEditorContext()
+  const { $journal, $event } = useJournalContext()
+  const { $open } = useThisEditorContext()
 
   $event.$on('journal__clickingJournal', (journal) => {
     $open({
@@ -29,7 +24,15 @@ export function JournalSidebar() {
         time: Date.now()
       }
     })
-    $setCurrentlyOpenedJournal(journal)
+    $journal.$setCurrentlyOpened(journal)
+  })
+
+  $event.$on('journal__deletingJournal', (deleteRightAway, journal) => {
+    if (deleteRightAway) {
+      $journal.$delete(journal.id)
+    }
+
+    // else it's gonna show the confirmation modal
   })
 
   return (

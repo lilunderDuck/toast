@@ -1,4 +1,4 @@
-import { HttpMethod } from "~/api"
+import { HttpMethod } from "~/common"
 
 const BASE_PATH = 'http://localhost:8000'
 export async function fetchIt<Data extends {} = {}>(method: HttpMethod, path: string, body = {}): Promise<Data | null> {

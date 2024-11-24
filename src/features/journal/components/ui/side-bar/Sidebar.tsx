@@ -1,12 +1,14 @@
 import stylex from "@stylexjs/stylex"
-import { For } from "solid-js"
+import { createSignal, For, lazy } from "solid-js"
 // ...
-import { Divider } from "~/components"
+import { createLazyLoadedDialog, Divider } from "~/components"
 import type { JournalData } from "~/api"
 // ...
 import { useJournalContext } from "../../../context"
 import { SidebarButtonsRow } from "./SidebarButtonsRow"
 import { Journal } from "./file-display"
+
+const DeleteJournalModal = lazy(() => import('./delete-stuff'))
 
 const style = stylex.create({
   sidebar: {
@@ -20,15 +22,18 @@ const style = stylex.create({
 })
 
 export function Sidebar(props: HTMLAttributes<"div">) {
-  const { $tree, $event } = useJournalContext()
-  const [tree] = $tree
+  const { $journal, $event } = useJournalContext()
+  const [tree] = $journal.$fileTree
 
-  let lastJournalId = ''
-  const clickingOnJournal = (data: JournalData) => () => {
-    if (data.id === lastJournalId) return
-    $event.$emit('journal__clickingJournal', data)
-    lastJournalId = data.id
-  }
+  const deleteJournalModal = createLazyLoadedDialog()
+  const [thingToDelete, setThingToDelete] = createSignal<JournalData>()
+
+  $event.$on('journal__deletingJournal', (deleteRightAway, data) => {
+    if (deleteRightAway) return
+
+    setThingToDelete(data)
+    deleteJournalModal.$show()
+  })
 
   return (
     <div 
@@ -45,9 +50,15 @@ export function Sidebar(props: HTMLAttributes<"div">) {
         app-invs-scrollbar
       >
         <For each={tree()}>
-          {it => <Journal {...it} onClick={clickingOnJournal(it)} />}
+          {it => <Journal {...it} />}
         </For>
       </div>
+      <deleteJournalModal.$Modal>
+        <DeleteJournalModal 
+          $close={deleteJournalModal.$close} 
+          $journal={thingToDelete()!}
+        />
+      </deleteJournalModal.$Modal>
     </div>
   )
 }
