@@ -4,7 +4,7 @@ import { For } from "solid-js"
 import { Divider } from "~/components"
 import type { JournalData } from "~/api"
 // ...
-import { useJournalContext } from "../../context"
+import { useJournalContext } from "../../../context"
 import { SidebarButtonsRow } from "./SidebarButtonsRow"
 import { Journal } from "./file-display"
 

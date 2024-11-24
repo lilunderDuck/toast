@@ -1,0 +1,15 @@
+#tool h2:not(:first-child) {
+  margin-top: 25px;
+}
+
+.leastActive {
+  --block-bg: #33b2e4;
+}
+
+.active {
+  --block-bg: #d435e2;
+}
+
+.veryActive {
+  --block-bg: #ec223d;
+}

@@ -28,10 +28,12 @@ const style = stylex.create({
   },
 })
 
-interface ITooltipProps extends HTMLAttributes<"div"> {
+export interface ITooltipOptions {
   $tooltipOptions?: TooltipRootProps
   $label: JSX.Element
 }
+
+interface ITooltipProps extends HTMLAttributes<"div">, ITooltipOptions {}
 
 export function Tooltip(
   props: ITooltipProps
@@ -39,7 +41,7 @@ export function Tooltip(
   const [local, others] = splitProps(props, ["$tooltipOptions", "$label", "children"])
 
   return (
-    <Root openDelay={0} closeDelay={100} gutter={4} {...local.$tooltipOptions}>
+    <Root openDelay={0} closeDelay={0} gutter={4} {...local.$tooltipOptions}>
       <Trigger as="div">
         {local.children}
       </Trigger>

@@ -1,7 +1,7 @@
-import { FlexCenter } from "~/components";
+import { FlexCenter } from "~/components"
 
 import stylex from "@stylexjs/stylex"
-import { showItOff } from "../../utils";
+import { showItOff } from "../../utils"
 
 const style = stylex.create({
   empty: {

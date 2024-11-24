@@ -1,7 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import { IconTypes } from "solid-icons"
 import { splitProps } from "solid-js"
-import { FlexCenter } from "../../../../components"
+import { FlexCenter } from "../../../../../components"
 
 const style = stylex.create({
   item: {

@@ -3,11 +3,18 @@ import { BsFolderFill, BsJournalPlus } from "solid-icons/bs"
 import { lazy, splitProps } from "solid-js"
 import { IconTypes } from "solid-icons"
 // ...
-import { Button, ButtonSizeVariant, createLazyLoadedDialog, FlexCenterY, Spacer, Tooltip } from "~/components"
-import { ThisEditor, useThisEditorContext } from "~/libs/editor"
+import { 
+  Button, 
+  ButtonSizeVariant, 
+  createLazyLoadedDialog, 
+  FlexCenterY, 
+  Spacer, 
+  Tooltip 
+} from "~/components"
+import { useThisEditorContext } from "~/libs/editor"
 // ...
-import { EditOrReadonlyIcon } from "../../common"
-import { useJournalContext } from "../../context"
+import { EditOrReadonlyIcon } from "~/features/journal"
+import { useJournalContext } from "../../../context"
 
 const CreateJournalModal = lazy(() => import('./create-stuff/CreateJournalModal'))
 
