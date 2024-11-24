@@ -6,7 +6,7 @@ import {
 } from "~/api"
 import { Flex, FlexCenter } from "~/components"
 import { fetchIt, mergeClassname } from "~/utils"
-import { arrayObjects_replace } from "~/common"
+import { thisArrayObjects } from "~/common"
 // ...
 import { JournalInfoSidebar, openJournalInfoSidebar } from "./sidebar"
 import { CreateNewJournalGroup, JournalGrid } from "./journal-grid"
@@ -86,5 +86,5 @@ export function addJournalList(another: JournalGroupData) {
 }
 
 export function updateJournalList(newOne: JournalGroupData) {
-  setJournalGroups(prev => [...arrayObjects_replace(prev, it => it.id === newOne.id, newOne)])
+  setJournalGroups(prev => [...thisArrayObjects(prev).$replace(it => it.id === newOne.id, newOne)])
 }

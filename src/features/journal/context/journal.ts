@@ -9,6 +9,7 @@ import {
 import { fetchIt } from "~/utils"
 import { Accessor, createSignal, Setter, Signal } from "solid-js"
 import type { OutputData } from "@editorjs/editorjs"
+import { thisArrayObjects } from "~/common"
 
 export interface IThisJournalContext {
   $currentlyOpened: Accessor<JournalData | undefined>
@@ -27,6 +28,7 @@ export interface IThisJournalContext {
 export function createJournal(): IThisJournalContext {
   const [$currentlyOpened, $setCurrentlyOpened] = createSignal<JournalData>()
   const [$currentGroup, $setCurrentGroup] = createSignal<JournalGroupData>()
+  const [fileTree, setFileTree] = createSignal([] as JournalData[])
 
   const getCurrentJournalGroupId = () => {
     console.assert($currentGroup(), '[panic] currentGroup data should NOT be null or undefined')
@@ -39,7 +41,7 @@ export function createJournal(): IThisJournalContext {
     $setCurrentlyOpened,
     $currentGroup, 
     $setCurrentGroup,
-    $fileTree: createSignal([] as JournalData[]),
+    $fileTree: [fileTree, setFileTree],
     async $create(data) {
       const currentJournalGroupId = getCurrentJournalGroupId()
       return (await fetchIt<JournalData>('POST', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}`, data))!
@@ -47,6 +49,8 @@ export function createJournal(): IThisJournalContext {
     async $delete(journalId) {
       const currentJournalGroupId = getCurrentJournalGroupId()
       await fetchIt('DELETE', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}&journal=${journalId}`)
+      setFileTree(prev => [...thisArrayObjects(prev).$remove('id', journalId)])
+      $setCurrentlyOpened(undefined)
     },
     async $getAll() {
       const currentJournalGroupId = getCurrentJournalGroupId()

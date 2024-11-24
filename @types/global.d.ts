@@ -31,6 +31,10 @@ declare global {
   > =
     HTMLAttributes<ElementName>[EventName]
   // ...
-
+  
+  /**A type representing any function, regardless of its parameters or return type. */
   type AnyFunction = (...anything: any[]) => any
+
+  /**A type representing any object, where the keys are strings and the values can be of any type. */
+  type AnyObject = Record<string, any>
 }
