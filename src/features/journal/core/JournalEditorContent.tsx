@@ -1,8 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import { useJournalContext } from "../context"
-import { EditorWelcome, Tab, TabPanel } from "../components"
-import { createSignal, For, type ParentProps, Show } from "solid-js"
-import { FlexCenterY, SortableVerticalItem, SortableVerticalList } from "~/components"
+import { EditorWelcome, TabList, TabPanel } from "../components"
+import { type ParentProps, Show } from "solid-js"
 
 const style = stylex.create({
   content: {
@@ -21,20 +20,10 @@ const style = stylex.create({
 
 export function JournalEditorContent(props: ParentProps) {
   const { $journal } = useJournalContext()
-  const [item, setItem] = createSignal([
-    { name: '1', active: false },
-    { name: '4', active: true },
-  ])
 
   return (
     <TabPanel initialSize={0.7} titleBar={
-      <div app-scrollbar app-scrollbar-vertical app-invs-scrollbar>
-        <FlexCenterY {...stylex.attrs(style.tabs)}>
-          <For each={item()}>
-            {it => <Tab focused={it.active}>{it.name}</Tab>}
-          </For>
-        </FlexCenterY>
-      </div>
+      <TabList />
     }>
       <div {...stylex.attrs(style.content)}>
         {props.children}

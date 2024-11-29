@@ -3,9 +3,9 @@ import {
   type ParentProps, 
   useContext 
 } from "solid-js"
-import { createStorage, type IEvent, type IStorage } from "~/utils"
+import { createEvent, createStorage, type IEvent, type IStorage } from "~/utils"
 // ...
-import { $event, JournalEventMap } from "./event"
+import { JournalEventMap } from "./event"
 import { createJournal, IThisJournalContext } from "./journal"
 
 interface IJournalContext {
@@ -20,11 +20,13 @@ interface IJournalContext {
 const Context = createContext<IJournalContext>()
 
 export function JournalProvider(props: ParentProps) {
+  const event = createEvent<JournalEventMap>()
+
   return (
     <Context.Provider value={{
-      $journal: createJournal(),
+      $journal: createJournal(event),
       $localStorage: createStorage(localStorage),
-      $event
+      $event: event
     }}>
       {props.children}
     </Context.Provider>

@@ -29,8 +29,8 @@ export function JournalEditor() {
     }
   })
 
-  $event.$on('editor_onUpdate', (data) => {
-    // autoSaveJournal($journal.$currentGroup, data.id, data.content)
+  $event.$on('editor_onUpdate', async(data) => {
+    await $journal.$save(data.id, data.content)
   })
 
   onMount(async() => {

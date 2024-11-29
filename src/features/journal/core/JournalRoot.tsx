@@ -8,6 +8,7 @@ import __style from './stuff.module.css'
 import stylex from '@stylexjs/stylex'
 // ...
 import { JournalProvider } from '../context'
+import { TabProvider } from '../components'
 
 const style = stylex.create({
   thisThing: {
@@ -24,12 +25,14 @@ export function JournalRoot(props: ParentProps) {
   })
  
   return (
-    <JournalProvider>
+    <TabProvider>
       <ThisEditorProvider>
-        <Resizable {...stylex.attrs(style.thisThing)}>
-          {props.children}
-        </Resizable>
+        <JournalProvider>
+          <Resizable {...stylex.attrs(style.thisThing)}>
+            {props.children}
+          </Resizable>
+        </JournalProvider>
       </ThisEditorProvider>
-    </JournalProvider>
+    </TabProvider>
   )
 }

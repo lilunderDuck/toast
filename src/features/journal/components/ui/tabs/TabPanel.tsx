@@ -1,4 +1,4 @@
-import __style from "./tab.module.css"
+import __style from "./TabList.module.css"
 import { type JSX, ParentProps, splitProps } from "solid-js"
 import { ResizablePanel, type ResizablePanelProps } from "~/components"
 

@@ -29,7 +29,11 @@ export function ThisEditor() {
     editor.$editorInstance = createEditor(
       editorRef, 
       false, 
-      () => ({})
+      async() => {
+        const savedData = await editor.$save()
+        editor.$event.$emit('editor_onUpdate', savedData)
+        editor.$cache.set(savedData.id, savedData)
+      }
     )
   })
 

@@ -3,8 +3,7 @@ import {
   JournalRoot,
   JournalEditorContent,
   JournalEditor,
-  JournalSidebar,
-  JournalToolsSidebar
+  JournalSidebar
 } from "~/features/journal"
 
 export default function JournalPage() {
@@ -14,7 +13,7 @@ export default function JournalPage() {
       <JournalEditorContent>
         <JournalEditor />
       </JournalEditorContent>
-      <JournalToolsSidebar />
+      {/* <JournalToolsSidebar /> */}
     </JournalRoot>
   )
 }

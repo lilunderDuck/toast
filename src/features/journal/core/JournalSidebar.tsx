@@ -13,17 +13,10 @@ const style = stylex.create({
 
 export function JournalSidebar() {
   const { $journal, $event } = useJournalContext()
-  const { $open } = useThisEditorContext()
+  // const { $open } = useThisEditorContext()
 
   $event.$on('journal__clickingJournal', (journal) => {
-    $open({
-      id: journal.id,
-      content: journal.data ?? {
-        version: '1',
-        blocks: [],
-        time: Date.now()
-      }
-    })
+    $journal.$open(journal.id)
     $journal.$setCurrentlyOpened(journal)
   })
 

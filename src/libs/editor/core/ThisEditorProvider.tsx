@@ -37,7 +37,9 @@ export type ThisEditorEvent = {
 
 export interface IThisEditorProviderContext {
   $editorInstance?: EditorJS
+  $save(): Promise<EditorData>
   $event: IEvent<ThisEditorEvent>
+  $cache: Map<string, EditorData>
   /**Tracks whether the editor is editable. */
   $setIsEditable(setter: Setter<boolean>): void
   /**Opens a new editor with the specified data.
@@ -57,8 +59,13 @@ export function ThisEditorProvider(props: ParentProps) {
   return (
     <Context.Provider value={{
       $event: event,
+      $cache: new Map(),
       set $editorInstance(instance: EditorJS) {
         editorInstance = instance
+      },
+      get $editorInstance() {
+        console.assert(editorInstance, 'Editor instance should not be undefined')
+        return editorInstance
       },
       $setIsEditable(setter) {
         setIsEditable(prev => {
@@ -68,15 +75,22 @@ export function ThisEditorProvider(props: ParentProps) {
         })
       },
       $open(data) {
-        console.assert(editorInstance, 'panic')
-    
         event.$emit('editor_onSwitching', lastData, data)
     
-        editorInstance?.render({
-          blocks: data.content.blocks
+        editorInstance!.render({
+          blocks: data.content?.blocks ?? []
         })
-    
+        
         lastData = data
+        console.log('[editor] opened', data)
+      },
+      async $save() {
+        const content = await this.$editorInstance!.save()
+        console.log('[editor] saving', lastData?.id, 'with', content)
+        return {
+          content,
+          id: lastData!.id
+        }
       }
     }}>
       {props.children}

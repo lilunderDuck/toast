@@ -34,7 +34,7 @@ export interface IThisArrayObjects<T extends AnyObject[]> {
    */
   $replace(
     whereToReplace: Predicate<ArrayElement<T>, T>, 
-    somethingElse: ArrayElement<T>
+    somethingElse: Partial<ArrayElement<T>>
   ): T
   /**Finds an object in the array based on a predicate.
    * @param whereToFind The predicate function to find the object.
