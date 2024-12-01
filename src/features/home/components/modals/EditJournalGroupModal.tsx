@@ -2,12 +2,12 @@
 import { 
   DialogContent,
   DialogTitle,
-} from "../../../../components"
-import type { IDialog } from "../../../../utils"
+  type IDialog
+} from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 import EditJournalGroupForm from "./EditJournalGroupForm"
-import type { JournalApi.GroupData } from "~/api"
+import type { JournalApi } from "~/api"
 
 const style = stylex.create({
   $content: {

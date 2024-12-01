@@ -1,10 +1,12 @@
 /* @refresh reload */
 import { render } from 'solid-js/web'
-
+// ...
 import './assets/style/index.css'
 import './assets/style/scrollbar.css'
 import './assets/colors/dark.css'
+// ...
 import App from './App'
+import { logThisVeryHelpfulMessage } from './utils'
 
 const root = document.getElementById('duck')
 
@@ -16,5 +18,6 @@ __devMode && (() => {
   }
 })()
 
+logThisVeryHelpfulMessage()
 
 render(() => <App />, root!)
