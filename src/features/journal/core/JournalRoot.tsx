@@ -2,7 +2,7 @@ import { onCleanup, ParentProps } from 'solid-js'
 // ...
 import { bodyClasslist } from '~/utils'
 import { Resizable } from '~/components'
-import { ThisEditorProvider } from '~/libs/editor'
+import { ThisEditorProvider } from '~/features/editor'
 // ...
 import __style from './stuff.module.css'
 import stylex from '@stylexjs/stylex'

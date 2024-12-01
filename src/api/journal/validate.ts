@@ -1,4 +1,4 @@
-import { OutputData } from '@editorjs/editorjs'
+import { OutputBlockData } from '@editorjs/editorjs'
 
 import {
   object,
@@ -23,20 +23,42 @@ export const journalCategoryFormSchema = object({
   icon: optional(string()),
 })
 
-export type JournalGroup = InferOutput<typeof journalGroupFormSchema>
-export type Journal = InferOutput<typeof journalFormSchema>
-export type JournalCategory = InferOutput<typeof journalCategoryFormSchema>
+/**### namespace `JournalApi`
+ * A namespace for *only* types related to the Journal API.
+ */
+export namespace JournalApi {
+  export type Group = InferOutput<typeof journalGroupFormSchema>
+  export type Journal = InferOutput<typeof journalFormSchema>
+  export type Category = InferOutput<typeof journalCategoryFormSchema>
 
-export type JournalGroupData = JournalGroup & {
-  id: string
-  created: Date
-  modified?: Date
-  entries: number
-}
+  export type GroupData = Group & {
+    /**The unique identifier of the group. */
+    id: string
+    /**The creation date of the group. */
+    created: Date
+    /**The last modification date of the group. */
+    modified?: Date
+    /**The total number of journals in the group. */
+    entries: number
+  }
 
-export type JournalData = Journal & {
-  id: string
-  created: Date
-  modified?: Date
-  data?: OutputData
+  export type JournalData = Journal & {
+    /**The unique identifier of the group. 
+     *
+     * @note you can create 2 groups with the same name (if you want to confuse you in the future).
+     */
+    id: string
+    /**The creation date of the group. */
+    created: Date
+    /**The last modification date of the group. */
+    modified?: Date
+  }
+
+  export type SavedJournalData = JournalData & {
+    /**An array of output block data associated with the journal. */
+    data?: JournalContentData
+  }
+
+  /**The type of the content itself, which is an array of output block data associated with the journal. */
+  export type JournalContentData = OutputBlockData[]
 }

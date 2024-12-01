@@ -11,7 +11,7 @@ import {
   Spacer, 
   Tooltip 
 } from "~/components"
-import { useThisEditorContext } from "~/libs/editor"
+import { useThisEditorContext } from "~/features/editor"
 // ...
 import { EditOrReadonlyIcon } from "~/features/journal"
 import { useJournalContext } from "../../../context"

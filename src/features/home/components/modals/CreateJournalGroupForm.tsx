@@ -7,8 +7,7 @@ import IconInput from "./IconInput"
 // ...
 import { 
   JOURNAL_GROUP_ROUTE, 
-  type JournalGroup, 
-  type JournalGroupData 
+  type JournalApi
 } from "~/api"
 import { fetchIt } from "~/utils"
 import { 
@@ -16,7 +15,7 @@ import {
   ButtonSizeVariant, 
   FieldInput, 
 } from "~/components"
-import { toast } from '~/libs/toast'
+import { toast } from '~/features/toast'
 import { createSignal } from "solid-js"
 import { addJournalList } from "../JournalList"
 
@@ -25,14 +24,14 @@ interface ICreateJournalGroupFormProps {
 }
 
 export default function CreateJournalGroupForm(props: ICreateJournalGroupFormProps) {
-  const [_journalGroupForm, { Field, Form }] = createForm<JournalGroup>()
+  const [_journalGroupForm, { Field, Form }] = createForm<JournalApi.Group>()
   const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
 
-  const callApi = (data: JournalGroup) => {
-    return fetchIt<JournalGroupData>('POST', JOURNAL_GROUP_ROUTE, data)
+  const callApi = (data: JournalApi.Group) => {
+    return fetchIt<JournalApi.GroupData>('POST', JOURNAL_GROUP_ROUTE, data)
   }
 
-  const submit: SubmitHandler<JournalGroup> = async(data) => {
+  const submit: SubmitHandler<JournalApi.Group> = async(data) => {
     setSubmitButtonDisabled(true)
     const dataReturned = await toast
       .promise(callApi(data), {

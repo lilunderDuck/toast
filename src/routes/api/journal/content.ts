@@ -1,23 +1,31 @@
 import { validator } from "hono/validator"
 // ...
-import { JOURNAL_CONTENT_ROUTE } from "~/api"
+import { JOURNAL_CONTENT_ROUTE, JournalApi } from "~/api"
 import { duck } from "~/entry-server"
-import { isThisDirectoryExist, mustHaveAnId, validate } from "~/server"
-import { buildJournalGroupPath, getAllJournals } from "~/features/journal-data"
+import { validate } from "~/server"
+import { updateJournal } from "~/features/journal-data"
+import { object, string } from "valibot"
 
-duck.get(JOURNAL_CONTENT_ROUTE, validator('query', (value, context) => {
-  if (validate(mustHaveAnId, value)) {
+const mustHaveIdAndJournalId = object({
+  id: string(),
+  journal: string(),
+})
+
+duck.post(JOURNAL_CONTENT_ROUTE, validator('query', (value, context) => {
+  if (validate(mustHaveIdAndJournalId, value)) {
     return value
   }
 
   return context.text('Invalid', 400)
-}), async (context) => {
+}), validator('json', (value) => {
+  return value
+}), async(context) => {
   const query = context.req.valid('query')
+  const data = context.req.valid('json') as JournalApi.JournalContentData
 
-  const path = buildJournalGroupPath(query.id)
-  if (!await isThisDirectoryExist(path)) {
-    return context.text('not found', 404)
-  }
+  await updateJournal(query.id, query.journal, {
+    data
+  })
 
-  return context.json(await getAllJournals(query.id), 200)
+  return context.text('okay', 201)
 })

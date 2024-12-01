@@ -1,5 +1,5 @@
 // import { 
-//   type JournalGroupData,
+//   JournalApi,
 //   JOURNAL_GROUP_ROUTE
 // } from "~/api"
 import { SplashScreen } from "../components"

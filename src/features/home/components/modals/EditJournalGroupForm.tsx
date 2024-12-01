@@ -3,32 +3,31 @@ import { createSignal } from "solid-js"
 // ...
 import { 
   JOURNAL_GROUP_ROUTE, 
-  type JournalGroupData, 
-  type JournalGroup 
+  type JournalApi
 } from "~/api"
 import { Button, ButtonSizeVariant, FieldInput } from "~/components"
-import { toast } from '~/libs/toast'
+import { toast } from '~/features/toast'
 import { fetchIt } from "~/utils"
 // ...
 import IconInput from "./IconInput"
 import { updateJournalList } from "../JournalList"
 import { updateJournalInfoSidebar } from "../sidebar"
 
-interface IEditJournalGroupFormProps extends JournalGroupData {
+interface IEditJournalGroupFormProps extends JournalApi.GroupData {
   onClick: () => any
 }
 
 export default function EditJournalGroupForm(props: IEditJournalGroupFormProps) {
-  const [_journalGroupForm, { Field, Form }] = createForm<JournalGroup>()
+  const [_journalGroupForm, { Field, Form }] = createForm<JournalApi.Group>()
 
   const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
 
-  const callApi = (id: string, data: JournalGroup) => {
+  const callApi = (id: string, data: JournalApi.Group) => {
     const route = `${JOURNAL_GROUP_ROUTE}?id=${id}` as const
-    return fetchIt<JournalGroupData>('PATCH', route, data)
+    return fetchIt<JournalApi.GroupData>('PATCH', route, data)
   }
 
-  const submit: SubmitHandler<JournalGroup> = async(data) => {
+  const submit: SubmitHandler<JournalApi.Group> = async(data) => {
     setSubmitButtonDisabled(true)
     const dataReturned = await toast
       .promise(callApi(props.id, data), {

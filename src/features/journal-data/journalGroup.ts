@@ -1,8 +1,7 @@
 import crypto from 'node:crypto'
 // ...
 import { 
-  JournalGroupData,
-  type JournalGroup 
+  type JournalApi
 } from "~/api"
 import { 
   bson_writeFile,
@@ -13,9 +12,9 @@ import {
 import { getAllJournalGroupsCache, updateJournalGroupsCache } from './cache'
 
 export const buildJournalGroupPath = <const T extends string>(path: T) => `${JOURNALS_FOLDER}/${path}` as const
-export async function createJournalGroup(data: JournalGroup) {
+export async function createJournalGroup(data: JournalApi.Group) {
   const journalGroupId = crypto.randomBytes(5).toString('hex')
-  const newData: JournalGroupData = {
+  const newData: JournalApi.GroupData = {
     ...data,
     id: journalGroupId,
     created: new Date(),
@@ -30,9 +29,9 @@ export async function createJournalGroup(data: JournalGroup) {
   return newData
 }
 
-export async function updateJournalGroup(journalGroupId: string, data: Partial<JournalGroupData>) {
+export async function updateJournalGroup(journalGroupId: string, data: Partial<JournalApi.GroupData>) {
   const cache = await getAllJournalGroupsCache()
-  const newData: JournalGroupData = {
+  const newData: JournalApi.GroupData = {
     ...cache[journalGroupId],
     ...data,
     modified: new Date()

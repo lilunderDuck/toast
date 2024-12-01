@@ -1,41 +1,44 @@
 import { 
-  Journal, 
-  JOURNAL_AUTO_SAVE_ROUTE, 
+  type Accessor, 
+  createSignal, 
+  type Setter, 
+  type Signal 
+} from "solid-js"
+// ...
+import { 
+  type JournalApi, 
   JOURNAL_CONTENT_ROUTE, 
   JOURNAL_ROUTE, 
-  JournalData,   
-  JournalGroupData 
 } from "~/api"
-import { fetchIt, IEvent } from "~/utils"
-import { Accessor, createSignal, Setter, Signal } from "solid-js"
-import type { OutputData } from "@editorjs/editorjs"
+import { fetchIt, type IEvent } from "~/utils"
 import { thisArrayObjects } from "~/common"
+import { useThisEditorContext } from "~/features/editor"
+// ...
 import { useTabContext } from "../components"
-import { JournalEventMap } from "./event"
-import { useThisEditorContext } from "~/libs/editor"
+import { type JournalEventMap } from "./event"
 
 export interface IThisJournalContext {
-  $currentlyOpened: Accessor<JournalData | undefined>
-  $setCurrentlyOpened: Setter<JournalData | undefined>
-  $currentGroup: Accessor<JournalGroupData | undefined>
-  $setCurrentGroup: Setter<JournalGroupData | undefined>
+  $currentlyOpened: Accessor<JournalApi.JournalData | undefined>
+  $setCurrentlyOpened: Setter<JournalApi.JournalData | undefined>
+  $currentGroup: Accessor<JournalApi.GroupData | undefined>
+  $setCurrentGroup: Setter<JournalApi.GroupData | undefined>
   // ...
-  $fileTree: Signal<JournalData[]>
+  $fileTree: Signal<JournalApi.JournalData[]>
   // ...
-  $create(data: Journal): Promise<JournalData>
+  $create(data: JournalApi.Journal): Promise<JournalApi.JournalData>
   $delete(journalId: string): Promise<void>
   $open(journalId: string): Promise<void>
-  $getAll(): Promise<JournalData[]>
-  $save(journalId: string, data: OutputData): Promise<{} | null>
+  $getAll(): Promise<JournalApi.JournalData[]>
+  $save(journalId: string, data: JournalApi.JournalContentData): Promise<{} | null>
 }
 
 export function createJournal(event: IEvent<JournalEventMap>): IThisJournalContext {
   const { $updateTab, $getFocusedTab, $removeTab } = useTabContext()
   const { $cache, $open } = useThisEditorContext()
 
-  const [$currentlyOpened, $setCurrentlyOpened] = createSignal<JournalData>()
-  const [$currentGroup, $setCurrentGroup] = createSignal<JournalGroupData>()
-  const [fileTree, setFileTree] = createSignal([] as JournalData[])
+  const [$currentlyOpened, $setCurrentlyOpened] = createSignal<JournalApi.JournalData>()
+  const [$currentGroup, $setCurrentGroup] = createSignal<JournalApi.GroupData>()
+  const [fileTree, setFileTree] = createSignal([] as JournalApi.JournalData[])
 
   const getCurrentJournalGroupId = () => {
     console.assert($currentGroup(), '[panic] currentGroup data should NOT be null or undefined')
@@ -57,18 +60,20 @@ export function createJournal(event: IEvent<JournalEventMap>): IThisJournalConte
     async $create(data) {
       console.log('[journal] creating', data, '...')
       const currentJournalGroupId = getCurrentJournalGroupId()
-      return (await fetchIt<JournalData>('POST', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}`, data))!
+      return (
+        await fetchIt('POST', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}`, data)
+      )!
     },
     async $open(journalId) {
       console.log('[journal] creating', journalId, '...')
-      let lastContent = $cache.get(journalId) ?? fileTree().find(it => it.id === journalId)
+      let lastContent = $cache.get(journalId) ?? []
       if (lastContent) {
         // 
       }
 
       $open({
         id: journalId,
-        content: lastContent?.content,
+        content: lastContent,
         ...lastContent
       })
     },
@@ -83,12 +88,12 @@ export function createJournal(event: IEvent<JournalEventMap>): IThisJournalConte
     },
     async $getAll() {
       const currentJournalGroupId = getCurrentJournalGroupId()
-      return await fetchIt<JournalData[]>('GET', `${JOURNAL_CONTENT_ROUTE}?id=${currentJournalGroupId}`) ?? []
+      return await fetchIt('GET', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}`) ?? []
     },
     async $save(journalId, data) {
       console.log('[journal] saving', journalId, '...')
       const currentJournalGroupId = getCurrentJournalGroupId()
-      return await fetchIt('POST', `${JOURNAL_AUTO_SAVE_ROUTE}?id=${currentJournalGroupId}&journal=${journalId}`, data)
+      return await fetchIt('POST', `${JOURNAL_CONTENT_ROUTE}?id=${currentJournalGroupId}&journal=${journalId}`, data)
     }
   }
 }

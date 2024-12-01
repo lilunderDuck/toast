@@ -7,7 +7,7 @@ import type { IDialog } from "../../../../utils"
 // ...
 import stylex from "@stylexjs/stylex"
 import EditJournalGroupForm from "./EditJournalGroupForm"
-import type { JournalGroupData } from "~/api"
+import type { JournalApi.GroupData } from "~/api"
 
 const style = stylex.create({
   $content: {
@@ -15,7 +15,7 @@ const style = stylex.create({
   }
 })
 
-interface IEditJournalGroupModalProps extends IDialog, JournalGroupData {
+interface IEditJournalGroupModalProps extends IDialog, JournalApi.GroupData {
   // ...
 }
 

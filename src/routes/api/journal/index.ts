@@ -2,10 +2,9 @@ import { validator } from "hono/validator"
 // ...
 import { JOURNAL_ROUTE, journalFormSchema } from "~/api"
 import { duck } from "~/entry-server"
-import { mustHaveAnId, validate } from "~/server"
-import { createJournal, deleteJournal } from "~/features/journal-data"
+import { isThisDirectoryExist, mustHaveAnId, validate } from "~/server"
+import { buildJournalGroupPath, createJournal, deleteJournal, getAllJournals } from "~/features/journal-data"
 // ...
-import "./auto-save"
 import "./content"
 import { object, string } from "valibot"
 
@@ -13,6 +12,24 @@ const mustHaveAnIdAndJournalId = object({
   id: string(),
   journal: string()
 })
+
+duck.get(JOURNAL_ROUTE, validator('query', (value, context) => {
+  if (validate(mustHaveAnId, value)) {
+    return value
+  }
+
+  return context.text('invalid query', 400)
+}), async (context) => {
+  const query = context.req.valid('query')
+
+  const path = buildJournalGroupPath(query.id)
+  if (!await isThisDirectoryExist(path)) {
+    return context.text('not found', 404)
+  }
+
+  return context.json(await getAllJournals(query.id), 200)
+})
+
 
 duck.post(JOURNAL_ROUTE, validator('query', (value, context) => {
   if (validate(mustHaveAnId, value)) {

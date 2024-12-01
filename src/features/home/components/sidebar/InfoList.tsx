@@ -1,10 +1,11 @@
 import stylex from "@stylexjs/stylex"
 import { Show, type JSX } from "solid-js"
-import { BsCalendar2, BsCalendar2Fill, BsJournalCheck, BsPencil, BsPencilFill } from "solid-icons/bs"
+import { BsCalendar2Fill, BsJournalCheck, BsPencilFill } from "solid-icons/bs"
 // ...
-import { FlexCenterY } from "../../../../components"
+import { FlexCenterY } from "~/components"
+import { JournalApi } from "~/api"
+// ...
 import { SectionText } from "./Section"
-import { JournalGroupData } from "~/api"
 
 const style = stylex.create({
   $name: {
@@ -37,7 +38,7 @@ function Info(props: IInfoProps) {
   )
 }
 
-export default function InfoList(props: JournalGroupData) {
+export default function InfoList(props: JournalApi.GroupData) {
   const formatDate = (date: Date) => new Intl.DateTimeFormat('default', {
     day: 'numeric',
     month: 'short',

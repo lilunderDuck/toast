@@ -1,13 +1,13 @@
-import { Journal, JournalData } from "~/api"
+import { JournalApi } from "~/api"
 import { buildJournalGroupPath } from "./journalGroup"
 import { bson_readFile, bson_writeFile, deleteFile, getEverythingFromDir } from "~/server"
 import crypto from 'node:crypto'
 
-export async function createJournal(groupId: string, data: Journal) {
+export async function createJournal(groupId: string, data: JournalApi.Journal) {
   const journalId = crypto.randomBytes(5).toString('hex')
   const whereToUpdate = `${buildJournalGroupPath(groupId)}/${journalId}.dat` as const
 
-  const newData: JournalData = {
+  const newData: JournalApi.JournalData = {
     id: journalId,
     created: new Date(),
     ...data
@@ -17,15 +17,15 @@ export async function createJournal(groupId: string, data: Journal) {
   return newData
 }
 
-export async function updateJournal(groupId: string, journalId: string, data: Partial<JournalData>) {
+export async function updateJournal(groupId: string, journalId: string, data: Partial<JournalApi.SavedJournalData>) {
   const whereToUpdate = `${buildJournalGroupPath(groupId)}/${journalId}.dat` as const
 
-  const oldData = await bson_readFile<JournalData>(whereToUpdate) ?? {}
+  const oldData = await bson_readFile<JournalApi.JournalData>(whereToUpdate) ?? {}
   const newData = {
     ...oldData,
-    ...data as Journal,
+    ...data as JournalApi.Journal,
     modified: new Date()
-  } as JournalData
+  } as JournalApi.JournalData
 
   console.log('[journal] update from', oldData, 'to', newData)
 
@@ -48,7 +48,7 @@ export async function getAllJournals(groupId: string) {
   console.log(journals)
   const data = []
   for (const journalFile of journals) {
-    const dataFetched = await bson_readFile<JournalData>(`${thisJournalGroupPath}/${journalFile}`)
+    const dataFetched = await bson_readFile<JournalApi.JournalData>(`${thisJournalGroupPath}/${journalFile}`)
     if (dataFetched) data.push(dataFetched)
   }
 

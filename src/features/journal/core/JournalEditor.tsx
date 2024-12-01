@@ -8,11 +8,11 @@ import {
   ThisEditorStatusBar,
   ThisEditorTitleBar, 
   useThisEditorContext 
-} from "~/libs/editor"
+} from "~/features/editor"
 import { fetchIt } from "~/utils"
 import { 
   JOURNAL_GROUP_ROUTE, 
-  JournalGroupData 
+  type JournalApi
 } from "~/api"
 
 export function JournalEditor() {
@@ -34,7 +34,7 @@ export function JournalEditor() {
   })
 
   onMount(async() => {
-    const data = await fetchIt<JournalGroupData>('GET', `${JOURNAL_GROUP_ROUTE}?id=${param.id}`)
+    const data = await fetchIt<JournalApi.GroupData>('GET', `${JOURNAL_GROUP_ROUTE}?id=${param.id}`)
     if (!data) {
       return goTo('/')
     }

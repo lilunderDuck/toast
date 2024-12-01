@@ -1,8 +1,8 @@
 import { createSignal, Show } from "solid-js"
 import { useNavigate } from "@solidjs/router"
 // ...
-import type { JournalGroupData } from "~/api"
-import { OpenAndCloseButton } from "../../../../components"
+import type { JournalApi } from "~/api"
+import { OpenAndCloseButton } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from './sidebar.module.css' 
@@ -33,7 +33,7 @@ const style = stylex.create({
   }
 })
 
-const [currentJournalData, setCurrentJournalData] = createSignal<JournalGroupData>()
+const [currentJournalData, setCurrentJournalData] = createSignal<JournalApi.GroupData>()
 
 export function JournalInfoSidebar() {
   const navigateTo = useNavigate()
@@ -69,7 +69,7 @@ export function JournalInfoSidebar() {
 
 JournalInfoSidebar.$onClose = () => {}
 
-export function openJournalInfoSidebar(data: JournalGroupData) {
+export function openJournalInfoSidebar(data: JournalApi.GroupData) {
   setCurrentJournalData(data)
   console.log('[home > sidebar] opened', data)
 }
@@ -80,7 +80,7 @@ export function closeJournalInfoSidebar() {
   JournalInfoSidebar.$onClose()
 }
 
-export function updateJournalInfoSidebar(data: JournalGroupData) {
+export function updateJournalInfoSidebar(data: JournalApi.GroupData) {
   // looks confusing at first, but openJournalInfoSidebar() basically is just update the 
   // currentJournalData signal.
   // 

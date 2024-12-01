@@ -2,7 +2,7 @@ import { Flex, ResizableHandle } from "~/components"
 import { QuickActionBar, Sidebar, TabPanel } from "../components"
 import stylex from "@stylexjs/stylex"
 import { useJournalContext } from "../context"
-import { useThisEditorContext } from "~/libs/editor"
+import { useThisEditorContext } from "~/features/editor"
 
 const style = stylex.create({
   sidebar: {

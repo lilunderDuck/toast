@@ -1,5 +1,6 @@
-// ...
 import EditorJS from '@editorjs/editorjs'
+// ...
+import { createColorPicker, someToolsIShouldNeed } from '../tools'
 
 export type OnEditorUpdate = () => {}
 
@@ -8,9 +9,16 @@ export const createEditor = (
   isEditable: boolean,
   onUpdate: AnyFunction
 ) => {
-  console.log('editor created')
   return new EditorJS({
     holder: whereToPut,
+    autofocus: true,
+    tools: {
+      ...someToolsIShouldNeed(),
+      colorPicker: createColorPicker()
+    },
+    onReady() {
+      console.log('[editor] editor created')
+    },
     onChange() {
       onUpdate()
     }

@@ -6,13 +6,13 @@ import {
 import { createSignal } from "solid-js"
 // ...
 import { 
-  type Journal,
+  type JournalApi,
 } from "~/api"
 import { 
   FieldInput,
   OpenAndCloseButton
 } from "~/components"
-import { toast } from "~/libs/toast"
+import { toast } from "~/features/toast"
 // ...
 import { useJournalContext } from "~/features/journal/context"
 
@@ -24,10 +24,10 @@ export default function CreateJournalForm(props: ICreateJournalFormProps) {
   const { $journal } = useJournalContext()
   const [, setTree] = $journal.$fileTree
 
-  const [_journalGroupForm, { Field, Form }] = createForm<Journal>()
+  const [_journalGroupForm, { Field, Form }] = createForm<JournalApi.Journal>()
   const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
 
-  const submit: SubmitHandler<Journal> = async(data) => {
+  const submit: SubmitHandler<JournalApi.Journal> = async(data) => {
     setSubmitButtonDisabled(true)
     const dataReturned = await toast
       .promise($journal.$create(data), {

@@ -37,4 +37,6 @@ declare global {
 
   /**A type representing any object, where the keys are strings and the values can be of any type. */
   type AnyObject = Record<string, any>
+
+  type AnyClass = abstract new (...args: any) => any
 }

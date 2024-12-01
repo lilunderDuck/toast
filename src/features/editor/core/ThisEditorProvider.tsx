@@ -5,12 +5,12 @@ import {
   type Setter, 
   useContext 
 } from "solid-js"
-import EditorJS, { type OutputData } from "@editorjs/editorjs"
+import EditorJS, { type OutputBlockData } from "@editorjs/editorjs"
 import { createEvent, IEvent } from "~/utils"
 
 export type EditorData = {
   id: string
-  content: OutputData
+  content: OutputBlockData[]
 }
 
 export type OnEditorSwitchingEvent =  (previous: EditorData | null, current: EditorData) => any
@@ -39,7 +39,8 @@ export interface IThisEditorProviderContext {
   $editorInstance?: EditorJS
   $save(): Promise<EditorData>
   $event: IEvent<ThisEditorEvent>
-  $cache: Map<string, EditorData>
+  /**Editor's cache data */
+  $cache: Map<string, EditorData["content"]>
   /**Tracks whether the editor is editable. */
   $setIsEditable(setter: Setter<boolean>): void
   /**Opens a new editor with the specified data.
@@ -53,18 +54,19 @@ const Context = createContext<IThisEditorProviderContext>()
 export function ThisEditorProvider(props: ParentProps) {
   const [isEditable, setIsEditable] = createSignal(true)
   const event = createEvent<ThisEditorEvent>()
+  const cache = new Map()
   let editorInstance: EditorJS
   let lastData: EditorData | null = null
 
   return (
     <Context.Provider value={{
       $event: event,
-      $cache: new Map(),
+      $cache: cache,
       set $editorInstance(instance: EditorJS) {
         editorInstance = instance
       },
       get $editorInstance() {
-        console.assert(editorInstance, 'Editor instance should not be undefined')
+        console.assert(editorInstance, '[editor] editor instance should not be undefined')
         return editorInstance
       },
       $setIsEditable(setter) {
@@ -78,17 +80,18 @@ export function ThisEditorProvider(props: ParentProps) {
         event.$emit('editor_onSwitching', lastData, data)
     
         editorInstance!.render({
-          blocks: data.content?.blocks ?? []
+          blocks: data.content ?? []
         })
         
         lastData = data
+        cache.set(data.id, data.content)
         console.log('[editor] opened', data)
       },
       async $save() {
         const content = await this.$editorInstance!.save()
-        console.log('[editor] saving', lastData?.id, 'with', content)
+        console.log('[editor] saving', lastData?.id, 'with', content.blocks)
         return {
-          content,
+          content: content.blocks,
           id: lastData!.id
         }
       }

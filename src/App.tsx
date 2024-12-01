@@ -2,7 +2,7 @@ import { Route, Router } from '@solidjs/router'
 import { lazy } from 'solid-js'
 // ...
 import { ColorAndStuff } from '~/components'
-import { Toaster } from '~/libs/toast'
+import { Toaster } from '~/features/toast'
 import { StartupSequence } from '~/features/misc'
 
 const HomePage = lazy(() => import('~/routes/index'))

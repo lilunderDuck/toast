@@ -106,7 +106,7 @@ export function createEvent<T extends EventMap>(): IEvent<T> {
       }
     },
     $emit(eventName, ...args) {
-      console.log('[event] emitting:', eventName)
+      console.log('[event] emitting:', eventName, 'with', args)
       let _listeners = listeners[eventName]
       if (!_listeners) return true
       for (const listener of _listeners) {
