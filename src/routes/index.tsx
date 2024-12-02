@@ -3,7 +3,7 @@ import { mergeClassname } from "~/utils"
 import { Flex } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
-import __style from "~/features/home/index.module.css"
+import __style from "~/features/journal-home/index.module.css"
 // ...
 
 const style = stylex.create({
