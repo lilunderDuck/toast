@@ -1,4 +1,3 @@
-export * from './journal'
-export * from './journal-group'
+export * from './(journal)'
 export * from './splash-text'
 export * from './mem_usage'
