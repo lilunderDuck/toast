@@ -1,4 +1,4 @@
-import { JournalInfoSidebar, JournalList } from "~/features/home"
+import { JournalInfoSidebar, JournalList } from "~/features/journal-home"
 import { mergeClassname } from "~/utils"
 import { Flex } from "~/components"
 // ...
