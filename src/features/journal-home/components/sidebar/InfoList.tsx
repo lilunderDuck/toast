@@ -3,7 +3,7 @@ import { Show, type JSX } from "solid-js"
 import { BsCalendar2Fill, BsJournalCheck, BsPencilFill } from "solid-icons/bs"
 // ...
 import { FlexCenterY } from "~/components"
-import { JournalApi } from "~/api"
+import { JournalApi } from "~/api/journal"
 // ...
 import { SectionText } from "./Section"
 

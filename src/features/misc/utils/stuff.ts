@@ -1,4 +1,4 @@
-import { MEMORY_USAGE_ROUTE, type IServerResourceUsage } from "~/api"
+import { MEMORY_USAGE_ROUTE, type IServerResourceUsage } from "~/api/misc"
 import { fetchIt } from "~/utils"
 
 export async function getServerUsages() {

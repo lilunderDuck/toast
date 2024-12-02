@@ -4,7 +4,7 @@ import { createSignal } from "solid-js"
 import { 
   JOURNAL_GROUP_ROUTE, 
   type JournalApi
-} from "~/api"
+} from "~/api/journal"
 import { Button, ButtonSizeVariant, FieldInput } from "~/components"
 import { toast } from '~/features/toast'
 import { fetchIt } from "~/utils"

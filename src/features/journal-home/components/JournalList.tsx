@@ -3,7 +3,7 @@ import { createResource, createSignal, For, Show } from "solid-js"
 import { 
   JOURNAL_GROUP_ROUTE, 
   type JournalApi 
-} from "~/api"
+} from "~/api/journal"
 import { Flex, FlexCenter } from "~/components"
 import { fetchIt, mergeClassname } from "~/utils"
 import { thisArrayObjects } from "~/common"

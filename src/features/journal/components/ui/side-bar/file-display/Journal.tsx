@@ -3,7 +3,7 @@ import { BsX } from "solid-icons/bs"
 import stylex from "@stylexjs/stylex"
 import __style from "./Journal.module.css"
 // ...
-import type { JournalData } from "~/api"
+import type { JournalApi } from "~/api/journal"
 import { FlexCenterY, Spacer } from "~/components"
 import { useJournalContext } from "~/features/journal"
 import { onCleanup } from "solid-js"
@@ -31,7 +31,7 @@ const style = stylex.create({
   }
 })
 
-interface IJournalProps extends JournalData {
+interface IJournalProps extends JournalApi.JournalData {
   onClick?: EventHandler<"div", "onClick">
 }
 

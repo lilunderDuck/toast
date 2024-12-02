@@ -5,7 +5,7 @@ import { lazy, onCleanup } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import __style from "../JournalList.module.css"
 // ...
-import type { JournalApi } from "~/api"
+import type { JournalApi } from "~/api/journal"
 import { Button, ButtonSizeVariant, Flex, Spacer, createLazyLoadedDialog } from "~/components"
 import { BsPencilFill } from "solid-icons/bs"
 

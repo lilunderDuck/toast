@@ -3,7 +3,7 @@ import { validator } from 'hono/validator'
 import { 
   JOURNAL_GROUP_ROUTE, 
   journalGroupFormSchema 
-} from "~/api"
+} from "~/api/journal"
 import { 
   createJournalGroup, 
   getAllJournalGroups,
@@ -15,7 +15,6 @@ import { canHaveIdOrNot, getBodyAndQuery, mustHaveAnId, validate } from "~/serve
 import { duck } from "~/entry-server"
 import { isEmptyObject } from '~/common'
 // ...
-// import { isEmptyObject } from '@tiptap/core'
 
 duck.get(JOURNAL_GROUP_ROUTE, validator('query', (value, context) => {
   if (isEmptyObject(value)) {

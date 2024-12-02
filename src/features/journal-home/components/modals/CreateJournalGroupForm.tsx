@@ -8,7 +8,7 @@ import IconInput from "./IconInput"
 import { 
   JOURNAL_GROUP_ROUTE, 
   type JournalApi
-} from "~/api"
+} from "~/api/journal"
 import { fetchIt } from "~/utils"
 import { 
   Button, 

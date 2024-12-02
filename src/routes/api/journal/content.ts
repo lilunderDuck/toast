@@ -1,6 +1,6 @@
 import { validator } from "hono/validator"
 // ...
-import { JOURNAL_CONTENT_ROUTE, JournalApi } from "~/api"
+import { JOURNAL_CONTENT_ROUTE, JournalApi } from "~/api/journal"
 import { duck } from "~/entry-server"
 import { validate } from "~/server"
 import { getJournal, updateJournal } from "~/features/journal-data"

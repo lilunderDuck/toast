@@ -13,7 +13,7 @@ import { fetchIt } from "~/utils"
 import { 
   JOURNAL_GROUP_ROUTE, 
   type JournalApi
-} from "~/api"
+} from "~/api/journal"
 
 export function JournalEditor() {
   const param = useParams()

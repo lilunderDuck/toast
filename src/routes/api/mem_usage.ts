@@ -1,4 +1,4 @@
-import { type IServerResourceUsage, MEMORY_USAGE_ROUTE } from "~/api"
+import { type IServerResourceUsage, MEMORY_USAGE_ROUTE } from "~/api/misc"
 import { duck } from "~/entry-server"
 // import os from 'node:os'
 

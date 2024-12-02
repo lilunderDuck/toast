@@ -1,4 +1,4 @@
-import { SPLASH_TEXT_ROUTE } from "~/api"
+import { SPLASH_TEXT_ROUTE } from "~/api/misc"
 import { apiRoute, getRandomElement } from "~/common"
 import { duck } from "~/entry-server"
 

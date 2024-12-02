@@ -1,7 +1,7 @@
 import { Checkbox, DialogContent, DialogDescription, DialogTitle, FlexCenterY, OpenAndCloseButton, type IDialog } from "~/components"
 import stylex from '@stylexjs/stylex'
 import { useJournalContext } from "~/features/journal"
-import { JournalData } from "~/api"
+import { JournalApi } from "~/api/journal"
 
 const style = stylex.create({
   form: {
@@ -14,7 +14,7 @@ const style = stylex.create({
 })
 
 interface IDeleteJournalModalProps extends IDialog {
-  $journal: JournalData
+  $journal: JournalApi.JournalData
 }
 
 export default function DeleteJournalModal(props: IDeleteJournalModalProps) {

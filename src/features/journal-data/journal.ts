@@ -1,4 +1,4 @@
-import { JournalApi } from "~/api"
+import { JournalApi } from "~/api/journal"
 import { buildJournalGroupPath } from "./journalGroup"
 import { bson_readFile, bson_writeFile, deleteFile, getEverythingFromDir } from "~/server"
 import crypto from 'node:crypto'

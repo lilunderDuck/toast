@@ -1,6 +1,8 @@
 import { createSignal, onCleanup, onMount } from "solid-js"
+// ...
+import type { IServerResourceUsage } from "~/api/misc"
+// ...
 import MemorySlider from "./MemorySlider"
-import type { IServerResourceUsage } from "~/api"
 import { getServerUsages } from "../../utils"
 
 export function MemoryUsage() {

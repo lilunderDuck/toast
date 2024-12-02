@@ -9,7 +9,7 @@ import {
   type JournalApi, 
   JOURNAL_CONTENT_ROUTE, 
   JOURNAL_ROUTE, 
-} from "~/api"
+} from "~/api/journal"
 import { fetchIt, type IEvent } from "~/utils"
 import { thisArrayObjects } from "~/common"
 import { useThisEditorContext } from "~/features/editor"

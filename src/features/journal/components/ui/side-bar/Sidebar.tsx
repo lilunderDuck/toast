@@ -2,7 +2,7 @@ import stylex from "@stylexjs/stylex"
 import { createSignal, For, lazy } from "solid-js"
 // ...
 import { createLazyLoadedDialog, Divider } from "~/components"
-import type { JournalData } from "~/api"
+import type { JournalApi } from "~/api/journal"
 // ...
 import { useJournalContext } from "../../../context"
 import { SidebarButtonsRow } from "./SidebarButtonsRow"
@@ -26,7 +26,7 @@ export function Sidebar(props: HTMLAttributes<"div">) {
   const [tree] = $journal.$fileTree
 
   const deleteJournalModal = createLazyLoadedDialog()
-  const [thingToDelete, setThingToDelete] = createSignal<JournalData>()
+  const [thingToDelete, setThingToDelete] = createSignal<JournalApi.JournalData>()
 
   $event.$on('journal__deletingJournal', (deleteRightAway, data) => {
     if (deleteRightAway) return

@@ -1,7 +1,7 @@
 import { createSignal, Show } from "solid-js"
 import { useNavigate } from "@solidjs/router"
 // ...
-import type { JournalApi } from "~/api"
+import type { JournalApi } from "~/api/journal"
 import { OpenAndCloseButton } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"

@@ -7,7 +7,7 @@ import {
 // ...
 import stylex from "@stylexjs/stylex"
 import EditJournalGroupForm from "./EditJournalGroupForm"
-import type { JournalApi } from "~/api"
+import type { JournalApi } from "~/api/journal"
 
 const style = stylex.create({
   $content: {

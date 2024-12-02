@@ -2,14 +2,17 @@ import crypto from 'node:crypto'
 // ...
 import { 
   type JournalApi
-} from "~/api"
+} from "~/api/journal"
 import { 
   bson_writeFile,
   createDirectoryIfNotExist, 
   isThisDirectoryExist,
   JOURNALS_FOLDER
 } from "~/server"
-import { getAllJournalGroupsCache, updateJournalGroupsCache } from './cache'
+import { 
+  getAllJournalGroupsCache,
+  updateJournalGroupsCache 
+} from './cache'
 
 export const buildJournalGroupPath = <const T extends string>(path: T) => `${JOURNALS_FOLDER}/${path}` as const
 export async function createJournalGroup(data: JournalApi.Group) {

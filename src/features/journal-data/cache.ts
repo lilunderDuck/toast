@@ -1,4 +1,4 @@
-import type { JournalApi } from "~/api"
+import type { JournalApi } from "~/api/journal"
 import { bson_readFile, bson_writeFile, CACHE_FOLDER } from "~/server"
 
 type JournalGroupCacheData = Record<string, JournalApi.GroupData>

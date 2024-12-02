@@ -7,7 +7,7 @@ import { createSignal } from "solid-js"
 // ...
 import { 
   type JournalApi,
-} from "~/api"
+} from "~/api/journal"
 import { 
   FieldInput,
   OpenAndCloseButton
