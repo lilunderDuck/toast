@@ -1,4 +1,12 @@
-import { Checkbox, DialogContent, DialogDescription, DialogTitle, FlexCenterY, OpenAndCloseButton, type IDialog } from "~/components"
+import { 
+  Checkbox, 
+  DialogContent, 
+  DialogDescription, 
+  DialogTitle, 
+  FlexCenterY, 
+  OpenAndCloseButton, 
+  type IDialog 
+} from "~/components"
 import stylex from '@stylexjs/stylex'
 import { useJournalContext } from "~/features/journal"
 import { JournalApi } from "~/api/journal"

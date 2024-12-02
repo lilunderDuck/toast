@@ -1,14 +1,11 @@
 import stylex from "@stylexjs/stylex"
-import { createSignal, For, lazy } from "solid-js"
+import { For } from "solid-js"
 // ...
-import { createLazyLoadedDialog, Divider } from "~/components"
-import type { JournalApi } from "~/api/journal"
+import { Divider } from "~/components"
 // ...
 import { useJournalContext } from "../../../context"
 import { SidebarButtonsRow } from "./SidebarButtonsRow"
 import { Journal } from "./file-display"
-
-const DeleteJournalModal = lazy(() => import('./delete-stuff'))
 
 const style = stylex.create({
   sidebar: {
@@ -22,18 +19,8 @@ const style = stylex.create({
 })
 
 export function Sidebar(props: HTMLAttributes<"div">) {
-  const { $journal, $event } = useJournalContext()
+  const { $journal } = useJournalContext()
   const [tree] = $journal.$fileTree
-
-  const deleteJournalModal = createLazyLoadedDialog()
-  const [thingToDelete, setThingToDelete] = createSignal<JournalApi.JournalData>()
-
-  $event.$on('journal__deletingJournal', (deleteRightAway, data) => {
-    if (deleteRightAway) return
-
-    setThingToDelete(data)
-    deleteJournalModal.$show()
-  })
 
   return (
     <div 
@@ -53,12 +40,6 @@ export function Sidebar(props: HTMLAttributes<"div">) {
           {it => <Journal {...it} />}
         </For>
       </div>
-      <deleteJournalModal.$Modal>
-        <DeleteJournalModal 
-          $close={deleteJournalModal.$close} 
-          $journal={thingToDelete()!}
-        />
-      </deleteJournalModal.$Modal>
     </div>
   )
 }
