@@ -65,10 +65,14 @@ export function createJournal(event: IEvent<JournalEventMap>): IThisJournalConte
       )!
     },
     async $open(journalId) {
-      console.log('[journal] creating', journalId, '...')
-      let lastContent = $cache.get(journalId) ?? []
-      if (lastContent) {
-        // 
+      console.log('[journal] opening', journalId, '...')
+      const currentJournalGroupId = getCurrentJournalGroupId()
+      let lastContent = $cache.get(journalId)!
+
+      if (!lastContent) {
+        console.group()
+        lastContent = await fetchIt('GET', `${JOURNAL_CONTENT_ROUTE}?id=${currentJournalGroupId}&journal=${journalId}`) as JournalApi.JournalContentData
+        console.groupEnd()
       }
 
       $open({

@@ -1,3 +1,4 @@
+import { SPLASH_TEXT_ROUTE } from "~/api"
 import { apiRoute, getRandomElement } from "~/common"
 import { duck } from "~/entry-server"
 
@@ -40,7 +41,7 @@ const splashTexts = [
 ]
 
 let text = ''
-duck.get(apiRoute('/splash-text'), async(context) => {
+duck.get(SPLASH_TEXT_ROUTE, async(context) => {
   while (true) {
     const newText = getRandomElement(splashTexts)
     if (text !== newText) {

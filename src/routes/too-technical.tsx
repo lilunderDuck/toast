@@ -1,6 +1,6 @@
 import stylex from "@stylexjs/stylex"
 import __style from "~/features/misc/TooTechnicalPage.module.css"
-import { LibarySearchBox } from "~/features/misc"
+import { LibarySearchBox, MemoryUsage } from "~/features/misc"
 import { createSignal } from "solid-js"
 
 const style = stylex.create({
@@ -8,7 +8,8 @@ const style = stylex.create({
     paddingInline: 15,
     paddingTop: 10,
     width: '100%',
-    height: '100%'
+    height: '100%',
+    paddingBottom: '4rem',
   },
   libList: {
     display: 'grid',
@@ -35,6 +36,10 @@ export default function TooTechnicalPage() {
           $value={value}
           $onSelect={setValue}
         />
+      </section>
+      <section>
+        <h1>Resource usage</h1>
+        <MemoryUsage />
       </section>
     </div>
   )

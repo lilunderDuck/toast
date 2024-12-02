@@ -20,12 +20,12 @@ export async function createJournal(groupId: string, data: JournalApi.Journal) {
 export async function updateJournal(groupId: string, journalId: string, data: Partial<JournalApi.SavedJournalData>) {
   const whereToUpdate = `${buildJournalGroupPath(groupId)}/${journalId}.dat` as const
 
-  const oldData = await bson_readFile<JournalApi.JournalData>(whereToUpdate) ?? {}
+  const oldData = await bson_readFile<JournalApi.SavedJournalData>(whereToUpdate) ?? {}
   const newData = {
     ...oldData,
     ...data as JournalApi.Journal,
     modified: new Date()
-  } as JournalApi.JournalData
+  } as JournalApi.SavedJournalData
 
   console.log('[journal] update from', oldData, 'to', newData)
 
@@ -39,6 +39,14 @@ export async function deleteJournal(groupId: string, journalId: string) {
   await deleteFile(whereToDelete)
 }
 
+export async function getJournal(groupId: string, journalId: string) {
+  const thisJournalGroupPath = buildJournalGroupPath(groupId)
+
+  const data = await bson_readFile<JournalApi.SavedJournalData>(`${thisJournalGroupPath}/${journalId}.dat`)
+
+  return data?.data ?? []
+}
+
 export async function getAllJournals(groupId: string) {
   const thisJournalGroupPath = buildJournalGroupPath(groupId)
   const journals = (await getEverythingFromDir(thisJournalGroupPath))
@@ -48,7 +56,7 @@ export async function getAllJournals(groupId: string) {
   console.log(journals)
   const data = []
   for (const journalFile of journals) {
-    const dataFetched = await bson_readFile<JournalApi.JournalData>(`${thisJournalGroupPath}/${journalFile}`)
+    const dataFetched = await bson_readFile<JournalApi.SavedJournalData>(`${thisJournalGroupPath}/${journalFile}`)
     if (dataFetched) data.push(dataFetched)
   }
 

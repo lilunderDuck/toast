@@ -7,7 +7,7 @@ import { useThisEditorContext } from "./ThisEditorProvider"
 
 const style = stylex.create({
   editor: {
-    height: '100%',
+    height: 'calc(100vh - 20px)',
     paddingInline: 10
   }
 })
@@ -41,6 +41,11 @@ export function ThisEditor() {
   onCleanup(() => {
     editor.$editorInstance?.destroy()
   })
+
+  const autoScrollIntoBottom = () => {
+    editorRef.scrollIntoView({ behavior: "smooth", block: "end" })
+    editorRef.scrollTop = editorRef.scrollHeight + 1000
+  }
   
   return (
     <div
@@ -48,6 +53,7 @@ export function ThisEditor() {
       app-scrollbar-vertical 
       app-invs-scrollbar 
       ref={editorRef!} 
+      onKeyPress={autoScrollIntoBottom}
       {...stylex.attrs(style.editor)} 
     />
   )
