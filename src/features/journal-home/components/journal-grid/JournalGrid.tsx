@@ -29,10 +29,12 @@ const style = stylex.create({
   }
 })
 
-const EditJournalGroupModal = lazy(() => import('../modals/EditJournalGroupModal'))
-
 export function JournalGrid(props: IJournalGridProps) {
-  const modal = createLazyLoadedDialog()
+  const modal = createLazyLoadedDialog(
+    lazy(() => import('../modals/EditJournalGroupModal')), 
+    () => props
+  )
+  
   const [styleId, styleDispose] = inlineCssVar(props.icon ? {
     '--journal-grid-background': `url('${props.icon}')`
   } : {})
@@ -59,9 +61,7 @@ export function JournalGrid(props: IJournalGridProps) {
         {props.name}
       </span>
       {/* ... */}
-      <modal.$Modal>
-        <EditJournalGroupModal $close={modal.$close} {...props} />
-      </modal.$Modal>
+      <modal.$Modal />
     </JournalGridWrap>
   )
 }

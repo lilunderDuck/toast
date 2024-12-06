@@ -16,8 +16,6 @@ import { useThisEditorContext } from "~/features/editor"
 import { EditOrReadonlyIcon } from "~/features/journal"
 import { useJournalContext } from "../../context"
 
-const CreateJournalModal = lazy(() => import('./create-stuff'))
-
 const style = stylex.create({
   buttonsRow: {
     gap: 10
@@ -54,7 +52,9 @@ export function SidebarButtonsRow() {
     )
   }
 
-  const createJournalModal = createLazyLoadedDialog()
+  const createJournalModal = createLazyLoadedDialog(
+    lazy(() => import('./create-stuff'))
+  )
 
   return (
     <FlexCenterY {...stylex.attrs(style.buttonsRow)}>
@@ -79,9 +79,7 @@ export function SidebarButtonsRow() {
         $label={`Toggle ${true ? 'read-only' : 'edit'} mode`}
       />
       {/* ... */}
-      <createJournalModal.$Modal>
-        <CreateJournalModal $close={createJournalModal.$close} />
-      </createJournalModal.$Modal>
+      <createJournalModal.$Modal />
     </FlexCenterY>
   )
 }

@@ -25,8 +25,6 @@ import { useJournalContext } from "../context"
 import { BsHouseFill } from "solid-icons/bs"
 import { toast } from "~/features/toast"
 
-const DeleteJournalModal = lazy(() => import('./delete-journal-modal'))
-
 const style = stylex.create({
   sidebar: {
     width: '100%',
@@ -60,7 +58,13 @@ export function JournalSidebar() {
     return goHome()
   }
 
-  const deleteJournalModal = createLazyLoadedDialog()
+  const deleteJournalModal = createLazyLoadedDialog(
+    lazy(() => import('./delete-journal-modal')), 
+    () => ({
+      $journal: thingToDelete()!
+    })
+  )
+  
   const [thingToDelete, setThingToDelete] = createSignal<JournalApi.JournalData>()
   const clickingOpenJournal: ISidebarProps["$onClickingOpen"] = (journal) => {
     $journal.$open(journal.id)
@@ -96,12 +100,7 @@ export function JournalSidebar() {
       </TabPanel>
       <ResizableHandle />
       {/* ... */}
-      <deleteJournalModal.$Modal>
-        <DeleteJournalModal 
-          $close={deleteJournalModal.$close} 
-          $journal={thingToDelete()!}
-        />
-      </deleteJournalModal.$Modal>
+      <deleteJournalModal.$Modal />
     </>
   )
 }

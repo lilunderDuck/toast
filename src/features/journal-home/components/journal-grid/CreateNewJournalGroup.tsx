@@ -11,19 +11,15 @@ const style = stylex.create({
   }
 })
 
-const CreateJournalGroupModal = lazy(() => import('../modals/CreateJournalGroupModal'))
-
 export function CreateNewJournalGroup() {
-  const modal = createLazyLoadedDialog()
+  const modal = createLazyLoadedDialog(lazy(() => import('../modals/CreateJournalGroupModal')))
 
   return (
     <>
       <JournalGridWrap onClick={modal.$show} {...stylex.attrs(style.createButton)}>
         <BsPlus size={30} />
       </JournalGridWrap>
-      <modal.$Modal>
-        <CreateJournalGroupModal $close={modal.$close} />
-      </modal.$Modal>
+      <modal.$Modal />
     </>
   )
 }
