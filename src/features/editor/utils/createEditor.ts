@@ -12,6 +12,7 @@ export const createEditor = (
   return new EditorJS({
     holder: whereToPut,
     autofocus: true,
+    readOnly: isEditable,
     tools: {
       ...someToolsIShouldNeed(),
       colorPicker: createColorPicker()

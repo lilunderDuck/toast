@@ -14,10 +14,11 @@ const style = stylex.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    padding: 1,
-    backgroundColor: 'var(--gray3)',
+    padding: 0,
+    width: 2,
+    backgroundColor: 'transparent',
     ':hover': {
-      backgroundColor: 'var(--gray5)',
+      backgroundColor: 'var(--blue10)',
     }
   },
   $resiableIconHandle: {

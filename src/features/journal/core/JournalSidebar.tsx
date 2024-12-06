@@ -2,15 +2,28 @@ import stylex from "@stylexjs/stylex"
 import { createSignal, lazy, onMount } from "solid-js"
 import { useNavigate, useParams } from "@solidjs/router"
 // ...
-import { createLazyLoadedDialog, Flex, ResizableHandle } from "~/components"
+import { 
+  createLazyLoadedDialog, 
+  Flex, 
+  FlexCenterY, 
+  ResizableHandle 
+} from "~/components"
 import { fetchIt } from "~/utils"
 import { 
   JOURNAL_GROUP_ROUTE, 
   type JournalApi
 } from "~/api/journal"
 // ...
-import { QuickActionBar, Sidebar, TabPanel } from "../components"
+import { 
+  QuickActionBar, 
+  QuickActionItem, 
+  Sidebar, 
+  type ISidebarProps, 
+  TabPanel 
+} from "../components"
 import { useJournalContext } from "../context"
+import { BsHouseFill } from "solid-icons/bs"
+import { toast } from "~/features/toast"
 
 const DeleteJournalModal = lazy(() => import('./delete-journal-modal'))
 
@@ -22,46 +35,63 @@ const style = stylex.create({
 })
 
 export function JournalSidebar() {
-  const { $journal, $event } = useJournalContext()
+  const { $journal, $localStorage } = useJournalContext()
   const [, setTree] = $journal.$fileTree
 
   const param = useParams()
   const goTo = useNavigate()
+  const goHome = () => goTo('/')
+
   onMount(async() => {
     const data = await fetchIt<JournalApi.GroupData>('GET', `${JOURNAL_GROUP_ROUTE}?id=${param.id}`)
-    if (!data) {
-      return goTo('/')
-    }
-
+    if (!data) return goHomeImmediately()
+    // note: you should not reorder this line of code here, otherwise it *will* break
     $journal.$setCurrentGroup(data)
+
     const tree = await $journal.$getAll()
+    if (!tree) return goHomeImmediately()
 
     setTree(tree!)
   })
 
+  const goHomeImmediately = () => {
+    console.error(`[complete panic] Failed to get some data from ${param.id}. You're now going back to home page...`)
+    toast.error('Failed to open that journal group. It may be deleted or corrupted.')
+    return goHome()
+  }
+
   const deleteJournalModal = createLazyLoadedDialog()
   const [thingToDelete, setThingToDelete] = createSignal<JournalApi.JournalData>()
-  $event.$on('journal__clickingJournal', (journal) => {
+  const clickingOpenJournal: ISidebarProps["$onClickingOpen"] = (journal) => {
     $journal.$open(journal.id)
     $journal.$setCurrentlyOpened(journal)
-  })
+  }
 
-  $event.$on('journal__deletingJournal', (deleteRightAway, journal) => {
+  const clickingRemoveJournal: ISidebarProps["$onClickingRemove"] = (journal) => {
+    const deleteRightAway = $localStorage.$get('shouldShowDeleteConfirmationModal')
     if (deleteRightAway) {
       return $journal.$delete(journal.id)
     }
 
     setThingToDelete(journal)
     deleteJournalModal.$show()
-  })
+  }
 
   return (
     <>
       <TabPanel initialSize={0.3}>
-        <div></div>
+        <FlexCenterY>
+          <QuickActionItem 
+            $icon={BsHouseFill}
+            onClick={() => goHome()}
+          />
+        </FlexCenterY>
         <Flex {...stylex.attrs(style.sidebar)}>
           <QuickActionBar />
-          <Sidebar />
+          <Sidebar 
+            $onClickingOpen={clickingOpenJournal} 
+            $onClickingRemove={clickingRemoveJournal}
+          />
         </Flex>
       </TabPanel>
       <ResizableHandle />

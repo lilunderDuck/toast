@@ -39,7 +39,7 @@ export function ThisEditor() {
   })
 
   onCleanup(() => {
-    editor.$editorInstance?.destroy()
+    editor.$editorInstance?.destroy?.()
   })
 
   const autoScrollIntoBottom = () => {

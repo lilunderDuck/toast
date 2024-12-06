@@ -3,7 +3,12 @@ import { validator } from "hono/validator"
 import { JOURNAL_ROUTE, journalFormSchema } from "~/api/journal"
 import { duck } from "~/entry-server"
 import { isThisDirectoryExist, mustHaveAnId, validate } from "~/server"
-import { buildJournalGroupPath, createJournal, deleteJournal, getAllJournals } from "~/features/journal-data"
+import { 
+  buildJournalGroupPath, 
+  createJournal, 
+  deleteJournal, 
+  getAllJournals 
+} from "~/features/journal-data"
 // ...
 
 import { object, string } from "valibot"
@@ -29,7 +34,6 @@ duck.get(JOURNAL_ROUTE, validator('query', (value, context) => {
 
   return context.json(await getAllJournals(query.id), 200)
 })
-
 
 duck.post(JOURNAL_ROUTE, validator('query', (value, context) => {
   if (validate(mustHaveAnId, value)) {

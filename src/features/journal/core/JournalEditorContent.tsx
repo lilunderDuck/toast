@@ -1,7 +1,8 @@
 import stylex from "@stylexjs/stylex"
+import { type ParentProps, Show } from "solid-js"
+// ...
 import { useJournalContext } from "../context"
 import { EditorWelcome, TabList, TabPanel } from "../components"
-import { type ParentProps, Show } from "solid-js"
 
 const style = stylex.create({
   content: {

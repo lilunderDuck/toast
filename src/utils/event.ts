@@ -4,13 +4,13 @@ export interface IEvent<TEvent extends EventMap> {
   /**Adds a listener to the specified event. 
    * @example
    * ```js
-   * const event = new EventEmitter()
+   * const event = createEvent()
    * 
-   * event.on('some_event', () => {
+   * event.$on('some_event', () => {
    *   console.log("'some_event' called")
    * })
    * // call the event
-   * event.emit('some_event')
+   * event.$emit('some_event')
    * // should console out "'some_event' called"
    * ```
    */
@@ -19,13 +19,13 @@ export interface IEvent<TEvent extends EventMap> {
    * The next time eventName is triggered, this listener is removed and then invoked.
    * @example
    * ```js
-   * const event = new EventEmitter()
+   * const event = createEvent()
    * 
-   * event.once('some_event', () => {
+   * event.$once('some_event', () => {
    *   console.log("'some_event' called")
    * })
    * // call the event
-   * event.emit('some_event')
+   * event.$emit('some_event')
    * // should console out "'some_event' called"
    * ```
    */
@@ -33,14 +33,14 @@ export interface IEvent<TEvent extends EventMap> {
   /**Removes the specified listener from the listener array for the event named `eventName`.
    * @example
    * ```js
-   * const event = new EventEmitter()
+   * const event = createEvent()
    * const callback = () => {
    *   console.log('something happen!');
    * }
    * 
-   * event.on('some_event', callback);
+   * event.$on('some_event', callback);
    * // ...
-   * event.off('some_event', callback); 
+   * event.$off('some_event', callback); 
    * ```
    * @param eventName 
    * @param fn 
@@ -50,24 +50,24 @@ export interface IEvent<TEvent extends EventMap> {
    * in the order they were registered, passing the supplied arguments to each.
    * @example
    * ```js
-   * const event = new EventEmitter();
+   * const event = createEvent();
    *
    * // First listener
-   * event.on('some_event', firstListener() => {
+   * event.$on('some_event', firstListener() => {
    *   console.log('Helloooo! first listener');
    * });
    * // Second listener
-   * event.on('some_event', secondListener(arg1, arg2) => {
+   * event.$on('some_event', secondListener(arg1, arg2) => {
    *   console.log(`event with parameters ${arg1}, ${arg2} in second listener`);
    * });
    * // Third listener
-   * event.on('some_event', thirdListener(...args) => {
+   * event.$on('some_event', thirdListener(...args) => {
    *   const parameters = args.join(', ');
    *   console.log(`event with parameters ${parameters} in third listener`);
    * });
    *
    *
-   * event.emit('some_event', 1, 2, 3, 4, 5);
+   * event.$emit('some_event', 1, 2, 3, 4, 5);
    *
    * // Helloooo! first listener
    * // event with parameters 1, 2 in second listener

@@ -2,7 +2,7 @@ import { HttpMethod } from "~/common"
 
 const BASE_PATH = 'http://localhost:8000'
 export async function fetchIt<Data extends {} = {}>(method: HttpMethod, path: string, body = {}): Promise<Data | null> {
-  console.log(`--> ${method}:`, BASE_PATH + path)
+  console.groupCollapsed(`--> ${method}:`, BASE_PATH + path)
   const methodsThatAllowABody = ['POST', 'PATCH'].includes(method)
 
   const response = await fetch(BASE_PATH + path, {
@@ -17,10 +17,11 @@ export async function fetchIt<Data extends {} = {}>(method: HttpMethod, path: st
 
   if (isServerResponsesWithBadStatusCode(response.status)) {
     console.error(`<-- ${method}: ${BASE_PATH + path} - not okay, https://http.cat/${response.status} :(`)
+    console.groupEnd()
     return null
   }
 
-  console.log(`<-- ${method}: ${BASE_PATH + path} - okay, https://http.cat/${response.status} :)`)
+  console.log(`okay, https://http.cat/${response.status} :)`)
   
   return await tryConvertingToJson(response) as Data
 }
@@ -41,5 +42,8 @@ async function tryConvertingToJson(response: Response) {
     json = null
   }
 
+  console.log('data:', json)
+
+  console.groupEnd()
   return json
 }

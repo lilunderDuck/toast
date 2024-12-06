@@ -14,7 +14,7 @@ import {
 import { useThisEditorContext } from "~/features/editor"
 // ...
 import { EditOrReadonlyIcon } from "~/features/journal"
-import { useJournalContext } from "../../../context"
+import { useJournalContext } from "../../context"
 
 const CreateJournalModal = lazy(() => import('./create-stuff'))
 
@@ -34,9 +34,9 @@ interface IButtonItemProps extends HTMLAttributes<"button"> {
 
 export function SidebarButtonsRow() {
   const { $journal } = useJournalContext()
-  const {  } = useThisEditorContext()
+  const { $setIsEditable } = useThisEditorContext()
   const toggleEditOrReadonlyMode = () => {
-    // ThisEditor.$setIsEditable(prev => !prev)
+    $setIsEditable(prev => !prev)
   }
 
   const ButtonItem = (props: IButtonItemProps) => {

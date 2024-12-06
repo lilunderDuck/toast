@@ -72,7 +72,8 @@ export function ThisEditorProvider(props: ParentProps) {
       $setIsEditable(setter) {
         setIsEditable(prev => {
           const newState = setter(prev)
-          editorInstance?.readOnly.toggle(newState)
+          editorInstance?.readOnly.toggle(!newState)
+          console.log('[editor] readonly:', newState)
           return newState
         })
       },

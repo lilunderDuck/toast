@@ -1,0 +1,4 @@
+#actionBar {
+  --icon-bound: 35px;
+  --icon-content: calc(var(--icon-bound) - 10px);
+}

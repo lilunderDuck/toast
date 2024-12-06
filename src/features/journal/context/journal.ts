@@ -60,9 +60,8 @@ export function createJournal(event: IEvent<JournalEventMap>): IThisJournalConte
     async $create(data) {
       console.log('[journal] creating', data, '...')
       const currentJournalGroupId = getCurrentJournalGroupId()
-      return (
-        await fetchIt('POST', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}`, data)
-      )!
+      const newData = await fetchIt<JournalApi.JournalData>('POST', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}`, data)
+      return newData!
     },
     async $open(journalId) {
       console.log('[journal] opening', journalId, '...')
@@ -92,7 +91,8 @@ export function createJournal(event: IEvent<JournalEventMap>): IThisJournalConte
     },
     async $getAll() {
       const currentJournalGroupId = getCurrentJournalGroupId()
-      return await fetchIt('GET', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}`) ?? []
+      console.log('[journal] getting all journals data from', currentJournalGroupId, '...')
+      return await fetchIt('GET', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}`) as JournalApi.JournalData[]
     },
     async $save(journalId, data) {
       console.log('[journal] saving', journalId, '...')
