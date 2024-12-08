@@ -1,7 +1,7 @@
 import stylex from "@stylexjs/stylex"
-import { Flex } from "../../../../components"
-import { mergeClassname } from "../../../../utils"
-import __style from "../JournalList.module.css"
+import { Flex } from "~/components"
+import { mergeClassname } from "~/utils"
+import __style from "./JournalGrid.module.css"
 
 const style = stylex.create({
   $journal: {

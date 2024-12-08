@@ -12,7 +12,7 @@ const style = stylex.create({
 })
 
 export function CreateNewJournalGroup() {
-  const modal = createLazyLoadedDialog(lazy(() => import('../modals/CreateJournalGroupModal')))
+  const modal = createLazyLoadedDialog(lazy(() => import('./modals/CreateJournalGroupModal')))
 
   return (
     <>

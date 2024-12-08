@@ -1,2 +1,2 @@
-export * from "./JournalList"
 export * from "./sidebar"
+export * from "./journal-grid"

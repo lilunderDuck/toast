@@ -26,7 +26,7 @@ interface IBackgroundShowcaseProps {
   id?: string
 }
 
-export default function BackgroundShowcase(props: IBackgroundShowcaseProps) {
+export function BackgroundShowcase(props: IBackgroundShowcaseProps) {
   return (
     <>
       <Flex 

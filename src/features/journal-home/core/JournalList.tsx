@@ -8,11 +8,11 @@ import { Flex, FlexCenter } from "~/components"
 import { fetchIt, mergeClassname } from "~/utils"
 import { thisArrayObjects } from "~/common"
 // ...
-import { JournalInfoSidebar, openJournalInfoSidebar } from "./sidebar"
-import { CreateNewJournalGroup, JournalGrid } from "./journal-grid"
+import { CreateNewJournalGroup, JournalGrid } from "../components"
+import { JournalInfoSidebar, openJournalInfoSidebar } from './JournalInfoSidebar'
 // ...
 import stylex from "@stylexjs/stylex"
-import __style from './JournalList.module.css'
+import __style from '../components/journal-grid/JournalGrid.module.css'
 
 const style = stylex.create({
   $journalList: {

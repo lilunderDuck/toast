@@ -1,0 +1,7 @@
+#sidebar > *:not(:first-child) {
+  margin-top: 15px;
+}
+
+#sidebar > * {
+  padding-inline: 10px;
+}

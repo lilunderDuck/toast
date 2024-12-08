@@ -5,10 +5,9 @@ import type { JournalApi } from "~/api/journal"
 import { OpenAndCloseButton } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
-import __style from './sidebar.module.css' 
+import __style from './JournalInfoSidebar.module.css' 
 // ...
-import BackgroundShowcase from "./BackgroundShowcase"
-import InfoList from "./InfoList"
+import { BackgroundShowcase, InfoList } from "../components"
 
 const style = stylex.create({
   $sidebar: {

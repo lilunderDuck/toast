@@ -10,8 +10,8 @@ import { toast } from '~/features/toast'
 import { fetchIt } from "~/utils"
 // ...
 import IconInput from "./IconInput"
-import { updateJournalList } from "../JournalList"
-import { updateJournalInfoSidebar } from "../sidebar"
+import { updateJournalList } from "../../../core/JournalList"
+import { updateJournalInfoSidebar } from "../../sidebar"
 
 interface IEditJournalGroupFormProps extends JournalApi.GroupData {
   onClick: () => any

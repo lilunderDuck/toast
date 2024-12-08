@@ -1,1 +1,2 @@
-export * from "./JournalInfoSidebar"
+export * from "./BackgroundShowcase"
+export * from "./InfoList"

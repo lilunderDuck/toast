@@ -3,7 +3,7 @@ import JournalGridWrap from "./JournalGridWrap"
 import { lazy, onCleanup } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
-import __style from "../JournalList.module.css"
+import __style from "./JournalGrid.module.css"
 // ...
 import type { JournalApi } from "~/api/journal"
 import { Button, ButtonSizeVariant, Flex, Spacer, createLazyLoadedDialog } from "~/components"
@@ -31,7 +31,7 @@ const style = stylex.create({
 
 export function JournalGrid(props: IJournalGridProps) {
   const modal = createLazyLoadedDialog(
-    lazy(() => import('../modals/EditJournalGroupModal')), 
+    lazy(() => import('./modals/EditJournalGroupModal')), 
     () => props
   )
   
@@ -43,7 +43,8 @@ export function JournalGrid(props: IJournalGridProps) {
 
   return (
     <JournalGridWrap 
-      id={styleId} onClick={props.$onClick} 
+      id={styleId} 
+      onClick={props.$onClick} 
       {...stylex.attrs(style.grid)}
     >
       <Flex id={__style['journal-grid-edit-button']}>
