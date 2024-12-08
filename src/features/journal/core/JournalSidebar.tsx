@@ -19,7 +19,8 @@ import {
   QuickActionItem, 
   Sidebar, 
   type ISidebarProps, 
-  TabPanel 
+  TabPanel, 
+  useTabContext
 } from "../components"
 import { useJournalContext } from "../context"
 import { BsHouseFill } from "solid-icons/bs"
@@ -34,6 +35,7 @@ const style = stylex.create({
 
 export function JournalSidebar() {
   const { $journal, $localStorage } = useJournalContext()
+  const { $getFocusedTab, $updateTab } = useTabContext()
   const [, setTree] = $journal.$fileTree
 
   const param = useParams()
@@ -69,6 +71,8 @@ export function JournalSidebar() {
   const clickingOpenJournal: ISidebarProps["$onClickingOpen"] = (journal) => {
     $journal.$open(journal.id)
     $journal.$setCurrentlyOpened(journal)
+    const focusedTab = $getFocusedTab()
+    $updateTab(focusedTab.id, journal.name)
   }
 
   const clickingRemoveJournal: ISidebarProps["$onClickingRemove"] = (journal) => {

@@ -13,6 +13,7 @@ export const createEditor = (
     holder: whereToPut,
     autofocus: true,
     readOnly: isEditable,
+    // @ts-ignore
     tools: {
       ...someToolsIShouldNeed(),
       colorPicker: createColorPicker()

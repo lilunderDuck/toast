@@ -35,8 +35,8 @@ export function Sidebar(props: ISidebarProps) {
       return props.$onClickingRemove?.(data)
     }
 
-    const thisJournalId = props.id 
-    if (thisJournalId === lastJournalId) return console.log('No need to open the journal')
+    const thisJournalId = data.id 
+    if (thisJournalId === lastJournalId) return console.log(`No need to open journal, previous journal id: ${lastJournalId} - current journal id: ${thisJournalId}`)
     props.$onClickingOpen?.(data)
     lastJournalId = thisJournalId
   }

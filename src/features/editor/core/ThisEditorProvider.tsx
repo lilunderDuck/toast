@@ -1,4 +1,5 @@
 import { 
+  Accessor,
   createContext, 
   createSignal, 
   type ParentProps, 
@@ -6,7 +7,10 @@ import {
   useContext 
 } from "solid-js"
 import EditorJS, { type OutputBlockData } from "@editorjs/editorjs"
+// ...
 import { createEvent, IEvent } from "~/utils"
+// ...
+import { getBlocksTextLength, getBlocksWordCount } from "../utils"
 
 export type EditorData = {
   id: string
@@ -43,6 +47,10 @@ export interface IThisEditorProviderContext {
   $cache: Map<string, EditorData["content"]>
   /**Tracks whether the editor is editable. */
   $setIsEditable(setter: Setter<boolean>): void
+  $isEditable: Accessor<boolean>
+  $charsCount: Accessor<number>
+  $wordsCount: Accessor<number>
+  $updateCharsAndWordsCount(data: EditorData["content"]): void
   /**Opens a new editor with the specified data.
    * @param data the editor JSON data.
    */
@@ -53,6 +61,14 @@ const Context = createContext<IThisEditorProviderContext>()
 
 export function ThisEditorProvider(props: ParentProps) {
   const [isEditable, setIsEditable] = createSignal(true)
+  const [$wordsCount, $setWordsCount] = createSignal(0)
+  const [$charsCount, $setCharsCount] = createSignal(0)
+  const $updateCharsAndWordsCount = (savedData: EditorData["content"]) => {
+    $setCharsCount(getBlocksTextLength(savedData))
+    $setWordsCount(getBlocksWordCount(savedData))
+    console.log('[editor] total chars and words count updated')
+  }
+
   const event = createEvent<ThisEditorEvent>()
   const cache = new Map()
   let editorInstance: EditorJS
@@ -77,6 +93,10 @@ export function ThisEditorProvider(props: ParentProps) {
           return newState
         })
       },
+      $charsCount,
+      $wordsCount,
+      $updateCharsAndWordsCount,
+      $isEditable: isEditable,
       $open(data) {
         event.$emit('editor_onSwitching', lastData, data)
     
@@ -86,6 +106,7 @@ export function ThisEditorProvider(props: ParentProps) {
         
         lastData = data
         cache.set(data.id, data.content)
+        $updateCharsAndWordsCount(data.content)
         console.log('[editor] opened', data)
       },
       async $save() {

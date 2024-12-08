@@ -1,5 +1,5 @@
-import { onCleanup, onMount } from "solid-js"
-import { createEditor } from "../utils"
+import { onCleanup, onMount, ParentProps } from "solid-js"
+import { createEditor, getBlocksTextLength, getBlocksWordCount } from "../utils"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -7,7 +7,7 @@ import { useThisEditorContext } from "./ThisEditorProvider"
 
 const style = stylex.create({
   editor: {
-    height: 'calc(100vh - 20px)',
+    height: 'calc(100vh - 72px)',
     paddingInline: 10
   }
 })
@@ -22,7 +22,7 @@ const style = stylex.create({
  * @see {@link ThisEditorProvider}
  * @see {@link useThisEditorContext}
  */
-export function ThisEditor() {
+export function ThisEditor(props: ParentProps) {
   let editorRef: HTMLDivElement
   const editor = useThisEditorContext()
   
@@ -34,12 +34,14 @@ export function ThisEditor() {
         const savedData = await editor.$save()
         editor.$event.$emit('editor_onUpdate', savedData)
         editor.$cache.set(savedData.id, savedData.content)
+        editor.$updateCharsAndWordsCount(savedData.content)
       }
     )
   })
 
   onCleanup(() => {
     editor.$editorInstance?.destroy?.()
+    console.log('[editor] destroyed')
   })
 
   const autoScrollIntoBottom = () => {
@@ -55,6 +57,8 @@ export function ThisEditor() {
       ref={editorRef!} 
       onKeyPress={autoScrollIntoBottom}
       {...stylex.attrs(style.editor)} 
-    />
+    >
+      {props.children}
+    </div>
   )
 }

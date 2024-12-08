@@ -1,5 +1,12 @@
 import stylex from "@stylexjs/stylex"
-import { type ParentProps, Show } from "solid-js"
+import { Show } from "solid-js"
+// ...
+import { 
+  ThisEditor, 
+  ThisEditorStatusBar,
+  ThisEditorTitleBar, 
+  useThisEditorContext 
+} from "~/features/editor"
 // ...
 import { useJournalContext } from "../context"
 import { EditorWelcome, TabList, TabPanel } from "../components"
@@ -19,15 +26,29 @@ const style = stylex.create({
   }
 })
 
-export function JournalEditorContent(props: ParentProps) {
+export function JournalEditorContent() {
   const { $journal } = useJournalContext()
+  const { $event } = useThisEditorContext()
+
+  $event.$on('editor_onSwitching', async(previousData) => {
+    if (previousData) {
+      await $journal.$save(previousData.id, previousData.content)
+    }
+  })
+
+  $event.$on('editor_onUpdate', async(data) => {
+    await $journal.$save(data.id, data.content)
+  })
 
   return (
     <TabPanel initialSize={0.7} titleBar={
       <TabList />
     }>
       <div {...stylex.attrs(style.content)}>
-        {props.children}
+        <ThisEditorTitleBar name={$journal.$currentlyOpened()?.name} />
+        <ThisEditor>
+          <ThisEditorStatusBar />
+        </ThisEditor>
         <Show when={!$journal.$currentlyOpened()}>
           <EditorWelcome />
         </Show>

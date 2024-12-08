@@ -9,14 +9,17 @@ import { FlexCenterY, Flex, Spacer } from "~/components"
 const style = stylex.create({
   journal: {
     fontSize: 13,
-    paddingInline: 10,
-    paddingBlock: 5,
-    borderRadius: 6,
     transition: '0.15s ease-out',
     userSelect: 'none',
+    paddingInline: 10,
     ':hover': {
       backgroundColor: 'var(--gray3)'
     }
+  },
+  nameAndStuff: {
+    width: '100%',
+    paddingBlock: 5,
+    borderRadius: 6,
   },
   button: {
     flexShrink: 0,
@@ -39,7 +42,7 @@ export function Journal(props: IJournalProps) {
       {...stylex.attrs(style.journal)} 
       id={__style.journal} 
     >
-      <Flex onClick={() => props.$onClick?.('open', props)}>
+      <Flex {...stylex.attrs(style.nameAndStuff)} onClick={() => props.$onClick?.('open', props)}>
         <span>
           {props.name}
         </span>

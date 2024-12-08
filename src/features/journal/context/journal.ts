@@ -32,8 +32,8 @@ export interface IThisJournalContext {
   $save(journalId: string, data: JournalApi.JournalContentData): Promise<{} | null>
 }
 
-export function createJournal(event: IEvent<JournalEventMap>): IThisJournalContext {
-  const { $updateTab, $getFocusedTab, $removeTab } = useTabContext()
+export function createJournal(): IThisJournalContext {
+  const { $removeTab } = useTabContext()
   const { $cache, $open } = useThisEditorContext()
 
   const [$currentlyOpened, $setCurrentlyOpened] = createSignal<JournalApi.JournalData>()
@@ -45,11 +45,6 @@ export function createJournal(event: IEvent<JournalEventMap>): IThisJournalConte
 
     return $currentGroup()?.id!
   }
-
-  event.$on('journal__clickingJournal', (data) => {
-    const focusedTab = $getFocusedTab()
-    $updateTab(focusedTab.id, data.name)
-  })
 
   return {
     $currentlyOpened, 

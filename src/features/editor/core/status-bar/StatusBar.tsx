@@ -1,20 +1,20 @@
-import stylex from "@stylexjs/stylex"
-import __style from "./StatusBar.module.css"
 import { Show } from "solid-js"
-// import { ThisEditor } from "../ThisEditor"
 import { BsBoxFill, BsQuestionDiamondFill } from "solid-icons/bs"
 // ...
-import TagWithIcon from "./TagWithIcon"
-import { getRandomElement } from "~/common"
+import stylex from "@stylexjs/stylex"
+import __style from "./StatusBar.module.css"
 // ...
-import { FlexCenterY } from "~/components"
+import TagWithIcon from "./TagWithIcon"
 import { useThisEditorContext } from "../ThisEditorProvider"
+// ...
+import { getRandomElement } from "~/common"
+import { FlexCenterY } from "~/components"
 
 const style = stylex.create({
   statusBar: {
     backgroundColor: 'var(--gray4)',
     paddingInline: 10,
-    fontSize: 13,
+    fontSize: 12,
     gap: 10,
     userSelect: 'none',
     height: 25,
@@ -26,7 +26,7 @@ const style = stylex.create({
 })
 
 export function ThisEditorStatusBar() {
-  const {  } = useThisEditorContext()
+  const { $wordsCount, $charsCount } = useThisEditorContext()
   const randomText = [
     '*the text just magically disappeared*',
     '[redacted]',
@@ -37,7 +37,7 @@ export function ThisEditorStatusBar() {
 
   return (
     <FlexCenterY {...stylex.attrs(style.statusBar)} editor-tour-status-bar>
-      <Show when={0 > 0} fallback={
+      <Show when={$charsCount() > 0} fallback={
         <TagWithIcon
           name={<>{getRandomElement(randomText)}, there's nothing here...</>}
           icon={<BsQuestionDiamondFill />} 
@@ -46,13 +46,13 @@ export function ThisEditorStatusBar() {
         />
       }>
         <TagWithIcon
-          name={<>{0} characters</>}
+          name={<>{$charsCount()} characters</>}
           icon={<BsBoxFill />} 
           bgColor=' var(--crimson3)'
           color='var(--crimson9)'
         />
         <TagWithIcon
-          name={<>{0} words</>}
+          name={<>{$wordsCount()} words</>}
           icon={<BsBoxFill />} 
           bgColor=' var(--crimson3)'
           color='var(--crimson9)'

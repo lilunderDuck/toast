@@ -24,7 +24,7 @@ export function JournalProvider(props: ParentProps) {
 
   return (
     <Context.Provider value={{
-      $journal: createJournal(event),
+      $journal: createJournal(),
       $localStorage: createStorage(localStorage),
       $event: event
     }}>
