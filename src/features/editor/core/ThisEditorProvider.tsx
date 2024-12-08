@@ -37,6 +37,7 @@ export type ThisEditorEvent = {
    * @event
    */
   editor_onUpdate: OnEditorUpdateEvent
+  editor_onTyping: () => void
 }
 
 export interface IThisEditorProviderContext {

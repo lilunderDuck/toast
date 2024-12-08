@@ -1,14 +1,16 @@
-import { Show } from "solid-js"
+import { createSignal, Show } from "solid-js"
 import { BsBoxFill, BsQuestionDiamondFill } from "solid-icons/bs"
 // ...
 import stylex from "@stylexjs/stylex"
-import __style from "./StatusBar.module.css"
+import __style from "./ThisEditorStatusBar.module.css"
+import __bongoCat from "~/features/editor/assets/bongocat.module.css"
 // ...
 import TagWithIcon from "./TagWithIcon"
 import { useThisEditorContext } from "../ThisEditorProvider"
 // ...
 import { getRandomElement } from "~/common"
 import { FlexCenterY } from "~/components"
+import { debounce } from "~/utils"
 
 const style = stylex.create({
   statusBar: {
@@ -26,7 +28,8 @@ const style = stylex.create({
 })
 
 export function ThisEditorStatusBar() {
-  const { $wordsCount, $charsCount } = useThisEditorContext()
+  const { $wordsCount, $charsCount, $event } = useThisEditorContext()
+
   const randomText = [
     '*the text just magically disappeared*',
     '[redacted]',
@@ -35,8 +38,31 @@ export function ThisEditorStatusBar() {
     '*Quack*'
   ]
 
+  const bongoCatAnimation = {
+    stop: 'bc',
+    left_paw: 'dc',
+    right_paw: 'ba'
+  }
+
+  const [typing, setTyping] = createSignal<keyof typeof bongoCatAnimation>('stop')
+  const resetAfterOneSecond = debounce(() => setTyping('stop'), 1000)
+
+  $event.$on('editor_onTyping', () => {
+    if (typing() === 'left_paw') {
+      setTyping('right_paw')
+    }
+    else {
+      setTyping('left_paw')
+    }
+
+    resetAfterOneSecond()
+  })
+
   return (
     <FlexCenterY {...stylex.attrs(style.statusBar)} editor-tour-status-bar>
+      <div id={__bongoCat.bongoCat}>
+        {bongoCatAnimation[typing()]}
+      </div>
       <Show when={$charsCount() > 0} fallback={
         <TagWithIcon
           name={<>{getRandomElement(randomText)}, there's nothing here...</>}

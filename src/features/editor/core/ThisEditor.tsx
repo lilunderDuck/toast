@@ -1,5 +1,5 @@
 import { onCleanup, onMount, ParentProps } from "solid-js"
-import { createEditor, getBlocksTextLength, getBlocksWordCount } from "../utils"
+import { createEditor } from "../utils"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -47,6 +47,7 @@ export function ThisEditor(props: ParentProps) {
   const autoScrollIntoBottom = () => {
     editorRef.scrollIntoView({ behavior: "smooth", block: "end" })
     editorRef.scrollTop = editorRef.scrollHeight + 1000
+    editor.$event.$emit('editor_onTyping')
   }
   
   return (

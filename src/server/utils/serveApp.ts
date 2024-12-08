@@ -8,7 +8,7 @@ import { apiRoute } from "~/common"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const appResourcePath = resolve(__dirname, `./resource` as const)
+const appResourcePath = resolve(__dirname, `./server/resource` as const)
 
 export function serveApp() {
   duck.use('/*', serveStatic({
