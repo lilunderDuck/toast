@@ -17,7 +17,7 @@ import {
 } from "~/components"
 import { toast } from '~/features/toast'
 import { createSignal } from "solid-js"
-import { addJournalList } from "../../../core/JournalList"
+import { useJournalHomeContext } from "~/features/journal-home/provider"
 
 interface ICreateJournalGroupFormProps {
   onClick: () => any
@@ -26,6 +26,7 @@ interface ICreateJournalGroupFormProps {
 export default function CreateJournalGroupForm(props: ICreateJournalGroupFormProps) {
   const [_journalGroupForm, { Field, Form }] = createForm<JournalApi.Group>()
   const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
+  const { $grid } = useJournalHomeContext()
 
   const callApi = (data: JournalApi.Group) => {
     return fetchIt<JournalApi.GroupData>('POST', JOURNAL_GROUP_ROUTE, data)
@@ -45,7 +46,7 @@ export default function CreateJournalGroupForm(props: ICreateJournalGroupFormPro
     if (!dataReturned) return
 
     setSubmitButtonDisabled(false)
-    addJournalList(dataReturned)
+    $grid.$add(dataReturned)
     props.onClick()
   }
 
