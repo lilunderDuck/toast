@@ -17,10 +17,12 @@ export function createLazyLoadedDialog<Props extends IDialog>(
   const $show = () => {
     setIsShowing(false)
     setIsShowing(true)
+    console.log('[lazy dialog] shown')
   }
 
   const $close = () => {
     setIsShowing(false)
+    console.log('[lazy dialog] closed')
   }
 
   return {

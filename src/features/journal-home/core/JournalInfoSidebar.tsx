@@ -1,13 +1,13 @@
-import { createSignal, Show } from "solid-js"
+import { Show } from "solid-js"
 import { useNavigate } from "@solidjs/router"
 // ...
-import type { JournalApi } from "~/api/journal"
 import { OpenAndCloseButton } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from './JournalInfoSidebar.module.css' 
 // ...
 import { BackgroundShowcase, InfoList } from "../components"
+import { useJournalHomeContext } from "../provider"
 
 const style = stylex.create({
   $sidebar: {
@@ -32,14 +32,13 @@ const style = stylex.create({
   }
 })
 
-const [currentJournalData, setCurrentJournalData] = createSignal<JournalApi.GroupData>()
-
 export function JournalInfoSidebar() {
   const navigateTo = useNavigate()
-  const redirectToJournalPage = () => navigateTo(`/journal/${currentJournalData()?.id}`)
+  const { $infoSidebar } = useJournalHomeContext()
+  const redirectToJournalPage = () => navigateTo(`/journal/${$infoSidebar.$currentJournalData()?.id}`)
 
   return (
-    <Show when={currentJournalData()}>
+    <Show when={$infoSidebar.$currentJournalData()}>
       <div 
         app-scrollbar 
         app-scrollbar-vertical 
@@ -48,15 +47,12 @@ export function JournalInfoSidebar() {
         id={__style.sidebar}
       >
         <BackgroundShowcase 
-          $heading={currentJournalData()?.name}
-          $sectionText={currentJournalData()?.description}
+          $heading={$infoSidebar.$currentJournalData()?.name}
+          $sectionText={$infoSidebar.$currentJournalData()?.description}
         />
-        <InfoList {...currentJournalData()!} />
+        <InfoList {...$infoSidebar.$currentJournalData()!} />
         <OpenAndCloseButton 
-          $onClickingClose={() => {
-            closeJournalInfoSidebar()
-            JournalInfoSidebar.$onClose()
-          }}
+          $onClickingClose={$infoSidebar.$close}
           $onClickingOpen={redirectToJournalPage}
           $openText='Open this'
           $closeText='Close'
@@ -64,28 +60,4 @@ export function JournalInfoSidebar() {
       </div>
     </Show>
   )
-}
-
-JournalInfoSidebar.$onClose = () => {}
-
-export function openJournalInfoSidebar(data: JournalApi.GroupData) {
-  setCurrentJournalData(data)
-  console.log('[home > sidebar] opened', data)
-}
-
-export function closeJournalInfoSidebar() {
-  setCurrentJournalData(undefined)
-  console.log('[home > sidebar] closed')
-  JournalInfoSidebar.$onClose()
-}
-
-export function updateJournalInfoSidebar(data: JournalApi.GroupData) {
-  // looks confusing at first, but openJournalInfoSidebar() basically is just update the 
-  // currentJournalData signal.
-  // 
-  // also, if you setCurrentJournalData() to something that NOT undefined,
-  // the info sidebar will be shown.
-  if (currentJournalData()) {
-    openJournalInfoSidebar(data)
-  }
 }

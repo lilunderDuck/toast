@@ -3,8 +3,8 @@ import {
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from "../../../../../components"
-import type { IDialog } from "../../../../../utils"
+  type IDialog
+} from "~/components"
 // ...
 import CreateJournalGroupForm from "./CreateJournalGroupForm"
 // ...

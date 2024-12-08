@@ -11,7 +11,7 @@ import {
   isJournalGroupExist, 
   updateJournalGroup, 
 } from "~/features/journal-data"
-import { canHaveIdOrNot, getBodyAndQuery, mustHaveAnId, validate } from "~/server/utils"
+import { canHaveIdOrNot, mustHaveAnId, validate } from "~/server/utils"
 import { duck } from "~/entry-server"
 import { isEmptyObject } from '~/common'
 // ...
@@ -54,14 +54,25 @@ duck.post(JOURNAL_GROUP_ROUTE, validator('json', (value, context) => {
   return context.json(await createJournalGroup(data), 201)
 })
 
-duck.patch(JOURNAL_GROUP_ROUTE, async (context) => {
-  const thisThing = await getBodyAndQuery(context, mustHaveAnId, journalGroupFormSchema)
-  if (!thisThing) return context.text('bad request', 400)
-  const { body, query } = thisThing
+duck.patch(JOURNAL_GROUP_ROUTE, validator('query', (value, context) => {
+  if (validate(mustHaveAnId, value)) {
+    return value
+  }
+
+  return context.text('invalid input, oops', 400)
+}), validator('json', (value, context) => {
+  if (validate(journalGroupFormSchema, value)) {
+    return value
+  }
+
+  return context.text('invalid input, oops', 400)
+}), async (context) => {
+  const query = context.req.valid('query')
+  const data = context.req.valid('json')
 
   if (!await isJournalGroupExist(query.id)) {
     return context.status(404)
   }
 
-  context.json(await updateJournalGroup(query.id, body), 200)
+  return context.json(await updateJournalGroup(query.id, data), 200)
 })

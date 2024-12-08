@@ -1,15 +1,13 @@
-import { createResource, createSignal, For, Show } from "solid-js"
+import { createResource, For, Show } from "solid-js"
 // ...
 import { 
-  JOURNAL_GROUP_ROUTE, 
   type JournalApi 
 } from "~/api/journal"
 import { Flex, FlexCenter } from "~/components"
-import { fetchIt, mergeClassname } from "~/utils"
-import { thisArrayObjects } from "~/common"
+import { mergeClassname } from "~/utils"
 // ...
 import { CreateNewJournalGroup, JournalGrid } from "../components"
-import { JournalInfoSidebar, openJournalInfoSidebar } from './JournalInfoSidebar'
+import { useJournalHomeContext } from '../provider'
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from '../components/journal-grid/JournalGrid.module.css'
@@ -28,18 +26,18 @@ const style = stylex.create({
 
 type OnClickingJournalGroup = (data: JournalApi.GroupData) => EventHandler<"div", "onClick">
 
-const [journalGroups, setJournalGroups] = createSignal<JournalApi.GroupData[]>([])
 export function JournalList() {
+  const { $grid, $event, $infoSidebar } = useJournalHomeContext()
+
   const [resource] = createResource(async() => {
-    const data = await fetchIt<JournalApi.GroupData[]>('GET', JOURNAL_GROUP_ROUTE) ?? []
-    setJournalGroups(data)
+    await $grid.$fetchJournalGroups()
     return true
   })
 
   let lastElement: HTMLDivElement | undefined
   const clickOnSomeJournalGroup: OnClickingJournalGroup = (data) => (mouseEvent) => {
     highlightJournalGroup(mouseEvent.currentTarget)
-    openJournalInfoSidebar(data)
+    $infoSidebar.$open(data)
   }
   
   const highlightJournalGroup = (someElement: HTMLDivElement) => {
@@ -55,10 +53,10 @@ export function JournalList() {
     }
   }
 
-  JournalInfoSidebar.$onClose = () => {
+  $event.$on('home__infoSidebarClose', () => {
     deselectLastHighlightedGroupIfCan()
     lastElement = undefined
-  }
+  })
 
   return (
     <Flex class={mergeClassname(
@@ -70,7 +68,7 @@ export function JournalList() {
           Spinnin'
         </FlexCenter>
       }>
-        <For each={journalGroups()}>
+        <For each={$grid.$journalGroups()}>
           {it => (
             <JournalGrid {...it} $onClick={clickOnSomeJournalGroup(it)}/>
           )}
@@ -79,12 +77,4 @@ export function JournalList() {
       </Show>
     </Flex>
   )
-}
-
-export function addJournalList(another: JournalApi.GroupData) {
-  setJournalGroups(prev => [...prev, another])
-}
-
-export function updateJournalList(newOne: JournalApi.GroupData) {
-  setJournalGroups(prev => [...thisArrayObjects(prev).$replace(it => it.id === newOne.id, newOne)])
 }

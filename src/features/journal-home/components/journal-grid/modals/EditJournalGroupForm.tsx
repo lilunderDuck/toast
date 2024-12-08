@@ -10,8 +10,7 @@ import { toast } from '~/features/toast'
 import { fetchIt } from "~/utils"
 // ...
 import IconInput from "./IconInput"
-import { updateJournalList } from "../../../core/JournalList"
-import { updateJournalInfoSidebar } from "../../sidebar"
+import { useJournalHomeContext } from "~/features/journal-home/provider"
 
 interface IEditJournalGroupFormProps extends JournalApi.GroupData {
   onClick: () => any
@@ -19,6 +18,7 @@ interface IEditJournalGroupFormProps extends JournalApi.GroupData {
 
 export default function EditJournalGroupForm(props: IEditJournalGroupFormProps) {
   const [_journalGroupForm, { Field, Form }] = createForm<JournalApi.Group>()
+  const { $grid, $infoSidebar } = useJournalHomeContext()
 
   const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
 
@@ -41,8 +41,8 @@ export default function EditJournalGroupForm(props: IEditJournalGroupFormProps) 
     if (!dataReturned) return
 
     setSubmitButtonDisabled(false)
-    updateJournalList(dataReturned)
-    updateJournalInfoSidebar(dataReturned)
+    $grid.$update(dataReturned)
+    $infoSidebar.$update(dataReturned)
     props.onClick()
   }
 
