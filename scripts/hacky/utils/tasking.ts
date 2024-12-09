@@ -1,7 +1,7 @@
 export namespace tasking {
-  const tasks: AnyFunction[] = []
-  export function add(stuff: AnyFunction) {
-    tasks.push(stuff)
+  const tasks = [] as { name: string, stuff: AnyFunction }[]
+  export function add(name: string, stuff: AnyFunction) {
+    tasks.push({ name, stuff })
   } 
 
   export function run() {
@@ -10,8 +10,9 @@ export namespace tasking {
       const task = tasks[current]
       if (!task) return
       
-      console.log(`Running task #${current + 1}...`)
-      await task()
+      console.groupCollapsed(`Running task #${current + 1} - ${task.name}`)
+      await task.stuff()
+      console.groupEnd()
       return runThisTask(current + 1)
     }
 

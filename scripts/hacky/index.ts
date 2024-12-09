@@ -1,39 +1,24 @@
-// import { 
-//   copyOthersFiles, 
-//   createOutputDirectory, 
-//   manglePropsManually, 
-//   writeAllProcessedFile 
-// } from "./task"
-// import { categorizeFileType, getAllFilesFromDir } from "./utils"
+import { createSecretHtmlContent } from "./tools"
+import { categorizeFileType, getAllFilesFromDir, minify, tasking, writeFile } from "./utils"
 
-import { createSecretHtmlContent } from "./tools";
-import { categorizeFileType, getAllFilesFromDir, minify, tasking, writeFile } from "./utils";
-
-// const OUTPUT_DIRECTORY = "./out/server/statis"
-// const DIRECTORY_TO_READ = "./out/client"
-// const allFiles = getAllFilesFromDir(DIRECTORY_TO_READ)
-// const { cssFiles, jsFiles, htmlFiles, others } = categorizeFileType(allFiles)
-
-// createOutputDirectory(OUTPUT_DIRECTORY)
-// copyOthersFiles(OUTPUT_DIRECTORY, others)
-// const optimizedFiles = manglePropsManually([...cssFiles, ...jsFiles, ...htmlFiles])
-// writeAllProcessedFile(OUTPUT_DIRECTORY, optimizedFiles)
 const APP_BUILD_OUTPUT_PATH = './out/server/resource' as const
 
 let stuff: ReturnType<typeof categorizeFileType>
-tasking.add(function doStuff() {
+
+tasking.add('Categorizing all of the built file', () => {
   const all = getAllFilesFromDir(APP_BUILD_OUTPUT_PATH)
   stuff = categorizeFileType(APP_BUILD_OUTPUT_PATH, all)
 })
 
-tasking.add(async function superSecret() {
+tasking.add('Injecting a html file, this only show if you disable javascipt', async() => {
   // the folder name, must start with a slash or leave it empty
   const outputFolderName = '' as const
   // the output html file name, must end with a ".html" extension
   const outputHtmlFileName = 'yup.html' as const
 
   const outputPath = `${APP_BUILD_OUTPUT_PATH}${outputFolderName}` as const
-  const appMainHtml = stuff.htmlFiles[0]
+  const appMainHtml = stuff.find(it => it.fileName === 'index.html')
+  if (!appMainHtml) return
 
   // find this peace of text here, and replace this with another one.
   // Okay, if you want to edit this <noscript> tag in the index.html,
@@ -67,6 +52,20 @@ tasking.add(async function superSecret() {
   // override the old content with a new one
   writeFile(`${outputPath}/${outputHtmlFileName}`, await createSecretHtmlContent())
   writeFile(`${APP_BUILD_OUTPUT_PATH}/${appMainHtml.fileName}`, mainHtml)
+})
+
+tasking.add('Mangling every single properties starts with a dollar sign -> $', () => {
+  const propsList = [
+    'editor-tour-sidebar',
+    'editor-tour-create-journal-button',
+    'editor-tour-create-journal-category-button',
+    'editor-tour-toggle-edit-or-readonly-button',
+    'editor-tour-customize-layout-button',
+    'editor-tour-home-button',
+    'app-scrollbar',
+    'app-scrollbar-vertical',
+    'app-invs-scrollbar'
+  ]
 })
 
 tasking.run()
