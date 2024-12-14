@@ -1,10 +1,10 @@
 import { IconTypes } from "solid-icons"
-import { splitProps } from "solid-js"
+import { JSX, splitProps } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./QuickActionBar.module.css"
 // ...
-import { FlexCenter } from "~/components"
+import { FlexCenter, Tooltip } from "~/components"
 
 const style = stylex.create({
   item: {
@@ -26,16 +26,19 @@ const style = stylex.create({
 
 interface IQuickActionItemProps extends HTMLAttributes<"div"> {
   $icon: IconTypes
+  $label: JSX.Element
 }
 
 export function QuickActionItem(props: IQuickActionItemProps) {
-  const [, itsProps] = splitProps(props, ["$icon"])
+  const [thisThing, itsProps] = splitProps(props, ["$icon", "$label"])
 
   return (
     <FlexCenter {...stylex.attrs(style.item)} {...itsProps} id={__style.actionBar}>
-      <FlexCenter {...stylex.attrs(style.itemContent)}>
-        <props.$icon size={13} />
-      </FlexCenter>
+      <Tooltip $label={thisThing.$label}>
+        <FlexCenter {...stylex.attrs(style.itemContent)}>
+          <props.$icon size={13} />
+        </FlexCenter>
+      </Tooltip>
     </FlexCenter>
   )
 }

@@ -1,8 +1,6 @@
-import { SPLASH_TEXT_ROUTE } from "~/api/misc"
-import { duck } from "~/entry-server"
-import { getSplashTextRandomly } from "~/features/splash-screen"
+import { getRandomElement } from "~/common"
 
-export const splashTexts = [
+const splashTexts = [
   "Around 650MB of data could fit on a PS1 CD, as opposed to about 64MB on an N64 cartridge. This usually led to movie-style cutscenes, higher quality music, and voice acting on the PlayStation.",
   "Pac-Man was originally going to be called Puck-Man in the United States, but that was changed after considering how easy it would be to vandalize the arcade cabinets to say... something else.",
   "Remember, you need air to live",
@@ -40,10 +38,20 @@ export const splashTexts = [
   "https://meowfacts.herokuapp.com/?count=1"
 ]
 
-duck.get(SPLASH_TEXT_ROUTE, async(context) => {
-  const text = await getSplashTextRandomly()
-  
-  return context.json({
-    text
-  }, 200)
-})
+let text = ''
+export async function getSplashTextRandomly() {
+  while (true) {
+    const newText = getRandomElement(splashTexts)
+    if (text !== newText) {
+      text = newText
+      break
+    }
+  }
+
+  if (text.startsWith('https://')) {
+    const response = await fetch(text)
+    text = await response.text()
+  }
+
+  return text
+}

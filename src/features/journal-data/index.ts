@@ -1,2 +1,2 @@
-export * from './journalGroup'
-export * from './journal'
+export * from './core'
+export * from './utils'

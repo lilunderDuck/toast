@@ -1,6 +1,9 @@
-import stylex from "@stylexjs/stylex"
 import { createSignal, lazy, onMount } from "solid-js"
 import { useNavigate, useParams } from "@solidjs/router"
+import { BsHouseFill, BsLayoutSidebarInsetReverse, BsTrello } from "solid-icons/bs"
+// ...
+import stylex from "@stylexjs/stylex"
+import __style from "./JournalSidebar.module.css"
 // ...
 import { 
   createLazyLoadedDialog, 
@@ -13,6 +16,7 @@ import {
   JOURNAL_GROUP_ROUTE, 
   type JournalApi
 } from "~/api/journal"
+import { toast } from "~/features/toast"
 // ...
 import { 
   QuickActionBar, 
@@ -23,13 +27,15 @@ import {
   useTabContext
 } from "../components"
 import { useJournalContext } from "../context"
-import { BsHouseFill } from "solid-icons/bs"
-import { toast } from "~/features/toast"
 
 const style = stylex.create({
   sidebar: {
     width: '100%',
     height: '100%'
+  },
+  titleBar: {
+    padding: 5,
+    gap: 5
   }
 })
 
@@ -61,7 +67,7 @@ export function JournalSidebar() {
   }
 
   const deleteJournalModal = createLazyLoadedDialog(
-    lazy(() => import('./delete-journal-modal')), 
+    lazy(() => import('./modals/DeleteJournalModal')), 
     () => ({
       $journal: thingToDelete()!
     })
@@ -77,6 +83,7 @@ export function JournalSidebar() {
 
   const clickingRemoveJournal: ISidebarProps["$onClickingRemove"] = (journal) => {
     const deleteRightAway = $localStorage.$get('shouldShowDeleteConfirmationModal')
+    console.log('should delete right away?', deleteRightAway)
     if (deleteRightAway) {
       return $journal.$delete(journal.id)
     }
@@ -85,13 +92,29 @@ export function JournalSidebar() {
     deleteJournalModal.$show()
   }
 
+  const toolModal = createLazyLoadedDialog(
+    lazy(() => import('./modals/TrackingToolsModal'))
+  )
+
   return (
     <>
       <TabPanel initialSize={0.3}>
-        <FlexCenterY>
+        <FlexCenterY id={__style.iconTitleBar} {...stylex.attrs(style.titleBar)}>
+          <QuickActionItem 
+            $icon={BsLayoutSidebarInsetReverse}
+            $label='Hide sidebar'
+            onClick={() => {}}
+          />
+          <div  />
           <QuickActionItem 
             $icon={BsHouseFill}
-            onClick={() => goHome()}
+            $label='Go back to home'
+            onClick={goHome}
+          />
+          <QuickActionItem 
+            $icon={BsTrello}
+            $label='Trackers'
+            onClick={toolModal.$show}
           />
         </FlexCenterY>
         <Flex {...stylex.attrs(style.sidebar)}>
@@ -105,6 +128,7 @@ export function JournalSidebar() {
       <ResizableHandle />
       {/* ... */}
       <deleteJournalModal.$Modal />
+      <toolModal.$Modal />
     </>
   )
 }

@@ -16,11 +16,11 @@ import { toast } from "~/features/toast"
 // ...
 import { useJournalContext } from "~/features/journal/context"
 
-interface ICreateJournalFormProps {
+interface ICreateJournalCategoryFormProps {
   onClick: () => any
 }
 
-export default function CreateJournalForm(props: ICreateJournalFormProps) {
+export default function CreateJournalCategoryForm(props: ICreateJournalCategoryFormProps) {
   const { $journal } = useJournalContext()
   const [, setTree] = $journal.$fileTree
 

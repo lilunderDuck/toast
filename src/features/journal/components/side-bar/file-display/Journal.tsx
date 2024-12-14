@@ -8,7 +8,6 @@ import { FlexCenterY, Flex, Spacer } from "~/components"
 
 const style = stylex.create({
   journal: {
-    fontSize: 13,
     transition: '0.15s ease-out',
     userSelect: 'none',
     paddingInline: 10,
@@ -43,13 +42,13 @@ export function Journal(props: IJournalProps) {
       id={__style.journal} 
     >
       <Flex {...stylex.attrs(style.nameAndStuff)} onClick={() => props.$onClick?.('open', props)}>
-        <span>
+        <span id={__style.name}>
           {props.name}
         </span>
         <Spacer />
       </Flex>
-      <div {...stylex.attrs(style.button)} onClick={() => props.$onClick?.('remove', props)}>
-        <BsX size={15} id={__style.button} />
+      <div id={__style.button} {...stylex.attrs(style.button)} onClick={() => props.$onClick?.('remove', props)}>
+        <BsX size={15} />
       </div>
     </FlexCenterY>
   )

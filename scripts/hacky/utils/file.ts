@@ -9,15 +9,22 @@ export type FileInfo<T> = {
 const isJsCssOrHtmlFiles = (it: string) => it.endsWith('.js') || it.endsWith('.css') || it.endsWith('.html')
 
 export function categorizeFileType(basePath: string, allFiles: string[]) {
-  const mapIt = <T>(filePath: string): FileInfo<T> => {
+  console.log('categorizing...')
+  const fileInfo: FileInfo<string>[] = []
+  for (const filePath of allFiles) {
+    if (!isJsCssOrHtmlFiles(filePath)) continue
     const fullPath = `${basePath}/${filePath}` as const
-    const content = readFile(fullPath, isJsCssOrHtmlFiles(fullPath) ? undefined : 'default') as T
-    return {
-      path: fullPath,
-      content,
-      fileName: fullPath.split('/').pop()!
+    try {
+      const content = readFile(fullPath) as string
+      fileInfo.push({
+        path: fullPath,
+        content,
+        fileName: fullPath.split('/').pop()!
+      })
+    } catch(e) {
+      // do nothing
     }
   }
 
-  return allFiles.map(it => mapIt(it)) as FileInfo<string>[]
+  return fileInfo
 }

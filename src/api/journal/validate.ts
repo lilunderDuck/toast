@@ -15,12 +15,10 @@ export const journalGroupFormSchema = object({
 
 export const journalFormSchema = object({
   name: string(),
-  icon: optional(string()),
 })
 
 export const journalCategoryFormSchema = object({
   name: string(),
-  icon: optional(string()),
 })
 
 /**### namespace `JournalApi`
@@ -54,6 +52,14 @@ export namespace JournalApi {
     modified?: Date
   }
 
+  export type CategoryData = Category & {
+    id: string
+    /**The creation date of the group. */
+    created: Date
+    /**The last modification date of the group. */
+    modified?: Date
+  }
+
   export type SavedJournalData = JournalData & {
     /**An array of output block data associated with the journal. */
     data?: JournalContentData
@@ -61,4 +67,6 @@ export namespace JournalApi {
 
   /**The type of the content itself, which is an array of output block data associated with the journal. */
   export type JournalContentData = OutputBlockData[]
+
+  export type FileTree = JournalData | CategoryData
 }

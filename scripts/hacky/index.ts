@@ -1,13 +1,33 @@
 import { createSecretHtmlContent } from "./tools"
-import { categorizeFileType, getAllFilesFromDir, minify, tasking, writeFile } from "./utils"
+import { 
+  categorizeFileType, 
+  copyDir, 
+  deleteDir, 
+  getAllFilesFromDir, 
+  makeid, 
+  minify, 
+  split, 
+  tasking, 
+  writeFile 
+} from "./utils"
 
-const APP_BUILD_OUTPUT_PATH = './out/server/resource' as const
+const APP_BUILD_OUTPUT_PATH = './out/server' as const
+const CLONED_APP_BUILD_OUTPUT_PATH = `${APP_BUILD_OUTPUT_PATH}-cloned` as const
 
 let stuff: ReturnType<typeof categorizeFileType>
 
-tasking.add('Categorizing all of the built file', () => {
-  const all = getAllFilesFromDir(APP_BUILD_OUTPUT_PATH)
-  stuff = categorizeFileType(APP_BUILD_OUTPUT_PATH, all)
+tasking.add('Clone the build files and categorizing all of the built file', () => {
+  try {
+    deleteDir(CLONED_APP_BUILD_OUTPUT_PATH)
+  } catch (e) {
+    console.error(e)
+  } finally {
+    copyDir(APP_BUILD_OUTPUT_PATH, CLONED_APP_BUILD_OUTPUT_PATH)
+  }
+
+  const all = getAllFilesFromDir(CLONED_APP_BUILD_OUTPUT_PATH)
+  console.log(all)
+  stuff = categorizeFileType(CLONED_APP_BUILD_OUTPUT_PATH, all)
 })
 
 tasking.add('Injecting a html file, this only show if you disable javascipt', async() => {
@@ -55,6 +75,49 @@ tasking.add('Injecting a html file, this only show if you disable javascipt', as
 })
 
 tasking.add('Mangling every single properties starts with a dollar sign -> $', () => {
+  const THING_STARTS_WITH_DOLLAR_SIGN =  /\$[a-zA-Z0-9|_|\$]+/g
+  const parsedTokens = stuff.map(it => {
+    return split(it.content, THING_STARTS_WITH_DOLLAR_SIGN)
+  }).flat()
+
+  const fileToken = stuff.map(it => ({
+    ...it,
+    token: split(it.content, THING_STARTS_WITH_DOLLAR_SIGN)
+  }))
+
+  const canBeProcessed = (stuff: string) => (
+    stuff.startsWith('$') &&
+    stuff.length > 3 &&
+    !stuff.includes('|')
+  )
+  
+  const tokens = new Set<string>()
+  for (const token of parsedTokens) {
+    if (
+      token.startsWith('$') &&
+      token.length > 3 &&
+      !token.includes('|')
+    ) {
+      console.log('added', token)
+      tokens.add(token)
+    }
+  }
+
+  for (const token of tokens) {
+    const id = makeid(3)
+    for (const fileContent of fileToken) {
+      fileContent.token = fileContent.token.map(it => {
+        if (!canBeProcessed(it)) {
+          return it.replaceAll(token, id)
+        }
+
+        return id
+      })
+    }
+  }
+
+  writeFile(__dirname + '/token.json', JSON.stringify(fileToken))
+
   const propsList = [
     'editor-tour-sidebar',
     'editor-tour-create-journal-button',

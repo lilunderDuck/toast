@@ -7,6 +7,16 @@ export function getAllFilesFromDir<const T extends string>(path: T) {
   })
 }
 
+export function deleteDir<const T extends string>(path: T) {
+  console.log('delete', path)
+  return fs.rmSync(path, { recursive: true, force: true })
+}
+
+export function copyDir<const T extends string, const U extends string>(path: T, to: U) {
+  console.log('copy', path, 'to', to)
+  return fs.cpSync(path, to, { recursive: true })
+}
+
 export function readFile<const T extends string>(path: T, encoding?: BufferEncoding | 'default') {
   console.log('read', path)
   return fs.readFileSync(path, encoding === 'default' ? {} : {

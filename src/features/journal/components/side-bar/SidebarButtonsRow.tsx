@@ -12,8 +12,8 @@ import {
   Tooltip 
 } from "~/components"
 import { useThisEditorContext } from "~/features/editor"
-// ...
 import { EditOrReadonlyIcon } from "~/features/journal"
+// ...
 import { useJournalContext } from "../../context"
 
 const style = stylex.create({
@@ -56,6 +56,10 @@ export function SidebarButtonsRow() {
     lazy(() => import('./create-stuff'))
   )
 
+  const createJournalCategoryModal = createLazyLoadedDialog(
+    lazy(() => import('./CreateJournalCategoryModal'))
+  )
+
   return (
     <FlexCenterY {...stylex.attrs(style.buttonsRow)}>
       <ButtonItem 
@@ -66,6 +70,7 @@ export function SidebarButtonsRow() {
       />
       <ButtonItem
         editor-tour-create-journal-category-button
+        onClick={createJournalCategoryModal.$show}
         $icon={BsFolderFill}
         $label={'New category'}
       />
@@ -80,6 +85,7 @@ export function SidebarButtonsRow() {
       />
       {/* ... */}
       <createJournalModal.$Modal />
+      <createJournalCategoryModal.$Modal />
     </FlexCenterY>
   )
 }

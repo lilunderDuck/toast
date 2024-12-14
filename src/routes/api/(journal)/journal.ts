@@ -5,9 +5,7 @@ import { duck } from "~/entry-server"
 import { isThisDirectoryExist, mustHaveAnId, validate } from "~/server"
 import { 
   buildJournalGroupPath, 
-  createJournal, 
-  deleteJournal, 
-  getAllJournals 
+  journalData
 } from "~/features/journal-data"
 // ...
 
@@ -32,7 +30,7 @@ duck.get(JOURNAL_ROUTE, validator('query', (value, context) => {
     return context.text('not found', 404)
   }
 
-  return context.json(await getAllJournals(query.id), 200)
+  return context.json(await journalData.$getAll(query.id), 200)
 })
 
 duck.post(JOURNAL_ROUTE, validator('query', (value, context) => {
@@ -52,7 +50,7 @@ duck.post(JOURNAL_ROUTE, validator('query', (value, context) => {
   const body = context.req.valid('json')
   const query = context.req.valid('query')
 
-  const newData = await createJournal(query.id, body)
+  const newData = await journalData.$create(query.id, body)
   
   return context.json(newData, 200)
 })
@@ -66,7 +64,7 @@ duck.delete(JOURNAL_ROUTE, validator('query', (value, context) => {
 }), async (context) => {
   const query = context.req.valid('query')
 
-  deleteJournal(query.id, query.journal)
+  journalData.$delete(query.id, query.journal)
   
   return context.text('okay', 200)
 })
