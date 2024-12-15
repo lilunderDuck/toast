@@ -1,29 +1,17 @@
-import stylex from "@stylexjs/stylex"
-import __style from "~/features/misc/TooTechnicalPage.module.css"
-import { LibarySearchBox, MemoryUsage } from "~/features/misc"
 import { createSignal } from "solid-js"
-
-const style = stylex.create({
-  page: {
-    paddingInline: 15,
-    paddingTop: 10,
-    width: '100%',
-    height: '100%',
-    paddingBottom: '4rem',
-  },
-  libList: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr'
-  }
-})
+import { TooTechnicalPageRoot, LibarySearchBox, MemoryUsage, Versions } from "~/features/technical"
 
 export default function TooTechnicalPage() {
   const [value, setValue] = createSignal<string>()
   
   return (
-    <div {...stylex.attrs(style.page)} id={__style.thisPage} app-scrollbar app-scrollbar-vertical>
+    <TooTechnicalPageRoot>
       <h1>Hello world!</h1>
-      <span>This is where you can explore the *technical part* of this app</span>
+      <span>This is where you can explore the *technical part* of this app, a bunch of stuff smash into one place</span>
+      <section>
+        <h2>App versions</h2>
+        <Versions />
+      </section>
       <section>
         <LibarySearchBox
           $title="Which libraries did this app used..." 
@@ -38,9 +26,9 @@ export default function TooTechnicalPage() {
         />
       </section>
       <section>
-        <h1>Resource usage</h1>
+        <h2>Resource usage</h2>
         <MemoryUsage />
       </section>
-    </div>
+    </TooTechnicalPageRoot>
   )
 }

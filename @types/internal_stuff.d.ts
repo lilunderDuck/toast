@@ -1,6 +1,5 @@
 declare global {
-  /**Well, it's `true` if you're on development mode, `false` otherwise.
-   * 
+  /**
    * Behind the scene: it uses [esbuild's `defind` option](https://esbuild.github.io/api/#define)
    * to change some of the behavior of some part of the code between builds.
    * 
@@ -21,7 +20,15 @@ declare global {
    * 
    * @see https://esbuild.github.io/api/#define
    */
+
+  /**Well, it's `true` if you're on development mode, `false` otherwise. */
   const __devMode: boolean
+  /**The version of the app */
+  const __version: string
+  /**The api version of the app */
+  const __apiVersion: string
+  /**The backend (usually node's) version */
+  const __backendVersion: string
 }
 
 export {}

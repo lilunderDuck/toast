@@ -3,7 +3,7 @@ import { lazy } from 'solid-js'
 // ...
 import { ColorAndStuff } from '~/components'
 import { Toaster } from '~/features/toast'
-import { StartupSequence } from '~/features/misc'
+import { StartupSequence } from '~/features/splash-screen'
 
 const HomePage = lazy(() => import('~/routes/index'))
 const JournalPage = lazy(() => import('~/routes/journal'))

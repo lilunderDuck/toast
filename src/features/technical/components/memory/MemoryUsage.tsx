@@ -2,8 +2,17 @@ import { createSignal, onCleanup, onMount } from "solid-js"
 // ...
 import type { IServerResourceUsage } from "~/api/misc"
 // ...
+import stylex from "@stylexjs/stylex"
+// ...
 import MemorySlider from "./MemorySlider"
 import { getServerUsages } from "../../utils"
+
+const style = stylex.create({
+  percentage: {
+    color: 'var(--gray11)',
+    paddingLeft: 5
+  }
+})
 
 export function MemoryUsage() {
   const [usage, setUsage] = createSignal<IServerResourceUsage>()
@@ -37,7 +46,12 @@ export function MemoryUsage() {
   return (
     <div>
       <MemorySlider 
-        $label="Heap usage"
+        $label={
+          <>
+            Heap usage
+            <span {...stylex.attrs(style.percentage)}>{getHeapUsedPercentage(usage()).toFixed(2)}%</span>
+          </>
+        }
         $progress={getHeapUsedPercentage(usage())}
         $progressColor="#1b9490"
         $progressText={`${usage()?.heapUsed ?? 0} MB`}
