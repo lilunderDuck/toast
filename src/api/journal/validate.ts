@@ -29,44 +29,44 @@ export namespace JournalApi {
   export type Journal = InferOutput<typeof journalFormSchema>
   export type Category = InferOutput<typeof journalCategoryFormSchema>
 
-  export type GroupData = Group & {
-    /**The unique identifier of the group. */
+  export type UniqueId = {
     id: string
-    /**The creation date of the group. */
+  }
+
+  export type CreationAndModifiedDate = {
     created: Date
-    /**The last modification date of the group. */
     modified?: Date
-    /**The total number of journals in the group. */
+  }
+
+  export interface IGroupTree {
+    [journalId: string]: 0 | this
+  }
+
+  export interface IGroupData extends Group, UniqueId, CreationAndModifiedDate {
+    tree: IGroupTree
     entries: number
   }
 
-  export type JournalData = Journal & {
-    /**The unique identifier of the group. 
-     *
-     * @note you can create 2 groups with the same name (if you want to confuse you in the future).
-     */
-    id: string
-    /**The creation date of the group. */
-    created: Date
-    /**The last modification date of the group. */
-    modified?: Date
+  /**The journal meta data. This does not contain the actural journal content.
+   * @see {@link SavedJournalData}
+   */
+  export interface IJournalData extends Journal, UniqueId, CreationAndModifiedDate {
+    // ...
   }
-
-  export type CategoryData = Category & {
-    id: string
-    /**The creation date of the group. */
-    created: Date
-    /**The last modification date of the group. */
-    modified?: Date
-  }
-
-  export type SavedJournalData = JournalData & {
+  
+  /**The saved journal data that will be stored to the disk */
+  export type SavedJournalData = IJournalData & {
     /**An array of output block data associated with the journal. */
     data?: JournalContentData
+  }
+
+  export interface ICategoryData extends Category, UniqueId, CreationAndModifiedDate {
+    // ...
   }
 
   /**The type of the content itself, which is an array of output block data associated with the journal. */
   export type JournalContentData = OutputBlockData[]
 
-  export type FileTree = JournalData | CategoryData
+  /**A list of files that can be stored */
+  export type Files = SavedJournalData | ICategoryData
 }

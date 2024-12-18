@@ -29,7 +29,7 @@ duck.get(JOURNAL_GROUP_ROUTE, validator('query', (value, context) => {
     const data = await journalGroupData.$get(query.id)
 
     if (!data) {
-      return context.status(404)
+      return context.text('not found', 404)
     }
     
     return context.json(data, 200)

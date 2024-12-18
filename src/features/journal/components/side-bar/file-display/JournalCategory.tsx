@@ -36,7 +36,7 @@ const style = stylex.create({
   }
 })
 
-interface IJournalCategoryProps extends JournalApi.CategoryData {
+interface IJournalCategoryProps extends JournalApi.ICategoryData {
   // ...
 }
 

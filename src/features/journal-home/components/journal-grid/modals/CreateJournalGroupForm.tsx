@@ -29,7 +29,7 @@ export default function CreateJournalGroupForm(props: ICreateJournalGroupFormPro
   const { $grid } = useJournalHomeContext()
 
   const callApi = (data: JournalApi.Group) => {
-    return fetchIt<JournalApi.GroupData>('POST', JOURNAL_GROUP_ROUTE, data)
+    return fetchIt<JournalApi.IGroupData>('POST', JOURNAL_GROUP_ROUTE, data)
   }
 
   const submit: SubmitHandler<JournalApi.Group> = async(data) => {

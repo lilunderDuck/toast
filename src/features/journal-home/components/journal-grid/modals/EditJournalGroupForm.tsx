@@ -12,7 +12,7 @@ import { fetchIt } from "~/utils"
 import IconInput from "./IconInput"
 import { useJournalHomeContext } from "~/features/journal-home/provider"
 
-interface IEditJournalGroupFormProps extends JournalApi.GroupData {
+interface IEditJournalGroupFormProps extends JournalApi.IGroupData {
   onClick: () => any
 }
 
@@ -24,7 +24,7 @@ export default function EditJournalGroupForm(props: IEditJournalGroupFormProps) 
 
   const callApi = (id: string, data: JournalApi.Group) => {
     const route = `${JOURNAL_GROUP_ROUTE}?id=${id}` as const
-    return fetchIt<JournalApi.GroupData>('PATCH', route, data)
+    return fetchIt<JournalApi.IGroupData>('PATCH', route, data)
   }
 
   const submit: SubmitHandler<JournalApi.Group> = async(data) => {

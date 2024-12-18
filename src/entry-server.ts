@@ -19,9 +19,10 @@ serve({
   fetch: duck.fetch,
   port: 8000
 }).on('listening', async() => {
-  console.log('duck on the other side listening on port 8000')
+  console.group('duck on the other side listening on port 8000')
   await import("./routes/api")
   serveApp()
-  createDirectoryIfNotExist(JOURNALS_FOLDER)
-  createDirectoryIfNotExist(CACHE_FOLDER)
+  await createDirectoryIfNotExist(JOURNALS_FOLDER)
+  await createDirectoryIfNotExist(CACHE_FOLDER)
+  console.groupEnd()
 })

@@ -49,7 +49,7 @@ export function JournalSidebar() {
   const goHome = () => goTo('/')
 
   onMount(async() => {
-    const data = await fetchIt<JournalApi.GroupData>('GET', `${JOURNAL_GROUP_ROUTE}?id=${param.id}`)
+    const data = await fetchIt<JournalApi.IGroupData>('GET', `${JOURNAL_GROUP_ROUTE}?id=${param.id}`)
     if (!data) return goHomeImmediately()
     // note: you should not reorder this line of code here, otherwise it *will* break
     $journal.$setCurrentGroup(data)
@@ -73,7 +73,7 @@ export function JournalSidebar() {
     })
   )
   
-  const [thingToDelete, setThingToDelete] = createSignal<JournalApi.JournalData>()
+  const [thingToDelete, setThingToDelete] = createSignal<JournalApi.IJournalData>()
   const clickingOpenJournal: ISidebarProps["$onClickingOpen"] = (journal) => {
     $journal.$open(journal.id)
     $journal.$setCurrentlyOpened(journal)

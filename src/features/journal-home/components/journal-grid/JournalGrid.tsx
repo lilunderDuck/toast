@@ -9,7 +9,7 @@ import type { JournalApi } from "~/api/journal"
 import { Button, ButtonSizeVariant, Flex, Spacer, createLazyLoadedDialog } from "~/components"
 import { BsPencilFill } from "solid-icons/bs"
 
-interface IJournalGridProps extends JournalApi.GroupData {
+interface IJournalGridProps extends JournalApi.IGroupData {
   $onClick: EventHandler<"div", "onClick">
 }
 

@@ -15,7 +15,7 @@ const style = stylex.create({
   }
 })
 
-interface IEditJournalGroupModalProps extends IDialog, JournalApi.GroupData {
+interface IEditJournalGroupModalProps extends IDialog, JournalApi.IGroupData {
   // ...
 }
 

@@ -9,16 +9,16 @@ type JournalHomeEvent = {
 
 interface IJournalHomeContext {
   $infoSidebar: {
-    $open(data: JournalApi.GroupData): void
+    $open(data: JournalApi.IGroupData): void
     $close(): void
-    $update(data: JournalApi.GroupData): void
-    $currentJournalData: Accessor<JournalApi.GroupData | undefined>
+    $update(data: JournalApi.IGroupData): void
+    $currentJournalData: Accessor<JournalApi.IGroupData | undefined>
   }
   $grid: {
-    $fetchJournalGroups(): Promise<JournalApi.GroupData[]>
-    $journalGroups: Accessor<JournalApi.GroupData[]>
-    $add(data: JournalApi.GroupData): void
-    $update(data: JournalApi.GroupData): void
+    $fetchJournalGroups(): Promise<JournalApi.IGroupData[]>
+    $journalGroups: Accessor<JournalApi.IGroupData[]>
+    $add(data: JournalApi.IGroupData): void
+    $update(data: JournalApi.IGroupData): void
   }
   // ...
   $event: IEvent<JournalHomeEvent>
@@ -27,8 +27,8 @@ interface IJournalHomeContext {
 const Context = createContext<IJournalHomeContext>()
 
 export function JournalHomeProvider(props: ParentProps) {
-  const [journalGroups, setJournalGroups] = createSignal<JournalApi.GroupData[]>([])
-  const [currentJournalData, setCurrentJournalData] = createSignal<JournalApi.GroupData>()
+  const [journalGroups, setJournalGroups] = createSignal<JournalApi.IGroupData[]>([])
+  const [currentJournalData, setCurrentJournalData] = createSignal<JournalApi.IGroupData>()
 
   const event = createEvent<JournalHomeEvent>()
 
@@ -36,7 +36,7 @@ export function JournalHomeProvider(props: ParentProps) {
     <Context.Provider value={{
       $event: event,
       $infoSidebar: {
-        $open(data: JournalApi.GroupData) {
+        $open(data: JournalApi.IGroupData) {
           setCurrentJournalData(data)
           console.log('[home > sidebar] opened', data)
         },
@@ -45,7 +45,7 @@ export function JournalHomeProvider(props: ParentProps) {
           event.$emit('home__infoSidebarClose')
           console.log('[home > sidebar] closed')
         },
-        $update(data: JournalApi.GroupData) {
+        $update(data: JournalApi.IGroupData) {
           setCurrentJournalData(data)
           console.log('[home > sidebar] updated', data)
         },
@@ -53,7 +53,7 @@ export function JournalHomeProvider(props: ParentProps) {
       },
       $grid: {
         async $fetchJournalGroups() {
-          const data = await fetchIt<JournalApi.GroupData[]>('GET', JOURNAL_GROUP_ROUTE) ?? []
+          const data = await fetchIt<JournalApi.IGroupData[]>('GET', JOURNAL_GROUP_ROUTE) ?? []
           setJournalGroups(data)
           return data
         },

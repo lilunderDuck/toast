@@ -4,46 +4,43 @@ import {
   type JournalApi
 } from "~/api/journal"
 import { 
-  bson_writeFile,
   createDirectoryIfNotExist, 
   isThisDirectoryExist
 } from "~/server"
+import { mergeObjects } from '~/common'
 // ...
 import { 
+  buildJournalGroupPath, 
+  journalGroupFs,
   getAllJournalGroupsCache,
-  updateJournalGroupsCache 
-} from './cache'
-import { buildJournalGroupPath } from '../utils'
-import { mergeObjects } from '~/common'
-
-const META_FILE_NAME = `meta.dat`
+  updateJournalGroupsCache, 
+  createId
+} from '../utils'
 
 export const journalGroupData = {
   async $create(data: JournalApi.Group) {
-    const journalGroupId = crypto.randomBytes(5).toString('hex')
-    const newData: JournalApi.GroupData = mergeObjects(data, {
+    const journalGroupId = createId()
+    const newData: JournalApi.IGroupData = mergeObjects(data, {
       id: journalGroupId,
       created: new Date(),
-      entries: 0
-    })
+      tree: {}
+    } as JournalApi.IGroupData)
   
     const whereToCreate = buildJournalGroupPath(journalGroupId)
   
     await createDirectoryIfNotExist(whereToCreate)
-    await bson_writeFile(`${whereToCreate}/${META_FILE_NAME}`, newData)
+    await journalGroupFs.$writeMetaFile(journalGroupId, newData)
     await updateJournalGroupsCache(newData)
     return newData
   },
 
-  async $update(journalGroupId: string, data: Partial<JournalApi.GroupData>) {
+  async $update(journalGroupId: string, data: Partial<JournalApi.IGroupData>) {
     const cache = await getAllJournalGroupsCache()
-    const newData: JournalApi.GroupData = mergeObjects(cache[journalGroupId], data, {
+    const newData: JournalApi.IGroupData = mergeObjects(cache[journalGroupId], data, {
       modified: new Date()
     })
-  
-    const whereToUpdate = buildJournalGroupPath(journalGroupId)
-  
-    await bson_writeFile(`${whereToUpdate}/${META_FILE_NAME}`, newData)
+    
+    await journalGroupFs.$writeMetaFile(journalGroupId, () => newData)
     await updateJournalGroupsCache(newData)
     return newData
   },

@@ -6,7 +6,7 @@ import type { JournalApi } from "~/api/journal"
 // ...
 import { useJournalContext } from "../../context"
 import { SidebarButtonsRow } from "./SidebarButtonsRow"
-import { Journal, IJournalProps, JournalCategory } from "./file-display"
+import { Journal, IJournalProps, /*JournalCategory*/ } from "./file-display"
 
 const style = stylex.create({
   sidebar: {
@@ -20,8 +20,8 @@ const style = stylex.create({
 })
 
 export interface ISidebarProps extends HTMLAttributes<"div"> {
-  $onClickingOpen?: (journal: JournalApi.JournalData) => void
-  $onClickingRemove?: (journal: JournalApi.JournalData) => void
+  $onClickingOpen?: (journal: JournalApi.IJournalData) => void
+  $onClickingRemove?: (journal: JournalApi.IJournalData) => void
 }
 
 export function Sidebar(props: ISidebarProps) {
@@ -55,15 +55,9 @@ export function Sidebar(props: ISidebarProps) {
         app-scrollbar-vertical 
         app-invs-scrollbar
       >
-        {/* <For each={tree()}>
+        <For each={tree()}>
           {it => <Journal {...it} $onClick={openOrRemoveJournal} />}
-        </For> */}
-        <Journal created={new Date()} id="2000" name="Test" $onClick={openOrRemoveJournal} />
-        <JournalCategory created={new Date()} id="2000" name="Test 1">
-          <Journal created={new Date()} id="2000" name="Test 2" $onClick={openOrRemoveJournal} />
-          <Journal created={new Date()} id="2000" name="Test 3" $onClick={openOrRemoveJournal} />
-          <JournalCategory created={new Date()} id="2000" name="Test 4"></JournalCategory>
-        </JournalCategory>
+        </For>
       </div>
     </div>
   )

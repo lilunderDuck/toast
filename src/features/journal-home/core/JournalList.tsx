@@ -24,7 +24,7 @@ const style = stylex.create({
   }
 })
 
-type OnClickingJournalGroup = (data: JournalApi.GroupData) => EventHandler<"div", "onClick">
+type OnClickingJournalGroup = (data: JournalApi.IGroupData) => EventHandler<"div", "onClick">
 
 export function JournalList() {
   const { $grid, $event, $infoSidebar } = useJournalHomeContext()

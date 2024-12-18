@@ -18,17 +18,17 @@ import { useTabContext } from "../components"
 import { type JournalEventMap } from "./event"
 
 export interface IThisJournalContext {
-  $currentlyOpened: Accessor<JournalApi.JournalData | undefined>
-  $setCurrentlyOpened: Setter<JournalApi.JournalData | undefined>
-  $currentGroup: Accessor<JournalApi.GroupData | undefined>
-  $setCurrentGroup: Setter<JournalApi.GroupData | undefined>
+  $currentlyOpened: Accessor<JournalApi.IJournalData | undefined>
+  $setCurrentlyOpened: Setter<JournalApi.IJournalData | undefined>
+  $currentGroup: Accessor<JournalApi.IGroupData | undefined>
+  $setCurrentGroup: Setter<JournalApi.IGroupData | undefined>
   // ...
-  $fileTree: Signal<JournalApi.JournalData[]>
+  $fileTree: Signal<JournalApi.IJournalData[]>
   // ...
-  $create(data: JournalApi.Journal): Promise<JournalApi.JournalData>
+  $create(data: JournalApi.Journal): Promise<JournalApi.IJournalData>
   $delete(journalId: string): Promise<void>
   $open(journalId: string): Promise<void>
-  $getAll(): Promise<JournalApi.JournalData[]>
+  $getAll(): Promise<JournalApi.IJournalData[]>
   $save(journalId: string, data: JournalApi.JournalContentData): Promise<{} | null>
 }
 
@@ -36,9 +36,9 @@ export function createJournal(): IThisJournalContext {
   const { $removeTab } = useTabContext()
   const { $cache, $open } = useThisEditorContext()
 
-  const [$currentlyOpened, $setCurrentlyOpened] = createSignal<JournalApi.JournalData>()
-  const [$currentGroup, $setCurrentGroup] = createSignal<JournalApi.GroupData>()
-  const [fileTree, setFileTree] = createSignal([] as JournalApi.JournalData[])
+  const [$currentlyOpened, $setCurrentlyOpened] = createSignal<JournalApi.IJournalData>()
+  const [$currentGroup, $setCurrentGroup] = createSignal<JournalApi.IGroupData>()
+  const [fileTree, setFileTree] = createSignal([] as JournalApi.IJournalData[])
 
   const getCurrentJournalGroupId = () => {
     console.assert($currentGroup(), '[panic] currentGroup data should NOT be null or undefined')
@@ -55,7 +55,7 @@ export function createJournal(): IThisJournalContext {
     async $create(data) {
       console.log('[journal] creating', data, '...')
       const currentJournalGroupId = getCurrentJournalGroupId()
-      const newData = await fetchIt<JournalApi.JournalData>('POST', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}`, data)
+      const newData = await fetchIt<JournalApi.IJournalData>('POST', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}`, data)
       return newData!
     },
     async $open(journalId) {
@@ -87,7 +87,7 @@ export function createJournal(): IThisJournalContext {
     async $getAll() {
       const currentJournalGroupId = getCurrentJournalGroupId()
       console.log('[journal] getting all journals data from', currentJournalGroupId, '...')
-      return await fetchIt('GET', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}`) as JournalApi.JournalData[]
+      return await fetchIt('GET', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}`) as JournalApi.IJournalData[]
     },
     async $save(journalId, data) {
       console.log('[journal] saving', journalId, '...')

@@ -22,7 +22,7 @@ const style = stylex.create({
 })
 
 interface IDeleteJournalModalProps extends IDialog {
-  $journal: JournalApi.JournalData
+  $journal: JournalApi.IJournalData
 }
 
 export default function DeleteJournalModal(props: IDeleteJournalModalProps) {

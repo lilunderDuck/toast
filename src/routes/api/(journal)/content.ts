@@ -20,7 +20,7 @@ duck.get(JOURNAL_CONTENT_ROUTE, validator('query', (value, context) => {
 }), async(context) => {
   const query = context.req.valid('query')
 
-  const something = await journalData.$get(query.id, query.journal)
+  const something = await journalData.$getContent(query.id, query.journal)
 
   return context.json(something, 200)
 })

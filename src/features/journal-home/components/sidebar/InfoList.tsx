@@ -38,7 +38,7 @@ function Info(props: IInfoProps) {
   )
 }
 
-export function InfoList(props: JournalApi.GroupData) {
+export function InfoList(props: JournalApi.IGroupData) {
   const formatDate = (date: Date) => new Intl.DateTimeFormat('default', {
     day: 'numeric',
     month: 'short',

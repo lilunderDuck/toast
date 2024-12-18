@@ -31,8 +31,8 @@ const style = stylex.create({
   }
 })
 
-export interface IJournalProps extends JournalApi.JournalData {
-  $onClick?: (type: 'open' | 'remove', data: JournalApi.JournalData) => void
+export interface IJournalProps extends JournalApi.IJournalData {
+  $onClick?: (type: 'open' | 'remove', data: JournalApi.IJournalData) => void
 }
 
 export function Journal(props: IJournalProps) {

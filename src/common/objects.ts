@@ -1,4 +1,4 @@
-export function mergeObjects(...things: object[]) {
+export function mergeObjects<T extends object[]>(...things: T) {
   return Object.assign({}, ...things)
 }
 
