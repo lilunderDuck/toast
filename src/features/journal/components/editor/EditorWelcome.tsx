@@ -18,7 +18,7 @@ const style = stylex.create({
 
 export function EditorWelcome() {
   const walkthourgh = async() => {
-    (await import('../../utils/tour')).default()
+    
   }
 
   return (

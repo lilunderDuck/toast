@@ -1,7 +1,6 @@
 import { FlexCenter } from "~/components"
 
 import stylex from "@stylexjs/stylex"
-import { showItOff } from "../../utils"
 
 const style = stylex.create({
   empty: {
@@ -20,7 +19,7 @@ export default function EmptyEditor() {
       <div>
         But there's 
         <a app-just-an-anchor rel="noreferrer noopener" onClick={() => {
-          showItOff('rough-toggle-edit-or-readonly-button')
+          // ...
         }}>
           a button
         </a> to let you type though
