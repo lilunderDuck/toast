@@ -6,7 +6,7 @@ import { isThisDirectoryExist, mustHaveAnId, validate } from "~/server"
 import { 
   buildJournalGroupPath, 
   journalData
-} from "~/features/journal-data"
+} from "~/features/journal/data"
 // ...
 
 import { object, string } from "valibot"

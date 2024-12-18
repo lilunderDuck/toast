@@ -6,7 +6,7 @@ import {
 } from "~/api/journal"
 import { 
   journalGroupData
-} from "~/features/journal-data"
+} from "~/features/journal/data"
 import { canHaveIdOrNot, mustHaveAnId, validate } from "~/server/utils"
 import { duck } from "~/entry-server"
 import { isEmptyObject } from '~/common'

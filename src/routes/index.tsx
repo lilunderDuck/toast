@@ -2,7 +2,7 @@ import {
   JournalHomeRoot, 
   JournalInfoSidebar, 
   JournalList 
-} from "~/features/journal-home"
+} from "~/features/journal/home"
 
 export default function HomePage() {
   return (

@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex"
-import { Flex } from "../../../../components"
+import { Flex } from "../../../../../components"
 import { SectionText } from "./Section"
 import { Show } from "solid-js"
 
