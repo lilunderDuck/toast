@@ -2,10 +2,15 @@ import { onCleanup, onMount, ParentProps } from "solid-js"
 import { createEditor } from "../utils"
 // ...
 import stylex from "@stylexjs/stylex"
+import __scrollbarStyle from "~/assets/style/scrollbar.module.css"
 // ...
 import { useThisEditorContext } from "./ThisEditorProvider"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
+  everything: {
+    position: 'relative'
+  },
   editor: {
     height: 'calc(100vh - 72px)',
     paddingInline: 10
@@ -23,12 +28,12 @@ const style = stylex.create({
  * @see {@link useThisEditorContext}
  */
 export function ThisEditor(props: ParentProps) {
-  let editorRef: HTMLDivElement
+  let editorLocationRef!: HTMLDivElement
   const editor = useThisEditorContext()
   
   onMount(() => {
     editor.$editorInstance = createEditor(
-      editorRef, 
+      editorLocationRef, 
       false, 
       async() => {
         const savedData = await editor.$save()
@@ -45,20 +50,26 @@ export function ThisEditor(props: ParentProps) {
   })
 
   const autoScrollIntoBottom = () => {
-    editorRef.scrollIntoView({ behavior: "smooth", block: "end" })
-    editorRef.scrollTop = editorRef.scrollHeight + 1000
+    editorLocationRef.scrollIntoView({ behavior: "smooth", block: "end" })
+    editorLocationRef.scrollTop = editorLocationRef.scrollHeight + 500
     editor.$event.$emit('editor_onTyping')
   }
   
   return (
-    <div
-      app-scrollbar 
-      app-scrollbar-vertical 
-      app-invs-scrollbar 
-      ref={editorRef!} 
+    <div 
       onKeyPress={autoScrollIntoBottom}
-      {...stylex.attrs(style.editor)} 
+      {...stylex.attrs(style.everything)}
     >
+      <div 
+        class={mergeClassname( 
+          __scrollbarStyle.scrollbar, 
+          __scrollbarStyle.scrollbarVertical, 
+          __scrollbarStyle.invsScrollbar,
+          stylex.attrs(style.editor)
+        )}
+        ref={editorLocationRef!} 
+      />
+
       {props.children}
     </div>
   )

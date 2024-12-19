@@ -1,0 +1,43 @@
+.scrollbar {
+  --sb-track-color: var(--gray3);
+  --sb-thumb-color: var(--gray4);
+  --sb-border-radius: 3px;
+  --sb-thumb-pad: 1px;
+  --sb-size: 7px;
+  will-change: transform;
+}
+
+.scrollbarVertical {
+  overflow-y: scroll;
+}
+
+.scrollbarHorizontal {
+  overflow-x: scroll;
+}
+
+/* you have to manually change the scroll bar size for yourself */
+.scrollbar::-webkit-scrollbar {
+  width: var(--sb-size);
+  height: var(--sb-size);
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: var(--sb-border-radius);
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: var(--sb-border-radius);
+  border: var(--sb-thumb-pad) solid var(--sb-track-color);
+}
+
+.invsScrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .scrollbar {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
+}
