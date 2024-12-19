@@ -1,8 +1,11 @@
-import stylex from "@stylexjs/stylex"
 import { For, splitProps } from "solid-js"
+// ...
+import stylex from "@stylexjs/stylex"
+import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 // ...
 import { Divider } from "~/components"
 import type { JournalApi } from "~/api/journal"
+import { mergeClassname } from "~/utils"
 // ...
 import { useJournalContext } from "../../context"
 import { SidebarButtonsRow } from "./SidebarButtonsRow"
@@ -49,12 +52,12 @@ export function Sidebar(props: ISidebarProps) {
     >
       <SidebarButtonsRow />
       <Divider />
-      <div
-        {...stylex.attrs(style.content)} 
-        app-scrollbar 
-        app-scrollbar-vertical 
-        app-invs-scrollbar
-      >
+      <div class={mergeClassname(
+        __scrollbarStyle.scrollbar,
+        __scrollbarStyle.scrollbarVertical,
+        __scrollbarStyle.invsScrollbar,
+        stylex.attrs(style.content)
+      )}>
         <For each={tree()}>
           {it => <Journal {...it} $onClick={openOrRemoveJournal} />}
         </For>

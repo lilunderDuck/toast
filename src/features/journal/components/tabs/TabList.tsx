@@ -1,7 +1,12 @@
+import { For, ParentProps } from "solid-js"
+// ...
+import { FlexCenterY } from "~/components"
+import { mergeClassname } from "~/utils"
+// ...
 import stylex from "@stylexjs/stylex"
 import __style from './TabList.module.css'
-import { For, ParentProps } from "solid-js"
-import { FlexCenterY } from "~/components"
+import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
+// ...
 import { useTabContext } from "./TabProvider"
 
 const style = stylex.create({
@@ -32,7 +37,11 @@ export function TabList() {
   const [tabs] = $tabs
 
   return (
-    <div app-scrollbar app-scrollbar-vertical app-invs-scrollbar>
+    <div class={mergeClassname(
+      __scrollbarStyle.scrollbar,
+      __scrollbarStyle.scrollbarVertical,
+      __scrollbarStyle.invsScrollbar
+    )}>
       <FlexCenterY {...stylex.attrs(style.tabs)}>
         <For each={tabs()}>
           {it => (

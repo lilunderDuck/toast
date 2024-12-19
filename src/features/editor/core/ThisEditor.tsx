@@ -1,11 +1,12 @@
 import { onCleanup, onMount, ParentProps } from "solid-js"
-import { createEditor } from "../utils"
+// ...
+import { mergeClassname } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from "~/assets/style/scrollbar.module.css"
 // ...
 import { useThisEditorContext } from "./ThisEditorProvider"
-import { mergeClassname } from "~/utils"
+import { createEditor } from "../utils"
 
 const style = stylex.create({
   everything: {

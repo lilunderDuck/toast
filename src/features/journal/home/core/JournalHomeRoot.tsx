@@ -1,8 +1,12 @@
-import stylex from "@stylexjs/stylex"
-import __style from "./JournalHomeRoot.module.css"
+import { JSX, ParentProps } from "solid-js"
+// ...
 import { mergeClassname } from "~/utils"
 import { Flex } from "~/components"
-import { JSX, ParentProps } from "solid-js"
+// ...
+import stylex from "@stylexjs/stylex"
+import __style from "./JournalHomeRoot.module.css"
+import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
+// ...
 import { JournalHomeProvider } from "../provider"
 
 const style = stylex.create({
@@ -25,9 +29,11 @@ export function JournalHomeRoot(props: ParentProps<IJournalHomeRootProps>) {
   return (
     <JournalHomeProvider>
       <Flex class={mergeClassname(stylex.attrs(style.$homePage))}>
-        <div app-scrollbar app-scrollbar-vertical class={mergeClassname(
+        <div class={mergeClassname(
           stylex.attrs(style.$content), 
-          __style.scrollbar
+          __style.scrollbar,
+          __scrollbarStyle.scrollbar,
+          __scrollbarStyle.scrollbarVertical,
         )}>
           {props.children}
         </div>

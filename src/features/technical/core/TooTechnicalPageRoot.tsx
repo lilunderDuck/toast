@@ -1,7 +1,10 @@
 import { ParentProps } from "solid-js"
 // ...
+import { mergeClassname } from "~/utils"
+// ...
 import stylex from "@stylexjs/stylex"
 import __style from "./TooTechnicalPageRoot.module.css"
+import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 
 const style = stylex.create({
   page: {
@@ -19,7 +22,14 @@ const style = stylex.create({
 
 export function TooTechnicalPageRoot(props: ParentProps) {
   return (
-    <div {...stylex.attrs(style.page)} id={__style.thisPage} app-scrollbar app-scrollbar-vertical>
+    <div 
+      class={mergeClassname(
+        __scrollbarStyle.scrollbar,
+        __scrollbarStyle.scrollbarVertical,
+        stylex.attrs(style.page)
+      )} 
+      id={__style.thisPage}
+    >
       {props.children}
     </div>
   )

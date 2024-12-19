@@ -3,13 +3,14 @@ import { Show, splitProps } from "solid-js"
 import * as DialogPrimitive from "@kobalte/core/dialog"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 // ...
-import __style from './Dialog.module.css'
+import { mergeClassname } from "~/utils"
+// ...
 import stylex from "@stylexjs/stylex"
+import __style from './Dialog.module.css'
+import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 // ...
 import { FlexCenterX } from "../Flex"
 import { FadeInFadeOutAnimation } from "../../animation"
-// ...
-import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   portal: {
@@ -99,11 +100,11 @@ const DialogPortal: Component<IDialogPortalProps> = (props) => {
         <div dont-close {...stylex.attrs(style.overlay)} />
       </Show>
       <FadeInFadeOutAnimation>
-        <FlexCenterX
+        <FlexCenterX class={mergeClassname(
+          __scrollbarStyle.scrollBar, 
+          __scrollbarStyle.scrollbarVertical, 
           {...stylex.attrs(style.portal)}
-          app-scrollbar
-          app-scrollbar-vertical
-        >
+        )}>
           {props.children}
         </FlexCenterX>
       </FadeInFadeOutAnimation>

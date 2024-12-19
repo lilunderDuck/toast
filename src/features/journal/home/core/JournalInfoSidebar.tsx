@@ -2,9 +2,11 @@ import { Show } from "solid-js"
 import { useNavigate } from "@solidjs/router"
 // ...
 import { OpenAndCloseButton } from "~/components"
+import { mergeClassname } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from './JournalInfoSidebar.module.css' 
+import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 // ...
 import { BackgroundShowcase, InfoList } from "../components"
 import { useJournalHomeContext } from "../provider"
@@ -40,10 +42,12 @@ export function JournalInfoSidebar() {
   return (
     <Show when={$infoSidebar.$currentJournalData()}>
       <div 
-        app-scrollbar 
-        app-scrollbar-vertical 
-        app-invs-scrollbar
-        {...stylex.attrs(style.$sidebar)}
+        class={mergeClassname(
+          __scrollbarStyle.scrollbar,
+          __scrollbarStyle.scrollbarVertical,
+          __scrollbarStyle.invsScrollbar,
+          stylex.attrs(style.$sidebar)
+        )}
         id={__style.sidebar}
       >
         <BackgroundShowcase 

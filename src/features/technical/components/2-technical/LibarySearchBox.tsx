@@ -1,7 +1,10 @@
-import stylex from "@stylexjs/stylex"
 import { Accessor, For, Setter } from "solid-js"
 // ...
+import stylex from "@stylexjs/stylex"
+import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
+// ...
 import { FlexCenterY, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components"
+import { mergeClassname } from "~/utils"
 // ...
 import { solid_icon } from "../../assets"
 import libraries from "../../data/libraries.json"
@@ -56,7 +59,11 @@ export function LibarySearchBox(props: ILibarySearchBoxProps) {
           <SelectContent />
         </Select>
       </FlexCenterY>
-      <div {...stylex.attrs(style.libList)} app-scrollbar app-scrollbar-vertical>
+      <div class={mergeClassname(
+        __scrollbarStyle.scrollbar, 
+        __scrollbarStyle.scrollbarVertical,
+        stylex.attrs(style.libList)
+      )}>
         <For each={libraries}>
           {it => (
             <LibaryUsedBox 
