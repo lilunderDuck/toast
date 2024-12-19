@@ -2,7 +2,6 @@
 import { render } from 'solid-js/web'
 // ...
 import './assets/style/index.css'
-import './assets/style/scrollbar.css'
 import './assets/colors/dark.css'
 // ...
 import App from './App'
