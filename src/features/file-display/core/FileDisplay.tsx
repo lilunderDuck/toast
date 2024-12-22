@@ -1,17 +1,19 @@
 import { For } from "solid-js"
-import { JournalApi } from "~/api/journal"
-import { useJournalContext, type VirturalFileTree } from "~/features/journal"
-import { JournalCategory } from "./JournalCategory"
-import { Journal } from "./Journal"
+// ...
+import { type JournalApi } from "~/api/journal"
+// ...
+import { JournalCategory, Journal } from "../components"
+import { type ValidNode } from "../utils"
+import { useFileDisplayContext } from "./FileDisplayProvider"
 
 interface IRecursivelyRenderingOutStuff {
-  stuff: VirturalFileTree.ValidNode[]
+  stuff: ValidNode[]
 }
 
-export default function FileDislay() {
-  const { $fileTree } = useJournalContext()
+export function FileDisplay() {
+  const fileTree = useFileDisplayContext()
 
-  $fileTree.tree = [
+  fileTree.tree = [
     '1f',
     '4d',
     'cf',
@@ -47,6 +49,11 @@ export default function FileDislay() {
       id: '1f',
       name: 'Test 4'
     } as JournalApi.IJournalData,
+    '45': {
+      created: new Date(),
+      id: '1f',
+      name: 'Test 5 idk'
+    } as JournalApi.IJournalData,
     // ...
     'ef': {
       created: new Date(),
@@ -60,12 +67,25 @@ export default function FileDislay() {
     } as JournalApi.ICategoryData,
   }
 
-  $fileTree.$event.$on('node__update', () => void 0)
+  setTimeout(() => {
+    fileTree.tree = [
+      '1f',
+      '4d',
+      'cf',
+      '85',
+      {
+        id: 'ef',
+        child: [
+          '45'
+        ]
+      },
+    ]
+  }, 2000)
 
   const RecursivelyRenderingOut = (props: IRecursivelyRenderingOutStuff) => (
     <For each={props.stuff}>
       {it => {
-        if ($fileTree.$isFolder(it)) {
+        if (fileTree.$isFolder(it)) {
           const data = lookup[it.id]
           return (
             <JournalCategory {...data}>
@@ -84,7 +104,7 @@ export default function FileDislay() {
 
   return (
     <div>
-      <RecursivelyRenderingOut stuff={$fileTree.tree} />
+      <RecursivelyRenderingOut stuff={fileTree.$virturalTree()} />
     </div>
   )
 }

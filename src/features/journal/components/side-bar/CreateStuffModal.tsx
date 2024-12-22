@@ -1,9 +1,12 @@
-import { DialogContent, DialogTitle, IDialog, RadioGroup, RadioGroupItem, RadioGroupItemLabel } from "~/components"
-import CreateJournalCategoryForm from "./CreateJournalCategoryForm"
 import { For } from "solid-js"
+// ...
 import stylex from "@stylexjs/stylex"
-import { CreateStuffProvider, useCreateStuffContext } from "./CreateStuffProvider"
+// ...
+import { DialogContent, DialogTitle, type IDialog, RadioGroup, RadioGroupItem, RadioGroupItemLabel } from "~/components"
 import { JournalApi } from "~/api/journal"
+// ...
+import { CreateStuffProvider, useCreateStuffContext } from "./CreateStuffProvider"
+import CreateJournalCategoryForm from "./CreateStuffForm"
 
 const style = stylex.create({
   radioGroup: {

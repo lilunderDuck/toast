@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex"
-import { BsFolderFill, BsJournalPlus } from "solid-icons/bs"
+import { BsPlus } from "solid-icons/bs"
 import { lazy, splitProps } from "solid-js"
 import { IconTypes } from "solid-icons"
 // ...
@@ -59,27 +59,17 @@ export function SidebarButtonsRow() {
     )
   }
 
-  const createJournalModal = createLazyLoadedDialog(
-    lazy(() => import('./create-stuff'))
-  )
-
-  const createJournalCategoryModal = createLazyLoadedDialog(
-    lazy(() => import('./CreateJournalCategoryModal'))
+  const createStuffModal = createLazyLoadedDialog(
+    lazy(() => import('./CreateStuffModal'))
   )
 
   return (
     <FlexCenterY {...stylex.attrs(style.buttonsRow)}>
       <ButtonItem 
         editor-tour-create-journal-button
-        onClick={createJournalModal.$show}
-        $icon={BsJournalPlus}
+        onClick={createStuffModal.$show}
+        $icon={BsPlus}
         $label={'New journal'}
-      />
-      <ButtonItem
-        editor-tour-create-journal-category-button
-        onClick={createJournalCategoryModal.$show}
-        $icon={BsFolderFill}
-        $label={'New category'}
       />
       <Spacer />
       <ButtonItem 
@@ -91,8 +81,7 @@ export function SidebarButtonsRow() {
         $label={`Toggle ${true ? 'read-only' : 'edit'} mode`}
       />
       {/* ... */}
-      <createJournalModal.$Modal />
-      <createJournalCategoryModal.$Modal />
+      <createStuffModal.$Modal />
     </FlexCenterY>
   )
 }

@@ -10,7 +10,7 @@ import { toast } from '~/features/toast'
 import { fetchIt } from "~/utils"
 // ...
 import IconInput from "./IconInput"
-import { useJournalHomeContext } from "~/features/journal/home/provider"
+import { useJournalHomeContext } from "~/features/home/provider"
 
 interface IEditJournalGroupFormProps extends JournalApi.IGroupData {
   onClick: () => any

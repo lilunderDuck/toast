@@ -17,7 +17,7 @@ import {
 } from "~/components"
 import { toast } from '~/features/toast'
 import { createSignal } from "solid-js"
-import { useJournalHomeContext } from "~/features/journal/home/provider"
+import { useJournalHomeContext } from "~/features/home/provider"
 
 interface ICreateJournalGroupFormProps {
   onClick: () => any

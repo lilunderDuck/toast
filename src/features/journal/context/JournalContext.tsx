@@ -5,13 +5,11 @@ import {
 } from "solid-js"
 import { createEvent, createStorage, type IEvent, type IStorage } from "~/utils"
 // ...
-import { JournalEventMap } from "./event"
+import { type JournalEventMap } from "./event"
 import { createJournal, type IThisJournalContext } from "./journal"
-import { createNodeContext, INodeContext } from "./file-tree"
 
 interface IJournalContext {
   $journal: IThisJournalContext
-  $fileTree: INodeContext
   // ...
   $localStorage: IStorage<{
     shouldShowDeleteConfirmationModal: boolean
@@ -27,7 +25,6 @@ export function JournalProvider(props: ParentProps) {
   return (
     <Context.Provider value={{
       $journal: createJournal(),
-      $fileTree: createNodeContext(),
       $localStorage: createStorage(localStorage),
       $event: event
     }}>

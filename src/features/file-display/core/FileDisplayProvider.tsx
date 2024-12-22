@@ -1,23 +1,27 @@
-import { Accessor, createSignal } from "solid-js"
-import { type VirturalFileTree, insertBefore, isFolder } from "./stuff"
+import { type Accessor, createContext, createSignal, type ParentProps, useContext } from "solid-js"
+// ...
 import { createEvent, IEvent } from "~/utils"
+// ...
+import { Folder, insertBefore, isFolder, ValidNode } from "../utils"
 
 export interface INodeContext {
-  tree: VirturalFileTree.ValidNode[]
+  tree: ValidNode[]
   $event: IEvent<{
-    node__update(newTree: VirturalFileTree.ValidNode[]): void
+    node__update(newTree: ValidNode[]): void
   }>
-  $virturalTree: Accessor<VirturalFileTree.ValidNode[]>,
-  $isFolder: typeof isFolder,
-  $createFolder(id: string): VirturalFileTree.Folder,
-  $addNode(node: VirturalFileTree.ValidNode, toFolder: string, before?: string): any,
-  $findNodeRecursively(nodeId: string, nodes: VirturalFileTree.ValidNode[]): VirturalFileTree.ValidNode | null,
+  $virturalTree: Accessor<ValidNode[]>
+  $isFolder: typeof isFolder
+  $createFolder(id: string): Folder
+  $addNode(node: ValidNode, toFolder: string, before?: string): any
+  $findNodeRecursively(nodeId: string, nodes: ValidNode[]): ValidNode | null
 }
 
-export function createNodeContext(): INodeContext {
-  let tree: VirturalFileTree.ValidNode[] = []
+const Context = createContext<INodeContext>()
+
+export function FileDisplayProvider(props: ParentProps) {
+  let tree: ValidNode[] = []
   const event: INodeContext["$event"] = createEvent()
-  const [virturalTree, setVirturalTree] = createSignal<VirturalFileTree.ValidNode[]>([])
+  const [virturalTree, setVirturalTree] = createSignal<ValidNode[]>([])
 
   const update = () => {
     setVirturalTree(tree)
@@ -74,21 +78,28 @@ export function createNodeContext(): INodeContext {
 
     update()
   }
-
-  return { 
-    get tree() {
-      return tree
-    },
-    set tree(value) {
-      tree = value
-    },
-    $event: event,
-    $virturalTree: virturalTree,
-    $isFolder: isFolder,
-    $createFolder(id) {
-      return { id, child: [] }
-    },
-    $addNode: addNode,
-    $findNodeRecursively: findNodeRecursively,
-  }
+  
+  return (
+    <Context.Provider value={{
+      get tree() {
+        return tree
+      },
+      set tree(value) {
+        tree = value
+        setVirturalTree(value)
+      },
+      $event: event,
+      $virturalTree: virturalTree,
+      $isFolder: isFolder,
+      $createFolder(id) {
+        return { id, child: [] }
+      },
+      $addNode: addNode,
+      $findNodeRecursively: findNodeRecursively,
+    }}>
+      {props.children}
+    </Context.Provider>
+  )
 }
+
+export const useFileDisplayContext = () => useContext(Context)!

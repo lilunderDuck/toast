@@ -1,4 +1,4 @@
-import { For, splitProps } from "solid-js"
+import { splitProps } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
@@ -6,11 +6,10 @@ import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 import { Divider } from "~/components"
 import type { JournalApi } from "~/api/journal"
 import { mergeClassname } from "~/utils"
+import { FileDisplayProvider, FileDisplay } from "~/features/file-display"
 // ...
 import { useJournalContext } from "../../context"
 import { SidebarButtonsRow } from "./SidebarButtonsRow"
-import { Journal, IJournalProps, /*JournalCategory*/ } from "./file-display"
-import FileDislay from "./file-display/FileDisplay"
 
 const style = stylex.create({
   sidebar: {
@@ -53,17 +52,16 @@ export function Sidebar(props: ISidebarProps) {
     >
       <SidebarButtonsRow />
       <Divider />
-      <div class={mergeClassname(
-        __scrollbarStyle.scrollbar,
-        __scrollbarStyle.scrollbarVertical,
-        __scrollbarStyle.invsScrollbar,
-        stylex.attrs(style.content)
-      )}>
-        {/* <For each={tree()}>
-          {it => <Journal {...it} $onClick={openOrRemoveJournal} />}
-        </For> */}
-        <FileDislay />
-      </div>
+      <FileDisplayProvider>
+        <div class={mergeClassname(
+          __scrollbarStyle.scrollbar,
+          __scrollbarStyle.scrollbarVertical,
+          __scrollbarStyle.invsScrollbar,
+          stylex.attrs(style.content)
+        )}>
+          <FileDisplay />
+        </div>
+      </FileDisplayProvider>
     </div>
   )
 }

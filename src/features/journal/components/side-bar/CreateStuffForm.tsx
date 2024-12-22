@@ -3,7 +3,6 @@ import {
   required, 
   type SubmitHandler 
 } from "@modular-forms/solid"
-import { createSignal } from "solid-js"
 // ...
 import { 
   type JournalApi,
@@ -13,24 +12,27 @@ import {
   OpenAndCloseButton
 } from "~/components"
 import { toast } from "~/features/toast"
+import { useJournalContext } from "~/features/journal"
 // ...
-import { useJournalContext } from "~/features/journal/context"
+import { useCreateStuffContext } from "./CreateStuffProvider"
 
-interface ICreateJournalFormProps {
+interface ICreateJournalCategoryFormProps {
   onClick: () => any
 }
 
-export default function CreateJournalForm(props: ICreateJournalFormProps) {
+export default function CreateJournalCategoryForm(props: ICreateJournalCategoryFormProps) {
+  const { $submitButtonDisabled, $selected } = useCreateStuffContext()
   const { $journal } = useJournalContext()
-  const [, setTree] = $journal.$fileTree
 
+  const [, setTree] = $journal.$fileTree
   const [_journalGroupForm, { Field, Form }] = createForm<JournalApi.Journal>()
-  const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
+  const [submitButtonDisabled, setSubmitButtonDisabled] = $submitButtonDisabled
+  const [selected] = $selected
 
   const submit: SubmitHandler<JournalApi.Journal> = async(data) => {
     setSubmitButtonDisabled(true)
     const dataReturned = await toast
-      .promise($journal.$create(data), {
+      .promise($journal.$create(data, selected()!), {
         loading: 'Saving changes...',
         success: 'Done!',
         error: 'Failed to save changes :('
@@ -53,8 +55,7 @@ export default function CreateJournalForm(props: ICreateJournalFormProps) {
         {(field, inputProps) => (
           <FieldInput
             {...inputProps}
-            label='Name'
-            placeholder="What is your journal about?"
+            placeholder="[insert some name into here]"
             type="text"
             required
             value={field.value}
