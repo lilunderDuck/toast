@@ -21,7 +21,14 @@ const style = stylex.create({
     gap: 10
   },
   button: {
-    flexShrink: 0
+    flexShrink: 0,
+    // forced to be this way
+    backgroundColor: 'var(--gray1) !important',
+    color: 'var(--gray11)',
+    ':hover': {
+      backgroundColor: 'var(--gray4) !important',
+      color: 'var(--gray12)'
+    }
   }
 })
 

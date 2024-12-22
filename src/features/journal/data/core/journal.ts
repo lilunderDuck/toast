@@ -92,8 +92,8 @@ export const journalData = {
   
     console.log(journals)
     const data = []
-    for (const journalId of journals) {
-      const dataFetched = await journalFs.$readFile(groupId, journalId)
+    for (const journalFile of journals) {
+      const dataFetched = await journalFs.$readFile(groupId, journalFile.replace('.dat', ''))
       if (dataFetched) data.push(dataFetched)
     }
   

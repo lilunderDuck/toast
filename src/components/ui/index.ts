@@ -15,3 +15,4 @@ export * from "./Tooltip"
 export * from "./select"
 export * from "./dialog"
 export * from './charts'
+export * from './radio-group'

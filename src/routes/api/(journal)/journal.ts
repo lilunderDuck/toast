@@ -16,6 +16,11 @@ const mustHaveAnIdAndJournalId = object({
   journal: string()
 })
 
+const mustHaveAnIdAndType = object({
+  id: string(),
+  type: string()
+})
+
 duck.get(JOURNAL_ROUTE, validator('query', (value, context) => {
   if (validate(mustHaveAnId, value)) {
     return value
@@ -34,13 +39,12 @@ duck.get(JOURNAL_ROUTE, validator('query', (value, context) => {
 })
 
 duck.post(JOURNAL_ROUTE, validator('query', (value, context) => {
-  if (validate(mustHaveAnId, value)) {
+  if (validate(mustHaveAnIdAndType, value)) {
     return value
   }
 
   return context.text('invalid query', 400)
 }), validator('json', (value, context) => {
-  console.log(value)
   if (validate(journalFormSchema, value)) {
     return value
   }
@@ -50,7 +54,13 @@ duck.post(JOURNAL_ROUTE, validator('query', (value, context) => {
   const body = context.req.valid('json')
   const query = context.req.valid('query')
 
-  const newData = await journalData.$create(query.id, body)
+  let newData
+  if (query.type === 'journal') {
+    newData = await journalData.$create(query.id, body)
+  }
+  else {
+    newData = await journalData.$createCategory(query.id, body)
+  }
   
   return context.json(newData, 200)
 })

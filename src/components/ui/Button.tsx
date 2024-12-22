@@ -1,9 +1,11 @@
 import type { JSX, ValidComponent } from "solid-js"
 import { splitProps } from "solid-js"
- 
 import * as ButtonPrimitive from "@kobalte/core/button"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
+// ...
 import stylex from "@stylexjs/stylex"
+import __style from "./Button.module.css"
+// ...
 import { defaultValueOrElse, mergeClassname, type StylexAttrs } from "../../utils"
 
 export const enum ButtonVariant {
@@ -104,6 +106,7 @@ export const Button = <T extends ValidComponent = "button">(
       {...others}
       class={mergeClassname(
         others,
+        __style.button,
         stylex.attrs(style.$base),
         defaultValueOrElse(variantMapping, local.$variant, ButtonVariant.default),
         defaultValueOrElse(sizeMapping, local.$size, ButtonSizeVariant.default),

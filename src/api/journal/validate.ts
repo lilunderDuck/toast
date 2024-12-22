@@ -69,4 +69,6 @@ export namespace JournalApi {
 
   /**A list of files that can be stored */
   export type Files = SavedJournalData | ICategoryData
+
+  export type FileType = 'journal' | 'category'
 }

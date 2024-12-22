@@ -10,6 +10,7 @@ import { mergeClassname } from "~/utils"
 import { useJournalContext } from "../../context"
 import { SidebarButtonsRow } from "./SidebarButtonsRow"
 import { Journal, IJournalProps, /*JournalCategory*/ } from "./file-display"
+import FileDislay from "./file-display/FileDisplay"
 
 const style = stylex.create({
   sidebar: {
@@ -58,9 +59,10 @@ export function Sidebar(props: ISidebarProps) {
         __scrollbarStyle.invsScrollbar,
         stylex.attrs(style.content)
       )}>
-        <For each={tree()}>
+        {/* <For each={tree()}>
           {it => <Journal {...it} $onClick={openOrRemoveJournal} />}
-        </For>
+        </For> */}
+        <FileDislay />
       </div>
     </div>
   )

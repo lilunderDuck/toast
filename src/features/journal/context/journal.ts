@@ -10,25 +10,53 @@ import {
   JOURNAL_CONTENT_ROUTE, 
   JOURNAL_ROUTE, 
 } from "~/api/journal"
-import { fetchIt, type IEvent } from "~/utils"
+import { fetchIt } from "~/utils"
 import { thisArrayObjects } from "~/common"
 import { useThisEditorContext } from "~/features/editor"
 // ...
 import { useTabContext } from "../components"
-import { type JournalEventMap } from "./event"
 
 export interface IThisJournalContext {
+  /**Accessor for the currently opened journal data. 
+   * Returns the currently opened journal data or undefined if none is open.
+   */
   $currentlyOpened: Accessor<JournalApi.IJournalData | undefined>
+  /**Setter for the currently opened journal data. */
   $setCurrentlyOpened: Setter<JournalApi.IJournalData | undefined>
+  /**Accessor for the current journal group data.
+   * Returns the current journal group data or undefined if none is selected.
+   */
   $currentGroup: Accessor<JournalApi.IGroupData | undefined>
+  /**Setter for the current journal group data. */
   $setCurrentGroup: Setter<JournalApi.IGroupData | undefined>
   // ...
   $fileTree: Signal<JournalApi.IJournalData[]>
   // ...
-  $create(data: JournalApi.Journal): Promise<JournalApi.IJournalData>
+  /**Creates a new journal.
+   * @param data The initial data for the new journal.
+   * @param type The type of the journal file.
+   * @returns A promise that resolves to the created journal data.
+   */
+  $create(data: JournalApi.Journal, type: JournalApi.FileType): Promise<JournalApi.IJournalData>
+  /**Deletes a journal.
+   * @param journalId The ID of the journal to delete.
+   * @returns A promise that resolves when the journal is deleted.
+   */
   $delete(journalId: string): Promise<void>
+  /**Opens a journal.
+   * @param journalId The ID of the journal to open.
+   * @returns A promise that resolves when the journal is opened.
+   */
   $open(journalId: string): Promise<void>
+  /**Gets all journals.
+   * @returns A promise that resolves to an array of journal data.
+   */
   $getAll(): Promise<JournalApi.IJournalData[]>
+  /**Saves changes to a journal.
+   * @param journalId The ID of the journal to save.
+   * @param data The new data for the journal.
+   * @returns A promise that resolves to an empty object or null.
+   */
   $save(journalId: string, data: JournalApi.JournalContentData): Promise<{} | null>
 }
 
@@ -52,10 +80,11 @@ export function createJournal(): IThisJournalContext {
     $currentGroup, 
     $setCurrentGroup,
     $fileTree: [fileTree, setFileTree],
-    async $create(data) {
+    async $create(data, type) {
       console.log('[journal] creating', data, '...')
       const currentJournalGroupId = getCurrentJournalGroupId()
-      const newData = await fetchIt<JournalApi.IJournalData>('POST', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}`, data)
+      const route = `${JOURNAL_ROUTE}?id=${currentJournalGroupId}&type=${type}`
+      const newData = await fetchIt<JournalApi.IJournalData>('POST', route, data)
       return newData!
     },
     async $open(journalId) {

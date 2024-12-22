@@ -66,6 +66,7 @@ export const journalFs = {
    * @returns A `Promise` that resolves to the journal file data or an empty object if the file doesn't exist.
    */
   async $readFile<T extends JournalApi.Files>(groupId: string, journalId: string) {
+    console.assert(!journalId.includes('.'), 'Journal id should not include a dot, maybe you accidentally put a file name into here?')
     const path = buildJournalPath(groupId, journalId)
     return await bson_readFile<T>(path) ?? {} as T
   },
