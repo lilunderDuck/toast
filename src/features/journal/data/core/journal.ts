@@ -1,7 +1,7 @@
 import { JournalApi } from "~/api/journal"
 import { getEverythingFromDir } from "~/server"
 // ...
-import { buildJournalGroupPath, createId, journalFs, journalGroupFs, META_FILE_NAME } from "../utils"
+import { buildJournalGroupPath, createId, journalFs, journalGroupCache, journalGroupFs, META_FILE_NAME } from "../utils"
 import { mergeObjects } from '~/common'
 
 export const journalData = {
@@ -15,12 +15,19 @@ export const journalData = {
     
     await journalFs.$writeFile(groupId, journalId, newData)
 
-    console.log('[journal] updating journal count')
+    console.log('[journal]\t\t updating journal count')
     await journalGroupFs.$writeMetaFile(groupId, (prev) => mergeObjects(prev, {
       entries: prev.entries + 1
     }))
+
+    await journalGroupCache.write(groupId, (prev) => ({
+      journals: {
+        ...(prev.journals ?? {}),
+        [journalId]: newData
+      }
+    }))
   
-    console.log('[journal] created', newData)
+    console.log('[journal]\t\t created', newData)
     return newData
   },
 
@@ -34,7 +41,7 @@ export const journalData = {
     
     await journalFs.$writeFile(groupId, journalId, newData)
   
-    console.log('[journal] created category', newData)
+    console.log('[journal]\t\t created category', newData)
     return newData
   },
   
@@ -46,7 +53,7 @@ export const journalData = {
   
     await journalFs.$writeFile(groupId, journalId, () => newData)
   
-    console.log('[journal] update from', oldData, 'to', newData)
+    console.log('[journal]\t\t update from', oldData, 'to', newData)
     return newData
   },
 
@@ -58,14 +65,14 @@ export const journalData = {
   
     await journalFs.$writeFile(groupId, categoryId, () => newData)
   
-    console.log('[journal] update category from', oldData, 'to', newData)
+    console.log('[journal]\t\t update category from', oldData, 'to', newData)
     return newData
   },
   
   async $delete(groupId: string, journalId: string) {
     await journalFs.$deleteFile(groupId, journalId)
 
-    console.log('[journal] updating journal count')
+    console.log('[journal]\t\t updating journal count')
     await journalGroupFs.$writeMetaFile(groupId, (prev) => {
       const entries = prev.entries - 1
       return mergeObjects(prev, {
@@ -80,7 +87,7 @@ export const journalData = {
   
   async $getContent(groupId: string, journalId: string) {
     const data = await journalFs.$readFile<JournalApi.SavedJournalData>(groupId, journalId)
-    console.log('[journal] data returned', data.data)
+    console.log('[journal]\t\t data returned', data.data)
     return data.data ?? []
   },
   
@@ -97,7 +104,7 @@ export const journalData = {
       if (dataFetched) data.push(dataFetched)
     }
   
-    console.log('[journal] data returned', data)
+    console.log('[journal]\t\t data returned', data)
     return data
   }
 }

@@ -1,2 +1,2 @@
 export * from './JournalContext'
-export type * from './file-tree'
+export * from './FileDisplay'

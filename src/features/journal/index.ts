@@ -1,4 +1,4 @@
 export * from "./utils"
-export * from "./context"
+export * from "./components/context"
 export * from "./components"
 export * from "./core"

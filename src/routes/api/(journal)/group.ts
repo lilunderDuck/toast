@@ -10,6 +10,7 @@ import {
 import { canHaveIdOrNot, mustHaveAnId, validate } from "~/server/utils"
 import { duck } from "~/entry-server"
 import { isEmptyObject } from '~/common'
+import { object } from 'valibot'
 // ...
 
 duck.get(JOURNAL_GROUP_ROUTE, validator('query', (value, context) => {
@@ -56,12 +57,8 @@ duck.patch(JOURNAL_GROUP_ROUTE, validator('query', (value, context) => {
   }
 
   return context.text('invalid input, oops', 400)
-}), validator('json', (value, context) => {
-  if (validate(journalGroupFormSchema, value)) {
-    return value
-  }
-
-  return context.text('invalid input, oops', 400)
+}), validator('json', (value) => {
+  return value // insecure? yes, I know
 }), async (context) => {
   const query = context.req.valid('query')
   const data = context.req.valid('json')

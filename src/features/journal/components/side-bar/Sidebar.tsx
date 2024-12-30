@@ -6,10 +6,11 @@ import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 import { Divider } from "~/components"
 import type { JournalApi } from "~/api/journal"
 import { mergeClassname } from "~/utils"
-import { FileDisplayProvider, FileDisplay } from "~/features/file-display"
 // ...
-import { useJournalContext } from "../../context"
+import { FileDisplay, useJournalContext } from "../context"
 import { SidebarButtonsRow } from "./SidebarButtonsRow"
+import { Journal, type IJournalProps } from "./Journal"
+import { JournalCategory } from "./JournalCategory"
 
 const style = stylex.create({
   sidebar: {
@@ -29,11 +30,10 @@ export interface ISidebarProps extends HTMLAttributes<"div"> {
 
 export function Sidebar(props: ISidebarProps) {
   const [, itsProps] = splitProps(props, ["$onClickingOpen", "$onClickingRemove"])
-  const { $journal } = useJournalContext()
-  const [tree] = $journal.$fileTree
+  const { $journal, $fileDisplay } = useJournalContext()
 
   let lastJournalId: string | undefined
-  const openOrRemoveJournal: IJournalProps["$onClick"] = (type, data) => {
+  const openOrRemoveJournal: IJournalProps["onClick"] = (type, data: JournalApi.IJournalData) => {
     if (type === 'remove') {
       return props.$onClickingRemove?.(data)
     }
@@ -44,6 +44,16 @@ export function Sidebar(props: ISidebarProps) {
     lastJournalId = thisJournalId
   }
 
+  $fileDisplay.setOptions({
+    componentLookup: {
+      // @ts-ignore
+      file: Journal,
+      // @ts-ignore
+      folder: JournalCategory
+    },
+    dataLookup: $journal.$cache
+  })
+
   return (
     <div 
       {...itsProps} 
@@ -52,16 +62,14 @@ export function Sidebar(props: ISidebarProps) {
     >
       <SidebarButtonsRow />
       <Divider />
-      <FileDisplayProvider>
-        <div class={mergeClassname(
-          __scrollbarStyle.scrollbar,
-          __scrollbarStyle.scrollbarVertical,
-          __scrollbarStyle.invsScrollbar,
-          stylex.attrs(style.content)
-        )}>
-          <FileDisplay />
-        </div>
-      </FileDisplayProvider>
+      <div class={mergeClassname(
+        __scrollbarStyle.scrollbar,
+        __scrollbarStyle.scrollbarVertical,
+        __scrollbarStyle.invsScrollbar,
+        stylex.attrs(style.content)
+      )}>
+        <FileDisplay $onClickFile={openOrRemoveJournal} />
+      </div>
     </div>
   )
 }

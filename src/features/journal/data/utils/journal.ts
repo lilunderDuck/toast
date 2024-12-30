@@ -23,7 +23,7 @@ export function createId() {
  * @param prev The updated data or a function that takes the previous data and returns the updated data.
  * @returns The updated data.
  */
-type Updater<T> = T | ((prev: T) => T)
+export type Updater<T> = T | ((prev: T) => Partial<T>)
 
 /**This contains some file system operations to mess with journal groups data. */
 export const journalGroupFs = {
@@ -40,6 +40,7 @@ export const journalGroupFs = {
    *
    * @param journalGroupId   The ID of the journal group.
    * @param data             The data to write or a function that updates the existing data.
+   * If you pass a function into this, it will merge the previous data with the new one.
    * @returns A `Promise` that resolves when the write operation is complete.
    */
   async $writeMetaFile(

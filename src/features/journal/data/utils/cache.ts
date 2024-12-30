@@ -1,18 +1,40 @@
 import type { JournalApi } from "~/api/journal"
-import { bson_readFile, bson_writeFile, CACHE_FOLDER } from "~/server"
+import { bson_readFile, bson_writeFile, CACHE_FOLDER, deleteFile } from "~/server"
+import { Updater } from "./journal"
+import { mergeObjects } from "~/common"
 
-export type JournalGroupCacheData = Record<string, JournalApi.IGroupData>
+const LOCK_FILE_NAME = `${CACHE_FOLDER}/groups.dat` as const
+const buildGroupCacheFileName = (groupId: string) => `${CACHE_FOLDER}/cached-${groupId}-data.dat` as const
 
-const FILE_NAME = `${CACHE_FOLDER}/groups.dat` as const
-const FILE_TREE_NAME = (groupId: string) => `${CACHE_FOLDER}/tree-${groupId}.dat` as const
-export async function getAllJournalGroupsCache() {
-  return await bson_readFile<JournalGroupCacheData>(FILE_NAME) ?? {}
+export interface IJournalGroupLockFile {
+  [groupId: string]: JournalApi.IGroupData
 }
 
-export async function updateJournalGroupsCache(data: JournalApi.IGroupData) {
-  const prevData = await getAllJournalGroupsCache()
-  prevData[data.id] = data
-  await bson_writeFile(FILE_NAME, prevData)
+export interface ICachedJournalGroupContentFile extends JournalApi.IGroupData {
+  journals?: Record<string, JournalApi.Files>
 }
 
-export async function updateFileTreeCache() {}
+export const journalGroupCache = {
+  async getAll() {
+    return await bson_readFile<IJournalGroupLockFile>(LOCK_FILE_NAME) ?? {}
+  },
+  async write(groupId: string, data: Updater<ICachedJournalGroupContentFile>) {
+    const isUpdater = typeof data === "function"
+    let newData = data as ICachedJournalGroupContentFile
+    if (isUpdater) {
+      const prev = await bson_readFile<ICachedJournalGroupContentFile>(buildGroupCacheFileName(groupId))
+      newData = mergeObjects(prev!, data(prev!))
+    }
+    await bson_writeFile(buildGroupCacheFileName(groupId), newData)
+
+    const prevData = await this.getAll()
+    prevData[groupId] = newData
+    await bson_writeFile(LOCK_FILE_NAME, prevData)
+  },
+  async remove(groupId: string) {
+    await deleteFile(buildGroupCacheFileName(groupId))
+    const prevData = await this.getAll()
+    delete prevData[groupId]
+    await bson_writeFile(LOCK_FILE_NAME, prevData)
+  }
+}

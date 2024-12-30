@@ -8,8 +8,7 @@ import {
   useThisEditorContext 
 } from "~/features/editor"
 // ...
-import { useJournalContext } from "../context"
-import { EditorWelcome, TabList, TabPanel } from "../components"
+import { EditorWelcome, TabList, TabPanel, useJournalContext } from "../components"
 
 const style = stylex.create({
   content: {

@@ -10,6 +10,8 @@ import {
   serveApp 
 } from './server'
 
+console.log('standing by for full throttle...')
+
 export const duck = new Hono()
 
 duck.use('/*', cors())
@@ -25,4 +27,5 @@ serve({
   await createDirectoryIfNotExist(JOURNALS_FOLDER)
   await createDirectoryIfNotExist(CACHE_FOLDER)
   console.groupEnd()
+  console.log('throttled up!')
 })

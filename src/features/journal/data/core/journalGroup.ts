@@ -10,8 +10,7 @@ import { mergeObjects } from '~/common'
 import { 
   buildJournalGroupPath, 
   journalGroupFs,
-  getAllJournalGroupsCache,
-  updateJournalGroupsCache, 
+  journalGroupCache,
   createId
 } from '../utils'
 
@@ -21,34 +20,35 @@ export const journalGroupData = {
     const newData: JournalApi.IGroupData = mergeObjects(data, {
       id: journalGroupId,
       created: new Date(),
-      tree: {}
-    } as JournalApi.IGroupData)
+      tree: [],
+      entries: 0,
+    } as Partial<JournalApi.IGroupData>)
   
     const whereToCreate = buildJournalGroupPath(journalGroupId)
   
     await createDirectoryIfNotExist(whereToCreate)
     await journalGroupFs.$writeMetaFile(journalGroupId, newData)
-    await updateJournalGroupsCache(newData)
+    await journalGroupCache.write(journalGroupId, newData)
     return newData
   },
 
   async $update(journalGroupId: string, data: Partial<JournalApi.IGroupData>) {
-    const cache = await getAllJournalGroupsCache()
+    const cache = await journalGroupCache.getAll()
     const newData: JournalApi.IGroupData = mergeObjects(cache[journalGroupId], data, {
       modified: new Date()
     })
     
     await journalGroupFs.$writeMetaFile(journalGroupId, () => newData)
-    await updateJournalGroupsCache(newData)
+    await journalGroupCache.write(data.id!, newData)
     return newData
   },
 
   async $getAll() {
-    return Object.values(await getAllJournalGroupsCache())
+    return Object.values(await journalGroupCache.getAll())
   },
   
   async $get(id: string) {
-    return (await getAllJournalGroupsCache())[id]
+    return (await journalGroupCache.getAll())[id]
   },
   
   $isExist(journalGroupId: string) {

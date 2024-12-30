@@ -24,7 +24,6 @@ export default function CreateJournalCategoryForm(props: ICreateJournalCategoryF
   const { $submitButtonDisabled, $selected } = useCreateStuffContext()
   const { $journal } = useJournalContext()
 
-  const [, setTree] = $journal.$fileTree
   const [_journalGroupForm, { Field, Form }] = createForm<JournalApi.Journal>()
   const [submitButtonDisabled, setSubmitButtonDisabled] = $submitButtonDisabled
   const [selected] = $selected
@@ -32,17 +31,22 @@ export default function CreateJournalCategoryForm(props: ICreateJournalCategoryF
   const submit: SubmitHandler<JournalApi.Journal> = async(data) => {
     setSubmitButtonDisabled(true)
     const dataReturned = await toast
-      .promise($journal.$create(data, selected()!), {
-        loading: 'Saving changes...',
-        success: 'Done!',
-        error: 'Failed to save changes :('
-      })  
-      .catch(() => setSubmitButtonDisabled(false))
+      .promise(
+        $journal.$create(data, selected()!), 
+        {
+          loading: 'Saving changes...',
+          success: 'Done!',
+          error: 'Failed to save changes :('
+        }
+      )  
+      .catch((why) => {
+        console.log(why) // log the error out cuz you might absolutely have no idea where is the error come from
+        setSubmitButtonDisabled(false)
+      })
     // ...
 
     if (!dataReturned) return
     
-    setTree(prev => [...prev, dataReturned])
     setSubmitButtonDisabled(false)
     props.onClick()
   }

@@ -14,7 +14,7 @@ import {
 import { useThisEditorContext } from "~/features/editor"
 import { EditOrReadonlyIcon } from "~/features/journal"
 // ...
-import { useJournalContext } from "../../context"
+import { useJournalContext } from "../context"
 
 const style = stylex.create({
   buttonsRow: {

@@ -1,8 +1,7 @@
 import { 
   type Accessor, 
   createSignal, 
-  type Setter, 
-  type Signal 
+  type Setter
 } from "solid-js"
 // ...
 import { 
@@ -11,10 +10,10 @@ import {
   JOURNAL_ROUTE, 
 } from "~/api/journal"
 import { fetchIt } from "~/utils"
-import { thisArrayObjects } from "~/common"
 import { useThisEditorContext } from "~/features/editor"
 // ...
-import { useTabContext } from "../components"
+import { createFolder, useTabContext } from "../.."
+import { type IFileDisplayContext } from "./fileDisplayContext"
 
 export interface IThisJournalContext {
   /**Accessor for the currently opened journal data. 
@@ -29,8 +28,6 @@ export interface IThisJournalContext {
   $currentGroup: Accessor<JournalApi.IGroupData | undefined>
   /**Setter for the current journal group data. */
   $setCurrentGroup: Setter<JournalApi.IGroupData | undefined>
-  // ...
-  $fileTree: Signal<JournalApi.IJournalData[]>
   // ...
   /**Creates a new journal.
    * @param data The initial data for the new journal.
@@ -58,15 +55,16 @@ export interface IThisJournalContext {
    * @returns A promise that resolves to an empty object or null.
    */
   $save(journalId: string, data: JournalApi.JournalContentData): Promise<{} | null>
+  $cache: Map<string, JournalApi.IJournalData | JournalApi.ICategoryData>
 }
 
-export function createJournal(): IThisJournalContext {
+export function createJournal(fileDisplayContext: IFileDisplayContext): IThisJournalContext {
   const { $removeTab } = useTabContext()
   const { $cache, $open } = useThisEditorContext()
+  const journalCache = new Map()
 
   const [$currentlyOpened, $setCurrentlyOpened] = createSignal<JournalApi.IJournalData>()
   const [$currentGroup, $setCurrentGroup] = createSignal<JournalApi.IGroupData>()
-  const [fileTree, setFileTree] = createSignal([] as JournalApi.IJournalData[])
 
   const getCurrentJournalGroupId = () => {
     console.assert($currentGroup(), '[panic] currentGroup data should NOT be null or undefined')
@@ -75,16 +73,23 @@ export function createJournal(): IThisJournalContext {
   }
 
   return {
+    $cache: journalCache,
     $currentlyOpened, 
     $setCurrentlyOpened,
     $currentGroup, 
     $setCurrentGroup,
-    $fileTree: [fileTree, setFileTree],
     async $create(data, type) {
       console.log('[journal] creating', data, '...')
       const currentJournalGroupId = getCurrentJournalGroupId()
       const route = `${JOURNAL_ROUTE}?id=${currentJournalGroupId}&type=${type}`
       const newData = await fetchIt<JournalApi.IJournalData>('POST', route, data)
+
+      console.log('[journal] updating cache and file display')
+      journalCache.set(newData!.id, newData)
+      fileDisplayContext.add(
+        type === 'journal' ? newData!.id : createFolder(newData!.id),
+        'root'
+      )
       return newData!
     },
     async $open(journalId) {
@@ -108,7 +113,6 @@ export function createJournal(): IThisJournalContext {
       console.log('[journal] deleting', journalId, '...')
       const currentJournalGroupId = getCurrentJournalGroupId()
       await fetchIt('DELETE', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}&journal=${journalId}`)
-      setFileTree(prev => [...thisArrayObjects(prev).$remove('id', journalId)])
       $setCurrentlyOpened(undefined)
       $removeTab(journalId)
       $cache.delete(journalId)

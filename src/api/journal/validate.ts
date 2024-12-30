@@ -38,13 +38,18 @@ export namespace JournalApi {
     modified?: Date
   }
 
-  export interface IGroupTree {
-    [journalId: string]: 0 | this
+  export type GroupTree = string | {
+    id: string
+    child: GroupTree[]
   }
 
   export interface IGroupData extends Group, UniqueId, CreationAndModifiedDate {
-    tree: IGroupTree
+    tree: GroupTree[]
     entries: number
+  }
+
+  export interface IFetchedGroupData extends IGroupData {
+    treeData: Record<string, IJournalData | ICategoryData>
   }
 
   /**The journal meta data. This does not contain the actural journal content.

@@ -16,12 +16,12 @@ export async function fetchIt<Data extends {} = {}>(method: HttpMethod, path: st
   })
 
   if (isServerResponsesWithBadStatusCode(response.status)) {
-    console.error(`<-- ${method}: ${BASE_PATH + path} - not okay, https://http.cat/${response.status} :(`)
+    console.error(`<-- not okay, https://http.cat/${response.status} :(`)
     console.groupEnd()
     return null
   }
 
-  console.log(`okay, https://http.cat/${response.status} :)`)
+  console.log(`<-- okay, https://http.cat/${response.status} :)`)
   
   return await tryConvertingToJson(response) as Data
 }

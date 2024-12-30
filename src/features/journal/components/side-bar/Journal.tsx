@@ -32,7 +32,7 @@ const style = stylex.create({
 })
 
 export interface IJournalProps extends JournalApi.IJournalData {
-  $onClick?: (type: 'open' | 'remove', data: JournalApi.IJournalData) => void
+  onClick?: (type: 'open' | 'remove', data: JournalApi.IJournalData) => void
 }
 
 export function Journal(props: IJournalProps) {
@@ -41,13 +41,13 @@ export function Journal(props: IJournalProps) {
       {...stylex.attrs(style.journal)} 
       id={__style.journal} 
     >
-      <Flex {...stylex.attrs(style.nameAndStuff)} onClick={() => props.$onClick?.('open', props)}>
+      <Flex {...stylex.attrs(style.nameAndStuff)} onClick={() => props.onClick?.('open', props)}>
         <span id={__style.name}>
           {props.name}
         </span>
         <Spacer />
       </Flex>
-      <div id={__style.button} {...stylex.attrs(style.button)} onClick={() => props.$onClick?.('remove', props)}>
+      <div id={__style.button} {...stylex.attrs(style.button)} onClick={() => props.onClick?.('remove', props)}>
         <BsX size={15} />
       </div>
     </FlexCenterY>

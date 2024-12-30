@@ -1,5 +1,4 @@
-import { createSignal, lazy, onMount } from "solid-js"
-import { useNavigate, useParams } from "@solidjs/router"
+import { createSignal, lazy } from "solid-js"
 import { BsHouseFill, BsLayoutSidebarInsetReverse, BsTrello } from "solid-icons/bs"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -11,12 +10,9 @@ import {
   FlexCenterY, 
   ResizableHandle 
 } from "~/components"
-import { fetchIt } from "~/utils"
 import { 
-  JOURNAL_GROUP_ROUTE, 
   type JournalApi
 } from "~/api/journal"
-import { toast } from "~/features/toast"
 // ...
 import { 
   QuickActionBar, 
@@ -24,9 +20,10 @@ import {
   Sidebar, 
   type ISidebarProps, 
   TabPanel, 
-  useTabContext
+  useTabContext,
+  useJournalContext
 } from "../components"
-import { useJournalContext } from "../context"
+import { useNavigate } from "@solidjs/router"
 
 const style = stylex.create({
   sidebar: {
@@ -42,29 +39,8 @@ const style = stylex.create({
 export function JournalSidebar() {
   const { $journal, $localStorage } = useJournalContext()
   const { $getFocusedTab, $updateTab } = useTabContext()
-  const [, setTree] = $journal.$fileTree
 
-  const param = useParams()
-  const goTo = useNavigate()
-  const goHome = () => goTo('/')
-
-  onMount(async() => {
-    const data = await fetchIt<JournalApi.IGroupData>('GET', `${JOURNAL_GROUP_ROUTE}?id=${param.id}`)
-    if (!data) return goHomeImmediately()
-    // note: you should not reorder this line of code here, otherwise it *will* break
-    $journal.$setCurrentGroup(data)
-
-    const tree = await $journal.$getAll()
-    if (!tree) return goHomeImmediately()
-
-    setTree(tree!)
-  })
-
-  const goHomeImmediately = () => {
-    console.error(`[complete panic] Failed to get some data from ${param.id}. You're now going back to home page...`)
-    toast.error('Failed to open that journal group. It may be deleted or corrupted.')
-    return goHome()
-  }
+  const goHome = () => useNavigate()('/')
 
   const deleteJournalModal = createLazyLoadedDialog(
     lazy(() => import('./modals/DeleteJournalModal')), 
