@@ -1,6 +1,6 @@
 import { SPLASH_TEXT_ROUTE } from "~/api/misc"
 import { duck } from "~/entry-server"
-import { getSplashTextRandomly } from "~/features/splash-screen/data"
+import { getSplashTextRandomly } from "~/features/data/splash-screen"
 
 export const splashTexts = [
   "Around 650MB of data could fit on a PS1 CD, as opposed to about 64MB on an N64 cartridge. This usually led to movie-style cutscenes, higher quality music, and voice acting on the PlayStation.",

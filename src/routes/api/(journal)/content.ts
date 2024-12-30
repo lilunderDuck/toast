@@ -4,7 +4,7 @@ import { object, string } from "valibot"
 import { JOURNAL_CONTENT_ROUTE, JournalApi } from "~/api/journal"
 import { duck } from "~/entry-server"
 import { validate } from "~/server"
-import { journalData } from "~/features/journal/data"
+import { journalData } from "~/features/data/journal"
 
 const mustHaveIdAndJournalId = object({
   id: string(),
