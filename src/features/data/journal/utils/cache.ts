@@ -21,7 +21,7 @@ export const groupTreeCache = {
   async set(groupId: string, data?: JournalApi.IJournalData, tree?: JournalApi.IGroupData["tree"]) {
     const prevData = await this.get(groupId) ?? {} as ICachedJournalGroupContentFile
     if (data) {
-      prevData.journals[data.id] == data
+      prevData.journals[data.id] = data
     }
 
     if (tree) {

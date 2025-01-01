@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For } from "solid-js"
+import { createSignal, For } from "solid-js"
 import { FolderNode, type TreeNode } from "../../utils"
 import { setDebugMode, dndzone } from "solid-dnd-directive"
 import { useJournalContext } from "./JournalContext"
@@ -19,15 +19,16 @@ export function FileDisplay(props: Partial<IFileDisplayProps>) {
   const FileComponent = options.componentLookup.file
   const FolderComponent = options.componentLookup.folder
 
+  console.log(
+    'Used folder component:', FolderComponent.name, 
+    '\nUsed file component:', FileComponent.name
+  )
+
   const isFolder = (it: any): it is FolderNode => typeof it === 'object' && 'child' in it
   const rawToDraggable = (treeNode: TreeNode[]) => treeNode.map(it => typeof it === "string" ? { id: it } : it)
 
   const RecursivelyRenderItOut = (thisProps: { stuff: TreeNode[] }) => {
     const [items, setItems] = createSignal(rawToDraggable(thisProps.stuff))
-
-    createEffect(() => {
-      setItems(rawToDraggable(thisProps.stuff))
-    })
 
     type WhatTheHeckIsThisType = any
     const handleDndEvent = (e: WhatTheHeckIsThisType) => {
@@ -38,6 +39,7 @@ export function FileDisplay(props: Partial<IFileDisplayProps>) {
     return (
       //@ts-ignore
       <div use:dndzone={{items}} on:consider={handleDndEvent} on:finalize={handleDndEvent}>
+        {void setItems(rawToDraggable(thisProps.stuff))}
         <For each={items()}>  
           {it => {
             console.log('cache', $journal.$cache)
@@ -48,17 +50,19 @@ export function FileDisplay(props: Partial<IFileDisplayProps>) {
             }
     
             if (isFolder(it)) return (
-              <FolderComponent {...data} onClick={() => props?.$onClickFolder?.(data)}>
+              <FolderComponent {...data} onClick={() => options.onClick?.('folder', it.id, data)}>
                 <RecursivelyRenderItOut stuff={it.child} />
               </FolderComponent>
             )
     
-            return <FileComponent {...data} onClick={() => props?.$onClickFile?.(data)} />
+            return <FileComponent {...data} onClick={() => options.onClick?.('file', it.id, data)} />
           }}
         </For>
       </div>
     )
   }
   
-  return <RecursivelyRenderItOut stuff={$fileDisplay.tree()} />
+  return (
+    <RecursivelyRenderItOut stuff={$fileDisplay.tree()} />
+  )
 }

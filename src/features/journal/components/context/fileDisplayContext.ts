@@ -5,9 +5,12 @@ import { JOURNAL_GROUP_ROUTE, JournalApi } from "~/api/journal"
 // ...
 import { getCurrentJournalGroupId, insertBefore, isFolder, TreeNode } from "../../utils"
 
+type TreeNodeType = 'file' | 'folder'
+
 export interface IFileDisplayOptions {
-  componentLookup: Record<'file' | 'folder', Component>
+  componentLookup: Record<TreeNodeType, Component>
   dataLookup: Map<string, any>
+  onClick: (type: TreeNodeType, id: string, data: {}) => void
 }
 
 export interface IFileDisplayContext {

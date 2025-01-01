@@ -33,17 +33,6 @@ export function Sidebar(props: ISidebarProps) {
   const { $journal, $fileDisplay } = useJournalContext()
 
   let lastJournalId: string | undefined
-  const openOrRemoveJournal: IJournalProps["onClick"] = (type, data: JournalApi.IJournalData) => {
-    if (type === 'remove') {
-      return props.$onClickingRemove?.(data)
-    }
-
-    const thisJournalId = data.id 
-    if (thisJournalId === lastJournalId) return console.log(`No need to open journal, previous journal id: ${lastJournalId} - current journal id: ${thisJournalId}`)
-    props.$onClickingOpen?.(data)
-    lastJournalId = thisJournalId
-  }
-
   $fileDisplay.setOptions({
     componentLookup: {
       // @ts-ignore
@@ -51,7 +40,20 @@ export function Sidebar(props: ISidebarProps) {
       // @ts-ignore
       folder: JournalCategory
     },
-    dataLookup: $journal.$cache
+    dataLookup: $journal.$cache,
+    onClick(type, id, data) {
+      if (type === 'file') {
+        console.log(data)
+        // if (type === 'remove') {
+        //   return props.$onClickingRemove?.(data)
+        // }
+
+        const thisJournalId = data.id 
+        if (thisJournalId === lastJournalId) return console.log(`No need to open journal, previous journal id: ${lastJournalId} - current journal id: ${thisJournalId}`)
+        props.$onClickingOpen?.(data)
+        lastJournalId = thisJournalId
+      }
+    },
   })
 
   return (
@@ -68,7 +70,7 @@ export function Sidebar(props: ISidebarProps) {
         __scrollbarStyle.invsScrollbar,
         stylex.attrs(style.content)
       )}>
-        <FileDisplay $onClickFile={openOrRemoveJournal} />
+        <FileDisplay />
       </div>
     </div>
   )

@@ -46,6 +46,8 @@ export function JournalRoot(props: ParentProps) {
       setCurrentJournalGroupId(data.id)
   
       $fileDisplay.setTree(data.tree)
+
+      console.log('\n\n\n\n\n\n\n\n\n\n\n... A bunch of empty lines to make the log message not so messy ...\n\n\n\n\n\n\n\n\n\n\n\n\n')
     })
 
     return (<></>)

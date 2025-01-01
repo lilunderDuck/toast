@@ -40,7 +40,8 @@ export function JournalSidebar() {
   const { $journal, $localStorage } = useJournalContext()
   const { $getFocusedTab, $updateTab } = useTabContext()
 
-  const goHome = () => useNavigate()('/')
+  const goTo = useNavigate()
+  const goHome = () => goTo('/')
 
   const deleteJournalModal = createLazyLoadedDialog(
     lazy(() => import('./modals/DeleteJournalModal')), 

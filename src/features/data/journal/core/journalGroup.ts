@@ -18,6 +18,7 @@ import {
 
 export const journalGroupData = {
   async $create(data: JournalApi.Group) {
+    console.group('[journal group]\t\t Creating group')
     const journalGroupId = createId()
     const newData: JournalApi.IGroupData = mergeObjects(data, {
       id: journalGroupId,
@@ -31,10 +32,14 @@ export const journalGroupData = {
     await createDirectoryIfNotExist(whereToCreate)
     await journalGroupFs.$writeMetaFile(journalGroupId, newData)
     await groupLockCache.set(newData)
+    await groupTreeCache.create(journalGroupId)
+
+    console.groupEnd()
     return newData
   },
 
   async $update(journalGroupId: string, data: Partial<JournalApi.IGroupData>) {
+    console.group('[journal group]\t\t Updating group')
     const cache = await groupLockCache.getAll()
     const newData: JournalApi.IGroupData = mergeObjects(cache[journalGroupId], data, {
       modified: new Date()
@@ -42,6 +47,11 @@ export const journalGroupData = {
     
     await journalGroupFs.$writeMetaFile(journalGroupId, () => newData)
     await groupLockCache.set(newData)
+    if (data.tree) {
+      await groupTreeCache.set(journalGroupId, undefined, data.tree)
+    }
+
+    console.groupEnd()
     return newData
   },
 

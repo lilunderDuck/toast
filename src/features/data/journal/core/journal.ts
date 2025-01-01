@@ -1,7 +1,7 @@
 import { JournalApi } from "~/api/journal"
 import { getEverythingFromDir } from "~/server"
 // ...
-import { buildJournalGroupPath, createId, journalFs, groupLockCache, journalGroupFs, META_FILE_NAME } from "../utils"
+import { buildJournalGroupPath, createId, journalFs, journalGroupFs, META_FILE_NAME, groupTreeCache } from "../utils"
 import { mergeObjects } from '~/common'
 
 export async function getAllJournalData(groupId: string) {
@@ -23,6 +23,7 @@ export async function getAllJournalData(groupId: string) {
 
 export const journalData = {
   async $create(groupId: string, data: JournalApi.Journal) {
+    console.group('[journal]\t\t creating journal')
     const journalId = createId()
   
     const newData: JournalApi.IJournalData = mergeObjects(data, {
@@ -36,20 +37,26 @@ export const journalData = {
     await journalGroupFs.$writeMetaFile(groupId, (prev) => mergeObjects(prev, {
       entries: prev.entries + 1
     }))
+
+    await groupTreeCache.set(groupId, newData)
   
     console.log('[journal]\t\t created', newData)
+    console.groupEnd()
     return newData
   },
   
   async $update(groupId: string, journalId: string, data: Partial<JournalApi.SavedJournalData>) {
+    console.group('[journal]\t\t Updating journal')
     const oldData = await journalFs.$readFile(groupId, journalId)
     const newData: JournalApi.SavedJournalData = mergeObjects(oldData, data, {
       modified: new Date()
     })
   
     await journalFs.$writeFile(groupId, journalId, () => newData)
+    await groupTreeCache.set(groupId, newData)
   
     console.log('[journal]\t\t update from', oldData, 'to', newData)
+    console.groupEnd()
     return newData
   },
 
