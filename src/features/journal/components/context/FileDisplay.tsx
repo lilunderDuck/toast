@@ -13,7 +13,7 @@ interface IFileDisplayProps {
 }
 
 export function FileDisplay(props: Partial<IFileDisplayProps>) {
-  const { $fileDisplay } = useJournalContext()
+  const { $fileDisplay, $journal } = useJournalContext()
 
   const options = $fileDisplay.options
   const FileComponent = options.componentLookup.file
@@ -40,7 +40,8 @@ export function FileDisplay(props: Partial<IFileDisplayProps>) {
       <div use:dndzone={{items}} on:consider={handleDndEvent} on:finalize={handleDndEvent}>
         <For each={items()}>  
           {it => {
-            const data = options.dataLookup.get(it.id)
+            console.log('cache', $journal.$cache)
+            const data = $journal.$cache.get(it.id)
             if (!data) {
               console.log('cannot get data', it)
               return null

@@ -61,7 +61,7 @@ export interface IThisJournalContext {
 export function createJournal(fileDisplayContext: IFileDisplayContext): IThisJournalContext {
   const { $removeTab } = useTabContext()
   const { $cache, $open } = useThisEditorContext()
-  const journalCache = new Map()
+  let journalCache = new Map()
 
   const [$currentlyOpened, $setCurrentlyOpened] = createSignal<JournalApi.IJournalData>()
   const [$currentGroup, $setCurrentGroup] = createSignal<JournalApi.IGroupData>()
@@ -73,7 +73,13 @@ export function createJournal(fileDisplayContext: IFileDisplayContext): IThisJou
   }
 
   return {
-    $cache: journalCache,
+    get $cache() {
+      return journalCache
+    },
+    set $cache(value) {
+      journalCache = value
+      console.log(value)
+    },
     $currentlyOpened, 
     $setCurrentlyOpened,
     $currentGroup, 

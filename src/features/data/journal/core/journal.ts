@@ -1,8 +1,25 @@
 import { JournalApi } from "~/api/journal"
 import { getEverythingFromDir } from "~/server"
 // ...
-import { buildJournalGroupPath, createId, journalFs, journalGroupCache, journalGroupFs, META_FILE_NAME } from "../utils"
+import { buildJournalGroupPath, createId, journalFs, groupLockCache, journalGroupFs, META_FILE_NAME } from "../utils"
 import { mergeObjects } from '~/common'
+
+export async function getAllJournalData(groupId: string) {
+  const thisJournalGroupPath = buildJournalGroupPath(groupId)
+  const journals = (await getEverythingFromDir(thisJournalGroupPath))
+    .filter(it => it.endsWith('.dat') && it !== META_FILE_NAME)
+  // 
+
+  console.log(journals)
+  const data = []
+  for (const journalFile of journals) {
+    const dataFetched = await journalFs.$readFile(groupId, journalFile.replace('.dat', ''))
+    if (dataFetched) data.push(dataFetched)
+  }
+
+  console.log('[journal]\t\t data returned', data)
+  return data
+}
 
 export const journalData = {
   async $create(groupId: string, data: JournalApi.Journal) {
@@ -19,29 +36,8 @@ export const journalData = {
     await journalGroupFs.$writeMetaFile(groupId, (prev) => mergeObjects(prev, {
       entries: prev.entries + 1
     }))
-
-    await journalGroupCache.write(groupId, (prev) => ({
-      journals: {
-        ...(prev.journals ?? {}),
-        [journalId]: newData
-      }
-    }))
   
     console.log('[journal]\t\t created', newData)
-    return newData
-  },
-
-  async $createCategory(groupId: string, data: JournalApi.Category) {
-    const journalId = createId()
-  
-    const newData: JournalApi.ICategoryData = mergeObjects(data, {
-      id: journalId,
-      created: new Date(),
-    })
-    
-    await journalFs.$writeFile(groupId, journalId, newData)
-  
-    console.log('[journal]\t\t created category', newData)
     return newData
   },
   
@@ -57,18 +53,6 @@ export const journalData = {
     return newData
   },
 
-  async $updateCategory(groupId: string, categoryId: string, data: Partial<JournalApi.Category>) {
-    const oldData = await journalFs.$readFile(groupId, categoryId)
-    const newData: JournalApi.SavedJournalData = mergeObjects(oldData, data, {
-      modified: new Date()
-    })
-  
-    await journalFs.$writeFile(groupId, categoryId, () => newData)
-  
-    console.log('[journal]\t\t update category from', oldData, 'to', newData)
-    return newData
-  },
-  
   async $delete(groupId: string, journalId: string) {
     await journalFs.$deleteFile(groupId, journalId)
 
@@ -80,31 +64,40 @@ export const journalData = {
       })
     })
   },
-
-  async $deleteCategory(groupId: string, categoryId: string) {
-    await journalFs.$deleteFile(groupId, categoryId)
-  },
   
   async $getContent(groupId: string, journalId: string) {
     const data = await journalFs.$readFile<JournalApi.SavedJournalData>(groupId, journalId)
     console.log('[journal]\t\t data returned', data.data)
     return data.data ?? []
-  },
-  
-  async $getAll(groupId: string) {
-    const thisJournalGroupPath = buildJournalGroupPath(groupId)
-    const journals = (await getEverythingFromDir(thisJournalGroupPath))
-      .filter(it => it.endsWith('.dat') && it !== META_FILE_NAME)
-    // 
-  
-    console.log(journals)
-    const data = []
-    for (const journalFile of journals) {
-      const dataFetched = await journalFs.$readFile(groupId, journalFile.replace('.dat', ''))
-      if (dataFetched) data.push(dataFetched)
-    }
-  
-    console.log('[journal]\t\t data returned', data)
-    return data
   }
+}
+
+export const journalCategoryData = {
+  async $create(groupId: string, data: JournalApi.Category) {
+    const journalId = createId()
+  
+    const newData: JournalApi.ICategoryData = mergeObjects(data, {
+      id: journalId,
+      created: new Date(),
+    })
+    
+    await journalFs.$writeFile(groupId, journalId, newData)
+  
+    console.log('[journal]\t\t created category', newData)
+    return newData
+  },
+  async $update(groupId: string, categoryId: string, data: Partial<JournalApi.Category>) {
+    const oldData = await journalFs.$readFile(groupId, categoryId)
+    const newData: JournalApi.SavedJournalData = mergeObjects(oldData, data, {
+      modified: new Date()
+    })
+  
+    await journalFs.$writeFile(groupId, categoryId, () => newData)
+  
+    console.log('[journal]\t\t update category from', oldData, 'to', newData)
+    return newData
+  },
+  async $delete(groupId: string, categoryId: string) {
+    await journalFs.$deleteFile(groupId, categoryId)
+  },
 }

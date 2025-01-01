@@ -1,4 +1,5 @@
 import { 
+  IClientJournalGroupData,
   type JournalApi
 } from "~/api/journal"
 import { 
@@ -10,8 +11,9 @@ import { mergeObjects } from '~/common'
 import { 
   buildJournalGroupPath, 
   journalGroupFs,
-  journalGroupCache,
-  createId
+  groupLockCache,
+  createId,
+  groupTreeCache
 } from '../utils'
 
 export const journalGroupData = {
@@ -28,27 +30,29 @@ export const journalGroupData = {
   
     await createDirectoryIfNotExist(whereToCreate)
     await journalGroupFs.$writeMetaFile(journalGroupId, newData)
-    await journalGroupCache.write(journalGroupId, newData)
+    await groupLockCache.set(newData)
     return newData
   },
 
   async $update(journalGroupId: string, data: Partial<JournalApi.IGroupData>) {
-    const cache = await journalGroupCache.getAll()
+    const cache = await groupLockCache.getAll()
     const newData: JournalApi.IGroupData = mergeObjects(cache[journalGroupId], data, {
       modified: new Date()
     })
     
     await journalGroupFs.$writeMetaFile(journalGroupId, () => newData)
-    await journalGroupCache.write(data.id!, newData)
+    await groupLockCache.set(newData)
     return newData
   },
 
   async $getAll() {
-    return Object.values(await journalGroupCache.getAll())
+    return Object.values(await groupLockCache.getAll())
   },
   
   async $get(id: string) {
-    return (await journalGroupCache.getAll())[id]
+    const data = (await groupLockCache.getAll())[id] as IClientJournalGroupData
+    data.treeMapping = (await groupTreeCache.get(id))!.journals
+    return data
   },
   
   $isExist(journalGroupId: string) {

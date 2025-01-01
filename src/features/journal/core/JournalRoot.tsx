@@ -4,7 +4,7 @@ import { onCleanup, onMount, type ParentProps } from 'solid-js'
 import { bodyClasslist, fetchIt } from '~/utils'
 import { Resizable } from '~/components'
 import { ThisEditorProvider } from '~/features/editor'
-import { JOURNAL_GROUP_ROUTE, type JournalApi } from '~/api/journal'
+import { IClientJournalGroupData, JOURNAL_GROUP_ROUTE } from '~/api/journal'
 import { toast } from '~/features/toast'
 // ...
 import __style from './stuff.module.css'
@@ -35,18 +35,17 @@ export function JournalRoot(props: ParentProps) {
     const { $journal, $fileDisplay } = useJournalContext()
 
     onMount(async() => {
-      console.group('Starting up:', param.id)
-      const data = await fetchIt<JournalApi.IGroupData>('GET', `${JOURNAL_GROUP_ROUTE}?id=${param.id}`)
+      console.log('Starting up:', param.id)
+      const data = await fetchIt<IClientJournalGroupData>('GET', `${JOURNAL_GROUP_ROUTE}?id=${param.id}`)
       if (!data) {
-        console.groupEnd()
         return goHomeImmediately()
       }
       // note: you should not reorder this line of code here, otherwise it *will* break
       $journal.$setCurrentGroup(data)
+      $journal.$cache = new Map(Object.entries(data.treeMapping))
       setCurrentJournalGroupId(data.id)
   
       $fileDisplay.setTree(data.tree)
-      console.groupEnd()
     })
 
     return (<></>)

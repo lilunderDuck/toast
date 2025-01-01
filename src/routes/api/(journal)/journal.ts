@@ -5,6 +5,8 @@ import { duck } from "~/entry-server"
 import { isThisDirectoryExist, mustHaveAnId, validate } from "~/server"
 import { 
   buildJournalGroupPath, 
+  getAllJournalData, 
+  journalCategoryData, 
   journalData
 } from "~/features/data/journal"
 // ...
@@ -35,7 +37,7 @@ duck.get(JOURNAL_ROUTE, validator('query', (value, context) => {
     return context.text('not found', 404)
   }
 
-  return context.json(await journalData.$getAll(query.id), 200)
+  return context.json(await getAllJournalData(query.id), 200)
 })
 
 duck.post(JOURNAL_ROUTE, validator('query', (value, context) => {
@@ -59,7 +61,7 @@ duck.post(JOURNAL_ROUTE, validator('query', (value, context) => {
     newData = await journalData.$create(query.id, body)
   }
   else {
-    newData = await journalData.$createCategory(query.id, body)
+    newData = await journalCategoryData.$create(query.id, body)
   }
   
   return context.json(newData, 200)

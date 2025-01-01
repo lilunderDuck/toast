@@ -10,7 +10,6 @@ import {
 import { canHaveIdOrNot, mustHaveAnId, validate } from "~/server/utils"
 import { duck } from "~/entry-server"
 import { isEmptyObject } from '~/common'
-import { object } from 'valibot'
 // ...
 
 duck.get(JOURNAL_GROUP_ROUTE, validator('query', (value, context) => {
@@ -47,8 +46,9 @@ duck.post(JOURNAL_GROUP_ROUTE, validator('json', (value, context) => {
   return context.text('invalid input, oops', 400)
 }), async (context) => {
   const data = context.req.valid('json')
+  const newGroup = await journalGroupData.$create(data)
 
-  return context.json(await journalGroupData.$create(data), 201)
+  return context.json(newGroup, 201)
 })
 
 duck.patch(JOURNAL_GROUP_ROUTE, validator('query', (value, context) => {
@@ -67,5 +67,6 @@ duck.patch(JOURNAL_GROUP_ROUTE, validator('query', (value, context) => {
     return context.status(404)
   }
 
-  return context.json(await journalGroupData.$update(query.id, data), 200)
+  const updated = await journalGroupData.$update(query.id, data)
+  return context.json(updated, 200)
 })
