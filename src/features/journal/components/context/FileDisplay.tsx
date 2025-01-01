@@ -1,6 +1,10 @@
 import { createSignal, For } from "solid-js"
-import { FolderNode, type TreeNode } from "../../utils"
 import { setDebugMode, dndzone } from "solid-dnd-directive"
+//                                    ^^^^^^^^^^^^^^^^^^^^^
+// phew, I can finally live in peace with this one, instead of writting my freaking own
+// drag and drop.
+// ...
+import { type FolderNode, type TreeNode } from "../../utils"
 import { useJournalContext } from "./JournalContext"
 
 __devMode && setDebugMode(true)
@@ -25,8 +29,19 @@ export function FileDisplay(props: Partial<IFileDisplayProps>) {
   )
 
   const isFolder = (it: any): it is FolderNode => typeof it === 'object' && 'child' in it
+
+  /**The reason why this function exist is to make draggable file/folder work.
+   * 
+   * Draggable item [must have an `id` property](https://github.com/isaacHagoel/solid-dnd-directive?tab=readme-ov-file#usage), so it needs to convert
+   * `"<random id>"` to `{ id: "<random id>" }`.
+   * 
+   * And yeah, weird function name I know, naming thing is hard.
+   * @param treeNode 
+   * @returns
+   */
   const rawToDraggable = (treeNode: TreeNode[]) => treeNode.map(it => typeof it === "string" ? { id: it } : it)
 
+  // OooOo, scary name
   const RecursivelyRenderItOut = (thisProps: { stuff: TreeNode[] }) => {
     const [items, setItems] = createSignal(rawToDraggable(thisProps.stuff))
 
@@ -37,7 +52,7 @@ export function FileDisplay(props: Partial<IFileDisplayProps>) {
     }
 
     return (
-      //@ts-ignore
+      //@ts-ignore - "use:dndzone" is a directive, maybe I should add that type somewhere...
       <div use:dndzone={{items}} on:consider={handleDndEvent} on:finalize={handleDndEvent}>
         {void setItems(rawToDraggable(thisProps.stuff))}
         <For each={items()}>  
@@ -50,11 +65,13 @@ export function FileDisplay(props: Partial<IFileDisplayProps>) {
             }
     
             if (isFolder(it)) return (
+              //@ts-ignore - oh come on, it does work you know?
               <FolderComponent {...data} onClick={() => options.onClick?.('folder', it.id, data)}>
                 <RecursivelyRenderItOut stuff={it.child} />
               </FolderComponent>
             )
-    
+            
+            //@ts-ignore - i said it DOES WORK!!!
             return <FileComponent {...data} onClick={() => options.onClick?.('file', it.id, data)} />
           }}
         </For>

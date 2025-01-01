@@ -20,7 +20,6 @@ const style = stylex.create({
 
 /**This is the editor component itself.
  * 
- * It already comes with the editor content, bubble menu and floating menu. 
  * Also, everytime you type, it updates both of the word and charater counts.
  * 
  * @note Make sure to wrap it around `<ThisEditorProvider />`
@@ -38,7 +37,7 @@ export function ThisEditor(props: ParentProps) {
       false, 
       async() => {
         const savedData = await editor.$save()
-        editor.$event.$emit('editor_onUpdate', savedData)
+        editor.$event.$emit('editor__onUpdate', savedData)
         editor.$cache.set(savedData.id, savedData.content)
         editor.$updateCharsAndWordsCount(savedData.content)
       }
@@ -53,7 +52,7 @@ export function ThisEditor(props: ParentProps) {
   const autoScrollIntoBottom = () => {
     editorLocationRef.scrollIntoView({ behavior: "smooth", block: "end" })
     editorLocationRef.scrollTop = editorLocationRef.scrollHeight + 500
-    editor.$event.$emit('editor_onTyping')
+    editor.$event.$emit('editor__onTyping')
   }
   
   return (

@@ -2,8 +2,6 @@ import EditorJS from '@editorjs/editorjs'
 // ...
 import { createColorPicker, someToolsIShouldNeed } from '../tools'
 
-export type OnEditorUpdate = () => {}
-
 export const createEditor = (
   whereToPut: HTMLElement,
   isEditable: boolean,

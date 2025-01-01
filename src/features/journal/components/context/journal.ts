@@ -12,7 +12,7 @@ import {
 import { fetchIt } from "~/utils"
 import { useThisEditorContext } from "~/features/editor"
 // ...
-import { createFolder, useTabContext } from "../.."
+import { createFolder, JournalSessionStorage, useTabContext } from "../.."
 import { type IFileDisplayContext } from "./fileDisplayContext"
 
 export interface IThisJournalContext {
@@ -22,12 +22,6 @@ export interface IThisJournalContext {
   $currentlyOpened: Accessor<JournalApi.IJournalData | undefined>
   /**Setter for the currently opened journal data. */
   $setCurrentlyOpened: Setter<JournalApi.IJournalData | undefined>
-  /**Accessor for the current journal group data.
-   * Returns the current journal group data or undefined if none is selected.
-   */
-  $currentGroup: Accessor<JournalApi.IGroupData | undefined>
-  /**Setter for the current journal group data. */
-  $setCurrentGroup: Setter<JournalApi.IGroupData | undefined>
   // ...
   /**Creates a new journal.
    * @param data The initial data for the new journal.
@@ -58,18 +52,21 @@ export interface IThisJournalContext {
   $cache: Map<string, JournalApi.IJournalData | JournalApi.ICategoryData>
 }
 
-export function createJournal(fileDisplayContext: IFileDisplayContext): IThisJournalContext {
+export function createJournal(
+  thisSessionStorage: JournalSessionStorage,
+  fileDisplayContext: IFileDisplayContext
+): IThisJournalContext {
   const { $removeTab } = useTabContext()
   const { $cache, $open } = useThisEditorContext()
   let journalCache = new Map()
 
   const [$currentlyOpened, $setCurrentlyOpened] = createSignal<JournalApi.IJournalData>()
-  const [$currentGroup, $setCurrentGroup] = createSignal<JournalApi.IGroupData>()
 
   const getCurrentJournalGroupId = () => {
-    console.assert($currentGroup(), '[panic] currentGroup data should NOT be null or undefined')
+    const currentGroupId = thisSessionStorage.$get('currentGroup')?.id
+    console.assert(currentGroupId, '[panic] currentGroup data should NOT be null or undefined')
 
-    return $currentGroup()?.id!
+    return thisSessionStorage.$get('currentGroup').id
   }
 
   return {
@@ -82,8 +79,6 @@ export function createJournal(fileDisplayContext: IFileDisplayContext): IThisJou
     },
     $currentlyOpened, 
     $setCurrentlyOpened,
-    $currentGroup, 
-    $setCurrentGroup,
     async $create(data, type) {
       console.log('[journal] creating', data, '...')
       const currentJournalGroupId = getCurrentJournalGroupId()

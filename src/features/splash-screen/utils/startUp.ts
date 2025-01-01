@@ -1,23 +1,9 @@
-// import { 
-//   JournalApi,
-//   JOURNAL_GROUP_ROUTE
-// } from "~/api"
 import { SplashScreen } from "../components"
-// import { fetchIt } from "./fetching"
 import { sleep } from "~/utils"
 
 export async function fetchStuffFromServer() {
   let journalGroups
   const checkList = [
-    // {
-    //   msg: 'Check if server is alive or not',
-    //   async run() {
-    //     const stuff = await fetchIt('GET', '/ping')
-    //     if (!stuff) {
-    //       throw 'App panic'
-    //     }
-    //   }
-    // },
     {
       msg: 'Lift off!',
       async run() {

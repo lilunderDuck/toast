@@ -29,13 +29,13 @@ export function JournalEditorContent() {
   const { $journal } = useJournalContext()
   const { $event } = useThisEditorContext()
 
-  $event.$on('editor_onSwitching', async(previousData) => {
+  $event.$on('editor__onSwitching', async(previousData) => {
     if (previousData) {
       await $journal.$save(previousData.id, previousData.content)
     }
   })
 
-  $event.$on('editor_onUpdate', async(data) => {
+  $event.$on('editor__onUpdate', async(data) => {
     await $journal.$save(data.id, data.content)
   })
 

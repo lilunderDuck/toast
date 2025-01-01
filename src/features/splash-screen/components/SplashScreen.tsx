@@ -1,11 +1,15 @@
 import { createSignal, Show } from "solid-js"
+import { Transition } from "solid-transition-group"
+// ...
+import { FlexCenter, FlexCenterX } from "~/components"
+// ...
 import stylex from "@stylexjs/stylex"
 import __style from "./SplashScreen.module.css"
 // ...
 import SplashText from "./SplashText"
 import SplashProgressBar from "./SplashProgressBar"
 import SplashInfoText from "./SplashInfoText"
-import { Transition } from "solid-transition-group"
+import cat_jumping from "../assets/cat_jumping.gif"
 
 const fadeIn = stylex.keyframes({
   from: {
@@ -20,8 +24,6 @@ const style = stylex.create({
   screen: {
     width: '100%',
     height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
     userSelect: 'none',
     backgroundColor: 'var(--app-background-color)',
     position: 'fixed',
@@ -34,6 +36,17 @@ const style = stylex.create({
     position: 'absolute',
     bottom: 0,
     paddingBottom: 30
+  },
+  iconHolder: {
+    width: '100%',
+    height: '100%',
+  },
+  icon: {
+    marginLeft: '5.5rem',
+    width: '20rem',
+    height: '20rem',
+    background: 'center center no-repeat var(--bg)',
+    backgroundSize: 'contain'
   }
 })
 
@@ -57,15 +70,20 @@ export namespace SplashScreen {
         }}
       >
         <Show when={isVisible()}>
-          <div {...stylex.attrs(style.screen)}>
+          <FlexCenterX {...stylex.attrs(style.screen)}>
             <SplashProgressBar style={{
               '--progress': `${progress()}%`
             }} />
+            <FlexCenter {...stylex.attrs(style.iconHolder)}>
+              <div {...stylex.attrs(style.icon)} style={{
+                '--bg': `url('${cat_jumping}')`
+              }} />
+            </FlexCenter>
             <SplashInfoText>
               {text()}
             </SplashInfoText>
             <SplashText {...stylex.attrs(style.text)} />
-          </div>
+          </FlexCenterX>
         </Show>
       </Transition>
     )
