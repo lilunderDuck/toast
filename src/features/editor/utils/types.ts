@@ -1,4 +1,4 @@
-import { InlineTool } from "@editorjs/editorjs"
+import { InlineTool, BlockTool } from "@editorjs/editorjs"
 
 /**Represent any editorjs's inline tool.
  * 
@@ -20,3 +20,5 @@ type AnyEditorjsInlineToolClass = AnyClass & Partial<InlineTool>
  * @see {@link AnyEditorjsInlineToolClass}
  */
 export type InlineToolContructorArgs<T extends AnyEditorjsInlineToolClass> = ConstructorParameters<T>[0]
+
+export type BlockToolConstructorArgs<T extends AnyClass & Partial<BlockTool>> = ConstructorParameters<T>[0]

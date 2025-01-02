@@ -1,0 +1,8 @@
+/* table class wrapper */
+.tc-wrap, .tc-wrap * {
+  --color-border: var(--border);
+  --color-text-secondary: var(--text);
+  --color-background: var(--selected);
+  --toggler-dots-color: var(--selected);
+  --toggler-dots-color-hovered: var(--text);
+}

@@ -8,7 +8,6 @@ import ListTool from '@editorjs/list'
 import CodeTool from '@editorjs/code'
 // @ts-ignore
 import RawHtmlTool from '@editorjs/raw'
-import TableTool from '@editorjs/table'
 // @ts-ignore
 import AttachmentTool from '@editorjs/attaches'
 import EmbedTool from '@editorjs/embed'
@@ -24,7 +23,6 @@ export function someToolsIShouldNeed() {
     list: ListTool,
     code: CodeTool,
     html: RawHtmlTool,
-    table: TableTool,
     attach: AttachmentTool,
     embed: EmbedTool,
     // ... inline tools zone ...

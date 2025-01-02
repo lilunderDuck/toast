@@ -1,0 +1,106 @@
+:root {
+  /* background color */
+  --main: var(--gray1);
+  /* Toolbar and popover */
+  --primary: var(--gray2);
+  /* On hover or selected */
+  --selected: var(--gray4);
+  /* Border color */
+  --border: var(--gray2);
+  /* Text and icon colors */
+  --text: var(--gray12);
+}
+
+/**This does wrack my brain.
+ * A list of classes and what does it for can be found here: https://editorjs.io/styles/
+ */
+
+/* You select some text */
+.ce-block__content > *::selection {
+  background-color: var(--gray5);
+}
+
+/**Text that highlighted when you use anything in the editor inline toolbar.
+ *
+ * The default is cyan-ish color, but I forced it to gray, well, to match with the theme of
+ * my app
+ */
+.ce-paragraph span[style] {
+  background-color: var(--gray6) !important;
+}
+
+/* The plus button on the right side of every block */
+.ce-toolbar__plus,
+.ce-toolbar__settings-btn,
+/* Every text in the editor popover */
+.ce-popover-item__title,
+/* Every icon in the editor popover */
+.ce-popover-item__icon {
+  color: var(--text);
+}
+
+/* Basically a "Filter" input */
+.cdx-search-field.ce-popover__search {
+  background-color: var(--primary);
+  border-color: var(--border);
+}
+
+.cdx-search-field__input {
+  color: var(--text);
+}
+
+/* Every blocks in the editor */
+.cdx-block, .ce-block {
+  color: var(--text);
+}
+
+.ce-inline-toolbar,
+.ce-conversion-tool__icon,
+.ce-popover-item__icon,
+.tc-popover__item-icon {
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.ce-popover, .ce-conversion-toolbar, .ce-inline-toolbar,
+.tc-popover {
+  background-color: var(--primary);
+  border-color: var(--border);
+  box-shadow: 0 3px 15px -3px var(--border);
+}
+
+.ce-popover__container {
+  background-color: var(--main);
+  border: none !important;
+}
+
+.ce-popover-item-html svg {
+  color: var(--text) !important;
+}
+
+.ce-inline-tool:hover,
+.ce-inline-toolbar__dropdown:hover,
+.ce-toolbar__plus:hover,
+.ce-toolbar__settings-btn:hover,
+.ce-conversion-tool:hover,
+.ce-popover-item:hover {
+  background-color: var(--selected) !important;
+}
+
+*::selection, .ce-block.ce-block--selected .ce-block__content {
+  background-color: var(--selected);
+  border-radius: 8px;
+}
+
+.ce-popover__items {
+  scrollbar-color: var(--border) var(--main);
+}
+
+@media (max-width: 650px) {
+  .ce-toolbar__settings-btn,
+  .ce-toolbar__plus {
+    background-color: var(--primary);
+    border-color: var(--border);
+    box-shadow: 0 3px 15px -3px var(--border);
+  }
+}

@@ -1,6 +1,7 @@
 import EditorJS from '@editorjs/editorjs'
 // ...
-import { createColorPicker, someToolsIShouldNeed } from '../tools'
+import { createColorPicker, createTable, someToolsIShouldNeed } from '../tools'
+import { mergeObjects } from '~/common'
 
 export const createEditor = (
   whereToPut: HTMLElement,
@@ -12,10 +13,13 @@ export const createEditor = (
     autofocus: true,
     readOnly: isEditable,
     // @ts-ignore
-    tools: {
-      ...someToolsIShouldNeed(),
-      colorPicker: createColorPicker()
-    },
+    tools: mergeObjects(
+      someToolsIShouldNeed(),
+      createTable(),
+      {
+        colorPicker: createColorPicker()
+      }
+    ),
     onReady() {
       console.log('[editor] editor created')
     },

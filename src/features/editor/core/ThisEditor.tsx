@@ -4,6 +4,7 @@ import { mergeClassname } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from "~/assets/style/scrollbar.module.css"
+import "./ThisEditor.css"
 // ...
 import { useThisEditorContext } from "./ThisEditorProvider"
 import { createEditor } from "../utils"
@@ -67,6 +68,7 @@ export function ThisEditor(props: ParentProps) {
           __scrollbarStyle.invsScrollbar,
           stylex.attrs(style.editor)
         )}
+        spellcheck={false}
         ref={editorLocationRef!} 
       />
 
