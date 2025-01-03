@@ -1,6 +1,6 @@
 import EditorJS from '@editorjs/editorjs'
 // ...
-import { createColorPicker, createTable, someToolsIShouldNeed } from '../tools'
+import { createColorPicker, someToolsIShouldNeed } from '../tools'
 import { mergeObjects } from '~/common'
 
 export const createEditor = (
@@ -15,7 +15,6 @@ export const createEditor = (
     // @ts-ignore
     tools: mergeObjects(
       someToolsIShouldNeed(),
-      createTable(),
       {
         colorPicker: createColorPicker()
       }

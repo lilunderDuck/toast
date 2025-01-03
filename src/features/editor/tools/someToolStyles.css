@@ -1,0 +1,37 @@
+/* table class wrapper */
+.tc-wrap, .tc-wrap * {
+  --color-border: var(--gray6);
+  --color-text-secondary: var(--text);
+  --color-background: var(--selected);
+  --toggler-dots-color: var(--selected);
+  --toggler-dots-color-hovered: var(--text);
+}
+
+/* @editorjs/code */
+.ce-code__textarea,
+/* @editorjs/raw */
+.ce-rawtool__textarea {
+  background: var(--gray3) !important;
+  border: none !important;
+  color: var(--text) !important;
+}
+
+/* @editorjs/attaches */
+.cdx-attaches .cdx-button {
+  background-color: var(--gray3) !important;
+  border: none !important;
+  transition: 0.15s ease-out;
+}
+
+.cdx-attaches .cdx-button:hover {
+  background-color: var(--gray4) !important;
+}
+
+.cdx-attaches .cdx-attaches__button {
+  --color-line: var(--gray3);
+  --color-bg: var(--gray3);
+  --color-bg-secondary: var(--gray4);
+  --color-bg-secondary--hover: var(--gray5);
+  --color-text-secondary: var(--gray11);
+  color: var(--text);
+}

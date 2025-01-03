@@ -16,8 +16,8 @@
  */
 
 /* You select some text */
-.ce-block__content > *::selection {
-  background-color: var(--gray5);
+.ce-block__content *::selection {
+  background-color: #1f67c5;
 }
 
 /**Text that highlighted when you use anything in the editor inline toolbar.

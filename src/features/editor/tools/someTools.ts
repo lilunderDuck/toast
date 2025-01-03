@@ -11,9 +11,12 @@ import RawHtmlTool from '@editorjs/raw'
 // @ts-ignore
 import AttachmentTool from '@editorjs/attaches'
 import EmbedTool from '@editorjs/embed'
+import TableTool from '@editorjs/table'
 // ...
 // @ts-ignore
 import InlineSpoilerTool from 'editorjs-inline-spoiler-tool'
+// ...
+import "./someToolStyles.css"
 
 /**A list of basic tool I throw together. That it.
  * @returns 
@@ -27,5 +30,6 @@ export function someToolsIShouldNeed() {
     embed: EmbedTool,
     // ... inline tools zone ...
     spoiler: InlineSpoilerTool,
+    table: TableTool
   }
 }

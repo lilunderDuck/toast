@@ -12,5 +12,5 @@
   "editor.tabSize": 2,
   "explorer.compactFolders": false,
   "material-icon-theme.hidesExplorerArrows": true,
-  "deno.enable": true
+  "deno.enable": false,
 }
