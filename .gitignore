@@ -2,7 +2,10 @@ backup/*
 node_modules
 out
 *.lock
+package-lock.json
 
 logs
 *.log
-vite-app.config.ts.timestamp-*.js
+*.config.ts.timestamp-*.mjs
+
+*.exe.tmp-*
