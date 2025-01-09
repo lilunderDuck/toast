@@ -4,14 +4,15 @@
   "description": "Description not found",
   "license": "MIT",
   "dependencies": {
+    "@codemirror/lang-css": "^6.3.1",
     "@corvu/resizable": "^0.2.3",
     "@editorjs/attaches": "^1.3.0",
-    "@editorjs/code": "^2.9.3",
     "@editorjs/editorjs": "^2.30.7",
     "@editorjs/embed": "^2.7.6",
     "@editorjs/list": "^2.0.2",
-    "@editorjs/raw": "^2.5.0",
+    "@editorjs/marker": "^1.4.0",
     "@editorjs/table": "^2.4.2",
+    "@editorjs/underline": "^1.2.1",
     "@hono/node-server": "^1.13.3",
     "@kobalte/core": "^0.13.6",
     "@modular-forms/solid": "^0.23.0",
@@ -23,6 +24,7 @@
     "@thisbeyond/solid-dnd": "^0.7.5",
     "bson": "^6.8.0",
     "chart.js": "^4.4.7",
+    "codemirror": "^6.0.1",
     "editorjs-color-picker": "^1.0.4",
     "editorjs-inline-spoiler-tool": "^1.0.1",
     "embla-carousel-solid": "^8.3.0",
@@ -33,7 +35,9 @@
     "solid-icons": "^1.1.0",
     "solid-js": "^1.8.11",
     "solid-transition-group": "^0.2.3",
-    "valibot": "^0.42.1"
+    "valibot": "^0.42.1",
+    "vanjs-core": "^1.5.2",
+    "vanjs-ext": "^0.6.2"
   },
   "devDependencies": {
     "@types/html-minifier-terser": "^7.0.2",
@@ -59,6 +63,6 @@
     "dev": "vite --config ./vite-server.config.ts build --mode=development && node ./out/server/entry-server.mjs & vite --config ./vite-app.config.ts",
     "build:app": "deno task vite:app build",
     "build:server": "vite --config ./vite-server.config.ts build --mode=NOT-development",
-    "build": "vite --config ./vite-server.config.ts build --mode=NOT-development && vite --config ./vite-app.config.ts vuild"
+    "build": "vite --config ./vite-server.config.ts build --mode=NOT-development && vite --config ./vite-app.config.ts build"
   }
 }

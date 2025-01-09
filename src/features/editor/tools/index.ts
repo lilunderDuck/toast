@@ -1,2 +1,5 @@
 export * from './colorPicker'
-export * from './someTools'
+// ...
+export * from './htmlBlock'
+export * from './codeBlock'
+export * from './linkBlock'

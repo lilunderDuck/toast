@@ -15,6 +15,15 @@
  * A list of classes and what does it for can be found here: https://editorjs.io/styles/
  */
 
+.ce-block__content {
+  margin: 0;
+  max-width: 100% !important;
+}
+
+.ce-block__content, .ce-block__content > * {
+  width: 100%;
+}
+
 /* You select some text */
 .ce-block__content *::selection {
   background-color: #1f67c5;

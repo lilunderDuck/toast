@@ -5,7 +5,7 @@ const RUN_SERVER = "node ./out/server/entry-server.mjs"
 
 const DEV_APP = VITE_APP_COMMAND
 const DEV_SERVER = `${VITE_SERVER_COMMAND} build --mode=development && ${RUN_SERVER}`
-const BUILD_APP = `${VITE_APP_COMMAND} vuild`
+const BUILD_APP = `${VITE_APP_COMMAND} build`
 const BUILD_SERVER = `${VITE_SERVER_COMMAND} build --mode=NOT-development`
 
 // const BUILD_HACKY = `${BUILD_SCRIPTS_COMMAND} ./scripts/hacky/index.ts`

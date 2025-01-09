@@ -10,6 +10,9 @@ import tsconfig from './tsconfig.json'
 
 const rollupOutputOptions: Rollup.OutputOptions = {
   ...outPutFilenameConfig,
+  manualChunks: {
+    codemirror: ['codemirror', '@codemirror/lang-css']
+  }
 }
 
 const config = (devMode: boolean): InlineConfig => ({
