@@ -4,9 +4,9 @@ import stylex from '@stylexjs/stylex'
 import __style from './tools.module.css'
 // ...
 import { createSolidRenderer } from '~/utils'
+import { ResizableTextarea } from '~/components'
 // ...
 import { createToolbox } from '../utils'
-import { createSignal } from 'solid-js'
 
 export type HtmlSavedData = {
   html: string
@@ -46,24 +46,14 @@ export class HtmlBlock {
   protected $textarea!: HTMLTextAreaElement
   protected $dispose!: () => void
   render() {
-    const [height, setHeight] = createSignal<string>('auto')
-
-    const onSlappingYourKeyboard = (inputEvent: InputEvent) => {
-      const current = inputEvent.currentTarget as HTMLTextAreaElement
-      setHeight('auto')
-      setHeight(`${current.scrollHeight}px`)
-    }
-
     const [element, dispose] = createSolidRenderer(() => (
-      <textarea 
+      <ResizableTextarea 
         {...stylex.attrs(style.input)} 
         rows={2} 
         placeholder='Input some html code' 
-        style={`height: ${height()}`}
         readonly={this.options.readOnly}
         ref={this.$textarea} 
         value={this.options.data.html}
-        onInput={onSlappingYourKeyboard}
       />
     ), { class: __style.tool })
 
