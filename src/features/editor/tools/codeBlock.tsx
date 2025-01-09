@@ -23,14 +23,13 @@ export class CodeBlock {
   
   constructor(protected options: CodeToolClass) {}
 
-
   protected $editorView!: EditorView
   render() {
     const mountingPoint = document.createElement('div')
     const view = new EditorView({
       parent: mountingPoint,
       doc: `p { background-color: purple }`,
-      extensions: [basicSetup, css()]
+      extensions: [basicSetup, ]
     })
 
     mountingPoint.id = __style.tool

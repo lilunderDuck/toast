@@ -21,8 +21,6 @@ const style = stylex.create({
 })
 
 export function ResizableTextarea(props: HTMLAttributes<"textarea">) {
-  let textareaId = `_${getRandomNumber(100_000)}${__devMode ? '-did-not-intentionally-add-this' : ''}`
-  // ...
   const [height, setHeight] = createSignal<string>('auto')
 
   const onSlappingYourKeyboard = (inputEvent: InputEvent) => {
@@ -36,15 +34,21 @@ export function ResizableTextarea(props: HTMLAttributes<"textarea">) {
     console.log('[ResizableTextarea] updated height')
   }
 
+  // update the textarea height right after it mounts.
+  // 
+  // this exist is because if we set some value to this textarea, its height doesn't update
+  // right away. Only when you start typing something, it will update the height correctly
+  let textareaId = `_${getRandomNumber(100_000)}${__devMode ? '-did-not-intentionally-add-this' : ''}`
   onMount(() => {
     console.group('[ResizableTextarea] mounted')
     let timeout = setTimeout(() => {
       const textareaRef = document.getElementById(textareaId) as HTMLTextAreaElement | null
       console.assert(textareaRef, `cannot select textarea id: ${textareaId}`)
-      
+
       console.log('textarea ref is:', textareaRef, '. Updating now')
       updateTextarea(textareaRef!)
 
+      // explicit clean up everything
       console.log('clean up')
       clearTimeout(timeout)
       console.groupEnd()

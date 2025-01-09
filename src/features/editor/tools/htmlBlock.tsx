@@ -46,6 +46,12 @@ export class HtmlBlock {
   protected $textarea!: HTMLTextAreaElement
   protected $dispose!: () => void
   render() {
+    // I don't know how to add the "block will be deleted if block is empty" functionality
+    // const setIfEmpty = (event: InputEvent) => {
+    //   const current = event.currentTarget as HTMLTextAreaElement
+    //   this.isEmpty = current.value.length === 0
+    // }
+
     const [element, dispose] = createSolidRenderer(() => (
       <ResizableTextarea 
         {...stylex.attrs(style.input)} 
