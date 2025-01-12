@@ -5,7 +5,13 @@ import { optimizeCssModules } from 'vite-plugin-optimize-css-modules'
 import { stylex as stylexPlugin } from 'vite-plugin-stylex-dev'
 import { ViteImageOptimizer as imageOptimizer } from 'vite-plugin-image-optimizer'
 // ...
-import { getEsbuildConfig, getAliasPath, internals, outPutFilenameConfig } from './scripts/vite'
+import { 
+  getEsbuildConfig, 
+  getAliasPath, 
+  CLIENT_OUTPUT_DIRECTORY, 
+  OUTPUT_DIRECTORY, 
+  outPutFilenameConfig 
+} from './vite-stuff'
 import tsconfig from './tsconfig.json'
 
 const rollupOutputOptions: Rollup.OutputOptions = {
@@ -34,9 +40,9 @@ const config = (devMode: boolean): InlineConfig => ({
     alias: getAliasPath(tsconfig, __dirname)
   },
   ...getEsbuildConfig(devMode),
-  cacheDir: internals.outDir,
+  cacheDir: OUTPUT_DIRECTORY,
   build: {
-    outDir: internals.clientOutDir,
+    outDir: CLIENT_OUTPUT_DIRECTORY,
     rollupOptions: {
       output: rollupOutputOptions
     }

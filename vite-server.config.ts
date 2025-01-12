@@ -2,7 +2,12 @@ import { defineConfig, type InlineConfig } from 'vite'
 // ...
 import { VitePluginNode as nodePlugin } from 'vite-plugin-node'
 // ...
-import { getEsbuildConfig, getAliasPath, internals } from './scripts/vite'
+import {
+  getEsbuildConfig, 
+  getAliasPath, 
+  OUTPUT_DIRECTORY, 
+  SERVER_OUTPUT_DIRECTORY 
+} from './vite-stuff'
 import tsconfig from './tsconfig.json'
 
 const config = (devMode: boolean): InlineConfig => ({
@@ -29,10 +34,10 @@ const config = (devMode: boolean): InlineConfig => ({
       "hono"
     ],
   },
-  cacheDir: internals.outDir,
+  cacheDir: OUTPUT_DIRECTORY,
   build: {
     target: 'esnext',
-    outDir: internals.serverOutDir,
+    outDir: SERVER_OUTPUT_DIRECTORY,
     minify: !devMode,
     sourcemap: devMode,
     rollupOptions: {

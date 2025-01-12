@@ -1,5 +1,10 @@
-import type this_tsconfig from '../../tsconfig.json'
 import path from 'node:path'
+// ...
+import { 
+  type ESBuildOptions, 
+  type InlineConfig 
+} from "vite"
+import type this_tsconfig from './tsconfig.json'
 
 /**Extracts and resolves aliases from a TypeScript configuration file (`tsconfig.json`).
  * ```
@@ -38,4 +43,33 @@ export function getAliasPath(tsconfig: typeof this_tsconfig, basePath: string) {
   }
 
   return alias
+}
+
+export function getEsbuildConfig(devMode: boolean, others?: ESBuildOptions): InlineConfig {
+  return {
+    esbuild: {
+      ...others,
+      define: {
+        "__devMode": `${devMode}`,
+        "__version": `"1.0.0-beta"`,
+        "__apiVersion": `"1.0.0-beta"`,
+        "__backendVersion": `"node-${process.version}"`,
+      },
+      // drop "console.(something)" call and "debugger" on production
+      // ...(devMode ? {/* nothing here... */} : {
+      //   drop: ['console', 'debugger'],
+      // })
+    },
+  }
+}
+
+const BASE_OUTPUT_DIRECTORY = './out'
+export const OUTPUT_DIRECTORY = BASE_OUTPUT_DIRECTORY
+export const SERVER_OUTPUT_DIRECTORY = `${BASE_OUTPUT_DIRECTORY}/server`
+export const CLIENT_OUTPUT_DIRECTORY = `${BASE_OUTPUT_DIRECTORY}/server/resource`
+
+export const outPutFilenameConfig = {
+  chunkFileNames: `[hash].js`,
+  entryFileNames: "[hash].js",
+  assetFileNames: "assets/[hash].[ext]",
 }
