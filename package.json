@@ -40,6 +40,7 @@
     "vanjs-ext": "^0.6.2"
   },
   "devDependencies": {
+    "@types/deno": "^2.0.0",
     "@types/html-minifier-terser": "^7.0.2",
     "@types/node": "^22.5.5",
     "@types/prismjs": "^1.26.4",
@@ -57,10 +58,10 @@
     "vite-plugin-stylex-dev": "^0.7.3"
   },
   "scripts": {
-    "preview": "deno ./out/server/entry-server.mjs",
-    "dev:server": "vite --config ./vite-server.config.ts build --mode=development && deno ./out/server/entry-server.mjs",
+    "preview": "deno ./out/server/entry-server.mjs -A",
+    "dev:server": "vite --config ./vite-server.config.ts build --mode=development && deno ./out/server/entry-server.mjs -A",
     "dev:app": "vite --config ./vite-app.config.ts",
-    "dev": "vite --config ./vite-server.config.ts build --mode=development && deno ./out/server/entry-server.mjs & vite --config ./vite-app.config.ts",
+    "dev": "vite --config ./vite-server.config.ts build --mode=development && deno ./out/server/entry-server.mjs -A & vite --config ./vite-app.config.ts",
     "build:app": "deno task vite:app build",
     "build:server": "vite --config ./vite-server.config.ts build --mode=NOT-development",
     "build": "vite --config ./vite-server.config.ts build --mode=NOT-development && vite --config ./vite-app.config.ts build"

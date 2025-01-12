@@ -1,3 +1,5 @@
+/// <reference types="deno" />
+
 const VITE_APP_COMMAND = "vite --config ./vite-app.config.ts"
 const VITE_SERVER_COMMAND = "vite --config ./vite-server.config.ts"
 // const BUILD_SCRIPTS_COMMAND = "esbuild --bundle --minify --platform=node --external:esbuild"
@@ -28,3 +30,7 @@ json['scripts'] = commands
 
 const encoder = new TextEncoder()
 Deno.writeFile('package.json', encoder.encode(JSON.stringify(json, null, 2)))
+
+// supress this error:
+// 'await' expressions are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+export {}
