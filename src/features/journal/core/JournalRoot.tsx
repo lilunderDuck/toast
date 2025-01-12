@@ -10,7 +10,7 @@ import { toast } from '~/features/toast'
 import __style from './stuff.module.css'
 import stylex from '@stylexjs/stylex'
 // ...
-import { TabProvider, JournalProvider, useJournalContext } from '../components'
+import { JournalProvider, useJournalContext } from '../context'
 
 const style = stylex.create({
   thisThing: {
@@ -77,15 +77,13 @@ export function JournalRoot(props: ParentProps) {
   }
  
   return (
-    <TabProvider>
-      <ThisEditorProvider>
-        <JournalProvider>
-          <LoadThing />
-          <Resizable {...stylex.attrs(style.thisThing)}>
-            {props.children}
-          </Resizable>
-        </JournalProvider>
-      </ThisEditorProvider>
-    </TabProvider>
+    <ThisEditorProvider>
+      <JournalProvider>
+        <LoadThing />
+        <Resizable {...stylex.attrs(style.thisThing)}>
+          {props.children}
+        </Resizable>
+      </JournalProvider>
+    </ThisEditorProvider>
   )
 }

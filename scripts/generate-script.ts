@@ -3,7 +3,7 @@
 const VITE_APP_COMMAND = "vite --config ./vite-app.config.ts"
 const VITE_SERVER_COMMAND = "vite --config ./vite-server.config.ts"
 // const BUILD_SCRIPTS_COMMAND = "esbuild --bundle --minify --platform=node --external:esbuild"
-const RUN_SERVER = "deno ./out/server/entry-server.mjs -A"
+const RUN_SERVER = "deno -A ./out/server/entry-server.mjs"
 
 const DEV_APP = VITE_APP_COMMAND
 const DEV_SERVER = `${VITE_SERVER_COMMAND} build --mode=development && ${RUN_SERVER}`

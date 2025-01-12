@@ -4,16 +4,20 @@ import {
   type Setter
 } from "solid-js"
 // ...
-import { 
-  type JournalApi, 
-  JOURNAL_CONTENT_ROUTE, 
-  JOURNAL_ROUTE, 
-} from "~/api/journal"
-import { fetchIt } from "~/utils"
+import { type JournalApi } from "~/api/journal"
 import { useThisEditorContext } from "~/features/editor"
 // ...
-import { createFolder, JournalSessionStorage, useTabContext } from "../.."
+import { 
+  api_createJournal, 
+  api_deleteJournal, 
+  api_getAllJournals, 
+  api_getJournalContent, 
+  api_saveJournalContent, 
+  createFolderData, 
+  JournalSessionStorage
+} from ".."
 import { type IFileDisplayContext } from "./fileDisplayContext"
+import { JournalEvent } from "./event"
 
 export interface IThisJournalContext {
   /**Accessor for the currently opened journal data. 
@@ -53,10 +57,10 @@ export interface IThisJournalContext {
 }
 
 export function createJournal(
+  event: JournalEvent,
   thisSessionStorage: JournalSessionStorage,
   fileDisplayContext: IFileDisplayContext
 ): IThisJournalContext {
-  const { $removeTab } = useTabContext()
   const { $cache, $open } = useThisEditorContext()
   let journalCache = new Map()
 
@@ -66,42 +70,33 @@ export function createJournal(
     const currentGroupId = thisSessionStorage.$get('currentGroup')?.id
     console.assert(currentGroupId, '[panic] currentGroup data should NOT be null or undefined')
 
-    return thisSessionStorage.$get('currentGroup').id
+    return currentGroupId
   }
 
-  return {
+  const stuff: IThisJournalContext = {
     get $cache() {
       return journalCache
     },
     set $cache(value) {
       journalCache = value
-      console.log(value)
     },
     $currentlyOpened, 
     $setCurrentlyOpened,
     async $create(data, type) {
-      console.log('[journal] creating', data, '...')
       const currentJournalGroupId = getCurrentJournalGroupId()
-      const route = `${JOURNAL_ROUTE}?id=${currentJournalGroupId}&type=${type}`
-      const newData = await fetchIt<JournalApi.IJournalData>('POST', route, data)
+      const newData = await api_createJournal(currentJournalGroupId, data, type)
+      event.$emit('journal__createJournal', newData)
 
-      console.log('[journal] updating cache and file display')
-      journalCache.set(newData!.id, newData)
-      fileDisplayContext.add(
-        type === 'journal' ? newData!.id : createFolder(newData!.id),
-        'root'
-      )
-      return newData!
+      journalCache.set(newData.id, newData)
+      fileDisplayContext.addToRoot(type === 'journal' ? newData.id : createFolderData(newData!.id))
+      return newData
     },
     async $open(journalId) {
-      console.log('[journal] opening', journalId, '...')
       const currentJournalGroupId = getCurrentJournalGroupId()
       let lastContent = $cache.get(journalId)!
 
       if (!lastContent) {
-        console.group()
-        lastContent = await fetchIt('GET', `${JOURNAL_CONTENT_ROUTE}?id=${currentJournalGroupId}&journal=${journalId}`) as JournalApi.JournalContentData
-        console.groupEnd()
+        lastContent = await api_getJournalContent(currentJournalGroupId, journalId)
       }
 
       $open({
@@ -111,22 +106,21 @@ export function createJournal(
       })
     },
     async $delete(journalId) {
-      console.log('[journal] deleting', journalId, '...')
       const currentJournalGroupId = getCurrentJournalGroupId()
-      await fetchIt('DELETE', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}&journal=${journalId}`)
+      await api_deleteJournal(currentJournalGroupId, journalId)
       $setCurrentlyOpened(undefined)
-      $removeTab(journalId)
+      event.$emit('journal__deleteJournal', journalId)
       $cache.delete(journalId)
     },
     async $getAll() {
       const currentJournalGroupId = getCurrentJournalGroupId()
-      console.log('[journal] getting all journals data from', currentJournalGroupId, '...')
-      return await fetchIt('GET', `${JOURNAL_ROUTE}?id=${currentJournalGroupId}`) as JournalApi.IJournalData[]
+      return await api_getAllJournals(currentJournalGroupId)
     },
     async $save(journalId, data) {
-      console.log('[journal] saving', journalId, '...')
       const currentJournalGroupId = getCurrentJournalGroupId()
-      return await fetchIt('POST', `${JOURNAL_CONTENT_ROUTE}?id=${currentJournalGroupId}&journal=${journalId}`, data)
+      return await api_saveJournalContent(currentJournalGroupId, journalId, data)
     }
   }
+
+  return stuff
 }

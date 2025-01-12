@@ -1,6 +1,6 @@
 import { onCleanup, onMount, ParentProps } from "solid-js"
 // ...
-import { mergeClassname } from "~/utils"
+import { debounce, mergeClassname } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from "~/assets/style/scrollbar.module.css"
@@ -14,7 +14,6 @@ const style = stylex.create({
     position: 'relative'
   },
   editor: {
-    height: 'calc(100vh - 72px)',
     paddingInline: 10
   }
 })
@@ -28,20 +27,14 @@ const style = stylex.create({
  * @see {@link ThisEditorProvider}
  * @see {@link useThisEditorContext}
  */
-export function ThisEditor(props: ParentProps) {
+export function ThisEditor(props: ParentProps<{ class?: string }>) {
   let editorLocationRef!: HTMLDivElement
   const editor = useThisEditorContext()
   
   onMount(() => {
     editor.$editorInstance = createEditor(
       editorLocationRef, 
-      false, 
-      async() => {
-        const savedData = await editor.$save()
-        editor.$event.$emit('editor__onUpdate', savedData)
-        editor.$cache.set(savedData.id, savedData.content)
-        editor.$updateCharsAndWordsCount(savedData.content)
-      }
+      false
     )
   })
 
@@ -55,6 +48,27 @@ export function ThisEditor(props: ParentProps) {
     editorLocationRef.scrollTop = editorLocationRef.scrollHeight + 500
     editor.$event.$emit('editor__onTyping')
   }
+
+  const onSlappingYourKeyboard: EventHandler<"div", "onKeyUp"> = async(keyboardEvent) => {
+    // don't update if you press these key
+    const keyYouJustPressed = keyboardEvent.key
+    const isContainsTheseModifierKeys = ['Control', 'Shift', 'Alt'].includes(keyYouJustPressed)
+    const isContainsKeysFSomething = keyYouJustPressed[0] === 'F' && !Number.isNaN(parseInt(keyYouJustPressed[1]))
+
+    if (
+      isContainsTheseModifierKeys ||
+      isContainsKeysFSomething
+    ) return
+    // else auto-save it
+    update()
+  }
+
+  const update = debounce(async() => {
+    const savedData = await editor.$save()
+    editor.$event.$emit('editor__onUpdate', savedData)
+    editor.$cache.set(savedData.id, savedData.content)
+    editor.$updateCharsAndWordsCount(savedData.content)
+  }, 1500)
   
   return (
     <div 
@@ -66,8 +80,10 @@ export function ThisEditor(props: ParentProps) {
           __scrollbarStyle.scrollbar, 
           __scrollbarStyle.scrollbarVertical, 
           __scrollbarStyle.invsScrollbar,
-          stylex.attrs(style.editor)
+          stylex.attrs(style.editor),
+          props
         )}
+        onKeyUp={onSlappingYourKeyboard}
         spellcheck={false}
         ref={editorLocationRef!} 
       />

@@ -4,19 +4,12 @@ import { setDebugMode, dndzone } from "solid-dnd-directive"
 // phew, I can finally live in peace with this one, instead of writting my freaking own
 // drag and drop.
 // ...
-import { type FolderNode, type TreeNode } from "../../utils"
+import { type FolderNode, type TreeNode } from "../utils"
 import { useJournalContext } from "./JournalContext"
 
 __devMode && setDebugMode(true)
 
-interface IFileDisplayProps {
-  $onClickFolder: AnyFunction
-  $onClickFile: AnyFunction
-  $folderProps: Record<string, string>
-  $fileProps: Record<string, string>
-}
-
-export function FileDisplay(props: Partial<IFileDisplayProps>) {
+export function FileDisplay() {
   const { $fileDisplay, $journal } = useJournalContext()
 
   const options = $fileDisplay.options
@@ -41,6 +34,25 @@ export function FileDisplay(props: Partial<IFileDisplayProps>) {
    */
   const rawToDraggable = (treeNode: TreeNode[]) => treeNode.map(it => typeof it === "string" ? { id: it } : it)
 
+  const RenderFolderAndFileComponent = (props: FolderNode | { id: string }) => {
+    console.log('cache', $journal.$cache)
+    const data = $journal.$cache.get(props.id)
+    if (!data) {
+      console.log('cannot get data', props)
+      return null
+    }
+
+    if (isFolder(props)) return (
+      //@ts-ignore - oh come on, it does work you know?
+      <FolderComponent {...data} onClick={() => options.onClick?.('folder', props.id, data)}>
+        <RecursivelyRenderItOut stuff={props.child} />
+      </FolderComponent>
+    )
+    
+    //@ts-ignore - i said it DOES WORK!!!
+    return <FileComponent {...data} onClick={() => options.onClick?.('file', props.id, data)} />
+  }
+
   // OooOo, scary name
   const RecursivelyRenderItOut = (thisProps: { stuff: TreeNode[] }) => {
     const [items, setItems] = createSignal(rawToDraggable(thisProps.stuff))
@@ -56,24 +68,7 @@ export function FileDisplay(props: Partial<IFileDisplayProps>) {
       <div use:dndzone={{items}} on:consider={handleDndEvent} on:finalize={handleDndEvent}>
         {void setItems(rawToDraggable(thisProps.stuff))}
         <For each={items()}>  
-          {it => {
-            console.log('cache', $journal.$cache)
-            const data = $journal.$cache.get(it.id)
-            if (!data) {
-              console.log('cannot get data', it)
-              return null
-            }
-    
-            if (isFolder(it)) return (
-              //@ts-ignore - oh come on, it does work you know?
-              <FolderComponent {...data} onClick={() => options.onClick?.('folder', it.id, data)}>
-                <RecursivelyRenderItOut stuff={it.child} />
-              </FolderComponent>
-            )
-            
-            //@ts-ignore - i said it DOES WORK!!!
-            return <FileComponent {...data} onClick={() => options.onClick?.('file', it.id, data)} />
-          }}
+          {it => <RenderFolderAndFileComponent {...it} />}
         </For>
       </div>
     )

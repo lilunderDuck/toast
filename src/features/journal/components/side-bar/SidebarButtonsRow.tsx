@@ -14,7 +14,7 @@ import {
 import { useThisEditorContext } from "~/features/editor"
 import { EditOrReadonlyIcon } from "~/features/journal"
 // ...
-import { useJournalContext } from "../context"
+import { useJournalContext } from "../../context"
 
 const style = stylex.create({
   buttonsRow: {
@@ -39,24 +39,9 @@ interface IButtonItemProps extends HTMLAttributes<"button"> {
 
 export function SidebarButtonsRow() {
   const { $journal } = useJournalContext()
-  const { $setIsEditable } = useThisEditorContext()
+  const { $isEditable, $setIsEditable } = useThisEditorContext()
   const toggleEditOrReadonlyMode = () => {
     $setIsEditable(prev => !prev)
-  }
-
-  const ButtonItem = (props: IButtonItemProps) => {
-    const [, buttonProps] = splitProps(props, ["$icon", "$label"])
-    return (
-      <Tooltip $label={props.$label}>
-        <Button 
-          {...buttonProps}
-          $size={ButtonSizeVariant.icon} 
-          {...stylex.attrs(style.button)}
-        >
-          <props.$icon />
-        </Button>
-      </Tooltip>
-    )
   }
 
   const createStuffModal = createLazyLoadedDialog(
@@ -73,15 +58,28 @@ export function SidebarButtonsRow() {
       />
       <Spacer />
       <ButtonItem 
-        rough-toggle-edit-or-readonly-button
-        editor-tour-toggle-edit-or-readonly-button
         onClick={toggleEditOrReadonlyMode}
         disabled={!$journal.$currentlyOpened()}
         $icon={EditOrReadonlyIcon}
-        $label={`Toggle ${true ? 'read-only' : 'edit'} mode`}
+        $label={`Toggle ${$isEditable() ? 'read-only' : 'edit'} mode`}
       />
       {/* ... */}
       <createStuffModal.$Modal />
     </FlexCenterY>
+  )
+}
+
+function ButtonItem(props: IButtonItemProps) {
+  const [, buttonProps] = splitProps(props, ["$icon", "$label"])
+  return (
+    <Tooltip $label={props.$label}>
+      <Button 
+        {...buttonProps}
+        $size={ButtonSizeVariant.icon} 
+        {...stylex.attrs(style.button)}
+      >
+        <props.$icon />
+      </Button>
+    </Tooltip>
   )
 }

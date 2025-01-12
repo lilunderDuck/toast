@@ -31,7 +31,7 @@ import MarkerTool from '@editorjs/marker'
 // override editor's default styles
 import './createEditor.css'
 
-export function createEditor(whereToPut: HTMLElement, isEditable: boolean, onUpdate: AnyFunction) {
+export function createEditor(whereToPut: HTMLElement, isEditable: boolean) {
   const tools = {
     // ... block zone ...
     // all of the number here is the block type, to easily confuse myself
@@ -58,9 +58,6 @@ export function createEditor(whereToPut: HTMLElement, isEditable: boolean, onUpd
     tools,
     onReady() {
       console.log('[editor] editor created')
-    },
-    onChange() {
-      onUpdate()
     }
   })
 }

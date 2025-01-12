@@ -1,9 +1,0 @@
-#tab {
-  --tab-title-bar-thickness: 30px;
-}
-
-/* title bar */
-#tab > :first-child {
-  width: 100%;
-  height: var(--tab-title-bar-thickness);
-}

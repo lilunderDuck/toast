@@ -45,7 +45,9 @@ export function JournalCategory(props: ParentProps<IJournalCategoryProps>) {
     <section id={__style.journal} {...stylex.attrs(style.journalCategory)}>
       <FlexCenterY {...stylex.attrs(style.nameAndStuff)}>
         <BsCaretRightFill size={10} />
-        <span id={__style.name}>{props.name}</span>
+        <span id={__style.name}>
+          {props.name}
+        </span>
       </FlexCenterY>
       <div {...stylex.attrs(style.leftPadding)}>
         {props.children}

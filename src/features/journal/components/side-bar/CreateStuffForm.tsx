@@ -40,7 +40,8 @@ export default function CreateJournalCategoryForm(props: ICreateJournalCategoryF
         }
       )  
       .catch((why) => {
-        console.log(why) // log the error out cuz you might absolutely have no idea where is the error come from
+        // log the error out cuz you might absolutely have no idea where is the error come from
+        console.log(why)
         setSubmitButtonDisabled(false)
       })
     // ...

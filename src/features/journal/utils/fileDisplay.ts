@@ -32,7 +32,7 @@ export function insertBefore(
   return newChild;
 }
 
-export function createFolder(id: string): FolderNode {
+export function createFolderData(id: string): FolderNode {
   return {
     id,
     child: []

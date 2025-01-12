@@ -7,8 +7,10 @@ import {
   ThisEditorTitleBar, 
   useThisEditorContext 
 } from "~/features/editor"
+import { ResizablePanel } from "~/components"
 // ...
-import { EditorWelcome, TabList, TabPanel, useJournalContext } from "../components"
+import { EditorWelcome } from "../components"
+import { useJournalContext } from "../context"
 
 const style = stylex.create({
   content: {
@@ -22,6 +24,9 @@ const style = stylex.create({
     gap: 5,
     whiteSpace: 'nowrap',
     flexWrap: 'nowrap'
+  },
+  editor: {
+    height: 'calc(100vh - 39px)'
   }
 })
 
@@ -40,18 +45,16 @@ export function JournalEditorContent() {
   })
 
   return (
-    <TabPanel initialSize={0.7} titleBar={
-      <TabList />
-    }>
+    <ResizablePanel initialSize={0.7}>
       <div {...stylex.attrs(style.content)}>
         <ThisEditorTitleBar name={$journal.$currentlyOpened()?.name} />
-        <ThisEditor>
+        <ThisEditor {...stylex.attrs(style.editor)}>
           <ThisEditorStatusBar />
         </ThisEditor>
         <Show when={!$journal.$currentlyOpened()}>
           <EditorWelcome />
         </Show>
       </div>
-    </TabPanel>
+    </ResizablePanel>
   )
 }

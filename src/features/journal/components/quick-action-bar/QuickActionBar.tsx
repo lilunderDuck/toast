@@ -1,4 +1,4 @@
-import { BsFileFill, BsGearFill, BsLayoutWtf, BsSearchHeart } from "solid-icons/bs"
+import { BsFileFill, BsGearFill } from "solid-icons/bs"
 // ...
 import { Flex, Spacer } from "~/components"
 // ...
@@ -19,19 +19,15 @@ const style = stylex.create({
 
 export function QuickActionBar() {
   return (
-    <Flex editor-tour-quick-action-bar id={__style.actionBar} {...stylex.attrs(style.bar)}>
-      <QuickActionItem 
+    <Flex id={__style.actionBar} {...stylex.attrs(style.bar)}>
+      <QuickActionItem
         $icon={BsFileFill}
-      />
-      <QuickActionItem 
-        $icon={BsSearchHeart}
-      />
-      <QuickActionItem 
-        $icon={BsLayoutWtf}
+        $label={'Your stuff'}
       />
       <Spacer />
-      <QuickActionItem 
+      <QuickActionItem
         $icon={BsGearFill}
+        $label={'Settings'}
       />
     </Flex>
   )

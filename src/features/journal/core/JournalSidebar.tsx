@@ -1,5 +1,6 @@
 import { createSignal, lazy } from "solid-js"
 import { BsHouseFill, BsTrello } from "solid-icons/bs"
+import { useNavigate } from "@solidjs/router"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./JournalSidebar.module.css"
@@ -15,15 +16,14 @@ import {
 } from "~/api/journal"
 // ...
 import { 
+  type ISidebarProps,
   QuickActionBar, 
   QuickActionItem, 
   Sidebar, 
-  type ISidebarProps, 
-  TabPanel, 
-  useTabContext,
-  useJournalContext
+  TabPanel,
 } from "../components"
-import { useNavigate } from "@solidjs/router"
+import { useJournalContext } from "../context"
+
 
 const style = stylex.create({
   sidebar: {
@@ -38,7 +38,6 @@ const style = stylex.create({
 
 export function JournalSidebar() {
   const { $journal, $localStorage } = useJournalContext()
-  const { $getFocusedTab, $updateTab } = useTabContext()
 
   const goTo = useNavigate()
   const goHome = () => goTo('/')
@@ -49,13 +48,11 @@ export function JournalSidebar() {
       $journal: thingToDelete()!
     })
   )
-  
+
   const [thingToDelete, setThingToDelete] = createSignal<JournalApi.IJournalData>()
   const clickingOpenJournal: ISidebarProps["$onClickingOpen"] = (journal) => {
     $journal.$open(journal.id)
     $journal.$setCurrentlyOpened(journal)
-    const focusedTab = $getFocusedTab()
-    $updateTab(focusedTab.id, journal.name)
   }
 
   const clickingRemoveJournal: ISidebarProps["$onClickingRemove"] = (journal) => {

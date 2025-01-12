@@ -7,9 +7,9 @@ import { Divider } from "~/components"
 import type { JournalApi } from "~/api/journal"
 import { mergeClassname } from "~/utils"
 // ...
-import { FileDisplay, useJournalContext } from "../context"
+import { FileDisplay, useJournalContext } from "../../context"
 import { SidebarButtonsRow } from "./SidebarButtonsRow"
-import { Journal, type IJournalProps } from "./Journal"
+import { Journal } from "./Journal"
 import { JournalCategory } from "./JournalCategory"
 
 const style = stylex.create({
@@ -42,17 +42,16 @@ export function Sidebar(props: ISidebarProps) {
     },
     dataLookup: $journal.$cache,
     onClick(type, id, data) {
-      if (type === 'file') {
-        console.log(data)
-        // if (type === 'remove') {
-        //   return props.$onClickingRemove?.(data)
-        // }
+      if (type !== 'file') return
 
-        const thisJournalId = data.id 
-        if (thisJournalId === lastJournalId) return console.log(`No need to open journal, previous journal id: ${lastJournalId} - current journal id: ${thisJournalId}`)
-        props.$onClickingOpen?.(data)
-        lastJournalId = thisJournalId
+      console.log(data)
+      const thisJournalId = data.id 
+      if (thisJournalId === lastJournalId) {
+        return console.log(`No need to open journal, previous journal id: ${lastJournalId} - current journal id: ${thisJournalId}`)
       }
+      
+      props.$onClickingOpen?.(data)
+      lastJournalId = thisJournalId
     },
   })
 

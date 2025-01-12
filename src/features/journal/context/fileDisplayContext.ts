@@ -3,7 +3,7 @@ import { createSignal, type Accessor, type Component } from "solid-js"
 import { fetchIt } from "~/utils"
 import { JOURNAL_GROUP_ROUTE, type JournalApi } from "~/api/journal"
 // ...
-import { insertBefore, isFolder, type TreeNode } from "../../utils"
+import { insertBefore, isFolder, type TreeNode } from "../utils"
 import type { JournalSessionStorage } from "./JournalContext"
 
 type TreeNodeType = 'file' | 'folder'
@@ -19,6 +19,7 @@ export interface IFileDisplayContext {
   setOptions(option: IFileDisplayOptions): void
   findNodeRecursively(nodeId: string, nodes: TreeNode[]): TreeNode | null
   add(node: TreeNode, toFolder: string, before?: string): void
+  addToRoot(node: TreeNode, before?: string): void
   tree: Accessor<TreeNode[]>
   setTree(tree?: TreeNode[]): void
 }
@@ -86,10 +87,15 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage): IF
 
     updateTree()
   }
+
+  const addToRoot: IFileDisplayContext["addToRoot"] = (node, before) => {
+    add(node, 'root', before)
+  }
   
   return {
     findNodeRecursively,
     add,
+    addToRoot,
     tree,
     get options() {
       return options!

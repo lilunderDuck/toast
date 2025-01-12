@@ -35,7 +35,7 @@ export function JournalProvider(props: ParentProps) {
   const wrappedSessionStorage: JournalSessionStorage = createStorage(sessionStorage)
   const event = createEvent<JournalEventMap>()
   const fileDisplayContext = createFileDisplay(wrappedSessionStorage)
-  const journalContext = createJournal(wrappedSessionStorage, fileDisplayContext)
+  const journalContext = createJournal(event, wrappedSessionStorage, fileDisplayContext)
 
   return (
     <Context.Provider value={{
