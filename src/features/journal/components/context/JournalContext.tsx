@@ -3,15 +3,17 @@ import {
   type ParentProps, 
   useContext 
 } from "solid-js"
+// ...
 import { createEvent, createStorage, type IEvent, type IStorage } from "~/utils"
+import type { JournalApi } from "~/api/journal"
 // ...
 import { type JournalEventMap } from "./event"
 import { createJournal, type IThisJournalContext } from "./journal"
 import { type IFileDisplayContext, createFileDisplay } from "./fileDisplayContext"
-import type { JournalApi } from "~/api/journal"
 
 export type JournalLocalStorage = IStorage<{
   shouldShowDeleteConfirmationModal: boolean
+  [key: `readonly-${string}`]: boolean
 }>
 
 export type JournalSessionStorage = IStorage<{
@@ -39,9 +41,10 @@ export function JournalProvider(props: ParentProps) {
     <Context.Provider value={{
       $journal: journalContext,
       $fileDisplay: fileDisplayContext,
+      // ...
       $localStorage: createStorage(localStorage),
       $sessionStorage: wrappedSessionStorage,
-      $event: event
+      $event: event,
     }}>
       {props.children}
     </Context.Provider>

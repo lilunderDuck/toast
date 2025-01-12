@@ -1,5 +1,5 @@
 import { createSignal, lazy } from "solid-js"
-import { BsHouseFill, BsLayoutSidebarInsetReverse, BsTrello } from "solid-icons/bs"
+import { BsHouseFill, BsTrello } from "solid-icons/bs"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./JournalSidebar.module.css"
@@ -78,16 +78,11 @@ export function JournalSidebar() {
       <TabPanel initialSize={0.3}>
         <FlexCenterY id={__style.iconTitleBar} {...stylex.attrs(style.titleBar)}>
           <QuickActionItem 
-            $icon={BsLayoutSidebarInsetReverse}
-            $label='Hide sidebar'
-            onClick={() => {}}
-          />
-          <div  />
-          <QuickActionItem 
             $icon={BsHouseFill}
             $label='Go back to home'
             onClick={goHome}
           />
+          <div  />
           <QuickActionItem 
             $icon={BsTrello}
             $label='Trackers'

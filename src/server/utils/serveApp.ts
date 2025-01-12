@@ -4,7 +4,7 @@ import { dirname } from 'node:path'
 // ...
 import { duck } from "~/entry-server"
 import { readFile } from "~/server"
-import { apiRoute } from "~/common"
+import { apiRoute } from '~/common'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,20 +18,18 @@ export function serveApp() {
     },
   }))
   
-  __devMode ? 0 : (
-    duck.notFound(async(context) => {
-      const API_ROUTE = apiRoute('')
-      const isApiRoute = context.req.path.includes(API_ROUTE)
-      if (isApiRoute) {
-        return context.text('not found', 404)
-      }
-    
-      const content = await readFile(`${appResourcePath}/index.html`, {
-        encoding: 'utf-8'
-      }) as string
-      return context.html(content, 200)
-    })
-  )
+  duck.notFound(async(context) => {
+    const API_ROUTE = apiRoute('')
+    const isApiRoute = context.req.path.includes(API_ROUTE)
+    if (isApiRoute) {
+      return context.text('not found', 404)
+    }
+  
+    const content = await readFile(`${appResourcePath}/index.html`, {
+      encoding: 'utf-8'
+    }) as string
+    return context.html(content, 200)
+  })
   
   duck.on('GET', ['/', '/journal/:id', '/too-technical', '*404'], async(context) => {
     const content = await readFile(`${appResourcePath}/index.html`, {

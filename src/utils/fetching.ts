@@ -33,13 +33,15 @@ export async function fetchIt<Data extends {} = {}>(method: HttpMethod, path: st
     ...(methodsThatAllowABody ? dataWillBeSentToServer : {}),
   })
 
-  if (isServerResponsesWithBadStatusCode(response.status)) {
-    console.error(`<-- not okay, https://http.cat/${response.status} :(`)
+  const thisStatusCode = response.status
+
+  if (isServerResponsesWithBadStatusCode(thisStatusCode)) {
+    console.error(`<-- not okay, https://http.cat/${thisStatusCode} :(`)
     console.groupEnd()
     return null
   }
 
-  console.log(`<-- okay, https://http.cat/${response.status} :)`)
+  console.log(`<-- okay, https://http.cat/${thisStatusCode} :)`)
   
   return await tryConvertingToJson(response) as Data
 }

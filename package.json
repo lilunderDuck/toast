@@ -57,10 +57,10 @@
     "vite-plugin-stylex-dev": "^0.7.3"
   },
   "scripts": {
-    "preview": "vite --config ./vite-app.config.ts preview & node ./out/server/entry-server.mjs",
-    "dev:server": "vite --config ./vite-server.config.ts build --mode=development && node ./out/server/entry-server.mjs",
+    "preview": "deno ./out/server/entry-server.mjs",
+    "dev:server": "vite --config ./vite-server.config.ts build --mode=development && deno ./out/server/entry-server.mjs",
     "dev:app": "vite --config ./vite-app.config.ts",
-    "dev": "vite --config ./vite-server.config.ts build --mode=development && node ./out/server/entry-server.mjs & vite --config ./vite-app.config.ts",
+    "dev": "vite --config ./vite-server.config.ts build --mode=development && deno ./out/server/entry-server.mjs & vite --config ./vite-app.config.ts",
     "build:app": "deno task vite:app build",
     "build:server": "vite --config ./vite-server.config.ts build --mode=NOT-development",
     "build": "vite --config ./vite-server.config.ts build --mode=NOT-development && vite --config ./vite-app.config.ts build"

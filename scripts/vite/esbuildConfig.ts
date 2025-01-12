@@ -10,8 +10,8 @@ export const getEsbuildConfig = (devMode: boolean, others?: ESBuildOptions): Inl
       "__backendVersion": `"node-${process.version}"`,
     },
     // drop "console.(something)" call and "debugger" on production
-    ...(devMode ? {/* nothing here... */} : {
-      drop: ['console', 'debugger'],
-    })
+    // ...(devMode ? {/* nothing here... */} : {
+    //   drop: ['console', 'debugger'],
+    // })
   },
 })
