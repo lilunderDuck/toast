@@ -10,6 +10,8 @@ const BASE_PATH = 'http://localhost:8000'
  * 
  * @note This only work if the server return **only with JSON**.
  * @template Data The type of the data expected in the response, defaults to an empty object (`{}`).
+ * @template Path The path of the request, just to make you easier to guess what route
+ * you gonna make by hovering this function.
  * @param method The HTTP method to use for the request (e.g., `'GET'`, `'POST'`, `'PATCH'`).
  * @param path The path of the API endpoint relative to the base URL.
  * @param body An optional object containing data to send in the request body (for `POST` and `PATCH` methods only).
@@ -17,21 +19,26 @@ const BASE_PATH = 'http://localhost:8000'
  * type (`Data`), or `null` if the request fails.
  * @see {@link HttpMethod}
  */
-export async function fetchIt<Data extends {} = {}>(method: HttpMethod, path: string, body = {}): Promise<Data | null> {
+export async function fetchIt<
+  Data extends {} = {}, 
+  const Path extends string = string,
+  Body = {}
+>(method: HttpMethod, path: Path, body?: Body): Promise<Data | null> {
   console.groupCollapsed(`--> ${method}:`, BASE_PATH + path)
   const methodsThatAllowABody = ['POST', 'PATCH'].includes(method)
 
-  const dataWillBeSentToServer = {
-    body: JSON.stringify(body),
+  const dataWillBeSentToServer: RequestInit = {
+    method,
     headers: {
       'Content-Type': 'application/json'
     }
   }
 
-  const response = await fetch(BASE_PATH + path, {
-    method,
-    ...(methodsThatAllowABody ? dataWillBeSentToServer : {}),
-  })
+  if (methodsThatAllowABody && body) {
+    dataWillBeSentToServer.body = JSON.stringify(body)
+  }
+
+  const response = await fetch(BASE_PATH + path, dataWillBeSentToServer)
 
   const thisStatusCode = response.status
 

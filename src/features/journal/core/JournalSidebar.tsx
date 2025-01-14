@@ -9,7 +9,8 @@ import {
   createLazyLoadedDialog, 
   Flex, 
   FlexCenterY, 
-  ResizableHandle 
+  ResizableHandle, 
+  ResizablePanel
 } from "~/components"
 import { 
   type JournalApi
@@ -20,7 +21,6 @@ import {
   QuickActionBar, 
   QuickActionItem, 
   Sidebar, 
-  TabPanel,
 } from "../components"
 import { useJournalContext } from "../context"
 
@@ -72,7 +72,7 @@ export function JournalSidebar() {
 
   return (
     <>
-      <TabPanel initialSize={0.3}>
+      <ResizablePanel initialSize={0.3}>
         <FlexCenterY id={__style.iconTitleBar} {...stylex.attrs(style.titleBar)}>
           <QuickActionItem 
             $icon={BsHouseFill}
@@ -93,7 +93,7 @@ export function JournalSidebar() {
             $onClickingRemove={clickingRemoveJournal}
           />
         </Flex>
-      </TabPanel>
+      </ResizablePanel>
       <ResizableHandle />
       {/* ... */}
       <deleteJournalModal.$Modal />

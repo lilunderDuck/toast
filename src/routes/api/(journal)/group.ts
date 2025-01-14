@@ -7,7 +7,7 @@ import {
 import { 
   journalGroupData
 } from "~/features/data/journal"
-import { canHaveIdOrNot, mustHaveAnId, validate } from "~/server/utils"
+import { canHaveIdOrNot, mustHaveAnId, validateIfValid } from "~/server/utils"
 import { duck } from "~/entry-server"
 import { isEmptyObject } from '~/common'
 // ...
@@ -17,11 +17,7 @@ duck.get(JOURNAL_GROUP_ROUTE, validator('query', (value, context) => {
     return null
   }
 
-  if (validate(canHaveIdOrNot, value)) {
-    return value
-  }
-
-  return context.text('invalid input, oops', 400)
+  return validateIfValid(canHaveIdOrNot, value, context)
 }), async (context) => {
   const query = context.req.valid('query')
 
@@ -39,11 +35,7 @@ duck.get(JOURNAL_GROUP_ROUTE, validator('query', (value, context) => {
 })
 
 duck.post(JOURNAL_GROUP_ROUTE, validator('json', (value, context) => {
-  if (validate(journalGroupFormSchema, value)) {
-    return value
-  }
-
-  return context.text('invalid input, oops', 400)
+  return validateIfValid(journalGroupFormSchema, value, context)
 }), async (context) => {
   const data = context.req.valid('json')
   const newGroup = await journalGroupData.$create(data)
@@ -52,11 +44,7 @@ duck.post(JOURNAL_GROUP_ROUTE, validator('json', (value, context) => {
 })
 
 duck.patch(JOURNAL_GROUP_ROUTE, validator('query', (value, context) => {
-  if (validate(mustHaveAnId, value)) {
-    return value
-  }
-
-  return context.text('invalid input, oops', 400)
+  return validateIfValid(mustHaveAnId, value, context)
 }), validator('json', (value) => {
   return value // insecure? yes, I know
 }), async (context) => {

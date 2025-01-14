@@ -1,8 +1,8 @@
 import { validator } from "hono/validator"
 // ...
-import { JOURNAL_ROUTE, journalFormSchema } from "~/api/journal"
+import { JOURNAL_ROUTE, JournalApi, journalFormSchema } from "~/api/journal"
 import { duck } from "~/entry-server"
-import { isThisDirectoryExist, mustHaveAnId, validate } from "~/server"
+import { isThisDirectoryExist, validateIfValid } from "~/server"
 import { 
   buildJournalGroupPath, 
   getAllJournalData, 
@@ -13,70 +13,86 @@ import {
 
 import { object, string } from "valibot"
 
-const mustHaveAnIdAndJournalId = object({
-  id: string(),
-  journal: string()
-})
+/**`GET /duck/journal/:groupId`
+ * Gets all journals data from `groupId`.
+ * 
+ * Returns an 404 - not found if the requested `groupId` could not be found.
+ */
+duck.get(`${JOURNAL_ROUTE}/:groupId`, async (context) => {
+  const { groupId } = context.req.param()
 
-const mustHaveAnIdAndType = object({
-  id: string(),
-  type: string()
-})
-
-duck.get(JOURNAL_ROUTE, validator('query', (value, context) => {
-  if (validate(mustHaveAnId, value)) {
-    return value
-  }
-
-  return context.text('invalid query', 400)
-}), async (context) => {
-  const query = context.req.valid('query')
-
-  const path = buildJournalGroupPath(query.id)
+  const path = buildJournalGroupPath(groupId)
   if (!await isThisDirectoryExist(path)) {
     return context.text('not found', 404)
   }
 
-  return context.json(await getAllJournalData(query.id), 200)
+  return context.json(await getAllJournalData(groupId), 200)
 })
 
-duck.post(JOURNAL_ROUTE, validator('query', (value, context) => {
-  if (validate(mustHaveAnIdAndType, value)) {
-    return value
-  }
+const mustHaveAType = object({
+  type: string()
+})
 
-  return context.text('invalid query', 400)
+/**`POST /duck/journal/:groupId?type=...`
+ * Creates a new journal based on given `type` query on `groupId`.
+ * 
+ * A `400 - bad request` will be returned if the `type` query or the data
+ * being posted is invalid
+ */
+duck.post(`${JOURNAL_ROUTE}/:groupId`, validator('query', (value, context) => {
+  return validateIfValid(mustHaveAType, value, context)
 }), validator('json', (value, context) => {
-  if (validate(journalFormSchema, value)) {
-    return value
-  }
-
-  return context.text('invalid data', 400)
+  return validateIfValid(journalFormSchema, value, context)
 }), async (context) => {
   const body = context.req.valid('json')
   const query = context.req.valid('query')
+  const { groupId } = context.req.param()
 
   let newData
   if (query.type === 'journal') {
-    newData = await journalData.$create(query.id, body)
+    newData = await journalData.$create(groupId, body)
   }
   else {
-    newData = await journalCategoryData.$create(query.id, body)
+    newData = await journalCategoryData.$create(groupId, body)
   }
   
   return context.json(newData, 200)
 })
 
-duck.delete(JOURNAL_ROUTE, validator('query', (value, context) => {
-  if (validate(mustHaveAnIdAndJournalId, value)) {
-    return value
-  }
+/**`DELETE /duck/journal/:groupId/:journalId`
+ * Deletes a `journalId` from `groupId`
+ */
+duck.delete(`${JOURNAL_ROUTE}/:groupId/:journalId`, async (context) => {
+  const { groupId, journalId } = context.req.param()
 
-  return context.text('invalid query', 400)
-}), async (context) => {
-  const query = context.req.valid('query')
-
-  journalData.$delete(query.id, query.journal)
+  await journalData.$delete(groupId, journalId)
   
   return context.text('okay', 200)
+})
+
+/**`GET /duck/journal/:groupId/:journalId`
+ * Gets the journal data based on `journalId` from `groupId`
+ */
+duck.get(`${JOURNAL_ROUTE}/:groupId/:journalId`, async(context) => {
+  const { groupId, journalId } = context.req.param()
+
+  const something = await journalData.$getContent(groupId, journalId)
+
+  return context.json(something, 200)
+})
+
+/**`PATCH /duck/journal/:groupId/:journalId`
+ * Updates `journalId` data from `groupId`
+ */
+duck.patch(`${JOURNAL_ROUTE}/:groupId/:journalId`, validator('json', (value) => {
+  return value as JournalApi.JournalContentData
+}), async(context) => {
+  const { groupId, journalId } = context.req.param()
+  const data = context.req.valid('json') 
+
+  await journalData.$update(groupId, journalId, {
+    data
+  })
+
+  return context.text('okay', 201)
 })
