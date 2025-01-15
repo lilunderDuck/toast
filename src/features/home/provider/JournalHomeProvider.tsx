@@ -1,7 +1,10 @@
-import { Accessor, createContext, createSignal, type ParentProps, useContext } from "solid-js"
-import { IJournalGroupData, JOURNAL_GROUP_ROUTE } from "~/api/journal"
+import { type Accessor, createContext, createSignal, type ParentProps, useContext } from "solid-js"
+// ...
+import type { IJournalGroupData } from "~/api/journal"
 import { thisArrayObjects } from "~/common"
-import { createEvent, fetchIt, type IEvent } from "~/utils"
+import { createEvent, type IEvent } from "~/utils"
+// ...
+import { api_getGroup } from "../utils"
 
 type JournalHomeEvent = {
   home__infoSidebarClose(): void
@@ -53,7 +56,7 @@ export function JournalHomeProvider(props: ParentProps) {
       },
       $grid: {
         async $fetchJournalGroups() {
-          const data = await fetchIt<IJournalGroupData[]>('GET', JOURNAL_GROUP_ROUTE) ?? []
+          const data = await api_getGroup<undefined>()
           setJournalGroups(data)
           return data
         },

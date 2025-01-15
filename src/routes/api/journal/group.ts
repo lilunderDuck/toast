@@ -7,22 +7,16 @@ import {
 import { 
   journalGroupData
 } from "~/features/data/journal"
-import { canHaveIdOrNot, mustHaveAnId, validateIfValid } from "~/server/utils"
+import { validateIfValid } from "~/server/utils"
 import { duck } from "~/entry-server"
-import { isEmptyObject } from '~/common'
 // ...
 
-duck.get(JOURNAL_GROUP_ROUTE, validator('query', (value, context) => {
-  if (isEmptyObject(value)) {
-    return null
-  }
+/**GET /duck/journal/group/:groupId? */
+duck.get(`${JOURNAL_GROUP_ROUTE}/:groupId?`, async (context) => {
+  const { groupId } = context.req.param()
 
-  return validateIfValid(canHaveIdOrNot, value, context)
-}), async (context) => {
-  const query = context.req.valid('query')
-
-  if (query?.id) {
-    const data = await journalGroupData.$get(query.id)
+  if (groupId) {
+    const data = await journalGroupData.$get(groupId)
 
     if (!data) {
       return context.text('not found', 404)
@@ -34,6 +28,7 @@ duck.get(JOURNAL_GROUP_ROUTE, validator('query', (value, context) => {
   return context.json(await journalGroupData.$getAll(), 200)
 })
 
+/**POST /duck/journal/group/ */
 duck.post(JOURNAL_GROUP_ROUTE, validator('json', (value, context) => {
   return validateIfValid(journalGroupFormSchema, value, context)
 }), async (context) => {
@@ -43,18 +38,17 @@ duck.post(JOURNAL_GROUP_ROUTE, validator('json', (value, context) => {
   return context.json(newGroup, 201)
 })
 
-duck.patch(JOURNAL_GROUP_ROUTE, validator('query', (value, context) => {
-  return validateIfValid(mustHaveAnId, value, context)
-}), validator('json', (value) => {
+/**PATCH /duck/journal/group/:groupId */
+duck.patch(`${JOURNAL_GROUP_ROUTE}/:groupId`, validator('json', (value) => {
   return value // insecure? yes, I know
 }), async (context) => {
-  const query = context.req.valid('query')
+  const { groupId } = context.req.param()
   const data = context.req.valid('json')
 
-  if (!await journalGroupData.$isExist(query.id)) {
+  if (!await journalGroupData.$isExist(groupId)) {
     return context.status(404)
   }
 
-  const updated = await journalGroupData.$update(query.id, data)
+  const updated = await journalGroupData.$update(groupId, data)
   return context.json(updated, 200)
 })

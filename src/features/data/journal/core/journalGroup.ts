@@ -1,6 +1,7 @@
 import type { 
   IClientJournalGroupData,
-  IJournalGroupData
+  IJournalGroupData,
+  JournalGroupSchema
 } from "~/api/journal"
 import { 
   createDirectoryIfNotExist, 
@@ -17,7 +18,7 @@ import {
 } from '../utils'
 
 export const journalGroupData = {
-  async $create(data: IJournalGroupData) {
+  async $create(data: JournalGroupSchema) {
     console.group('[journal group]\t\t Creating group')
     const journalGroupId = createId()
     const newData: IJournalGroupData = mergeObjects(data, {

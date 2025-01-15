@@ -5,12 +5,9 @@ import {
 } from "@modular-forms/solid"
 import IconInput from "./IconInput"
 // ...
-import { 
-  type IJournalGroupData,
-  JOURNAL_GROUP_ROUTE, 
+import {
   type JournalGroupSchema,
 } from "~/api/journal"
-import { fetchIt } from "~/utils"
 import { 
   Button, 
   ButtonSizeVariant, 
@@ -19,6 +16,7 @@ import {
 import { toast } from '~/features/toast'
 import { createSignal } from "solid-js"
 import { useJournalHomeContext } from "~/features/home/provider"
+import { api_createGroup } from "~/features/home"
 
 interface ICreateJournalGroupFormProps {
   onClick: () => any
@@ -29,14 +27,10 @@ export default function CreateJournalGroupForm(props: ICreateJournalGroupFormPro
   const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
   const { $grid } = useJournalHomeContext()
 
-  const callApi = (data: JournalGroupSchema) => {
-    return fetchIt<IJournalGroupData>('POST', JOURNAL_GROUP_ROUTE, data)
-  }
-
   const submit: SubmitHandler<JournalGroupSchema> = async(data) => {
     setSubmitButtonDisabled(true)
     const dataReturned = await toast
-      .promise(callApi(data), {
+      .promise(api_createGroup(data), {
         loading: 'Saving changes...',
         success: 'Done!',
         error: 'Failed to save changes :('
