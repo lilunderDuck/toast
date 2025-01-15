@@ -21,16 +21,20 @@ export interface IFileDisplayContext {
   add(node: TreeNode, toFolder: string, before?: string): void
   addToRoot(node: TreeNode, before?: string): void
   tree: Accessor<TreeNode[]>
+  isUpdating: Accessor<boolean>
   setTree(tree?: TreeNode[]): void
 }
 
 export function createFileDisplay(thisSessionStorage: JournalSessionStorage): IFileDisplayContext {
   const [tree, setTree] = createSignal<TreeNode[]>([])
+  const [isUpdating, setIsUpdating] = createSignal<boolean>(false)
 
   let treeCache = tree()
   let options: IFileDisplayOptions
   const updateTree = async() => {
+    setIsUpdating(true)
     setTree(treeCache)
+    setIsUpdating(false)
     const currentGroup = thisSessionStorage.$get('currentGroup')
     await fetchIt<Partial<IJournalGroupData>>('PATCH', `${JOURNAL_GROUP_ROUTE}?id=${currentGroup.id}`, {
       tree: treeCache
@@ -97,6 +101,7 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage): IF
     add,
     addToRoot,
     tree,
+    isUpdating,
     get options() {
       return options!
     },

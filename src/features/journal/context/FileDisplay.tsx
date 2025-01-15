@@ -1,4 +1,4 @@
-import { createSignal, For } from "solid-js"
+import { createSignal, For, Show } from "solid-js"
 import { setDebugMode, dndzone } from "solid-dnd-directive"
 //                                    ^^^^^^^^^^^^^^^^^^^^^
 // phew, I can finally live in peace with this one, instead of writting my freaking own
@@ -75,6 +75,8 @@ export function FileDisplay() {
   }
   
   return (
-    <RecursivelyRenderItOut stuff={$fileDisplay.tree()} />
+    <Show when={!$fileDisplay.isUpdating()}>
+      <RecursivelyRenderItOut stuff={$fileDisplay.tree()} />
+    </Show>
   )
 }
