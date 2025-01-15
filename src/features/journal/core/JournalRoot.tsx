@@ -1,16 +1,17 @@
 import { useNavigate, useParams } from '@solidjs/router'
 import { onCleanup, onMount, type ParentProps } from 'solid-js'
 // ...
-import { bodyClasslist, fetchIt } from '~/utils'
+import { bodyClasslist } from '~/utils'
 import { Resizable } from '~/components'
 import { ThisEditorProvider } from '~/features/editor'
-import { IClientJournalGroupData, JOURNAL_GROUP_ROUTE } from '~/api/journal'
+import type { IClientJournalGroupData} from '~/api/journal'
 import { toast } from '~/features/toast'
 // ...
 import __style from './stuff.module.css'
 import stylex from '@stylexjs/stylex'
 // ...
 import { JournalProvider, useJournalContext } from '../context'
+import { api_getGroup } from '~/features/home'
 
 const style = stylex.create({
   thisThing: {
@@ -52,7 +53,7 @@ export function JournalRoot(props: ParentProps) {
     onMount(async() => {
       console.log('Starting up:', param.id)
       // Attempt to get the journal group data from the server
-      const data = await fetchIt<IClientJournalGroupData>('GET', `${JOURNAL_GROUP_ROUTE}?id=${param.id}`)
+      const data = await api_getGroup(param.id) as IClientJournalGroupData
       if (!data) {
         return goHomeImmediately()
       }
