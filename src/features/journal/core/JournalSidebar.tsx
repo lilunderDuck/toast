@@ -12,9 +12,7 @@ import {
   ResizableHandle, 
   ResizablePanel
 } from "~/components"
-import { 
-  type JournalApi
-} from "~/api/journal"
+import type { IJournalGroupData } from "~/api/journal"
 // ...
 import { 
   type ISidebarProps,
@@ -49,7 +47,7 @@ export function JournalSidebar() {
     })
   )
 
-  const [thingToDelete, setThingToDelete] = createSignal<JournalApi.IJournalData>()
+  const [thingToDelete, setThingToDelete] = createSignal<IJournalGroupData>()
   const clickingOpenJournal: ISidebarProps["$onClickingOpen"] = (journal) => {
     $journal.$open(journal.id)
     $journal.$setCurrentlyOpened(journal)

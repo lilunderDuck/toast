@@ -1,9 +1,9 @@
 import { createContext, createSignal, useContext, type ParentProps, type Signal } from "solid-js"
-import { JournalApi } from "~/api/journal"
+import type { JournalVituralFileTree } from "~/api/journal"
 
 interface ICreateStuffContext {
   $submitButtonDisabled: Signal<boolean>
-  $selected: Signal<JournalApi.FileType | undefined>
+  $selected: Signal<JournalVituralFileTree.Type | undefined>
 }
 
 const Context = createContext<ICreateStuffContext>()

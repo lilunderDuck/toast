@@ -5,13 +5,9 @@ import { lazy, onCleanup } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import __style from "./JournalGrid.module.css"
 // ...
-import type { JournalApi } from "~/api/journal"
+import type { IJournalGroupData } from "~/api/journal"
 import { Button, ButtonSizeVariant, Flex, Spacer, createLazyLoadedDialog } from "~/components"
 import { BsPencilFill } from "solid-icons/bs"
-
-interface IJournalGridProps extends JournalApi.IGroupData {
-  $onClick: EventHandler<"div", "onClick">
-}
 
 const style = stylex.create({
   grid: {
@@ -28,6 +24,10 @@ const style = stylex.create({
     flexShrink: 0
   }
 })
+
+interface IJournalGridProps extends IJournalGroupData {
+  $onClick: EventHandler<"div", "onClick">
+}
 
 export function JournalGrid(props: IJournalGridProps) {
   const modal = createLazyLoadedDialog(

@@ -1,14 +1,15 @@
-import { JournalApi } from "./stuff"
+import { IJournalGroupData } from "./stuff"
+import { JournalVituralFileTree } from "./vituralFileTree"
 
 export interface ICachedJournalGroupLockFile {
-  [groupId: string]: JournalApi.IGroupData
+  [groupId: string]: IJournalGroupData
 }
 
 export interface ICachedJournalGroupTreeFile {
-  journals: Record<string, JournalApi.Files>
-  tree: JournalApi.IGroupData["tree"]
+  journals: Record<string, JournalVituralFileTree.Data>
+  tree: IJournalGroupData["tree"]
 }
 
-export interface IClientJournalGroupData extends JournalApi.IGroupData {
-  treeMapping: Record<string, JournalApi.Files>
+export interface IClientJournalGroupData extends IJournalGroupData {
+  treeMapping: Record<string, JournalVituralFileTree.Data>
 }

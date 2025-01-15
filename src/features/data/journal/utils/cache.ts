@@ -1,13 +1,13 @@
-import type { JournalApi } from "~/api/journal"
+import type { IJournalData, IJournalGroupData, JournalVituralFileTree } from "~/api/journal"
 import { bson_readFile, bson_writeFile, CACHE_FOLDER, deleteFile } from "~/server"
 
 export interface IJournalGroupLockFile {
-  [groupId: string]: JournalApi.IGroupData
+  [groupId: string]: IJournalData
 }
 
 export interface ICachedJournalGroupContentFile {
-  journals: Record<string, JournalApi.Files>
-  tree: JournalApi.IGroupData["tree"]
+  journals: Record<string, JournalVituralFileTree.Data>
+  tree: IJournalGroupData["tree"]
 }
 
 const buildGroupCacheFileName = (groupId: string) => `${CACHE_FOLDER}/cached-${groupId}-data.dat` as const
@@ -18,7 +18,7 @@ export const groupTreeCache = {
       tree: []
     })
   },
-  async set(groupId: string, data?: JournalApi.IJournalData, tree?: JournalApi.IGroupData["tree"]) {
+  async set(groupId: string, data?: IJournalData, tree?: IJournalGroupData["tree"]) {
     const prevData = await this.get(groupId) ?? {} as ICachedJournalGroupContentFile
     if (data) {
       prevData.journals[data.id] = data
@@ -50,7 +50,7 @@ export const groupLockCache = {
   async getAll() {
     return await bson_readFile<IJournalGroupLockFile>(LOCK_FILE_NAME) ?? {}
   },
-  async set(data: JournalApi.IGroupData) {
+  async set(data: IJournalData) {
     const prevData = await this.getAll()
     prevData[data.id] = data
     await bson_writeFile(LOCK_FILE_NAME, prevData)

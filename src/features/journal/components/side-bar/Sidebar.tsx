@@ -4,7 +4,7 @@ import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 // ...
 import { Divider } from "~/components"
-import type { JournalApi } from "~/api/journal"
+import type { IJournalData } from "~/api/journal"
 import { mergeClassname } from "~/utils"
 // ...
 import { FileDisplay, useJournalContext } from "../../context"
@@ -24,8 +24,8 @@ const style = stylex.create({
 })
 
 export interface ISidebarProps extends HTMLAttributes<"div"> {
-  $onClickingOpen?: (journal: JournalApi.IJournalData) => void
-  $onClickingRemove?: (journal: JournalApi.IJournalData) => void
+  $onClickingOpen?: (journal: IJournalData) => void
+  $onClickingRemove?: (journal: IJournalData) => void
 }
 
 export function Sidebar(props: ISidebarProps) {

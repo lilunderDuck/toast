@@ -1,6 +1,10 @@
 import { validator } from "hono/validator"
 // ...
-import { JOURNAL_ROUTE, JournalApi, journalFormSchema } from "~/api/journal"
+import { 
+  JOURNAL_ROUTE, 
+  type JournalContentData, 
+  journalFormSchema 
+} from "~/api/journal"
 import { duck } from "~/entry-server"
 import { isThisDirectoryExist, validateIfValid } from "~/server"
 import { 
@@ -85,7 +89,7 @@ duck.get(`${JOURNAL_ROUTE}/:groupId/:journalId`, async(context) => {
  * Updates `journalId` data from `groupId`
  */
 duck.patch(`${JOURNAL_ROUTE}/:groupId/:journalId`, validator('json', (value) => {
-  return value as JournalApi.JournalContentData
+  return value as JournalContentData
 }), async(context) => {
   const { groupId, journalId } = context.req.param()
   const data = context.req.valid('json') 

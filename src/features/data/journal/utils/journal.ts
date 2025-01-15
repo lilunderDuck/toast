@@ -1,6 +1,6 @@
 import crypto from "node:crypto"
 // ...
-import type { JournalApi } from "~/api/journal"
+import type { IJournalGroupData, JournalVituralFileTree } from "~/api/journal"
 import { mergeObjects } from "~/common"
 import { bson_readFile, bson_writeFile, deleteFile } from "~/server"
 // ...
@@ -34,7 +34,7 @@ export const journalGroupFs = {
    */
   $readMetaFile(journalGroupId: string) {
     const whereToUpdate = buildJournalGroupPath(journalGroupId)
-    return bson_readFile<JournalApi.IGroupData>(`${whereToUpdate}/${META_FILE_NAME}`)
+    return bson_readFile<IJournalGroupData>(`${whereToUpdate}/${META_FILE_NAME}`)
   },
   /**Writes or updates the metadata file for a specific journal group to disk.
    *
@@ -45,7 +45,7 @@ export const journalGroupFs = {
    */
   async $writeMetaFile(
     journalGroupId: string, 
-    data: Updater<JournalApi.IGroupData>
+    data: Updater<IJournalGroupData>
   ) {
     const whereToUpdate = buildJournalGroupPath(journalGroupId)
     const path = `${whereToUpdate}/${META_FILE_NAME}` as const
@@ -66,7 +66,7 @@ export const journalFs = {
    * @param journalId  The ID of the journal.
    * @returns A `Promise` that resolves to the journal file data or an empty object if the file doesn't exist.
    */
-  async $readFile<T extends JournalApi.Files>(groupId: string, journalId: string) {
+  async $readFile<T extends JournalVituralFileTree.Data>(groupId: string, journalId: string) {
     console.assert(!journalId.includes('.'), 'Journal id should not include a dot, maybe you accidentally put a file name into here?')
     const path = buildJournalPath(groupId, journalId)
     return await bson_readFile<T>(path) ?? {} as T
@@ -77,7 +77,7 @@ export const journalFs = {
    * @param journalId  The ID of the journal.
    * @returns A `Promise` that resolves *nothing* when the write operation is complete.
    */
-  async $writeFile<T extends JournalApi.Files>(groupId: string, journalId: string, data: Updater<T>) {
+  async $writeFile<T extends JournalVituralFileTree.Data>(groupId: string, journalId: string, data: Updater<T>) {
     const path = buildJournalPath(groupId, journalId)
     console.group(`[journal] writing`, path, 'with', data)
     if (typeof data === "function") {

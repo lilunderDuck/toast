@@ -1,7 +1,7 @@
 import { createSignal, type Accessor, type Component } from "solid-js"
 // ...
 import { fetchIt } from "~/utils"
-import { JOURNAL_GROUP_ROUTE, type JournalApi } from "~/api/journal"
+import { type IJournalGroupData, JOURNAL_GROUP_ROUTE } from "~/api/journal"
 // ...
 import { insertBefore, isFolder, type TreeNode } from "../utils"
 import type { JournalSessionStorage } from "./JournalContext"
@@ -32,7 +32,7 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage): IF
   const updateTree = async() => {
     setTree(treeCache)
     const currentGroup = thisSessionStorage.$get('currentGroup')
-    await fetchIt<Partial<JournalApi.IGroupData>>('PATCH', `${JOURNAL_GROUP_ROUTE}?id=${currentGroup.id}`, {
+    await fetchIt<Partial<IJournalGroupData>>('PATCH', `${JOURNAL_GROUP_ROUTE}?id=${currentGroup.id}`, {
       tree: treeCache
     })
     console.log('Tree updated', treeCache)

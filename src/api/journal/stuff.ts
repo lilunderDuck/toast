@@ -2,64 +2,44 @@ import { InferOutput } from "valibot"
 import type { journalCategoryFormSchema, journalFormSchema, journalGroupFormSchema } from "./validate"
 import { OutputBlockData } from "@editorjs/editorjs"
 import { apiRoute } from "~/common"
+import { JournalVituralFileTree } from "./vituralFileTree"
 
-export const JOURNAL_ROUTE = apiRoute('/journal')
-export const JOURNAL_GROUP_ROUTE = apiRoute('/journal-group')
-export const JOURNAL_CONTENT_ROUTE = apiRoute('/journal-content')
+export const JOURNAL_ROUTE = apiRoute('/journal/stuff')
+export const JOURNAL_GROUP_ROUTE = apiRoute('/journal/group')
 
-/**### namespace `JournalApi`
- * A namespace for *only* types related to the Journal API.
+export type JournalGroupSchema = InferOutput<typeof journalGroupFormSchema>
+export type JournalCategorySchema = InferOutput<typeof journalCategoryFormSchema>
+export type JournalSchema = InferOutput<typeof journalFormSchema>
+
+type UniqueId = {
+  id: string
+}
+
+type CreatedAndModifiedDate = {
+  created: Date
+  modified?: Date
+}
+
+export interface IJournalGroupData extends JournalGroupSchema, UniqueId, CreatedAndModifiedDate {
+  tree: JournalVituralFileTree.Tree[]
+  entries: number
+}
+
+export interface IJournalCategoryData extends JournalCategorySchema, UniqueId, CreatedAndModifiedDate {
+  // ...
+}
+
+/**The journal meta data. This does not contain the actural journal content.
+ * @see {@link SavedJournalData}
  */
-export namespace JournalApi {
-  export type Group = InferOutput<typeof journalGroupFormSchema>
-  export type Journal = InferOutput<typeof journalFormSchema>
-  export type Category = InferOutput<typeof journalCategoryFormSchema>
+export interface IJournalMetadata extends JournalSchema, UniqueId, CreatedAndModifiedDate {
+  // ...
+}
 
-  export type UniqueId = {
-    id: string
-  }
+/**The type of the content itself, which is an array of output block data associated with the journal. */
+export type JournalContentData = OutputBlockData[]
 
-  export type CreationAndModifiedDate = {
-    created: Date
-    modified?: Date
-  }
-
-  export type GroupTree = string | {
-    id: string
-    child: GroupTree[]
-  }
-
-  export interface IGroupData extends Group, UniqueId, CreationAndModifiedDate {
-    tree: GroupTree[]
-    entries: number
-  }
-
-  export interface IFetchedGroupData extends IGroupData {
-    treeData: Record<string, IJournalData | ICategoryData>
-  }
-
-  /**The journal meta data. This does not contain the actural journal content.
-   * @see {@link SavedJournalData}
-   */
-  export interface IJournalData extends Journal, UniqueId, CreationAndModifiedDate {
-    // ...
-  }
-  
-  /**The saved journal data that will be stored to the disk */
-  export type SavedJournalData = IJournalData & {
-    /**An array of output block data associated with the journal. */
-    data?: JournalContentData
-  }
-
-  export interface ICategoryData extends Category, UniqueId, CreationAndModifiedDate {
-    // ...
-  }
-
-  /**The type of the content itself, which is an array of output block data associated with the journal. */
-  export type JournalContentData = OutputBlockData[]
-
-  /**A list of files that can be stored */
-  export type Files = SavedJournalData | ICategoryData
-
-  export type FileType = 'journal' | 'category'
+export interface IJournalData extends IJournalMetadata {
+  /**An array of output block data associated with the journal. */
+  data?: JournalContentData
 }

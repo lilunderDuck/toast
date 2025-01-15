@@ -4,9 +4,7 @@ import {
   type SubmitHandler 
 } from "@modular-forms/solid"
 // ...
-import { 
-  type JournalApi,
-} from "~/api/journal"
+import type { JournalSchema } from "~/api/journal"
 import { 
   FieldInput,
   OpenAndCloseButton
@@ -24,11 +22,11 @@ export default function CreateJournalCategoryForm(props: ICreateJournalCategoryF
   const { $submitButtonDisabled, $selected } = useCreateStuffContext()
   const { $journal } = useJournalContext()
 
-  const [_journalGroupForm, { Field, Form }] = createForm<JournalApi.Journal>()
+  const [_journalGroupForm, { Field, Form }] = createForm<JournalSchema>()
   const [submitButtonDisabled, setSubmitButtonDisabled] = $submitButtonDisabled
   const [selected] = $selected
 
-  const submit: SubmitHandler<JournalApi.Journal> = async(data) => {
+  const submit: SubmitHandler<JournalSchema> = async(data) => {
     setSubmitButtonDisabled(true)
     const dataReturned = await toast
       .promise(

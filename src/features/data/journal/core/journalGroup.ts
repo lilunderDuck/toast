@@ -1,6 +1,6 @@
-import { 
+import type { 
   IClientJournalGroupData,
-  type JournalApi
+  IJournalGroupData
 } from "~/api/journal"
 import { 
   createDirectoryIfNotExist, 
@@ -17,15 +17,15 @@ import {
 } from '../utils'
 
 export const journalGroupData = {
-  async $create(data: JournalApi.Group) {
+  async $create(data: IJournalGroupData) {
     console.group('[journal group]\t\t Creating group')
     const journalGroupId = createId()
-    const newData: JournalApi.IGroupData = mergeObjects(data, {
+    const newData: IJournalGroupData = mergeObjects(data, {
       id: journalGroupId,
       created: new Date(),
       tree: [],
       entries: 0,
-    } as Partial<JournalApi.IGroupData>)
+    } as Partial<IJournalGroupData>)
   
     const whereToCreate = buildJournalGroupPath(journalGroupId)
   
@@ -38,10 +38,10 @@ export const journalGroupData = {
     return newData
   },
 
-  async $update(journalGroupId: string, data: Partial<JournalApi.IGroupData>) {
+  async $update(journalGroupId: string, data: Partial<IJournalGroupData>) {
     console.group('[journal group]\t\t Updating group')
     const cache = await groupLockCache.getAll()
-    const newData: JournalApi.IGroupData = mergeObjects(cache[journalGroupId], data, {
+    const newData: IJournalGroupData = mergeObjects(cache[journalGroupId], data, {
       modified: new Date()
     })
     

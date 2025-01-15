@@ -8,8 +8,9 @@ import {
   type IDialog 
 } from "~/components"
 import stylex from '@stylexjs/stylex'
+// ...
 import { useJournalContext } from "~/features/journal"
-import { JournalApi } from "~/api/journal"
+import type { IJournalData } from "~/api/journal"
 
 const style = stylex.create({
   form: {
@@ -22,7 +23,7 @@ const style = stylex.create({
 })
 
 interface IDeleteJournalModalProps extends IDialog {
-  $journal: JournalApi.IJournalData
+  $journal: IJournalData
 }
 
 export default function DeleteJournalModal(props: IDeleteJournalModalProps) {

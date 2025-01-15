@@ -10,7 +10,7 @@ import {
   RadioGroupItem, 
   RadioGroupItemLabel 
 } from "~/components"
-import { JournalApi } from "~/api/journal"
+import type { JournalVituralFileTree } from "~/api/journal"
 // ...
 import { CreateStuffProvider, useCreateStuffContext } from "./CreateStuffProvider"
 import CreateJournalCategoryForm from "./CreateStuffForm"
@@ -50,13 +50,13 @@ function Content(props: ICreateJournalCategoryModalProps) {
   const [, setSubmitButtonDisabled] = $submitButtonDisabled
   const [selected, setSelected] = $selected
 
-  type Stuff = { $name: JournalApi.FileType, $description: string }[]
+  type Stuff = { $name: JournalVituralFileTree.Type, $description: string }[]
   const items: Stuff = [
     { $name: "journal", $description: "Classic diary to write some stuff." },
     { $name: "category", $description: "You can think of it as a folder, well, for more customization." },
   ]
 
-  const thingSelected = (value: JournalApi.FileType) => () => {
+  const thingSelected = (value: JournalVituralFileTree.Type) => () => {
     if (value === selected()) {
       return
     }

@@ -1,8 +1,6 @@
 import { createResource, For, Show } from "solid-js"
 // ...
-import { 
-  type JournalApi 
-} from "~/api/journal"
+import type { IJournalGroupData } from "~/api/journal"
 import { Flex, FlexCenter } from "~/components"
 import { mergeClassname } from "~/utils"
 // ...
@@ -24,7 +22,7 @@ const style = stylex.create({
   }
 })
 
-type OnClickingJournalGroup = (data: JournalApi.IGroupData) => EventHandler<"div", "onClick">
+type OnClickingJournalGroup = (data: IJournalGroupData) => EventHandler<"div", "onClick">
 
 export function JournalList() {
   const { $grid, $event, $infoSidebar } = useJournalHomeContext()

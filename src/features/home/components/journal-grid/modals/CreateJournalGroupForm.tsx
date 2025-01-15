@@ -6,8 +6,9 @@ import {
 import IconInput from "./IconInput"
 // ...
 import { 
+  type IJournalGroupData,
   JOURNAL_GROUP_ROUTE, 
-  type JournalApi
+  type JournalGroupSchema,
 } from "~/api/journal"
 import { fetchIt } from "~/utils"
 import { 
@@ -24,15 +25,15 @@ interface ICreateJournalGroupFormProps {
 }
 
 export default function CreateJournalGroupForm(props: ICreateJournalGroupFormProps) {
-  const [_journalGroupForm, { Field, Form }] = createForm<JournalApi.Group>()
+  const [_journalGroupForm, { Field, Form }] = createForm<JournalGroupSchema>()
   const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
   const { $grid } = useJournalHomeContext()
 
-  const callApi = (data: JournalApi.Group) => {
-    return fetchIt<JournalApi.IGroupData>('POST', JOURNAL_GROUP_ROUTE, data)
+  const callApi = (data: JournalGroupSchema) => {
+    return fetchIt<IJournalGroupData>('POST', JOURNAL_GROUP_ROUTE, data)
   }
 
-  const submit: SubmitHandler<JournalApi.Group> = async(data) => {
+  const submit: SubmitHandler<JournalGroupSchema> = async(data) => {
     setSubmitButtonDisabled(true)
     const dataReturned = await toast
       .promise(callApi(data), {

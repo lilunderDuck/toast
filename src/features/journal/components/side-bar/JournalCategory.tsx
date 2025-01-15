@@ -3,7 +3,7 @@ import { ParentProps } from "solid-js"
 import __style from "./Journal.module.css"
 import stylex from "@stylexjs/stylex"
 // ...
-import { JournalApi } from "~/api/journal"
+import type { IJournalCategoryData } from "~/api/journal"
 import { FlexCenterY } from "~/components"
 import { BsCaretRightFill } from "solid-icons/bs"
 
@@ -36,7 +36,7 @@ const style = stylex.create({
   }
 })
 
-interface IJournalCategoryProps extends JournalApi.ICategoryData {
+interface IJournalCategoryProps extends IJournalCategoryData {
   // ...
 }
 

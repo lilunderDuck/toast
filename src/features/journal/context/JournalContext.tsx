@@ -5,7 +5,7 @@ import {
 } from "solid-js"
 // ...
 import { createEvent, createStorage, type IEvent, type IStorage } from "~/utils"
-import type { JournalApi } from "~/api/journal"
+import type { IJournalGroupData } from "~/api/journal"
 // ...
 import { type JournalEventMap } from "./event"
 import { createJournal, type IThisJournalContext } from "./journal"
@@ -17,7 +17,7 @@ export type JournalLocalStorage = IStorage<{
 }>
 
 export type JournalSessionStorage = IStorage<{
-  currentGroup: JournalApi.IGroupData
+  currentGroup: IJournalGroupData
 }>
 
 interface IJournalContext {

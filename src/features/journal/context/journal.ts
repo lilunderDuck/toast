@@ -4,7 +4,13 @@ import {
   type Setter
 } from "solid-js"
 // ...
-import { type JournalApi } from "~/api/journal"
+import type { 
+  IJournalCategoryData, 
+  IJournalData, 
+  JournalContentData, 
+  JournalSchema, 
+  JournalVituralFileTree 
+} from "~/api/journal"
 import { useThisEditorContext } from "~/features/editor"
 // ...
 import { 
@@ -23,16 +29,16 @@ export interface IThisJournalContext {
   /**Accessor for the currently opened journal data. 
    * Returns the currently opened journal data or undefined if none is open.
    */
-  $currentlyOpened: Accessor<JournalApi.IJournalData | undefined>
+  $currentlyOpened: Accessor<IJournalData | undefined>
   /**Setter for the currently opened journal data. */
-  $setCurrentlyOpened: Setter<JournalApi.IJournalData | undefined>
+  $setCurrentlyOpened: Setter<IJournalData | undefined>
   // ...
   /**Creates a new journal.
    * @param data The initial data for the new journal.
    * @param type The type of the journal file.
    * @returns A promise that resolves to the created journal data.
    */
-  $create(data: JournalApi.Journal, type: JournalApi.FileType): Promise<JournalApi.IJournalData>
+  $create(data: JournalSchema, type: JournalVituralFileTree.Type): Promise<IJournalData>
   /**Deletes a journal.
    * @param journalId The ID of the journal to delete.
    * @returns A promise that resolves when the journal is deleted.
@@ -46,14 +52,14 @@ export interface IThisJournalContext {
   /**Gets all journals.
    * @returns A promise that resolves to an array of journal data.
    */
-  $getAll(): Promise<JournalApi.IJournalData[]>
+  $getAll(): Promise<IJournalData[]>
   /**Saves changes to a journal.
    * @param journalId The ID of the journal to save.
    * @param data The new data for the journal.
    * @returns A promise that resolves to an empty object or null.
    */
-  $save(journalId: string, data: JournalApi.JournalContentData): Promise<{} | null>
-  $cache: Map<string, JournalApi.IJournalData | JournalApi.ICategoryData>
+  $save(journalId: string, data: JournalContentData): Promise<{} | null>
+  $cache: Map<string, IJournalData | IJournalCategoryData>
 }
 
 export function createJournal(
@@ -64,7 +70,7 @@ export function createJournal(
   const { $cache, $open } = useThisEditorContext()
   let journalCache = new Map()
 
-  const [$currentlyOpened, $setCurrentlyOpened] = createSignal<JournalApi.IJournalData>()
+  const [$currentlyOpened, $setCurrentlyOpened] = createSignal<IJournalData>()
 
   const getCurrentJournalGroupId = () => {
     const currentGroupId = thisSessionStorage.$get('currentGroup')?.id
