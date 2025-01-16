@@ -51,7 +51,6 @@ export function SidebarButtonsRow() {
   return (
     <FlexCenterY {...stylex.attrs(style.buttonsRow)}>
       <ButtonItem 
-        editor-tour-create-journal-button
         onClick={createStuffModal.$show}
         $icon={BsPlus}
         $label={'New journal'}

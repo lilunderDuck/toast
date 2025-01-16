@@ -16,7 +16,6 @@
     "@hono/node-server": "^1.13.3",
     "@kobalte/core": "^0.13.6",
     "@modular-forms/solid": "^0.23.0",
-    "@sjmc11/tourguidejs": "^0.0.17",
     "@solid-primitives/refs": "^1.0.8",
     "@solidjs/router": "^0.14.7",
     "@soorria/solid-dropzone": "^1.0.1",

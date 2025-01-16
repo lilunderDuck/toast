@@ -1,5 +1,9 @@
 import stylex from "@stylexjs/stylex"
-import { Button, ButtonSizeVariant, FlexCenter } from "~/components"
+// ...
+import { FlexCenter } from "~/components"
+// ...
+import Step from "./Step"
+import { BsHouseFill, BsPencilFill, BsPlus } from "solid-icons/bs"
 
 const style = stylex.create({
   welcome: {
@@ -7,27 +11,30 @@ const style = stylex.create({
     height: '100%',
     userSelect: 'none',
     backgroundColor: 'var(--gray2)',
+    flexFlow: 'column',
     // ahh, good ol' position trick to center a <div>
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    marginTop: 30
+    marginTop: 30,
+  },
+  stepList: {
+    marginTop: 15
   }
 })
 
 export function EditorWelcome() {
-  const walkthourgh = async() => {
-    
-  }
-
   return (
     <FlexCenter {...stylex.attrs(style.welcome)}>
       <h3>You just landed</h3>
       <div>
-        <Button $size={ButtonSizeVariant.sm} onClick={walkthourgh}>
-          I want a walkthourgh
-        </Button>
+        Currently there's nothing here... but here's a few thing you can do:
+        <div {...stylex.attrs(style.stepList)}>
+          <Step $icon={BsPlus} $stuff='Create new journal' />
+          <Step $icon={BsPencilFill} $stuff='Edit existing journal' />
+          <Step $icon={BsHouseFill} $stuff='Go back to home' />
+        </div>
       </div>
     </FlexCenter>
   )

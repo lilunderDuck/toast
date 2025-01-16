@@ -4,7 +4,8 @@ import { fetchIt } from "~/utils"
 type Group<T extends string | undefined> = T extends undefined ? IJournalGroupData[] : IJournalGroupData
 
 export async function api_getGroup<T extends string | undefined>(id?: T): Promise<Group<T>> {
-  return await fetchIt('GET', `${JOURNAL_GROUP_ROUTE}/${id ?? ''}`) as Group<T>
+  const route = `${JOURNAL_GROUP_ROUTE}${id ? '/' : ''}${id ?? ''}` as const
+  return await fetchIt('GET', route) as Group<T>
 }
 
 export async function api_createGroup(data: JournalGroupSchema) {

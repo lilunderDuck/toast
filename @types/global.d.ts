@@ -31,6 +31,8 @@ declare global {
   > =
     HTMLAttributes<ElementName>[EventName]
   // ...
+
+  type Ref<ElementName extends keyof HTMLElementTagNameMap> = HTMLElementTagNameMap[ElementName]
   
   /**A type representing any function, regardless of its parameters or return type. */
   type AnyFunction = (...anything: any[]) => any
