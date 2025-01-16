@@ -5,7 +5,7 @@ import type { IServerResourceUsage } from "~/api/misc"
 import stylex from "@stylexjs/stylex"
 // ...
 import MemorySlider from "./MemorySlider"
-import { getServerUsages } from "../../utils"
+import { api_getServerUsages } from "../../utils"
 
 const style = stylex.create({
   percentage: {
@@ -35,7 +35,7 @@ export function MemoryUsage() {
 
   onMount(() => {
     timer = setInterval(async() => {
-      setUsage(await getServerUsages())
+      setUsage(await api_getServerUsages())
     }, 1500)
   })
 

@@ -9,3 +9,5 @@ logs
 *.config.ts.timestamp-*.mjs
 
 *.exe.tmp-*
+
+src/public/*.generated.json

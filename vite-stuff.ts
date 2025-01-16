@@ -2,9 +2,12 @@ import path from 'node:path'
 // ...
 import { 
   type ESBuildOptions, 
-  type InlineConfig 
+  type InlineConfig,
+  type BuildOptions
 } from "vite"
 import type this_tsconfig from './tsconfig.json'
+
+type RollupOptions = NonNullable<BuildOptions["rollupOptions"]>
 
 /**Extracts and resolves aliases from a TypeScript configuration file (`tsconfig.json`).
  * ```
@@ -53,7 +56,7 @@ export function getEsbuildConfig(devMode: boolean, others?: ESBuildOptions): Inl
         "__devMode": `${devMode}`,
         "__version": `"1.0.0-beta"`,
         "__apiVersion": `"1.0.0-beta"`,
-        "__backendVersion": `"node-${process.version}"`,
+        "__backendVersion": `"${`deno-${Deno.version.deno}, ts-${Deno.version.typescript}, v8-${Deno.version.v8}`}"`,
       },
       // drop "console.(something)" call and "debugger" on production
       // ...(devMode ? {/* nothing here... */} : {
@@ -68,7 +71,7 @@ export const OUTPUT_DIRECTORY = BASE_OUTPUT_DIRECTORY
 export const SERVER_OUTPUT_DIRECTORY = `${BASE_OUTPUT_DIRECTORY}/server`
 export const CLIENT_OUTPUT_DIRECTORY = `${BASE_OUTPUT_DIRECTORY}/server/resource`
 
-export const outPutFilenameConfig = {
+export const outPutFilenameConfig: RollupOptions["output"] = {
   chunkFileNames: `[hash].js`,
   entryFileNames: "[hash].js",
   assetFileNames: "assets/[hash].[ext]",

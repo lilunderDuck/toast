@@ -1,5 +1,11 @@
 import { createSignal } from "solid-js"
-import { TooTechnicalPageRoot, LibarySearchBox, MemoryUsage, Versions } from "~/features/technical"
+import { 
+  TooTechnicalPageRoot, 
+  LibarySearchBox, 
+  MemoryUsage, 
+  Versions, 
+  LibaryUsedList 
+} from "~/features/technical"
 
 export default function TooTechnicalPage() {
   const [value, setValue] = createSignal<string>()
@@ -7,7 +13,7 @@ export default function TooTechnicalPage() {
   return (
     <TooTechnicalPageRoot>
       <h1>Hello world!</h1>
-      <span>This is where you can explore the *technical part* of this app, a bunch of stuff smash into one place</span>
+      <span>This is where you can explore the *technical part* of this app, a bunch of stuff smash into one place.</span>
       <section>
         <h2>App versions</h2>
         <Versions />
@@ -24,6 +30,7 @@ export default function TooTechnicalPage() {
           $value={value}
           $onSelect={setValue}
         />
+        <LibaryUsedList />
       </section>
       <section>
         <h2>Resource usage</h2>

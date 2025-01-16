@@ -1,14 +1,10 @@
-import { Accessor, For, Setter } from "solid-js"
+import { Accessor, Setter } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 // ...
 import { FlexCenterY, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components"
-import { mergeClassname } from "~/utils"
 // ...
-import { solid_icon } from "../../assets"
-import libraries from "../../data/libraries.json"
-import LibaryUsedBox from "./LibaryUsedBox"
 
 const style = stylex.create({
   page: {
@@ -16,10 +12,6 @@ const style = stylex.create({
     paddingTop: 10,
     width: '100%',
     height: '100%'
-  },
-  libList: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr'
   },
   heading: {
     gap: 15
@@ -59,21 +51,6 @@ export function LibarySearchBox(props: ILibarySearchBoxProps) {
           <SelectContent />
         </Select>
       </FlexCenterY>
-      <div class={mergeClassname(
-        __scrollbarStyle.scrollbar, 
-        __scrollbarStyle.scrollbarVertical,
-        stylex.attrs(style.libList)
-      )}>
-        <For each={libraries}>
-          {it => (
-            <LibaryUsedBox 
-              {...it} 
-              url={it.homepageUrl}
-              iconUrl={it.name.includes('solid') ? solid_icon : ''} 
-            />
-          )}
-        </For>
-      </div>
     </>
   )
 }

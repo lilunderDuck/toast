@@ -11,10 +11,9 @@ type OverSimpifiedNpmRegistryData = {
   tags: string[]
 }
 
-const stuff: OverSimpifiedNpmRegistryData[] = []
-const otherStuff: OverSimpifiedNpmRegistryData[] = []
 async function fetchNpmRegistry(packageName: string, packageVersion: string, out: OverSimpifiedNpmRegistryData[]) {
   try {
+    console.log('Fetching', packageName)
     const response = await fetch(`https://registry.npmjs.org/${encodeUrl(packageName)}`)
     const metadata: NpmRegistryResponse = await response.json()
 
@@ -31,17 +30,21 @@ async function fetchNpmRegistry(packageName: string, packageVersion: string, out
   }
 }
 
-for (const [packageName, packageVersion] of Object.entries(packageJson.dependencies)) {
-  await fetchNpmRegistry(packageName, packageVersion, stuff)
-}
+/**Fetch all package informations inside `package.json`, both of the `dependencies` and `devDependencies`.
+ * 
+ * Before you scream at me, this function is poorly optimized.
+ * @returns all package informations.
+ */
+export async function fetchNpmData() {
+  const stuff: OverSimpifiedNpmRegistryData[] = []
+  const things = [
+    ...Object.entries(packageJson.dependencies),
+    ...Object.entries(packageJson.devDependencies)
+  ]
+  
+  for (const [packageName, packageVersion] of things) {
+    await fetchNpmRegistry(packageName, packageVersion, stuff)
+  }
 
-for (const [packageName, packageVersion] of Object.entries(packageJson.devDependencies)) {
-  await fetchNpmRegistry(packageName, packageVersion, otherStuff)
+  return stuff
 }
-
-const encoder = new TextEncoder()
-const data = encoder.encode(JSON.stringify({
-  deps: stuff,
-  devDeps: otherStuff
-}))
-Deno.writeFile('./generated.json', data)

@@ -10,7 +10,7 @@ import {
   getAliasPath, 
   CLIENT_OUTPUT_DIRECTORY, 
   OUTPUT_DIRECTORY, 
-  outPutFilenameConfig 
+  outPutFilenameConfig
 } from './vite-stuff'
 import tsconfig from './tsconfig.json'
 
@@ -46,7 +46,7 @@ const config = (devMode: boolean): InlineConfig => ({
     rollupOptions: {
       output: rollupOutputOptions
     }
-  },
+  }
 })
 
 // https://vitejs.dev/config/

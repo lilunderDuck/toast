@@ -6,7 +6,7 @@ import {
   getEsbuildConfig, 
   getAliasPath, 
   OUTPUT_DIRECTORY, 
-  SERVER_OUTPUT_DIRECTORY 
+  SERVER_OUTPUT_DIRECTORY
 } from './vite-stuff'
 import tsconfig from './tsconfig.json'
 
@@ -18,7 +18,6 @@ const config = (devMode: boolean): InlineConfig => ({
       appPath: './src/entry-server.ts',
     }),
   ],
-  publicDir: false,
   resolve: {
     alias: getAliasPath(tsconfig, __dirname)
   },
@@ -30,7 +29,6 @@ const config = (devMode: boolean): InlineConfig => ({
     target: 'node',
     noExternal: [
       "bson",
-      "@hono/node-server",
       "hono"
     ],
   },
@@ -43,7 +41,7 @@ const config = (devMode: boolean): InlineConfig => ({
     rollupOptions: {
       treeshake: true
     }
-  },
+  }
 })
 
 // https://vitejs.dev/config/
