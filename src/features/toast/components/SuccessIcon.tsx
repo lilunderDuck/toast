@@ -1,14 +1,20 @@
-import type { Component } from 'solid-js'
+import stylex from '@stylexjs/stylex'
 import { 
   genSVGCubicBezier, 
   type IconProps 
 } from '../util'
 import { MainCircle, SecondaryCircle } from './IconCircle'
 
-export const Success: Component<IconProps> = (props: IconProps) => {
+const style = stylex.create({
+  success: {
+    overflow: 'visible'
+  }
+})
+
+export function Success(props: IconProps) {
   const fill = props.primary || '#34C759';
   return (
-    <svg style={{ overflow: 'visible' }} viewBox="0 0 32 32" width="1.25rem" height="1.25rem">
+    <svg {...stylex.attrs(style.success)} viewBox="0 0 32 32" width="1.25rem" height="1.25rem">
       <MainCircle fill={fill} />
       <SecondaryCircle fill={fill} begin="350ms" />
       <path

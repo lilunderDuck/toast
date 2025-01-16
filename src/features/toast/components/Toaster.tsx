@@ -27,7 +27,7 @@ const style = stylex.create({
 export function Toaster(props: IToasterProps) {
   createEffect(() => {
     mergeContainerOptions(props)
-  });
+  })
 
   createEffect(() => {
     const timers = createTimers()

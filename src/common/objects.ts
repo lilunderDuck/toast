@@ -1,4 +1,4 @@
-export function mergeObjects<T extends object[]>(...things: T) {
+export function mergeObjects<T extends (object | undefined)[]>(...things: T) {
   return Object.assign({}, ...things)
 }
 

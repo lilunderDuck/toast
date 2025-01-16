@@ -40,7 +40,7 @@ export class LinkBlock {
 
   constructor(protected options: LinkToolClass) {}
 
-  protected $input!: HTMLInputElement
+  protected $input!: Ref<"input">
   protected $dispose!: () => void
   render() {
     const [element, dispose] = createSolidRenderer(() => (

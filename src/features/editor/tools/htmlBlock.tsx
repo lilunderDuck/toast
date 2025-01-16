@@ -43,7 +43,7 @@ export class HtmlBlock {
   
   constructor(protected options: HtmlToolClass) {}
 
-  protected $textarea!: HTMLTextAreaElement
+  protected $textarea!: Ref<"textarea">
   protected $dispose!: () => void
   render() {
     // I don't know how to add the "block will be deleted if block is empty" functionality

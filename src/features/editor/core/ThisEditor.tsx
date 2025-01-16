@@ -28,7 +28,7 @@ const style = stylex.create({
  * @see {@link useThisEditorContext}
  */
 export function ThisEditor(props: ParentProps<{ class?: string }>) {
-  let editorLocationRef!: HTMLDivElement
+  let editorLocationRef!: Ref<"div">
   const editor = useThisEditorContext()
   
   onMount(() => {

@@ -1,4 +1,7 @@
 import { createMemo, onMount, Component } from 'solid-js'
+// ...
+import { mergeClassname } from '~/utils'
+// ...
 import { defaultToastOptions, dispatch } from '../util'
 import { 
   getToastWrapperStyles, 
@@ -15,14 +18,17 @@ export const ToastContainer: Component<ToastContainerProps> = (props) => {
   const calculatePosition = () => {
     const position = props.toast.position || defaultToastOptions.position
     const offset = getWrapperYAxisOffset(props.toast, position)
-    const positionStyle = getToastWrapperStyles(position, offset)
+    const positionStyle = getToastWrapperStyles(position)
 
-    return positionStyle
+    return {
+      class: positionStyle.class,
+      offset
+    }
   }
 
   const positionStyle = createMemo(() => calculatePosition())
 
-  let el: HTMLDivElement | undefined = undefined
+  let el!: Ref<"div">
   onMount(() => {
     if (el) {
       updateToastHeight(el, props.toast)
@@ -32,8 +38,13 @@ export const ToastContainer: Component<ToastContainerProps> = (props) => {
   return (
     <div
       ref={el}
-      style={positionStyle()}
-      class={props.toast.visible ? __style['sldt-active'] : ''}
+      style={{
+        '--offset': positionStyle().offset
+      }}
+      class={mergeClassname(
+        props.toast.visible ? __style['sldt-active'] : '',
+        positionStyle()
+      )}
       onMouseEnter={() =>
         dispatch({
           type: ActionType.START_PAUSE,

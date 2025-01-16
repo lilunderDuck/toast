@@ -1,6 +1,7 @@
 import type stylex from "@stylexjs/stylex"
 
-export type StylexAttrs = ReturnType<typeof stylex.attrs>
+/**Just the return type of `stylex.attrs` */
+export type StylexStylesAttribute = ReturnType<typeof stylex.attrs>
 
 type HasClassInIt = { class?: string }
 
@@ -82,3 +83,5 @@ export function inlineCssVar(cssVar: Record<string, string>) {
 export function bodyClasslist() {
   return document.body.classList
 }
+
+export const NO_STYLE = {}

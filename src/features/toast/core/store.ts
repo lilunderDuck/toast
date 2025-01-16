@@ -1,5 +1,5 @@
-import { Action, ActionType, type State } from '../store'
-import type { Toast } from '../toast'
+import { Action, ActionType, type State } from '../util/store'
+import type { Toast } from '../util/toast'
 import { createStore, produce as p } from 'solid-js/store'
 
 const [store, setStore] = createStore<State>({

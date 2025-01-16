@@ -32,6 +32,9 @@ declare global {
     HTMLAttributes<ElementName>[EventName]
   // ...
 
+  /**A type representing an reference to a DOM element 
+   * @template ElementName the html element name, example: `'div'` 
+   */
   type Ref<ElementName extends keyof HTMLElementTagNameMap> = HTMLElementTagNameMap[ElementName]
   
   /**A type representing any function, regardless of its parameters or return type. */

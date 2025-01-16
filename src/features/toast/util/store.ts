@@ -1,6 +1,6 @@
 import { Toast } from './toast';
 
-export enum ActionType {
+export const enum ActionType {
   ADD_TOAST,
   UPDATE_TOAST,
   UPSERT_TOAST,
@@ -39,7 +39,7 @@ export type Action =
       type: ActionType.END_PAUSE;
       time: number;
     };
-
+// ...
 export interface State {
   toasts: Toast[];
   pausedAt: number | undefined;

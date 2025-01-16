@@ -31,11 +31,6 @@ export interface Toast {
   paused: boolean;
   position?: ToastPosition;
 
-  ariaProps: {
-    role: 'status' | 'alert';
-    'aria-live': 'assertive' | 'off' | 'polite';
-  };
-
   style?: JSX.CSSProperties;
   class?: string;
 
@@ -51,7 +46,7 @@ export interface Toast {
 export type ToastOptions = Partial<
   Pick<
     Toast,
-    'id' | 'icon' | 'duration' | 'ariaProps' | 'class' | 'style' | 'position' | 'unmountDelay' | 'iconTheme'
+    'id' | 'icon' | 'duration' | 'class' | 'style' | 'position' | 'unmountDelay' | 'iconTheme'
   >
 >
 
