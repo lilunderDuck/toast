@@ -6,3 +6,5 @@ export type OverSimpifiedNpmRegistryData = {
   homepageUrl: string
   tags: string[]
 }
+
+export type LibaryUsedData = OverSimpifiedNpmRegistryData[]

@@ -5,11 +5,11 @@ import { FlexCenter, FlexCenterX } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./SplashScreen.module.css"
+import cat_jumping from "../assets/cat_jumping.gif"
 // ...
 import SplashText from "./SplashText"
 import SplashProgressBar from "./SplashProgressBar"
-import SplashInfoText from "./SplashInfoText"
-import cat_jumping from "../assets/cat_jumping.gif"
+
 
 const fadeIn = stylex.keyframes({
   from: {
@@ -47,6 +47,13 @@ const style = stylex.create({
     height: '20rem',
     background: 'center center no-repeat var(--bg)',
     backgroundSize: 'contain'
+  },
+  splashInfoText: {
+    position: 'absolute',
+    width: '100%',
+    paddingTop: 5,
+    paddingLeft: 10,
+    fontSize: 14
   }
 })
 
@@ -79,9 +86,9 @@ export namespace SplashScreen {
                 '--bg': `url('${cat_jumping}')`
               }} />
             </FlexCenter>
-            <SplashInfoText>
+            <div {...stylex.attrs(style.splashInfoText)}>
               {text()}
-            </SplashInfoText>
+            </div>
             <SplashText {...stylex.attrs(style.text)} />
           </FlexCenterX>
         </Show>

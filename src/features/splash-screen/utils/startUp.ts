@@ -2,7 +2,6 @@ import { SplashScreen } from "../components"
 import { sleep } from "~/utils"
 
 export async function fetchStuffFromServer() {
-  let journalGroups
   const checkList = [
     {
       msg: 'Lift off!',
@@ -30,9 +29,6 @@ export async function fetchStuffFromServer() {
   
   await sleep(1000)
   await tasking(0)
-  
-  // just in case I messed up something... 
-  console.assert(journalGroups !== null, "journal group should not return null, if there's none, return an empty array instead...")
 
   console.timeEnd('[make toast] fetching finished')
 }

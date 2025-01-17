@@ -2,20 +2,23 @@ import { Buffer } from 'node:buffer'
 import { BSON } from "bson"
 // ...
 import { writeFile, readFile } from './fs'
+import { internalCache } from '../internals'
 
-const cache = new Map()
+const bson_key = (path: string) => `bson-${path}` as const
+
 export async function bson_writeFile<T extends {}>(somePath: string, someData: T) {
   console.log("[bson]\t\t writing", somePath, 'with', JSON.stringify(someData))
   await writeFile(somePath, bson_serialize(someData))
 
   console.log("[bson]\t\t cached data saved")
-  cache.set(somePath, someData)
+  internalCache.set(bson_key(somePath), someData)
 }
 
 export async function bson_readFile<T>(somePath: string): Promise<T | null> {
   console.log("[bson]\t\t reading", somePath)
+  const key = bson_key(somePath)
   // check if we already saved the data in memory, if so, just return it.
-  const cachedData = cache.get(somePath)
+  const cachedData = internalCache.get(key)
   if (cachedData) {
     console.log("[bson]\t\t data read from cache", cachedData)
     return cachedData
@@ -33,7 +36,7 @@ export async function bson_readFile<T>(somePath: string): Promise<T | null> {
   console.log("[bson]\t\t data", JSON.stringify(json))
 
   // make sure to save to cache too, for faster read operation
-  cache.set(somePath, json)
+  internalCache.set(key, json)
   return json
 }
 

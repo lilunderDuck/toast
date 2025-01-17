@@ -1,8 +1,7 @@
 import stylex from "@stylexjs/stylex"
-import { fetchIt, mergeClassname } from "~/utils"
-// you can't stop me adding silly loading text
+import { mergeClassname } from "~/utils"
 import { createSignal, onMount } from "solid-js"
-import { apiRoute } from "~/common"
+import { api_getSplashText } from "../utils"
 
 const style = stylex.create({
   text: {
@@ -15,7 +14,7 @@ const style = stylex.create({
 export default function SplashText(props: HTMLAttributes<"span">) {
   const [text, setText] = createSignal('')
   onMount(async() => {
-    const text = await fetchIt<{ text: string }>('GET', apiRoute('/splash-text'))
+    const text = await api_getSplashText()
     setText(text?.text!)
   })
   

@@ -1,4 +1,4 @@
-import { SPLASH_TEXT_ROUTE } from "~/api/misc"
+import { SPLASH_TEXT_ROUTE, type SplashTextData } from "~/api/misc"
 import { duck } from "~/entry-server"
 import { getSplashTextRandomly } from "~/features/data/misc"
 
@@ -7,5 +7,5 @@ duck.get(SPLASH_TEXT_ROUTE, async(context) => {
   
   return context.json({
     text
-  }, 200)
+  } as SplashTextData, 200)
 })

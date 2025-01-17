@@ -38,9 +38,13 @@ try {
 // save the file, so later on when you run this script
 // it won't need to rebuild the file again.
 // you really don't want to wait 1 minute each time you start up/build the server.
-await Deno.writeFile(LIBARY_USED_FILE_PATH, encoder.encode(
-  JSON.stringify(outputData)
-))
+try {
+  await Deno.writeFile(LIBARY_USED_FILE_PATH, encoder.encode(
+    JSON.stringify(outputData)
+  ))
+} catch(error) {
+  // file already exist
+}
 
 const createDirectory = Deno.mkdir
 try {
@@ -51,7 +55,11 @@ try {
 }
 
 // make sure to copy all of the thing to the built output directory
-await copyDirectory('./src/public', SERVER_OUTPUT_DIRECTORY)
+try {
+  await copyDirectory('./src/public', SERVER_OUTPUT_DIRECTORY)
+} catch (error) {
+  // ...
+}
 
 console.log('done')
 export {} // suppress error
