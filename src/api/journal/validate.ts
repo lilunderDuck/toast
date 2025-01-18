@@ -1,4 +1,5 @@
 import {
+  type InferOutput,
   object,
   optional,
   string,
@@ -18,3 +19,6 @@ export const journalCategoryFormSchema = object({
   name: string(),
 })
 
+export type JournalGroupSchema = InferOutput<typeof journalGroupFormSchema>
+export type JournalCategorySchema = InferOutput<typeof journalCategoryFormSchema>
+export type JournalSchema = InferOutput<typeof journalFormSchema>

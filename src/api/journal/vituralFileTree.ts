@@ -1,4 +1,4 @@
-import { IJournalCategoryData } from "./stuff"
+import type { IJournalCategoryData, IJournalData } from "./stuff"
 
 export namespace JournalVituralFileTree {
   export type Tree = string | {
@@ -7,7 +7,10 @@ export namespace JournalVituralFileTree {
   }
 
   /**A list of file datas that can be stored */
-  export type Data = IJournalCategoryData | IJournalCategoryData
+  export type Data = IJournalData | IJournalCategoryData 
+}
 
-  export type Type = 'journal' | 'category'
+export const enum JournalFileType {
+  journal,
+  category
 }

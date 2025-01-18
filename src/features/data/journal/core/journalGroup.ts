@@ -4,69 +4,69 @@ import type {
   JournalGroupSchema
 } from "~/api/journal"
 import { 
-  createDirectoryIfNotExist, 
   isThisDirectoryExist
 } from "~/server"
 import { mergeObjects } from '~/common'
 // ...
 import { 
-  buildJournalGroupPath, 
-  journalGroupFs,
-  groupLockCache,
+  buildJournalGroupPath,
   createId,
-  groupTreeCache
 } from '../utils'
+import { journalGroupCache, journalGroupFileHandler } from "../handlers"
+import { journalGroupTreeCache } from "../cache"
 
 export const journalGroupData = {
   async $create(data: JournalGroupSchema) {
-    console.group('[journal group]\t\t Creating group')
-    const journalGroupId = createId()
+    const groupId = createId()
     const newData: IJournalGroupData = mergeObjects(data, {
-      id: journalGroupId,
+      id: groupId,
       created: new Date(),
       tree: [],
       entries: 0,
     } as Partial<IJournalGroupData>)
   
-    const whereToCreate = buildJournalGroupPath(journalGroupId)
-  
-    await createDirectoryIfNotExist(whereToCreate)
-    await journalGroupFs.$writeMetaFile(journalGroupId, newData)
-    await groupLockCache.set(newData)
-    await groupTreeCache.create(journalGroupId)
+    await journalGroupFileHandler.create$(groupId)
+    await journalGroupFileHandler.write$(groupId, newData)
+    await journalGroupCache.set$(groupId, newData)
+    await journalGroupTreeCache.create(groupId)
 
-    console.groupEnd()
     return newData
   },
 
-  async $update(journalGroupId: string, data: Partial<IJournalGroupData>) {
-    console.group('[journal group]\t\t Updating group')
-    const cache = await groupLockCache.getAll()
-    const newData: IJournalGroupData = mergeObjects(cache[journalGroupId], data, {
+  async $update(groupId: string, data: Partial<IJournalGroupData>) {
+    const cacheData = await journalGroupCache.get$(groupId)
+    const newData: IJournalGroupData = mergeObjects(cacheData, data, {
       modified: new Date()
     })
     
-    await journalGroupFs.$writeMetaFile(journalGroupId, () => newData)
-    await groupLockCache.set(newData)
+    await journalGroupFileHandler.write$(groupId, () => newData)
+
     if (data.tree) {
-      await groupTreeCache.set(journalGroupId, undefined, data.tree)
+      await journalGroupTreeCache.set(groupId, undefined, data.tree)
     }
 
-    console.groupEnd()
     return newData
   },
 
   async $getAll() {
-    return Object.values(await groupLockCache.getAll())
+    return Object.values(await journalGroupCache.getAll$())
   },
   
   async $get(id: string) {
-    const data = (await groupLockCache.getAll())[id] as IClientJournalGroupData
-    data.treeMapping = (await groupTreeCache.get(id))!.journals
+    const allData = await journalGroupCache.getAll$()
+    const data = allData[id] as IClientJournalGroupData
+    data.treeMapping = (await journalGroupTreeCache.get(id))!.journals
     return data
   },
+
+  // await journalGroupCache.remove$(groupId)
   
-  $isExist(journalGroupId: string) {
-    return isThisDirectoryExist(buildJournalGroupPath(journalGroupId))
+  async $isExist(groupId: string) {
+    const isExistInCache = !!(await journalGroupCache.get$(groupId))
+    if (!isExistInCache) {
+      return await isThisDirectoryExist(buildJournalGroupPath(groupId))
+    }
+
+    return isExistInCache
   }
 }

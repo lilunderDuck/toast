@@ -76,25 +76,22 @@ export async function createDirectoryIfNotExist<
 >(filePath: T) {
   console.log('[files]\t\t creating', filePath, 'if it\'s not exist')
   if (!await isThisDirectoryExist(filePath)) {
-    console.log('[files]\t\t | creating a new one')
     return await fs.mkdir(filePath, {
       recursive: true
     })
   }
-
-  console.log('[files]\t\t we don\'t need to create', filePath)
 }
 
 export async function isThisDirectoryExist<
   const T extends string
 >(filePath: T) {
+  console.log('[files]\t\t checking', filePath, 'if it\'s exist or not')
   try {
-    console.log(`[files]\t\t instant check: check ${filePath} is exist or not`)
     await fs.access(filePath, fs.constants.F_OK)
-    console.log(`[files]\t\t | okay: looking good`)
+    console.log('[files]\t\t it did exist')
     return true
   } catch(error) {
-    console.log('[files]\t\t | well, it does not exist')
+    console.log('[files]\t\t nope!')
     return false
   }
 }
@@ -104,9 +101,7 @@ export async function deleteDirectory<
 >(filePath: T) {
   try {
     await fs.unlink(filePath)
-  } catch (e) {
-    console.log('[files]\t\t |', e)
-  }
+  } catch (e) {}
 }
 
 export function getEverythingFromDir<const T extends string>(filePath: T, recursive?: boolean) {
