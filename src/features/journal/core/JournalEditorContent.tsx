@@ -34,13 +34,21 @@ export function JournalEditorContent() {
   const { $journal } = useJournalContext()
   const { $event } = useThisEditorContext()
 
+  const shouldSave = () => {
+    return $journal.$currentlyOpened() !== undefined
+  }
+
   $event.$on('editor__onSwitching', async(previousData) => {
+    if (!shouldSave()) return console.log('not open anything')
+
     if (previousData) {
       await $journal.$save(previousData.id, previousData.content)
     }
   })
 
   $event.$on('editor__onUpdate', async(data) => {
+    if (!shouldSave()) return console.log('not open anything')
+    
     await $journal.$save(data.id, data.content)
   })
 

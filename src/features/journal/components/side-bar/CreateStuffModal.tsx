@@ -10,7 +10,7 @@ import {
   RadioGroupItem, 
   RadioGroupItemLabel 
 } from "~/components"
-import type { JournalVituralFileTree } from "~/api/journal"
+import { JournalFileType } from "~/api/journal"
 // ...
 import { CreateStuffProvider, useCreateStuffContext } from "./CreateStuffProvider"
 import CreateJournalCategoryForm from "./CreateStuffForm"
@@ -50,13 +50,13 @@ function Content(props: ICreateJournalCategoryModalProps) {
   const [, setSubmitButtonDisabled] = $submitButtonDisabled
   const [selected, setSelected] = $selected
 
-  type Stuff = { $name: JournalVituralFileTree.Type, $description: string }[]
+  type Stuff = { $name: string, $description: string, $type: JournalFileType }[]
   const items: Stuff = [
-    { $name: "journal", $description: "Classic diary to write some stuff." },
-    { $name: "category", $description: "You can think of it as a folder, well, for more customization." },
+    { $name: "journal", $type: JournalFileType.journal, $description: "Classic diary to write some stuff." },
+    { $name: "category", $type: JournalFileType.category, $description: "You can think of it as a folder, well, for more customization." },
   ]
 
-  const thingSelected = (value: JournalVituralFileTree.Type) => () => {
+  const thingSelected = (value: JournalFileType) => () => {
     if (value === selected()) {
       return
     }
@@ -71,7 +71,7 @@ function Content(props: ICreateJournalCategoryModalProps) {
       <RadioGroup {...stylex.attrs(style.radioGroup)}>
         <For each={items}>
           {(it) => (
-            <RadioGroupItem value={it.$name} onClick={thingSelected(it.$name)}>
+            <RadioGroupItem value={it.$name} onClick={thingSelected(it.$type)}>
               <RadioGroupItemLabel>
                 <div>{it.$name}</div>
                 <div {...stylex.attrs(style.description)}>{it.$description}</div>

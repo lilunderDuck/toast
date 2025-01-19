@@ -4,12 +4,12 @@ import {
   type Setter
 } from "solid-js"
 // ...
-import type { 
-  IJournalCategoryData, 
-  IJournalData, 
-  JournalContentData, 
-  JournalSchema, 
-  JournalVituralFileTree 
+import { 
+  type IJournalCategoryData, 
+  type IJournalData, 
+  type JournalContentData, 
+  JournalFileType, 
+  type JournalSchema,
 } from "~/api/journal"
 import { useThisEditorContext } from "~/features/editor"
 // ...
@@ -38,7 +38,7 @@ export interface IThisJournalContext {
    * @param type The type of the journal file.
    * @returns A promise that resolves to the created journal data.
    */
-  $create(data: JournalSchema, type: JournalVituralFileTree.Type): Promise<IJournalData>
+  $create(data: JournalSchema, type: JournalFileType): Promise<IJournalData>
   /**Deletes a journal.
    * @param journalId The ID of the journal to delete.
    * @returns A promise that resolves when the journal is deleted.
@@ -94,7 +94,7 @@ export function createJournal(
       event.$emit('journal__createJournal', newData)
 
       journalCache.set(newData.id, newData)
-      fileDisplayContext.addToRoot(type === 'journal' ? newData.id : createFolderData(newData!.id))
+      fileDisplayContext.addToRoot(type === JournalFileType.journal ? newData.id : createFolderData(newData!.id))
       return newData
     },
     async $open(journalId) {

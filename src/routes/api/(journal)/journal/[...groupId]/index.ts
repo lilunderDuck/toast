@@ -2,6 +2,7 @@ import { validator } from "hono/validator"
 import { object, string } from "valibot"
 import { 
   JOURNAL_ROUTE, 
+  JournalFileType, 
   journalFormSchema 
 } from "~/api/journal"
 import { duck } from "~/entry-server"
@@ -13,6 +14,7 @@ import {
 } from "~/features/data/journal"
 import { 
   isThisDirectoryExist, 
+  validate, 
   validateIfValid 
 } from "~/server"
 
@@ -43,7 +45,17 @@ const mustHaveAType = object({
  * being posted is invalid
  */
 duck.post(`${JOURNAL_ROUTE}/:groupId`, validator('query', (value, context) => {
-  return validateIfValid(mustHaveAType, value, context)
+  if (validate(mustHaveAType, value)) {
+    const { type } = value
+    const isNotAnNumber = isNaN(parseInt(type))
+    if (isNotAnNumber) {
+      return context.text('not an number', 400)
+    }
+
+    return value as unknown as { type: number }
+  }
+
+  return context.text('invalid data', 400)
 }), validator('json', (value, context) => {
   return validateIfValid(journalFormSchema, value, context)
 }), async (context) => {
@@ -52,7 +64,7 @@ duck.post(`${JOURNAL_ROUTE}/:groupId`, validator('query', (value, context) => {
   const { groupId } = context.req.param()
 
   let newData
-  if (query.type === 'journal') {
+  if (query.type === JournalFileType.journal) {
     newData = await journalData.$create(groupId, body)
   }
   else {
