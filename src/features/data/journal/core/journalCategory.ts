@@ -1,10 +1,10 @@
-import { IJournalCategoryData } from "~/api/journal"
+import type { IJournalCategoryData, JournalCategorySchema } from "~/api/journal"
 import { mergeObjects } from "~/common"
 import { createId } from "../utils"
 import { journalCategoryFileHandler } from "../handlers"
 
 export const journalCategoryData = {
-  async $create(groupId: string, data: IJournalCategoryData) {
+  async $create(groupId: string, data: JournalCategorySchema) {
     const journalId = createId()
   
     const newData: IJournalCategoryData = mergeObjects(data, {

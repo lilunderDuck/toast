@@ -21,13 +21,13 @@ declare global {
    * @see https://esbuild.github.io/api/#define
    */
 
-  /**Well, it's `true` if you're on development mode, `false` otherwise. */
+  /**Whether this application is in dev mode, `false` if the app is in production */
   const __devMode: boolean
-  /**The version of the app */
+  /**The current version of the app */
   const __version: string
-  /**The api version of the app */
+  /**The current api version of the app */
   const __apiVersion: string
-  /**The backend (usually node's) version */
+  /**The current version of the backend, that is which technology and its version has been used in the server */
   const __backendVersion: string
 }
 

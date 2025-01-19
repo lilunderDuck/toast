@@ -25,7 +25,10 @@ export async function readAndUpdatePreviousIfNeeds<T, U extends AnyFunction>(
   readFileFn: U, ...args: Parameters<U>
 ): Promise<T> {
   if (typeof newData !== "function") return newData
-  const previous = await readFileFn(...args)
+  let previous
+  try {
+    previous = await readFileFn(...args)
+  } catch(error) {}
   // @ts-ignore
   const overritenData = mergeObjects(previous!, newData(previous!))
   return overritenData

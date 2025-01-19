@@ -16,8 +16,8 @@ const COMMAND_AFTER_RUN_SERVER = "deno -A ./scripts/additional-tasks.ts"
 
 const DEV_APP = VITE_APP_COMMAND
 const DEV_SERVER = mergeCommands(
-  COMMAND_AFTER_RUN_SERVER,
   `${VITE_SERVER_COMMAND} build --mode=development`,
+  COMMAND_AFTER_RUN_SERVER,
   RUN_SERVER
 )
 

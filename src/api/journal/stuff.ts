@@ -1,10 +1,6 @@
 import type { JournalCategorySchema, JournalSchema, JournalGroupSchema } from "./validate"
-import { OutputBlockData } from "@editorjs/editorjs"
-import { apiRoute } from "~/common"
+import type { OutputBlockData } from "@editorjs/editorjs"
 import { JournalFileType, JournalVituralFileTree } from "./vituralFileTree"
-
-export const JOURNAL_ROUTE = apiRoute('/journal/stuff')
-export const JOURNAL_GROUP_ROUTE = apiRoute('/journal/group')
 
 type UniqueId = {
   id: string
@@ -16,7 +12,7 @@ type CreatedAndModifiedDate = {
 }
 
 export interface IJournalGroupData extends JournalGroupSchema, UniqueId, CreatedAndModifiedDate {
-  tree: JournalVituralFileTree.Tree[]
+  tree: JournalVituralFileTree.Tree
   entries: number
 }
 

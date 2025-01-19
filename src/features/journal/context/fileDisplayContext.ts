@@ -1,9 +1,8 @@
 import { createSignal, type Accessor, type Component } from "solid-js"
 // ...
-import { fetchIt } from "~/utils"
-import { type IJournalGroupData, JOURNAL_GROUP_ROUTE } from "~/api/journal"
+import { JournalVituralFileTree } from "~/api/journal"
 // ...
-import { insertBefore, isFolder, type TreeNode } from "../utils"
+import { api_updateJournalVirturalFileTree, insertBefore, isFolder, type TreeNode } from "../utils"
 import type { JournalSessionStorage } from "./JournalContext"
 
 type TreeNodeType = 'file' | 'folder'
@@ -36,9 +35,7 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage): IF
     setTree(treeCache)
     setIsUpdating(false)
     const currentGroup = thisSessionStorage.$get('currentGroup')
-    await fetchIt<Partial<IJournalGroupData>>('PATCH', `${JOURNAL_GROUP_ROUTE}?id=${currentGroup.id}`, {
-      tree: treeCache
-    })
+    await api_updateJournalVirturalFileTree(currentGroup.id, treeCache as JournalVituralFileTree.Tree)
     console.log('Tree updated', treeCache)
   }
 

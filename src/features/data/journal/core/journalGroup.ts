@@ -1,5 +1,4 @@
 import type { 
-  IClientJournalGroupData,
   IJournalGroupData,
   JournalGroupSchema
 } from "~/api/journal"
@@ -54,8 +53,7 @@ export const journalGroupData = {
   
   async $get(id: string) {
     const allData = await journalGroupCache.getAll$()
-    const data = allData[id] as IClientJournalGroupData
-    data.treeMapping = (await journalGroupTreeCache.get(id))!.journals
+    const data = allData[id]
     return data
   },
 

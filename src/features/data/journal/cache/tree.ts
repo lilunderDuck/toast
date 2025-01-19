@@ -1,9 +1,14 @@
-import { IJournalData, IJournalGroupData, JournalVituralFileTree } from "~/api/journal"
-import { bson_readFile, bson_writeFile, CACHE_FOLDER, deleteFile } from "~/server"
+import type { 
+  IClientJournalVirturalFileTreeData,
+  IJournalGroupData, 
+  JournalVituralFileTree 
+} from "~/api/journal"
+import { bson_readFile, bson_writeFile, CACHE_FOLDER, deleteFile, isThisDirectoryExist } from "~/server"
+import { journalGroupFileHandler } from "../handlers"
+import { getAllJournalData } from "../utils"
 
-export interface ICachedJournalGroupContentFile {
-  journals: Record<string, JournalVituralFileTree.Data>
-  tree: IJournalGroupData["tree"]
+export interface ICachedJournalGroupContentFile extends IClientJournalVirturalFileTreeData {
+  // ...
 }
 
 function buildGroupCacheFileName(groupId: string) {
@@ -12,15 +17,20 @@ function buildGroupCacheFileName(groupId: string) {
 
 export const journalGroupTreeCache = {
   async create(groupId: string) {
-    return bson_writeFile<ICachedJournalGroupContentFile>(buildGroupCacheFileName(groupId), {
-      journals: {},
+    const thisGroupPath = buildGroupCacheFileName(groupId)
+    if (await isThisDirectoryExist(thisGroupPath)) {
+      return console.warn(groupId, 'already exist')
+    }
+
+    return bson_writeFile<ICachedJournalGroupContentFile>(thisGroupPath, {
+      lookup: {},
       tree: []
     })
   },
-  async set(groupId: string, data?: IJournalData, tree?: IJournalGroupData["tree"]) {
+  async set(groupId: string, data?: JournalVituralFileTree.Data, tree?: IJournalGroupData["tree"]) {
     const prevData = await this.get(groupId) ?? {} as ICachedJournalGroupContentFile
     if (data) {
-      prevData.journals[data.id] = data
+      prevData.lookup[data.id] = data
     }
 
     if (tree) {
@@ -35,11 +45,32 @@ export const journalGroupTreeCache = {
   async remove(groupId: string, journalId: string) {
     const prevData = (await this.get(groupId))!
 
-    delete prevData.journals[journalId]
+    delete prevData.lookup[journalId]
 
     await bson_writeFile(buildGroupCacheFileName(groupId), prevData)
   },
   async delete(groupId: string) {
     await deleteFile(buildGroupCacheFileName(groupId))
+  },
+  async rebuild(groupId: string): Promise<void | IClientJournalVirturalFileTreeData> {
+    const groupData = await journalGroupFileHandler.read$(groupId)
+    if (!groupData) {
+      return console.error('Could not find journal group data:', groupId)
+    }
+
+    await this.create(groupId)
+
+    const tree = groupData.tree
+    const allJournal = await getAllJournalData(groupId)
+
+    const lookup: IClientJournalVirturalFileTreeData["lookup"] = {}
+    for (const journal of allJournal) {
+      lookup[journal.id] = journal
+      await this.set(groupId, journal)
+    }
+
+    await this.set(groupId, undefined, tree)
+
+    return { lookup, tree }
   }
 }

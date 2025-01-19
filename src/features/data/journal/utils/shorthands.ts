@@ -2,8 +2,9 @@ import { getEverythingFromDir } from "~/server"
 import { buildJournalGroupPath } from "./stuff"
 import { journalCategoryFileHandler, journalGroupFileHandler, META_FILE_NAME } from "../handlers"
 import { mergeObjects } from "~/common"
+import { JournalVituralFileTree } from "~/api/journal"
 
-export async function getAllJournalData(groupId: string) {
+export async function getAllJournalData(groupId: string): Promise<JournalVituralFileTree.Data[]> {
   const thisJournalGroupPath = buildJournalGroupPath(groupId)
   const journals = (await getEverythingFromDir(thisJournalGroupPath))
     .filter(it => it.endsWith('.dat') && it !== META_FILE_NAME)

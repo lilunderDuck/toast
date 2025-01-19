@@ -1,4 +1,4 @@
-import type { IJournalData } from "~/api/journal"
+import type { IJournalData, JournalSchema } from "~/api/journal"
 // ...
 import { mergeObjects } from '~/common'
 // ...
@@ -11,7 +11,7 @@ import {
 } from "../cache"
 
 export const journalData = {
-  async $create(groupId: string, data: IJournalData) {
+  async $create(groupId: string, data: JournalSchema) {
     const journalId = createId()
     const newData: IJournalData = mergeObjects(data, {
       id: journalId,

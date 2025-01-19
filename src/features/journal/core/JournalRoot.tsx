@@ -4,14 +4,15 @@ import { onCleanup, onMount, type ParentProps } from 'solid-js'
 import { bodyClasslist } from '~/utils'
 import { Resizable } from '~/components'
 import { ThisEditorProvider } from '~/features/editor'
-import type { IClientJournalGroupData} from '~/api/journal'
+import type { IJournalGroupData} from '~/api/journal'
 import { toast } from '~/features/toast'
+import { api_getGroup } from '~/features/home'
 // ...
 import __style from './stuff.module.css'
 import stylex from '@stylexjs/stylex'
 // ...
 import { JournalProvider, useJournalContext } from '../context'
-import { api_getGroup } from '~/features/home'
+import { api_getJournalVirturalFileTree, type TreeNode } from '../utils'
 
 const style = stylex.create({
   thisThing: {
@@ -51,23 +52,26 @@ export function JournalRoot(props: ParentProps) {
     const { $journal, $fileDisplay, $sessionStorage } = useJournalContext()
 
     onMount(async() => {
-      console.log('Starting up:', param.id)
+      const currentGroupId = param.id
+      console.log('Starting up:', currentGroupId)
       // Attempt to get the journal group data from the server
-      const data = await api_getGroup(param.id) as IClientJournalGroupData
+      const data = await api_getGroup(currentGroupId) as IJournalGroupData
       if (!data) {
         return goHomeImmediately()
       }
-      // note: you should not reorder this line of code here, otherwise it *will* break
-      $journal.$cache = new Map(Object.entries(data.treeMapping))
-      // @ts-ignore - weird error, not gonna look into that...
-      // Anyways, what this does is just for extra storage efficent.
-      // 'treeMapping' contains all of the journals metadata (without the journal content).
-      // Imagine we have a lot of entries on that one and then temponary saved to sessionStorage,
-      // well, this is pretty bad, because we only have 5 - 10MB of sessionStorage/localStorage
-      delete data.treeMapping
-      $sessionStorage.$set('currentGroup', data)
 
-      $fileDisplay.setTree(data.tree)
+      const treeData = await api_getJournalVirturalFileTree(currentGroupId)
+
+      console.log('Tree data is', treeData, treeData.lookup)
+
+      // note: you should not reorder this line of code here, otherwise it *will* break
+      $journal.$cache = new Map(Object.entries(treeData.lookup))
+      
+      // @ts-ignore - should work
+      delete data.tree
+      $sessionStorage.$set('currentGroup', data)
+      
+      $fileDisplay.setTree(treeData.tree as TreeNode[])
 
       console.log('\n\n\n\n\n\n\n\n\n\n\n... A bunch of empty lines to make the log message not so messy ...\n\n\n\n\n\n\n\n\n\n\n\n\n')
     })

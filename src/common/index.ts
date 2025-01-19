@@ -3,8 +3,11 @@
  * These functions must not contain specific api like:
  * - node's only apis
  * - browser's only apis
+ * 
+ * And it must work between the server and client.
  */
-export * from "./apiRoute"
+
+export * from "./route"
 export * from "./https"
 export * from './array'
 export * from './random'
