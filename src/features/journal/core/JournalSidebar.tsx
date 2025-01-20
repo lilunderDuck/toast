@@ -48,20 +48,20 @@ export function JournalSidebar() {
   )
 
   const [thingToDelete, setThingToDelete] = createSignal<IJournalData>()
-  const clickingOpenJournal: ISidebarProps["$onClickingOpen"] = (journal) => {
-    $journal.$open(journal.id)
-    $journal.$setCurrentlyOpened(journal)
+  const clickingOpenJournal: ISidebarProps["onClickingOpen$"] = (journal) => {
+    $journal.open$(journal.id)
+    $journal.setCurrentlyOpened$(journal)
   }
 
-  const clickingRemoveJournal: ISidebarProps["$onClickingRemove"] = (journal) => {
-    const deleteRightAway = $localStorage.$get('shouldShowDeleteConfirmationModal')
+  const clickingRemoveJournal: ISidebarProps["on$ClickingRemove"] = (journal) => {
+    const deleteRightAway = $localStorage.get$('shouldShowDeleteConfirmationModal')
     console.log('should delete right away?', deleteRightAway)
     if (deleteRightAway) {
-      return $journal.$delete(journal.id)
+      return $journal.delete$(journal.id)
     }
 
     setThingToDelete(journal)
-    deleteJournalModal.$show()
+    deleteJournalModal.show$()
   }
 
   const toolModal = createLazyLoadedDialog(
@@ -74,21 +74,21 @@ export function JournalSidebar() {
         <FlexCenterY id={__style.iconTitleBar} {...stylex.attrs(style.titleBar)}>
           <QuickActionItem 
             $icon={BsHouseFill}
-            $label='Go back to home'
+            label$='Go back to home'
             onClick={goHome}
           />
           <div  />
           <QuickActionItem 
             $icon={BsTrello}
-            $label='Trackers'
-            onClick={toolModal.$show}
+            label$='Trackers'
+            onClick={toolModal.show$}
           />
         </FlexCenterY>
         <Flex {...stylex.attrs(style.sidebar)}>
           <QuickActionBar />
           <Sidebar 
-            $onClickingOpen={clickingOpenJournal} 
-            $onClickingRemove={clickingRemoveJournal}
+            onClickingOpen$={clickingOpenJournal} 
+            on$ClickingRemove={clickingRemoveJournal}
           />
         </Flex>
       </ResizablePanel>

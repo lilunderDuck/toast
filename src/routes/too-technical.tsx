@@ -20,15 +20,15 @@ export default function TooTechnicalPage() {
       </section>
       <section>
         <LibarySearchBox
-          $title="Which libraries did this app used..." 
-          $options={[
+          title$="Which libraries did this app used..." 
+          options$={[
             "client",
             "server",
             "build tools"
           ]}
-          $placeholder="[insert thing to search here]"
-          $value={value}
-          $onSelect={setValue}
+          placeholder$="[insert thing to search here]"
+          value$={value}
+          onSelect$={setValue}
         />
         <LibaryUsedList />
       </section>

@@ -37,7 +37,7 @@ const config = (devMode: boolean): InlineConfig => ({
     target: 'esnext',
     outDir: SERVER_OUTPUT_DIRECTORY,
     minify: !devMode,
-    sourcemap: devMode,
+    sourcemap: 'inline',
     rollupOptions: {
       treeshake: true
     }

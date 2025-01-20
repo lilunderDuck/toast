@@ -34,14 +34,14 @@ const style = stylex.create({
 
 interface IButtonItemProps extends HTMLAttributes<"button"> {
   $icon: IconTypes
-  $label: string
+  label$: string
 }
 
 export function SidebarButtonsRow() {
   const { $journal } = useJournalContext()
-  const { $isEditable, $setIsEditable } = useThisEditorContext()
+  const { isEditable$, setIsEditable$ } = useThisEditorContext()
   const toggleEditOrReadonlyMode = () => {
-    $setIsEditable(prev => !prev)
+    setIsEditable$(prev => !prev)
   }
 
   const createStuffModal = createLazyLoadedDialog(
@@ -51,16 +51,16 @@ export function SidebarButtonsRow() {
   return (
     <FlexCenterY {...stylex.attrs(style.buttonsRow)}>
       <ButtonItem 
-        onClick={createStuffModal.$show}
+        onClick={createStuffModal.show$}
         $icon={BsPlus}
-        $label={'New journal'}
+        label$={'New journal'}
       />
       <Spacer />
       <ButtonItem 
         onClick={toggleEditOrReadonlyMode}
-        disabled={!$journal.$currentlyOpened()}
+        disabled={!$journal.currentlyOpened$()}
         $icon={EditOrReadonlyIcon}
-        $label={`Toggle ${$isEditable() ? 'read-only' : 'edit'} mode`}
+        label$={`Toggle ${isEditable$() ? 'read-only' : 'edit'} mode`}
       />
       {/* ... */}
       <createStuffModal.$Modal />
@@ -69,12 +69,12 @@ export function SidebarButtonsRow() {
 }
 
 function ButtonItem(props: IButtonItemProps) {
-  const [, buttonProps] = splitProps(props, ["$icon", "$label"])
+  const [, buttonProps] = splitProps(props, ["$icon", "label$"])
   return (
-    <Tooltip $label={props.$label}>
+    <Tooltip label$={props.label$}>
       <Button 
         {...buttonProps}
-        $size={ButtonSizeVariant.icon} 
+        size$={ButtonSizeVariant.icon} 
         {...stylex.attrs(style.button)}
       >
         <props.$icon />

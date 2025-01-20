@@ -3,7 +3,7 @@ export interface IStorage<Mapping extends Record<string, any>> {
    * @param key The key to retrieve the value for.
    * @returns The value associated with the key or `undefined` if the key does not exist.
    */
-  $get<T extends keyof Mapping>(key: T): Mapping[T]
+  get$<T extends keyof Mapping>(key: T): Mapping[T]
   /**Sets the value associated with the given key.
    * @param key The key to set the value for.
    * @param value The value to set for the key.
@@ -12,7 +12,7 @@ export interface IStorage<Mapping extends Record<string, any>> {
   /**Deletes the value associated with the given key.
    * @param key The key to delete.
    */
-  $delete<T extends keyof Mapping>(key: T): void
+  delete$<T extends keyof Mapping>(key: T): void
 }
 
 /**Create a type-safe version of `localStorage`, `sessionStorage`, ...
@@ -45,7 +45,7 @@ export interface IStorage<Mapping extends Record<string, any>> {
  */
 export function createStorage<Mapping extends Record<string, any>>(storage: Storage): IStorage<Mapping> {
   return {
-    $get(key) {
+    get$(key) {
       const data = storage.getItem(key as string)
       if (!data) return data
 
@@ -59,7 +59,7 @@ export function createStorage<Mapping extends Record<string, any>>(storage: Stor
     $set(key, value) {
       storage.setItem(key as string, JSON. stringify(value))
     },
-    $delete(key) {
+    delete$(key) {
       storage.removeItem(key as string)
     }
   }

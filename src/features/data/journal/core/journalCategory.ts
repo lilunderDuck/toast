@@ -4,7 +4,7 @@ import { createId } from "../utils"
 import { journalCategoryFileHandler } from "../handlers"
 
 export const journalCategoryData = {
-  async $create(groupId: string, data: JournalCategorySchema) {
+  async create$(groupId: string, data: JournalCategorySchema) {
     const journalId = createId()
   
     const newData: IJournalCategoryData = mergeObjects(data, {
@@ -16,7 +16,7 @@ export const journalCategoryData = {
   
     return newData
   },
-  async $update(groupId: string, categoryId: string, data: Partial<IJournalCategoryData>) {
+  async update$(groupId: string, categoryId: string, data: Partial<IJournalCategoryData>) {
     const oldData = await journalCategoryFileHandler.read$(groupId, categoryId)
     const newData: IJournalCategoryData = mergeObjects(oldData, data, {
       modified: new Date()
@@ -26,7 +26,7 @@ export const journalCategoryData = {
 
     return newData
   },
-  async $delete(groupId: string, categoryId: string) {
+  async delete$(groupId: string, categoryId: string) {
     await journalCategoryFileHandler.delete$(groupId, categoryId)
   },
 }

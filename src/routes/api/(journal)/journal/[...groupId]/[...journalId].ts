@@ -9,7 +9,7 @@ import { journalData } from "~/features/data/journal"
 duck.delete(`${JOURNAL_ROUTE}/:groupId/:journalId`, async (context) => {
   const { groupId, journalId } = context.req.param()
 
-  await journalData.$delete(groupId, journalId)
+  await journalData.delete$(groupId, journalId)
   
   return context.text('okay', 200)
 })
@@ -20,7 +20,7 @@ duck.delete(`${JOURNAL_ROUTE}/:groupId/:journalId`, async (context) => {
 duck.get(`${JOURNAL_ROUTE}/:groupId/:journalId`, async(context) => {
   const { groupId, journalId } = context.req.param()
 
-  const something = await journalData.$getContent(groupId, journalId)
+  const something = await journalData.getContent$(groupId, journalId)
 
   return context.json(something, 200)
 })
@@ -32,9 +32,9 @@ duck.patch(`${JOURNAL_ROUTE}/:groupId/:journalId`, validator('json', (value) => 
   return value as JournalContentData
 }), async(context) => {
   const { groupId, journalId } = context.req.param()
-  const data = context.req.valid('json') 
+  const data = context.req.valid('json')
 
-  await journalData.$update(groupId, journalId, {
+  await journalData.update$(groupId, journalId, {
     data
   })
 

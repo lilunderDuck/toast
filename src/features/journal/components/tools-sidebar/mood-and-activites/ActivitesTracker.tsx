@@ -23,8 +23,8 @@ const style = stylex.create({
 })
 
 export default function ActivitesTracker() {
-  const { $getFormatedCurrentMonth, $selectedDate, $currentTime } = useCalendarContext()
-  const [selectedDate] = $selectedDate
+  const { getFormatedCurrentMonth$, selectedDate$, currentTime$ } = useCalendarContext()
+  const [selectedDate] = selectedDate$
   
   const sampleData: Record<string, any[] | undefined> = {
     1: new Array(3),
@@ -39,11 +39,11 @@ export default function ActivitesTracker() {
 
   const getSummaryText = (someDate: Date) => {
     const selectedDay = someDate.getDate()
-    if (selectedDay === $currentTime.day) {
+    if (selectedDay === currentTime$.day) {
       return `There is no activity, for now...` as const
     }
 
-    if (selectedDay > $currentTime.day) {
+    if (selectedDay > currentTime$.day) {
       return `There is no activity because you have time traveled too far :)` as const
     }
 
@@ -77,7 +77,7 @@ export default function ActivitesTracker() {
     <section>
       <h2>Activites</h2>
       <div {...stylex.attrs(style.currentMonth)}>
-        All of activites in {$getFormatedCurrentMonth()}
+        All of activites in {getFormatedCurrentMonth$()}
       </div>
       <div {...stylex.attrs(style.currentMonth)}>
         <MonthCalendar 

@@ -21,7 +21,7 @@ export function JournalToolsSidebar() {
   return (
     <div {...stylex.attrs(style.sidebar)}>
       <FlexCenterY {...stylex.attrs(style.titleBar)}>
-        <ToolButton $icon={BsCardHeading} $label="Table of contents" />
+        <ToolButton $icon={BsCardHeading} label$="Table of contents" />
       </FlexCenterY>
       <ToolContent />
     </div>

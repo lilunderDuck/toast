@@ -82,7 +82,7 @@ function Content(props: ICreateJournalCategoryModalProps) {
       </RadioGroup>
 
       <h5>Give it a name</h5>
-      <CreateJournalCategoryForm onClick={props.$close} />
+      <CreateJournalCategoryForm onClick={props.close$} />
     </>
   )
 }

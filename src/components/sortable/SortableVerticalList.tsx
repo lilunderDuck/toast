@@ -12,13 +12,13 @@ import { createSignal, For, JSX, Signal, splitProps } from "solid-js"
 import { mergeClassname } from "../../utils"
 
 interface ISortableVerticalItemProps extends HTMLAttributes<"div"> {
-  $itemName: string
+  itemName$: string
 }
 
 export function SortableVerticalItem(props: ISortableVerticalItemProps) {
-  const sortable = createSortable(props.$itemName)
+  const sortable = createSortable(props.itemName$)
   const [state] = useDragDropContext()!
-  const [, itsProps] = splitProps(props, ["$itemName"])
+  const [, itsProps] = splitProps(props, [/* @__KEY__ */"itemName$"])
 
   return (
     <div

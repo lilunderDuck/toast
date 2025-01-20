@@ -7,7 +7,7 @@ const style = stylex.create({
     gridTemplateColumns: 'repeat(auto-fit, minmax(40%, 1fr))',
     gap: 15
   },
-  $onlyOnBottom: {
+  on$lyOnBottom: {
     position: 'absolute',
     bottom: 0,
     width: '100%',
@@ -17,22 +17,22 @@ const style = stylex.create({
 })
 
 interface IButtonRowOnTheBottomProps {
-  $onClickingClose: () => any
-  $onClickingOpen: () => any
+  onClickingClose$: () => any
+  onClickingOpen$: () => any
 }
 
 export default function ButtonRowOnTheBottom(props: IButtonRowOnTheBottomProps) {
   return (
-    <Flex {...stylex.attrs(style.$onlyOnBottom)}>
+    <Flex {...stylex.attrs(style.on$lyOnBottom)}>
       <Spacer />
       <Button 
-        $size={ButtonSizeVariant.sm} 
-        $variant={ButtonVariant.danger}
-        onClick={props.$onClickingClose}
+        size$={ButtonSizeVariant.sm} 
+        variant$={ButtonVariant.danger}
+        onClick={props.onClickingClose$}
       >
         Close
       </Button>
-      <Button $size={ButtonSizeVariant.sm} onClick={props.$onClickingOpen}>
+      <Button size$={ButtonSizeVariant.sm} onClick={props.onClickingOpen$}>
         Open this
       </Button>
     </Flex>

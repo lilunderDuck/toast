@@ -35,8 +35,8 @@ export function FileDisplay() {
   const rawToDraggable = (treeNode: TreeNode[]) => treeNode.map(it => typeof it === "string" ? { id: it } : it)
 
   const RenderFolderAndFileComponent = (props: FolderNode | { id: string }) => {
-    console.log('cache', $journal.$cache)
-    const data = $journal.$cache.get(props.id)
+    console.log('cache', $journal.cache$)
+    const data = $journal.cache$.get(props.id)
     if (!data) {
       console.log('cannot get data', props)
       return null

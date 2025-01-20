@@ -45,12 +45,12 @@ export default function DeleteJournalModal(props: IDeleteJournalModalProps) {
         </FlexCenterY>
       </DialogDescription>
       <OpenAndCloseButton 
-        $openText='Yup'
-        $closeText='No, I changed my mind'
-        $onClickingClose={props.$close}
-        $onClickingOpen={async() => {
-          await $journal.$delete(props.$journal?.id)
-          props.$close()
+        openText$='Yup'
+        closeText$='No, I changed my mind'
+        onClickingClose$={props.close$}
+        onClickingOpen$={async() => {
+          await $journal.delete$(props.$journal?.id)
+          props.close$()
         }}
       />
     </DialogContent>

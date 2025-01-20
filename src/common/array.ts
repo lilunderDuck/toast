@@ -24,7 +24,7 @@ export interface IThisArrayObjects<T extends AnyObject[]> {
    * @param value    The value of the property to filter by.
    * @returns A new array with the specified object removed.
    */
-  $remove<Element extends keyof ArrayElement<T>>(
+  remove$<Element extends keyof ArrayElement<T>>(
     name: Element, value: ArrayElement<T>[Element]
   ): T
   /**Replaces an object in the array with a new one based on a predicate.
@@ -32,7 +32,7 @@ export interface IThisArrayObjects<T extends AnyObject[]> {
    * @param somethingElse    The new object to replace the old one with.
    * @returns The modified array.
    */
-  $replace(
+  replace$(
     whereToReplace: Predicate<ArrayElement<T>, T>, 
     somethingElse: Partial<ArrayElement<T>>
   ): T
@@ -40,7 +40,7 @@ export interface IThisArrayObjects<T extends AnyObject[]> {
    * @param whereToFind The predicate function to find the object.
    * @returns An array containing the found object and its index.
    */
-  $find(whereToFind: Predicate<ArrayElement<T>, T>): [ArrayElement<T>, number]
+  find$(whereToFind: Predicate<ArrayElement<T>, T>): [ArrayElement<T>, number]
 }
 
 /**Provides some utility functions for working with arrays of objects.
@@ -52,15 +52,15 @@ export interface IThisArrayObjects<T extends AnyObject[]> {
  */
 export function thisArrayObjects<T extends AnyObject[]>(arrayOfObjects: T): IThisArrayObjects<T> {
   return {
-    $remove(name, value) {
+    remove$(name, value) {
       // @ts-ignore
       return arrayOfObjects.filter((it) => it[name] !== value) as T
       //                                   ^^^^^^^^
       // well, the type error is right here - [look at the arrow]
       // but the code is working fineee...
     },
-    $replace(whereToReplace, somethingElse) {
-      const [oldData, index] = this.$find(whereToReplace)
+    replace$(whereToReplace, somethingElse) {
+      const [oldData, index] = this.find$(whereToReplace)
       console.log('old', oldData)
 
       const newData = {
@@ -72,7 +72,7 @@ export function thisArrayObjects<T extends AnyObject[]>(arrayOfObjects: T): IThi
       arrayOfObjects[index] = newData
       return arrayOfObjects
     },
-    $find(whereToFind) {
+    find$(whereToFind) {
       // @ts-ignore
       const index = arrayOfObjects.findIndex(whereToFind)
       return [arrayOfObjects[index] as ArrayElement<T>, index]

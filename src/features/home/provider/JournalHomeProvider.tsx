@@ -11,20 +11,20 @@ type JournalHomeEvent = {
 }
 
 interface IJournalHomeContext {
-  $infoSidebar: {
-    $open(data: IJournalGroupData): void
-    $close(): void
-    $update(data: IJournalGroupData): void
-    $currentJournalData: Accessor<IJournalGroupData | undefined>
+  infoSidebar$: {
+    open$(data: IJournalGroupData): void
+    close$(): void
+    update$(data: IJournalGroupData): void
+    currentJournalData$: Accessor<IJournalGroupData | undefined>
   }
-  $grid: {
-    $fetchJournalGroups(): Promise<IJournalGroupData[]>
-    $journalGroups: Accessor<IJournalGroupData[]>
-    $add(data: IJournalGroupData): void
-    $update(data: IJournalGroupData): void
+  grid$: {
+    fetchJournalGroups$(): Promise<IJournalGroupData[]>
+    journalGroups$: Accessor<IJournalGroupData[]>
+    add$(data: IJournalGroupData): void
+    update$(data: IJournalGroupData): void
   }
   // ...
-  $event: IEvent<JournalHomeEvent>
+  event$: IEvent<JournalHomeEvent>
 }
 
 const Context = createContext<IJournalHomeContext>()
@@ -37,36 +37,36 @@ export function JournalHomeProvider(props: ParentProps) {
 
   return (
     <Context.Provider value={{
-      $event: event,
-      $infoSidebar: {
-        $open(data: IJournalGroupData) {
+      event$: event,
+      infoSidebar$: {
+        open$(data: IJournalGroupData) {
           setCurrentJournalData(data)
           console.log('[home > sidebar] opened', data)
         },
-        $close() {
+        close$() {
           setCurrentJournalData(undefined)
-          event.$emit('home__infoSidebarClose')
+          event.emit$('home__infoSidebarClose')
           console.log('[home > sidebar] closed')
         },
-        $update(data: IJournalGroupData) {
+        update$(data: IJournalGroupData) {
           setCurrentJournalData(data)
           console.log('[home > sidebar] updated', data)
         },
-        $currentJournalData: currentJournalData,
+        currentJournalData$: currentJournalData,
       },
-      $grid: {
-        async $fetchJournalGroups() {
+      grid$: {
+        async fetchJournalGroups$() {
           const data = await api_getGroup<undefined>()
           setJournalGroups(data)
           return data
         },
-        $journalGroups: journalGroups,
-        $add(another) {
+        journalGroups$: journalGroups,
+        add$(another) {
           setJournalGroups(prev => [...prev, another])
           console.log('[home > grid] added', another)
         },
-        $update(newOne) {
-          setJournalGroups(prev => [...thisArrayObjects(prev).$replace(it => it.id === newOne.id, newOne)])
+        update$(newOne) {
+          setJournalGroups(prev => [...thisArrayObjects(prev).replace$(it => it.id === newOne.id, newOne)])
           console.log('[home > grid] updated', newOne)
         }
       },

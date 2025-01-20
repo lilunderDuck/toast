@@ -2,11 +2,11 @@ import { type Component, createSignal, lazy, Show } from "solid-js"
 import { Dialog } from "./Dialog"
 
 export interface IDialog {
-  $close(): void
+  close$(): void
 }
 
 type SomeLazyLoadedComponent<T extends {}> = ReturnType<typeof lazy<Component<T>>>
-type LazyLoadedComponentProps<T extends Component> = Omit<Parameters<T>[0], '$close'>
+type LazyLoadedComponentProps<T extends Component> = Omit<Parameters<T>[0], 'close$'>
 
 export function createLazyLoadedDialog<Props extends IDialog>(
   Component: SomeLazyLoadedComponent<Props>, 
@@ -14,13 +14,13 @@ export function createLazyLoadedDialog<Props extends IDialog>(
   itProps: () => LazyLoadedComponentProps<SomeLazyLoadedComponent<Props>> = () => {}
 ) {
   const [showing, setIsShowing] = createSignal(false)
-  const $show = () => {
+  const show = () => {
     setIsShowing(false)
     setIsShowing(true)
     console.log('[lazy dialog] shown')
   }
 
-  const $close = () => {
+  const close = () => {
     setIsShowing(false)
     console.log('[lazy dialog] closed')
   }
@@ -30,12 +30,12 @@ export function createLazyLoadedDialog<Props extends IDialog>(
       return (
         <Show when={showing()}>
           <Dialog defaultOpen={true} preventScroll={false} modal={true}>
-            <Component {...itProps()} $close={$close} />
+            <Component {...itProps()} close$={close} />
           </Dialog>
         </Show>
       )
     },
-    $show,
-    $close
+    show$: show,
+    close$: close
   }
 }

@@ -34,7 +34,7 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage): IF
     setIsUpdating(true)
     setTree(treeCache)
     setIsUpdating(false)
-    const currentGroup = thisSessionStorage.$get('currentGroup')
+    const currentGroup = thisSessionStorage.get$('currentGroup')
     await api_updateJournalVirturalFileTree(currentGroup.id, treeCache as JournalVituralFileTree.Tree)
     console.log('Tree updated', treeCache)
   }

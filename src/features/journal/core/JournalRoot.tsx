@@ -65,7 +65,7 @@ export function JournalRoot(props: ParentProps) {
       console.log('Tree data is', treeData, treeData.lookup)
 
       // note: you should not reorder this line of code here, otherwise it *will* break
-      $journal.$cache = new Map(Object.entries(treeData.lookup))
+      $journal.cache$ = new Map(Object.entries(treeData.lookup))
       
       // @ts-ignore - should work
       delete data.tree

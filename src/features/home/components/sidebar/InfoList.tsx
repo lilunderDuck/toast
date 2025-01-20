@@ -27,7 +27,7 @@ interface IInfoProps {
 function Info(props: IInfoProps) {
   return (
     <div>
-      <FlexCenterY {...stylex.attrs(style.$name)} $as="h4">
+      <FlexCenterY {...stylex.attrs(style.$name)} as$="h4">
         {props.$icon}
         <span>{props.$name}</span>
       </FlexCenterY>

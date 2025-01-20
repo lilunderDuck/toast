@@ -29,8 +29,8 @@ const style = stylex.create({
 })
 
 export interface ITooltipOptions {
-  $tooltipOptions?: TooltipRootProps
-  $label: JSX.Element
+  tooltipOptions$?: TooltipRootProps
+  label$: JSX.Element
 }
 
 interface ITooltipProps extends HTMLAttributes<"div">, ITooltipOptions {}
@@ -38,10 +38,14 @@ interface ITooltipProps extends HTMLAttributes<"div">, ITooltipOptions {}
 export function Tooltip(
   props: ITooltipProps
 ) {
-  const [local, others] = splitProps(props, ["$tooltipOptions", "$label", "children"])
+  const [local, others] = splitProps(props, [
+    /* @__KEY__ */"tooltipOptions$", 
+    /* @__KEY__ */"label$", 
+    "children"
+  ])
 
   return (
-    <Root openDelay={0} closeDelay={0} gutter={4} {...local.$tooltipOptions}>
+    <Root openDelay={0} closeDelay={0} gutter={4} {...local.tooltipOptions$}>
       <Trigger as="div">
         {local.children}
       </Trigger>
@@ -50,7 +54,7 @@ export function Tooltip(
           {...others}
           class={mergeClassname(stylex.attrs(style.$tooltip), others)}
         >
-          {local.$label}
+          {local.label$}
         </Content>
       </Portal>
     </Root>

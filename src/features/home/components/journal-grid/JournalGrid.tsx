@@ -26,7 +26,7 @@ const style = stylex.create({
 })
 
 interface IJournalGridProps extends IJournalGroupData {
-  $onClick: EventHandler<"div", "onClick">
+  on$Click: EventHandler<"div", "onClick">
 }
 
 export function JournalGrid(props: IJournalGridProps) {
@@ -44,14 +44,14 @@ export function JournalGrid(props: IJournalGridProps) {
   return (
     <JournalGridWrap 
       id={styleId} 
-      onClick={props.$onClick} 
+      onClick={props.on$Click} 
       {...stylex.attrs(style.grid)}
     >
       <Flex id={__style['journal-grid-edit-button']}>
         <Spacer />
         <Button 
-          onClick={modal.$show}
-          $size={ButtonSizeVariant.icon} 
+          onClick={modal.show$}
+          size$={ButtonSizeVariant.icon} 
           {...stylex.attrs(style.editButton)}
         >
           <BsPencilFill />

@@ -12,7 +12,7 @@ import { duck } from "~/entry-server"
 duck.get(`${JOURNAL_GROUP_ROUTE}/:groupId`, async (context) => {
   const { groupId } = context.req.param()
 
-  const data = await journalGroupData.$get(groupId)
+  const data = await journalGroupData.get$(groupId)
 
   if (!data) {
     return context.text('not found', 404)
@@ -28,10 +28,10 @@ duck.patch(`${JOURNAL_GROUP_ROUTE}/:groupId`, validator('json', (value) => {
   const { groupId } = context.req.param()
   const data = context.req.valid('json')
 
-  if (!await journalGroupData.$isExist(groupId)) {
+  if (!await journalGroupData.isExist$(groupId)) {
     return context.status(404)
   }
 
-  const updated = await journalGroupData.$update(groupId, data)
+  const updated = await journalGroupData.update$(groupId, data)
   return context.json(updated, 200)
 })

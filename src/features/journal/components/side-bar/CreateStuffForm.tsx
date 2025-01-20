@@ -30,7 +30,7 @@ export default function CreateJournalCategoryForm(props: ICreateJournalCategoryF
     setSubmitButtonDisabled(true)
     const dataReturned = await toast
       .promise(
-        $journal.$create(data, selected()!), 
+        $journal.create$(data, selected()!), 
         {
           loading: 'Saving changes...',
           success: 'Done!',
@@ -67,10 +67,10 @@ export default function CreateJournalCategoryForm(props: ICreateJournalCategoryF
         )}
       </Field>
       <OpenAndCloseButton 
-        $closeText='Dismiss'
-        $openText="Submit"
-        $onClickingClose={props.onClick}
-        $openButtonProps={{
+        closeText$='Dismiss'
+        openText$="Submit"
+        onClickingClose$={props.onClick}
+        openButtonProps$={{
           type: 'submit',
           disabled: submitButtonDisabled()
         }}

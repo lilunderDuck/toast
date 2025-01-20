@@ -34,7 +34,7 @@ export interface ILibaryUsedBoxProps {
 export default function LibaryUsedBox(props: ILibaryUsedBoxProps) {
   return (
     <div {...stylex.attrs(style.thisBox)}>
-      <FlexCenterY $as="span" {...stylex.attrs(style.heading)}>
+      <FlexCenterY as$="span" {...stylex.attrs(style.heading)}>
         <Show when={props.iconUrl}>
           <div {...stylex.attrs(style.icon)} style={{
             '--lib-box-icon-url': `url('${props.iconUrl}')`

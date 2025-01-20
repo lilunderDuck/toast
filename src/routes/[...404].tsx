@@ -46,7 +46,7 @@ export default function PageNotFound() {
         <br />
         You want to go home?
         <Flex {...stylex.attrs(style.buttonRows)}>
-          <Button $size={ButtonSizeVariant.sm} onClick={() => goTo('/')}>
+          <Button size$={ButtonSizeVariant.sm} onClick={() => goTo('/')}>
             Lemme outta here!!
           </Button>
         </Flex>

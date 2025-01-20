@@ -32,21 +32,21 @@ export function ThisEditor(props: ParentProps<{ class?: string }>) {
   const editor = useThisEditorContext()
   
   onMount(() => {
-    editor.$editorInstance = createEditor(
+    editor.editorInstance$ = createEditor(
       editorLocationRef, 
       false
     )
   })
 
   onCleanup(() => {
-    editor.$editorInstance?.destroy?.()
+    editor.editorInstance$?.destroy?.()
     console.log('[editor] destroyed')
   })
 
   const autoScrollIntoBottom = () => {
     editorLocationRef.scrollIntoView({ behavior: "smooth", block: "end" })
     editorLocationRef.scrollTop = editorLocationRef.scrollHeight + 500
-    editor.$event.$emit('editor__onTyping')
+    editor.event$.emit$('editor__onTyping')
   }
 
   const onSlappingYourKeyboard: EventHandler<"div", "onKeyUp"> = async(keyboardEvent) => {
@@ -64,10 +64,10 @@ export function ThisEditor(props: ParentProps<{ class?: string }>) {
   }
 
   const update = debounce(async() => {
-    const savedData = await editor.$save()
-    editor.$event.$emit('editor__onUpdate', savedData)
-    editor.$cache.set(savedData.id, savedData.content)
-    editor.$updateCharsAndWordsCount(savedData.content)
+    const savedData = await editor.save$()
+    editor.event$.emit$('editor__onUpdate', savedData)
+    editor.cache$.set(savedData.id, savedData.content)
+    editor.updateCharsAndWordsCount$(savedData.content)
   }, 1500)
   
   return (

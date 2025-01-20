@@ -18,7 +18,7 @@ interface IEditJournalGroupFormProps extends IJournalGroupData {
 
 export default function EditJournalGroupForm(props: IEditJournalGroupFormProps) {
   const [_journalGroupForm, { Field, Form }] = createForm<JournalGroupSchema>()
-  const { $grid, $infoSidebar } = useJournalHomeContext()
+  const { grid$, infoSidebar$ } = useJournalHomeContext()
 
   const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
 
@@ -36,8 +36,8 @@ export default function EditJournalGroupForm(props: IEditJournalGroupFormProps) 
     if (!dataReturned) return
 
     setSubmitButtonDisabled(false)
-    $grid.$update(dataReturned)
-    $infoSidebar.$update(dataReturned)
+    grid$.update$(dataReturned)
+    infoSidebar$.update$(dataReturned)
     props.onClick()
   }
 
@@ -74,7 +74,7 @@ export default function EditJournalGroupForm(props: IEditJournalGroupFormProps) 
         )}
       </Field>
       <Button 
-        $size={ButtonSizeVariant.sm} 
+        size$={ButtonSizeVariant.sm} 
         type="submit" 
         disabled={submitButtonDisabled()}
       >

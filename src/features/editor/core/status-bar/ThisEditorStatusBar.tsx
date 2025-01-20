@@ -28,7 +28,7 @@ const style = stylex.create({
 })
 
 export function ThisEditorStatusBar() {
-  const { $wordsCount, $charsCount, $event } = useThisEditorContext()
+  const { wordsCount$, charsCount$, event$ } = useThisEditorContext()
 
   const randomText = [
     '*the text just magically disappeared*',
@@ -59,7 +59,7 @@ export function ThisEditorStatusBar() {
   const [typing, setTyping] = createSignal<keyof typeof bongoCatAnimation>('stop')
   const resetAfterOneSecond = debounce(() => setTyping('stop'), 1000)
 
-  $event.$on('editor__onTyping', () => {
+  event$.on$('editor__onTyping', () => {
     if (typing() === 'left_paw') {
       setTyping('right_paw')
     }
@@ -76,7 +76,7 @@ export function ThisEditorStatusBar() {
       <div id={__bongoCat.bongoCat}>
         {bongoCatAnimation[typing()]}
       </div>
-      <Show when={$charsCount() > 0} fallback={
+      <Show when={charsCount$() > 0} fallback={
         <TagWithIcon
           name={<>{getRandomElement(randomText)}, there's nothing here...</>}
           icon={<BsQuestionDiamondFill />} 
@@ -85,13 +85,13 @@ export function ThisEditorStatusBar() {
         />
       }>
         <TagWithIcon
-          name={<>{$charsCount()} characters</>}
+          name={<>{charsCount$()} characters</>}
           icon={<BsBoxFill />} 
           bgColor=' var(--crimson3)'
           color='var(--crimson9)'
         />
         <TagWithIcon
-          name={<>{$wordsCount()} words</>}
+          name={<>{wordsCount$()} words</>}
           icon={<BsBoxFill />} 
           bgColor=' var(--crimson3)'
           color='var(--crimson9)'

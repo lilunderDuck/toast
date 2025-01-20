@@ -15,11 +15,12 @@ function loadStuff() { return import("./routes/api") }
 
 export const duck = new Hono()
 
-duck.use('/*', cors())
+__devMode && duck.use('/*', cors())
 __devMode && duck.use('*', logger())
-__devMode ? null : serveApp()
 
-loadStuff()
+loadStuff().then(() => {
+  __devMode ? null : serveApp()
+})
 
 // currently there's no workarounds to autocomplete Deno's related stuff 
 // without messing up the types on the client

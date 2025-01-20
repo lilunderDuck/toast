@@ -65,10 +65,10 @@ duck.post(`${JOURNAL_ROUTE}/:groupId`, validator('query', (value, context) => {
 
   let newData
   if (query.type === JournalFileType.journal) {
-    newData = await journalData.$create(groupId, body)
+    newData = await journalData.create$(groupId, body)
   }
   else {
-    newData = await journalCategoryData.$create(groupId, body)
+    newData = await journalCategoryData.create$(groupId, body)
   }
   
   return context.json(newData, 200)

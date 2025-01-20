@@ -31,7 +31,7 @@ export type OnEditorUpdateEvent = (data: EditorData) => any
 
 export type ThisEditorEvent = {
   /**Fired when the editor is switching to another "document", usually by calling
-   * `ThisEditor.$open()`
+   * `ThisEditor.open$()`
    * @param previous  the previous editor JSON data, or `null` if no previous data exists
    * @param current   the new editor JSON data
    */
@@ -50,40 +50,40 @@ export type ThisEditorEvent = {
 
 export interface IThisEditorProviderContext {
   /**The `EditorJS` instance. Must be initialized else bad thing happens */
-  $editorInstance?: EditorJS
+  editorInstance$?: EditorJS
   /**Saves the current editor data. */
-  $save(): Promise<EditorData>
+  save$(): Promise<EditorData>
   /**Accessor for editor events. */
-  $event: IEvent<ThisEditorEvent>
+  event$: IEvent<ThisEditorEvent>
   /**Editor's cache data */
-  $cache: Map<string, EditorData["content"]>
+  cache$: Map<string, EditorData["content"]>
   /**Tracks whether the editor is editable. */
-  $setIsEditable(setter: Setter<boolean>): void
+  setIsEditable$(setter: Setter<boolean>): void
   /**The editable state of the editor. */
-  $isEditable: Accessor<boolean>
+  isEditable$: Accessor<boolean>
   /**The number of characters in the editor. */
-  $charsCount: Accessor<number>
+  charsCount$: Accessor<number>
   /**The number of words in the editor. */
-  $wordsCount: Accessor<number>
+  wordsCount$: Accessor<number>
   /**Updates the character and word counts based on the editor content. 
    * @param data the editor data
    */
-  $updateCharsAndWordsCount(data: EditorData["content"]): void
+  updateCharsAndWordsCount$(data: EditorData["content"]): void
   /**Opens a new editor with the specified data.
    * @param data the editor JSON data.
    */
-  $open(data: EditorData): void
+  open$(data: EditorData): void
 }
 
 const Context = createContext<IThisEditorProviderContext>()
 
 export function ThisEditorProvider(props: ParentProps) {
   const [isEditable, setIsEditable] = createSignal(true)
-  const [$wordsCount, $setWordsCount] = createSignal(0)
-  const [$charsCount, $setCharsCount] = createSignal(0)
-  const $updateCharsAndWordsCount = (savedData: EditorData["content"]) => {
-    $setCharsCount(getBlocksTextLength(savedData))
-    $setWordsCount(getBlocksWordCount(savedData))
+  const [wordsCount$, setWordsCount] = createSignal(0)
+  const [charsCount$, setCharsCount] = createSignal(0)
+  const updateCharsAndWordsCount$ = (savedData: EditorData["content"]) => {
+    setCharsCount(getBlocksTextLength(savedData))
+    setWordsCount(getBlocksWordCount(savedData))
     console.log('[editor] total chars and words count updated')
   }
 
@@ -94,16 +94,16 @@ export function ThisEditorProvider(props: ParentProps) {
 
   return (
     <Context.Provider value={{
-      $event: event,
-      $cache: cache,
-      set $editorInstance(instance: EditorJS) {
+      event$: event,
+      cache$: cache,
+      set editorInstance$(instance: EditorJS) {
         editorInstance = instance
       },
-      get $editorInstance() {
+      get editorInstance$() {
         console.assert(editorInstance, '[editor] editor instance should not be undefined')
         return editorInstance
       },
-      $setIsEditable(setter) {
+      setIsEditable$(setter) {
         setIsEditable(prev => {
           const newState = setter(prev)
           editorInstance?.readOnly.toggle(!newState)
@@ -111,12 +111,12 @@ export function ThisEditorProvider(props: ParentProps) {
           return newState
         })
       },
-      $charsCount,
-      $wordsCount,
-      $updateCharsAndWordsCount,
-      $isEditable: isEditable,
-      $open(data) {
-        event.$emit('editor__onSwitching', lastData, data)
+      charsCount$,
+      wordsCount$,
+      updateCharsAndWordsCount$,
+      isEditable$: isEditable,
+      open$(data) {
+        event.emit$('editor__onSwitching', lastData, data)
     
         editorInstance!.render({
           blocks: data.content ?? []
@@ -124,11 +124,11 @@ export function ThisEditorProvider(props: ParentProps) {
         
         lastData = data
         cache.set(data.id, data.content)
-        $updateCharsAndWordsCount(data.content)
+        updateCharsAndWordsCount$(data.content)
         console.log('[editor] opened', data)
       },
-      async $save() {
-        const content = await this.$editorInstance!.save()
+      async save$() {
+        const content = await this.editorInstance$!.save()
         console.log('[editor] saving', lastData?.id, 'with', content.blocks)
         return {
           content: content.blocks,

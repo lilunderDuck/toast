@@ -19,23 +19,23 @@ const style = stylex.create({
 })
 
 interface ILibarySearchBoxProps {
-  $title: string
-  $onSelect: Setter<string | undefined>
-  $placeholder: string
-  $value: Accessor<string | undefined>
-  $options: string[]
+  title$: string
+  onSelect$: Setter<string | undefined>
+  placeholder$: string
+  value$: Accessor<string | undefined>
+  options$: string[]
 }
 
 export function LibarySearchBox(props: ILibarySearchBoxProps) {
   return (
     <>
-      <FlexCenterY $as="h1" {...stylex.attrs(style.heading)}>
-        {props.$title}
+      <FlexCenterY as$="h1" {...stylex.attrs(style.heading)}>
+        {props.title$}
         <Select<string>
-          value={props.$value()}
-          onChange={props.$onSelect}
-          options={props.$options}
-          placeholder={props.$placeholder}
+          value={props.value$()}
+          onChange={props.onSelect$}
+          options={props.options$}
+          placeholder={props.placeholder$}
           // @ts-ignore
           itemComponent={(props) => (
             <SelectItem item={props.item}>

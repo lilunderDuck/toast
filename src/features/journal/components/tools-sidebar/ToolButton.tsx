@@ -7,8 +7,8 @@ interface IToolButtonProps extends ITooltipOptions {
 
 export function ToolButton(props: IToolButtonProps) {
   return (
-    <Tooltip $label={props.$label}>
-      <Button $size={ButtonSizeVariant.icon}>
+    <Tooltip label$={props.label$}>
+      <Button size$={ButtonSizeVariant.icon}>
         <props.$icon />
       </Button>
     </Tooltip>

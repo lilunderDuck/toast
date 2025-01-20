@@ -11,7 +11,7 @@ import {
 } from "../cache"
 
 export const journalData = {
-  async $create(groupId: string, data: JournalSchema) {
+  async create$(groupId: string, data: JournalSchema) {
     const journalId = createId()
     const newData: IJournalData = mergeObjects(data, {
       id: journalId,
@@ -24,7 +24,7 @@ export const journalData = {
     return newData
   },
   
-  async $update(groupId: string, journalId: string, data: Partial<IJournalData>) {
+  async update$(groupId: string, journalId: string, data: Partial<IJournalData>) {
     const oldData = await journalFileHandler.read$(groupId, journalId)
     const newData: IJournalData = mergeObjects(oldData, data, {
       modified: new Date()
@@ -36,13 +36,13 @@ export const journalData = {
     return newData
   },
 
-  async $delete(groupId: string, journalId: string) {
+  async delete$(groupId: string, journalId: string) {
     await journalFileHandler.delete$(groupId, journalId)
     await journalGroupTreeCache.remove(groupId, journalId)
     await updateGroupEntriesCount(groupId, (prev) => prev - 1)
   },
   
-  async $getContent(groupId: string, journalId: string) {
+  async getContent$(groupId: string, journalId: string) {
     const data = await journalFileHandler.read$(groupId, journalId)
     return data.data ?? []
   }

@@ -15,7 +15,7 @@ import { journalGroupCache, journalGroupFileHandler } from "../handlers"
 import { journalGroupTreeCache } from "../cache"
 
 export const journalGroupData = {
-  async $create(data: JournalGroupSchema) {
+  async create$(data: JournalGroupSchema) {
     const groupId = createId()
     const newData: IJournalGroupData = mergeObjects(data, {
       id: groupId,
@@ -32,7 +32,7 @@ export const journalGroupData = {
     return newData
   },
 
-  async $update(groupId: string, data: Partial<IJournalGroupData>) {
+  async update$(groupId: string, data: Partial<IJournalGroupData>) {
     const cacheData = await journalGroupCache.get$(groupId)
     const newData: IJournalGroupData = mergeObjects(cacheData, data, {
       modified: new Date()
@@ -47,11 +47,11 @@ export const journalGroupData = {
     return newData
   },
 
-  async $getAll() {
+  async getAll$() {
     return Object.values(await journalGroupCache.getAll$())
   },
   
-  async $get(id: string) {
+  async get$(id: string) {
     const allData = await journalGroupCache.getAll$()
     const data = allData[id]
     return data
@@ -59,7 +59,7 @@ export const journalGroupData = {
 
   // await journalGroupCache.remove$(groupId)
   
-  async $isExist(groupId: string) {
+  async isExist$(groupId: string) {
     const isExistInCache = !!(await journalGroupCache.get$(groupId))
     if (!isExistInCache) {
       return await isThisDirectoryExist(buildJournalGroupPath(groupId))

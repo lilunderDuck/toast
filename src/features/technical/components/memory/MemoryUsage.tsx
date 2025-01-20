@@ -46,7 +46,7 @@ export function MemoryUsage() {
   return (
     <div>
       <MemorySlider 
-        $label={
+        label$={
           <>
             Heap usage
             <span {...stylex.attrs(style.percentage)}>{getHeapUsedPercentage(usage()).toFixed(2)}%</span>

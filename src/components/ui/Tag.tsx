@@ -15,6 +15,6 @@ const style = stylex.create({
 
 export function Tag(props: HTMLAttributes<"span">) {
   return (
-    <FlexCenterY $as="span" class={mergeClassname(props, stylex.attrs(style.tag))} {...props} />
+    <FlexCenterY as$="span" class={mergeClassname(props, stylex.attrs(style.tag))} {...props} />
   )
 }

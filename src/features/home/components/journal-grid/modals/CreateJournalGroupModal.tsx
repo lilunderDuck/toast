@@ -19,7 +19,7 @@ const style = stylex.create({
 export default function CreateJournalGroupModal(props: IDialog) {
   return (
     <DialogContent 
-      $closeOnClickOutside={false}
+      close$OnClickOutside={false}
       {...stylex.attrs(style.$content)}
     >
       <DialogTitle>
@@ -28,7 +28,7 @@ export default function CreateJournalGroupModal(props: IDialog) {
       <DialogDescription>
         Group many things into one place
       </DialogDescription>
-      <CreateJournalGroupForm onClick={props.$close} />
+      <CreateJournalGroupForm onClick={props.close$} />
     </DialogContent>
   )
 }

@@ -49,6 +49,23 @@ export function getAliasPath(tsconfig: typeof this_tsconfig, basePath: string) {
 }
 
 export function getEsbuildConfig(devMode: boolean, others?: ESBuildOptions): InlineConfig {
+  // break app unexpectedly, won't enable this until find a new way
+  // const PROP_ENDS_WITH_DOLLAR_SIGN = /\$$/
+  const onlyManglePropsInProdMode: ESBuildOptions = devMode ? {} : {
+    // mangleProps: PROP_ENDS_WITH_DOLLAR_SIGN,
+    // mangleQuoted: true,
+    legalComments: 'none',
+    minifyIdentifiers: true,
+    minifySyntax: true,
+    minifyWhitespace: true,
+    treeShaking: true
+  }
+
+  // drop "console.(something)" call and "debugger" on production
+  const dropConsoleSomethingCall: ESBuildOptions = devMode ? {/* nothing here... */} : {
+    // drop: ['console', 'debugger'],
+  }
+  
   return {
     esbuild: {
       ...others,
@@ -58,10 +75,8 @@ export function getEsbuildConfig(devMode: boolean, others?: ESBuildOptions): Inl
         "__apiVersion": `"1.0.0-beta"`,
         "__backendVersion": `"${`deno-${Deno.version.deno}, ts-${Deno.version.typescript}, v8-${Deno.version.v8}`}"`,
       },
-      // drop "console.(something)" call and "debugger" on production
-      // ...(devMode ? {/* nothing here... */} : {
-      //   drop: ['console', 'debugger'],
-      // })
+      ...dropConsoleSomethingCall,
+      ...onlyManglePropsInProdMode
     },
   }
 }
@@ -69,10 +84,10 @@ export function getEsbuildConfig(devMode: boolean, others?: ESBuildOptions): Inl
 const BASE_OUTPUT_DIRECTORY = './out'
 export const OUTPUT_DIRECTORY = BASE_OUTPUT_DIRECTORY
 export const SERVER_OUTPUT_DIRECTORY = `${BASE_OUTPUT_DIRECTORY}/server`
-export const CLIENT_OUTPUT_DIRECTORY = `${BASE_OUTPUT_DIRECTORY}/server/resource`
+export const CLIENT_OUTPUT_DIRECTORY = `${BASE_OUTPUT_DIRECTORY}/server/static`
 
 export const outPutFilenameConfig: RollupOptions["output"] = {
   chunkFileNames: `[hash].js`,
   entryFileNames: "[hash].js",
-  assetFileNames: "assets/[hash].[ext]",
+  assetFileNames: "[hash].[ext]",
 }

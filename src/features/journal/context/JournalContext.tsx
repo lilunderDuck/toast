@@ -26,7 +26,7 @@ interface IJournalContext {
   // ...
   $localStorage: JournalLocalStorage
   $sessionStorage: JournalSessionStorage
-  $event: IEvent<JournalEventMap>
+  event$: IEvent<JournalEventMap>
 }
 
 const Context = createContext<IJournalContext>()
@@ -44,7 +44,7 @@ export function JournalProvider(props: ParentProps) {
       // ...
       $localStorage: createStorage(localStorage),
       $sessionStorage: wrappedSessionStorage,
-      $event: event,
+      event$: event,
     }}>
       {props.children}
     </Context.Provider>

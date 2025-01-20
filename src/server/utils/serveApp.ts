@@ -5,16 +5,24 @@ import { dirname } from 'node:path'
 import { duck } from "~/entry-server"
 import { readFile } from "~/server"
 import { apiRoute } from '~/common'
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const appResourcePath = resolve(__dirname, `./server/resource` as const)
+import { Context } from 'hono'
 
 export function serveApp() {
-  duck.use('/*', serveStatic({
+  const __filename = fileURLToPath(import.meta.url)
+  const __dirname = dirname(__filename)
+  const appResourcePath = resolve(__dirname, `./server/static` as const)
+  const API_ROUTE = apiRoute()
+
+  console.log('app resource path is', appResourcePath)
+
+  duck.use('*', serveStatic({
     root: appResourcePath,
-    getContent(path) {
-      return readFile(path)
+    async getContent(path) {
+      console.log('input path is:', path)
+      // return await readFile(`${appResourcePath}/${path}`, {
+      return await readFile(path, {
+        encoding: 'utf-8'
+      })
     },
   }))
   
@@ -25,16 +33,17 @@ export function serveApp() {
       return context.text('not found', 404)
     }
   
-    const content = await readFile(`${appResourcePath}/index.html`, {
-      encoding: 'utf-8'
-    }) as string
-    return context.html(content, 200)
+    return returnBackIndexHtmlFile(appResourcePath, context)
   })
   
   duck.on('GET', ['/', '/journal/:id', '/too-technical', '*404'], async(context) => {
-    const content = await readFile(`${appResourcePath}/index.html`, {
-      encoding: 'utf-8'
-    }) as string
-    return context.html(content, 200)
+    return returnBackIndexHtmlFile(appResourcePath, context)
   })
+}
+
+async function returnBackIndexHtmlFile(resourcePath: string, context: Context) {
+  const content = await readFile(`${resourcePath}/index.html`, {
+    encoding: 'utf-8'
+  }) as string
+  return context.html(content, 200)
 }

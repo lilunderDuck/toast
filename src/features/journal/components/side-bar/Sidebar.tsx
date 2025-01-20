@@ -24,12 +24,12 @@ const style = stylex.create({
 })
 
 export interface ISidebarProps extends HTMLAttributes<"div"> {
-  $onClickingOpen?: (journal: IJournalData) => void
-  $onClickingRemove?: (journal: IJournalData) => void
+  onClickingOpen$?: (journal: IJournalData) => void
+  on$ClickingRemove?: (journal: IJournalData) => void
 }
 
 export function Sidebar(props: ISidebarProps) {
-  const [, itsProps] = splitProps(props, ["$onClickingOpen", "$onClickingRemove"])
+  const [, itsProps] = splitProps(props, ["onClickingOpen$", "on$ClickingRemove"])
   const { $journal, $fileDisplay } = useJournalContext()
 
   let lastJournalId: string | undefined
@@ -40,7 +40,7 @@ export function Sidebar(props: ISidebarProps) {
       // @ts-ignore
       folder: JournalCategory
     },
-    dataLookup: $journal.$cache,
+    dataLookup: $journal.cache$,
     onClick(type, id, data) {
       if (type !== 'file') return
 
@@ -50,7 +50,7 @@ export function Sidebar(props: ISidebarProps) {
         return console.log(`No need to open journal, previous journal id: ${lastJournalId} - current journal id: ${thisJournalId}`)
       }
       
-      props.$onClickingOpen?.(data)
+      props.onClickingOpen$?.(data)
       lastJournalId = thisJournalId
     },
   })

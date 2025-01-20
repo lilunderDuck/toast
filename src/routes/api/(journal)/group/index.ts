@@ -10,12 +10,12 @@ duck.post(JOURNAL_GROUP_ROUTE, validator('json', (value, context) => {
   return validateIfValid(journalGroupFormSchema, value, context)
 }), async (context) => {
   const data = context.req.valid('json')
-  const newGroup = await journalGroupData.$create(data)
+  const newGroup = await journalGroupData.create$(data)
 
   return context.json(newGroup, 201)
 })
 
 /**GET /duck/journal-group/ */
 duck.get(JOURNAL_GROUP_ROUTE, async (context) => {
-  return context.json(await journalGroupData.$getAll(), 200)
+  return context.json(await journalGroupData.getAll$(), 200)
 })

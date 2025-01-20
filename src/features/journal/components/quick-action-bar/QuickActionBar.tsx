@@ -22,12 +22,12 @@ export function QuickActionBar() {
     <Flex id={__style.actionBar} {...stylex.attrs(style.bar)}>
       <QuickActionItem
         $icon={BsFileFill}
-        $label={'Your stuff'}
+        label$={'Your stuff'}
       />
       <Spacer />
       <QuickActionItem
         $icon={BsGearFill}
-        $label={'Settings'}
+        label$={'Settings'}
       />
     </Flex>
   )

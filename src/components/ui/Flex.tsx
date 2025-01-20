@@ -35,13 +35,13 @@ const createFlex = (type: FlexType) => {
   }
 
   return <T extends keyof HTMLElementTagNameMap>(props: HTMLAttributes<T> & {
-    $as?: T
+    as$?: T
   }) => {
-    const [, itsProps] = splitProps(props, ["$as"])
+    const [, itsProps] = splitProps(props, ["as$"])
 
     return (
       // @ts-ignore too lazy!
-      <Dynamic component={props.$as ?? "div"} {...itsProps} class={mergeClassname(props, mapping[type])} />
+      <Dynamic component={props.as$ ?? "div"} {...itsProps} class={mergeClassname(props, mapping[type])} />
     )
   }
 }

@@ -25,17 +25,17 @@ const style = stylex.create({
 type OnClickingJournalGroup = (data: IJournalGroupData) => EventHandler<"div", "onClick">
 
 export function JournalList() {
-  const { $grid, $event, $infoSidebar } = useJournalHomeContext()
+  const { grid$, event$, infoSidebar$ } = useJournalHomeContext()
 
   const [resource] = createResource(async() => {
-    await $grid.$fetchJournalGroups()
+    await grid$.fetchJournalGroups$()
     return true
   })
 
   let lastElement: HTMLDivElement | undefined
   const clickOnSomeJournalGroup: OnClickingJournalGroup = (data) => (mouseEvent) => {
     highlightJournalGroup(mouseEvent.currentTarget)
-    $infoSidebar.$open(data)
+    infoSidebar$.open$(data)
   }
   
   const highlightJournalGroup = (someElement: HTMLDivElement) => {
@@ -51,7 +51,9 @@ export function JournalList() {
     }
   }
 
-  $event.$on('home__infoSidebarClose', () => {
+  console.log(event$)
+
+  event$['on$']('home__infoSidebarClose', () => {
     deselectLastHighlightedGroupIfCan()
     lastElement = undefined
   })
@@ -66,9 +68,9 @@ export function JournalList() {
           Spinnin'
         </FlexCenter>
       }>
-        <For each={$grid.$journalGroups()}>
+        <For each={grid$.journalGroups$()}>
           {it => (
-            <JournalGrid {...it} $onClick={clickOnSomeJournalGroup(it)}/>
+            <JournalGrid {...it} on$Click={clickOnSomeJournalGroup(it)}/>
           )}
         </For>
         <CreateNewJournalGroup />

@@ -22,13 +22,13 @@ interface IEditJournalGroupModalProps extends IDialog, IJournalGroupData {
 export default function EditJournalGroupModal(props: IEditJournalGroupModalProps) {
   return (
     <DialogContent 
-      $closeOnClickOutside={false}
+      close$OnClickOutside={false}
       {...stylex.attrs(style.$content)}
     >
       <DialogTitle>
         Edit group
       </DialogTitle>
-      <EditJournalGroupForm {...props} onClick={props.$close} />
+      <EditJournalGroupForm {...props} onClick={props.close$} />
     </DialogContent>
   )
 }

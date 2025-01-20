@@ -41,30 +41,30 @@ const style = stylex.create({
 })
 
 interface ITrackingTime {
-  $currentTime: ThisYearsCurrentTime
-  $allDaysInThatMonth: Date[]
-  $selectedDate: Signal<Date>
+  currentTime$: ThisYearsCurrentTime
+  allDaysInThatMonth$: Date[]
+  selectedDate$: Signal<Date>
 }
 
 export interface IThisCalendarIdk extends ITrackingTime {
-  $getFormatedCurrentMonth(): string
+  getFormatedCurrentMonth$(): string
 }
 
 const Context = createContext<IThisCalendarIdk>()
 export function CalendarProvider(props: ParentProps) {
-  const $currentTime = getCurrentMonthAndYear()
-  const $allDaysInThatMonth = getDaysInMonth($currentTime.month, $currentTime.year)
-  const $getFormatedCurrentMonth = () => `${getMonthName($currentTime.month)}, ${$currentTime.year}`
-  const [selectedDate, setSelectedDate] = createSignal() as ITrackingTime['$selectedDate']
+  const currentTime$ = getCurrentMonthAndYear()
+  const allDaysInThatMonth$ = getDaysInMonth(currentTime$.month, currentTime$.year)
+  const getFormatedCurrentMonth$ = () => `${getMonthName(currentTime$.month)}, ${currentTime$.year}`
+  const [selectedDate, setSelectedDate] = createSignal() as ITrackingTime['selectedDate$']
 
   setSelectedDate(new Date())
 
   return (
     <Context.Provider value={{
-      $currentTime,
-      $allDaysInThatMonth,
-      $getFormatedCurrentMonth,
-      $selectedDate: [selectedDate, setSelectedDate]
+      currentTime$,
+      allDaysInThatMonth$,
+      getFormatedCurrentMonth$,
+      selectedDate$: [selectedDate, setSelectedDate]
     }}>
       {props.children}
     </Context.Provider>
@@ -78,24 +78,24 @@ export interface IMonthCalendarProps {
 }
 
 export function MonthCalendar(props: IMonthCalendarProps) {
-  const { $selectedDate, $currentTime, $allDaysInThatMonth } = useCalendarContext()
-  const [selectedDate, setSelectedDate] = $selectedDate
+  const { selectedDate$, currentTime$, allDaysInThatMonth$ } = useCalendarContext()
+  const [selectedDate, setSelectedDate] = selectedDate$
   const isCurrentDate = (someDate: Date) => 
-    someDate.getDate() === $currentTime.day
+    someDate.getDate() === currentTime$.day
   // ...
 
   const isSomeDateInTheFuture = (someDate: Date) => 
-    someDate.getDate() > $currentTime.day
+    someDate.getDate() > currentTime$.day
   // ...
 
   const isSomeDateSelected = (someDate: Date, selectedDate: Accessor<Date>) => 
     someDate.getDate() === selectedDate().getDate() &&
-    selectedDate().getDate() !== $currentTime.day
+    selectedDate().getDate() !== currentTime$.day
   // ...
 
   return (
     <div {...stylex.attrs(style.blockList)} id={__style.blockList}>
-      <For each={$allDaysInThatMonth}>
+      <For each={allDaysInThatMonth$}>
         {it => (
           <FlexCenter 
             class={mergeClassname(

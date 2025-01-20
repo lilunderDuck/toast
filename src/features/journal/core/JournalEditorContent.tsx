@@ -32,34 +32,34 @@ const style = stylex.create({
 
 export function JournalEditorContent() {
   const { $journal } = useJournalContext()
-  const { $event } = useThisEditorContext()
+  const { event$ } = useThisEditorContext()
 
   const shouldSave = () => {
-    return $journal.$currentlyOpened() !== undefined
+    return $journal.currentlyOpened$() !== undefined
   }
 
-  $event.$on('editor__onSwitching', async(previousData) => {
+  event$.on$('editor__onSwitching', async(previousData) => {
     if (!shouldSave()) return console.log('not open anything')
 
     if (previousData) {
-      await $journal.$save(previousData.id, previousData.content)
+      await $journal.save$(previousData.id, previousData.content)
     }
   })
 
-  $event.$on('editor__onUpdate', async(data) => {
+  event$.on$('editor__onUpdate', async(data) => {
     if (!shouldSave()) return console.log('not open anything')
     
-    await $journal.$save(data.id, data.content)
+    await $journal.save$(data.id, data.content)
   })
 
   return (
     <ResizablePanel initialSize={0.7}>
       <div {...stylex.attrs(style.content)}>
-        <ThisEditorTitleBar name={$journal.$currentlyOpened()?.name} />
+        <ThisEditorTitleBar name={$journal.currentlyOpened$()?.name} />
         <ThisEditor {...stylex.attrs(style.editor)}>
           <ThisEditorStatusBar />
         </ThisEditor>
-        <Show when={!$journal.$currentlyOpened()}>
+        <Show when={!$journal.currentlyOpened$()}>
           <EditorWelcome />
         </Show>
       </div>

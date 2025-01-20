@@ -27,14 +27,14 @@ interface IMemorySliderProps {
   $progressText?: string
   $otherProgressColor: string
   $otherProgressText?: string
-  $label: JSX.Element
+  label$: JSX.Element
 }
 
 export default function MemorySlider(props: IMemorySliderProps) {
   return (
     <section>
       <span {...stylex.attrs(style.sliderLabel)}>
-        {props.$label}
+        {props.label$}
       </span>
       <Flex {...stylex.attrs(style.slider)}>
         <FlexCenterY style={{

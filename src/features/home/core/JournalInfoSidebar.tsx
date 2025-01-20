@@ -25,7 +25,7 @@ const style = stylex.create({
     gridTemplateColumns: 'repeat(auto-fit, minmax(40%, 1fr))',
     gap: 15
   },
-  $onlyOnBottom: {
+  on$lyOnBottom: {
     position: 'absolute',
     bottom: 0,
     width: '100%',
@@ -36,11 +36,11 @@ const style = stylex.create({
 
 export function JournalInfoSidebar() {
   const navigateTo = useNavigate()
-  const { $infoSidebar } = useJournalHomeContext()
-  const redirectToJournalPage = () => navigateTo(`/journal/${$infoSidebar.$currentJournalData()?.id}`)
+  const { infoSidebar$ } = useJournalHomeContext()
+  const redirectToJournalPage = () => navigateTo(`/journal/${infoSidebar$.currentJournalData$()?.id}`)
 
   return (
-    <Show when={$infoSidebar.$currentJournalData()}>
+    <Show when={infoSidebar$.currentJournalData$()}>
       <div 
         class={mergeClassname(
           __scrollbarStyle.scrollbar,
@@ -51,15 +51,15 @@ export function JournalInfoSidebar() {
         id={__style.sidebar}
       >
         <BackgroundShowcase 
-          $heading={$infoSidebar.$currentJournalData()?.name}
-          $sectionText={$infoSidebar.$currentJournalData()?.description}
+          $heading={infoSidebar$.currentJournalData$()?.name}
+          $sectionText={infoSidebar$.currentJournalData$()?.description}
         />
-        <InfoList {...$infoSidebar.$currentJournalData()!} />
+        <InfoList {...infoSidebar$.currentJournalData$()!} />
         <OpenAndCloseButton 
-          $onClickingClose={$infoSidebar.$close}
-          $onClickingOpen={redirectToJournalPage}
-          $openText='Open this'
-          $closeText='Close'
+          onClickingClose$={infoSidebar$.close$}
+          onClickingOpen$={redirectToJournalPage}
+          openText$='Open this'
+          closeText$='Close'
         />
       </div>
     </Show>

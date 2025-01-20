@@ -32,7 +32,7 @@ const commands = {
   'dev:server':    DEV_SERVER,
   'dev:app':       DEV_APP,
   dev:             `${DEV_SERVER} & ${DEV_APP}`,
-  "build:app":     "deno task vite:app build",
+  "build:app":     `${VITE_APP_COMMAND} build`,
   "build:server":  BUILD_SERVER,
   build:           mergeCommands(BUILD_SERVER, BUILD_APP)
 } as const

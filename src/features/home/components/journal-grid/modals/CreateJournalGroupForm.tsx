@@ -25,7 +25,7 @@ interface ICreateJournalGroupFormProps {
 export default function CreateJournalGroupForm(props: ICreateJournalGroupFormProps) {
   const [_journalGroupForm, { Field, Form }] = createForm<JournalGroupSchema>()
   const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
-  const { $grid } = useJournalHomeContext()
+  const { grid$ } = useJournalHomeContext()
 
   const submit: SubmitHandler<JournalGroupSchema> = async(data) => {
     setSubmitButtonDisabled(true)
@@ -41,7 +41,7 @@ export default function CreateJournalGroupForm(props: ICreateJournalGroupFormPro
     if (!dataReturned) return
 
     setSubmitButtonDisabled(false)
-    $grid.$add(dataReturned)
+    grid$.add$(dataReturned)
     props.onClick()
   }
 
@@ -78,7 +78,7 @@ export default function CreateJournalGroupForm(props: ICreateJournalGroupFormPro
         )}
       </Field>
       <Button 
-        $size={ButtonSizeVariant.sm} 
+        size$={ButtonSizeVariant.sm} 
         type="submit" 
         disabled={submitButtonDisabled()}
       >
