@@ -4,7 +4,13 @@ export type OverSimpifiedNpmRegistryData = {
   version: string
   description: string
   homepageUrl: string
-  tags: string[]
+  type: 'dep' | 'devDep'
 }
 
 export type LibaryUsedData = OverSimpifiedNpmRegistryData[]
+
+export const enum LibaryType {
+  frontend,
+  backend,
+  build
+}

@@ -1,5 +1,3 @@
-import { Accessor, Setter } from "solid-js"
-// ...
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 // ...
@@ -18,24 +16,36 @@ const style = stylex.create({
   }
 })
 
-interface ILibarySearchBoxProps {
-  title$: string
-  onSelect$: Setter<string | undefined>
+interface ISelectBoxOptions {
+  onSelect$(value: string | null): any
   placeholder$: string
-  value$: Accessor<string | undefined>
   options$: string[]
 }
 
+interface ILibarySearchBoxProps {
+  title$: string
+  selectBox$: ISelectBoxOptions
+}
+
 export function LibarySearchBox(props: ILibarySearchBoxProps) {
+  const callEvent = props.selectBox$.onSelect$
+
+  const onSomethingSelected = (value: string | null) => {
+    if (value === props.selectBox$.placeholder$) {
+      return callEvent(null)
+    }
+
+    callEvent(value)
+  }
+  
   return (
     <>
       <FlexCenterY as$="h1" {...stylex.attrs(style.heading)}>
         {props.title$}
         <Select<string>
-          value={props.value$()}
-          onChange={props.onSelect$}
-          options={props.options$}
-          placeholder={props.placeholder$}
+          onChange={onSomethingSelected}
+          options={[props.selectBox$.placeholder$, ...props.selectBox$.options$]}
+          placeholder={props.selectBox$.placeholder$}
           // @ts-ignore
           itemComponent={(props) => (
             <SelectItem item={props.item}>

@@ -36,7 +36,7 @@ export function MemoryUsage() {
   onMount(() => {
     timer = setInterval(async() => {
       setUsage(await api_getServerUsages())
-    }, 1500)
+    }, 2000)
   })
 
   onCleanup(() => {

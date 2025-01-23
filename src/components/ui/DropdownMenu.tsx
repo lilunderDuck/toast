@@ -179,7 +179,7 @@ const DropdownMenuShortcut: Component<ComponentProps<"span">> = (props) => {
   const [, rest] = splitProps(props, ["class"])
   return <span class={mergeClassname(
     props,
-    stylex.attrs(style.menuShortcut)
+   stylex.attrs(style.menuShortcut)
   )} {...rest} />
 }
  
@@ -200,7 +200,8 @@ type DropdownMenuSeparatorProps<T extends ValidComponent = "hr"> =
   DropdownMenuPrimitive.DropdownMenuSeparatorProps<T> & {
     class?: string | undefined
   }
- 
+// ...
+
 const DropdownMenuSeparator = <T extends ValidComponent = "hr">(
   props: PolymorphicProps<T, DropdownMenuSeparatorProps<T>>
 ) => {
@@ -221,7 +222,8 @@ type DropdownMenuSubTriggerProps<T extends ValidComponent = "div"> =
     class?: string | undefined
     children?: JSX.Element
   }
- 
+// ...
+
 const DropdownMenuSubTrigger = <T extends ValidComponent = "div">(
   props: PolymorphicProps<T, DropdownMenuSubTriggerProps<T>>
 ) => {
@@ -230,7 +232,7 @@ const DropdownMenuSubTrigger = <T extends ValidComponent = "div">(
     <DropdownMenuPrimitive.SubTrigger
       class={mergeClassname(
         props,
-        stylex.attrs(style.menuSubContent)
+       stylex.attrs(style.menuSubContent)
       )}
       {...rest}
     >
@@ -255,7 +257,8 @@ type DropdownMenuSubContentProps<T extends ValidComponent = "div"> =
   DropdownMenuPrimitive.DropdownMenuSubContentProps<T> & {
     class?: string | undefined
   }
- 
+// ...
+
 const DropdownMenuSubContent = <T extends ValidComponent = "div">(
   props: PolymorphicProps<T, DropdownMenuSubContentProps<T>>
 ) => {
@@ -264,7 +267,7 @@ const DropdownMenuSubContent = <T extends ValidComponent = "div">(
     <DropdownMenuPrimitive.SubContent
       class={mergeClassname(
         props,
-        stylex.attrs(style.menuSubContent)
+       stylex.attrs(style.menuSubContent)
       )}
       {...rest}
     />
@@ -276,7 +279,8 @@ type DropdownMenuCheckboxItemProps<T extends ValidComponent = "div"> =
     class?: string | undefined
     children?: JSX.Element
   }
- 
+// ...
+
 const DropdownMenuCheckboxItem = <T extends ValidComponent = "div">(
   props: PolymorphicProps<T, DropdownMenuCheckboxItemProps<T>>
 ) => {
@@ -289,7 +293,7 @@ const DropdownMenuCheckboxItem = <T extends ValidComponent = "div">(
       )}
       {...rest}
     >
-      <span {...stylex.attrs(style.menuItemIndicator)}>
+      <span class={mergeClassname(stylex.attrs(style.menuItemIndicator))}>
         <DropdownMenuPrimitive.ItemIndicator>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -314,7 +318,8 @@ type DropdownMenuGroupLabelProps<T extends ValidComponent = "span"> =
   DropdownMenuPrimitive.DropdownMenuGroupLabelProps<T> & {
     class?: string | undefined
   }
- 
+// ...
+
 const DropdownMenuGroupLabel = <T extends ValidComponent = "span">(
   props: PolymorphicProps<T, DropdownMenuGroupLabelProps<T>>
 ) => {
@@ -323,7 +328,7 @@ const DropdownMenuGroupLabel = <T extends ValidComponent = "span">(
     <DropdownMenuPrimitive.GroupLabel
       class={mergeClassname(
         props,
-        stylex.attrs(style.menuGroupLabel)
+       stylex.attrs(style.menuGroupLabel)
       )}
       {...rest}
     />
@@ -335,7 +340,8 @@ type DropdownMenuRadioItemProps<T extends ValidComponent = "div"> =
     class?: string | undefined
     children?: JSX.Element
   }
- 
+// ...
+
 const DropdownMenuRadioItem = <T extends ValidComponent = "div">(
   props: PolymorphicProps<T, DropdownMenuRadioItemProps<T>>
 ) => {
@@ -344,7 +350,7 @@ const DropdownMenuRadioItem = <T extends ValidComponent = "div">(
     <DropdownMenuPrimitive.RadioItem
       class={mergeClassname(
         props,
-        stylex.attrs(style.menuRadioItem)
+       stylex.attrs(style.menuRadioItem)
       )}
       {...rest}
     >

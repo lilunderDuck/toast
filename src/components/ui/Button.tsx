@@ -96,7 +96,8 @@ export type ButtonProps<T extends ValidComponent = "button"> = ButtonPrimitive.B
     variant$?: ButtonVariant
     size$?: ButtonSizeVariant
   }
-// 
+// ...
+
 export const Button = <T extends ValidComponent = "button">(
   props: PolymorphicProps<T, ButtonProps<T>>
 ) => {

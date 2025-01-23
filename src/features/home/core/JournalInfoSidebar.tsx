@@ -2,7 +2,6 @@ import { Show } from "solid-js"
 import { useNavigate } from "@solidjs/router"
 // ...
 import { OpenAndCloseButton } from "~/components"
-import { mergeClassname } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from './JournalInfoSidebar.module.css' 
@@ -10,6 +9,7 @@ import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 // ...
 import { BackgroundShowcase, InfoList } from "../components"
 import { useJournalHomeContext } from "../provider"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   $sidebar: {

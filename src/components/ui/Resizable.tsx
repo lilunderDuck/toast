@@ -70,7 +70,7 @@ const ResizableHandle = <T extends ValidComponent = "button">(
       )}
     >
       <Show when={props.withHandle}>
-        <div {...stylex.attrs(style.$resiableIconHandle)}>
+        <div class={mergeClassname(stylex.attrs(style.$resiableIconHandle))}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

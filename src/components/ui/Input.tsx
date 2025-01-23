@@ -15,6 +15,9 @@ const style = stylex.create({
 
 export function Input(props: HTMLAttributes<"input">) {
   return (
-    <input {...props} class={mergeClassname(props, stylex.attrs(style.$input))} />
+    <input {...props} class={mergeClassname(
+      props,
+      stylex.attrs(style.$input)
+    )} />
   )
 }

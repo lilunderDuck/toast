@@ -4,14 +4,13 @@ import type stylex from "@stylexjs/stylex"
 export type StylexStylesAttribute = ReturnType<typeof stylex.attrs>
 
 type HasClassInIt = { class?: string }
+export type ValidClassnames = HasClassInIt | string | undefined
 
 /**Merges multiple class names into a single giant class.
  * @param something An array of class name elements to be merged.
  * @returns The merged class names as a single string.
  */
-export function mergeClassname<T extends (HasClassInIt | string | undefined)[]>(
-  ...something: T
-) {
+export function mergeClassname<T extends ValidClassnames[]>(...something: T) {
   let newClassname = ''
   for (const name of something) {
     if (!name) continue

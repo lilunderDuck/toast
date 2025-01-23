@@ -1,23 +1,37 @@
-import { createResource, For } from "solid-js"
+import { For } from "solid-js"
 // ...
-import { mergeClassname } from "~/utils"
+import { bodyClasslist, mergeClassname } from "~/utils"
+import type { OverSimpifiedNpmRegistryData } from "~/api/misc"
 // ...
 import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 import stylex from "@stylexjs/stylex"
 // ...
-import { api_getLibariesUsed } from "../../utils"
 import { solid_icon } from "../../assets"
 import LibaryUsedBox from "./LibaryUsedBox"
 
 const style = stylex.create({
   libList: {
     display: 'grid',
-    gridTemplateColumns: '1fr 1fr'
+    gridTemplateColumns: 'repeat(auto-fill, minmax(310px, 1fr))',
+    minWidth: '100%',
+    paddingLeft: 10,
+    paddingRight: 20
+  },
+  noOverflowX: {
+    overflowX: 'hidden'
   }
 })
 
-export function LibaryUsedList() {
-  const [libraries] = createResource(api_getLibariesUsed)
+interface ILibaryUsedListProps {
+  libaries: OverSimpifiedNpmRegistryData[]
+}
+
+export function LibaryUsedList(props: ILibaryUsedListProps) {
+  bodyClasslist().add(
+    ...mergeClassname(stylex.attrs(style.noOverflowX))
+      .split(' ')
+    // 
+  )
 
   return (
     <div class={mergeClassname(
@@ -25,7 +39,7 @@ export function LibaryUsedList() {
       __scrollbarStyle.scrollbarVertical,
       stylex.attrs(style.libList)
     )}>
-      <For each={libraries() ?? []}>
+      <For each={props.libaries}>
         {it => (
           <LibaryUsedBox 
             {...it} 

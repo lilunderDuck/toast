@@ -42,7 +42,10 @@ export function showTooltip(context: ChartContext) {
     return
   }
 
-  el.className = mergeClassname(stylex.attrs(style.chartjsTooltip), model.yAlign ? `no-transform` : '')
+  el.className = mergeClassname(
+    stylex.attrs(style.chartjsTooltip), 
+    model.yAlign ? `no-transform` : ''
+  )
 
   let content = ""
 

@@ -46,9 +46,10 @@ export function RadioGroupItem<T extends ValidComponent = "div">(
     "class",
     "children",
   ])
+  
   return (
     <RadioGroupPrimitive.Item
-      class={mergeClassname(stylex.attrs(style.item), local.class)}
+      class={mergeClassname(stylex.attrs(style.item), local)}
       {...others}
     >
       <RadioGroupPrimitive.ItemInput />

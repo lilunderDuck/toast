@@ -1,2 +1,3 @@
-export * from "./2-technical"
+export * from "./libary-list"
 export * from './memory'
+export * from './versions'

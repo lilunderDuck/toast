@@ -5,12 +5,12 @@ import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 // ...
 import { Divider } from "~/components"
 import type { IJournalData } from "~/api/journal"
-import { mergeClassname } from "~/utils"
 // ...
 import { FileDisplay, useJournalContext } from "../../context"
 import { SidebarButtonsRow } from "./SidebarButtonsRow"
 import { Journal } from "./Journal"
 import { JournalCategory } from "./JournalCategory"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   sidebar: {

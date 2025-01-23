@@ -1,4 +1,4 @@
-import type { JSX, ValidComponent } from "solid-js"
+import type { ValidComponent } from "solid-js"
 import { splitProps } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import * as RadioGroupPrimitive from "@kobalte/core/radio-group"
@@ -22,10 +22,7 @@ export function RadioGroupItemLabel<T extends ValidComponent = "label">(
   const [local, others] = splitProps(props as RadioGroupLabelProps, ["class"])
   return (
     <RadioGroupPrimitive.ItemLabel
-      class={mergeClassname(
-        stylex.attrs(style.itemLabel),
-        local.class
-      )}
+      class={mergeClassname(stylex.attrs(style.itemLabel), local)}
       {...others}
     />
   )

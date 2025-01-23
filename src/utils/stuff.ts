@@ -1,15 +1,19 @@
+import { API_VERSION, APP_VERSION } from "~/macros" assert { type: 'macro' }
+
 /**Pauses execution for a specified number of milliseconds.
  * @param delayInMs The number of milliseconds to delay.
  * @returns A Promise that resolves after the delay.
  */
-export const sleep = (delayInMs: number) => new Promise(resolve => setTimeout(resolve, delayInMs))
+export function sleep(delayInMs: number) {
+  return new Promise(resolve => setTimeout(resolve, delayInMs))
+}
 
 /**Debounces a function, limiting the rate at which it can be called.
  * @param callback The function to debounce.
  * @param wait The number of milliseconds to wait before calling the function.
  * @returns The debounced function.
  */
-export const debounce = <Fn extends AnyFunction>(callback: Fn, wait: number) => {
+export function debounce<Fn extends AnyFunction>(callback: Fn, wait: number) {
   let timeoutId: number | undefined = undefined
   return (...args: Parameters<Fn>) => {
     clearTimeout(timeoutId)
@@ -25,8 +29,8 @@ export function logThisVeryHelpfulMessage() {
     "\n\n",
     "\n---- You're now looking at the app information ----",
     `\nuser: ${navigator.userAgent}`,
-    `\napp version           :  v1.0.0`,
-    '\napi version           :  v1.0.0',
+    `\napp version           :  ${APP_VERSION}`,
+    `\napi version           :  ${API_VERSION}`,
     '\nusing solidjs version :  v1.8.11',
     '\n\n',
     "\n---- You're now looking at this cute cat ----",

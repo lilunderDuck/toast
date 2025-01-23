@@ -63,7 +63,7 @@ export function getEsbuildConfig(devMode: boolean, others?: ESBuildOptions): Inl
 
   // drop "console.(something)" call and "debugger" on production
   const dropConsoleSomethingCall: ESBuildOptions = devMode ? {/* nothing here... */} : {
-    // drop: ['console', 'debugger'],
+    drop: ['console', 'debugger'],
   }
   
   return {

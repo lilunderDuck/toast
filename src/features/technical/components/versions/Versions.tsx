@@ -2,6 +2,7 @@ import { For } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./Versions.module.css"
+import { API_VERSION, APP_BACKEND_VERSION, APP_VERSION } from "~/macros" assert { type: 'macro' }
 
 const style = stylex.create({
   versions: {
@@ -14,9 +15,9 @@ const style = stylex.create({
 
 export function Versions() {
   const stuff = [
-    { $name: 'App version', $version: __version },
-    { $name: 'Api version', $version: __apiVersion },
-    { $name: 'Backend', $version: __backendVersion },
+    { $name: 'App version', $version: APP_VERSION },
+    { $name: 'Api version', $version: API_VERSION },
+    { $name: 'Backend', $version: APP_BACKEND_VERSION },
     { $name: 'You', $version: navigator.userAgent.split('(')[1].split(')')[0] },
   ]
 

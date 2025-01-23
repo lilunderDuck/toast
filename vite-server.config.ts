@@ -1,4 +1,4 @@
-import { defineConfig, type InlineConfig } from 'vite'
+import { type BuildOptions, defineConfig, type InlineConfig } from 'vite'
 // ...
 import { VitePluginNode as nodePlugin } from 'vite-plugin-node'
 // ...
@@ -10,39 +10,38 @@ import {
 } from './vite-stuff'
 import tsconfig from './tsconfig.json'
 
-const config = (devMode: boolean): InlineConfig => ({
-  plugins: [
-    // @ts-ignore
-    nodePlugin({
-      adapter: () => {},
-      appPath: './src/entry-server.ts',
-    }),
-  ],
-  resolve: {
-    alias: getAliasPath(tsconfig, __dirname)
-  },
-  ...getEsbuildConfig(devMode),
-  server: {
-    port: 8000
-  },
-  ssr: {
-    target: 'node',
-    noExternal: [
-      "bson",
-      "hono"
+const config = (devMode: boolean): InlineConfig => {
+  const enableSourceMapInDev: BuildOptions = devMode ? {
+    sourcemap: true
+  } : {}
+
+  return {
+    plugins: [
+      // @ts-ignore
+      nodePlugin({
+        adapter: () => {},
+        appPath: './src/entry-server.ts',
+      }),
     ],
-  },
-  cacheDir: OUTPUT_DIRECTORY,
-  build: {
-    target: 'esnext',
-    outDir: SERVER_OUTPUT_DIRECTORY,
-    minify: !devMode,
-    sourcemap: 'inline',
-    rollupOptions: {
-      treeshake: true
-    }
+    resolve: {
+      alias: getAliasPath(tsconfig, __dirname)
+    },
+    ...getEsbuildConfig(devMode),
+    server: {
+      port: 8000
+    },
+    cacheDir: OUTPUT_DIRECTORY,
+    build: {
+      target: 'esnext',
+      outDir: SERVER_OUTPUT_DIRECTORY,
+      minify: !devMode,
+      rollupOptions: {
+        treeshake: true
+      }
+    },
+    ...enableSourceMapInDev
   }
-})
+}
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {

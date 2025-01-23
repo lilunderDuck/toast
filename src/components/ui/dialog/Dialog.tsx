@@ -102,8 +102,8 @@ const DialogPortal: Component<IDialogPortalProps> = (props) => {
       <FadeInFadeOutAnimation>
         <FlexCenterX class={mergeClassname(
           __scrollbarStyle.scrollBar, 
-          __scrollbarStyle.scrollbarVertical, 
-          {...stylex.attrs(style.portal)}
+          __scrollbarStyle.scrollbarVertical,
+          stylex.attrs(style.portal)
         )}>
           {props.children}
         </FlexCenterX>

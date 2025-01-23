@@ -4,6 +4,10 @@ import solidPlugin from 'vite-plugin-solid'
 import { optimizeCssModules } from 'vite-plugin-optimize-css-modules'
 import { stylex as stylexPlugin } from 'vite-plugin-stylex-dev'
 import { ViteImageOptimizer as imageOptimizer } from 'vite-plugin-image-optimizer'
+import macrosPlugin from 'unplugin-macros/vite'
+// ...
+// @ts-ignore
+import babelImportAssertions from '@babel/plugin-syntax-import-assertions'
 // ...
 import { 
   getEsbuildConfig, 
@@ -21,12 +25,27 @@ const rollupOutputOptions: Rollup.OutputOptions = {
   }
 }
 
+const macroPlugin = macrosPlugin({
+  viteConfig: {
+    resolve: {
+      alias: getAliasPath(tsconfig, __dirname)
+    }
+  }
+})
+
 const config = (devMode: boolean): InlineConfig => ({
   plugins: [
     optimizeCssModules() as Plugin,
-    solidPlugin(),
+    solidPlugin({
+      babel: {
+        plugins: [
+          babelImportAssertions
+        ]
+      },
+    }),
     stylexPlugin(),
     imageOptimizer() as Plugin,
+    macroPlugin,
   ],
   optimizeDeps: {
     include: [

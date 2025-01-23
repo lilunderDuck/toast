@@ -3,8 +3,9 @@ import { splitProps } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import * as RadioGroupPrimitive from "@kobalte/core/radio-group"
 // ...
-import { mergeClassname } from "~/utils"
 import stylex from "@stylexjs/stylex"
+// ...
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   group: {
@@ -23,6 +24,6 @@ export function RadioGroup<T extends ValidComponent = "div">(
   const [local, others] = splitProps(props as RadioGroupRootProps, ["class"])
   return <RadioGroupPrimitive.Root class={mergeClassname(
     stylex.attrs(style.group), 
-    local.class
+    local
   )} {...others} />
 }

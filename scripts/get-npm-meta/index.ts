@@ -1,17 +1,14 @@
 import packageJson from "../../package.json" with { type: "json" }
 import { encodeUrl } from "https://deno.land/x/encodeurl@1.0.0/mod.ts"
 import { NpmRegistryResponse } from "./npm.ts"
+import type { OverSimpifiedNpmRegistryData } from "../../src/api/misc/index.ts"
 
-type OverSimpifiedNpmRegistryData = {
-  name: string
-  author?: string
-  version: string
-  description: string
-  homepageUrl: string
-  tags: string[]
-}
-
-async function fetchNpmRegistry(packageName: string, packageVersion: string, out: OverSimpifiedNpmRegistryData[]) {
+async function fetchNpmRegistry(
+  packageName: string, 
+  packageVersion: string, 
+  type: OverSimpifiedNpmRegistryData["type"],
+  out: OverSimpifiedNpmRegistryData[]
+) {
   try {
     console.log('Fetching', packageName)
     const response = await fetch(`https://registry.npmjs.org/${encodeUrl(packageName)}`)
@@ -23,7 +20,7 @@ async function fetchNpmRegistry(packageName: string, packageVersion: string, out
       version: packageVersion,
       description: metadata.description,
       homepageUrl: metadata.homepage,
-      tags: metadata.keywords
+      type
     })
   } catch(it) {
     console.error(it)
@@ -37,13 +34,15 @@ async function fetchNpmRegistry(packageName: string, packageVersion: string, out
  */
 export async function fetchNpmData() {
   const stuff: OverSimpifiedNpmRegistryData[] = []
-  const things = [
-    ...Object.entries(packageJson.dependencies),
-    ...Object.entries(packageJson.devDependencies)
-  ]
+  const deps = Object.entries(packageJson.dependencies)
+  const devDeps = Object.entries(packageJson.devDependencies)
   
-  for (const [packageName, packageVersion] of things) {
-    await fetchNpmRegistry(packageName, packageVersion, stuff)
+  for (const [packageName, packageVersion] of deps) {
+    await fetchNpmRegistry(packageName, packageVersion, 'dep', stuff)
+  }
+
+  for (const [packageName, packageVersion] of devDeps) {
+    await fetchNpmRegistry(packageName, packageVersion, 'devDep', stuff)
   }
 
   return stuff
