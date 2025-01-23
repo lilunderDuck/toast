@@ -1,7 +1,7 @@
 import type { JSX, ValidComponent } from "solid-js"
 import { splitProps } from "solid-js"
-import * as ButtonPrimitive from "@kobalte/core/button"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
+import { ButtonRootProps, Root } from "@kobalte/core/button"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./Button.module.css"
@@ -89,7 +89,7 @@ const sizeMapping: Record<ButtonSizeVariant, StylexStylesAttribute> = {
   [ButtonSizeVariant.icon]: stylex.attrs(style.size_icon)
 }
  
-export type ButtonProps<T extends ValidComponent = "button"> = ButtonPrimitive.ButtonRootProps<T> &
+export type ButtonProps<T extends ValidComponent = "button"> = ButtonRootProps<T> &
   { 
     class?: string | undefined
     children?: JSX.Element 
@@ -98,12 +98,12 @@ export type ButtonProps<T extends ValidComponent = "button"> = ButtonPrimitive.B
   }
 // ...
 
-export const Button = <T extends ValidComponent = "button">(
+export function Button<T extends ValidComponent = "button">(
   props: PolymorphicProps<T, ButtonProps<T>>
-) => {
+) {
   const [local, others] = splitProps(props as ButtonProps, ["variant$", "size$"])
   return (
-    <ButtonPrimitive.Root
+    <Root
       {...others}
       class={mergeClassname(
         others,

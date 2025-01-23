@@ -85,16 +85,16 @@ const Dialog = DialogPrimitive.Root
 const DialogTrigger = DialogPrimitive.Trigger
 
 interface IDialogPortalProps extends DialogPrimitive.DialogPortalProps {
-  close$OnClickOutside?: boolean
+  closeOnClickOutside$?: boolean
 }
 
 const DialogPortal: Component<IDialogPortalProps> = (props) => {
-  const [, rest] = splitProps(props, ["children", "close$OnClickOutside"])
+  const [, rest] = splitProps(props, ["children", "closeOnClickOutside$"])
 
   return (
     <DialogPrimitive.Portal {...rest}>
       <Show
-        when={props.close$OnClickOutside === false}
+        when={props.closeOnClickOutside$ === false}
         fallback={<DialogOverlay />}
       >
         <div dont-close {...stylex.attrs(style.overlay)} />
@@ -136,7 +136,7 @@ type DialogContentProps<T extends ValidComponent = "div"> =
   & {
     class?: string | undefined
     children?: JSX.Element
-    close$OnClickOutside?: boolean
+    closeOnClickOutside$?: boolean
   }
 // ...
 
@@ -146,11 +146,11 @@ const DialogContent = <T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as DialogContentProps, [
     "class",
     "children",
-    "close$OnClickOutside",
+    "closeOnClickOutside$",
   ])
 
   return (
-    <DialogPortal close$OnClickOutside={props.close$OnClickOutside}>
+    <DialogPortal closeOnClickOutside$={props.closeOnClickOutside$}>
       <DialogPrimitive.Content
         class={mergeClassname(props, stylex.attrs(style.content))}
         {...rest}

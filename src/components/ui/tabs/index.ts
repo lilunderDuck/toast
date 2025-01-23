@@ -1,0 +1,5 @@
+export * from './Tabs'
+export * from './TabsContent'
+export * from './TabsIndicator'
+export * from './TabsList'
+export * from './TabsTrigger'

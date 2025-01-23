@@ -19,7 +19,7 @@ const style = stylex.create({
 export default function CreateJournalGroupModal(props: IDialog) {
   return (
     <DialogContent 
-      close$OnClickOutside={false}
+      closeOnClickOutside$={false}
       {...stylex.attrs(style.$content)}
     >
       <DialogTitle>

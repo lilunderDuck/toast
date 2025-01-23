@@ -1,16 +1,12 @@
 import type { ValidComponent } from "solid-js"
 import { splitProps } from "solid-js"
  
-import * as CheckboxPrimitive from "@kobalte/core/checkbox"
+import { Root, Input, Control, Indicator, type CheckboxRootProps } from "@kobalte/core/checkbox"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
  
 import stylex from "@stylexjs/stylex"
 import { mergeClassname } from "../../utils"
 import { BsCheck } from "solid-icons/bs"
- 
-type CheckboxRootProps<T extends ValidComponent = "div"> =
-  CheckboxPrimitive.CheckboxRootProps<T> & { class?: string | undefined }
-// 
 
 const style = stylex.create({
   checkbox: {
@@ -29,21 +25,23 @@ const style = stylex.create({
     borderWidth: "1px"
   }
 })
- 
-const Checkbox = <T extends ValidComponent = "div">(
-  props: PolymorphicProps<T, CheckboxRootProps<T>>
-) => {
-  const [local, others] = splitProps(props as CheckboxRootProps, ["class"])
-  return (
-    <CheckboxPrimitive.Root {...others} class={mergeClassname(local, stylex.attrs(style.checkbox))}>
-      <CheckboxPrimitive.Input class="peer" />
-      <CheckboxPrimitive.Control {...stylex.attrs(style.checkboxControl)}>
-        <CheckboxPrimitive.Indicator>
-          <BsCheck />
-        </CheckboxPrimitive.Indicator>
-      </CheckboxPrimitive.Control>
-    </CheckboxPrimitive.Root>
-  )
+
+interface ICheckboxRootProps<T extends ValidComponent = "div"> extends CheckboxRootProps<T> {
+  class?: string | undefined
 }
  
-export { Checkbox }
+export function Checkbox<T extends ValidComponent = "div">(
+  props: PolymorphicProps<T, ICheckboxRootProps<T>>
+) {
+  const [local, others] = splitProps(props as ICheckboxRootProps, ["class"])
+  return (
+    <Root {...others} class={mergeClassname(local, stylex.attrs(style.checkbox))}>
+      <Input class="peer" />
+      <Control {...stylex.attrs(style.checkboxControl)}>
+        <Indicator>
+          <BsCheck />
+        </Indicator>
+      </Control>
+    </Root>
+  )
+}

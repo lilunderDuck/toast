@@ -1,22 +1,10 @@
-import type { Component, ValidComponent } from "solid-js"
+import type { ValidComponent } from "solid-js"
 import { splitProps } from "solid-js"
- 
-import * as HoverCardPrimitive from "@kobalte/core/hover-card"
+
+import { Content, HoverCardContentProps, HoverCardRootProps, Portal, Root, Trigger } from "@kobalte/core/hover-card"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
 import { mergeClassname } from "../../utils"
- 
-const HoverCardTrigger = HoverCardPrimitive.Trigger
- 
-const HoverCard: Component<HoverCardPrimitive.HoverCardRootProps> = (props) => {
-  return <HoverCardPrimitive.Root gutter={4} {...props} />
-}
- 
-type HoverCardContentProps<T extends ValidComponent = "div"> =
-  HoverCardPrimitive.HoverCardContentProps<T> & {
-    class?: string | undefined
-  }
-// 
 
 const style = stylex.create({
   hoverCard: {
@@ -31,18 +19,28 @@ const style = stylex.create({
   }
 })
 
-const HoverCardContent = <T extends ValidComponent = "div">(
-  props: PolymorphicProps<T, HoverCardContentProps<T>>
-) => {
-  const [local, others] = splitProps(props as HoverCardContentProps, ["class"])
+export const HoverCardTrigger = Trigger
+
+export function HoverCard(props: HoverCardRootProps) {
+  return <Root gutter={4} {...props} />
+}
+
+export interface IHoverCardContentProps<
+  T extends ValidComponent = "div"
+> extends HoverCardContentProps<T> {
+  class?: string | undefined
+}
+
+export function HoverCardContent<T extends ValidComponent = "div">(
+  props: PolymorphicProps<T, IHoverCardContentProps<T>>
+) {
+  const [local, others] = splitProps(props as IHoverCardContentProps, ["class"])
   return (
-    <HoverCardPrimitive.Portal>
-      <HoverCardPrimitive.Content
+    <Portal>
+      <Content
         {...others}
         class={mergeClassname(local, stylex.attrs(style.hoverCard))}
       />
-    </HoverCardPrimitive.Portal>
+    </Portal>
   )
 }
- 
-export { HoverCard, HoverCardTrigger, HoverCardContent }
