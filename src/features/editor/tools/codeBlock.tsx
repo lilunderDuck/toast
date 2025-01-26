@@ -1,6 +1,6 @@
 import type { BlockToolConstructorOptions } from '@editorjs/editorjs/types/tools'
 import { EditorView, basicSetup } from "codemirror"
-import { css } from "@codemirror/lang-css"
+// import { css } from "@codemirror/lang-css"
 // ...
 import { createToolbox } from '../utils'
 // ...
@@ -23,7 +23,7 @@ export class CodeBlock {
   
   constructor(protected options: CodeToolClass) {}
 
-  protected $editorView!: EditorView
+  protected editorView$!: EditorView
   render() {
     const mountingPoint = document.createElement('div')
     const view = new EditorView({
@@ -34,18 +34,18 @@ export class CodeBlock {
 
     mountingPoint.id = __style.tool
 
-    this.$editorView = view
+    this.editorView$ = view
 
     return mountingPoint
   }
 
   save(): CodeSavedData {
     return {
-      code: this.$editorView.state.doc.toString()
+      code: this.editorView$.state.doc.toString()
     }
   }
 
   destroy() {
-    this.$editorView.destroy()
+    this.editorView$.destroy()
   }
 }

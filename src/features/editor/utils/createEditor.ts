@@ -4,7 +4,8 @@ import {
   createColorPicker, 
   HtmlBlock,
   CodeBlock,
-  LinkBlock
+  LinkBlock,
+  TodoBlock
 } from '../tools'
 // ...
 // before you yell at me,
@@ -43,6 +44,7 @@ export function createEditor(whereToPut: HTMLElement, isEditable: boolean) {
     html: HtmlBlock,
     code: CodeBlock,
     link: LinkBlock,
+    todo: TodoBlock,
     // ... inline tools zone ...
     spoiler: InlineSpoilerTool,
     underline: UnderlineTool,

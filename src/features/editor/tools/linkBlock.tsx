@@ -5,13 +5,13 @@ import __style from './tools.module.css'
 // ...
 import { createSolidRenderer } from '~/utils'
 // ...
-import { BlockComponentProps, createToolbox } from '../utils'
+import { createToolbox } from '../utils'
 
 export type LinkSavedData = {
   link: string
 }
 
-type LinkToolClass = BlockToolConstructorOptions<LinkSavedData, {}>
+type LinkBlockOptions = BlockToolConstructorOptions<LinkSavedData, {}>
 
 const style = stylex.create({
   input: {
@@ -38,10 +38,10 @@ export class LinkBlock {
     </svg>  
   `)
 
-  constructor(protected options: LinkToolClass) {}
+  constructor(protected options: LinkBlockOptions) {}
 
-  protected $input!: Ref<"input">
-  protected $dispose!: () => void
+  protected input$!: Ref<"input">
+  protected dispose$!: () => void
   render() {
     const [element, dispose] = createSolidRenderer(() => (
       <input 
@@ -49,22 +49,22 @@ export class LinkBlock {
         placeholder='Enter some link into here' 
         readonly={this.options.readOnly}
         value={this.options.data.link}
-        ref={this.$input} 
+        ref={this.input$} 
       />
     ), { class: __style.tool })
 
-    this.$dispose = dispose
+    this.dispose$ = dispose
     return element
   }
 
   save(): LinkSavedData {
     return {
-      link: this.$input.value
+      link: this.input$.value
     }
   }
 
   destroy() {
-    this.$dispose()
-    this.$input = null as unknown as HTMLInputElement
+    this.dispose$()
+    this.input$ = null as unknown as HTMLInputElement
   }
 }

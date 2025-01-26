@@ -1,0 +1,13 @@
+.description {
+  color: var(--gray11)
+}
+
+.checked .name {
+  color: var(--gray11);
+  text-decoration: line-through;
+}
+
+.checked .description {
+  color: var(--gray10);
+  text-decoration: line-through;
+}

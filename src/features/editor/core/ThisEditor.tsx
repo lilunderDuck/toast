@@ -50,8 +50,12 @@ export function ThisEditor(props: ParentProps<{ class?: string }>) {
   }
 
   const onSlappingYourKeyboard: EventHandler<"div", "onKeyUp"> = async(keyboardEvent) => {
+    const target = keyboardEvent.target
+
     // don't update if you press these key
     const keyYouJustPressed = keyboardEvent.key
+    if (!keyYouJustPressed) return
+    
     const isContainsTheseModifierKeys = ['Control', 'Shift', 'Alt'].includes(keyYouJustPressed)
     const isContainsKeysFSomething = keyYouJustPressed[0] === 'F' && !Number.isNaN(parseInt(keyYouJustPressed[1]))
 
@@ -63,12 +67,7 @@ export function ThisEditor(props: ParentProps<{ class?: string }>) {
     update()
   }
 
-  const update = debounce(async() => {
-    const savedData = await editor.save$()
-    editor.event$.emit$('editor__onUpdate', savedData)
-    editor.cache$.set(savedData.id, savedData.content)
-    editor.updateCharsAndWordsCount$(savedData.content)
-  }, 1500)
+  const update = debounce(editor.update$, 1500)
   
   return (
     <div 

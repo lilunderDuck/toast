@@ -10,3 +10,11 @@ export function mergeObjects<T extends (object | undefined)[]>(...things: T) {
 export function isEmptyObject(obj: {}) {
   return Object.keys(obj).length === 0;
 }
+
+export function convertMapToObject(anyMap: Map<any, any>) {
+  return Object.fromEntries(anyMap)
+}
+
+export function convertObjectToMap(anyObject: {}) {
+  return new Map(Object.entries(anyObject))
+}

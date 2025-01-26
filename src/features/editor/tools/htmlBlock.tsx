@@ -43,8 +43,8 @@ export class HtmlBlock {
   
   constructor(protected options: HtmlToolClass) {}
 
-  protected $textarea!: Ref<"textarea">
-  protected $dispose!: () => void
+  protected textarea$!: Ref<"textarea">
+  protected dispose$!: () => void
   render() {
     // I don't know how to add the "block will be deleted if block is empty" functionality
     // const setIfEmpty = (event: InputEvent) => {
@@ -58,23 +58,23 @@ export class HtmlBlock {
         rows={2} 
         placeholder='Input some html code' 
         readonly={this.options.readOnly}
-        ref={this.$textarea} 
+        ref={this.textarea$} 
         value={this.options.data.html}
       />
     ), { class: __style.tool })
 
-    this.$dispose = dispose
+    this.dispose$ = dispose
     return element
   }
 
   save(): HtmlSavedData {
     return {
-      html: this.$textarea.value
+      html: this.textarea$.value
     }
   }
 
   destroy() {
-    this.$dispose()
-    this.$textarea = null as unknown as HTMLTextAreaElement
+    this.dispose$()
+    this.textarea$ = null as unknown as HTMLTextAreaElement
   }
 }

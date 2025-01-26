@@ -9,6 +9,12 @@ export function getRandomNumber(bound: number) {
   return Math.floor(Math.random() * bound)
 }
 
+export function getRandomNumberFrom(from: number, to: number) {
+  const minCeiled = Math.ceil(from)
+  const maxFloored = Math.floor(to)
+  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled)
+}
+
 /**Selects a random element from an array.
  *
  * @template T The type of the elements in the array.

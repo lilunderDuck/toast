@@ -3,20 +3,23 @@ import stylex from '@stylexjs/stylex'
 import { type JSX, Show, splitProps } from 'solid-js'
 import __style from './FieldInput.module.css'
 
-type TextFieldProps = {
+export type TextFieldInputRef = HTMLInputElement | HTMLTextAreaElement
+
+export type TextFieldProps = {
   name: string;
   type?: 'text' | 'email' | 'tel' | 'password' | 'url' | 'date' | undefined;
   label?: string | undefined;
   placeholder?: string | undefined;
   value: string | undefined;
   error: string;
+  autocomplete?: 'off' | 'on'
   multiline?: boolean | undefined;
   required?: boolean | undefined;
   disabled?: boolean | undefined;
-  ref: (element: HTMLInputElement | HTMLTextAreaElement) => void;
-  onInput: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, InputEvent>;
-  onChange: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, Event>;
-  onBlur: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, FocusEvent>;
+  ref: (element: TextFieldInputRef) => void;
+  onInput: JSX.EventHandler<TextFieldInputRef, InputEvent>;
+  onChange: JSX.EventHandler<TextFieldInputRef, Event>;
+  onBlur: JSX.EventHandler<TextFieldInputRef, FocusEvent>;
 }
 
 const style = stylex.create({
@@ -39,7 +42,7 @@ export function FieldInput(props: TextFieldProps) {
   const [rootProps, inputProps] = splitProps(
     props,
     ['name', 'value', 'required', 'disabled'],
-    ['placeholder', 'ref', 'onInput', 'onChange', 'onBlur']
+    ['placeholder', 'ref', 'onInput', 'onChange', 'onBlur', 'autocomplete']
   )
 
   return (

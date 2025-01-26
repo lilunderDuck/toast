@@ -22,3 +22,5 @@ type AnyEditorjsInlineToolClass = AnyClass & Partial<InlineTool>
 export type InlineToolContructorArgs<T extends AnyEditorjsInlineToolClass> = ConstructorParameters<T>[0]
 
 export type BlockToolConstructorArgs<T extends AnyClass & Partial<BlockTool>> = ConstructorParameters<T>[0]
+
+export type NoOptions = {}

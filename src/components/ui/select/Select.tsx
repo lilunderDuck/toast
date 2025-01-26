@@ -1,5 +1,7 @@
 import { 
+  HiddenSelect,
   Root,
+  Value,
   type SelectRootProps
 } from "@kobalte/core/select"
 import __style from "./Select.module.css"
@@ -12,6 +14,10 @@ const style = stylex.create({
     borderRadius: 6
   }
 })
+
+// Forgot to add these things
+export const SelectValue = Value
+export const SelectHiddenSelect = HiddenSelect
 
 export function Select<
   Option, 

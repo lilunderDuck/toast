@@ -2,6 +2,7 @@ import {
   Accessor,
   createContext, 
   createSignal, 
+  onCleanup, 
   type ParentProps, 
   type Setter, 
   useContext 
@@ -11,6 +12,7 @@ import EditorJS, { type OutputBlockData } from "@editorjs/editorjs"
 import { createEvent, IEvent } from "~/utils"
 // ...
 import { getBlocksTextLength, getBlocksWordCount } from "../utils"
+import { ThisEditorGlobal } from "./ThisEditorGlobal"
 
 export type EditorData = {
   /** The unique identifier of the editor. */
@@ -73,6 +75,8 @@ export interface IThisEditorProviderContext {
    * @param data the editor JSON data.
    */
   open$(data: EditorData): void
+
+  update$(): Promise<void>
 }
 
 const Context = createContext<IThisEditorProviderContext>()
@@ -92,8 +96,31 @@ export function ThisEditorProvider(props: ParentProps) {
   let editorInstance: EditorJS
   let lastData: EditorData | null = null
 
+  const update = async() => {
+    const savedData = await save()
+    event.emit$('editor__onUpdate', savedData)
+    cache.set(savedData.id, savedData.content)
+    updateCharsAndWordsCount$(savedData.content)
+  }
+
+  const save = async() => {
+    const content = await editorInstance!.save()
+    console.log('[editor] saving', lastData?.id, 'with', content.blocks)
+    return {
+      content: content.blocks,
+      id: lastData!.id
+    }
+  }
+
+  onCleanup(() => {
+    ThisEditorGlobal.update$ = undefined
+  })
+
+  ThisEditorGlobal.update$ = update
+
   return (
     <Context.Provider value={{
+      update$: update,
       event$: event,
       cache$: cache,
       set editorInstance$(instance: EditorJS) {
@@ -127,14 +154,7 @@ export function ThisEditorProvider(props: ParentProps) {
         updateCharsAndWordsCount$(data.content)
         console.log('[editor] opened', data)
       },
-      async save$() {
-        const content = await this.editorInstance$!.save()
-        console.log('[editor] saving', lastData?.id, 'with', content.blocks)
-        return {
-          content: content.blocks,
-          id: lastData!.id
-        }
-      }
+      save$: save
     }}>
       {props.children}
     </Context.Provider>

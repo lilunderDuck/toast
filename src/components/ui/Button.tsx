@@ -45,8 +45,8 @@ const style = stylex.create({
     height: "2.5rem"
   },
   size_small: {
-    paddingInline: "0.75rem",
-    paddingBlock: '0.375rem',
+    paddingInline: "0.65rem",
+    paddingBlock: '0.275rem',
     borderRadius: "0.275rem"
   },
   size_large: {
