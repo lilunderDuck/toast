@@ -1,21 +1,24 @@
-import { createForm, required, SubmitHandler } from "@modular-forms/solid"
+import { createForm, required, type SubmitHandler } from "@modular-forms/solid"
 // ...
-import { TodoSchema } from "~/features/editor/types"
-import { FieldInput, OpenAndCloseButton } from "~/components"
-// ...
-import { resetFieldInputs } from "~/utils"
+import type { TodoSchema } from "~/features/editor/types"
 import { ThisEditorGlobal } from "~/features/editor/core"
+import { FieldInput, OpenAndCloseButton } from "~/components"
+import { resetFieldInputs } from "~/utils"
+// ...
+import type { TodoInputOptions } from "../provider"
 
-interface ICreateTodoInputProps {
-  onClose$(): void
-  onSubmit$(data: TodoSchema): void
-}
+interface ICreateTodoInputProps extends TodoInputOptions<TodoSchema> {}
 
 export default function CreateTodoInput(props: ICreateTodoInputProps) {
   const [thisForm, { Form, Field }] = createForm<TodoSchema>()
 
   const onSubmit: SubmitHandler<TodoSchema> = (data) => {
-    props.onSubmit$(data)
+    try {
+      props.onSubmit$(data)
+    } catch (error) {
+      console.log(error)
+    }
+    console.log('submited')
     resetFieldInputs(thisForm, {
       name: '',
       description: undefined
@@ -33,7 +36,7 @@ export default function CreateTodoInput(props: ICreateTodoInputProps) {
             autocomplete="off"
             type="text"
             required
-            value={field.value}
+            value={field.value ?? props.name}
             error={field.error}
           />
         )}
@@ -47,7 +50,7 @@ export default function CreateTodoInput(props: ICreateTodoInputProps) {
             autocomplete="off"
             type="text"
             required
-            value={field.value}
+            value={field.value ?? props.description}
             error={field.error}
           />
         )}
@@ -55,7 +58,7 @@ export default function CreateTodoInput(props: ICreateTodoInputProps) {
 
       <OpenAndCloseButton
         closeText$='Cancel'
-        openText$="Create" 
+        openText$={props.isEditMode$ ? 'Edit' : "Create"}
         openButtonProps$={{
           type: 'submit',
         }}

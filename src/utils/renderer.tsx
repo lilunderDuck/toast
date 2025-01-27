@@ -15,7 +15,7 @@ type DisposeFn = () => void
  */
 export function createSolidRenderer(RandomComponent: VoidComponent, rootProps?: RootProps): [HTMLDivElement, DisposeFn] {
   let element = document.createElement('div')
-  render(() => <RandomComponent />, element)
+  const componentDispose = render(() => <RandomComponent />, element)
 
   __devMode && element.setAttribute('this-is-solid-renderer', crypto.randomUUID())
 
@@ -27,6 +27,7 @@ export function createSolidRenderer(RandomComponent: VoidComponent, rootProps?: 
     console.log('[solid renderer] destroyed', element)
     element.remove()
     element = null as unknown as HTMLDivElement
+    componentDispose()
   }
 
   console.log('[solid renderer] created', element)

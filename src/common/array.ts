@@ -61,14 +61,12 @@ export function thisArrayObjects<T extends AnyObject[]>(arrayOfObjects: T): IThi
     },
     replace$(whereToReplace, somethingElse) {
       const [oldData, index] = this.find$(whereToReplace)
-      console.log('old', oldData)
 
       const newData = {
         ...oldData,
         ...somethingElse,
       }
 
-      console.log('new', newData)
       arrayOfObjects[index] = newData
       return arrayOfObjects
     },

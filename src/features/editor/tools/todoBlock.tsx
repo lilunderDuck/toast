@@ -24,6 +24,7 @@ export class TodoBlock {
   protected dispose$!: () => void
   protected data$ = createSignal({} as TodoSavedData)
   render() {
+    console.log('data in', this.options.data)
     const [element, dispose] = createSolidRenderer(() => (
       <TodoBlockRoot 
         dataOut$={this.data$}
@@ -43,5 +44,6 @@ export class TodoBlock {
 
   destroy() {
     this.dispose$()
+    this.data$ = undefined
   }
 }

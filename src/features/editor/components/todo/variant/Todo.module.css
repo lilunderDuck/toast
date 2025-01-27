@@ -11,3 +11,11 @@
   color: var(--gray10);
   text-decoration: line-through;
 }
+
+.todo .editOptions {
+  opacity: 0;
+}
+
+.todo:hover .editOptions {
+  opacity: 1;
+}

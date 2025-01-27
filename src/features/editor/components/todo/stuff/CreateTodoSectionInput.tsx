@@ -4,16 +4,16 @@ import type { TodoSectionSchema } from "~/features/editor/types"
 import { ThisEditorGlobal } from "~/features/editor/core"
 import { FieldInput, OpenAndCloseButton } from "~/components"
 import { resetFieldInputs } from "~/utils"
+// ...
+import { TodoInputOptions } from "../provider"
 
-interface ICreateTodoSectionInputProps {
-  onClose$(): void
-  onSubmit$(data: TodoSectionSchema): void
-}
+interface ICreateTodoSectionInputProps extends TodoInputOptions<TodoSectionSchema> {}
 
 export default function CreateTodoSectionInput(props: ICreateTodoSectionInputProps) {
   const [thisForm, { Form, Field }] = createForm<TodoSectionSchema>()
 
   const onSubmit: SubmitHandler<TodoSectionSchema> = (data) => {
+    // debugger
     props.onSubmit$(data)
     resetFieldInputs(thisForm, {})
     ThisEditorGlobal.update$()
@@ -29,7 +29,7 @@ export default function CreateTodoSectionInput(props: ICreateTodoSectionInputPro
             autocomplete="off"
             type="text"
             required
-            value={field.value}
+            value={field.value ?? props.name}
             error={field.error}
           />
         )}
@@ -37,7 +37,7 @@ export default function CreateTodoSectionInput(props: ICreateTodoSectionInputPro
 
       <OpenAndCloseButton
         closeText$='Cancel'
-        openText$="Create" 
+        openText$={props.isEditMode$ ? 'Edit' : "Create"} 
         openButtonProps$={{
           type: 'submit',
         }}

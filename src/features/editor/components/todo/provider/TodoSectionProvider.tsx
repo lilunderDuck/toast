@@ -1,6 +1,14 @@
 import { createContext, createSignal, type ParentProps, Signal, useContext } from "solid-js"
 // ...
-import { AnyTodoSection } from "~/features/editor/types"
+import type { 
+  AnyTodoSection, 
+} from "~/features/editor/types"
+
+export type TodoInputOptions<T> = Partial<T> & {
+  onClose$(): void
+  onSubmit$(data: T): void
+  isEditMode$?: boolean
+}
 
 interface ITodoSectionProviderProps {
   id: AnyTodoSection["id"]
@@ -14,14 +22,14 @@ interface ITodoSectionContext extends ITodoSectionProviderProps {
 const Context = createContext<ITodoSectionContext>()
 
 export function TodoSectionProvider(props: ParentProps<ITodoSectionProviderProps>) {
-  const isShowingTodoInput = createSignal(false)
-  const isShowingSectionInput = createSignal(false)
+  const [isShowingTodoInput, setIsShowingTodoInput] = createSignal(false)
+  const [isShowingSectionInput, setIsShowingSectionInput] = createSignal(false)
 
   return (
     <Context.Provider value={{
       id: props.id,
-      isShowingTodoInput$: isShowingTodoInput,
-      isShowingSectionInput$: isShowingSectionInput,
+      isShowingTodoInput$: [isShowingTodoInput, setIsShowingTodoInput],
+      isShowingSectionInput$: [isShowingSectionInput, setIsShowingSectionInput],
     }}>
       {props.children}
     </Context.Provider>

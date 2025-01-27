@@ -1,34 +1,39 @@
 import stylex from "@stylexjs/stylex"
 import { Button, ButtonSizeVariant, FlexCenterY } from "~/components"
-import { useTodoSectionContext } from "../variant/TodoSectionProvider"
+import { useTodoSectionContext } from "../provider/TodoSectionProvider"
+import { BsCheck2Square, BsUiChecks } from "solid-icons/bs"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   buttonRow: {
-    gap: 10,
-    marginBottom: 10
+    gap: 10
   }
 })
 
-export default function TodoButtonRow() {
+interface ITodoButtonRowProps extends HTMLAttributes<"div"> {
+  // ...
+}
+
+export function TodoButtonRow(props: ITodoButtonRowProps) {
   const { isShowingSectionInput$, isShowingTodoInput$ } = useTodoSectionContext()
   const [isShowingTodoInput, setisShowingTodoInput] = isShowingTodoInput$
   const [isShowingSectionInput, setisShowingSectionInput] = isShowingSectionInput$
 
   return (
-    <FlexCenterY {...stylex.attrs(style.buttonRow)}>
+    <FlexCenterY {...props} class={mergeClassname(props, stylex.attrs(style.buttonRow))}>
       <Button 
-        size$={ButtonSizeVariant.sm} 
+        size$={ButtonSizeVariant.icon} 
         onClick={() => setisShowingTodoInput(true)}
         disabled={isShowingTodoInput()}
       >
-        Create todo
+        <BsUiChecks />
       </Button>
       <Button 
-        size$={ButtonSizeVariant.sm}
+        size$={ButtonSizeVariant.icon}
         onClick={() => setisShowingSectionInput(true)}
         disabled={isShowingSectionInput()}
       >
-        Create section
+        <BsCheck2Square />
       </Button>
     </FlexCenterY>
   )
