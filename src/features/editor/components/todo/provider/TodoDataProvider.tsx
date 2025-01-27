@@ -85,6 +85,8 @@ export function TodoDataProvider(props: ParentProps<{
   // make sure to call this so it correctly shows on readonly mode
   saveData()
 
+  console.log('cached data', cachedData)
+
   return (
     <Context.Provider value={{
       ...props.data,

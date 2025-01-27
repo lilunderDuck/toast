@@ -50,7 +50,8 @@ export function makeTodoId() {
 
 export type CachedSectionData = Map<TodoSectionId, ITodoSection>
 export function createTodoData(cachedData: CachedSectionData, toSection: TodoSectionId, data: TodoSchema) {
-  const dataFromCache = cachedData.get(toSection)
+  const dataFromCache = cachedData.get(`${toSection}`)
+
   if (!dataFromCache) {
     return console.error('Could not find section id:', toSection)
   }

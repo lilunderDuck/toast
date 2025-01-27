@@ -23,6 +23,9 @@ const style = stylex.create({
   button: {
     flexShrink: 0,
     gap: 10
+  },
+  hideTodoArrow: {
+    rotate: '270deg'
   }
 })
 
@@ -37,6 +40,7 @@ export default function TodoSection(props: ITodoSectionProps) {
       <Show when={`${props.id}` !== 'uncategorized'}>
         <BsCaretDownFill 
           onClick={() => setIsShowingTodoList(prev => !prev)} 
+          {...stylex.attrs(isShowingTodoList() ? {} : style.hideTodoArrow)}
         />
         <span>{props.name}</span>
         <Spacer />
@@ -51,7 +55,7 @@ export default function TodoSection(props: ITodoSectionProps) {
     <TodoSectionProvider id={props.id}>
       <section class={mergeClassname(
         stylex.attrs(style.section), 
-        props.id !== 'uncategorized' ? __style.section : ''
+        `${props.id}` !== 'uncategorized' ? __style.section : ''
       )}>
         <Name />
         <Show when={isShowingTodoList()}>
