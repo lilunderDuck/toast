@@ -10,9 +10,7 @@ build_hacky:
 build_server:
 	${VITE_SERVER_COMMAND} build --mode=NOT-development
 	${COMMAND_AFTER_RUN_SERVER}
-	cd out
-	deno compile ./out/server/entry-server.mjs
-	cd ..
+	deno compile --output="./out/burned toast" --allow-read --allow-write --allow-net --node-modules-dir="none" ./out/server/entry-server.mjs
 
 build_app:
 	${VITE_APP_COMMAND} build
