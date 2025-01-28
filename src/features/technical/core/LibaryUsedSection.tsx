@@ -1,14 +1,14 @@
 import { createResource, createSignal, Show } from "solid-js"
 // ...
 import { ArrayElement } from "~/common"
-import { LibaryType, OverSimpifiedNpmRegistryData } from "~/api/misc"
+import { LibaryType, LibaryData } from "~/api/misc"
 // ...
 import { LibarySearchBox, LibaryUsedList } from "../components"
 import { api_getLibariesUsed } from "../utils"
 
 export function LibaryUsedSection() {
   const [libraries] = createResource(api_getLibariesUsed)
-  const [libaryList, setLibaryList] = createSignal<OverSimpifiedNpmRegistryData[]>([])
+  const [libaryList, setLibaryList] = createSignal<LibaryData[]>([])
   const options = [
     "in the client",
     "in the server",
@@ -24,7 +24,7 @@ export function LibaryUsedSection() {
   }
 
   const SURELY_THIS_IS_SELF_DOCUMENTED = /editorjs|codemirror|corvu|prism|chart|kobalte|modular-forms|solid|stylex/
-  const isUsedInTheClient = (thisThing: OverSimpifiedNpmRegistryData) => {
+  const isUsedInTheClient = (thisThing: LibaryData) => {
     return SURELY_THIS_IS_SELF_DOCUMENTED.test(thisThing.name)
   }
 

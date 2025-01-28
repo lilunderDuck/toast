@@ -1,5 +1,5 @@
 import { type CompressedJournalData, type IJournalData } from "~/api/journal"
-import { IFileCompression, IFileHandler, type Updater, buildJournalPath, createFileHandler, readAndUpdatePreviousIfNeeds } from "../utils"
+import { type IFileCompression, IFileHandler, type Updater, buildJournalPath, createFileHandler, readAndUpdatePreviousIfNeeds } from "../utils"
 import { bson_readFile, bson_writeFile, deleteFile } from "~/server"
 
 interface IJournalFileHandler extends IFileHandler, IFileCompression<IJournalData, CompressedJournalData> {
@@ -32,13 +32,11 @@ export const journalFileHandler = createFileHandler<IJournalFileHandler>(() => {
 
   const compress: IJournalFileHandler["compress$"] = (incomingData) => {
     const {type, id, created, modified, name, data} = incomingData
-    return {
-      0: [type, id, created, modified, name, data]
-    } as CompressedJournalData
+    return [type, id, created, modified, name, data] as CompressedJournalData
   }
 
   const decompress: IJournalFileHandler["decompress$"] = (compressedData) => {
-    const [type, id, created, modified, name, data] = compressedData[0]
+    const [type, id, created, modified, name, data] = compressedData
     return { 
       type: type, 
       id: id, 

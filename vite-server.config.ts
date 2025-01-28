@@ -31,7 +31,12 @@ const config = (devMode: boolean): InlineConfig => {
       port: 8000
     },
     cacheDir: OUTPUT_DIRECTORY,
+    // bundle everything
+    ssr: {
+      noExternal: ['hono', 'hast-util-from-html', 'valibot', 'bson']
+    },
     build: {
+      assetsDir: SERVER_OUTPUT_DIRECTORY,
       target: 'esnext',
       outDir: SERVER_OUTPUT_DIRECTORY,
       minify: !devMode,

@@ -4,6 +4,7 @@ import stylex from "@stylexjs/stylex"
 // ...
 import { useTodoDataContext, useTodoSectionContext } from "../provider"
 import Todo from "../variant/Todo"
+import { ITodo } from "~/features/editor/types"
 
 const style = stylex.create({
   todoList: {
@@ -11,7 +12,11 @@ const style = stylex.create({
   }
 })
 
-export function TodoList() {
+interface ITodoListProps {
+  list: ITodo[]
+}
+
+export function TodoList(props: ITodoListProps) {
   const { id } = useTodoSectionContext()
   const { sectionTodoLookup$, updateTodo$, setSomeTodoToEditMode$ } = useTodoDataContext()
 
@@ -23,7 +28,7 @@ export function TodoList() {
 
   return (
     <div {...stylex.attrs(style.todoList)}>
-      <For each={todos()}>
+      <For each={props.list}>
         {it => {
           if (!firstTime && lastId === it.id) {
             console.log('dupercated, refused to render', it.id)

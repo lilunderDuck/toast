@@ -11,11 +11,12 @@ import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   section: {
-    marginBottom: 30
+    marginBottom: 20,
+    fontSize: 14
   },
   sectionName: {
     gap: 10,
-    marginBottom: 4
+    marginBottom: 2
   },
   todoList: {
     marginBottom: 10
@@ -32,8 +33,9 @@ const style = stylex.create({
 interface ITodoSectionProps extends StripedTodoSectionData {}
 
 export default function TodoSection(props: ITodoSectionProps) {
-  const { readOnly } = useTodoDataContext()
+  const { readOnly, sectionTodoLookup$ } = useTodoDataContext()
   const [isShowingTodoList, setIsShowingTodoList] = createSignal(true)
+  const [todos] = sectionTodoLookup$[props.id]
 
   const Name = () => (
     <FlexCenterY {...stylex.attrs(style.sectionName)}>
@@ -59,7 +61,7 @@ export default function TodoSection(props: ITodoSectionProps) {
       )}>
         <Name />
         <Show when={isShowingTodoList()}>
-          <TodoList />
+          <TodoList list={todos()} />
         </Show>
         <TodoInputs />
       </section>

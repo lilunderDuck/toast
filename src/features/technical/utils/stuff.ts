@@ -1,7 +1,7 @@
 import { 
   LIBARY_USED_ROUTE, 
   MEMORY_USAGE_ROUTE, 
-  type OverSimpifiedNpmRegistryData,
+  type LibaryData,
   type IServerResourceUsage 
 } from "~/api/misc"
 import { fetchIt } from "~/utils"
@@ -11,5 +11,5 @@ export async function api_getServerUsages() {
 }
 
 export async function api_getLibariesUsed() {
-  return await fetchIt('GET', LIBARY_USED_ROUTE) as OverSimpifiedNpmRegistryData[]
+  return await fetchIt('GET', LIBARY_USED_ROUTE) as LibaryData[]
 }

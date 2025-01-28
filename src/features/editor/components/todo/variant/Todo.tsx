@@ -11,8 +11,7 @@ import { EditAndDeleteButtonRow } from "../stuff"
 
 const style = stylex.create({
   todo: {
-    gap: 10,
-    paddingBlock: 5
+    gap: 10
   },
   textWrapper: {
     width: '100%'

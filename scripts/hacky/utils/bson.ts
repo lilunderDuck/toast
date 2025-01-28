@@ -1,13 +1,28 @@
 import { Buffer } from 'node:buffer'
 import { BSON } from "bson"
 // ...
-import { writeFile, readFile } from './fs'
-import { internalCache } from '../internals'
+import fs from 'node:fs/promises'
+
+async function readFile<const T extends string>(filePath: T, options?: any) {
+  console.log(`[files]\t\t read: ${filePath} with options:`, JSON.stringify(options))
+  try {
+    return await fs.readFile(filePath, options)
+  } catch(error) {
+    console.error('[files]\t\t Cannot read this file', filePath, ', the rest of the error is\n', error)
+    return null
+  }
+}
+
+function writeFile<const T extends string, U extends any>(filePath: T, data: U, options?: any) {
+  console.log(`[files]\t\t write: ${filePath}`)
+  return fs.writeFile(filePath, data, options)
+}
 
 function bson_key(path: string) {
   return `bson-${path}` as const
 }
 
+const internalCache = new Map() 
 export async function bson_writeFile<T extends {}>(somePath: string, someData: T) {
   console.log("[bson]\t\t writing", somePath, 'with', JSON.stringify(someData))
   await writeFile(somePath, bson_serialize(someData))

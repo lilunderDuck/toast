@@ -1,13 +1,12 @@
-import packageJson from "../../package.json" with { type: "json" }
+import packageJson from "../../../package.json" with { type: "json" }
 import { encodeUrl } from "https://deno.land/x/encodeurl@1.0.0/mod.ts"
-import { NpmRegistryResponse } from "./npm.ts"
-import type { OverSimpifiedNpmRegistryData } from "../../src/api/misc/index.ts"
+import type { LibaryData } from "../../../src/api/misc/index.ts"
 
 async function fetchNpmRegistry(
   packageName: string, 
   packageVersion: string, 
-  type: OverSimpifiedNpmRegistryData["type"],
-  out: OverSimpifiedNpmRegistryData[]
+  type: LibaryData["type"],
+  out: LibaryData[]
 ) {
   try {
     console.log('Fetching', packageName)
@@ -33,7 +32,7 @@ async function fetchNpmRegistry(
  * @returns all package informations.
  */
 export async function fetchNpmData() {
-  const stuff: OverSimpifiedNpmRegistryData[] = []
+  const stuff: LibaryData[] = []
   const deps = Object.entries(packageJson.dependencies)
   const devDeps = Object.entries(packageJson.devDependencies)
   
@@ -46,4 +45,53 @@ export async function fetchNpmData() {
   }
 
   return stuff
+}
+
+export type NpmRegistryVersion = {
+  name: string
+  description: string
+  author: {
+    name: string
+  }
+  license: string
+  version: string
+  homepage: string
+  repository: {
+    type: string
+    url: string
+  }
+  // ... more ...
+}
+
+type Maintainer = {
+  name: string
+  email: string
+}
+
+export type NpmRegistryResponse = {
+  _id: string
+  _rev: string
+  name: string
+  'dist-tag': Record<string, string>
+  versions: Record<string, NpmRegistryVersion>
+  time: Record<string, Date> & {
+    created: Date
+    modified: Date
+  }
+  maintainers: Maintainer[]
+  description: string
+  homepage: string
+  keywords: string[]
+  repository: {
+    type: string
+    url: string
+  }
+  author: {
+    name: string
+  }
+  bugs: {
+    name: string
+  }
+  license: string
+  readme: string
 }

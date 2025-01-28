@@ -1,1 +1,1 @@
-export * from "./mangleProps"
+export * from './publicFolder.ts'

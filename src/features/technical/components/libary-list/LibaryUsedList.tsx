@@ -1,7 +1,7 @@
 import { For } from "solid-js"
 // ...
 import { bodyClasslist, mergeClassname } from "~/utils"
-import type { OverSimpifiedNpmRegistryData } from "~/api/misc"
+import type { LibaryData } from "~/api/misc"
 // ...
 import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 import stylex from "@stylexjs/stylex"
@@ -23,7 +23,7 @@ const style = stylex.create({
 })
 
 interface ILibaryUsedListProps {
-  libaries: OverSimpifiedNpmRegistryData[]
+  libaries: LibaryData[]
 }
 
 export function LibaryUsedList(props: ILibaryUsedListProps) {

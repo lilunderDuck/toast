@@ -11,3 +11,4 @@ logs
 *.exe.tmp-*
 
 src/public/*.generated.json
+src/public/*.bin

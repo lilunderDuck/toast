@@ -6,8 +6,7 @@ import {
   buildJournalGroupPath, 
   createCacheStorage, 
   createFileHandler, 
-  ICache, 
-  IFileCompression, 
+  type IFileCompression, 
   type IFileHandler, 
   readAndUpdatePreviousIfNeeds, 
   type Updater 
@@ -67,13 +66,11 @@ export const journalGroupFileHandler = createFileHandler<IJournalGroupFileHandle
 
   const compress: IJournalGroupFileHandler["compress$"] = (incomingData) => {
     const { id, created, modified, name, entries, tree, description, icon: __currentlyUnsupported } = incomingData
-    return {
-      0: [id, created, modified, name, description, entries, tree]
-    } as CompressedJournalGroupData
+    return [id, created, modified, name, description, entries, tree] as CompressedJournalGroupData
   }
 
   const decompress: IJournalGroupFileHandler["decompress$"] = (compressedData) => {
-    const [id, created, modified, name, description, entries, tree] = compressedData[0]
+    const [id, created, modified, name, description, entries, tree] = compressedData
     return {
       id: id, 
       created: created, 

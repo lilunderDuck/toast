@@ -3,7 +3,7 @@ import {
   type IJournalCategoryData
 } from "~/api/journal"
 import { 
-  IFileCompression,
+  type IFileCompression,
   type IFileHandler, 
   type Updater, 
   buildJournalPath, 
@@ -42,13 +42,11 @@ export const journalCategoryFileHandler = createFileHandler<IJournalCategoryFile
 
   const compress$: IJournalCategoryFileHandler["compress$"] = (incomingData) => {
     const { type, id, created, modified, name } = incomingData
-    return {
-      0: [type, id, created, modified, name]
-    } as CompressedJournalCategoryData
+    return [type, id, created, modified, name] as CompressedJournalCategoryData
   }
 
   const decompress$: IJournalCategoryFileHandler["decompress$"] = (compressedData) => {
-    const [type, id, created, modified, name] = compressedData[0]
+    const [type, id, created, modified, name] = compressedData
     return { 
       type: type, 
       id: id, 
