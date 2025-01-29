@@ -23,12 +23,6 @@ declare global {
 
   /**Whether this application is in dev mode, `false` if the app is in production */
   const __devMode: boolean
-  /**The current version of the app */
-  const __version: string
-  /**The current api version of the app */
-  const __apiVersion: string
-  /**The current version of the backend, that is which technology and its version has been used in the server */
-  const __backendVersion: string
 }
 
 export {}
