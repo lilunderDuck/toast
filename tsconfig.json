@@ -8,12 +8,12 @@
     "baseUrl": ".",
     "types": [
       "vite/client", 
-      "./src/@types/global.d.ts",
-      "./src/@types/internal_stuff.d.ts",
+      "./client/@types/global.d.ts",
+      "./client/@types/internal_stuff.d.ts",
       "@types/node"
     ],
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["client/*"]
     },
     
     "moduleResolution": "node",
