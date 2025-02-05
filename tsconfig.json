@@ -8,8 +8,8 @@
     "baseUrl": ".",
     "types": [
       "vite/client", 
-      "./@types/global.d.ts",
-      "./@types/internal_stuff.d.ts",
+      "./src/@types/global.d.ts",
+      "./src/@types/internal_stuff.d.ts",
       "@types/node"
     ],
     "paths": {
