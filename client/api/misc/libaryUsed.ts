@@ -9,15 +9,6 @@ export type LibaryData = {
 
 export type LibaryUsedData = LibaryData[]
 
-export type CompressedLibaryData = [
-  LibaryData["type"],
-  LibaryData["name"],
-  LibaryData["version"],
-  LibaryData["author"],
-  LibaryData["homepageUrl"],
-  LibaryData["description"],
-]
-
 export const enum LibaryType {
   frontend,
   backend,
