@@ -4,15 +4,13 @@ import { onCleanup, onMount, type ParentProps } from 'solid-js'
 import { bodyClasslist } from '~/utils'
 import { Resizable } from '~/components'
 import { ThisEditorProvider } from '~/features/editor'
-import type { IJournalGroupData} from '~/api/journal'
+import { type IJournalGroupData, api_getGroup } from '~/api/journal'
 import { toast } from '~/features/toast'
-import { api_getGroup } from '~/features/home'
 // ...
 import __style from './stuff.module.css'
 import stylex from '@stylexjs/stylex'
 // ...
 import { JournalProvider, useJournalContext } from '../context'
-import { api_getJournalVirturalFileTree, type TreeNode } from '../utils'
 
 const style = stylex.create({
   thisThing: {
@@ -62,13 +60,12 @@ export function JournalRoot(props: ParentProps) {
 
       // note: you should not reorder this line of code here, otherwise it *will* break
       $journal.cache$ = new Map() // hasn't handled
+      $fileDisplay.setTree$(data.tree.data)
       
       // @ts-ignore - should work
       delete data.tree
       $sessionStorage.$set('currentGroup', data)
       
-      $fileDisplay.setTree(data.tree.data)
-
       console.log('\n\n\n\n\n\n\n\n\n\n\n... A bunch of empty lines to make the log message not so messy ...\n\n\n\n\n\n\n\n\n\n\n\n\n')
     })
 

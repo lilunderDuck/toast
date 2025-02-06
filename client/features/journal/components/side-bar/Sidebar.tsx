@@ -33,27 +33,27 @@ export function Sidebar(props: ISidebarProps) {
   const { $journal, $fileDisplay } = useJournalContext()
 
   let lastJournalId: string | undefined
-  $fileDisplay.setOptions({
-    componentLookup: {
-      // @ts-ignore
-      file: Journal,
-      // @ts-ignore
-      folder: JournalCategory
-    },
-    dataLookup: $journal.cache$,
-    onClick(type, id, data) {
-      if (type !== 'file') return
+  // $fileDisplay.setOptions({
+  //   componentLookup: {
+  //     // @ts-ignore
+  //     file: Journal,
+  //     // @ts-ignore
+  //     folder: JournalCategory
+  //   },
+  //   dataLookup: $journal.cache$,
+  //   onClick(type, id, data) {
+  //     if (type !== 'file') return
 
-      console.log(data)
-      const thisJournalId = data.id 
-      if (thisJournalId === lastJournalId) {
-        return console.log(`No need to open journal, previous journal id: ${lastJournalId} - current journal id: ${thisJournalId}`)
-      }
+  //     console.log(data)
+  //     const thisJournalId = data.id 
+  //     if (thisJournalId === lastJournalId) {
+  //       return console.log(`No need to open journal, previous journal id: ${lastJournalId} - current journal id: ${thisJournalId}`)
+  //     }
       
-      props.onClickingOpen$?.(data)
-      lastJournalId = thisJournalId
-    },
-  })
+  //     props.onClickingOpen$?.(data)
+  //     lastJournalId = thisJournalId
+  //   },
+  // })
 
   return (
     <div 

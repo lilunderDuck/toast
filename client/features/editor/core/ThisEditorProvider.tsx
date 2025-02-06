@@ -58,7 +58,7 @@ export interface IThisEditorProviderContext {
   /**Accessor for editor events. */
   event$: IEvent<ThisEditorEvent>
   /**Editor's cache data */
-  cache$: Map<string, EditorData["content"]>
+  cache$: Map<number, EditorData["content"]>
   /**Tracks whether the editor is editable. */
   setIsEditable$(setter: Setter<boolean>): void
   /**The editable state of the editor. */

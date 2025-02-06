@@ -1,16 +1,16 @@
 import { createForm, required, SubmitHandler } from "@modular-forms/solid"
 import { createSignal } from "solid-js"
 // ...
-import type { 
-  IJournalGroupData,
-  JournalGroupSchema,
+import { 
+  type IJournalGroupData,
+  type JournalGroupSchema,
+  api_updateGroup
 } from "~/api/journal"
 import { Button, ButtonSizeVariant, FieldInput } from "~/components"
 import { toast } from '~/features/toast'
+import { useJournalHomeContext } from "~/features/home/provider"
 // ...
 import IconInput from "./IconInput"
-import { useJournalHomeContext } from "~/features/home/provider"
-import { api_updateGroup } from "~/features/home"
 
 interface IEditJournalGroupFormProps extends IJournalGroupData {
   onClick: () => any

@@ -4,7 +4,7 @@ import type { IEvent } from "~/utils"
 export type JournalEventMap = {
   journal__createJournal(data: IJournalData): void
   journal__openJournal(data: IJournalData): void
-  journal__deleteJournal(journalId: string): void
+  journal__deleteJournal(journalId: number): void
 }
 
 export type JournalEvent = IEvent<JournalEventMap>

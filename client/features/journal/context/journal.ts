@@ -5,21 +5,22 @@ import {
 } from "solid-js"
 // ...
 import { 
+  createFileNodeData,
+  createFolderNodeData,
   type IJournalCategoryData, 
   type IJournalData, 
   type JournalContentData, 
-  JournalFileType, 
+  JournalType, 
   type JournalSchema,
-} from "~/api/journal"
-import { useThisEditorContext } from "~/features/editor"
-// ...
-import { 
   api_createJournal, 
   api_deleteJournal, 
   api_getAllJournals, 
   api_getJournalContent, 
   api_saveJournalContent, 
-  createFolderData, 
+} from "~/api/journal"
+import { useThisEditorContext } from "~/features/editor"
+// ...
+import { 
   JournalSessionStorage
 } from ".."
 import { type IFileDisplayContext } from "./fileDisplayContext"
@@ -38,17 +39,17 @@ export interface IThisJournalContext {
    * @param type The type of the journal file.
    * @returns A promise that resolves to the created journal data.
    */
-  create$(data: JournalSchema, type: JournalFileType): Promise<IJournalData>
+  create$(data: JournalSchema, type: JournalType): Promise<IJournalData>
   /**Deletes a journal.
    * @param journalId The ID of the journal to delete.
    * @returns A promise that resolves when the journal is deleted.
    */
-  delete$(journalId: string): Promise<void>
+  delete$(journalId: number): Promise<void>
   /**Opens a journal.
    * @param journalId The ID of the journal to open.
    * @returns A promise that resolves when the journal is opened.
    */
-  open$(journalId: string): Promise<void>
+  open$(journalId: number): Promise<void>
   /**Gets all journals.
    * @returns A promise that resolves to an array of journal data.
    */
@@ -58,8 +59,8 @@ export interface IThisJournalContext {
    * @param data The new data for the journal.
    * @returns A promise that resolves to an empty object or null.
    */
-  save$(journalId: string, data: JournalContentData): Promise<{} | null>
-  cache$: Map<string, IJournalData | IJournalCategoryData>
+  save$(journalId: number, data: JournalContentData): Promise<{} | null>
+  cache$: Map<number, IJournalData | IJournalCategoryData>
 }
 
 export function createJournal(
@@ -94,7 +95,10 @@ export function createJournal(
       event.emit$('journal__createJournal', newData)
 
       journalCache.set(newData.id, newData)
-      fileDisplayContext.addToRoot(type === JournalFileType.journal ? newData.id : createFolderData(newData!.id))
+      fileDisplayContext.add$(
+        type === JournalType.journal ? createFileNodeData(newData.id) : createFolderNodeData(newData!.id),
+        'root'
+      )
       return newData
     },
     async open$(journalId) {
