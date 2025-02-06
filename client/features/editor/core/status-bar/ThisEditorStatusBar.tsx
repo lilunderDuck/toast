@@ -8,9 +8,9 @@ import __bongoCat from "~/features/editor/assets/bongocat.module.css"
 import TagWithIcon from "./TagWithIcon"
 import { useThisEditorContext } from "../ThisEditorProvider"
 // ...
-import { getRandomElement } from "client/common"
-import { FlexCenterY } from "client/components"
-import { debounce } from "client/utils"
+import { getRandomElement } from "~/common"
+import { FlexCenterY } from "~/components"
+import { debounce } from "~/utils"
 
 const style = stylex.create({
   statusBar: {

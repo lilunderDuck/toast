@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex";
-import { mergeClassname } from "client/utils";
+import { mergeClassname } from "~/utils";
 import { FlexCenterY } from "./Flex";
 
 const style = stylex.create({

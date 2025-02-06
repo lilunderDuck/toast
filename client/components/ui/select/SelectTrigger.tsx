@@ -2,7 +2,7 @@ import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { Icon, type SelectTriggerProps, Trigger } from "@kobalte/core/select"
 import stylex from "@stylexjs/stylex"
 import { type JSX, splitProps, type ValidComponent } from "solid-js"
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   trigger: {

@@ -9,7 +9,7 @@ import {
   Content
 } from "@kobalte/core/tooltip"
 import stylex from "@stylexjs/stylex"
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   $tooltip: {

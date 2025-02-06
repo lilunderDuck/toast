@@ -1,5 +1,5 @@
-import type { IJournalData } from "client/api/journal"
-import type { IEvent } from "client/utils"
+import type { IJournalData } from "~/api/journal"
+import type { IEvent } from "~/utils"
 
 export type JournalEventMap = {
   journal__createJournal(data: IJournalData): void

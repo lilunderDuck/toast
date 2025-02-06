@@ -1,7 +1,7 @@
 import { createResource, createSignal, Show } from "solid-js"
 // ...
-import { ArrayElement } from "client/common"
-import { LibaryType, LibaryData } from "client/api/misc"
+import { ArrayElement } from "~/common"
+import { LibaryType, LibaryData } from "~/api/misc"
 // ...
 import { LibarySearchBox, LibaryUsedList } from "../components"
 import { api_getLibariesUsed } from "../utils"

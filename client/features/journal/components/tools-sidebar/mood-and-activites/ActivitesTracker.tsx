@@ -1,8 +1,8 @@
-import { Flex, Spacer } from "client/components"
+import { Flex, Spacer } from "~/components"
 import { IMonthCalendarProps, MonthCalendar, useCalendarContext } from "./MonthCalendar"
 import __style from "./index.module.css"
 import stylex from "@stylexjs/stylex"
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   tool: {

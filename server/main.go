@@ -19,6 +19,10 @@ func main() {
 
 	gin.SetMode(mode)
 	router := gin.Default()
+	if mode != "release" {
+		router.Use(server.DealWithCORSCuzItsStupid())
+	}
+
 	handleRequest := server.CreateRouter(router)
 
 	// serve static files

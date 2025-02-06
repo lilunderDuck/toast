@@ -1,6 +1,6 @@
 import { createSignal, type Accessor, type Component } from "solid-js"
 // ...
-import { JournalVituralFileTree } from "client/api/journal"
+import { JournalVituralFileTree } from "~/api/journal"
 // ...
 import { api_updateJournalVirturalFileTree, insertBefore, isFolder, type TreeNode } from "../utils"
 import type { JournalSessionStorage } from "./JournalContext"

@@ -3,7 +3,7 @@ import { BlockToolConstructorOptions } from '@editorjs/editorjs/types/tools'
 import stylex from '@stylexjs/stylex'
 import __style from './tools.module.css'
 // ...
-import { createSolidRenderer } from 'client/utils'
+import { createSolidRenderer } from '~/utils'
 // ...
 import { createToolbox } from '../utils'
 

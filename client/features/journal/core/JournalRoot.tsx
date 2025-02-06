@@ -1,12 +1,12 @@
 import { useNavigate, useParams } from '@solidjs/router'
 import { onCleanup, onMount, type ParentProps } from 'solid-js'
 // ...
-import { bodyClasslist } from 'client/utils'
-import { Resizable } from 'client/components'
-import { ThisEditorProvider } from 'client/features/editor'
-import type { IJournalGroupData} from 'client/api/journal'
-import { toast } from 'client/features/toast'
-import { api_getGroup } from 'client/features/home'
+import { bodyClasslist } from '~/utils'
+import { Resizable } from '~/components'
+import { ThisEditorProvider } from '~/features/editor'
+import type { IJournalGroupData} from '~/api/journal'
+import { toast } from '~/features/toast'
+import { api_getGroup } from '~/features/home'
 // ...
 import __style from './stuff.module.css'
 import stylex from '@stylexjs/stylex'
@@ -60,18 +60,14 @@ export function JournalRoot(props: ParentProps) {
         return goHomeImmediately()
       }
 
-      const treeData = await api_getJournalVirturalFileTree(currentGroupId)
-
-      console.log('Tree data is', treeData, treeData.lookup)
-
       // note: you should not reorder this line of code here, otherwise it *will* break
-      $journal.cache$ = new Map(Object.entries(treeData.lookup))
+      $journal.cache$ = new Map() // hasn't handled
       
       // @ts-ignore - should work
       delete data.tree
       $sessionStorage.$set('currentGroup', data)
       
-      $fileDisplay.setTree(treeData.tree as TreeNode[])
+      $fileDisplay.setTree(data.tree.data)
 
       console.log('\n\n\n\n\n\n\n\n\n\n\n... A bunch of empty lines to make the log message not so messy ...\n\n\n\n\n\n\n\n\n\n\n\n\n')
     })

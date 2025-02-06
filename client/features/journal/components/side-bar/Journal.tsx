@@ -3,8 +3,8 @@ import { BsX } from "solid-icons/bs"
 import stylex from "@stylexjs/stylex"
 import __style from "./Journal.module.css"
 // ...
-import type { IJournalData } from "client/api/journal"
-import { FlexCenterY, Flex, Spacer } from "client/components"
+import type { IJournalData } from "~/api/journal"
+import { FlexCenterY, Flex, Spacer } from "~/components"
 
 const style = stylex.create({
   journal: {

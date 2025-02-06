@@ -1,6 +1,6 @@
 import { onCleanup, onMount, ParentProps } from "solid-js"
 // ...
-import { debounce, mergeClassname } from "client/utils"
+import { debounce, mergeClassname } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from "~/assets/style/scrollbar.module.css"

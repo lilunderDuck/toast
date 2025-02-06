@@ -2,8 +2,8 @@ import { createEffect } from 'solid-js'
 // ...
 import stylex from '@stylexjs/stylex'
 // ...
-import { mergeClassname } from 'client/utils'
-import { FlexCenterY } from 'client/components'
+import { mergeClassname } from '~/utils'
+import { FlexCenterY } from '~/components'
 // ...
 import { 
   getToastYDirection,

@@ -2,7 +2,7 @@ import { IconTypes } from "solid-icons"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { FlexCenterY } from "client/components"
+import { FlexCenterY } from "~/components"
 import { JSX } from "solid-js"
 
 const style = stylex.create({

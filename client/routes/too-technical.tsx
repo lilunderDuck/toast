@@ -3,7 +3,7 @@ import {
   MemoryUsage, 
   Versions, 
   LibaryUsedSection
-} from "client/features/technical"
+} from "~/features/technical"
 
 export default function TooTechnicalPage() {
   return (

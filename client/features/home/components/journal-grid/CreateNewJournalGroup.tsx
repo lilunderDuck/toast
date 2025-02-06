@@ -1,7 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import JournalGridWrap from "./JournalGridWrap"
 import { BsPlus } from "solid-icons/bs"
-import { createLazyLoadedDialog } from "client/components"
+import { createLazyLoadedDialog } from "~/components"
 import { lazy } from "solid-js"
 
 const style = stylex.create({

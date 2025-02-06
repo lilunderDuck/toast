@@ -1,6 +1,6 @@
 import stylex from "@stylexjs/stylex"
 import { lazy, Show } from "solid-js"
-import { FlexCenterY, HoverCard, HoverCardContent, HoverCardTrigger, Spacer, Tag } from "client/components"
+import { FlexCenterY, HoverCard, HoverCardContent, HoverCardTrigger, Spacer, Tag } from "~/components"
 
 const style = stylex.create({
   thisBox: {

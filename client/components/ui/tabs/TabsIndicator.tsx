@@ -1,7 +1,7 @@
 import { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { splitProps, ValidComponent } from "solid-js"
 import { Indicator, TabsIndicatorProps } from "@kobalte/core/tabs"
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({

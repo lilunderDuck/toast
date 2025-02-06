@@ -1,6 +1,6 @@
 import { Show } from "solid-js/web"
 import { BsBookFill, BsPencilFill } from "solid-icons/bs"
-import { useThisEditorContext } from "client/features/editor"
+import { useThisEditorContext } from "~/features/editor"
 
 export function EditOrReadonlyIcon() {
   const { isEditable$ } = useThisEditorContext()

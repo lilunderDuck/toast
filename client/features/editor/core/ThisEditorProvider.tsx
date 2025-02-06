@@ -9,7 +9,7 @@ import {
 } from "solid-js"
 import EditorJS, { type OutputBlockData } from "@editorjs/editorjs"
 // ...
-import { createEvent, IEvent } from "client/utils"
+import { createEvent, IEvent } from "~/utils"
 // ...
 import { getBlocksTextLength, getBlocksWordCount } from "../utils"
 import { ThisEditorGlobal } from "./ThisEditorGlobal"

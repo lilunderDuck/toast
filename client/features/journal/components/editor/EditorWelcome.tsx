@@ -1,6 +1,6 @@
 import stylex from "@stylexjs/stylex"
 // ...
-import { FlexCenter } from "client/components"
+import { FlexCenter } from "~/components"
 // ...
 import Step from "./Step"
 import { BsHouseFill, BsPencilFill, BsPlus } from "solid-icons/bs"

@@ -1,8 +1,8 @@
 import stylex from "@stylexjs/stylex"
-import { Button, ButtonSizeVariant, FlexCenterY } from "client/components"
+import { Button, ButtonSizeVariant, FlexCenterY } from "~/components"
 import { useTodoSectionContext } from "../provider/TodoSectionProvider"
 import { BsCheck2Square, BsUiChecks } from "solid-icons/bs"
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   buttonRow: {

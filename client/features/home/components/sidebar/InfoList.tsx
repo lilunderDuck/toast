@@ -2,8 +2,8 @@ import stylex from "@stylexjs/stylex"
 import { Show, type JSX } from "solid-js"
 import { BsCalendar2Fill, BsJournalCheck, BsPencilFill } from "solid-icons/bs"
 // ...
-import { FlexCenterY } from "client/components"
-import type { IJournalGroupData } from "client/api/journal"
+import { FlexCenterY } from "~/components"
+import type { IJournalGroupData } from "~/api/journal"
 // ...
 import { SectionText } from "./Section"
 

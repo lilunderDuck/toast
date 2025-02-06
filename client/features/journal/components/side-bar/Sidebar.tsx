@@ -3,14 +3,14 @@ import { splitProps } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 // ...
-import { Divider } from "client/components"
-import type { IJournalData } from "client/api/journal"
+import { Divider } from "~/components"
+import type { IJournalData } from "~/api/journal"
 // ...
 import { FileDisplay, useJournalContext } from "../../context"
 import { SidebarButtonsRow } from "./SidebarButtonsRow"
 import { Journal } from "./Journal"
 import { JournalCategory } from "./JournalCategory"
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   sidebar: {

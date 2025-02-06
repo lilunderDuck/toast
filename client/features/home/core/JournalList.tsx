@@ -1,8 +1,8 @@
 import { createResource, For, Show } from "solid-js"
 // ...
-import type { IJournalGroupData } from "client/api/journal"
-import { Flex, FlexCenter } from "client/components"
-import { mergeClassname } from "client/utils"
+import type { IJournalGroupData } from "~/api/journal"
+import { Flex, FlexCenter } from "~/components"
+import { mergeClassname } from "~/utils"
 // ...
 import { CreateNewJournalGroup, JournalGrid } from "../components"
 import { useJournalHomeContext } from '../provider'

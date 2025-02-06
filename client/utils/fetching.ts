@@ -1,4 +1,4 @@
-import { HttpMethod } from "client/common"
+import { HttpMethod } from "~/common"
 
 /**The base path for making API requests. */
 const BASE_PATH = 'http://localhost:8000'

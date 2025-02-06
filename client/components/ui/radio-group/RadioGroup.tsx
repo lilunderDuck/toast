@@ -5,7 +5,7 @@ import * as RadioGroupPrimitive from "@kobalte/core/radio-group"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   group: {

@@ -6,11 +6,11 @@ import {
   FlexCenterY, 
   OpenAndCloseButton, 
   type IDialog 
-} from "client/components"
+} from "~/components"
 import stylex from '@stylexjs/stylex'
 // ...
-import { useJournalContext } from "client/features/journal"
-import type { IJournalData } from "client/api/journal"
+import { useJournalContext } from "~/features/journal"
+import type { IJournalData } from "~/api/journal"
 
 const style = stylex.create({
   form: {

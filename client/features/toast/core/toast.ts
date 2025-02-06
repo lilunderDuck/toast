@@ -20,7 +20,7 @@ import {
   resolveValue 
 } from '../util'
 import { dispatch, store } from './store'
-import { mergeObjects } from 'client/common'
+import { mergeObjects } from '~/common'
 
 export const [defaultOpts, setDefaultOpts] = createSignal<IToasterProps>(defaultToasterOptions)
 

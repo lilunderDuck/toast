@@ -10,7 +10,7 @@ import {
 import { 
   convertMapToObject, 
   convertObjectToMap,
-} from "client/common"
+} from "~/common"
 import type { 
   ITodo, 
   ITodoSection, 
@@ -18,14 +18,14 @@ import type {
   TodoSchema, 
   TodoSectionId, 
   TodoSectionSchema
-} from "client/features/editor/types"
+} from "~/features/editor/types"
 import { 
   changeSomeTodoToEditMode, 
   createSectionData, 
   createTodoData, 
   deleteTodoData, 
   updateTodoData 
-} from "client/features/editor/utils"
+} from "~/features/editor/utils"
 // ...
 import type { 
   ITodoBlockRoot 

@@ -2,7 +2,7 @@ import { For } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./Versions.module.css"
-import { API_VERSION, APP_BACKEND_VERSION, APP_VERSION } from "client/macros" assert { type: 'macro' }
+import { API_VERSION, APP_BACKEND_VERSION, APP_VERSION } from "~/macros" assert { type: 'macro' }
 
 const style = stylex.create({
   versions: {

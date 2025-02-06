@@ -1,5 +1,5 @@
-import { IJournalGroupData, JOURNAL_GROUP_ROUTE, JournalGroupSchema } from "client/api/journal"
-import { fetchIt } from "client/utils"
+import { IJournalGroupData, JOURNAL_GROUP_ROUTE, JournalGroupSchema } from "~/api/journal"
+import { fetchIt } from "~/utils"
 
 type Group<T extends string | undefined> = T extends undefined ? IJournalGroupData[] : IJournalGroupData
 

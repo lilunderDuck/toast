@@ -62,3 +62,19 @@ func ResponseWithData(status int, data any) (httpStatus int, anyData any, someKi
 func NotImplemented() (httpStatus int, anyData any, someKindOfError error) {
 	return ResponseWithError(http.StatusNotImplemented, fmt.Errorf("this route hasn't been implemented yet."))
 }
+
+func DealWithCORSCuzItsStupid() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PATCH, PUT, DELETE")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
+}

@@ -3,8 +3,8 @@ import { ParentProps } from "solid-js"
 import __style from "./Journal.module.css"
 import stylex from "@stylexjs/stylex"
 // ...
-import type { IJournalCategoryData } from "client/api/journal"
-import { FlexCenterY } from "client/components"
+import type { IJournalCategoryData } from "~/api/journal"
+import { FlexCenterY } from "~/components"
 import { BsCaretRightFill } from "solid-icons/bs"
 
 const style = stylex.create({

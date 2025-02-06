@@ -1,5 +1,5 @@
 import { splitProps } from "solid-js"
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({

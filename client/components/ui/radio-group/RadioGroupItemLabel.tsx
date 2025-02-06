@@ -3,7 +3,7 @@ import { splitProps } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import * as RadioGroupPrimitive from "@kobalte/core/radio-group"
 import stylex from "@stylexjs/stylex"
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 // ...
 
 type RadioGroupLabelProps<T extends ValidComponent = "label"> =

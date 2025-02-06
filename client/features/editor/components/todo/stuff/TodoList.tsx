@@ -4,7 +4,7 @@ import stylex from "@stylexjs/stylex"
 // ...
 import { useTodoDataContext, useTodoSectionContext } from "../provider"
 import Todo from "../variant/Todo"
-import { ITodo } from "client/features/editor/types"
+import { ITodo } from "~/features/editor/types"
 
 const style = stylex.create({
   todoList: {

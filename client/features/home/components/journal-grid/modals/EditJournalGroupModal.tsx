@@ -3,11 +3,11 @@ import {
   DialogContent,
   DialogTitle,
   type IDialog
-} from "client/components"
+} from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 import EditJournalGroupForm from "./EditJournalGroupForm"
-import type { IJournalGroupData } from "client/api/journal"
+import type { IJournalGroupData } from "~/api/journal"
 
 const style = stylex.create({
   $content: {

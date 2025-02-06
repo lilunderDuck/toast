@@ -6,8 +6,8 @@ import {
   ThisEditorStatusBar,
   ThisEditorTitleBar, 
   useThisEditorContext 
-} from "client/features/editor"
-import { ResizablePanel } from "client/components"
+} from "~/features/editor"
+import { ResizablePanel } from "~/components"
 // ...
 import { EditorWelcome } from "../components"
 import { useJournalContext } from "../context"

@@ -1,12 +1,12 @@
-import { inlineCssVar } from "client/utils"
+import { inlineCssVar } from "~/utils"
 import JournalGridWrap from "./JournalGridWrap"
 import { lazy, onCleanup } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./JournalGrid.module.css"
 // ...
-import type { IJournalGroupData } from "client/api/journal"
-import { Button, ButtonSizeVariant, Flex, Spacer, createLazyLoadedDialog } from "client/components"
+import type { IJournalGroupData } from "~/api/journal"
+import { Button, ButtonSizeVariant, Flex, Spacer, createLazyLoadedDialog } from "~/components"
 import { BsPencilFill } from "solid-icons/bs"
 
 const style = stylex.create({

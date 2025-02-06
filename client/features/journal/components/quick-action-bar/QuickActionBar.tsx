@@ -1,6 +1,6 @@
 import { BsFileFill, BsGearFill } from "solid-icons/bs"
 // ...
-import { Flex, Spacer } from "client/components"
+import { Flex, Spacer } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./QuickActionBar.module.css"

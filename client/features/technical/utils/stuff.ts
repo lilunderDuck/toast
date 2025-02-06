@@ -3,8 +3,8 @@ import {
   MEMORY_USAGE_ROUTE, 
   type LibaryData,
   type IServerResourceUsage 
-} from "client/api/misc"
-import { fetchIt } from "client/utils"
+} from "~/api/misc"
+import { fetchIt } from "~/utils"
 
 export async function api_getServerUsages() {
   return await fetchIt('GET', MEMORY_USAGE_ROUTE) as IServerResourceUsage

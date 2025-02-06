@@ -4,7 +4,7 @@ import { splitProps } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { Content, type TabsContentProps } from "@kobalte/core/tabs"
 import stylex from "@stylexjs/stylex"
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   tabsContent: {

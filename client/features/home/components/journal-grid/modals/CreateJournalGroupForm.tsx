@@ -7,16 +7,16 @@ import IconInput from "./IconInput"
 // ...
 import {
   type JournalGroupSchema,
-} from "client/api/journal"
+} from "~/api/journal"
 import { 
   Button, 
   ButtonSizeVariant, 
   FieldInput, 
-} from "client/components"
-import { toast } from 'client/features/toast'
+} from "~/components"
+import { toast } from '~/features/toast'
 import { createSignal } from "solid-js"
-import { useJournalHomeContext } from "client/features/home/provider"
-import { api_createGroup } from "client/features/home"
+import { useJournalHomeContext } from "~/features/home/provider"
+import { api_createGroup } from "~/features/home"
 
 interface ICreateJournalGroupFormProps {
   onClick: () => any

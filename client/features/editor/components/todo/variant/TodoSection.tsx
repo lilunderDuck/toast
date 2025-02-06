@@ -5,9 +5,9 @@ import __style from "./TodoSection.module.css"
 // ...
 import { useTodoDataContext, TodoSectionProvider, type StripedTodoSectionData } from "../provider"
 import { TodoList, TodoInputs, TodoButtonRow } from "../stuff"
-import { FlexCenterY, Spacer } from "client/components"
+import { FlexCenterY, Spacer } from "~/components"
 import { BsCaretDownFill } from "solid-icons/bs"
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   section: {

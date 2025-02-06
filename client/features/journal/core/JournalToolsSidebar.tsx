@@ -1,7 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import { BsCardHeading } from "solid-icons/bs"
 // ...
-import { FlexCenterY } from "client/components"
+import { FlexCenterY } from "~/components"
 // ...
 import { 
   ToolButton, 

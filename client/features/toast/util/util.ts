@@ -6,7 +6,7 @@ import type {
 } from './toast'
 import { ActionType } from './store'
 import stylex from '@stylexjs/stylex'
-import { NO_STYLE, StylexStylesAttribute } from 'client/utils'
+import { NO_STYLE, StylexStylesAttribute } from '~/utils'
 
 export const generateID = (() => {
   let count = 0

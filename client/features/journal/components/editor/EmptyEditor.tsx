@@ -1,4 +1,4 @@
-import { FlexCenter } from "client/components"
+import { FlexCenter } from "~/components"
 
 import stylex from "@stylexjs/stylex"
 

@@ -1,13 +1,13 @@
 import { JSX, ParentProps } from "solid-js"
 // ...
-import { Flex } from "client/components"
+import { Flex } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./JournalHomeRoot.module.css"
 import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 // ...
 import { JournalHomeProvider } from "../provider"
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   $homePage: {

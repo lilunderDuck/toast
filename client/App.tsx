@@ -1,14 +1,14 @@
 import { Route, Router } from '@solidjs/router'
 import { lazy } from 'solid-js'
 // ...
-import { ColorAndStuff } from 'client/components'
-import { Toaster } from 'client/features/toast'
-import { StartupSequence } from 'client/features/splash-screen'
+import { ColorAndStuff } from '~/components'
+import { Toaster } from '~/features/toast'
+import { StartupSequence } from '~/features/splash-screen'
 
-const HomePage = lazy(() => import('client/routes/index'))
-const JournalPage = lazy(() => import('client/routes/journal'))
-const ThisPageIsNotFound = lazy(() => import('client/routes/[...404]'))
-const TooTechnicalPage = lazy(() => import('client/routes/too-technical'))
+const HomePage = lazy(() => import('~/routes/index'))
+const JournalPage = lazy(() => import('~/routes/journal'))
+const ThisPageIsNotFound = lazy(() => import('~/routes/[...404]'))
+const TooTechnicalPage = lazy(() => import('~/routes/too-technical'))
 
 export default function App() {
   return (

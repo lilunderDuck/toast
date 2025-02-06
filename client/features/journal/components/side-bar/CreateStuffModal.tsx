@@ -9,8 +9,8 @@ import {
   RadioGroup, 
   RadioGroupItem, 
   RadioGroupItemLabel 
-} from "client/components"
-import { JournalFileType } from "client/api/journal"
+} from "~/components"
+import { JournalFileType } from "~/api/journal"
 // ...
 import { CreateStuffProvider, useCreateStuffContext } from "./CreateStuffProvider"
 import CreateJournalCategoryForm from "./CreateStuffForm"

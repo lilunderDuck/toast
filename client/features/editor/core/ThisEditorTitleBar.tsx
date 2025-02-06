@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex"
-import { FlexCenter } from "client/components"
+import { FlexCenter } from "~/components"
 
 const style = stylex.create({
   titleBar: {

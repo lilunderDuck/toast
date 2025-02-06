@@ -1,7 +1,7 @@
 import { createSignal, Show } from "solid-js"
 import { Transition } from "solid-transition-group"
 // ...
-import { FlexCenter, FlexCenterX } from "client/components"
+import { FlexCenter, FlexCenterX } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./SplashScreen.module.css"

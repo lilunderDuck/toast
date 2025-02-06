@@ -1,10 +1,10 @@
 import stylex from "@stylexjs/stylex"
 import { BsPencilFill, BsTrashFill } from "solid-icons/bs"
-import { Button, ButtonSizeVariant, ButtonVariant, Flex, FlexCenterY, Spacer } from "client/components"
+import { Button, ButtonSizeVariant, ButtonVariant, Flex, FlexCenterY, Spacer } from "~/components"
 import { useTodoDataContext, useTodoSectionContext } from "../provider"
-import { ThisEditorGlobal } from "client/features/editor/core"
+import { ThisEditorGlobal } from "~/features/editor/core"
 import { splitProps } from "solid-js"
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   buttonRow: {

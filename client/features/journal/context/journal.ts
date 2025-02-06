@@ -10,8 +10,8 @@ import {
   type JournalContentData, 
   JournalFileType, 
   type JournalSchema,
-} from "client/api/journal"
-import { useThisEditorContext } from "client/features/editor"
+} from "~/api/journal"
+import { useThisEditorContext } from "~/features/editor"
 // ...
 import { 
   api_createJournal, 

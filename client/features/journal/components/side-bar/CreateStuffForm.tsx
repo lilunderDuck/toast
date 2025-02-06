@@ -4,13 +4,13 @@ import {
   type SubmitHandler 
 } from "@modular-forms/solid"
 // ...
-import type { JournalSchema } from "client/api/journal"
+import type { JournalSchema } from "~/api/journal"
 import { 
   FieldInput,
   OpenAndCloseButton
-} from "client/components"
-import { toast } from "client/features/toast"
-import { useJournalContext } from "client/features/journal"
+} from "~/components"
+import { toast } from "~/features/toast"
+import { useJournalContext } from "~/features/journal"
 // ...
 import { useCreateStuffContext } from "./CreateStuffProvider"
 

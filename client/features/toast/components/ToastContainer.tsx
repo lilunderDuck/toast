@@ -1,6 +1,6 @@
 import { createMemo, onMount, Component } from 'solid-js'
 // ...
-import { mergeClassname } from 'client/utils'
+import { mergeClassname } from '~/utils'
 // ...
 import { defaultToastOptions, dispatch } from '../util'
 import { 

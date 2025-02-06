@@ -3,7 +3,7 @@ import { Show, splitProps } from "solid-js"
 import * as DialogPrimitive from "@kobalte/core/dialog"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 // ...
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from './Dialog.module.css'

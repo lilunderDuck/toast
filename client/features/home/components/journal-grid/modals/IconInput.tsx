@@ -2,7 +2,7 @@ import { createDropzone } from "@soorria/solid-dropzone"
 import stylex from "@stylexjs/stylex"
 import { BsFileImageFill } from "solid-icons/bs"
 import { createSignal, Show } from "solid-js"
-import { FlexCenter, FlexCenterX } from "client/components"
+import { FlexCenter, FlexCenterX } from "~/components"
 
 const style = stylex.create({
   $iconInput: {

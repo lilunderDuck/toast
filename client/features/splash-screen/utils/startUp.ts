@@ -1,5 +1,5 @@
 import { SplashScreen } from "../components"
-import { sleep } from "client/utils"
+import { sleep } from "~/utils"
 
 export async function fetchStuffFromServer() {
   const checkList = [

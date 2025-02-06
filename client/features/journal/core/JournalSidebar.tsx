@@ -11,8 +11,8 @@ import {
   FlexCenterY, 
   ResizableHandle, 
   ResizablePanel
-} from "client/components"
-import type { IJournalData } from "client/api/journal"
+} from "~/components"
+import type { IJournalData } from "~/api/journal"
 // ...
 import { 
   type ISidebarProps,

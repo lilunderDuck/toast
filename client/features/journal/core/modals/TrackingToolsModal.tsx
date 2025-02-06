@@ -1,4 +1,4 @@
-import { DialogContent, type IDialog } from "client/components"
+import { DialogContent, type IDialog } from "~/components"
 // ...
 import { ToolContent } from "../../components"
 import stylex from "@stylexjs/stylex"

@@ -1,7 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 // ...
-import { FlexCenterY, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "client/components"
+import { FlexCenterY, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components"
 // ...
 
 const style = stylex.create({

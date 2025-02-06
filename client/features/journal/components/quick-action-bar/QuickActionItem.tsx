@@ -4,7 +4,7 @@ import { JSX, splitProps } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import __style from "./QuickActionBar.module.css"
 // ...
-import { FlexCenter, Tooltip } from "client/components"
+import { FlexCenter, Tooltip } from "~/components"
 
 const style = stylex.create({
   item: {

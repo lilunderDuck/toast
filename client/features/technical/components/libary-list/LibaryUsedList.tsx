@@ -1,7 +1,7 @@
 import { For } from "solid-js"
 // ...
-import { bodyClasslist, mergeClassname } from "client/utils"
-import type { LibaryData } from "client/api/misc"
+import { bodyClasslist, mergeClassname } from "~/utils"
+import type { LibaryData } from "~/api/misc"
 // ...
 import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 import stylex from "@stylexjs/stylex"

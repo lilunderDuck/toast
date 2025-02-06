@@ -1,4 +1,4 @@
-import { apiRoute } from "client/common"
+import { apiRoute } from "~/common"
 
 export const JOURNAL_ROUTE = apiRoute('/journal')
 export const JOURNAL_GROUP_ROUTE = apiRoute('/journal-group')

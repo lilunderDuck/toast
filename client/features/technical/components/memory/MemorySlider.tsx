@@ -1,6 +1,6 @@
 import stylex from "@stylexjs/stylex"
 import { JSX } from "solid-js"
-import { Flex, FlexCenterY } from "client/components"
+import { Flex, FlexCenterY } from "~/components"
 
 const style = stylex.create({
   slider: {

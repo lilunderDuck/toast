@@ -1,5 +1,5 @@
 import { IconTypes } from "solid-icons"
-import { Button, ButtonSizeVariant, type ITooltipOptions, Tooltip } from "client/components"
+import { Button, ButtonSizeVariant, type ITooltipOptions, Tooltip } from "~/components"
 
 interface IToolButtonProps extends ITooltipOptions {
   $icon: IconTypes

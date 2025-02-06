@@ -1,4 +1,4 @@
-import { API_VERSION, APP_VERSION } from "client/macros" assert { type: 'macro' }
+import { API_VERSION, APP_VERSION } from "~/macros" assert { type: 'macro' }
 
 /**Pauses execution for a specified number of milliseconds.
  * @param delayInMs The number of milliseconds to delay.

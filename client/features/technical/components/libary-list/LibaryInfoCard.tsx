@@ -1,6 +1,6 @@
 import stylex from "@stylexjs/stylex"
 import { ILibaryUsedBoxProps } from "./LibaryUsedBox"
-import { Flex, Tag } from "client/components"
+import { Flex, Tag } from "~/components"
 
 const style = stylex.create({
   stuffInside: {

@@ -2,13 +2,13 @@ import {
   type IClientJournalVirturalFileTreeData,
   type IJournalData, 
   JOURNAL_ROUTE, 
-  JOURNAL_VIRTURAL_FILE_TREE_ROUTE, 
+  JOURNAL_GROUP_ROUTE, 
   type JournalContentData, 
   JournalFileType, 
   type JournalSchema, 
   type JournalVituralFileTree
-} from "client/api/journal"
-import { fetchIt } from "client/utils"
+} from "~/api/journal"
+import { fetchIt } from "~/utils"
 
 export async function api_createJournal(currentGroupId: string, data: JournalSchema, type: JournalFileType) {
   const route = `${JOURNAL_ROUTE}/${currentGroupId}?type=${type}` as const
@@ -41,12 +41,12 @@ export async function api_getJournalContent(
 export async function api_getJournalVirturalFileTree(
   currentGroupId: string
 ) {
-  return await fetchIt('GET', `${JOURNAL_VIRTURAL_FILE_TREE_ROUTE}/${currentGroupId}`) as IClientJournalVirturalFileTreeData
+  return await fetchIt('GET', `${JOURNAL_GROUP_ROUTE}/${currentGroupId}`) as IClientJournalVirturalFileTreeData
 }
 
 export async function api_updateJournalVirturalFileTree(
   currentGroupId: string,
   data: JournalVituralFileTree.Tree
 ) {
-  return await fetchIt('PATCH', `${JOURNAL_VIRTURAL_FILE_TREE_ROUTE}/${currentGroupId}`, data) as IClientJournalVirturalFileTreeData
+  return await fetchIt('PATCH', `${JOURNAL_GROUP_ROUTE}/${currentGroupId}`, data) as IClientJournalVirturalFileTreeData
 }

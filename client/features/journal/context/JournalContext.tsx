@@ -4,8 +4,8 @@ import {
   useContext 
 } from "solid-js"
 // ...
-import { createEvent, createStorage, type IEvent, type IStorage } from "client/utils"
-import type { IJournalGroupData } from "client/api/journal"
+import { createEvent, createStorage, type IEvent, type IStorage } from "~/utils"
+import type { IJournalGroupData } from "~/api/journal"
 // ...
 import { type JournalEventMap } from "./event"
 import { createJournal, type IThisJournalContext } from "./journal"

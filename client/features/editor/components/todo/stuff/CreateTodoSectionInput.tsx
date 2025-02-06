@@ -1,9 +1,9 @@
 import { createForm, required, SubmitHandler } from "@modular-forms/solid"
 // ...
-import type { TodoSectionSchema } from "client/features/editor/types"
-import { ThisEditorGlobal } from "client/features/editor/core"
-import { FieldInput, OpenAndCloseButton } from "client/components"
-import { resetFieldInputs } from "client/utils"
+import type { TodoSectionSchema } from "~/features/editor/types"
+import { ThisEditorGlobal } from "~/features/editor/core"
+import { FieldInput, OpenAndCloseButton } from "~/components"
+import { resetFieldInputs } from "~/utils"
 // ...
 import { TodoInputOptions } from "../provider"
 

@@ -2,7 +2,7 @@ import { createContext, createSignal, type ParentProps, Signal, useContext } fro
 // ...
 import type { 
   AnyTodoSection, 
-} from "client/features/editor/types"
+} from "~/features/editor/types"
 
 export type TodoInputOptions<T> = Partial<T> & {
   onClose$(): void

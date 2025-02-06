@@ -1,8 +1,8 @@
 import { type Accessor, createContext, createSignal, type ParentProps, useContext } from "solid-js"
 // ...
-import type { IJournalGroupData } from "client/api/journal"
-import { thisArrayObjects } from "client/common"
-import { createEvent, type IEvent } from "client/utils"
+import type { IJournalGroupData } from "~/api/journal"
+import { thisArrayObjects } from "~/common"
+import { createEvent, type IEvent } from "~/utils"
 // ...
 import { api_getGroup } from "../utils"
 

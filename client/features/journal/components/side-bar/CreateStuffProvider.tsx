@@ -1,5 +1,5 @@
 import { createContext, createSignal, useContext, type ParentProps, type Signal } from "solid-js"
-import type { JournalFileType } from "client/api/journal"
+import type { JournalFileType } from "~/api/journal"
 
 interface ICreateStuffContext {
   $submitButtonDisabled: Signal<boolean>

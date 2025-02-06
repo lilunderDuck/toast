@@ -2,7 +2,7 @@ import { DropdownMenuSubTriggerProps, SubTrigger } from "@kobalte/core/dropdown-
 import { PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
 import { ParentProps, splitProps, ValidComponent } from "solid-js"
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   menuSubContent: {

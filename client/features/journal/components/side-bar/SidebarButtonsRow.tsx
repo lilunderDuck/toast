@@ -10,9 +10,9 @@ import {
   FlexCenterY, 
   Spacer, 
   Tooltip 
-} from "client/components"
-import { useThisEditorContext } from "client/features/editor"
-import { EditOrReadonlyIcon } from "client/features/journal"
+} from "~/components"
+import { useThisEditorContext } from "~/features/editor"
+import { EditOrReadonlyIcon } from "~/features/journal"
 // ...
 import { useJournalContext } from "../../context"
 

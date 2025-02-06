@@ -2,7 +2,7 @@ import { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { Item, ItemIndicator, ItemLabel, type SelectItemProps } from "@kobalte/core/select"
 import stylex from "@stylexjs/stylex"
 import { splitProps, type ParentProps, type ValidComponent } from "solid-js"
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   item: {

@@ -1,4 +1,4 @@
-import { getRandomNumberFrom, mergeObjects, thisArrayObjects } from "client/common"
+import { getRandomNumberFrom, mergeObjects, thisArrayObjects } from "~/common"
 import type { ITodo, ITodoSection, TodoSchema, TodoSectionId } from "../types"
 
 export type ThisTodo = ITodo & {

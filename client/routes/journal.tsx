@@ -3,7 +3,7 @@ import {
   JournalRoot,
   JournalEditorContent,
   JournalSidebar
-} from "client/features/journal"
+} from "~/features/journal"
 
 export default function JournalPage() {
   return (

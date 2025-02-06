@@ -3,9 +3,9 @@ import { createSignal, ParentProps, Show } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import __style from './Todo.module.css'
 // ...
-import { Checkbox, FlexCenterY } from "client/components"
-import { ITodo } from "client/features/editor/types"
-import { mergeClassname } from "client/utils"
+import { Checkbox, FlexCenterY } from "~/components"
+import { ITodo } from "~/features/editor/types"
+import { mergeClassname } from "~/utils"
 // ...
 import { EditAndDeleteButtonRow } from "../stuff"
 

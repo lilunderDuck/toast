@@ -3,8 +3,8 @@ import { BlockToolConstructorOptions } from '@editorjs/editorjs/types/tools'
 import stylex from '@stylexjs/stylex'
 import __style from './tools.module.css'
 // ...
-import { createSolidRenderer } from 'client/utils'
-import { ResizableTextarea } from 'client/components'
+import { createSolidRenderer } from '~/utils'
+import { ResizableTextarea } from '~/components'
 // ...
 import { createToolbox } from '../utils'
 

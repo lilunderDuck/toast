@@ -4,13 +4,13 @@ import { createSignal } from "solid-js"
 import type { 
   IJournalGroupData,
   JournalGroupSchema,
-} from "client/api/journal"
-import { Button, ButtonSizeVariant, FieldInput } from "client/components"
-import { toast } from 'client/features/toast'
+} from "~/api/journal"
+import { Button, ButtonSizeVariant, FieldInput } from "~/components"
+import { toast } from '~/features/toast'
 // ...
 import IconInput from "./IconInput"
-import { useJournalHomeContext } from "client/features/home/provider"
-import { api_updateGroup } from "client/features/home"
+import { useJournalHomeContext } from "~/features/home/provider"
+import { api_updateGroup } from "~/features/home"
 
 interface IEditJournalGroupFormProps extends IJournalGroupData {
   onClick: () => any

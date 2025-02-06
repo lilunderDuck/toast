@@ -4,7 +4,7 @@ import {
   DialogDescription,
   DialogTitle,
   type IDialog
-} from "client/components"
+} from "~/components"
 // ...
 import CreateJournalGroupForm from "./CreateJournalGroupForm"
 // ...

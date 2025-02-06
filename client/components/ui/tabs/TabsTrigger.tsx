@@ -1,7 +1,7 @@
 import { splitProps, ValidComponent } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { type TabsTriggerProps, Trigger } from "@kobalte/core/tabs"
-import { mergeClassname } from "client/utils"
+import { mergeClassname } from "~/utils"
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({

@@ -3,14 +3,14 @@ import { Accessor, createContext, createSignal, For, ParentProps, Signal, useCon
 import __style from "./MonthCalendar.module.css"
 import stylex from "@stylexjs/stylex"
 // ...
-import { FlexCenter } from "client/components"
-import { mergeClassname } from "client/utils"
+import { FlexCenter } from "~/components"
+import { mergeClassname } from "~/utils"
 import { 
   getCurrentMonthAndYear, 
   getDaysInMonth,
   getMonthName, 
   ThisYearsCurrentTime 
-} from "client/features/journal"
+} from "~/features/journal"
 
 const style = stylex.create({
   blockList: {
