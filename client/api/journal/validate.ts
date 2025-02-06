@@ -1,24 +1,13 @@
-import {
-  type InferOutput,
-  object,
-  optional,
-  string,
-} from 'valibot'
+export type JournalGroupSchema = {
+  name: string
+  description?: string
+  icon?: string
+}
 
-export const journalGroupFormSchema = object({
-  name: string(),
-  description: optional(string()),
-  icon: optional(string()),
-})
+export type JournalCategorySchema = {
+  name: string
+}
 
-export const journalFormSchema = object({
-  name: string(),
-})
-
-export const journalCategoryFormSchema = object({
-  name: string(),
-})
-
-export type JournalGroupSchema = InferOutput<typeof journalGroupFormSchema>
-export type JournalCategorySchema = InferOutput<typeof journalCategoryFormSchema>
-export type JournalSchema = InferOutput<typeof journalFormSchema>
+export type JournalSchema = {
+  name: string
+}

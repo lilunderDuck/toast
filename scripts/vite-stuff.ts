@@ -5,7 +5,7 @@ import {
   type InlineConfig,
   type BuildOptions
 } from "vite"
-import type this_tsconfig from './tsconfig.json'
+import type this_tsconfig from '../tsconfig.json'
 
 type RollupOptions = NonNullable<BuildOptions["rollupOptions"]>
 
@@ -73,7 +73,7 @@ export function getEsbuildConfig(devMode: boolean, others?: ESBuildOptions): Inl
         "__devMode": `${devMode}`,
         "__version": `"1.0.0-beta"`,
         "__apiVersion": `"1.0.0-beta"`,
-        "__backendVersion": `"${`deno-${Deno.version.deno}, ts-${Deno.version.typescript}, v8-${Deno.version.v8}`}"`,
+        "__backendVersion": `"golang v1.23.4"`,
       },
       ...dropConsoleSomethingCall,
       ...onlyManglePropsInProdMode

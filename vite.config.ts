@@ -15,7 +15,7 @@ import {
   CLIENT_OUTPUT_DIRECTORY, 
   OUTPUT_DIRECTORY, 
   outPutFilenameConfig
-} from './vite-stuff'
+} from './scripts/vite-stuff'
 import tsconfig from './tsconfig.json'
 
 const rollupOutputOptions: Rollup.OutputOptions = {
