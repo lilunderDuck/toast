@@ -1,7 +1,5 @@
 import { 
-  type Accessor, 
   createSignal, 
-  type Setter
 } from "solid-js"
 // ...
 import { 
@@ -22,7 +20,7 @@ import { useThisEditorContext } from "~/features/editor"
 import { 
   JournalSessionStorage
 } from ".."
-import { type IFileDisplayContext } from "./fileDisplayContext"
+import { type IFileDisplayContext } from "./fileDisplay"
 import { JournalEvent } from "./event"
 
 export interface IThisJournalContext extends ReturnType<typeof createJournal> {
@@ -55,7 +53,7 @@ export function createJournal(
     const newData = await api_createJournal(currentJournalGroupId, data, type)
     event.emit$('journal__createJournal', newData)
 
-    fileDisplayContext.mapping$.set(`${newData.id}`, newData)
+    fileDisplayContext.mapping$[newData.id] = newData
     fileDisplayContext.add$(
       type === JournalType.journal ? createFileNodeData(newData.id) : createFolderNodeData(newData!.id),
       'root'
@@ -70,7 +68,7 @@ export function createJournal(
   const open = async(journalId: number) => {
     const currentJournalGroupId = getCurrentJournalGroupId()
     let lastContent = cache$.get(journalId)!
-    let journalData = fileDisplayContext.mapping$.get(`${journalId}`) as IJournalData | undefined
+    let journalData = fileDisplayContext.mapping$[journalId] as IJournalData | undefined
     if (!journalData) {
       journalData = await api_getJournal(currentJournalGroupId, journalId)
     }

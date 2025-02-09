@@ -16,15 +16,15 @@ export function FileDisplay() {
   const ROOT_ID = 0
   const getCache = () => fileDisplay$.mapping$
 
+  let lastOpenedJournalId = 0
+
   const RenderFolderAndFileComponent = (props: AnyVirTreeNode) => {
-    const data = getCache().get(`${props.id}`)
+    const data = getCache()[props.id]
     if (!data) {
-      console.warn('cannot get data', props)
-      return null
+      return void console.warn('cannot get data', props)
     }
     
     if (isFolder(props)) {
-      console.log('recursive render call')
       return (
         <JournalCategory {...data}>
           <RecursivelyRenderItOut {...props} />
@@ -32,7 +32,14 @@ export function FileDisplay() {
       )
     } 
     
-    return <Journal {...data} onClick={() => journal$.open$(props.id)} />
+    return <Journal {...data} onClick={(type, thisJournal) => {
+      if (type === 'open') {
+        if (lastOpenedJournalId !== thisJournal.id) {
+          journal$.open$(thisJournal.id)
+          lastOpenedJournalId = thisJournal.id
+        }
+      }
+    }} />
   }
 
   // OooOo, scary name
@@ -45,8 +52,6 @@ export function FileDisplay() {
       setItems(newItems)
       fileDisplay$.replaceTree$(thisProps.id === ROOT_ID ? "root" : thisProps.id, newItems)
     }
-
-    console.log("enter folder", thisProps)
 
     return (
       //@ts-ignore - "use:dndzone" is a directive, maybe I should add that type somewhere...

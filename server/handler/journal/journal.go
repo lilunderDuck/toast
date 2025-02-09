@@ -67,7 +67,7 @@ func UpdateJournal(currentGroupId int, journalId int, newData *JournalUpdateSche
 	data.Modified = utils.GetCurrentDateNow()
 
 	server.Cache_Update(utils.IntToString(currentGroupId), func(db *pogreb.DB) {
-		server.Cache_Set(db, utils.IntToString(data.Id), &newData)
+		server.Cache_Set(db, utils.IntToString(data.Id), &data)
 	})
 
 	writeError := utils.BSON_WriteFile(

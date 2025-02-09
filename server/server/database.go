@@ -103,6 +103,7 @@ func Cache_GetAll(db *pogreb.DB) map[string]any {
 		var jsonVal any
 		json.Unmarshal(val, &jsonVal)
 		outMap[utils.BytesToString(key)] = jsonVal
+		fmt.Println(utils.BytesToString(key), jsonVal)
 	}
 
 	return outMap
@@ -113,6 +114,7 @@ type CacheUpdateFn func(db *pogreb.DB)
 func Cache_Update(dbName string, updateFn CacheUpdateFn) {
 	db := openDatabase(dbName)
 	defer db.Close()
+	println("make some mess to the server database now -> ", dbName)
 
 	updateFn(db)
 }

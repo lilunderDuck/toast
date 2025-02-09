@@ -35,7 +35,9 @@ export function api_saveJournalContent(
   someJournalId: number, 
   data: JournalContentData
 ) {
-  return fetchIt('PATCH', `${JOURNAL_ROUTE}/${currentGroupId}/${someJournalId}`, data)
+  return fetchIt('PATCH', `${JOURNAL_ROUTE}/${currentGroupId}/${someJournalId}`, {
+    data: data
+  })
 }
 
 export async function api_getJournalContent(

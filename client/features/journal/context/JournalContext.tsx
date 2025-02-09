@@ -1,5 +1,6 @@
 import { 
   createContext, 
+  onCleanup, 
   type ParentProps, 
   useContext 
 } from "solid-js"
@@ -9,7 +10,7 @@ import type { IJournalGroupData } from "~/api/journal"
 // ...
 import { type JournalEventMap } from "./event"
 import { createJournal, type IThisJournalContext } from "./journal"
-import { type IFileDisplayContext, createFileDisplay } from "./fileDisplayContext"
+import { type IFileDisplayContext, createFileDisplay } from "./fileDisplay"
 
 export type JournalLocalStorage = IStorage<{
   shouldShowDeleteConfirmationModal: boolean
@@ -36,6 +37,11 @@ export function JournalProvider(props: ParentProps) {
   const event = createEvent<JournalEventMap>()
   const fileDisplayContext = createFileDisplay(wrappedSessionStorage)
   const journalContext = createJournal(event, wrappedSessionStorage, fileDisplayContext)
+
+  onCleanup(() => {
+    wrappedSessionStorage.delete$("currentGroup")
+    console.log('clean up')
+  })
 
   return (
     <Context.Provider value={{

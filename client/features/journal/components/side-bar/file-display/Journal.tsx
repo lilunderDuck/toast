@@ -40,6 +40,7 @@ export default function Journal(props: IJournalProps) {
     <FlexCenterY 
       {...stylex.attrs(style.journal)} 
       id={__style.journal} 
+      data-id={props.id}
     >
       <Flex {...stylex.attrs(style.nameAndStuff)} onClick={() => props.onClick?.('open', props)}>
         <span id={__style.name}>

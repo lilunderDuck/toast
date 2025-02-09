@@ -44,8 +44,8 @@ type JournalData struct {
 }
 
 type JournalContentData struct {
-	Id    int      `json:"id"              cbor:"0,keyasint"`
-	Type  string   `json:"type"            cbor:"1,keyasint"`
-	Tunes struct{} `json:"tunes,omitempty" cbor:"2,keyasint"`
-	Data  struct{} `json:"data"            cbor:"3,keyasint"`
+	Id    string         `json:"id"              cbor:"0,keyasint"`
+	Type  string         `json:"type"            cbor:"1,keyasint"`
+	Tunes struct{}       `json:"tunes,omitempty" cbor:"2,keyasint"`
+	Data  map[string]any `json:"data"            cbor:"3,keyasint"`
 }

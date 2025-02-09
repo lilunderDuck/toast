@@ -147,6 +147,7 @@ export function ThisEditorProvider(props: ParentProps) {
       updateCharsAndWordsCount$,
       isEditable$: isEditable,
       open$(data) {
+        console.dir(data)
         event.emit$('editor__onSwitching', lastData, data)
     
         editorInstance!.render({

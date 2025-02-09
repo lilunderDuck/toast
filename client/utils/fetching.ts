@@ -75,6 +75,8 @@ export async function fetchIt<
     json = null
   }
 
+  console.log('data', json)
+
   console.groupEnd()
   return json 
 }

@@ -1,18 +1,47 @@
-import { AnyVirTreeNode, IJournalCategoryData, IJournalData, isFolder, VirFileTree } from "~/api/journal"
+import { createSignal, type Component } from "solid-js"
+// ...
+import { 
+  AnyVirTreeNode,
+  IJournalCategoryData,
+  IJournalData,
+  VirFileTree,
+  api_updateJournalVirturalFileTree,
+  isFolder
+} from "~/api/journal"
+// ...
+import type { JournalSessionStorage } from "./JournalContext"
 
+type TreeNodeType = 'file' | 'folder'
 type TreeMappingData = Record<number, IJournalCategoryData | IJournalData>
-type TreeMapping = Map<string, IJournalCategoryData | IJournalData>
 
-export function createVirTree(initalTree: VirFileTree.Data | 'default', updateThis?: AnyFunction) {
-  let treeCache: VirFileTree.Data = initalTree !== 'default' ? initalTree : {
+export interface IFileDisplayOptions {
+  componentLookup: Record<TreeNodeType, Component>
+  dataLookup: Map<number, any>
+  onClick: (type: TreeNodeType, id: number, data: {}) => void
+}
+
+export interface IFileDisplayContext extends ReturnType<typeof createFileDisplay> {
+  // ...
+}
+
+export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
+  const [tree, setTree] = createSignal<VirFileTree.Tree>([])
+  const [isUpdating, setIsUpdating] = createSignal(false)
+
+  let treeCache: VirFileTree.Data = {
     list: [],
     data: []
   }
-
-  let mapping: TreeMapping = new Map()
-
-  const update = () => {
-    updateThis?.()
+  
+  let mapping: TreeMappingData = {}
+  
+  const update = async() => {
+    const thisGroup = thisSessionStorage.get$('currentGroup')
+    setIsUpdating(true)
+    const newTree = treeCache.data
+    setTree(newTree)
+    setIsUpdating(false)
+    await api_updateJournalVirturalFileTree(thisGroup.id, newTree)
     console.log('[vir tree] update')
   }
 
@@ -73,27 +102,20 @@ export function createVirTree(initalTree: VirFileTree.Data | 'default', updateTh
     shouldBeAFolder.child = tree
     update()
   }
-
+  
   return {
+    treeSignal$: tree,
+    isUpdating$: isUpdating,
     add$: add,
-    find$: find,
     replaceTree$: replaceTree,
-    setTree$(tree: VirFileTree.Tree) {
+    setTree$(tree: VirFileTree.Tree, data: VirFileTree.ClientData["list"]) {
+      console.log(tree)
+      mapping = data
       treeCache.data = tree
       update()
     },
-    setMapping$(data: TreeMappingData) {
-      console.log(mapping)
-      mapping = new Map(Object.entries(data))
-      console.log(mapping)
-      update()
-    },
     get mapping$() {
-      console.log('get', mapping)
       return mapping
-    },
-    get tree$() {
-      return treeCache
     }
   }
 }

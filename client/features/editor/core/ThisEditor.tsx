@@ -50,7 +50,7 @@ export function ThisEditor(props: ParentProps<{ class?: string }>) {
   }
 
   const onSlappingYourKeyboard: EventHandler<"div", "onKeyUp"> = async(keyboardEvent) => {
-    const target = keyboardEvent.target
+    // const target = keyboardEvent.target
 
     // don't update if you press these key
     const keyYouJustPressed = keyboardEvent.key
