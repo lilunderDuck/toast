@@ -6,11 +6,9 @@ import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 import { Divider } from "~/components"
 import type { IJournalData } from "~/api/journal"
 // ...
-import { FileDisplay, useJournalContext } from "../../context"
 import { SidebarButtonsRow } from "./SidebarButtonsRow"
-import { Journal } from "./Journal"
-import { JournalCategory } from "./JournalCategory"
 import { mergeClassname } from "~/utils"
+import { FileDisplay } from "./file-display"
 
 const style = stylex.create({
   sidebar: {
@@ -30,30 +28,6 @@ export interface ISidebarProps extends HTMLAttributes<"div"> {
 
 export function Sidebar(props: ISidebarProps) {
   const [, itsProps] = splitProps(props, ["onClickingOpen$", "on$ClickingRemove"])
-  const { $journal, $fileDisplay } = useJournalContext()
-
-  let lastJournalId: string | undefined
-  // $fileDisplay.setOptions({
-  //   componentLookup: {
-  //     // @ts-ignore
-  //     file: Journal,
-  //     // @ts-ignore
-  //     folder: JournalCategory
-  //   },
-  //   dataLookup: $journal.cache$,
-  //   onClick(type, id, data) {
-  //     if (type !== 'file') return
-
-  //     console.log(data)
-  //     const thisJournalId = data.id 
-  //     if (thisJournalId === lastJournalId) {
-  //       return console.log(`No need to open journal, previous journal id: ${lastJournalId} - current journal id: ${thisJournalId}`)
-  //     }
-      
-  //     props.onClickingOpen$?.(data)
-  //     lastJournalId = thisJournalId
-  //   },
-  // })
 
   return (
     <div 

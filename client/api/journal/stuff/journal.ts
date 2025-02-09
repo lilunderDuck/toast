@@ -23,5 +23,5 @@ export type JournalContentData = OutputBlockData[]
 
 export interface IJournalData extends JournalSchema, UniqueId, CreatedAndModifiedDate {
   /**An array of output block data associated with the journal. */
-  data?: JournalContentData
+  data: JournalContentData
 }

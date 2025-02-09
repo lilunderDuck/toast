@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"server/server"
 	"server/utils"
+
+	"github.com/akrylysov/pogreb"
 )
 
 func CreateGroupFolders(groupId int, groupData *Data) (anyError error) {
@@ -32,10 +34,9 @@ func GetGroupMetaFilePath(groupId int) string {
 
 func UpdateGroupMetaFile(groupData *Data) error {
 	groupId := utils.IntToString(groupData.Id)
-	cacheError := server.Cache_Get(server.JournalGroupDb, groupId, &groupData)
-	if cacheError != nil {
-		return cacheError
-	}
+	server.Cache_Update("journal-group", func(db *pogreb.DB) {
+		server.Cache_Set(db, groupId, groupData)
+	})
 
 	return utils.BSON_WriteFile(GetGroupMetaFilePath(groupData.Id), &groupData)
 }

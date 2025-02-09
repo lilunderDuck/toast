@@ -36,7 +36,7 @@ func HandleJournalRoutes(handleRequest server.RouteCreateFn) {
 			return server.ResponseWithError(http.StatusInternalServerError, anyError)
 		}
 
-		return server.ResponseWithData(http.StatusNotImplemented, journalData)
+		return server.ResponseWithData(http.StatusOK, journalData)
 	})
 
 	handleRequest("PATCH", ROUTE_NAME+"/:journalId", func(context *gin.Context) (int, any, error) {

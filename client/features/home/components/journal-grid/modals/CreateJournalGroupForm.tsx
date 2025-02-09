@@ -7,6 +7,7 @@ import IconInput from "./IconInput"
 // ...
 import {
   type JournalGroupSchema,
+  api_createGroup
 } from "~/api/journal"
 import { 
   Button, 
@@ -16,7 +17,6 @@ import {
 import { toast } from '~/features/toast'
 import { createSignal } from "solid-js"
 import { useJournalHomeContext } from "~/features/home/provider"
-import { api_createGroup } from "~/features/home"
 
 interface ICreateJournalGroupFormProps {
   onClick: () => any

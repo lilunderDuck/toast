@@ -38,7 +38,7 @@ interface IButtonItemProps extends HTMLAttributes<"button"> {
 }
 
 export function SidebarButtonsRow() {
-  const { $journal } = useJournalContext()
+  const { journal$ } = useJournalContext()
   const { isEditable$, setIsEditable$ } = useThisEditorContext()
   const toggleEditOrReadonlyMode = () => {
     setIsEditable$(prev => !prev)
@@ -58,7 +58,7 @@ export function SidebarButtonsRow() {
       <Spacer />
       <ButtonItem 
         onClick={toggleEditOrReadonlyMode}
-        disabled={!$journal.currentlyOpened$()}
+        disabled={!journal$.currentlyOpened$()}
         $icon={EditOrReadonlyIcon}
         label$={`Toggle ${isEditable$() ? 'read-only' : 'edit'} mode`}
       />

@@ -35,7 +35,7 @@ export interface IJournalProps extends IJournalData {
   onClick?: (type: 'open' | 'remove', data: IJournalData) => void
 }
 
-export function Journal(props: IJournalProps) {
+export default function Journal(props: IJournalProps) {
   return (
     <FlexCenterY 
       {...stylex.attrs(style.journal)} 

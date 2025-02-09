@@ -85,7 +85,11 @@ export function ThisEditorProvider(props: ParentProps) {
   const [isEditable, setIsEditable] = createSignal(true)
   const [wordsCount$, setWordsCount] = createSignal(0)
   const [charsCount$, setCharsCount] = createSignal(0)
+  /**Updates the character and word counts based on the editor content. 
+   * @param data the editor data
+   */
   const updateCharsAndWordsCount$ = (savedData: EditorData["content"]) => {
+    console.log(savedData)
     setCharsCount(getBlocksTextLength(savedData))
     setWordsCount(getBlocksWordCount(savedData))
     console.log('[editor] total chars and words count updated')

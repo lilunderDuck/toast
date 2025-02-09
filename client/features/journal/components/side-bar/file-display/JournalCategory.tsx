@@ -40,7 +40,7 @@ interface IJournalCategoryProps extends IJournalCategoryData {
   // ...
 }
 
-export function JournalCategory(props: ParentProps<IJournalCategoryProps>) {
+export default function JournalCategory(props: ParentProps<IJournalCategoryProps>) {
   return (
     <section id={__style.journal} {...stylex.attrs(style.journalCategory)}>
       <FlexCenterY {...stylex.attrs(style.nameAndStuff)}>

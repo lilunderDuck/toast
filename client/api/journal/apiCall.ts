@@ -23,6 +23,13 @@ export async function api_getAllJournals(currentGroupId: number) {
   return await fetchIt('GET', `${JOURNAL_ROUTE}/${currentGroupId}`) as IJournalData[]
 }
 
+export async function api_getJournal(
+  currentGroupId: number, 
+  someJournalId: number,
+) {
+  return await fetchIt('GET', `${JOURNAL_ROUTE}/${currentGroupId}/${someJournalId}`) as IJournalData
+}
+
 export function api_saveJournalContent(
   currentGroupId: number, 
   someJournalId: number, 
@@ -41,7 +48,8 @@ export async function api_getJournalContent(
 export async function api_getJournalVirturalFileTree(
   currentGroupId: number
 ) {
-  return await fetchIt('GET', `${JOURNAL_GROUP_ROUTE}/${currentGroupId}`)
+  const data = await fetchIt('GET', `${JOURNAL_GROUP_ROUTE}/${currentGroupId}/vir-tree`) as string
+  return JSON.parse(data) as VirFileTree.ClientData["list"]
 }
 
 export async function api_updateJournalVirturalFileTree(

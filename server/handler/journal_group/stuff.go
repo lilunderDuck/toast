@@ -4,6 +4,8 @@ import (
 	"os"
 	"server/server"
 	"server/utils"
+
+	"github.com/akrylysov/pogreb"
 )
 
 func Create(groupSchema *Schema) (newGroupData *Data, anyError error) {
@@ -19,7 +21,9 @@ func Create(groupSchema *Schema) (newGroupData *Data, anyError error) {
 	}
 
 	// Save it to cache so we can access it later
-	server.Cache_Set(server.JournalGroupDb, stringRandomId, &data)
+	server.Cache_Update("journal-group", func(db *pogreb.DB) {
+		server.Cache_Set(db, stringRandomId, &data)
+	})
 
 	// Create the journal group data folder to save your stuffs
 	someError := CreateGroupFolders(numberId, &data)
@@ -40,9 +44,13 @@ func Get(groupId int) (*Data, error) {
 
 	// Try to get journal group data from cache.
 	var dataFromCache Data
-	anyError := server.Cache_Get(server.JournalGroupDb, thisGroupId, &dataFromCache)
+	var cacheError error
+	server.Cache_Update("journal-group", func(db *pogreb.DB) {
+		cacheError = server.Cache_Get(db, thisGroupId, &dataFromCache)
+	})
+
 	// If success, returns it.
-	if anyError == nil {
+	if cacheError == nil {
 		return &dataFromCache, nil
 	}
 
@@ -58,9 +66,20 @@ func Get(groupId int) (*Data, error) {
 	}
 
 	// Also make sure to save it to the cache as well.
-	server.Cache_Set(server.JournalGroupDb, thisGroupId, &outData)
+	server.Cache_Update("journal-group", func(db *pogreb.DB) {
+		server.Cache_Set(db, thisGroupId, &outData)
+	})
 
 	return &outData, nil
+}
+
+func GetVirTreeData(groupId int) map[string]any {
+	var outData map[string]any
+	server.Cache_Update(utils.IntToString(groupId), func(db *pogreb.DB) {
+		outData = server.Cache_GetAll(db)
+	})
+
+	return outData
 }
 
 func Update(groupId int, newData *UpdateSchema) (updatedGroupData *Data, anyError error) {
@@ -89,7 +108,9 @@ func Update(groupId int, newData *UpdateSchema) (updatedGroupData *Data, anyErro
 	}
 
 	// Make sure to update the meta data and cache data too.
-	server.Cache_Set(server.JournalGroupDb, utils.IntToString(groupId), &groupData)
+	server.Cache_Update("journal-group", func(db *pogreb.DB) {
+		server.Cache_Set(db, utils.IntToString(groupData.Id), &groupData)
+	})
 	UpdateGroupMetaFile(groupData)
 
 	return groupData, nil
@@ -98,7 +119,10 @@ func Update(groupId int, newData *UpdateSchema) (updatedGroupData *Data, anyErro
 func Delete(groupId int) error {
 	// Firstly, it will delete from cache first
 	groupDataPath := GetGroupPath(groupId)
-	updateError := server.Cache_Delete(server.JournalGroupDb, utils.IntToString(groupId))
+	var updateError error
+	server.Cache_Update("journal-group", func(db *pogreb.DB) {
+		updateError = server.Cache_Delete(db, utils.IntToString(groupId))
+	})
 	if updateError != nil {
 		println(updateError.Error())
 		return updateError
@@ -115,5 +139,9 @@ func Delete(groupId int) error {
 }
 
 func GetAll() []any {
-	return server.Cache_GetAllValue(server.JournalGroupDb)
+	var out []any
+	server.Cache_Update("journal-group", func(db *pogreb.DB) {
+		out = server.Cache_GetAllValue(db)
+	})
+	return out
 }

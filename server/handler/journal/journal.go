@@ -2,11 +2,14 @@ package journal
 
 import (
 	"server/handler/journal_group"
+	"server/server"
 	"server/utils"
+
+	"github.com/akrylysov/pogreb"
 )
 
 func CreateJournal(currentGroupId int, schema *JournalSchema) *JournalData {
-	_, numberId := utils.GenerateRandomNumberId()
+	stringJournalId, numberId := utils.GenerateRandomNumberId()
 
 	newData := JournalData{
 		Id:      numberId,
@@ -24,6 +27,10 @@ func CreateJournal(currentGroupId int, schema *JournalSchema) *JournalData {
 
 	journal_group.Update(currentGroupId, &journal_group.UpdateSchema{
 		Item: numberId,
+	})
+
+	server.Cache_Update(utils.IntToString(currentGroupId), func(db *pogreb.DB) {
+		server.Cache_Set(db, stringJournalId, &newData)
 	})
 
 	return &newData
@@ -59,6 +66,10 @@ func UpdateJournal(currentGroupId int, journalId int, newData *JournalUpdateSche
 
 	data.Modified = utils.GetCurrentDateNow()
 
+	server.Cache_Update(utils.IntToString(currentGroupId), func(db *pogreb.DB) {
+		server.Cache_Set(db, utils.IntToString(data.Id), &newData)
+	})
+
 	writeError := utils.BSON_WriteFile(
 		GetJournalSavedFilePath(currentGroupId, journalId),
 		&data,
@@ -76,6 +87,10 @@ func DeleteJournal(currentGroupId int, journalId int) error {
 	if removeError != nil {
 		return removeError
 	}
+
+	server.Cache_Update(utils.IntToString(currentGroupId), func(db *pogreb.DB) {
+		server.Cache_Delete(db, utils.IntToString(journalId))
+	})
 
 	return nil
 }

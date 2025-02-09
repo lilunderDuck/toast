@@ -1,6 +1,9 @@
 package utils
 
-import "strconv"
+import (
+	"encoding/json"
+	"strconv"
+)
 
 func StringToInt(someString string) int {
 	result, convertError := strconv.Atoi(someString)
@@ -12,4 +15,17 @@ func StringToInt(someString string) int {
 
 func IntToString(someInt int) string {
 	return strconv.Itoa(someInt)
+}
+
+func BytesToString(bytes []byte) string {
+	return string(bytes[:])
+}
+
+func MapToBinJSON(anyMap map[string]any) []byte {
+	json, encodeError := json.Marshal(anyMap)
+	if encodeError != nil {
+		panic(encodeError)
+	}
+
+	return json
 }

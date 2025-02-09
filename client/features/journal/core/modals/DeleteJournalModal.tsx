@@ -23,11 +23,11 @@ const style = stylex.create({
 })
 
 interface IDeleteJournalModalProps extends IDialog {
-  $journal: IJournalData
+  journal$: IJournalData
 }
 
 export default function DeleteJournalModal(props: IDeleteJournalModalProps) {
-  const { $localStorage, $journal } = useJournalContext()
+  const { localStorage$, journal$ } = useJournalContext()
 
   return (
     <DialogContent {...stylex.attrs(style.form)}>
@@ -35,11 +35,11 @@ export default function DeleteJournalModal(props: IDeleteJournalModalProps) {
         Confirmation
       </DialogTitle>
       <DialogDescription>
-        You're about to delete <b>{props.$journal?.name}</b>. Are you sure?
+        You're about to delete <b>{props.journal$?.name}</b>. Are you sure?
 
         <FlexCenterY {...stylex.attrs(style.theTextBelow)}>
           <Checkbox 
-            onChange={(isChecked) => $localStorage.$set('shouldShowDeleteConfirmationModal', isChecked)} 
+            onChange={(isChecked) => localStorage$.$set('shouldShowDeleteConfirmationModal', isChecked)} 
           />
           Make sure to delete right away, instead of asking me this.
         </FlexCenterY>
@@ -49,7 +49,7 @@ export default function DeleteJournalModal(props: IDeleteJournalModalProps) {
         closeText$='No, I changed my mind'
         onClickingClose$={props.close$}
         onClickingOpen$={async() => {
-          await $journal.delete$(props.$journal?.id)
+          await journal$.delete$(props.journal$?.id)
           props.close$()
         }}
       />

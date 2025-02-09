@@ -4,7 +4,7 @@ import { mergeClassname } from "~/utils"
 import __style from "./JournalGrid.module.css"
 
 const style = stylex.create({
-  $journal: {
+  journal$: {
     width: '10rem',
     height: '10rem',
     flexShrink: 0,
@@ -18,7 +18,7 @@ export default function JournalGridWrap(props: HTMLAttributes<"div">) {
     <Flex
       {...props} 
       id={__style['journal-grid']}
-      class={mergeClassname(stylex.attrs(style.$journal), props)}
+      class={mergeClassname(stylex.attrs(style.journal$), props)}
     />
   )
 }

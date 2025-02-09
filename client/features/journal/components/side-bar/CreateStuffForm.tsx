@@ -20,7 +20,7 @@ interface ICreateJournalCategoryFormProps {
 
 export default function CreateJournalCategoryForm(props: ICreateJournalCategoryFormProps) {
   const { $submitButtonDisabled, $selected } = useCreateStuffContext()
-  const { $journal } = useJournalContext()
+  const { journal$ } = useJournalContext()
 
   const [_journalGroupForm, { Field, Form }] = createForm<JournalSchema>()
   const [submitButtonDisabled, setSubmitButtonDisabled] = $submitButtonDisabled
@@ -30,7 +30,7 @@ export default function CreateJournalCategoryForm(props: ICreateJournalCategoryF
     setSubmitButtonDisabled(true)
     const dataReturned = await toast
       .promise(
-        $journal.create$(data, selected()!), 
+        journal$.create$(data, selected()!), 
         {
           loading: 'Saving changes...',
           success: 'Done!',

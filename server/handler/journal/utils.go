@@ -7,7 +7,7 @@ import (
 )
 
 func GetJournalsSavedFolder(groupId int) string {
-	return journal_group.GetGroupPath(groupId) + "/stuff"
+	return journal_group.GetGroupPath(groupId)
 }
 
 func GetJournalSavedFilePath(groupId int, journalId int) string {

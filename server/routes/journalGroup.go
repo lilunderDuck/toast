@@ -74,4 +74,10 @@ func HandleJournalGroupRoutes(handleRequest server.RouteCreateFn) {
 
 		return server.ResponseWithData(http.StatusOK, nil)
 	})
+
+	handleRequest("GET", ROUTE_NAME+"/:id/vir-tree", func(context *gin.Context) (int, any, error) {
+		requestedGroupId := getParam(context)
+		this := utils.MapToBinJSON(journal_group.GetVirTreeData(requestedGroupId))
+		return server.ResponseWithData(http.StatusOK, utils.BytesToString(this))
+	})
 }

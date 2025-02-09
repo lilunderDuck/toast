@@ -21,11 +21,11 @@ export type JournalSessionStorage = IStorage<{
 }>
 
 interface IJournalContext {
-  $journal: IThisJournalContext
-  $fileDisplay: IFileDisplayContext
+  journal$: IThisJournalContext
+  fileDisplay$: IFileDisplayContext
   // ...
-  $localStorage: JournalLocalStorage
-  $sessionStorage: JournalSessionStorage
+  localStorage$: JournalLocalStorage
+  sessionStorage$: JournalSessionStorage
   event$: IEvent<JournalEventMap>
 }
 
@@ -39,11 +39,11 @@ export function JournalProvider(props: ParentProps) {
 
   return (
     <Context.Provider value={{
-      $journal: journalContext,
-      $fileDisplay: fileDisplayContext,
+      journal$: journalContext,
+      fileDisplay$: fileDisplayContext,
       // ...
-      $localStorage: createStorage(localStorage),
-      $sessionStorage: wrappedSessionStorage,
+      localStorage$: createStorage(localStorage),
+      sessionStorage$: wrappedSessionStorage,
       event$: event,
     }}>
       {props.children}

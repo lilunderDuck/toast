@@ -11,7 +11,7 @@ import stylex from "@stylexjs/stylex"
 import __style from '../components/journal-grid/JournalGrid.module.css'
 
 const style = stylex.create({
-  $journalList: {
+  journal$List: {
     gap: 15,
     flexWrap: 'wrap'
   },
@@ -60,7 +60,7 @@ export function JournalList() {
 
   return (
     <Flex class={mergeClassname(
-      stylex.attrs(style.$journalList),
+      stylex.attrs(style.journal$List),
       __style['journal-list']
     )}>
       <Show when={!resource.loading} fallback={

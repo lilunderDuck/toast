@@ -35,7 +35,7 @@ const style = stylex.create({
 })
 
 export function JournalSidebar() {
-  const { $journal, $localStorage } = useJournalContext()
+  const { journal$, localStorage$ } = useJournalContext()
 
   const goTo = useNavigate()
   const goHome = () => goTo('/')
@@ -43,21 +43,21 @@ export function JournalSidebar() {
   const deleteJournalModal = createLazyLoadedDialog(
     lazy(() => import('./modals/DeleteJournalModal')), 
     () => ({
-      $journal: thingToDelete()!
+      journal$: thingToDelete()!
     })
   )
 
   const [thingToDelete, setThingToDelete] = createSignal<IJournalData>()
   const clickingOpenJournal: ISidebarProps["onClickingOpen$"] = (journal) => {
-    $journal.open$(journal.id)
-    $journal.setCurrentlyOpened$(journal)
+    journal$.open$(journal.id)
+    journal$.setCurrentlyOpened$(journal)
   }
 
   const clickingRemoveJournal: ISidebarProps["on$ClickingRemove"] = (journal) => {
-    const deleteRightAway = $localStorage.get$('shouldShowDeleteConfirmationModal')
+    const deleteRightAway = localStorage$.get$('shouldShowDeleteConfirmationModal')
     console.log('should delete right away?', deleteRightAway)
     if (deleteRightAway) {
-      return $journal.delete$(journal.id)
+      return journal$.delete$(journal.id)
     }
 
     setThingToDelete(journal)

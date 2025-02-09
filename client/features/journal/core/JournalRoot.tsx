@@ -4,7 +4,11 @@ import { onCleanup, onMount, type ParentProps } from 'solid-js'
 import { bodyClasslist } from '~/utils'
 import { Resizable } from '~/components'
 import { ThisEditorProvider } from '~/features/editor'
-import { type IJournalGroupData, api_getGroup } from '~/api/journal'
+import { 
+  type IJournalGroupData, 
+  api_getGroup, 
+  api_getJournalVirturalFileTree
+} from '~/api/journal'
 import { toast } from '~/features/toast'
 // ...
 import __style from './stuff.module.css'
@@ -47,11 +51,10 @@ export function JournalRoot(props: ParentProps) {
    * @returns `JSX.Element`, but nothing render anything
    */
   const LoadThing = () => {
-    const { $journal, $fileDisplay, $sessionStorage } = useJournalContext()
+    const { fileDisplay$, sessionStorage$ } = useJournalContext()
+    const currentGroupId = parseInt(param.id)
 
     onMount(async() => {
-      const currentGroupId = param.id
-      console.log('Starting up:', currentGroupId)
       // Attempt to get the journal group data from the server
       const data = await api_getGroup(currentGroupId) as IJournalGroupData
       if (!data) {
@@ -59,14 +62,13 @@ export function JournalRoot(props: ParentProps) {
       }
 
       // note: you should not reorder this line of code here, otherwise it *will* break
-      $journal.cache$ = new Map() // hasn't handled
-      $fileDisplay.setTree$(data.tree.data)
-      
+      const treeData = data.tree.data
       // @ts-ignore - should work
       delete data.tree
-      $sessionStorage.$set('currentGroup', data)
-      
-      console.log('\n\n\n\n\n\n\n\n\n\n\n... A bunch of empty lines to make the log message not so messy ...\n\n\n\n\n\n\n\n\n\n\n\n\n')
+      sessionStorage$.$set('currentGroup', data)
+
+      const treeMapping = await api_getJournalVirturalFileTree(currentGroupId)
+      fileDisplay$.setTree$(treeData, treeMapping)
     })
 
     return (

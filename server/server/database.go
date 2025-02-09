@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"server/utils"
 
 	"github.com/akrylysov/pogreb"
 )
@@ -18,10 +19,6 @@ func openDatabase(name string) *pogreb.DB {
 
 	return db
 }
-
-var JournalGroupDb *pogreb.DB = openDatabase("journal-group")
-var JournalDb *pogreb.DB = openDatabase("journal")
-var OtherPurposeDb *pogreb.DB = openDatabase("stuff")
 
 func Cache_Set[T any](db *pogreb.DB, key string, value T) error {
 	jsonInBinary, encodeError := json.Marshal(&value)
@@ -91,7 +88,31 @@ func Cache_GetAllValue(db *pogreb.DB) []any {
 	return item
 }
 
-func DatabaseCleanUps() {
-	JournalGroupDb.Close()
-	OtherPurposeDb.Close()
+func Cache_GetAll(db *pogreb.DB) map[string]any {
+	it := db.Items()
+	outMap := make(map[string]any)
+	for {
+		key, val, err := it.Next()
+		if err == pogreb.ErrIterationDone {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		var jsonVal any
+		json.Unmarshal(val, &jsonVal)
+		outMap[utils.BytesToString(key)] = jsonVal
+	}
+
+	return outMap
+}
+
+type CacheUpdateFn func(db *pogreb.DB)
+
+func Cache_Update(dbName string, updateFn CacheUpdateFn) {
+	db := openDatabase(dbName)
+	defer db.Close()
+
+	updateFn(db)
 }

@@ -7,7 +7,6 @@ import {
 import { 
   createFileNodeData,
   createFolderNodeData,
-  type IJournalCategoryData, 
   type IJournalData, 
   type JournalContentData, 
   JournalType, 
@@ -15,8 +14,8 @@ import {
   api_createJournal, 
   api_deleteJournal, 
   api_getAllJournals, 
-  api_getJournalContent, 
-  api_saveJournalContent, 
+  api_saveJournalContent,
+  api_getJournal, 
 } from "~/api/journal"
 import { useThisEditorContext } from "~/features/editor"
 // ...
@@ -26,50 +25,16 @@ import {
 import { type IFileDisplayContext } from "./fileDisplayContext"
 import { JournalEvent } from "./event"
 
-export interface IThisJournalContext {
-  /**Accessor for the currently opened journal data. 
-   * Returns the currently opened journal data or undefined if none is open.
-   */
-  currentlyOpened$: Accessor<IJournalData | undefined>
-  /**Setter for the currently opened journal data. */
-  setCurrentlyOpened$: Setter<IJournalData | undefined>
+export interface IThisJournalContext extends ReturnType<typeof createJournal> {
   // ...
-  /**Creates a new journal.
-   * @param data The initial data for the new journal.
-   * @param type The type of the journal file.
-   * @returns A promise that resolves to the created journal data.
-   */
-  create$(data: JournalSchema, type: JournalType): Promise<IJournalData>
-  /**Deletes a journal.
-   * @param journalId The ID of the journal to delete.
-   * @returns A promise that resolves when the journal is deleted.
-   */
-  delete$(journalId: number): Promise<void>
-  /**Opens a journal.
-   * @param journalId The ID of the journal to open.
-   * @returns A promise that resolves when the journal is opened.
-   */
-  open$(journalId: number): Promise<void>
-  /**Gets all journals.
-   * @returns A promise that resolves to an array of journal data.
-   */
-  getAll$(): Promise<IJournalData[]>
-  /**Saves changes to a journal.
-   * @param journalId The ID of the journal to save.
-   * @param data The new data for the journal.
-   * @returns A promise that resolves to an empty object or null.
-   */
-  save$(journalId: number, data: JournalContentData): Promise<{} | null>
-  cache$: Map<number, IJournalData | IJournalCategoryData>
 }
 
 export function createJournal(
   event: JournalEvent,
   thisSessionStorage: JournalSessionStorage,
   fileDisplayContext: IFileDisplayContext
-): IThisJournalContext {
+) {
   const { cache$, open$ } = useThisEditorContext()
-  let journalCache = new Map()
 
   const [currentlyOpened$, setCurrentlyOpened$] = createSignal<IJournalData>()
 
@@ -80,57 +45,91 @@ export function createJournal(
     return currentGroupId
   }
 
-  const stuff: IThisJournalContext = {
-    get cache$() {
-      return journalCache
-    },
-    set cache$(value) {
-      journalCache = value
-    },
-    currentlyOpened$, 
-    setCurrentlyOpened$,
-    async create$(data, type) {
-      const currentJournalGroupId = getCurrentJournalGroupId()
-      const newData = await api_createJournal(currentJournalGroupId, data, type)
-      event.emit$('journal__createJournal', newData)
+  /**Creates a new journal.
+   * @param data The initial data for the new journal.
+   * @param type The type of the journal file.
+   * @returns A promise that resolves to the created journal data.
+   */
+  const create = async(data: JournalSchema, type: JournalType): Promise<IJournalData> => {
+    const currentJournalGroupId = getCurrentJournalGroupId()
+    const newData = await api_createJournal(currentJournalGroupId, data, type)
+    event.emit$('journal__createJournal', newData)
 
-      journalCache.set(newData.id, newData)
-      fileDisplayContext.add$(
-        type === JournalType.journal ? createFileNodeData(newData.id) : createFolderNodeData(newData!.id),
-        'root'
-      )
-      return newData
-    },
-    async open$(journalId) {
-      const currentJournalGroupId = getCurrentJournalGroupId()
-      let lastContent = cache$.get(journalId)!
-
-      if (!lastContent) {
-        lastContent = await api_getJournalContent(currentJournalGroupId, journalId)
-      }
-
-      open$({
-        id: journalId,
-        content: lastContent,
-        ...lastContent
-      })
-    },
-    async delete$(journalId) {
-      const currentJournalGroupId = getCurrentJournalGroupId()
-      await api_deleteJournal(currentJournalGroupId, journalId)
-      setCurrentlyOpened$(undefined)
-      event.emit$('journal__deleteJournal', journalId)
-      cache$.delete(journalId)
-    },
-    async getAll$() {
-      const currentJournalGroupId = getCurrentJournalGroupId()
-      return await api_getAllJournals(currentJournalGroupId)
-    },
-    async save$(journalId, data) {
-      const currentJournalGroupId = getCurrentJournalGroupId()
-      return await api_saveJournalContent(currentJournalGroupId, journalId, data)
-    }
+    fileDisplayContext.mapping$.set(`${newData.id}`, newData)
+    fileDisplayContext.add$(
+      type === JournalType.journal ? createFileNodeData(newData.id) : createFolderNodeData(newData!.id),
+      'root'
+    )
+    return newData
   }
 
-  return stuff
+  /**Opens a journal.
+   * @param journalId The ID of the journal to open.
+   * @returns A promise that resolves when the journal is opened.
+   */
+  const open = async(journalId: number) => {
+    const currentJournalGroupId = getCurrentJournalGroupId()
+    let lastContent = cache$.get(journalId)!
+    let journalData = fileDisplayContext.mapping$.get(`${journalId}`) as IJournalData | undefined
+    if (!journalData) {
+      journalData = await api_getJournal(currentJournalGroupId, journalId)
+    }
+
+    if (!lastContent) {
+      lastContent = journalData.data
+    }
+
+    console.log(lastContent)
+    setCurrentlyOpened$(journalData)
+
+    open$({
+      id: `${journalId}`,
+      content: lastContent,
+      ...lastContent
+    })
+  }
+
+  /**Deletes a journal.
+   * @param journalId The ID of the journal to delete.
+   * @returns A promise that resolves when the journal is deleted.
+   */
+  const deleteJournal = async(journalId: number) => {
+    const currentJournalGroupId = getCurrentJournalGroupId()
+    await api_deleteJournal(currentJournalGroupId, journalId)
+    setCurrentlyOpened$(undefined)
+    event.emit$('journal__deleteJournal', journalId)
+    cache$.delete(journalId)
+  }
+
+  /**Gets all journals.
+   * @returns A promise that resolves to an array of journal data.
+   */
+  const getAll = async() => {
+    const currentJournalGroupId = getCurrentJournalGroupId()
+    return await api_getAllJournals(currentJournalGroupId)
+  }
+
+  /**Saves changes to a journal.
+   * @param journalId The ID of the journal to save.
+   * @param data The new data for the journal.
+   * @returns A promise that resolves to an empty object or null.
+   */
+  const save = async(journalId: number, data: JournalContentData) => {
+    const currentJournalGroupId = getCurrentJournalGroupId()
+    return await api_saveJournalContent(currentJournalGroupId, journalId, data)
+  }
+
+  return {
+    /**Accessor for the currently opened journal data. 
+     * Returns the currently opened journal data or undefined if none is open.
+     */
+    currentlyOpened$, 
+    /**Setter for the currently opened journal data. */
+    setCurrentlyOpened$,
+    create$: create,
+    delete$: deleteJournal,
+    getAll$: getAll,
+    open$: open,
+    save$: save
+  }
 }

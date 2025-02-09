@@ -28,3 +28,11 @@ func IsFileExist(pathToFile string) bool {
 	_, err := os.Stat(pathToFile)
 	return !errors.Is(err, os.ErrNotExist)
 }
+
+func WriteFile(name string, stuff []byte) error {
+	return os.WriteFile(name, stuff, os.ModePerm)
+}
+
+func ReadFile(name string) ([]byte, error) {
+	return os.ReadFile(name)
+}

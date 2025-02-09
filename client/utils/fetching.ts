@@ -1,4 +1,10 @@
 import { HttpMethod } from "~/common"
+import { 
+  DELETE_COLOR$,
+  GET_COLOR$,
+  PATCH_COLOR$,
+  POST_COLOR$
+} from "./fetching_macro" assert { type: 'macro' }
 
 /**The base path for making API requests. */
 const BASE_PATH = 'http://localhost:8000'
@@ -24,7 +30,15 @@ export async function fetchIt<
   const Path extends string = string,
   Body = {}
 >(method: HttpMethod, path: Path, body?: Body): Promise<Data | null> {
-  console.groupCollapsed(`--> ${method}:`, BASE_PATH + path)
+  console.groupCollapsed(
+    `%c${method}%c ${BASE_PATH + path}`,
+    method === "GET" ? GET_COLOR$ :
+    method === "POST" ? POST_COLOR$ :
+    method === "PATCH" ? PATCH_COLOR$ :
+    method === "DELETE" ? DELETE_COLOR$ : '',
+    '' // reset style
+  )
+  
   const methodsThatAllowABody = ['POST', 'PATCH'].includes(method)
 
   const dataWillBeSentToServer: RequestInit = {
@@ -42,7 +56,7 @@ export async function fetchIt<
 
   const thisStatusCode = response.status
 
-  if (isServerResponsesWithBadStatusCode(thisStatusCode)) {
+  if (thisStatusCode >= 400) {
     console.error(`<-- not okay, https://http.cat/${thisStatusCode} :(`)
     console.groupEnd()
     return null
@@ -50,20 +64,7 @@ export async function fetchIt<
 
   console.log(`<-- okay, https://http.cat/${thisStatusCode} :)`)
   
-  return await tryConvertingToJson(response) as Data
-}
-
-function isServerResponsesWithBadStatusCode(statusCode: number) {
-  return statusCode >= 400
-}
-
-/**Attempts to parse a `Response` object as JSON and return the parsed data.
- * @param response The `Response` object to parse.
- * @returns A promise that resolves to the parsed JSON data as an object, or null if parsing fails.
- * @see https://developer.mozilla.org/docs/Web/API/Response
- */
-async function tryConvertingToJson(response: Response) {
-  let json: {} | null = {}
+  let json: Data | null = {} as Data
   try {
     json = await response.json()
   } catch (error) {
@@ -74,8 +75,6 @@ async function tryConvertingToJson(response: Response) {
     json = null
   }
 
-  console.log('data:', json)
-
   console.groupEnd()
-  return json
+  return json 
 }

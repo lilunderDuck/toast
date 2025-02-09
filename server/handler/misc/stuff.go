@@ -16,16 +16,18 @@ func GetRandomSplashText() (randomText string, someError error) {
 	}
 
 	var lastSplashText string
-	readError = server.Cache_Get(server.OtherPurposeDb, "last-splash-text", &lastSplashText)
+	rawByteData, readError := utils.ReadFile(server.CacheFolderPath + "/stuff.txt")
 	if readError != nil {
 		lastSplashText = ""
+	} else {
+		lastSplashText = utils.BytesToString(rawByteData)
 	}
 
 	var randomSplashText string
 	for { // while true
 		randomSplashText = utils.GetRandomElementFromArray(out)
 		if randomSplashText != lastSplashText {
-			server.Cache_Set(server.OtherPurposeDb, "last-splash-text", randomSplashText)
+			utils.WriteFile(server.CacheFolderPath+"/stuff.txt", []byte(randomSplashText))
 			break
 		}
 
