@@ -14,11 +14,13 @@ export function TodoBlockRoot(props: ITodoBlockRoot) {
     const { sections$ } = useTodoDataContext()
 
     return (
-      <For each={sections$()}>
-        {(it) => (
-          <TodoSection {...it} />
-        )}
-      </For>
+      <>
+        <For each={sections$()}>
+          {(it) => (
+            <TodoSection {...it} />
+          )}
+        </For>
+      </>
     )
   }
 

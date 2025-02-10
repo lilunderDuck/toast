@@ -8,7 +8,7 @@ export interface IStorage<Mapping extends Record<string, any>> {
    * @param key The key to set the value for.
    * @param value The value to set for the key.
    */
-  $set<T extends keyof Mapping>(key: T, value: Mapping[T]): void
+  set$<T extends keyof Mapping>(key: T, value: Mapping[T]): void
   /**Deletes the value associated with the given key.
    * @param key The key to delete.
    */
@@ -27,14 +27,14 @@ export interface IStorage<Mapping extends Record<string, any>> {
  *   something: number
  * }>(localStorage)
  * 
- * storage.$set('something', 10)
+ * storage.set$('something', 10)
  * // no type error
  * 
- * storage.$set('something else', 10)
+ * storage.set$('something else', 10)
  * //           ^^^^^^^^^^^^^^^^
  * // Argument of type '"something else"' is not assignable to parameter of type '"something"'
  * 
- * storage.$set('something', 'invalid')
+ * storage.set$('something', 'invalid')
  * //                        ^^^^^^^^^
  * // Argument of type 'string' is not assignable to parameter of type 'number'
  * ```
@@ -56,11 +56,20 @@ export function createStorage<Mapping extends Record<string, any>>(storage: Stor
         return data
       }
     },
-    $set(key, value) {
+    set$(key, value) {
       storage.setItem(key as string, JSON. stringify(value))
     },
     delete$(key) {
       storage.removeItem(key as string)
     }
   }
+}
+
+export function updateStorage<
+  Mapping extends Record<string, any>,
+  Key extends keyof Mapping
+>(storage: IStorage<Mapping>, key: Key, call: (prev: Mapping[Key] | null) => Mapping[Key]) {
+  const previous = storage.get$(key)
+  const newValue = call(previous)
+  storage.set$(key, newValue)
 }

@@ -13,7 +13,6 @@ export default function CreateTodoSectionInput(props: ICreateTodoSectionInputPro
   const [thisForm, { Form, Field }] = createForm<TodoSectionSchema>()
 
   const onSubmit: SubmitHandler<TodoSectionSchema> = (data) => {
-    // debugger
     props.onSubmit$(data)
     resetFieldInputs(thisForm, {})
     ThisEditorGlobal.update$()

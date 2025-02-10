@@ -1,14 +1,18 @@
+import { splitProps } from "solid-js"
+// ...
 import stylex from "@stylexjs/stylex"
+import __todoStyle from '../TodoBlockRoot.module.css'
+// ...
 import { BsPencilFill, BsTrashFill } from "solid-icons/bs"
 import { Button, ButtonSizeVariant, ButtonVariant, Flex, FlexCenterY, Spacer } from "~/components"
 import { useTodoDataContext, useTodoSectionContext } from "../provider"
 import { ThisEditorGlobal } from "~/features/editor/core"
-import { splitProps } from "solid-js"
 import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   buttonRow: {
-    width: '100%'
+    width: '100%',
+    fontSize: 14,
   },
   button: {
     flexShrink: 0,
@@ -17,31 +21,30 @@ const style = stylex.create({
 })
 
 interface IEditAndDeleteButtonRowProps extends HTMLAttributes<"div"> {
-  todoId$: number
+  onClickingEdit$(): void
+  onClickingDelete$(): void
 }
 
 export function EditAndDeleteButtonRow(props: IEditAndDeleteButtonRowProps) {
-  const { deleteTodo$, setSomeTodoToEditMode$ } = useTodoDataContext()
-  const { id } = useTodoSectionContext()
-  const [, others] = splitProps(props, ["todoId$"])
+  const [, others] = splitProps(props, ["onClickingEdit$", "onClickingDelete$"])
 
   return (
-    <Flex {...others} class={mergeClassname(stylex.attrs(style.buttonRow), others)}>
+    <Flex {...others} class={mergeClassname(
+      stylex.attrs(style.buttonRow), 
+      others,
+      __todoStyle.editAndDeleteButtonRow
+    )}>
       <Spacer />
       <FlexCenterY {...stylex.attrs(style.button)}>
         <Button 
-          onClick={() => setSomeTodoToEditMode$(id, props.todoId$, true)} 
+          onClick={props.onClickingEdit$} 
           size$={ButtonSizeVariant.icon} 
-          // variant$={ButtonVariant.danger}
         >
           <BsPencilFill />
         </Button>
 
         <Button 
-          onClick={() => {
-            deleteTodo$(id, props.todoId$)
-            ThisEditorGlobal.update$()
-          }} 
+          onClick={() => props.onClickingDelete$} 
           size$={ButtonSizeVariant.icon} 
           variant$={ButtonVariant.danger}
         >

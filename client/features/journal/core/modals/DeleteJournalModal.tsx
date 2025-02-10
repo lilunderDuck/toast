@@ -39,7 +39,7 @@ export default function DeleteJournalModal(props: IDeleteJournalModalProps) {
 
         <FlexCenterY {...stylex.attrs(style.theTextBelow)}>
           <Checkbox 
-            onChange={(isChecked) => localStorage$.$set('shouldShowDeleteConfirmationModal', isChecked)} 
+            onChange={(isChecked) => localStorage$.set$('shouldShowDeleteConfirmationModal', isChecked)} 
           />
           Make sure to delete right away, instead of asking me this.
         </FlexCenterY>

@@ -117,6 +117,7 @@ export function ThisEditorProvider(props: ParentProps) {
   }
 
   onCleanup(() => {
+    //@ts-ignore - explicitly setting this to undefined
     ThisEditorGlobal.update$ = undefined
   })
 

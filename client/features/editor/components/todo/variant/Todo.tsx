@@ -8,6 +8,7 @@ import { ITodo } from "~/features/editor/types"
 import { mergeClassname } from "~/utils"
 // ...
 import { EditAndDeleteButtonRow } from "../stuff"
+import { useTodoDataContext, useTodoSectionContext } from "../provider"
 
 const style = stylex.create({
   todo: {
@@ -29,6 +30,18 @@ interface ITodoProps extends ITodo {}
 
 export default function Todo(props: ParentProps<ITodoProps>) {
   const [isCheckboxChecked, setIsCheckboxChecked] = createSignal(false)
+  const { id: sectionId } = useTodoSectionContext()
+  const { 
+    toggleMarkTodoAsCompleted$, 
+    isThisTodoCompleted$, 
+    deleteTodo$, 
+    setSomeTodoToEditMode$ 
+  } = useTodoDataContext()
+
+  const checkboxChanged = (isChecked: boolean) => {
+    setIsCheckboxChecked(isChecked)
+    toggleMarkTodoAsCompleted$(sectionId, props.id, isChecked)
+  }
 
   return (
     <FlexCenterY class={mergeClassname(
@@ -37,7 +50,7 @@ export default function Todo(props: ParentProps<ITodoProps>) {
       stylex.attrs(style.todo)
     )}>
       <div {...stylex.attrs(style.checkbox)}>
-        <Checkbox onChange={(isChecked) => setIsCheckboxChecked(isChecked)} />
+        <Checkbox onChange={checkboxChanged} defaultChecked={isThisTodoCompleted$(sectionId, props.id)} />
       </div>
       <div {...stylex.attrs(style.textWrapper)}>
         <div class={__style.name}>
@@ -52,7 +65,15 @@ export default function Todo(props: ParentProps<ITodoProps>) {
           </span>
         </Show>
       </div>
-      <EditAndDeleteButtonRow todoId$={props.id} class={__style.editOptions} />
+      <EditAndDeleteButtonRow 
+        class={__style.editOptions} 
+        onClickingEdit$={() => {
+          setSomeTodoToEditMode$(sectionId, props.id, true)
+        }}
+        onClickingDelete$={() => {
+          deleteTodo$(sectionId, props.id)
+        }}
+      />
     </FlexCenterY>
   )
 }

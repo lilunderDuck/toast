@@ -30,6 +30,7 @@ import {
 import type { 
   ITodoBlockRoot 
 } from "../TodoBlockRoot"
+import { createStorage, updateStorage } from "~/utils"
 
 export type CachedSectionData = Map<TodoSectionId, ITodoSection>
 export type StripedTodoSectionData = Omit<ITodoSection, 'todo'>
@@ -45,6 +46,8 @@ export interface ITodoDataContext extends ITodoBlockRoot {
   sections$: Accessor<StripedTodoSectionData[]>
   // ...
   setSomeTodoToEditMode$(fromSection: TodoSectionId, id: number, isEditMode: boolean): void
+  toggleMarkTodoAsCompleted$(fromSection: TodoSectionId, todoId: number, state: boolean): void
+  isThisTodoCompleted$(fromSection: TodoSectionId, todoId: number): boolean
   // ...
   cache$: CachedSectionData
   sectionTodoLookup$: SectionTodoSignals
@@ -55,15 +58,16 @@ const Context = createContext<ITodoDataContext>()
 export function TodoDataProvider(props: ParentProps<{
   data: ITodoBlockRoot
 }>) {
-  const inputData = props.data.dataIn$.stuff
-  const defaultData = {
+  const inputData = props.data.dataIn$.stuff ?? {
     uncategorized: {
       id: 'uncategorized',
       todo: []
     }
-  } satisfies TodoSavedData["stuff"]
+  }
 
-  const cachedData = convertObjectToMap(inputData ?? defaultData) as CachedSectionData
+  // console.log(Object.keys(inputData ?? defaultData))
+
+  const cachedData = convertObjectToMap(inputData) as CachedSectionData
 
   const [sections, setSection] = createSignal<StripedTodoSectionData[]>([])
   const sectionTodoLookup = {} as SectionTodoSignals
@@ -74,18 +78,20 @@ export function TodoDataProvider(props: ParentProps<{
 
   const [data, setData] = props.data.dataOut$
   const saveData = () => {
-    setData({
-      title: '',
+    setData(prev => ({
+      title: prev.title ?? '',
       stuff: convertMapToObject(cachedData)
-    })
+    }))
 
-    console.log('data saved', data())
+    console.log('data saved', data(), cachedData)
   }
 
   // make sure to call this so it correctly shows on readonly mode
   saveData()
 
-  console.log('cached data', cachedData)
+  const wrappedLocalStorage = createStorage<{
+    [key: `todo-${string}`]: string
+  }>(localStorage)
 
   return (
     <Context.Provider value={{
@@ -127,6 +133,22 @@ export function TodoDataProvider(props: ParentProps<{
       setSomeTodoToEditMode$(fromSection, id, isEditMode) {
         const [, setTodos] = sectionTodoLookup[fromSection]
         setTodos(prev => [...changeSomeTodoToEditMode(prev, id, isEditMode)])
+      },
+      toggleMarkTodoAsCompleted$(fromSection, todoId, isCompleted) {
+        updateStorage(wrappedLocalStorage, `todo-${fromSection}`, (prev) => {
+          if (!prev) {
+            prev = ''
+          }
+
+          if (isCompleted) {
+            return `${prev} ${todoId}`.trim()
+          }
+
+          return prev!.replaceAll(`${todoId}`, '').trim()
+        })
+      },
+      isThisTodoCompleted$(fromSection, todoId) {
+        return wrappedLocalStorage.get$(`todo-${fromSection}`)?.includes(`${todoId}`) ?? false
       }
     }}>
       {props.children}

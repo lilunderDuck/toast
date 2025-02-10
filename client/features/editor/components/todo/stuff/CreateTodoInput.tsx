@@ -18,7 +18,7 @@ export default function CreateTodoInput(props: ICreateTodoInputProps) {
     } catch (error) {
       console.log(error)
     }
-    console.log('submited')
+    
     resetFieldInputs(thisForm, {
       name: '',
       description: undefined

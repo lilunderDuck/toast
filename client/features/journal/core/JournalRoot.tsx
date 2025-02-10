@@ -65,7 +65,7 @@ export function JournalRoot(props: ParentProps) {
       const treeData = data.tree.data
       // @ts-ignore - should work
       delete data.tree
-      sessionStorage$.$set('currentGroup', data)
+      sessionStorage$.set$('currentGroup', data)
 
       const treeMapping = await api_getJournalVirturalFileTree(currentGroupId)
       fileDisplay$.setTree$(treeData, treeMapping)

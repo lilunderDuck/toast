@@ -1,13 +1,15 @@
 import { createSignal, Show } from "solid-js"
+import { BsCaretDownFill } from "solid-icons/bs"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./TodoSection.module.css"
+import __todoStyle from '../TodoBlockRoot.module.css'
+// ...
+import { FlexCenterY, Spacer } from "~/components"
+import { mergeClassname } from "~/utils"
 // ...
 import { useTodoDataContext, TodoSectionProvider, type StripedTodoSectionData } from "../provider"
-import { TodoList, TodoInputs, TodoButtonRow } from "../stuff"
-import { FlexCenterY, Spacer } from "~/components"
-import { BsCaretDownFill } from "solid-icons/bs"
-import { mergeClassname } from "~/utils"
+import { TodoList, TodoInputs, TodoButtonRow, TodoTitleInput } from "../stuff"
 
 const style = stylex.create({
   section: {
@@ -37,9 +39,12 @@ export default function TodoSection(props: ITodoSectionProps) {
   const [isShowingTodoList, setIsShowingTodoList] = createSignal(true)
   const [todos] = sectionTodoLookup$[props.id]
 
+  const isNotUncategorizedSection = `${props.id}` !== 'uncategorized'
+
   const Name = () => (
     <FlexCenterY {...stylex.attrs(style.sectionName)}>
-      <Show when={`${props.id}` !== 'uncategorized'}>
+      <Show when={isNotUncategorizedSection}>
+        {/* @ts-ignore - well it technically works */}
         <BsCaretDownFill 
           onClick={() => setIsShowingTodoList(prev => !prev)} 
           {...stylex.attrs(isShowingTodoList() ? {} : style.hideTodoArrow)}
@@ -47,8 +52,11 @@ export default function TodoSection(props: ITodoSectionProps) {
         <span>{props.name}</span>
         <Spacer />
       </Show>
+      <Show when={!isNotUncategorizedSection}>
+        <TodoTitleInput />
+      </Show>
       <Show when={!readOnly}>
-        <TodoButtonRow class={__style.buttonList} />
+        <TodoButtonRow class={__style.buttonList} showTodoSectionButton$={!isNotUncategorizedSection} />
       </Show>
     </FlexCenterY>
   )
@@ -57,7 +65,8 @@ export default function TodoSection(props: ITodoSectionProps) {
     <TodoSectionProvider id={props.id}>
       <section class={mergeClassname(
         stylex.attrs(style.section), 
-        `${props.id}` !== 'uncategorized' ? __style.section : ''
+        isNotUncategorizedSection ? __style.section : '',
+        __todoStyle.section
       )}>
         <Name />
         <Show when={isShowingTodoList()}>

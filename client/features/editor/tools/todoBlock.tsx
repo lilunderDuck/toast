@@ -2,8 +2,9 @@ import { createSignal } from 'solid-js'
 import type { BlockToolConstructorOptions } from '@editorjs/editorjs/types/tools'
 // ...
 import __style from './tools.module.css'
+import __todoStyle from '../components/todo/TodoBlockRoot.module.css'
 // ...
-import { createSolidRenderer } from '~/utils'
+import { createSolidRenderer, mergeClassname } from '~/utils'
 // ...
 import { createToolbox, type NoOptions } from '../utils'
 import { TodoBlockRoot } from '../components'
@@ -31,7 +32,7 @@ export class TodoBlock {
         dataIn$={this.options.data}
         readOnly={this.options.readOnly}
       />
-    ), { class: __style.tool })
+    ), { class: mergeClassname(__style.tool, __todoStyle.todo) })
 
     this.dispose$ = dispose
     return element
@@ -44,6 +45,7 @@ export class TodoBlock {
 
   destroy() {
     this.dispose$()
+    //@ts-ignore - explicitly setting this to undefined
     this.data$ = undefined
   }
 }
