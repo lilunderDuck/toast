@@ -12,11 +12,9 @@ import JournalCategory from "./JournalCategory"
 import Journal from "./Journal"
 
 export function FileDisplay() {
-  const { fileDisplay$, journal$ } = useJournalContext()
+  const { fileDisplay$ } = useJournalContext()
   const ROOT_ID = 0
   const getCache = () => fileDisplay$.mapping$
-
-  let lastOpenedJournalId = 0
 
   const RenderFolderAndFileComponent = (props: AnyVirTreeNode) => {
     const data = getCache()[props.id]
@@ -32,14 +30,7 @@ export function FileDisplay() {
       )
     } 
     
-    return <Journal {...data} onClick={(type, thisJournal) => {
-      if (type === 'open') {
-        if (lastOpenedJournalId !== thisJournal.id) {
-          journal$.open$(thisJournal.id)
-          lastOpenedJournalId = thisJournal.id
-        }
-      }
-    }} />
+    return <Journal {...data} />
   }
 
   // OooOo, scary name

@@ -9,6 +9,7 @@ export * from "./Button"
 export * from "./HoverCard"
 export * from "./Tag"
 export * from "./Tooltip"
+export * from "./Skeleton"
 // ...
 export * from "./select"
 export * from "./dialog"

@@ -8,8 +8,8 @@ export function StartupSequence() {
 
   return (
     <>
-      {void SplashScreen.$setIsVisible(resource.loading)}
-      <SplashScreen.$Screen />
+      {void SplashScreen.setIsVisible$(resource.loading)}
+      <SplashScreen.Screen$ />
     </>
   )
 }

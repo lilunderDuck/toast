@@ -62,7 +62,7 @@ export function JournalGrid(props: IJournalGridProps) {
         {props.name}
       </span>
       {/* ... */}
-      <modal.$Modal />
+      <modal.Modal$ />
     </JournalGridWrap>
   )
 }

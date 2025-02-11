@@ -33,7 +33,7 @@ const style = stylex.create({
 })
 
 interface IButtonItemProps extends HTMLAttributes<"button"> {
-  $icon: IconTypes
+  icon$: IconTypes
   label$: string
 }
 
@@ -52,24 +52,24 @@ export function SidebarButtonsRow() {
     <FlexCenterY {...stylex.attrs(style.buttonsRow)}>
       <ButtonItem 
         onClick={createStuffModal.show$}
-        $icon={BsPlus}
+        icon$={BsPlus}
         label$={'New journal'}
       />
       <Spacer />
       <ButtonItem 
         onClick={toggleEditOrReadonlyMode}
         disabled={!journal$.currentlyOpened$()}
-        $icon={EditOrReadonlyIcon}
+        icon$={EditOrReadonlyIcon}
         label$={`Toggle ${isEditable$() ? 'read-only' : 'edit'} mode`}
       />
       {/* ... */}
-      <createStuffModal.$Modal />
+      <createStuffModal.Modal$ />
     </FlexCenterY>
   )
 }
 
 function ButtonItem(props: IButtonItemProps) {
-  const [, buttonProps] = splitProps(props, ["$icon", "label$"])
+  const [, buttonProps] = splitProps(props, ["icon$", "label$"])
   return (
     <Tooltip label$={props.label$}>
       <Button 
@@ -77,7 +77,7 @@ function ButtonItem(props: IButtonItemProps) {
         size$={ButtonSizeVariant.icon} 
         {...stylex.attrs(style.button)}
       >
-        <props.$icon />
+        <props.icon$ />
       </Button>
     </Tooltip>
   )

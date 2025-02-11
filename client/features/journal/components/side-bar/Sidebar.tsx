@@ -1,14 +1,15 @@
-import { splitProps } from "solid-js"
+import { Show } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 // ...
 import { Divider } from "~/components"
-import type { IJournalData } from "~/api/journal"
+import { mergeClassname } from "~/utils"
 // ...
 import { SidebarButtonsRow } from "./SidebarButtonsRow"
-import { mergeClassname } from "~/utils"
-import { FileDisplay } from "./file-display"
+import { FileDisplay, FileDisplaySkeleton } from "./file-display"
+import SidebarActions from "./SidebarActions"
+import { useJournalContext } from "../../context"
 
 const style = stylex.create({
   sidebar: {
@@ -21,19 +22,13 @@ const style = stylex.create({
   }
 })
 
-export interface ISidebarProps extends HTMLAttributes<"div"> {
-  onClickingOpen$?: (journal: IJournalData) => void
-  on$ClickingRemove?: (journal: IJournalData) => void
-}
-
-export function Sidebar(props: ISidebarProps) {
-  const [, itsProps] = splitProps(props, ["onClickingOpen$", "on$ClickingRemove"])
+export function Sidebar() {
+  const { fileDisplay$ } = useJournalContext()
+  const [isLoading] = fileDisplay$.isLoading$
 
   return (
     <div 
-      {...itsProps} 
       {...stylex.attrs(style.sidebar)} 
-      editor-tour-sidebar
     >
       <SidebarButtonsRow />
       <Divider />
@@ -43,8 +38,12 @@ export function Sidebar(props: ISidebarProps) {
         __scrollbarStyle.invsScrollbar,
         stylex.attrs(style.content)
       )}>
-        <FileDisplay />
+        <Show when={!isLoading()} fallback={<FileDisplaySkeleton />}>
+          <FileDisplay />
+        </Show>
       </div>
+
+      <SidebarActions />
     </div>
   )
 }

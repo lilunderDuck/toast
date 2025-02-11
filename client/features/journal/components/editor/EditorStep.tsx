@@ -30,14 +30,14 @@ const style = stylex.create({
 })
 
 interface IStepProps {
-  $icon: IconTypes
+  icon$: IconTypes
   $stuff: JSX.Element
 }
 
-export default function Step(props: IStepProps) {
+export default function EditorStep(props: IStepProps) {
   return (
     <FlexCenterY {...stylex.attrs(style.step)}>
-      <props.$icon />
+      <props.icon$ />
       <div>
         {props.$stuff}
       </div>

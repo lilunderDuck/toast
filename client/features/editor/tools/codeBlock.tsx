@@ -1,5 +1,6 @@
 import type { BlockToolConstructorOptions } from '@editorjs/editorjs/types/tools'
 import { EditorView, basicSetup } from "codemirror"
+import { coolGlow } from 'thememirror'
 // import { css } from "@codemirror/lang-css"
 // ...
 import { createToolbox } from '../utils'
@@ -29,7 +30,7 @@ export class CodeBlock {
     const view = new EditorView({
       parent: mountingPoint,
       doc: `p { background-color: purple }`,
-      extensions: [basicSetup, ]
+      extensions: [basicSetup, coolGlow]
     })
 
     mountingPoint.id = __style.tool

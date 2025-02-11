@@ -16,11 +16,9 @@ cold_start:
 build_hacky:
 	${BUILD_SCRIPTS_COMMAND} ./scripts/additional-tasks.ts
 
-build_server:
-	cd server && go build -ldflags "-X main.mode=release -H windowsgui" -o ${SERVER_BUILD_OUTPUT} ${SERVER_ENTRY_POINT}
-
-build_app:
+build:
 	${VITE_APP_COMMAND} build
+	cd server && go build -ldflags "-X main.mode=release -H windowsgui" -o ${SERVER_BUILD_OUTPUT} ${SERVER_ENTRY_POINT}
 
 dev_server:
 	cd server && go build -o ${SERVER_BUILD_OUTPUT} ${SERVER_ENTRY_POINT}

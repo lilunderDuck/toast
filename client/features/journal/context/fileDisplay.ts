@@ -102,18 +102,20 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
     shouldBeAFolder.child = tree
     update()
   }
+
+  const wrappedSetTree = (tree: VirFileTree.Tree, data: VirFileTree.ClientData["list"]) => {
+    mapping = data
+    treeCache.data = tree
+    update()
+  }
   
   return {
     treeSignal$: tree,
+    isLoading$: createSignal(false),
     isUpdating$: isUpdating,
     add$: add,
     replaceTree$: replaceTree,
-    setTree$(tree: VirFileTree.Tree, data: VirFileTree.ClientData["list"]) {
-      console.log(tree)
-      mapping = data
-      treeCache.data = tree
-      update()
-    },
+    setTree$: wrappedSetTree,
     get mapping$() {
       return mapping
     }

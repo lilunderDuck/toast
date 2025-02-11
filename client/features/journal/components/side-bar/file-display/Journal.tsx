@@ -3,8 +3,9 @@ import { BsX } from "solid-icons/bs"
 import stylex from "@stylexjs/stylex"
 import __style from "./Journal.module.css"
 // ...
-import type { IJournalData } from "~/api/journal"
+import { type IJournalData } from "~/api/journal"
 import { FlexCenterY, Flex, Spacer } from "~/components"
+import { useJournalContext } from "~/features/journal"
 
 const style = stylex.create({
   journal: {
@@ -32,23 +33,37 @@ const style = stylex.create({
 })
 
 export interface IJournalProps extends IJournalData {
-  onClick?: (type: 'open' | 'remove', data: IJournalData) => void
+  // ...
 }
 
 export default function Journal(props: IJournalProps) {
+  const { event$, journal$ } = useJournalContext()
+  const onClickTheJournalName = () => {
+    const currentlyOpenJournalId = journal$.currentlyOpened$()?.id
+    if (currentlyOpenJournalId !== props.id) {
+      return event$.emit$('journal__openJournal', props)
+    }
+
+    console.log('No need to open', props.id, "...")
+  }
+
+  const onClickRemoveButton = () => {
+    event$.emit$('journal__deleteJournal', props)
+  }
+
   return (
     <FlexCenterY 
       {...stylex.attrs(style.journal)} 
       id={__style.journal} 
       data-id={props.id}
     >
-      <Flex {...stylex.attrs(style.nameAndStuff)} onClick={() => props.onClick?.('open', props)}>
+      <Flex {...stylex.attrs(style.nameAndStuff)} onClick={onClickTheJournalName}>
         <span id={__style.name}>
           {props.name}
         </span>
         <Spacer />
       </Flex>
-      <div id={__style.button} {...stylex.attrs(style.button)} onClick={() => props.onClick?.('remove', props)}>
+      <div id={__style.button} {...stylex.attrs(style.button)} onClick={onClickRemoveButton}>
         <BsX size={15} />
       </div>
     </FlexCenterY>

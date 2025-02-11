@@ -19,7 +19,7 @@ export function CreateNewJournalGroup() {
       <JournalGridWrap onClick={modal.show$} {...stylex.attrs(style.createButton)}>
         <BsPlus size={30} />
       </JournalGridWrap>
-      <modal.$Modal />
+      <modal.Modal$ />
     </>
   )
 }

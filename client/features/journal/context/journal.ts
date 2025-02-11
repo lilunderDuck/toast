@@ -21,14 +21,12 @@ import {
   JournalSessionStorage
 } from ".."
 import { type IFileDisplayContext } from "./fileDisplay"
-import { JournalEvent } from "./event"
 
 export interface IThisJournalContext extends ReturnType<typeof createJournal> {
   // ...
 }
 
 export function createJournal(
-  event: JournalEvent,
   thisSessionStorage: JournalSessionStorage,
   fileDisplayContext: IFileDisplayContext
 ) {
@@ -51,7 +49,6 @@ export function createJournal(
   const create = async(data: JournalSchema, type: JournalType): Promise<IJournalData> => {
     const currentJournalGroupId = getCurrentJournalGroupId()
     const newData = await api_createJournal(currentJournalGroupId, data, type)
-    event.emit$('journal__createJournal', newData)
 
     fileDisplayContext.mapping$[newData.id] = newData
     fileDisplayContext.add$(
@@ -76,8 +73,7 @@ export function createJournal(
     if (!lastContent) {
       lastContent = journalData.data
     }
-
-    console.log(lastContent)
+    
     setCurrentlyOpened$(journalData)
 
     open$({
@@ -95,7 +91,6 @@ export function createJournal(
     const currentJournalGroupId = getCurrentJournalGroupId()
     await api_deleteJournal(currentJournalGroupId, journalId)
     setCurrentlyOpened$(undefined)
-    event.emit$('journal__deleteJournal', journalId)
     cache$.delete(journalId)
   }
 
@@ -128,6 +123,7 @@ export function createJournal(
     delete$: deleteJournal,
     getAll$: getAll,
     open$: open,
-    save$: save
+    save$: save,
+    isLoading$: createSignal(true)
   }
 }

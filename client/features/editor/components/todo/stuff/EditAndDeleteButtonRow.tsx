@@ -5,8 +5,6 @@ import __todoStyle from '../TodoBlockRoot.module.css'
 // ...
 import { BsPencilFill, BsTrashFill } from "solid-icons/bs"
 import { Button, ButtonSizeVariant, ButtonVariant, Flex, FlexCenterY, Spacer } from "~/components"
-import { useTodoDataContext, useTodoSectionContext } from "../provider"
-import { ThisEditorGlobal } from "~/features/editor/core"
 import { mergeClassname } from "~/utils"
 
 const style = stylex.create({

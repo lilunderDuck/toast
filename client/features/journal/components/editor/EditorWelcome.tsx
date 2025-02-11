@@ -2,7 +2,7 @@ import stylex from "@stylexjs/stylex"
 // ...
 import { FlexCenter } from "~/components"
 // ...
-import Step from "./Step"
+import EditorStep from "./EditorStep"
 import { BsHouseFill, BsPencilFill, BsPlus } from "solid-icons/bs"
 
 const style = stylex.create({
@@ -31,9 +31,9 @@ export function EditorWelcome() {
       <div>
         Currently there's nothing here... but here's a few thing you can do:
         <div {...stylex.attrs(style.stepList)}>
-          <Step $icon={BsPlus} $stuff='Create new journal' />
-          <Step $icon={BsPencilFill} $stuff='Edit existing journal' />
-          <Step $icon={BsHouseFill} $stuff='Go back to home' />
+          <EditorStep icon$={BsPlus} $stuff='Create new journal' />
+          <EditorStep icon$={BsPencilFill} $stuff='Edit existing journal' />
+          <EditorStep icon$={BsHouseFill} $stuff='Go back to home' />
         </div>
       </div>
     </FlexCenter>

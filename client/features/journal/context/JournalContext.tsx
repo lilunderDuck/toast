@@ -1,8 +1,11 @@
 import { 
   createContext, 
+  createSignal, 
   onCleanup, 
   type ParentProps, 
-  useContext 
+  type Signal, 
+  useContext, 
+  type VoidComponent
 } from "solid-js"
 // ...
 import { createEvent, createStorage, type IEvent, type IStorage } from "~/utils"
@@ -28,6 +31,10 @@ interface IJournalContext {
   localStorage$: JournalLocalStorage
   sessionStorage$: JournalSessionStorage
   event$: IEvent<JournalEventMap>
+  // ...
+  _sidebarComponent$: VoidComponent
+  isShowingSidebar$: Signal<boolean>
+  openSidebar$(sidebarComponent: VoidComponent): void
 }
 
 const Context = createContext<IJournalContext>()
@@ -36,12 +43,15 @@ export function JournalProvider(props: ParentProps) {
   const wrappedSessionStorage: JournalSessionStorage = createStorage(sessionStorage)
   const event = createEvent<JournalEventMap>()
   const fileDisplayContext = createFileDisplay(wrappedSessionStorage)
-  const journalContext = createJournal(event, wrappedSessionStorage, fileDisplayContext)
+  const journalContext = createJournal(wrappedSessionStorage, fileDisplayContext)
 
   onCleanup(() => {
     wrappedSessionStorage.delete$("currentGroup")
     console.log('clean up')
   })
+
+  let sidebarComponent: VoidComponent = () => undefined
+  const [isShowingSidebar, setIsShowingSidebar] = createSignal(false)
 
   return (
     <Context.Provider value={{
@@ -51,6 +61,16 @@ export function JournalProvider(props: ParentProps) {
       localStorage$: createStorage(localStorage),
       sessionStorage$: wrappedSessionStorage,
       event$: event,
+      // ...
+      get _sidebarComponent$() {
+        console.log('getter call')
+        return sidebarComponent
+      },
+      isShowingSidebar$: [isShowingSidebar, setIsShowingSidebar],
+      openSidebar$(thisSidebarComponent) {
+        sidebarComponent = thisSidebarComponent
+        setIsShowingSidebar(true)
+      }
     }}>
       {props.children}
     </Context.Provider>

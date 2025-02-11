@@ -1,6 +1,6 @@
 import { DialogContent, type IDialog } from "~/components"
 // ...
-import { ToolContent } from "../../components"
+import { ToolContent } from "../.."
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({

@@ -79,7 +79,7 @@ export function TodoDataProvider(props: ParentProps<{
   const [data, setData] = props.data.dataOut$
   const saveData = () => {
     setData(prev => ({
-      title: prev.title ?? '',
+      title: prev?.title ?? '',
       stuff: convertMapToObject(cachedData)
     }))
 

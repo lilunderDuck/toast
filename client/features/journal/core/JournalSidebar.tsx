@@ -1,27 +1,22 @@
-import { createSignal, lazy } from "solid-js"
-import { BsHouseFill, BsTrello } from "solid-icons/bs"
+import { BsHouseFill } from "solid-icons/bs"
 import { useNavigate } from "@solidjs/router"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./JournalSidebar.module.css"
 // ...
 import { 
-  createLazyLoadedDialog, 
   Flex, 
   FlexCenterY, 
   ResizableHandle, 
   ResizablePanel
 } from "~/components"
-import type { IJournalData } from "~/api/journal"
 // ...
 import { 
-  type ISidebarProps,
   QuickActionBar, 
   QuickActionItem, 
-  Sidebar, 
+  Sidebar,
+  TrackerButton, 
 } from "../components"
-import { useJournalContext } from "../context"
-
 
 const style = stylex.create({
   sidebar: {
@@ -35,67 +30,27 @@ const style = stylex.create({
 })
 
 export function JournalSidebar() {
-  const { journal$, localStorage$ } = useJournalContext()
-
   const goTo = useNavigate()
   const goHome = () => goTo('/')
-
-  const deleteJournalModal = createLazyLoadedDialog(
-    lazy(() => import('./modals/DeleteJournalModal')), 
-    () => ({
-      journal$: thingToDelete()!
-    })
-  )
-
-  const [thingToDelete, setThingToDelete] = createSignal<IJournalData>()
-  const clickingOpenJournal: ISidebarProps["onClickingOpen$"] = (journal) => {
-    journal$.open$(journal.id)
-    journal$.setCurrentlyOpened$(journal)
-  }
-
-  const clickingRemoveJournal: ISidebarProps["on$ClickingRemove"] = (journal) => {
-    const deleteRightAway = localStorage$.get$('shouldShowDeleteConfirmationModal')
-    console.log('should delete right away?', deleteRightAway)
-    if (deleteRightAway) {
-      return journal$.delete$(journal.id)
-    }
-
-    setThingToDelete(journal)
-    deleteJournalModal.show$()
-  }
-
-  const toolModal = createLazyLoadedDialog(
-    lazy(() => import('./modals/TrackingToolsModal'))
-  )
 
   return (
     <>
       <ResizablePanel initialSize={0.3}>
         <FlexCenterY id={__style.iconTitleBar} {...stylex.attrs(style.titleBar)}>
           <QuickActionItem 
-            $icon={BsHouseFill}
+            icon$={BsHouseFill}
             label$='Go back to home'
             onClick={goHome}
           />
           <div  />
-          <QuickActionItem 
-            $icon={BsTrello}
-            label$='Trackers'
-            onClick={toolModal.show$}
-          />
+          <TrackerButton />
         </FlexCenterY>
         <Flex {...stylex.attrs(style.sidebar)}>
           <QuickActionBar />
-          <Sidebar 
-            onClickingOpen$={clickingOpenJournal} 
-            on$ClickingRemove={clickingRemoveJournal}
-          />
+          <Sidebar />
         </Flex>
       </ResizablePanel>
       <ResizableHandle />
-      {/* ... */}
-      <deleteJournalModal.$Modal />
-      <toolModal.$Modal />
     </>
   )
 }

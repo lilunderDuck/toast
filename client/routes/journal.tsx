@@ -1,16 +1,20 @@
+import type { RouteSectionProps } from "@solidjs/router"
 // ...
 import { 
   JournalRoot,
   JournalEditorContent,
-  JournalSidebar
+  JournalSidebar,
+  // JournalRightSidebar
 } from "~/features/journal"
 
-export default function JournalPage() {
+export default function JournalPage(props: RouteSectionProps) {
   return (
     <JournalRoot>
       <JournalSidebar />
-      <JournalEditorContent />
-      {/* <JournalToolsSidebar /> */}
+      <JournalEditorContent>
+        {props.children}
+      </JournalEditorContent>
+      {/* <JournalRightSidebar /> */}
     </JournalRoot>
   )
 }

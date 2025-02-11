@@ -21,14 +21,14 @@ const style = stylex.create({
 interface IInfoProps {
   $name: JSX.Element
   $description: JSX.Element
-  $icon?: JSX.Element
+  icon$?: JSX.Element
 }
 
 function Info(props: IInfoProps) {
   return (
     <div>
       <FlexCenterY {...stylex.attrs(style.$name)} as$="h4">
-        {props.$icon}
+        {props.icon$}
         <span>{props.$name}</span>
       </FlexCenterY>
       <SectionText>
@@ -48,12 +48,12 @@ export function InfoList(props: IJournalGroupData) {
   return (
     <div {...stylex.attrs(style.$infoList)}>
       <Info 
-        $icon={<BsCalendar2Fill />}
+        icon$={<BsCalendar2Fill />}
         $name='Created'
         $description={formatDate(props?.created!)} 
       />
       <Info 
-        $icon={<BsPencilFill />}
+        icon$={<BsPencilFill />}
         $name='Last modified'
         $description={
           <Show when={props.modified} fallback={
@@ -64,7 +64,7 @@ export function InfoList(props: IJournalGroupData) {
         } 
       />
       <Info 
-        $icon={<BsJournalCheck />}
+        icon$={<BsJournalCheck />}
         $name='Entries'
         $description={props?.entries ?? 0}
       />

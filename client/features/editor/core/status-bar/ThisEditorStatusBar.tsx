@@ -72,7 +72,7 @@ export function ThisEditorStatusBar() {
   })
 
   return (
-    <FlexCenterY {...stylex.attrs(style.statusBar)} editor-tour-status-bar>
+    <FlexCenterY {...stylex.attrs(style.statusBar)}>
       <div id={__bongoCat.bongoCat}>
         {bongoCatAnimation[typing()]}
       </div>

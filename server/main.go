@@ -28,6 +28,7 @@ func main() {
 	// serve static files
 	routes.ServeStaticFiles(router)
 	// routes and stuffs will be here
+	routes.HandlePingRoutes(handleRequest)
 	routes.HandleJournalRoutes(handleRequest)
 	routes.HandleJournalGroupRoutes(handleRequest)
 	routes.HandleMiscRoutes(handleRequest)

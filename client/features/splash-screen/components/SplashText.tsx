@@ -2,9 +2,9 @@ import { createSignal, onMount } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
+import { api_getSplashText } from "~/api/misc"
 import { mergeClassname } from "~/utils"
 // ...
-import { api_getSplashText } from "../utils"
 
 const style = stylex.create({
   text: {

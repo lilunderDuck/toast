@@ -9,8 +9,8 @@ import {
 } from "~/features/editor"
 import { ResizablePanel } from "~/components"
 // ...
-import { EditorWelcome } from "../components"
 import { useJournalContext } from "../context"
+import { EditorWelcome } from "../components"
 
 const style = stylex.create({
   content: {

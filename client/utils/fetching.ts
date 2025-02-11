@@ -52,7 +52,13 @@ export async function fetchIt<
     dataWillBeSentToServer.body = JSON.stringify(body)
   }
 
-  const response = await fetch(BASE_PATH + path, dataWillBeSentToServer)
+  let response: Response
+  try {
+    response = await fetch(BASE_PATH + path, dataWillBeSentToServer)
+  } catch (error) {
+    console.error(`<-- not okay`, error)
+    return null
+  }
 
   const thisStatusCode = response.status
 

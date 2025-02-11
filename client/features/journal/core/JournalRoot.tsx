@@ -53,6 +53,7 @@ export function JournalRoot(props: ParentProps) {
   const LoadThing = () => {
     const { fileDisplay$, sessionStorage$ } = useJournalContext()
     const currentGroupId = parseInt(param.id)
+    const [, setIsLoading] = fileDisplay$.isLoading$
 
     onMount(async() => {
       // Attempt to get the journal group data from the server
@@ -61,6 +62,7 @@ export function JournalRoot(props: ParentProps) {
         return goHomeImmediately()
       }
 
+      setIsLoading(true)
       // note: you should not reorder this line of code here, otherwise it *will* break
       const treeData = data.tree.data
       // @ts-ignore - should work
@@ -69,6 +71,7 @@ export function JournalRoot(props: ParentProps) {
 
       const treeMapping = await api_getJournalVirturalFileTree(currentGroupId)
       fileDisplay$.setTree$(treeData, treeMapping)
+      setIsLoading(false)
     })
 
     return (

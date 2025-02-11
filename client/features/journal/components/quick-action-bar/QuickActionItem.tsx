@@ -25,18 +25,18 @@ const style = stylex.create({
 })
 
 interface IQuickActionItemProps extends HTMLAttributes<"div"> {
-  $icon: IconTypes
+  icon$: IconTypes
   label$: JSX.Element
 }
 
 export function QuickActionItem(props: IQuickActionItemProps) {
-  const [thisThing, itsProps] = splitProps(props, ["$icon", "label$"])
+  const [thisThing, itsProps] = splitProps(props, ["icon$", "label$"])
 
   return (
     <FlexCenter {...stylex.attrs(style.item)} {...itsProps} id={__style.actionBar}>
       <Tooltip label$={thisThing.label$}>
         <FlexCenter {...stylex.attrs(style.itemContent)}>
-          <props.$icon size={13} />
+          <props.icon$ size={13} />
         </FlexCenter>
       </Tooltip>
     </FlexCenter>

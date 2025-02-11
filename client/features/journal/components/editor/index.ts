@@ -1,2 +1,2 @@
-export * from "./EditorWelcome"
+export * from './EditorWelcome'
 export * from './EditOrReadonlyIcon'

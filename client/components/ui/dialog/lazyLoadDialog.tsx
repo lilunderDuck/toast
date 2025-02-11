@@ -26,7 +26,7 @@ export function createLazyLoadedDialog<Props extends IDialog>(
   }
 
   return {
-    $Modal() {
+    Modal$() {
       return (
         <Show when={showing()}>
           <Dialog defaultOpen={true} preventScroll={false} modal={true}>
