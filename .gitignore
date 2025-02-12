@@ -9,3 +9,8 @@ logs
 *.config.ts.timestamp-*.mjs
 
 *.exe.tmp-*
+
+*.md5
+wailsjs
+dist
+build/bin

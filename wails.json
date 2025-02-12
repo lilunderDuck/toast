@@ -1,0 +1,9 @@
+{
+  "name": "burned-toast",
+  "outputfilename": "burned-toast",
+  "frontend:install": "deno install",
+  "frontend:build": "deno task build",
+  "frontend:dev:watcher": "deno task dev",
+  "frontend:dev:serverUrl": "auto",
+  "assetdir": "./frontend/dist"
+}
