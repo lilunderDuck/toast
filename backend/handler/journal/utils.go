@@ -1,9 +1,9 @@
 package journal
 
 import (
+	"burned-toast/backend/handler/journal_group"
+	"burned-toast/backend/utils"
 	"fmt"
-	"server/handler/journal_group"
-	"server/utils"
 )
 
 func GetJournalsSavedFolder(groupId int) string {

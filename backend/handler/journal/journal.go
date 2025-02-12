@@ -1,9 +1,9 @@
 package journal
 
 import (
-	"server/handler/journal_group"
-	"server/server"
-	"server/utils"
+	"burned-toast/backend/handler/journal_group"
+	"burned-toast/backend/server"
+	"burned-toast/backend/utils"
 
 	"github.com/akrylysov/pogreb"
 )

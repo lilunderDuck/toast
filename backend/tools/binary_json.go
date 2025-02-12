@@ -1,9 +1,9 @@
 package main
 
 import (
+	"burned-toast/backend/handler/misc"
 	"encoding/json"
 	"os"
-	"server/handler/misc"
 
 	"github.com/fxamacker/cbor/v2"
 )

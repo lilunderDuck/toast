@@ -1,9 +1,9 @@
 package misc
 
 import (
+	"burned-toast/backend/server"
+	"burned-toast/backend/utils"
 	"fmt"
-	"server/server"
-	"server/utils"
 )
 
 func GetRandomSplashText() (randomText string, someError error) {

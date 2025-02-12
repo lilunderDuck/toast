@@ -1,6 +1,6 @@
 package server
 
-import "server/utils"
+import "burned-toast/backend/utils"
 
 var currentDir string = utils.GetCurrentDir()
 

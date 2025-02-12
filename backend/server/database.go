@@ -1,10 +1,10 @@
 package server
 
 import (
+	"burned-toast/backend/utils"
 	"encoding/json"
 	"fmt"
 	"log"
-	"server/utils"
 
 	"github.com/akrylysov/pogreb"
 )
