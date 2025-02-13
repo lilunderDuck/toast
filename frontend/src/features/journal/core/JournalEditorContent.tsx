@@ -26,7 +26,7 @@ const style = stylex.create({
     flexWrap: 'nowrap'
   },
   editor: {
-    height: 'calc(100vh - 39px)'
+    height: 'calc(100vh - 72px)'
   }
 })
 

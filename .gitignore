@@ -14,3 +14,4 @@ logs
 wailsjs
 dist
 build/bin
+*.syso

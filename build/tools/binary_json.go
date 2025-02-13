@@ -14,13 +14,15 @@ func main() {
 		splashText misc.SplashTextData
 	)
 
-	readJson("./tools/lib_used.json", &libUsed)
-	readJson("./tools/splash_text.json", &splashText)
+	var outDir string = "../bin/resource"
 
-	os.MkdirAll("../out/server/resource", os.ModePerm)
+	readJson("./lib_used.json", &libUsed)
+	readJson("./splash_text.json", &splashText)
 
-	bson_writeFile("../out/server/resource/splashText.bin", &splashText)
-	bson_writeFile("../out/server/resource/libUsed.bin", &libUsed)
+	os.MkdirAll(outDir, os.ModePerm)
+
+	bson_writeFile(outDir+"/splashText.bin", &splashText)
+	bson_writeFile(outDir+"/libUsed.bin", &libUsed)
 }
 
 func readJson[T any](filePathToEncode string, out *T) {

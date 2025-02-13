@@ -7,9 +7,7 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "backup": true,
-    "**/node_modules": true,
-    "frontend/dist": true,
-    "frontend/out": true,
+    "**/node_modules": true
   },
   "editor.tabSize": 2,
   "explorer.compactFolders": false,

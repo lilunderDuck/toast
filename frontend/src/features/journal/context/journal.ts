@@ -11,7 +11,6 @@ import {
   type JournalSchema,
   api_createJournal, 
   api_deleteJournal, 
-  api_getAllJournals, 
   api_saveJournalContent,
   api_getJournal, 
 } from "~/api/journal"
@@ -94,14 +93,6 @@ export function createJournal(
     cache$.delete(journalId)
   }
 
-  /**Gets all journals.
-   * @returns A promise that resolves to an array of journal data.
-   */
-  const getAll = async() => {
-    const currentJournalGroupId = getCurrentJournalGroupId()
-    return await api_getAllJournals(currentJournalGroupId)
-  }
-
   /**Saves changes to a journal.
    * @param journalId The ID of the journal to save.
    * @param data The new data for the journal.
@@ -121,7 +112,6 @@ export function createJournal(
     setCurrentlyOpened$,
     create$: create,
     delete$: deleteJournal,
-    getAll$: getAll,
     open$: open,
     save$: save,
     isLoading$: createSignal(true)

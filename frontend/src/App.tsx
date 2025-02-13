@@ -1,7 +1,7 @@
 import { Route, Router } from '@solidjs/router'
 import { lazy } from 'solid-js'
 // ...
-import { ColorAndStuff } from '~/components'
+import { ColorAndStuff, Titlebar } from '~/components'
 import { Toaster } from '~/features/toast'
 // import { StartupSequence } from'~/features/splash-screen'
 
@@ -13,6 +13,7 @@ export default function App() {
 
   return (
     <ColorAndStuff>
+      <Titlebar />
       {/* <StartupSequence /> */}
       <Toaster />
 

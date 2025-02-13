@@ -1,5 +1,16 @@
-import { fetchIt } from "~/utils"
-import { JOURNAL_GROUP_ROUTE, JOURNAL_ROUTE } from "./route"
+import { 
+  JournalGroup_Create,
+  JournalGroup_Delete,
+  JournalGroup_Get,
+  JournalGroup_GetAll,
+  JournalGroup_GetVirTreeData,
+  JournalGroup_Update,
+  Journal_Create,
+  Journal_Delete,
+  Journal_Get,
+  Journal_Update,
+} from "~/wailsjs/go/backend/App"
+// ...
 import { 
   type IJournalData, 
   type IJournalGroupData, 
@@ -9,56 +20,31 @@ import {
   JournalType 
 } from "./stuff"
 import type { VirFileTree } from "./virtural-tree"
-
 export async function api_createJournal(currentGroupId: number, data: JournalSchema, type: JournalType) {
-  const route = `${JOURNAL_ROUTE}/${currentGroupId}?type=${type}` as const
-  return await fetchIt('POST', route, data) as IJournalData
+  return await Journal_Create(currentGroupId, data, type) as IJournalData
 }
 
 export async function api_deleteJournal(currentGroupId: number, someJournalId: number) {
-  return fetchIt('DELETE', `${JOURNAL_ROUTE}/${currentGroupId}/${someJournalId}`)
+  return await Journal_Delete(currentGroupId, someJournalId)
 }
 
-export async function api_getAllJournals(currentGroupId: number) {
-  return await fetchIt('GET', `${JOURNAL_ROUTE}/${currentGroupId}`) as IJournalData[]
+export async function api_getJournal(currentGroupId: number, someJournalId: number) {
+  return await Journal_Get(currentGroupId, someJournalId) as IJournalData
 }
 
-export async function api_getJournal(
-  currentGroupId: number, 
-  someJournalId: number,
-) {
-  return await fetchIt('GET', `${JOURNAL_ROUTE}/${currentGroupId}/${someJournalId}`) as IJournalData
-}
-
-export function api_saveJournalContent(
-  currentGroupId: number, 
-  someJournalId: number, 
-  data: JournalContentData
-) {
-  return fetchIt('PATCH', `${JOURNAL_ROUTE}/${currentGroupId}/${someJournalId}`, {
-    data: data
+export function api_saveJournalContent(currentGroupId: number, someJournalId: number, data: JournalContentData) {
+  return Journal_Update(currentGroupId, someJournalId, {
+    data
   })
 }
 
-export async function api_getJournalContent(
-  currentGroupId: number, 
-  someJournalId: number
-) {
-  return await fetchIt('GET', `${JOURNAL_ROUTE}/${currentGroupId}/${someJournalId}`) as JournalContentData
+export async function api_getJournalVirturalFileTree(currentGroupId: number) {
+  const data = await JournalGroup_GetVirTreeData(currentGroupId)
+  return data as VirFileTree.ClientData["list"]
 }
 
-export async function api_getJournalVirturalFileTree(
-  currentGroupId: number
-) {
-  const data = await fetchIt('GET', `${JOURNAL_GROUP_ROUTE}/${currentGroupId}/vir-tree`) as string
-  return JSON.parse(data) as VirFileTree.ClientData["list"]
-}
-
-export async function api_updateJournalVirturalFileTree(
-  currentGroupId: number,
-  data: VirFileTree.Tree
-) {
-  return await fetchIt('PATCH', `${JOURNAL_GROUP_ROUTE}/${currentGroupId}`, {
+export async function api_updateJournalVirturalFileTree(currentGroupId: number, data: VirFileTree.Tree) {
+  return JournalGroup_Update(currentGroupId, {
     tree: data
   })
 }
@@ -66,14 +52,17 @@ export async function api_updateJournalVirturalFileTree(
 type Group<T extends number | undefined> = T extends undefined ? IJournalGroupData[] : IJournalGroupData
 
 export async function api_getGroup<T extends number | undefined>(id?: T): Promise<Group<T>> {
-  const route = `${JOURNAL_GROUP_ROUTE}${id ? '/' : ''}${id ?? ''}` as const
-  return await fetchIt('GET', route) as Group<T>
+  if (!id) {
+    return await JournalGroup_GetAll() as Group<undefined>
+  }
+
+  return await JournalGroup_Get(id) as Group<number>
 }
 
 export async function api_createGroup(data: JournalGroupSchema) {
-  return await fetchIt('POST', JOURNAL_GROUP_ROUTE, data) as IJournalGroupData
+  return await JournalGroup_Create(data) as IJournalGroupData
 } 
 
 export async function api_updateGroup(id: number, data: JournalGroupSchema) {
-  return await fetchIt('PATCH', `${JOURNAL_GROUP_ROUTE}/${id}`, data) as IJournalGroupData
+  return await JournalGroup_Update(id, data) as IJournalGroupData
 }
