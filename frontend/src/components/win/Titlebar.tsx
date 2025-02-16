@@ -8,7 +8,7 @@ import __style from "./Titlebar.module.css"
 import { WindowMaximise, WindowUnmaximise, WindowMinimise, WindowIsMaximised, Quit } from "~/wailsjs/runtime"
 // ...
 import { FlexCenterY, Spacer } from "../ui"
-import TitlebarButton from "./TitlebarButton"
+import { TitlebarButton } from "./TitlebarButton"
 
 const style = stylex.create({
   titleBar: {

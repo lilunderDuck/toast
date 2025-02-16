@@ -7,7 +7,7 @@ const style = stylex.create({
   }
 })
 
-export default function TitlebarButton(props: HTMLAttributes<"button">) {
+export function TitlebarButton(props: HTMLAttributes<"button">) {
   return (
     <Button size$={ButtonSizeVariant.icon} {...props} {...stylex.attrs(style.button)} />
   )

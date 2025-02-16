@@ -1,9 +1,9 @@
 import { Route, Router } from '@solidjs/router'
-import { lazy } from 'solid-js'
+import { lazy, ParentProps } from 'solid-js'
 // ...
-import { ColorAndStuff, Titlebar } from '~/components'
+import { ColorAndStuff, Titlebar, TitlebarProvider } from '~/components'
 import { Toaster } from '~/features/toast'
-// import { StartupSequence } from'~/features/splash-screen'
+import { StartupSequence } from'~/features/splash-screen'
 
 export default function App() {
   const HomePage = lazy(() => import('~/routes/index'))
@@ -12,9 +12,9 @@ export default function App() {
   const JournalPage = lazy(() => import('~/routes/journal'))
 
   return (
-    <ColorAndStuff>
+    <AppProvider>
       <Titlebar />
-      {/* <StartupSequence /> */}
+      <StartupSequence />
       <Toaster />
 
       <Router>
@@ -23,6 +23,16 @@ export default function App() {
         <Route path='/too-technical' component={TooTechnicalPage} />
         <Route path="*404" component={ThisPageIsNotFound} />
       </Router>
+    </AppProvider>
+  )
+}
+
+function AppProvider(props: ParentProps) {
+  return (
+    <ColorAndStuff>
+      <TitlebarProvider>
+        {props.children}
+      </TitlebarProvider>
     </ColorAndStuff>
   )
 }

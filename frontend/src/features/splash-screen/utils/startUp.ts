@@ -1,4 +1,4 @@
-import { fetchIt, sleep } from "~/utils"
+import { sleep } from "~/utils"
 // ...
 import { SplashScreen } from "../components"
 import { createTimer } from "./timer"
@@ -16,16 +16,6 @@ interface ITaskOptions {
 
 export async function fetchStuffFromServer() {
   const checkList: ITaskOptions[] = [
-    {
-      msg$: 'Make sure the server is up.',
-      async run() {
-        if (await fetchIt("GET", "/ping")) {
-          return
-        }
-
-        return TaskResult.retry
-      }
-    },
     {
       msg$: 'Lift off!',
       async run() {
