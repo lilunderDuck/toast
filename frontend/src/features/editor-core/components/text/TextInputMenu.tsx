@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex"
-import { createSignal, Setter } from "solid-js"
+import { createSignal, type Setter } from "solid-js"
 import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
@@ -9,7 +9,6 @@ import {
   DropdownMenuPortal,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -21,6 +20,10 @@ import { SubOrSupscript } from "./data"
 const style = stylex.create({
   menu: {
     width: '12rem'
+  },
+  menuSubContent: {
+    paddingLeft: '2rem',
+    paddingBlock: '.5rem'
   }
 })
 
@@ -31,8 +34,7 @@ interface ITextInputMenuProps {
 }
 
 export default function TextInputMenu(props: ITextInputMenuProps) {
-  const { updateData$, focusState$ } = useTextDataContext()
-  const [, setIsFocused] = focusState$
+  const { updateData$ } = useTextDataContext()
 
   const [bold, setBold] = createSignal(props.data$?.bold ?? false)
   const [italic, setItalic] = createSignal(props.data$?.italic ?? false)
@@ -85,6 +87,21 @@ export default function TextInputMenu(props: ITextInputMenuProps) {
     >
       <DropdownMenuGroup>
         <DropdownMenuGroupLabel>
+          Text colors
+        </DropdownMenuGroupLabel>
+        <DropdownMenuSub overlap>
+          <DropdownMenuSubTrigger {...stylex.attrs(style.menuSubContent)}>
+            Colors
+          </DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent>
+              <DropdownMenuItem>Nothing here</DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
+      </DropdownMenuGroup>
+      <DropdownMenuGroup>
+        <DropdownMenuGroupLabel>
           Text styles
         </DropdownMenuGroupLabel>
         <DropdownMenuCheckboxItem checked={bold()} onChange={_setBold}>
@@ -99,16 +116,11 @@ export default function TextInputMenu(props: ITextInputMenuProps) {
         <DropdownMenuCheckboxItem checked={underline()} onChange={_setUnderline}>
           Underline
         </DropdownMenuCheckboxItem>
-        {/* ... */}
-        <DropdownMenuSub overlap>
-          <DropdownMenuSubTrigger>Colors</DropdownMenuSubTrigger>
-          <DropdownMenuPortal>
-            <DropdownMenuSubContent>
-              <DropdownMenuItem>Nothing here</DropdownMenuItem>
-            </DropdownMenuSubContent>
-          </DropdownMenuPortal>
-        </DropdownMenuSub>
-        {/* ... */}
+      </DropdownMenuGroup>
+      <DropdownMenuGroup>
+        <DropdownMenuGroupLabel>
+          Subscript and superscript
+        </DropdownMenuGroupLabel>
         <DropdownMenuRadioGroup value={subOrSuperscript()} onChange={_setSubOrSuperscript}>
           <DropdownMenuRadioItem value={SubOrSupscript.none + ''}>
             None

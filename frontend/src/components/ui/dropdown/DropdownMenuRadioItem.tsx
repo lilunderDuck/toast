@@ -28,6 +28,12 @@ const style = stylex.create({
     left: "0.5rem",
     justifyContent: "center",
     alignItems: "center"
+  },
+  icon: {
+    width: 15,
+    height: 15,
+    backgroundColor: 'currentColor',
+    borderRadius: '50%'
   }
 })
 
@@ -47,20 +53,7 @@ export function DropdownMenuRadioItem<T extends ValidComponent = "div">(
       {...rest}
     >
       <span {...stylex.attrs(style.menuItemIndicator)}>
-        <ItemIndicator>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="size-2 fill-current"
-          >
-            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-          </svg>
-        </ItemIndicator>
+        <ItemIndicator {...stylex.attrs(style.icon)} />
       </span>
       {props.children}
     </RadioItem>

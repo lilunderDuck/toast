@@ -29,6 +29,10 @@ const style = stylex.create({
     cursor: "default",
     userSelect: "none"
   },
+  icon: {
+    width: 15,
+    height: 15
+  }
 })
 
 export interface IDropdownMenuCheckboxItemProps<
@@ -59,7 +63,7 @@ export function DropdownMenuCheckboxItem<T extends ValidComponent = "div">(
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="size-4"
+            {...stylex.attrs(style.icon)}
           >
             <path d="M5 12l5 5l10 -10" />
           </svg>
