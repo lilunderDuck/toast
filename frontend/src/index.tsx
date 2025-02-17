@@ -9,6 +9,14 @@ import { logThisVeryHelpfulMessage } from './utils'
 
 const root = document.getElementById('duck')
 
+window.onerror = function(error) {
+  console.log(error)
+  if (window.location.href.includes('/journal')) {
+    window.location.href = 'wails.localhost:34115'
+    window.location.reload()
+  }
+}
+
 __devMode && (() => {
   if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
     throw new Error(

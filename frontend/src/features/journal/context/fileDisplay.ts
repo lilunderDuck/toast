@@ -10,6 +10,7 @@ import {
 } from "~/api/journal"
 // ...
 import type { JournalSessionStorage } from "./JournalContext"
+import { journalFileDisplay_error, journalFileDisplay_log } from "../utils"
 
 type TreeNodeType = 'file' | 'folder'
 type TreeMappingData = Record<number, IJournalCategoryData | IJournalData>
@@ -42,7 +43,7 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
     setTree(newTree)
     setIsUpdating(false)
     await api_updateJournalVirturalFileTree(thisGroup.id, newTree)
-    console.log('[vir tree] update')
+    journalFileDisplay_log('updated')
   }
 
   const add = (node: AnyVirTreeNode, toFolder: number | 'root') => {
@@ -53,11 +54,11 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
 
     const thisFolder = find(toFolder)
     if (!thisFolder) {
-      return console.error("Could not insert", node, "to", toFolder)
+      return journalFileDisplay_error("Could not insert", node, "to", toFolder)
     }
 
     if (!isFolder(thisFolder)) {
-      return console.error(toFolder, "is not a folder")
+      return journalFileDisplay_error(toFolder, "is not a folder")
     }
 
     thisFolder.child.push(node)
@@ -92,11 +93,11 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
 
     const shouldBeAFolder = find(whichFolderId)
     if (!shouldBeAFolder) {
-      return console.error("could not find node", whichFolderId)
+      return journalFileDisplay_error("could not find node", whichFolderId)
     }
 
     if (!isFolder(shouldBeAFolder)) {
-      return console.error(shouldBeAFolder, "is not a folder")
+      return journalFileDisplay_error(shouldBeAFolder, "is not a folder")
     }
 
     shouldBeAFolder.child = tree
@@ -107,6 +108,7 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
     mapping = data
     treeCache.data = tree
     update()
+    journalFileDisplay_log("Tree updated with", tree, data)
   }
   
   return {

@@ -14,9 +14,12 @@ import {
   api_saveJournalContent,
   api_getJournal, 
 } from "~/api/journal"
-import { useThisEditorContext } from "~/features/editor"
+import { useEditorContext } from "~/features/editor-core"
 // ...
 import { 
+  journal_log,
+  journal_logGroup,
+  journal_logGroupEnd,
   JournalSessionStorage
 } from ".."
 import { type IFileDisplayContext } from "./fileDisplay"
@@ -29,7 +32,7 @@ export function createJournal(
   thisSessionStorage: JournalSessionStorage,
   fileDisplayContext: IFileDisplayContext
 ) {
-  const { cache$, open$ } = useThisEditorContext()
+  const { cache$, open$ } = useEditorContext()
 
   const [currentlyOpened$, setCurrentlyOpened$] = createSignal<IJournalData>()
 
@@ -54,6 +57,9 @@ export function createJournal(
       type === JournalType.journal ? createFileNodeData(newData.id) : createFolderNodeData(newData!.id),
       'root'
     )
+
+    journal_log('created new journal:', newData)
+
     return newData
   }
 
@@ -62,24 +68,31 @@ export function createJournal(
    * @returns A promise that resolves when the journal is opened.
    */
   const open = async(journalId: number) => {
+    journal_logGroup("Opening", journalId)
     const currentJournalGroupId = getCurrentJournalGroupId()
-    let lastContent = cache$.get(journalId)!
+    let journalContent = cache$.get(journalId)!
     let journalData = fileDisplayContext.mapping$[journalId] as IJournalData | undefined
+    
     if (!journalData) {
+      journal_log("getting the data from the other side...")
       journalData = await api_getJournal(currentJournalGroupId, journalId)
     }
-
-    if (!lastContent) {
-      lastContent = journalData.data
+    
+    if (!journalContent) {
+      journalContent = journalData.data
     }
+
+    journal_log("journal data is:", journalData)
     
     setCurrentlyOpened$(journalData)
-
+    
+    journal_log("journal should open now")
     open$({
-      id: `${journalId}`,
-      content: lastContent,
-      ...lastContent
+      id: journalId,
+      content: journalContent
     })
+
+    journal_logGroupEnd()
   }
 
   /**Deletes a journal.
@@ -91,6 +104,7 @@ export function createJournal(
     await api_deleteJournal(currentJournalGroupId, journalId)
     setCurrentlyOpened$(undefined)
     cache$.delete(journalId)
+    journal_log("deleted:", journalId)
   }
 
   /**Saves changes to a journal.
@@ -99,6 +113,7 @@ export function createJournal(
    * @returns A promise that resolves to an empty object or null.
    */
   const save = async(journalId: number, data: JournalContentData) => {
+    journal_log("saving", journalId)
     const currentJournalGroupId = getCurrentJournalGroupId()
     return await api_saveJournalContent(currentJournalGroupId, journalId, data)
   }

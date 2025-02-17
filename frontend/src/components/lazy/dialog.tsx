@@ -1,12 +1,10 @@
-import { type Component, createSignal, lazy, Show } from "solid-js"
-import { Dialog } from "./Dialog"
+import { createSignal, Show } from "solid-js"
+import { SomeLazyLoadedComponent } from "./types"
+import { Dialog } from "../ui"
 
 export interface IDialog {
   close$(): void
 }
-
-type SomeLazyLoadedComponent<T extends {}> = ReturnType<typeof lazy<Component<T>>>
-type LazyLoadedComponentProps<T extends Component> = Omit<Parameters<T>[0], 'close$'>
 
 export function createLazyLoadedDialog<Props extends IDialog>(
   Component: SomeLazyLoadedComponent<Props>, 

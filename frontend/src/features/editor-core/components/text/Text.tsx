@@ -4,7 +4,7 @@ import stylex from "@stylexjs/stylex"
 import __style from "./Text.module.css"
 // ...
 import { FlexCenterY } from "~/components"
-import { useEditorContext } from "~/editor/provider"
+import { useEditorContext } from "~/features/editor-core/provider"
 // ...
 import { TextRenderer } from "./TextRenderer"
 import TextInput from "./TextInput"
@@ -37,7 +37,7 @@ interface ITextProps {
 }
 
 export function Text(props: ITextProps) {
-  const { readonly$ } = useEditorContext()
+  const { isReadonly$ } = useEditorContext()
 
   const __Text = () => {
     const { textsData$ } = useTextDataContext()
@@ -45,7 +45,7 @@ export function Text(props: ITextProps) {
     return (
       <For each={textsData$()}>
         {(it, index) => (
-          <Show when={readonly$()} fallback={
+          <Show when={isReadonly$()} fallback={
             <TextInput
               value$={it.text}
               currentIndex$={index()}

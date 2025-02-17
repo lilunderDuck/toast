@@ -36,5 +36,43 @@
 			"{...stylex.attrs(style.${1:insert_name_here})}"
 		],
 		"description": "apply stylex styles"
+	},
+	"Solidjs's <Contexts.Provider /> component": {
+		"scope": "javascriptreact,typescriptreact",
+		"prefix": "ctxprov",
+		"body": [
+			"import { createContext, ParentProps, useContext } from \"solid-js\"",
+			"",
+			"const Context = createContext()",
+			"",
+			"export function ${1:insert_name}Provider(props: ParentProps) {",
+			"\treturn (",
+			"\t\t<Context.Provider value={${2:some_value}}>",
+			"\t\t\t{props.children}",
+			"\t\t</Context.Provider>",
+			"\t)",
+			"}",
+			"",
+			"export function use${1:insert_name}Context() {",
+			"\treturn useContext(Context)!",
+			"}",
+		],
+		"description": "Solidjs's <Contexts.Provider /> component"
+	},
+	"Solidjs's component": {
+		"scope": "typescriptreact",
+		"prefix": "cmp",
+		"body": [
+			"interface I${1:ComponentName}Props {",
+			"\t${2:// define your component props here}",
+			"}",
+			"",
+			"export function ${1:ComponentName}(props: I${1:ComponentName}Props) {",
+			"\treturn (",
+			"\t\t${3:<div>Insert your jsx here</div>}",
+			"\t)",
+			"}",
+		],
+		"description": "Solidjs's component"
 	}
 }

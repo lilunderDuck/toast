@@ -1,3 +1,0 @@
-#status-bar > *:not(#divider) {
-  flex-shrink: 0;
-}

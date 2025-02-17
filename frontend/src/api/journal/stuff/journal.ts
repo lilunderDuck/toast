@@ -1,5 +1,5 @@
-import type { OutputBlockData } from "@editorjs/editorjs"
 import type { CreatedAndModifiedDate, UniqueId } from "./commonTypes"
+import { IBlockData } from "~/features/editor-core"
 
 export const enum JournalType {
   journal,
@@ -19,7 +19,7 @@ export interface IJournalCategoryData extends JournalCategorySchema, UniqueId, C
 }
 
 /**The type of the content itself, which is an array of output block data associated with the journal. */
-export type JournalContentData = OutputBlockData[]
+export type JournalContentData = IBlockData[]
 
 export interface IJournalData extends JournalSchema, UniqueId, CreatedAndModifiedDate {
   /**An array of output block data associated with the journal. */

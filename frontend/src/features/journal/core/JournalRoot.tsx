@@ -3,13 +3,13 @@ import { onCleanup, onMount, type ParentProps } from 'solid-js'
 // ...
 import { bodyClasslist } from '~/utils'
 import { Resizable } from '~/components'
-import { ThisEditorProvider } from '~/features/editor'
-import { 
-  type IJournalGroupData, 
-  api_getGroup, 
+import {
+  type IJournalGroupData,
+  api_getGroup,
   api_getJournalVirturalFileTree
 } from '~/api/journal'
 import { toast } from '~/features/toast'
+import { EditorProvider } from '~/features/editor-core'
 // ...
 import __style from './stuff.module.css'
 import stylex from '@stylexjs/stylex'
@@ -48,14 +48,14 @@ export function JournalRoot(props: ParentProps) {
   /**This is a dummy component only to initialize everything it needs.
    * 
    * This is because it needs to access the `useJournalContext()` so it can set and mess it up.
-   * @returns `JSX.Element`, but nothing render anything
+   * @returns `JSX.Element`, but render nothing.
    */
   const LoadThing = () => {
     const { fileDisplay$, sessionStorage$ } = useJournalContext()
     const currentGroupId = parseInt(param.id)
     const [, setIsLoading] = fileDisplay$.isLoading$
 
-    onMount(async() => {
+    onMount(async () => {
       // Attempt to get the journal group data from the server
       const data = await api_getGroup(currentGroupId) as IJournalGroupData
       if (!data) {
@@ -78,15 +78,15 @@ export function JournalRoot(props: ParentProps) {
       <></>
     )
   }
- 
+
   return (
-    <ThisEditorProvider>
+    <EditorProvider>
       <JournalProvider>
         <LoadThing />
         <Resizable {...stylex.attrs(style.thisThing)}>
           {props.children}
         </Resizable>
       </JournalProvider>
-    </ThisEditorProvider>
+    </EditorProvider>
   )
 }

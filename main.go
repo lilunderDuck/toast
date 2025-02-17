@@ -31,7 +31,7 @@ func main() {
 		// MinHeight:         768,
 		DisableResize:     false,
 		Fullscreen:        false,
-		Frameless:         true,
+		Frameless:         false,
 		StartHidden:       false,
 		HideWindowOnClose: false,
 		Assets:            assets,

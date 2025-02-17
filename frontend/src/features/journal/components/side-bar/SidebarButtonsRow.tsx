@@ -11,8 +11,7 @@ import {
   Spacer, 
   Tooltip 
 } from "~/components"
-import { useThisEditorContext } from "~/features/editor"
-import { EditOrReadonlyIcon } from "~/features/journal"
+import { EditOrReadonlyIcon, useEditorContext } from "~/features/editor-core"
 // ...
 import { useJournalContext } from "../../context"
 
@@ -39,28 +38,30 @@ interface IButtonItemProps extends HTMLAttributes<"button"> {
 
 export function SidebarButtonsRow() {
   const { journal$ } = useJournalContext()
-  const { isEditable$, setIsEditable$ } = useThisEditorContext()
+  const { isReadonly$, setIsReadonly$ } = useEditorContext()
   const toggleEditOrReadonlyMode = () => {
-    setIsEditable$(prev => !prev)
+    setIsReadonly$(prev => !prev)
   }
 
   const createStuffModal = createLazyLoadedDialog(
     lazy(() => import('./CreateStuffModal'))
   )
 
+  const mode = () => isReadonly$() ? 'read-only' : 'edit'
+
   return (
     <FlexCenterY {...stylex.attrs(style.buttonsRow)}>
       <ButtonItem 
         onClick={createStuffModal.show$}
         icon$={BsPlus}
-        label$={'New journal'}
+        label$='New journal'
       />
       <Spacer />
       <ButtonItem 
         onClick={toggleEditOrReadonlyMode}
         disabled={!journal$.currentlyOpened$()}
         icon$={EditOrReadonlyIcon}
-        label$={`Toggle ${isEditable$() ? 'read-only' : 'edit'} mode`}
+        label$={`Toggle ${mode()} mode`}
       />
       {/* ... */}
       <createStuffModal.Modal$ />

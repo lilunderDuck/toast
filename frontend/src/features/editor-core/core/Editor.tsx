@@ -3,13 +3,18 @@ import { For, Show } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import __style from "./Editor.module.css"
 // ...
-import { type IBlockData, useEditorContext } from "./provider"
-import { editor_log, editor_warn } from "./utils"
-import { BlockButtonRow } from "./components"
+import { type IBlockData, useEditorContext } from "../provider"
+import { dontUpdateIfYouPressSomeKey, editor_warn } from "../utils"
+import { BlockButtonRow } from "../components"
+import { debounce } from "~/utils"
 
 const style = stylex.create({
   editor: {
-    // ...
+    paddingInline: 10,
+  },
+  blockList: {
+    width: '100%',
+    height: '100%',
   },
   blockSetting: {
     position: 'absolute',
@@ -21,7 +26,7 @@ const style = stylex.create({
 })
 
 export function Editor() {
-  const { blocks$, blockSetting$, buttonRow$, readonly$ } = useEditorContext()
+  const { blocks$, blockSetting$, buttonRow$, isReadonly$, update$ } = useEditorContext()
 
   const mouseHoverTheBlock: EventHandler<"div", "onMouseEnter"> = (mouseEvent) => {
     const currentTarget = mouseEvent.currentTarget
@@ -36,7 +41,7 @@ export function Editor() {
     }
   
     return (
-      <Show when={readonly$()} fallback={
+      <Show when={isReadonly$()} fallback={
         <div id={__style.block} data-id={props.id} onMouseEnter={mouseHoverTheBlock}>
           <BlockComponent dataIn$={props.data} blockId$={props.id} />
         </div>
@@ -48,19 +53,29 @@ export function Editor() {
     )
   }
 
-  setInterval(() => {
-    editor_log(blocks$.data$())
-  }, 5000)
+  const updateDebouce = debounce(update$, 1000)
+
+  const onPressingYourKeyboard: EventHandler<"div", "onKeyUp"> = (keyboardEvent) => {
+    const keyYouJustPress = keyboardEvent.key.toLowerCase()
+    if (dontUpdateIfYouPressSomeKey(keyYouJustPress)) {
+      return // don't call update
+    }
+
+    updateDebouce()
+  }
 
   return (
     <div {...stylex.attrs(style.editor)}>
-      <For each={blocks$.data$()}>
-        {it => <EditorBlock {...it} />}
-      </For>
-      <Show when={!readonly$()}>
+      <div onKeyUp={onPressingYourKeyboard}>
+        <For each={blocks$.data$()}>
+          {it => <EditorBlock {...it} />}
+        </For>
+      </div>
+      <Show when={!isReadonly$()}>
         <div {...stylex.attrs(style.blockSetting)} style={{
           '--y': `${buttonRow$.currentButtonRowYPos$().y}px`,
-          '--x': `${buttonRow$.currentButtonRowYPos$().x}px`,
+          // '--x': `${buttonRow$.currentButtonRowYPos$().x}px`,
+          '--x': `0px`,
         }}>
           <BlockButtonRow />
         </div>

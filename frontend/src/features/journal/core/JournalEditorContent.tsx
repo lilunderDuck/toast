@@ -1,16 +1,9 @@
 import stylex from "@stylexjs/stylex"
-import { Show } from "solid-js"
 // ...
-import { 
-  ThisEditor, 
-  ThisEditorStatusBar,
-  ThisEditorTitleBar, 
-  useThisEditorContext 
-} from "~/features/editor"
-import { ResizablePanel } from "~/components"
+import { FlexCenter, ResizablePanel } from "~/components"
+import { Editor, useEditorContext } from "~/features/editor-core"
 // ...
 import { useJournalContext } from "../context"
-import { EditorWelcome } from "../components"
 
 const style = stylex.create({
   content: {
@@ -27,12 +20,18 @@ const style = stylex.create({
   },
   editor: {
     height: 'calc(100vh - 72px)'
+  },
+  titleBar: {
+    height: 30,
+    width: '100%',
+    fontSize: 13,
+    marginBottom: 10
   }
 })
 
 export function JournalEditorContent() {
   const { journal$ } = useJournalContext()
-  const { event$ } = useThisEditorContext()
+  const { event$ } = useEditorContext()
 
   const shouldSave = () => {
     return journal$.currentlyOpened$() !== undefined
@@ -42,26 +41,23 @@ export function JournalEditorContent() {
     if (!shouldSave()) return console.log('not open anything')
 
     if (previousData) {
-      await journal$.save$(parseInt(previousData.id), previousData.content)
+      await journal$.save$(previousData.id, previousData.content)
     }
   })
 
   event$.on$('editor__onUpdate', async(data) => {
     if (!shouldSave()) return console.log('not open anything')
     
-    await journal$.save$(parseInt(data.id), data.content)
+    await journal$.save$(data.id, data.content)
   })
 
   return (
     <ResizablePanel initialSize={0.7}>
       <div {...stylex.attrs(style.content)}>
-        <ThisEditorTitleBar name={journal$.currentlyOpened$()?.name} />
-        <ThisEditor {...stylex.attrs(style.editor)}>
-          <ThisEditorStatusBar />
-        </ThisEditor>
-        <Show when={!journal$.currentlyOpened$()}>
-          <EditorWelcome />
-        </Show>
+        <FlexCenter {...stylex.attrs(style.titleBar)}>
+          {journal$.currentlyOpened$() ? journal$.currentlyOpened$()?.name : '*Nothing opened*'}
+        </FlexCenter>
+        <Editor />
       </div>
     </ResizablePanel>
   )

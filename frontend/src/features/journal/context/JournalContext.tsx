@@ -14,6 +14,7 @@ import type { IJournalGroupData } from "~/api/journal"
 import { type JournalEventMap } from "./event"
 import { createJournal, type IThisJournalContext } from "./journal"
 import { type IFileDisplayContext, createFileDisplay } from "./fileDisplay"
+import { journal_log } from "../utils"
 
 export type JournalLocalStorage = IStorage<{
   shouldShowDeleteConfirmationModal: boolean
@@ -47,11 +48,13 @@ export function JournalProvider(props: ParentProps) {
 
   onCleanup(() => {
     wrappedSessionStorage.delete$("currentGroup")
-    console.log('clean up')
+    journal_log('clean up')
   })
 
   let sidebarComponent: VoidComponent = () => undefined
   const [isShowingSidebar, setIsShowingSidebar] = createSignal(false)
+
+  journal_log('created')
 
   return (
     <Context.Provider value={{
@@ -63,7 +66,6 @@ export function JournalProvider(props: ParentProps) {
       event$: event,
       // ...
       get _sidebarComponent$() {
-        console.log('getter call')
         return sidebarComponent
       },
       isShowingSidebar$: [isShowingSidebar, setIsShowingSidebar],

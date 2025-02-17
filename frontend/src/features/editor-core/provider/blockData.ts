@@ -19,3 +19,8 @@ export interface IBlockSetting<T extends any> {
   iconComponent$?: Component
   blockComponent$: BlockComponent<T>
 }
+
+export type EditorDocumentData = {
+  id: number
+  content: IBlockData[]
+}

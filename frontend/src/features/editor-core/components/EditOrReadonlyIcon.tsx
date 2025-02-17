@@ -1,12 +1,13 @@
 import { Show } from "solid-js/web"
 import { BsBookFill, BsPencilFill } from "solid-icons/bs"
-import { useThisEditorContext } from "~/features/editor"
+import { useEditorContext } from "../provider"
+// ...
 
 export function EditOrReadonlyIcon() {
-  const { isEditable$ } = useThisEditorContext()
+  const { isReadonly$ } = useEditorContext()
 
   return (
-    <Show when={isEditable$()} fallback={
+    <Show when={isReadonly$()} fallback={
       <BsBookFill size={15} />
     }>
       <BsPencilFill size={15} />

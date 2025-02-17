@@ -1,4 +1,4 @@
-import { Accessor, createSignal } from "solid-js"
+import { Accessor, createSignal, Setter } from "solid-js"
 // ...
 import { array_insert, getRandomNumberFrom, thisArrayObjects } from "~/common"
 // ...
@@ -9,6 +9,7 @@ import type { IEditorContext } from "./EditorProvider"
 
 export interface IBlockUtils {
   data$: Accessor<IBlockData[]>
+  setData$: Setter<IBlockData[]>
   insert$(beforeBlockId: number | null, type: number, someData?: any): void
   save$(): IBlockData[]
   saveBlockData$(blockId: number, data: any): void
@@ -69,6 +70,7 @@ export function createBlocks(
   
   return {
     data$: data,
+    setData$: setData,
     insert$: insert,
     save$: data,
     saveBlockData$: saveBlockData

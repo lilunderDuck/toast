@@ -1,3 +1,7 @@
 #block {
   margin-bottom: 15px;
 }
+
+#block > * {
+  width: 100%;
+}
