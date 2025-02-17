@@ -1,5 +1,5 @@
 import type { CreatedAndModifiedDate, UniqueId } from "./commonTypes"
-import { IBlockData } from "~/features/editor-core"
+import { IBlockData } from "~/features/editor"
 
 export const enum JournalType {
   journal,

@@ -3,7 +3,7 @@ import __style from "./TextInput.module.css"
 import { ParentProps } from "solid-js"
 import { FlexCenterY } from "~/components"
 import { useTextDataContext } from "./TextProvider"
-import { setCaretToTheEnd } from "~/features/editor-core/utils"
+import { setCaretToTheEnd } from "~/features/editor/utils"
 
 const style = stylex.create({
   textinput: {

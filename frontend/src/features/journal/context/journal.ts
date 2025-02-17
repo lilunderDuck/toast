@@ -14,7 +14,7 @@ import {
   api_saveJournalContent,
   api_getJournal, 
 } from "~/api/journal"
-import { useEditorContext } from "~/features/editor-core"
+import { useEditorContext } from "~/features/editor"
 // ...
 import { 
   journal_log,

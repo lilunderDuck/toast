@@ -1,7 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import { createSignal, For, JSX } from "solid-js"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Input } from "~/components"
-import { useEditorContext } from "~/features/editor-core/provider"
+import { useEditorContext } from "~/features/editor/provider"
 
 const style = stylex.create({
   menu: {

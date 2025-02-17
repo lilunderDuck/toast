@@ -9,7 +9,7 @@ import {
   api_getJournalVirturalFileTree
 } from '~/api/journal'
 import { toast } from '~/features/toast'
-import { EditorProvider } from '~/features/editor-core'
+import { EditorProvider } from '~/features/editor'
 // ...
 import __style from './stuff.module.css'
 import stylex from '@stylexjs/stylex'

@@ -1,7 +1,7 @@
 import stylex from "@stylexjs/stylex"
 // ...
 import { FlexCenter, ResizablePanel } from "~/components"
-import { Editor, useEditorContext } from "~/features/editor-core"
+import { Editor, useEditorContext } from "~/features/editor"
 // ...
 import { useJournalContext } from "../context"
 

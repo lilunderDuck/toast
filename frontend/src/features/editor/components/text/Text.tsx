@@ -4,7 +4,7 @@ import stylex from "@stylexjs/stylex"
 import __style from "./Text.module.css"
 // ...
 import { FlexCenterY } from "~/components"
-import { useEditorContext } from "~/features/editor-core/provider"
+import { useEditorContext } from "~/features/editor/provider"
 // ...
 import { TextRenderer } from "./TextRenderer"
 import TextInput from "./TextInput"
