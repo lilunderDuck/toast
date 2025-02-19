@@ -22,18 +22,24 @@ export function TodoSectionProvider(props: ParentProps<ITodoSectionProviderProps
   const [isShowingTodoInput, setIsShowingTodoInput] = createSignal(false)
 
   const showTodoInput = () => {
+    //debug-start
     editor_logWithLabel("todo", "Showing todo input...")
+    //debug-end
     setIsShowingTodoInput(true)
     setIsShowingSectionInput(false)
   }
   
   const showSectionInput = () => {
+    //debug-start
     editor_logWithLabel("todo", "Showing todo section input...")
+    //debug-end
     setIsShowingSectionInput(true)
     setIsShowingTodoInput(false)
   }
   
+  //debug-start
   editor_logWithLabel("todo", "TodoSectionProvider created with section id:", props.sectionId$)
+  //debug-end
 
   return (
     <Context.Provider value={{
@@ -44,11 +50,15 @@ export function TodoSectionProvider(props: ParentProps<ITodoSectionProviderProps
       showSectionInput$: showSectionInput,
       closeTodoInput$: () => {
         setIsShowingTodoInput(false)
+        //debug-start
         editor_logWithLabel("todo", "todo input closed")
+        //debug-end
       },
       closeSectionInput$: () => {
         setIsShowingSectionInput(false)
+        //debug-start
         editor_logWithLabel("todo", "todo section input closed")
+        //debug-end
       },
     }}>
       {props.children}

@@ -48,13 +48,17 @@ export function JournalProvider(props: ParentProps) {
 
   onCleanup(() => {
     wrappedSessionStorage.delete$("currentGroup")
+    //debug-start
     journal_log('clean up')
+    //debug-end
   })
 
   let sidebarComponent: VoidComponent = () => undefined
   const [isShowingSidebar, setIsShowingSidebar] = createSignal(false)
 
+  //debug-start
   journal_log('created')
+  //debug-end
 
   return (
     <Context.Provider value={{

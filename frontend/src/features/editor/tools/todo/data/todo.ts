@@ -36,7 +36,9 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
       sectionsData.todo.push(newTodoData)
     }))
 
+    //debug-start
     editor_logWithLabel("todo", "Created new todo data", newTodoData, "from section", fromSectionId)
+    //debug-end
     update()
   }
 
@@ -51,7 +53,9 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
       sectionsData.push(newSectionData)
     }))
 
+    //debug-start
     editor_logWithLabel("todo", "Created new todo section data", newSectionData)
+    //debug-end
     update()
   }
 
@@ -63,13 +67,17 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
       (todos) => thisArrayObjects(todos).replace$(it => it.id === todoId, newData)
     )
 
+    //debug-start
     editor_logWithLabel("todo", "Todo", todoId, "from section id", fromSectionId, "updated with", newData)
+    //debug-end
     update()
   }
 
   const updateSectionData: ITodoUtils["updateSection$"] = (sectionId, newData) => {
     setData("stuff", (it) => it.id === sectionId, 'name', newData.name)
+    //debug-start
     editor_logWithLabel("todo", "Todo section id", sectionId, "updated with", newData)
+    //debug-end
     update()
   }
 
@@ -81,20 +89,26 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
       (todos) => thisArrayObjects(todos).remove$('id', todoId)
     )
 
+    //debug-start
     editor_logWithLabel("todo", "Todo", todoId, "from", fromSectionId, "deleted")
+    //debug-end
 
     update()
   }
 
   const deleteSectionData: ITodoUtils["deleteSection$"] = (sectionId) => {
+    //debug-start
     setData("stuff", (sections) => thisArrayObjects(sections).remove$('id', sectionId))
+    //debug-end
     editor_logWithLabel("todo", "Todo section id", sectionId, "deleted")
     update()
   }
   
   const updateTitle: ITodoUtils["updateTitle$"] = (newTitle) => {
     setData("title", newTitle)
+    //debug-start
     editor_logWithLabel("todo", "Updated this todo title to", newTitle)
+    //debug-end
     update()
   }
 

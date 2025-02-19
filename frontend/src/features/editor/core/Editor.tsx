@@ -36,7 +36,9 @@ export function Editor() {
   const EditorBlock = (props: IBlockData) => {
     const BlockComponent = blockSetting$[props.type]?.blockComponent$
     if (!BlockComponent) {
+      //debug-start
       editor_warn("could not find block component for block type:", props)
+      //debug-end
       return undefined
     }
   

@@ -56,7 +56,9 @@ export function EditorProvider(props: ParentProps) {
   const cache = new Map()
   let previousOpenedDocumentId = -1
 
+  //debug-start
   editor_log("Created with block setting", blockSetting)
+  //debug-end
 
   return (
     <Context.Provider value={{
@@ -70,19 +72,28 @@ export function EditorProvider(props: ParentProps) {
       setIsReadonly$: setIsReadonly,
       open$(data) {
         event.emit$('editor__onSwitching', cache.get(previousOpenedDocumentId))
+        //debug-start
         editor_log('Deleting previous cache data from memory:', previousOpenedDocumentId)
+        //debug-end
         cache.delete(previousOpenedDocumentId)
+
+        //debug-start
         editor_log('New data will be added now')
-        
+        //debug-end
         block.setData$(data.content)
+        
         if (data.content.length === 0) {
+          //debug-start
           editor_log('The provided document', data, 'has no block data in it, spawning the default block...')
+          //debug-end
           block.insert$(null, defaultBlock.type$, defaultBlock.setting$.defaultValue$)
         }
         
         cache.set(data.id, data.content)
         previousOpenedDocumentId = data.id
+        //debug-start
         editor_log('Finished')
+        //debug-end
       },
       update$() {
         if (previousOpenedDocumentId === -1) return

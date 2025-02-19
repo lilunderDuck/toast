@@ -39,7 +39,9 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
 
       prev[index] = newData
       context.onChange$(textsData())
+      //debug-start
       editor_log('[text] update text data at index', index, 'with', data, '. Data is', prev[index])
+      //debug-end
       return prev
     })
   }
@@ -52,7 +54,9 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
       return [...prev]
     })
     context.onChange$(textsData())
+    //debug-start
     editor_log('[text] Spawned new block')
+    //debug-end
   }
 
   const deleteInput = (index: number) => {
@@ -62,7 +66,9 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
     })
 
     context.onChange$(textsData())
+    //debug-start
     editor_log('[text] Deleted block at index', index)
+    //debug-end
   }
 
   const context = {

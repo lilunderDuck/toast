@@ -39,7 +39,9 @@ export function createBlocks(
 
     const newData = create(type, someData)
     if (!beforeBlockId) {
+      //debug-start
       editor_log("(1) inserting block type", type, "with data", someData, "on the bottom with", someData)
+      //debug-end
       return setData(prev => [...prev, newData])
     }
     
@@ -47,11 +49,15 @@ export function createBlocks(
     const arrayObject = thisArrayObjects(blockData)
     const [, index] = arrayObject.find$(it => it.id === beforeBlockId)
     if (blockData.length - 1 === index) {
+      //debug-start
       editor_log("(2) inserting block type", type, "with data", someData, "on the bottom with", someData)
+      //debug-end
       return setData(prev => [...prev, newData])
     }
     
+    //debug-start
     editor_log("(3) inserting block type", type, "with data", someData, "before block", beforeBlockId)
+    //debug-end
     array_insert(blockData, index, newData)
     setData(blockData)
   }

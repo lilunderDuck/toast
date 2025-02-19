@@ -58,7 +58,9 @@ export function createJournal(
       'root'
     )
 
+    //debug-start
     journal_log('created new journal:', newData)
+    //debug-end
 
     return newData
   }
@@ -68,13 +70,17 @@ export function createJournal(
    * @returns A promise that resolves when the journal is opened.
    */
   const open = async(journalId: number) => {
+    //debug-start
     journal_logGroup("Opening", journalId)
+    //debug-end
     const currentJournalGroupId = getCurrentJournalGroupId()
     let journalContent = cache$.get(journalId)!
     let journalData = fileDisplayContext.mapping$[journalId] as IJournalData | undefined
     
     if (!journalData) {
+      //debug-start
       journal_log("getting the data from the other side...")
+      //debug-end
       journalData = await api_getJournal(currentJournalGroupId, journalId)
     }
     
@@ -82,17 +88,23 @@ export function createJournal(
       journalContent = journalData.data
     }
 
+    //debug-start
     journal_log("journal data is:", journalData)
+    //debug-end
     
     setCurrentlyOpened$(journalData)
     
+    //debug-start
     journal_log("journal should open now")
+    //debug-end
     open$({
       id: journalId,
       content: journalContent
     })
 
+    //debug-start
     journal_logGroupEnd()
+    //debug-end
   }
 
   /**Deletes a journal.
@@ -104,7 +116,9 @@ export function createJournal(
     await api_deleteJournal(currentJournalGroupId, journalId)
     setCurrentlyOpened$(undefined)
     cache$.delete(journalId)
+    //debug-start
     journal_log("deleted:", journalId)
+    //debug-end
   }
 
   /**Saves changes to a journal.
@@ -113,7 +127,9 @@ export function createJournal(
    * @returns A promise that resolves to an empty object or null.
    */
   const save = async(journalId: number, data: JournalContentData) => {
+    //debug-start
     journal_log("saving", journalId)
+    //debug-end
     const currentJournalGroupId = getCurrentJournalGroupId()
     return await api_saveJournalContent(currentJournalGroupId, journalId, data)
   }
