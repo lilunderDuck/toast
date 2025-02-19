@@ -95,10 +95,7 @@ const CLIENT_OUTPUT_DIRECTORY = `${BASE_OUTPUT_DIRECTORY}/static`
 const rollupOutputOptions: Rollup.OutputOptions = {
   chunkFileNames: `[hash].js`,
   entryFileNames: "[hash].js",
-  assetFileNames: "[hash].[ext]",
-  manualChunks: {
-    codemirror: ['codemirror', '@codemirror/lang-css']
-  }
+  assetFileNames: "[hash].[ext]"
 }
 
 export default defineConfig(({ command }) => {

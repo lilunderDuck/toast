@@ -14,10 +14,19 @@ const style = stylex.create({
 })
 
 export function Input(props: HTMLAttributes<"input">) {
+  // because edge is just ignore the damn autocomplete attribute, so we have...
+  const disableAutocompleteInEdgeIfNeeds = () => props.autocomplete === 'off' ? {
+    'aria-autocomplete': "none"
+  } as const : {}
+
   return (
-    <input {...props} class={mergeClassname(
-      props,
-      stylex.attrs(style.$input)
-    )} />
+    <input 
+      {...props} 
+      {...disableAutocompleteInEdgeIfNeeds()}
+      class={mergeClassname(
+        props,
+        stylex.attrs(style.$input)
+      )} 
+    />
   )
 }

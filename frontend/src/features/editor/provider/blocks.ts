@@ -13,6 +13,7 @@ export interface IBlockUtils {
   insert$(beforeBlockId: number | null, type: number, someData?: any): void
   save$(): IBlockData[]
   saveBlockData$(blockId: number, data: any): void
+  delete$(blockId: number): void
 }
 
 export function createBlocks(
@@ -67,12 +68,17 @@ export function createBlocks(
       return prev
     })
   }
+
+  const deleteBlock: IBlockUtils["delete$"] = (blockId) => {
+    setData(prev => thisArrayObjects(prev).remove$('id', blockId))
+  }
   
   return {
     data$: data,
     setData$: setData,
     insert$: insert,
     save$: data,
-    saveBlockData$: saveBlockData
+    saveBlockData$: saveBlockData,
+    delete$: deleteBlock
   }
 }

@@ -6,20 +6,20 @@ import __style from './FieldInput.module.css'
 export type TextFieldInputRef = HTMLInputElement | HTMLTextAreaElement
 
 export type TextFieldProps = {
-  name: string;
-  type?: 'text' | 'email' | 'tel' | 'password' | 'url' | 'date' | undefined;
-  label?: string | undefined;
-  placeholder?: string | undefined;
-  value: string | undefined;
-  error: string;
+  name: string
+  type?: 'text' | 'email' | 'tel' | 'password' | 'url' | 'date' | undefined
+  label?: string | undefined
+  placeholder?: string | undefined
+  value: string | undefined
+  error: string
   autocomplete?: 'off' | 'on'
-  multiline?: boolean | undefined;
-  required?: boolean | undefined;
-  disabled?: boolean | undefined;
-  ref: (element: TextFieldInputRef) => void;
-  onInput: JSX.EventHandler<TextFieldInputRef, InputEvent>;
-  onChange: JSX.EventHandler<TextFieldInputRef, Event>;
-  onBlur: JSX.EventHandler<TextFieldInputRef, FocusEvent>;
+  multiline?: boolean | undefined
+  required?: boolean | undefined
+  disabled?: boolean | undefined
+  ref: (element: TextFieldInputRef) => void
+  onInput: JSX.EventHandler<TextFieldInputRef, InputEvent>
+  onChange: JSX.EventHandler<TextFieldInputRef, Event>
+  onBlur: JSX.EventHandler<TextFieldInputRef, FocusEvent>
 }
 
 const style = stylex.create({
@@ -66,5 +66,5 @@ export function FieldInput(props: TextFieldProps) {
         {props.error}
       </Kobalte.ErrorMessage>
     </Kobalte.Root>
-  );
+  )
 }

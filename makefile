@@ -7,7 +7,7 @@ dev:
 clean:
 	del ./frontend/out
 
-BUILD_COMMAND = wails build -platform	windows
+BUILD_COMMAND = wails build
 prod_build:
 	${BUILD_COMMAND}
 

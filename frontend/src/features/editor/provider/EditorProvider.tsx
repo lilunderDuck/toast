@@ -4,7 +4,10 @@ import { createBlocks, type IBlockUtils } from "./blocks"
 import type { IBlockSetting, EditorDocumentData, IBlockData } from "./blockData"
 import { createButtonRow, IButtonRowUtils } from "./buttonRow"
 import { editor_log } from "../utils"
-import { createTextBlock } from "../tools"
+import { 
+  createTextBlock, 
+  createTodoBlock 
+} from "../tools"
 import { EditorEvent } from "./event"
 import { createEvent } from "~/utils"
 
@@ -36,7 +39,7 @@ export function EditorProvider(props: ParentProps) {
   const buttonRow = createButtonRow()
 
   const blockSetting: Record<number, IBlockSetting<any>> = {
-    // ...
+    2: createTodoBlock()
   }
 
   const defaultBlock: DefaultBlockSetting = {
