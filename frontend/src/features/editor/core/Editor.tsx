@@ -4,7 +4,7 @@ import stylex from "@stylexjs/stylex"
 import __style from "./Editor.module.css"
 // ...
 import { type IBlockData, useEditorContext } from "../provider"
-import { dontUpdateIfYouPressSomeKey, editor_warn } from "../utils"
+import { dontUpdateIfYouPressSomeKey, editorLog } from "../utils"
 import { BlockButtonRow } from "../components"
 import { debounce } from "~/utils"
 
@@ -39,7 +39,7 @@ export function Editor() {
     const BlockComponent = blockSetting$[props.type]?.blockComponent$
     if (!BlockComponent) {
       //debug-start
-      editor_warn("could not find block component for block type:", props)
+      editorLog.warn("could not find block component for block type:", props)
       //debug-end
       return undefined
     }

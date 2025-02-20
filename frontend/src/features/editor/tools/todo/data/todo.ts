@@ -1,7 +1,7 @@
 import type { Accessor } from "solid-js"
 import type { ITodoBlockData, TodoSchema, TodoSectionData, TodoSectionSchema } from "../TodoBlock"
 import { getRandomNumberFrom, thisArrayObjects } from "~/common"
-import { editor_logWithLabel } from "~/features/editor/utils"
+import { editorLog } from "~/features/editor/utils"
 import type { ITodoDataProviderProps } from "./TodoDataProvider"
 import { createStore, produce } from "solid-js/store"
 
@@ -37,7 +37,7 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
     }))
 
     //debug-start
-    editor_logWithLabel("todo", "Created new todo data", newTodoData, "from section", fromSectionId)
+    editorLog.logLabel("todo", "Created new todo data", newTodoData, "from section", fromSectionId)
     //debug-end
     update()
   }
@@ -54,7 +54,7 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
     }))
 
     //debug-start
-    editor_logWithLabel("todo", "Created new todo section data", newSectionData)
+    editorLog.logLabel("todo", "Created new todo section data", newSectionData)
     //debug-end
     update()
   }
@@ -68,7 +68,7 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
     )
 
     //debug-start
-    editor_logWithLabel("todo", "Todo", todoId, "from section id", fromSectionId, "updated with", newData)
+    editorLog.logLabel("todo", "Todo", todoId, "from section id", fromSectionId, "updated with", newData)
     //debug-end
     update()
   }
@@ -76,7 +76,7 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
   const updateSectionData: ITodoUtils["updateSection$"] = (sectionId, newData) => {
     setData("stuff", (it) => it.id === sectionId, 'name', newData.name)
     //debug-start
-    editor_logWithLabel("todo", "Todo section id", sectionId, "updated with", newData)
+    editorLog.logLabel("todo", "Todo section id", sectionId, "updated with", newData)
     //debug-end
     update()
   }
@@ -90,7 +90,7 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
     )
 
     //debug-start
-    editor_logWithLabel("todo", "Todo", todoId, "from", fromSectionId, "deleted")
+    editorLog.logLabel("todo", "Todo", todoId, "from", fromSectionId, "deleted")
     //debug-end
 
     update()
@@ -100,14 +100,14 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
     //debug-start
     setData("stuff", (sections) => thisArrayObjects(sections).remove$('id', sectionId))
     //debug-end
-    editor_logWithLabel("todo", "Todo section id", sectionId, "deleted")
+    editorLog.logLabel("todo", "Todo section id", sectionId, "deleted")
     update()
   }
   
   const updateTitle: ITodoUtils["updateTitle$"] = (newTitle) => {
     setData("title", newTitle)
     //debug-start
-    editor_logWithLabel("todo", "Updated this todo title to", newTitle)
+    editorLog.logLabel("todo", "Updated this todo title to", newTitle)
     //debug-end
     update()
   }

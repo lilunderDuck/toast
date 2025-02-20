@@ -1,5 +1,5 @@
 import { Accessor, createContext, createSignal, ParentProps, useContext } from "solid-js"
-import { editor_logWithLabel } from "~/features/editor/utils"
+import { editorLog } from "~/features/editor/utils"
 
 interface ITodoSectionProviderProps {
   sectionId$: number
@@ -23,7 +23,7 @@ export function TodoSectionProvider(props: ParentProps<ITodoSectionProviderProps
 
   const showTodoInput = () => {
     //debug-start
-    editor_logWithLabel("todo", "Showing todo input...")
+    editorLog.logLabel("todo", "Showing todo input...")
     //debug-end
     setIsShowingTodoInput(true)
     setIsShowingSectionInput(false)
@@ -31,14 +31,14 @@ export function TodoSectionProvider(props: ParentProps<ITodoSectionProviderProps
   
   const showSectionInput = () => {
     //debug-start
-    editor_logWithLabel("todo", "Showing todo section input...")
+    editorLog.logLabel("todo", "Showing todo section input...")
     //debug-end
     setIsShowingSectionInput(true)
     setIsShowingTodoInput(false)
   }
   
   //debug-start
-  editor_logWithLabel("todo", "TodoSectionProvider created with section id:", props.sectionId$)
+  editorLog.logLabel("todo", "TodoSectionProvider created with section id:", props.sectionId$)
   //debug-end
 
   return (
@@ -51,13 +51,13 @@ export function TodoSectionProvider(props: ParentProps<ITodoSectionProviderProps
       closeTodoInput$: () => {
         setIsShowingTodoInput(false)
         //debug-start
-        editor_logWithLabel("todo", "todo input closed")
+        editorLog.logLabel("todo", "todo input closed")
         //debug-end
       },
       closeSectionInput$: () => {
         setIsShowingSectionInput(false)
         //debug-start
-        editor_logWithLabel("todo", "todo section input closed")
+        editorLog.logLabel("todo", "todo section input closed")
         //debug-end
       },
     }}>

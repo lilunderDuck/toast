@@ -10,7 +10,7 @@ import {
 } from "~/api/journal"
 // ...
 import type { JournalSessionStorage } from "./JournalContext"
-import { journalFileDisplay_error, journalFileDisplay_log } from "../utils"
+import { journalLog } from "../utils"
 
 type TreeNodeType = 'file' | 'folder'
 type TreeMappingData = Record<number, IJournalCategoryData | IJournalData>
@@ -43,7 +43,9 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
     setTree(newTree)
     setIsUpdating(false)
     await api_updateJournalVirturalFileTree(thisGroup.id, newTree)
-    journalFileDisplay_log('updated')
+    //debug-start
+    journalLog.logLabel("file display", 'updated')
+    //debug-end
   }
 
   const add = (node: AnyVirTreeNode, toFolder: number | 'root') => {
@@ -54,11 +56,17 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
 
     const thisFolder = find(toFolder)
     if (!thisFolder) {
-      return journalFileDisplay_error("Could not insert", node, "to", toFolder)
+      //debug-start
+      journalLog.errorLabel("file display", "Could not insert", node, "to", toFolder)
+      //debug-end
+      return 
     }
 
     if (!isFolder(thisFolder)) {
-      return journalFileDisplay_error(toFolder, "is not a folder")
+      //debug-start
+      journalLog.errorLabel("file display", toFolder, "is not a folder")
+      //debug-end
+      return
     }
 
     thisFolder.child.push(node)
@@ -93,11 +101,17 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
 
     const shouldBeAFolder = find(whichFolderId)
     if (!shouldBeAFolder) {
-      return journalFileDisplay_error("could not find node", whichFolderId)
+      //debug-start
+      journalLog.errorLabel("file display", "could not find node", whichFolderId)
+      //debug-end
+      return 
     }
 
     if (!isFolder(shouldBeAFolder)) {
-      return journalFileDisplay_error(shouldBeAFolder, "is not a folder")
+      //debug-start
+      journalLog.errorLabel("file display", shouldBeAFolder, "is not a folder")
+      //debug-end
+      return 
     }
 
     shouldBeAFolder.child = tree
@@ -108,7 +122,9 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
     mapping = data
     treeCache.data = tree
     update()
-    journalFileDisplay_log("Tree updated with", tree, data)
+    //debug-start
+    journalLog.logLabel("file display", "Tree updated with", tree, data)
+    //debug-end
   }
   
   return {

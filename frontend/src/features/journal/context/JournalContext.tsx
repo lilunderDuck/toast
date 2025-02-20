@@ -14,7 +14,7 @@ import type { IJournalGroupData } from "~/api/journal"
 import { type JournalEventMap } from "./event"
 import { createJournal, type IThisJournalContext } from "./journal"
 import { type IFileDisplayContext, createFileDisplay } from "./fileDisplay"
-import { journal_log } from "../utils"
+import { journalLog } from "../utils"
 
 export type JournalLocalStorage = IStorage<{
   shouldShowDeleteConfirmationModal: boolean
@@ -49,7 +49,7 @@ export function JournalProvider(props: ParentProps) {
   onCleanup(() => {
     wrappedSessionStorage.delete$("currentGroup")
     //debug-start
-    journal_log('clean up')
+    journalLog.log('clean up')
     //debug-end
   })
 
@@ -57,7 +57,7 @@ export function JournalProvider(props: ParentProps) {
   const [isShowingSidebar, setIsShowingSidebar] = createSignal(false)
 
   //debug-start
-  journal_log('created')
+  journalLog.log('created')
   //debug-end
 
   return (

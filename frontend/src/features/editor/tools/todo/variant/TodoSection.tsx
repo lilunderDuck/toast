@@ -1,13 +1,18 @@
 import { For, Show } from "solid-js"
 import { BsCaretDownFill } from "solid-icons/bs"
 // ...
-import { FlexCenterY, Input } from "~/components"
+import { FlexCenterY } from "~/components"
 import { useToggleState } from "~/utils"
 // ...
-import { AnyTodoSection, TodoSectionData } from "../TodoBlock"
+import type { AnyTodoSection, TodoSectionData } from "../TodoBlock"
 import { Todo } from "./Todo"
 import { useEditorContext } from "../../../provider"
-import { TodoSectionProvider, TodoSectionButtonRow, TodoSectionInputs } from "../ui"
+import { 
+  TodoSectionProvider, 
+  TodoSectionButtonRow, 
+  TodoSectionInputs, 
+  TodoSectionNameInput 
+} from "../ui"
 
 import stylex from "@stylexjs/stylex"
 import { useTodoDataContext } from "../data"
@@ -36,17 +41,19 @@ export function TodoSection(props: ITodoSectionProps & AnyTodoSection) {
   const { updateSection$, updateTitle$, data$ } = useTodoDataContext()
   const [isTodoToggled, toggleTodo] = useToggleState()
 
-  const updateTitle: EventHandler<"input", "onChange"> = (inputEvent) => {
+  const getName = (isUncategorizedSection: boolean) => 
+    isUncategorizedSection ? data$().title : (props as TodoSectionData).name
+  // ...
+
+  const updateName = (isUncategorizedSection: boolean, newName: string) => {
+    if (isUncategorizedSection) {
+      return updateTitle$(newName)
+    }
+
     updateSection$(props.id, {
-      name: inputEvent.currentTarget.value
+      name: newName
     })
   }
-
-  const updateThisTodoTitle: EventHandler<"input", "onChange"> = (inputEvent) => {
-    updateTitle$(inputEvent.currentTarget.value)
-  }
-
-  const isUncategorizedSection = () => props.id === -1337
 
   return (
     <TodoSectionProvider sectionId$={props.id}>
@@ -58,23 +65,18 @@ export function TodoSection(props: ITodoSectionProps & AnyTodoSection) {
           >
             <BsCaretDownFill />
           </div>
-          <Show when={isUncategorizedSection()} fallback={
-            <Input
-              value={(props as TodoSectionData).name}
-              onInput={updateTitle}
-              placeholder="Give this section a name"
-              disabled={isReadonly$()}
-              autocomplete='off'
-            />
-          }>
-            <Input
-              value={data$().title}
-              onInput={updateThisTodoTitle}
-              placeholder="Name this whole todo here a name"
-              disabled={isReadonly$()}
-              autocomplete='off'
-            />
-          </Show>
+          <TodoSectionNameInput 
+            getName$={getName}
+            onInput$={updateName}
+            readonly$={{
+              todoSectionComponent$(props) {
+                return props.name$
+              },
+              uncategorizedSectionComponent$(props) {
+                return props.name$
+              },
+            }}
+          />
           <Show when={!isReadonly$()}>
             <TodoSectionButtonRow />
           </Show>

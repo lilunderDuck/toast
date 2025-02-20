@@ -4,7 +4,7 @@ import { type IJournalGroupData, api_getGroup } from "~/api/journal"
 import { thisArrayObjects } from "~/common"
 import { createEvent, type IEvent } from "~/utils"
 // ...
-import { home_logWithLabel } from "../utils"
+import { homeLog } from "../utils"
 
 type JournalHomeEvent = {
   home__infoSidebarClose(): void
@@ -42,20 +42,20 @@ export function JournalHomeProvider(props: ParentProps) {
         open$(data: IJournalGroupData) {
           setCurrentJournalData(data)
           //debug-start
-          home_logWithLabel('sidebar', 'opened', data)
+          homeLog.logLabel('sidebar', 'opened', data)
           //debug-end
         },
         close$() {
           setCurrentJournalData(undefined)
           event.emit$('home__infoSidebarClose')
           //debug-start
-          home_logWithLabel('sidebar', 'closed')
+          homeLog.logLabel('sidebar', 'closed')
           //debug-end
         },
         update$(data: IJournalGroupData) {
           setCurrentJournalData(data)
           //debug-start
-          home_logWithLabel('sidebar', 'updated', data)
+          homeLog.logLabel('sidebar', 'updated', data)
           //debug-end
         },
         currentJournalData$: currentJournalData,
@@ -70,13 +70,13 @@ export function JournalHomeProvider(props: ParentProps) {
         add$(another) {
           setJournalGroups(prev => [...prev, another])
           //debug-start
-          home_logWithLabel('grid', 'added', another)
+          homeLog.logLabel('grid', 'added', another)
           //debug-end
         },
         update$(newOne) {
           setJournalGroups(prev => [...thisArrayObjects(prev).replace$(it => it.id === newOne.id, newOne)])
           //debug-start
-          home_logWithLabel('grid', 'updated', newOne)
+          homeLog.logLabel('grid', 'updated', newOne)
           //debug-end
         }
       },

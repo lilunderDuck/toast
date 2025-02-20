@@ -3,7 +3,7 @@ import { type Accessor, createContext, createSignal, type ParentProps, Setter, u
 import { createBlocks, type IBlockUtils } from "./blocks"
 import type { IBlockSetting, EditorDocumentData, IBlockData } from "./blockData"
 import { createButtonRow, IButtonRowUtils } from "./buttonRow"
-import { editor_log } from "../utils"
+import { editorLog } from "../utils"
 import { 
   createTextBlock, 
   createTodoBlock 
@@ -57,7 +57,7 @@ export function EditorProvider(props: ParentProps) {
   let previousOpenedDocumentId = -1
 
   //debug-start
-  editor_log("Created with block setting", blockSetting)
+  editorLog.log("Created with block setting", blockSetting)
   //debug-end
 
   return (
@@ -73,18 +73,18 @@ export function EditorProvider(props: ParentProps) {
       open$(data) {
         event.emit$('editor__onSwitching', cache.get(previousOpenedDocumentId))
         //debug-start
-        editor_log('Deleting previous cache data from memory:', previousOpenedDocumentId)
+        editorLog.log('Deleting previous cache data from memory:', previousOpenedDocumentId)
         //debug-end
         cache.delete(previousOpenedDocumentId)
 
         //debug-start
-        editor_log('New data will be added now')
+        editorLog.log('New data will be added now')
         //debug-end
         block.setData$(data.content)
         
         if (data.content.length === 0) {
           //debug-start
-          editor_log('The provided document', data, 'has no block data in it, spawning the default block...')
+          editorLog.log('The provided document', data, 'has no block data in it, spawning the default block...')
           //debug-end
           block.insert$(null, defaultBlock.type$, defaultBlock.setting$.defaultValue$)
         }
@@ -92,7 +92,7 @@ export function EditorProvider(props: ParentProps) {
         cache.set(data.id, data.content)
         previousOpenedDocumentId = data.id
         //debug-start
-        editor_log('Finished')
+        editorLog.log('Finished')
         //debug-end
       },
       update$() {

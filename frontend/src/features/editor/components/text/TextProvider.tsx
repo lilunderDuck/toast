@@ -1,6 +1,6 @@
 import { Accessor, createContext, createSignal, ParentProps, Signal, useContext } from "solid-js"
 // ...
-import { editor_log } from "~/features/editor/utils"
+import { editorLog } from "~/features/editor/utils"
 import { array_insert } from "~/common"
 // ...
 import { TextData } from "./data"
@@ -40,7 +40,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
       prev[index] = newData
       context.onChange$(textsData())
       //debug-start
-      editor_log('[text] update text data at index', index, 'with', data, '. Data is', prev[index])
+      editorLog.log('[text] update text data at index', index, 'with', data, '. Data is', prev[index])
       //debug-end
       return prev
     })
@@ -55,7 +55,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
     })
     context.onChange$(textsData())
     //debug-start
-    editor_log('[text] Spawned new block')
+    editorLog.log('[text] Spawned new block')
     //debug-end
   }
 
@@ -67,7 +67,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
 
     context.onChange$(textsData())
     //debug-start
-    editor_log('[text] Deleted block at index', index)
+    editorLog.log('[text] Deleted block at index', index)
     //debug-end
   }
 

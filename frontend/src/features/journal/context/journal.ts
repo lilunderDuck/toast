@@ -17,9 +17,7 @@ import {
 import { useEditorContext } from "~/features/editor"
 // ...
 import { 
-  journal_log,
-  journal_logGroup,
-  journal_logGroupEnd,
+  journalLog,
   JournalSessionStorage
 } from ".."
 import { type IFileDisplayContext } from "./fileDisplay"
@@ -59,7 +57,7 @@ export function createJournal(
     )
 
     //debug-start
-    journal_log('created new journal:', newData)
+    journalLog.log('created new journal:', newData)
     //debug-end
 
     return newData
@@ -71,7 +69,7 @@ export function createJournal(
    */
   const open = async(journalId: number) => {
     //debug-start
-    journal_logGroup("Opening", journalId)
+    journalLog.group("Opening", journalId)
     //debug-end
     const currentJournalGroupId = getCurrentJournalGroupId()
     let journalContent = cache$.get(journalId)!
@@ -79,7 +77,7 @@ export function createJournal(
     
     if (!journalData) {
       //debug-start
-      journal_log("getting the data from the other side...")
+      journalLog.log("getting the data from the other side...")
       //debug-end
       journalData = await api_getJournal(currentJournalGroupId, journalId)
     }
@@ -89,13 +87,13 @@ export function createJournal(
     }
 
     //debug-start
-    journal_log("journal data is:", journalData)
+    journalLog.log("journal data is:", journalData)
     //debug-end
     
     setCurrentlyOpened$(journalData)
     
     //debug-start
-    journal_log("journal should open now")
+    journalLog.log("journal should open now")
     //debug-end
     open$({
       id: journalId,
@@ -103,7 +101,7 @@ export function createJournal(
     })
 
     //debug-start
-    journal_logGroupEnd()
+    journalLog.groupEnd()
     //debug-end
   }
 
@@ -117,7 +115,7 @@ export function createJournal(
     setCurrentlyOpened$(undefined)
     cache$.delete(journalId)
     //debug-start
-    journal_log("deleted:", journalId)
+    journalLog.log("deleted:", journalId)
     //debug-end
   }
 
@@ -128,7 +126,7 @@ export function createJournal(
    */
   const save = async(journalId: number, data: JournalContentData) => {
     //debug-start
-    journal_log("saving", journalId)
+    journalLog.log("saving", journalId)
     //debug-end
     const currentJournalGroupId = getCurrentJournalGroupId()
     return await api_saveJournalContent(currentJournalGroupId, journalId, data)

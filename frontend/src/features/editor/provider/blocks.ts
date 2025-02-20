@@ -3,7 +3,7 @@ import { Accessor, createSignal, Setter } from "solid-js"
 import { array_insert, getRandomNumberFrom, thisArrayObjects } from "~/common"
 // ...
 import type { IBlockData } from "./blockData"
-import { editor_log } from "../utils"
+import { editorLog } from "../utils"
 import type { IButtonRowUtils } from "./buttonRow"
 import type { IEditorContext } from "./EditorProvider"
 
@@ -40,7 +40,7 @@ export function createBlocks(
     const newData = create(type, someData)
     if (!beforeBlockId) {
       //debug-start
-      editor_log("(1) inserting block type", type, "with data", someData, "on the bottom with", someData)
+      editorLog.log("(1) inserting block type", type, "with data", someData, "on the bottom with", someData)
       //debug-end
       return setData(prev => [...prev, newData])
     }
@@ -50,13 +50,13 @@ export function createBlocks(
     const [, index] = arrayObject.find$(it => it.id === beforeBlockId)
     if (blockData.length - 1 === index) {
       //debug-start
-      editor_log("(2) inserting block type", type, "with data", someData, "on the bottom with", someData)
+      editorLog.log("(2) inserting block type", type, "with data", someData, "on the bottom with", someData)
       //debug-end
       return setData(prev => [...prev, newData])
     }
     
     //debug-start
-    editor_log("(3) inserting block type", type, "with data", someData, "before block", beforeBlockId)
+    editorLog.log("(3) inserting block type", type, "with data", someData, "before block", beforeBlockId)
     //debug-end
     array_insert(blockData, index, newData)
     setData(blockData)
