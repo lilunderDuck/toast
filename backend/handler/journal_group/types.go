@@ -19,8 +19,8 @@ type UpdateSchema struct {
 type Data struct {
 	Id          int           `json:"id"                    cbor:"0,keyasint"`
 	Created     time.Duration `json:"created"               cbor:"1,keyasint"`
-	Modified    time.Duration `json:"modified,omitempty"    cbor:"2,keyasint"`
+	Modified    time.Duration `json:"modified,omitempty"    cbor:"2,keyasint,omitempty"`
 	Name        string        `json:"name"                  cbor:"3,keyasint"`
-	Description string        `json:"description,omitempty" cbor:"4,keyasint"`
+	Description string        `json:"description,omitempty" cbor:"4,keyasint,omitempty"`
 	Tree        VirTreeData   `json:"tree"                  cbor:"5,keyasint,toarray"`
 }

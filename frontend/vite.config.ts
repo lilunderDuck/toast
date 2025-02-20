@@ -76,12 +76,6 @@ function getEsbuildConfig(devMode: boolean, others?: ESBuildOptions): InlineConf
   return {
     esbuild: {
       ...others,
-      define: {
-        "__devMode": `${devMode}`,
-        "__version": `"1.0.0-beta"`,
-        "__apiVersion": `"1.0.0-beta"`,
-        "__backendVersion": `"golang v1.23.4"`,
-      },
       ...dropConsoleSomethingCall,
       ...onlyManglePropsInProdMode
     },
@@ -118,6 +112,12 @@ export default defineConfig(({ command }) => {
         ],
       })
     ],
+    define: {
+      "isDevMode": `${devMode}`,
+      "__version": `"1.0.0-beta"`,
+      "__apiVersion": `"1.0.0-beta"`,
+      "__backendVersion": `"golang v1.23.4"`,
+    },
     optimizeDeps: {
       include: [
         // ...

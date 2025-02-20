@@ -71,8 +71,8 @@ export function Editor() {
   }
 
   return (
-    <div {...stylex.attrs(style.editor)}>
-      <div onKeyUp={onPressingYourKeyboard} {...stylex.attrs(style.blockList)}>
+    <div {...stylex.attrs(style.editor)} onKeyUp={onPressingYourKeyboard}>
+      <div {...stylex.attrs(style.blockList)}>
         <For each={blocks$.data$()}>
           {it => <EditorBlock {...it} />}
         </For>

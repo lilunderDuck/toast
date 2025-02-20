@@ -30,7 +30,7 @@ type CategoryData struct {
 	Id       int           `json:"id"                 cbor:"0,keyasint"`
 	Type     uint8         `json:"type"               cbor:"1,keyasint"`
 	Created  time.Duration `json:"created"            cbor:"2,keyasint"`
-	Modified time.Duration `json:"modified,omitempty" cbor:"3,keyasint"`
+	Modified time.Duration `json:"modified,omitempty" cbor:"3,keyasint,omitempty"`
 	Name     string        `json:"name"               cbor:"4,keyasint"`
 }
 
@@ -38,13 +38,13 @@ type JournalData struct {
 	Id       int                  `json:"id"                 cbor:"0,keyasint"`
 	Type     uint8                `json:"type"               cbor:"1,keyasint"`
 	Created  time.Duration        `json:"created"            cbor:"2,keyasint"`
-	Modified time.Duration        `json:"modified,omitempty" cbor:"3,keyasint"`
+	Modified time.Duration        `json:"modified,omitempty" cbor:"3,keyasint,omitempty"`
 	Name     string               `json:"name"               cbor:"4,keyasint"`
 	Data     []JournalContentData `json:"data"               cbor:"5,keyasint"`
 }
 
 type JournalContentData struct {
-	Id   int    `json:"id"              cbor:"0,keyasint"`
-	Type uint16 `json:"type"            cbor:"1,keyasint"`
-	Data any    `json:"data"            cbor:"3,keyasint"`
+	Id   int   `json:"id"              cbor:"0,keyasint"`
+	Type int16 `json:"type"            cbor:"1,keyasint"`
+	Data any   `json:"data"            cbor:"3,keyasint,toarray"`
 }

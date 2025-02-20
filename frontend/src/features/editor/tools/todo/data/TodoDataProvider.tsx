@@ -1,6 +1,6 @@
 import { createContext, type ParentProps, useContext } from "solid-js"
-import { ITodoBlockData } from "../TodoBlock"
-import { createTodo, ITodoUtils } from "./todo"
+import type { ITodoBlockData } from "./this"
+import { createTodo, type ITodoUtils } from "./todo"
 
 export interface ITodoDataProviderProps {
   dataIn$: ITodoBlockData

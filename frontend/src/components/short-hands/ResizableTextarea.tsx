@@ -38,7 +38,7 @@ export function ResizableTextarea(props: HTMLAttributes<"textarea">) {
   // 
   // this exist is because if we set some value to this textarea, its height doesn't update
   // right away. Only when you start typing something, it will update the height correctly
-  let textareaId = `_${getRandomNumber(100_000)}${__devMode ? '-did-not-intentionally-add-this' : ''}`
+  let textareaId = `_${getRandomNumber(100_000)}${isDevMode ? '-did-not-intentionally-add-this' : ''}`
   onMount(() => {
     console.group('[ResizableTextarea] mounted')
     let timeout = setTimeout(() => {

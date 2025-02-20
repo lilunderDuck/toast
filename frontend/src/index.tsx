@@ -9,15 +9,7 @@ import { logThisVeryHelpfulMessage } from './utils'
 
 const root = document.getElementById('duck')
 
-window.onerror = function(error) {
-  console.log(error)
-  if (window.location.href.includes('/journal')) {
-    window.location.href = 'wails.localhost:34115'
-    window.location.reload()
-  }
-}
-
-__devMode && (() => {
+isDevMode && (() => {
   if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
     throw new Error(
       'Root element not found. Did you forget to add it to your index.html? Or maybe the id attribute got misspelled?',

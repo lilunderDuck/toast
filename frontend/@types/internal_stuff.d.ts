@@ -22,7 +22,7 @@ declare global {
    */
 
   /**Whether this application is in dev mode, `false` if the app is in production */
-  const __devMode: boolean
+  const isDevMode: boolean
 }
 
 export {}
