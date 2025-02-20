@@ -22,13 +22,12 @@ export function debounce<Fn extends AnyFunction>(callback: Fn, wait: number) {
 }
 
 export function logThisVeryHelpfulMessage() {
-  /* @__PURE__ */
-  console.log(
+  /*@__PURE__*/console.log(
     "%cOkay, hold on.", "font-size:25px",
     "\nThis is a very scary place you know? Pasting any code into here result in *no consequence* whatsoever, because it's just you and yourself.",
     "\n\n",
     "\n---- You're now looking at the app information ----",
-    `\nuser: ${navigator.userAgent}`,
+    `\nyou                   :  ${navigator.userAgent}`,
     `\napp version           :  ${APP_VERSION}`,
     `\napi version           :  ${API_VERSION}`,
     '\nusing solidjs version :  v1.8.11',

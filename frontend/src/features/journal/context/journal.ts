@@ -15,9 +15,9 @@ import {
   api_getJournal, 
 } from "~/api/journal"
 import { useEditorContext } from "~/features/editor"
+import { journalLog } from "~/features/debug"
 // ...
 import { 
-  journalLog,
   JournalSessionStorage
 } from ".."
 import { type IFileDisplayContext } from "./fileDisplay"

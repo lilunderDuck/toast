@@ -3,8 +3,8 @@ import { type Accessor, createContext, createSignal, type ParentProps, useContex
 import { type IJournalGroupData, api_getGroup } from "~/api/journal"
 import { thisArrayObjects } from "~/common"
 import { createEvent, type IEvent } from "~/utils"
+import { homeLog } from "~/features/debug"
 // ...
-import { homeLog } from "../utils"
 
 type JournalHomeEvent = {
   home__infoSidebarClose(): void

@@ -1,12 +1,14 @@
 import { For, Show } from "solid-js"
 // ...
+import { editorLog } from "~/features/debug"
+import { debounce } from "~/utils"
+// ...
 import stylex from "@stylexjs/stylex"
 import __style from "./Editor.module.css"
 // ...
 import { type IBlockData, useEditorContext } from "../provider"
-import { dontUpdateIfYouPressSomeKey, editorLog } from "../utils"
+import { dontUpdateIfYouPressSomeKey } from "../utils"
 import { BlockButtonRow } from "../components"
-import { debounce } from "~/utils"
 
 const style = stylex.create({
   editor: {

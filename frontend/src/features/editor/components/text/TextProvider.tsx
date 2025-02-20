@@ -1,6 +1,6 @@
 import { Accessor, createContext, createSignal, ParentProps, Signal, useContext } from "solid-js"
 // ...
-import { editorLog } from "~/features/editor/utils"
+import { editorLog } from "~/features/debug"
 import { array_insert } from "~/common"
 // ...
 import { TextData } from "./data"

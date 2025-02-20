@@ -8,9 +8,9 @@ import {
   api_updateJournalVirturalFileTree,
   isFolder
 } from "~/api/journal"
+import { journalLog } from "~/features/debug"
 // ...
 import type { JournalSessionStorage } from "./JournalContext"
-import { journalLog } from "../utils"
 
 type TreeNodeType = 'file' | 'folder'
 type TreeMappingData = Record<number, IJournalCategoryData | IJournalData>

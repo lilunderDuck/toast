@@ -10,11 +10,11 @@ import {
 // ...
 import { createEvent, createStorage, type IEvent, type IStorage } from "~/utils"
 import type { IJournalGroupData } from "~/api/journal"
+import { journalLog } from "~/features/debug"
 // ...
 import { type JournalEventMap } from "./event"
 import { createJournal, type IThisJournalContext } from "./journal"
 import { type IFileDisplayContext, createFileDisplay } from "./fileDisplay"
-import { journalLog } from "../utils"
 
 export type JournalLocalStorage = IStorage<{
   shouldShowDeleteConfirmationModal: boolean

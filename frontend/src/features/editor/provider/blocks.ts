@@ -1,9 +1,9 @@
 import { Accessor, createSignal, Setter } from "solid-js"
 // ...
 import { array_insert, getRandomNumberFrom, thisArrayObjects } from "~/common"
+import { editorLog } from "~/features/debug"
 // ...
 import type { IBlockData } from "./blockData"
-import { editorLog } from "../utils"
 import type { IButtonRowUtils } from "./buttonRow"
 import type { IEditorContext } from "./EditorProvider"
 

@@ -1,5 +1,6 @@
 import { Accessor, createContext, createSignal, ParentProps, useContext } from "solid-js"
-import { editorLog } from "~/features/editor/utils"
+// ...
+import { editorLog } from "~/features/debug"
 
 interface ITodoSectionProviderProps {
   sectionId$: number

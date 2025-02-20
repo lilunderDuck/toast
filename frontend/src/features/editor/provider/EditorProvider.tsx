@@ -1,15 +1,16 @@
 import { type Accessor, createContext, createSignal, type ParentProps, Setter, useContext } from "solid-js"
 // ...
+import { editorLog } from "~/features/debug"
+import { createEvent } from "~/utils"
+// ...
 import { createBlocks, type IBlockUtils } from "./blocks"
 import type { IBlockSetting, EditorDocumentData, IBlockData } from "./blockData"
 import { createButtonRow, IButtonRowUtils } from "./buttonRow"
-import { editorLog } from "../utils"
 import { 
   createTextBlock, 
   createTodoBlock 
 } from "../tools"
 import { EditorEvent } from "./event"
-import { createEvent } from "~/utils"
 
 type DefaultBlockSetting = {
   setting$: IBlockSetting<any>
