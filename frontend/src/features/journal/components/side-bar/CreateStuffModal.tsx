@@ -50,10 +50,10 @@ function Content(props: ICreateJournalCategoryModalProps) {
   const [, setSubmitButtonDisabled] = $submitButtonDisabled
   const [selected, setSelected] = $selected
 
-  type Stuff = { $name: string, $description: string, $type: JournalType }[]
+  type Stuff = { name$: string, description$: string, $type: JournalType }[]
   const items: Stuff = [
-    { $name: "journal", $type: JournalType.journal, $description: "Classic diary to write some stuff." },
-    { $name: "category", $type: JournalType.category, $description: "You can think of it as a folder, well, for more customization." },
+    { name$: "journal", $type: JournalType.journal, description$: "Classic diary to write some stuff." },
+    { name$: "category", $type: JournalType.category, description$: "You can think of it as a folder, well, for more customization." },
   ]
 
   const thingSelected = (value: JournalType) => () => {
@@ -71,10 +71,10 @@ function Content(props: ICreateJournalCategoryModalProps) {
       <RadioGroup {...stylex.attrs(style.radioGroup)}>
         <For each={items}>
           {(it) => (
-            <RadioGroupItem value={it.$name} onClick={thingSelected(it.$type)}>
+            <RadioGroupItem value={it.name$} onClick={thingSelected(it.$type)}>
               <RadioGroupItemLabel>
-                <div>{it.$name}</div>
-                <div {...stylex.attrs(style.description)}>{it.$description}</div>
+                <div>{it.name$}</div>
+                <div {...stylex.attrs(style.description)}>{it.description$}</div>
               </RadioGroupItemLabel>
             </RadioGroupItem>
           )}

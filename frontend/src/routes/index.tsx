@@ -6,7 +6,7 @@ import {
 
 export default function HomePage() {
   return (
-    <JournalHomeRoot $sidebarComponent={
+    <JournalHomeRoot sidebarComponent$={
       <JournalInfoSidebar />
     }>
       <h1>Home</h1>

@@ -15,10 +15,10 @@ const style = stylex.create({
 
 export function Versions() {
   const stuff = [
-    { $name: 'App version', $version: APP_VERSION },
-    { $name: 'Api version', $version: API_VERSION },
-    { $name: 'Backend', $version: APP_BACKEND_VERSION },
-    { $name: 'You', $version: navigator.userAgent.split('(')[1].split(')')[0] },
+    { name$: 'App version', $version: APP_VERSION },
+    { name$: 'Api version', $version: API_VERSION },
+    { name$: 'Backend', $version: APP_BACKEND_VERSION },
+    { name$: 'You', $version: navigator.userAgent.split('(')[1].split(')')[0] },
   ]
 
   return (
@@ -27,7 +27,7 @@ export function Versions() {
         <For each={stuff}>
           {it => (
             <tr>
-              <td>{it.$name}</td>
+              <td>{it.name$}</td>
               <td>{it.$version}</td>
             </tr>
           )}

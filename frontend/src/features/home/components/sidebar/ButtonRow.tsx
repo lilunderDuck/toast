@@ -2,12 +2,7 @@ import stylex from "@stylexjs/stylex"
 import { Button, ButtonSizeVariant, ButtonVariant, Flex, Spacer } from "~/components"
 
 const style = stylex.create({
-  $infoList: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(40%, 1fr))',
-    gap: 15
-  },
-  on$lyOnBottom: {
+  onlyOnBottom: {
     position: 'absolute',
     bottom: 0,
     width: '100%',
@@ -23,7 +18,7 @@ interface IButtonRowOnTheBottomProps {
 
 export default function ButtonRowOnTheBottom(props: IButtonRowOnTheBottomProps) {
   return (
-    <Flex {...stylex.attrs(style.on$lyOnBottom)}>
+    <Flex {...stylex.attrs(style.onlyOnBottom)}>
       <Spacer />
       <Button 
         size$={ButtonSizeVariant.sm} 

@@ -8,10 +8,10 @@ import type { IJournalGroupData } from "~/api/journal"
 import { SectionText } from "./Section"
 
 const style = stylex.create({
-  $name: {
+  name: {
     gap: 10
   },
-  $infoList: {
+  infoList: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(40%, 1fr))',
     gap: 15
@@ -19,20 +19,22 @@ const style = stylex.create({
 })
 
 interface IInfoProps {
-  $name: JSX.Element
-  $description: JSX.Element
+  name$: JSX.Element
+  description$: JSX.Element
   icon$?: JSX.Element
 }
 
 function Info(props: IInfoProps) {
   return (
     <div>
-      <FlexCenterY {...stylex.attrs(style.$name)} as$="h4">
+      <FlexCenterY {...stylex.attrs(style.name)} as$="h4">
         {props.icon$}
-        <span>{props.$name}</span>
+        <span>
+          {props.name$}
+        </span>
       </FlexCenterY>
       <SectionText>
-        {props.$description}
+        {props.description$}
       </SectionText>
     </div>
   )
@@ -46,27 +48,22 @@ export function InfoList(props: IJournalGroupData) {
   }).format(new Date(date))
 
   return (
-    <div {...stylex.attrs(style.$infoList)}>
+    <div {...stylex.attrs(style.infoList)}>
       <Info 
         icon$={<BsCalendar2Fill />}
-        $name='Created'
-        $description={formatDate(props?.created!)} 
+        name$='Created'
+        description$={formatDate(props?.created!)} 
       />
       <Info 
         icon$={<BsPencilFill />}
-        $name='Last modified'
-        $description={
+        name$='Last modified'
+        description$={
           <Show when={props.modified} fallback={
             <span>You just created this</span>
           }>
             {formatDate(props?.modified!)}
           </Show>
         } 
-      />
-      <Info 
-        icon$={<BsJournalCheck />}
-        $name='Entries'
-        $description={props?.entries ?? 0}
       />
     </div>
   )

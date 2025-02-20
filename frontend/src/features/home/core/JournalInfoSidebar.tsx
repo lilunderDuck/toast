@@ -2,6 +2,7 @@ import { Show } from "solid-js"
 import { useNavigate } from "@solidjs/router"
 // ...
 import { OpenAndCloseButton } from "~/components"
+import { mergeClassname } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from './JournalInfoSidebar.module.css' 
@@ -9,10 +10,9 @@ import __scrollbarStyle from'~/assets/style/scrollbar.module.css'
 // ...
 import { BackgroundShowcase, InfoList } from "../components"
 import { useJournalHomeContext } from "../provider"
-import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
-  $sidebar: {
+  sidebar: {
     width: '70%',
     height: '100%',
     backgroundColor: 'var(--gray2)',
@@ -20,12 +20,12 @@ const style = stylex.create({
     userSelect: 'none',
     position: 'relative'
   },
-  $infoList: {
+  infoList: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(40%, 1fr))',
     gap: 15
   },
-  on$lyOnBottom: {
+  onlyOnBottom: {
     position: 'absolute',
     bottom: 0,
     width: '100%',
@@ -46,13 +46,13 @@ export function JournalInfoSidebar() {
           __scrollbarStyle.scrollbar,
           __scrollbarStyle.scrollbarVertical,
           __scrollbarStyle.invsScrollbar,
-          stylex.attrs(style.$sidebar)
+          stylex.attrs(style.sidebar)
         )}
         id={__style.sidebar}
       >
         <BackgroundShowcase 
-          $heading={infoSidebar$.currentJournalData$()?.name}
-          $sectionText={infoSidebar$.currentJournalData$()?.description}
+          heading$={infoSidebar$.currentJournalData$()?.name}
+          sectionText$={infoSidebar$.currentJournalData$()?.description}
         />
         <InfoList {...infoSidebar$.currentJournalData$()!} />
         <OpenAndCloseButton 

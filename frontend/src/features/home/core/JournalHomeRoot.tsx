@@ -10,11 +10,11 @@ import { JournalHomeProvider } from "../provider"
 import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
-  $homePage: {
+  homePage: {
     width: '100%',
     height: '100%',
   },
-  $content: {
+  content: {
     width: '100%',
     height: '100%',
     paddingLeft: 20
@@ -22,20 +22,20 @@ const style = stylex.create({
 })
 
 interface IJournalHomeRootProps {
-  $sidebarComponent: JSX.Element
+  sidebarComponent$: JSX.Element
 }
 
 export function JournalHomeRoot(props: ParentProps<IJournalHomeRootProps>) {
   return (
     <JournalHomeProvider>
-      <Flex {...stylex.attrs(style.$homePage)}>
+      <Flex {...stylex.attrs(style.homePage)}>
         <div class={mergeClassname(
-          stylex.attrs(style.$content), 
+          stylex.attrs(style.content), 
           `${__style.scrollbar} ${__scrollbarStyle.scrollbar} ${__scrollbarStyle.scrollbarVertical}`
         )}>
           {props.children}
         </div>
-        {props.$sidebarComponent}
+        {props.sidebarComponent$}
       </Flex>
     </JournalHomeProvider>
   )

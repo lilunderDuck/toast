@@ -1,0 +1,7 @@
+#todo #button {
+  opacity: 0;
+}
+
+#todo:hover #button {
+  opacity: 1;
+}

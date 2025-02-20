@@ -15,13 +15,15 @@ const style = stylex.create({
   blockList: {
     width: '100%',
     height: '100%',
+    paddingRight: '4rem'
   },
   blockSetting: {
     position: 'absolute',
     transform: 'translate(calc(var(--x) * -1), var(--y))',
     right: 0,
     top: 0,
-    willChange: 'transform'
+    willChange: 'transform',
+    marginRight: 10
   }
 })
 
@@ -68,7 +70,7 @@ export function Editor() {
 
   return (
     <div {...stylex.attrs(style.editor)}>
-      <div onKeyUp={onPressingYourKeyboard}>
+      <div onKeyUp={onPressingYourKeyboard} {...stylex.attrs(style.blockList)}>
         <For each={blocks$.data$()}>
           {it => <EditorBlock {...it} />}
         </For>
