@@ -3,7 +3,7 @@ import { lazy } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { Button, ButtonSizeVariant, FlexCenterY } from "~/components"
+import { Button, ButtonSizeVariant, createLazyLoadedDropdownMenu, FlexCenterY } from "~/components"
 import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
@@ -13,18 +13,28 @@ const style = stylex.create({
 })
 
 export function BlockButtonRow(props: HTMLAttributes<"div">) {
-  const AddBlockMenu = lazy(() => import('./BlockAddListMenu'))
+  const AddBlockMenu = createLazyLoadedDropdownMenu(
+    () => (
+      <Button size$={ButtonSizeVariant.icon}>
+        <BsPlus />
+      </Button>
+    ),
+    lazy(() => import('./BlockAddListMenu'))
+  )
 
-  return (
-    <FlexCenterY {...props} class={mergeClassname(stylex.attrs(style.buttonRow), props)}>
-      <AddBlockMenu trigger$={
-        <Button size$={ButtonSizeVariant.icon}>
-          <BsPlus />
-        </Button>
-      } />
+  const SettingBlockMenu = createLazyLoadedDropdownMenu(
+    () => (
       <Button size$={ButtonSizeVariant.icon}>
         <BsGearFill />
       </Button>
+    ),
+    lazy(() => import('./BlockSettingMenu'))
+  )
+
+  return (
+    <FlexCenterY {...props} class={mergeClassname(stylex.attrs(style.buttonRow), props)}>
+      <AddBlockMenu.DropdownMenu$ />
+      <SettingBlockMenu.DropdownMenu$ />
     </FlexCenterY>
   )
 }

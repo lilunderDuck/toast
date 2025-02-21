@@ -52,7 +52,7 @@ export function Editor() {
           <BlockComponent dataIn$={props.data} blockId$={props.id} />
         </div>
       }>
-        <div id={__style.block}>
+        <div id={__style.block} data-id={props.id}>
           <BlockComponent dataIn$={props.data} blockId$={props.id} />
         </div>
       </Show>

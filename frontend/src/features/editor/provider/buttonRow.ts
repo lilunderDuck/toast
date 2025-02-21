@@ -1,4 +1,5 @@
-import { Accessor, createSignal } from "solid-js"
+import { type Accessor, createSignal } from "solid-js"
+import type { EditorSessionStorage } from "./EditorProvider"
 // ...
 
 export interface IButtonRowUtils {
@@ -9,7 +10,7 @@ export interface IButtonRowUtils {
   }>
 }
 
-export function createButtonRow() {
+export function createButtonRow(wrappedSessionStorage: EditorSessionStorage) {
   const [currentButtonRowYPos, setCurrentButtonRowYPos] = createSignal({
     x: 0,
     y: 0
@@ -21,6 +22,8 @@ export function createButtonRow() {
       x: boundRect.x,
       y: boundRect.y
     })
+
+    wrappedSessionStorage.set$('currentBlock', parseInt(blockRef.dataset!.id ?? ''))
   }
 
   return {

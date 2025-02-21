@@ -1,25 +1,27 @@
-import { type Accessor, createContext, createSignal, type ParentProps, Setter, useContext } from "solid-js"
+import { type Accessor, createContext, createSignal, type ParentProps, type Setter, useContext } from "solid-js"
 // ...
 import { editorLog } from "~/features/debug"
-import { createEvent } from "~/utils"
+import { createEvent, createStorage, type IStorage } from "~/utils"
 // ...
 import { createBlocks, type IBlockUtils } from "./blocks"
 import type { IBlockSetting, EditorDocumentData, IBlockData } from "./blockData"
-import { createButtonRow, IButtonRowUtils } from "./buttonRow"
-import { 
-  createTextBlock, 
-  createTodoBlock 
-} from "../tools"
+import { createButtonRow, type IButtonRowUtils } from "./buttonRow"
 import { EditorEvent } from "./event"
+import { loadBlockSettings } from "./settings"
 
-type DefaultBlockSetting = {
+export type DefaultBlockSetting = {
   setting$: IBlockSetting<any>
   type$: number
 }
 
+export type EditorSessionStorage = IStorage<{
+  currentBlock: number
+}>
+
 export interface IEditorContext {
   blockSetting$: Record<number, IBlockSetting<any>>
   event$: EditorEvent
+  sessionStorage$: EditorSessionStorage
   defaultBlock$: {
     setting$: IBlockSetting<any>
     type$: number
@@ -37,20 +39,11 @@ const Context = createContext<IEditorContext>()
 
 export function EditorProvider(props: ParentProps) {
   const [readonly, setIsReadonly] = createSignal(false)
-  const buttonRow = createButtonRow()
+  const wrappedSessionStorage: EditorSessionStorage = createStorage(sessionStorage)
+  const buttonRow = createButtonRow(wrappedSessionStorage)
 
-  const blockSetting: Record<number, IBlockSetting<any>> = {
-    2: createTodoBlock()
-  }
-
-  const defaultBlock: DefaultBlockSetting = {
-    setting$: createTextBlock(),
-    type$: 1
-  }
-
-  blockSetting[defaultBlock.type$] = defaultBlock.setting$
+  const { blockSetting, defaultBlock } = loadBlockSettings()
   const block = createBlocks(buttonRow, () => blockSetting)
-
   block.insert$(null, defaultBlock.type$, defaultBlock.setting$.defaultValue$)
 
   const event = createEvent()
@@ -61,41 +54,45 @@ export function EditorProvider(props: ParentProps) {
   editorLog.log("Created with block setting", blockSetting)
   //debug-end
 
+  const open: IEditorContext["open$"] = (data) => {
+    event.emit$('editor__onSwitching', cache.get(previousOpenedDocumentId))
+    //debug-start
+    editorLog.log('Deleting previous cache data from memory:', previousOpenedDocumentId)
+    //debug-end
+    cache.delete(previousOpenedDocumentId)
+
+    //debug-start
+    editorLog.log('New data will be added now')
+    //debug-end
+    block.setData$(data.content)
+    
+    if (data.content.length === 0) {
+      //debug-start
+      editorLog.log('The provided document', data, 'has no block data in it, spawning the default block...')
+      //debug-end
+      block.insert$(null, defaultBlock.type$, defaultBlock.setting$.defaultValue$)
+    }
+    
+    wrappedSessionStorage.delete$('currentBlock')
+    cache.set(data.id, data.content)
+    previousOpenedDocumentId = data.id
+    //debug-start
+    editorLog.log('Finished')
+    //debug-end
+  }
+
   return (
     <Context.Provider value={{
       blocks$: block,
       blockSetting$: blockSetting,
       defaultBlock$: defaultBlock,
       buttonRow$: buttonRow,
+      sessionStorage$: wrappedSessionStorage,
       event$: event,
       cache$: cache,
       isReadonly$: readonly,
       setIsReadonly$: setIsReadonly,
-      open$(data) {
-        event.emit$('editor__onSwitching', cache.get(previousOpenedDocumentId))
-        //debug-start
-        editorLog.log('Deleting previous cache data from memory:', previousOpenedDocumentId)
-        //debug-end
-        cache.delete(previousOpenedDocumentId)
-
-        //debug-start
-        editorLog.log('New data will be added now')
-        //debug-end
-        block.setData$(data.content)
-        
-        if (data.content.length === 0) {
-          //debug-start
-          editorLog.log('The provided document', data, 'has no block data in it, spawning the default block...')
-          //debug-end
-          block.insert$(null, defaultBlock.type$, defaultBlock.setting$.defaultValue$)
-        }
-        
-        cache.set(data.id, data.content)
-        previousOpenedDocumentId = data.id
-        //debug-start
-        editorLog.log('Finished')
-        //debug-end
-      },
+      open$: open,
       update$() {
         if (previousOpenedDocumentId === -1) return
         event.emit$('editor__onUpdate', {

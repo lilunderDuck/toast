@@ -1,6 +1,6 @@
 import stylex from "@stylexjs/stylex"
-import { createSignal, For, JSX } from "solid-js"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Input } from "~/components"
+import { createSignal, For } from "solid-js"
+import { DropdownMenuContent, DropdownMenuItem, Input } from "~/components"
 import { useEditorContext } from "~/features/editor/provider"
 
 const style = stylex.create({
@@ -12,11 +12,7 @@ const style = stylex.create({
   }
 })
 
-interface IBlockAddListMenuProps {
-  trigger$: JSX.Element
-}
-
-export default function BlockAddListMenu(props: IBlockAddListMenuProps) {
+export default function BlockAddListMenu() {
   const { blockSetting$, blocks$ } = useEditorContext()
   const original = Object.entries(blockSetting$)
   const [options, setOptions] = createSignal(original)
@@ -33,7 +29,7 @@ export default function BlockAddListMenu(props: IBlockAddListMenuProps) {
     if (value === '') {
       return resetOptionMenu()
     }
-    
+
     setOptions(prev => prev.filter(it => it.includes(value)))
   }
 
@@ -43,38 +39,34 @@ export default function BlockAddListMenu(props: IBlockAddListMenuProps) {
     resetOptionMenu()
 
     // absolutely force focus the input because I don't know why it automatically unfocus
+    // @ts-ignore
     interval = setInterval(() => {
       inputRef.focus()
     }, 1000)
   }
 
   return (
-    <DropdownMenu placement="bottom-end">
-      <DropdownMenuTrigger as="div">
-        {props.trigger$}
-      </DropdownMenuTrigger>
-      <DropdownMenuContent {...stylex.attrs(style.menu)}>
-        {
-          void keepFocusTilMenuClose()
-        }
+    <DropdownMenuContent {...stylex.attrs(style.menu)}>
+      {
+        void keepFocusTilMenuClose()
+      }
 
-        <Input 
-          {...stylex.attrs(style.input)} 
-          onInput={onSlapKeyboardToSearch} 
-          placeholder="Search something" 
-          ref={inputRef}
-        />
+      <Input
+        {...stylex.attrs(style.input)}
+        onInput={onSlapKeyboardToSearch}
+        placeholder="Search something"
+        ref={inputRef}
+      />
 
-        <For each={options()} fallback={
-          <span>Nothing here...</span>
-        }>
-          {([blockType, blockOptions]) => (
-            <DropdownMenuItem onClick={somethingSelected(blockType)}>
-              {blockOptions.displayName$}
-            </DropdownMenuItem>
-          )}
-        </For>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      <For each={options()} fallback={
+        <span>Nothing here...</span>
+      }>
+        {([blockType, blockOptions]) => (
+          <DropdownMenuItem onClick={somethingSelected(blockType)}>
+            {blockOptions.displayName$}
+          </DropdownMenuItem>
+        )}
+      </For>
+    </DropdownMenuContent>
   )
 }
