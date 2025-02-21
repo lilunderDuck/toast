@@ -1,6 +1,10 @@
-import { type DefaultBlockSetting } from "./EditorProvider"
 import { createTextBlock, createTodoBlock } from "../tools"
 import { type IBlockSetting } from "./blockData"
+
+export type DefaultBlockSetting = {
+  setting$: IBlockSetting<any>
+  type$: number
+}
 
 export function loadBlockSettings() {
   const blockSetting: Record<number, IBlockSetting<any>> = {

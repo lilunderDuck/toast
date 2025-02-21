@@ -3,7 +3,13 @@ import type { EditorSessionStorage } from "./EditorProvider"
 // ...
 
 export interface IButtonRowUtils {
+  /**Updates the position of the button row and also set `"currentBlock"` to `sessionStorage` to...
+   * make some basic editor editing functionality works.
+   * @param blockRef A reference to the block element.
+   * @returns *nothing*
+   */
   updatePosition$(blockRef: HTMLDivElement): void
+  /**An accessor for the current position of the button row. */
   currentButtonRowYPos$: Accessor<{
     x: number,
     y: number

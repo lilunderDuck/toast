@@ -9,29 +9,38 @@ import { createButtonRow, type IButtonRowUtils } from "./buttonRow"
 import { EditorEvent } from "./event"
 import { loadBlockSettings } from "./settings"
 
-export type DefaultBlockSetting = {
-  setting$: IBlockSetting<any>
-  type$: number
-}
-
 export type EditorSessionStorage = IStorage<{
   currentBlock: number
 }>
 
 export interface IEditorContext {
+  /**An object containing the block settings for each block.
+   * The keys are the block IDs and the values are the block settings.
+   */
   blockSetting$: Record<number, IBlockSetting<any>>
+  /**Just the editor events. */
   event$: EditorEvent
+  /**Editor session storage to store specific stuff. */
   sessionStorage$: EditorSessionStorage
-  defaultBlock$: {
-    setting$: IBlockSetting<any>
-    type$: number
-  }
+  /**Editor block utilities. */
   blocks$: IBlockUtils
+  /**Editor button row utilities. */
   buttonRow$: IButtonRowUtils
+  /**Containing the cached block data for each block.
+   * The keys are the block IDs and the values are the block data.
+   */
   cache$: Map<number, IBlockData[]>
+  /**The readonly state of the editor. */
   isReadonly$: Accessor<boolean>
+  /**A setter to set the readonly state of the editor. */
   setIsReadonly$: Setter<boolean>
+  /**Opens a new editor with the specified data.
+   * @param data The editor document data.
+   */
   open$(data: EditorDocumentData): void
+  /**Updates the editor data, this is just the editor's internal method.
+   * @internal
+   */
   update$(): void
 }
 
@@ -85,7 +94,6 @@ export function EditorProvider(props: ParentProps) {
     <Context.Provider value={{
       blocks$: block,
       blockSetting$: blockSetting,
-      defaultBlock$: defaultBlock,
       buttonRow$: buttonRow,
       sessionStorage$: wrappedSessionStorage,
       event$: event,

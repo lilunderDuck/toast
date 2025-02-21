@@ -8,11 +8,32 @@ import type { IButtonRowUtils } from "./buttonRow"
 import type { IEditorContext } from "./EditorProvider"
 
 export interface IBlockUtils {
+  /**The block data */
   data$: Accessor<IBlockData[]>
+  /**A setter to set the block data manually */
   setData$: Setter<IBlockData[]>
+  /**Inserts a new block.
+   * @param beforeBlockId the block id of the block to insert before, set it to `null` to insert at the end.
+   * @param type the type of the new block.
+   * @param someData optional data for the new block.
+   * @returns *nothing*
+   */
   insert$(beforeBlockId: number | null, type: number, someData?: any): void
+  /**Saves the block data.
+   * @returns The saved block data.
+   */
   save$(): IBlockData[]
+  /**Saves the data for a specific block.
+   * @param blockId The block id of the block to save data for.
+   * @param data The data to save for the block.
+   * @returns *nothing*
+   */
   saveBlockData$(blockId: number, data: any): void
+  /**Deletes a block from the current document
+   * @param blockId The block id of the block to delete. If `blockId` does not exist in
+   * the current document, nothing will happen, it won't be blew up or anything.
+   * @returns *nothing*
+   */
   delete$(blockId: number): void
 }
 
