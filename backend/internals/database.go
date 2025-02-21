@@ -1,4 +1,4 @@
-package server
+package internals
 
 import (
 	"burned-toast/backend/utils"

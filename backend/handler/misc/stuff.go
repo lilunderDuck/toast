@@ -1,13 +1,13 @@
 package misc
 
 import (
-	"burned-toast/backend/server"
+	"burned-toast/backend/internals"
 	"burned-toast/backend/utils"
 	"fmt"
 )
 
 func GetRandomSplashText() (randomText string, someError error) {
-	path := server.ResourcesFolderPath + "/splashText.bin"
+	path := internals.ResourcesFolderPath + "/splashText.bin"
 
 	var out SplashTextData
 	readError := utils.BSON_ReadFile(path, &out)
@@ -16,7 +16,7 @@ func GetRandomSplashText() (randomText string, someError error) {
 	}
 
 	var lastSplashText string
-	rawByteData, readError := utils.ReadFile(server.CacheFolderPath + "/stuff.txt")
+	rawByteData, readError := utils.ReadFile(internals.CacheFolderPath + "/stuff.txt")
 	if readError != nil {
 		lastSplashText = ""
 	} else {
@@ -27,7 +27,7 @@ func GetRandomSplashText() (randomText string, someError error) {
 	for { // while true
 		randomSplashText = utils.GetRandomElementFromArray(out)
 		if randomSplashText != lastSplashText {
-			utils.WriteFile(server.CacheFolderPath+"/stuff.txt", []byte(randomSplashText))
+			utils.WriteFile(internals.CacheFolderPath+"/stuff.txt", []byte(randomSplashText))
 			break
 		}
 
@@ -38,7 +38,7 @@ func GetRandomSplashText() (randomText string, someError error) {
 }
 
 func GetLibariesUsedList() (data *LibraryListData, someError error) {
-	path := server.ResourcesFolderPath + "/libUsed.bin"
+	path := internals.ResourcesFolderPath + "/libUsed.bin"
 
 	var out LibraryListData
 	readError := utils.BSON_ReadFile(path, &out)

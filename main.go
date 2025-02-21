@@ -2,11 +2,11 @@ package main
 
 import (
 	"burned-toast/backend"
+	"burned-toast/backend/internals"
 	"embed"
 	"log"
 
 	"github.com/wailsapp/wails/v2"
-	"github.com/wailsapp/wails/v2/pkg/logger"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
@@ -35,9 +35,6 @@ func main() {
 		StartHidden:       false,
 		HideWindowOnClose: false,
 		Assets:            assets,
-		Menu:              nil,
-		Logger:            nil,
-		LogLevel:          logger.DEBUG,
 		OnStartup:         app.Startup,
 		OnDomReady:        app.DomReady,
 		OnBeforeClose:     app.BeforeClose,
@@ -52,7 +49,7 @@ func main() {
 			WindowIsTranslucent:  false,
 			DisableWindowIcon:    false,
 			// DisableFramelessWindowDecorations: false,
-			WebviewUserDataPath: "",
+			WebviewUserDataPath: internals.Webview2DataPath,
 		},
 		// Mac platform specific options
 		Mac: &mac.Options{

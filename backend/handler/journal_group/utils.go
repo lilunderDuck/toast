@@ -1,7 +1,7 @@
 package journal_group
 
 import (
-	"burned-toast/backend/server"
+	server "burned-toast/backend/internals"
 	"burned-toast/backend/utils"
 	"fmt"
 

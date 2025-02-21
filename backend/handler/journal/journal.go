@@ -2,7 +2,7 @@ package journal
 
 import (
 	"burned-toast/backend/handler/journal_group"
-	"burned-toast/backend/server"
+	"burned-toast/backend/internals"
 	"burned-toast/backend/utils"
 
 	"github.com/akrylysov/pogreb"
@@ -29,8 +29,8 @@ func CreateJournal(currentGroupId int, schema *JournalSchema) *JournalData {
 		Item: numberId,
 	})
 
-	server.Cache_Update(utils.IntToString(currentGroupId), func(db *pogreb.DB) {
-		server.Cache_Set(db, stringJournalId, &newData)
+	internals.Cache_Update(utils.IntToString(currentGroupId), func(db *pogreb.DB) {
+		internals.Cache_Set(db, stringJournalId, &newData)
 	})
 
 	return &newData
@@ -66,8 +66,8 @@ func UpdateJournal(currentGroupId int, journalId int, newData *JournalUpdateSche
 
 	data.Modified = utils.GetCurrentDateNow()
 
-	server.Cache_Update(utils.IntToString(currentGroupId), func(db *pogreb.DB) {
-		server.Cache_Set(db, utils.IntToString(data.Id), &data)
+	internals.Cache_Update(utils.IntToString(currentGroupId), func(db *pogreb.DB) {
+		internals.Cache_Set(db, utils.IntToString(data.Id), &data)
 	})
 
 	writeError := utils.BSON_WriteFile(
@@ -88,8 +88,8 @@ func DeleteJournal(currentGroupId int, journalId int) error {
 		return removeError
 	}
 
-	server.Cache_Update(utils.IntToString(currentGroupId), func(db *pogreb.DB) {
-		server.Cache_Delete(db, utils.IntToString(journalId))
+	internals.Cache_Update(utils.IntToString(currentGroupId), func(db *pogreb.DB) {
+		internals.Cache_Delete(db, utils.IntToString(journalId))
 	})
 
 	return nil
