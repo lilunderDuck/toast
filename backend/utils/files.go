@@ -29,10 +29,10 @@ func IsFileExist(pathToFile string) bool {
 	return !errors.Is(err, os.ErrNotExist)
 }
 
-func WriteFile(name string, stuff []byte) error {
-	return os.WriteFile(name, stuff, os.ModePerm)
+func WriteFile(pathToFile string, stuff []byte) error {
+	return os.WriteFile(pathToFile, stuff, os.ModePerm)
 }
 
-func ReadFile(name string) ([]byte, error) {
-	return os.ReadFile(name)
+func ReadFile(pathToFile string) ([]byte, error) {
+	return os.ReadFile(pathToFile)
 }

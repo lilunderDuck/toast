@@ -1,10 +1,11 @@
 module burned-toast
 
-go 1.22.0
+go 1.23
 
 toolchain go1.23.4
 
 require (
+	github.com/PuerkitoBio/goquery v1.10.2
 	github.com/akrylysov/pogreb v0.10.2
 	github.com/fxamacker/cbor/v2 v2.7.0
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0
@@ -13,6 +14,7 @@ require (
 )
 
 require (
+	github.com/andybalholm/cascadia v1.3.3 // indirect
 	github.com/bep/debounce v1.2.1 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect

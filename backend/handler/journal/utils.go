@@ -6,6 +6,9 @@ import (
 	"fmt"
 )
 
+// Get the journal saved folder path.
+//
+// The full file path is “
 func GetJournalsSavedFolder(groupId int) string {
 	return journal_group.GetGroupPath(groupId)
 }

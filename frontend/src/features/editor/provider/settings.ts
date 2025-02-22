@@ -1,4 +1,8 @@
-import { createTextBlock, createTodoBlock } from "../tools"
+import { 
+  createImageBlock, 
+  createTextBlock, 
+  createTodoBlock 
+} from "../tools"
 import { type IBlockSetting } from "./blockData"
 
 export type DefaultBlockSetting = {
@@ -8,7 +12,8 @@ export type DefaultBlockSetting = {
 
 export function loadBlockSettings() {
   const blockSetting: Record<number, IBlockSetting<any>> = {
-    2: createTodoBlock()
+    2: createTodoBlock(),
+    3: createImageBlock()
   }
 
   const defaultBlock: DefaultBlockSetting = {

@@ -2,16 +2,17 @@ package backend
 
 import (
 	"burned-toast/backend/handler/journal"
+	"burned-toast/backend/handler/journal/blocks"
 	"burned-toast/backend/handler/journal_group"
 	"burned-toast/backend/handler/misc"
 )
 
 func (a *App) Journal_Create(currentGroupId int, schema *journal.JournalSchema) *journal.JournalData {
-	return journal.CreateJournal(currentGroupId, schema)
+	return journal.Journal_Create(currentGroupId, schema)
 }
 
 func (a *App) Journal_Get(currentGroupId int, journalId int) (*journal.JournalData, error) {
-	return journal.GetJournal(currentGroupId, journalId)
+	return journal.Journal_Get(currentGroupId, journalId)
 }
 
 func (a *App) Journal_Update(
@@ -19,11 +20,11 @@ func (a *App) Journal_Update(
 	journalId int,
 	newData *journal.JournalUpdateSchema,
 ) (*journal.JournalData, error) {
-	return journal.UpdateJournal(currentGroupId, journalId, newData)
+	return journal.Journal_Update(currentGroupId, journalId, newData)
 }
 
 func (a *App) Journal_Delete(currentGroupId int, journalId int) error {
-	return journal.DeleteJournal(currentGroupId, journalId)
+	return journal.Journal_Delete(currentGroupId, journalId)
 }
 
 // ...
@@ -59,4 +60,9 @@ func (a *App) Misc_GetRandomSplashText() (string, error) {
 
 func (a *App) Misc_GetLibariesUsedList() (*misc.LibraryListData, error) {
 	return misc.GetLibariesUsedList()
+}
+
+// ...
+func (a *App) Link_GetPageInformation(url string) (*blocks.WebPageInformation, error) {
+	return blocks.Link_GetPageInformation(url)
 }

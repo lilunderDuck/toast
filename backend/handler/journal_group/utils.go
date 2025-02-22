@@ -1,7 +1,7 @@
 package journal_group
 
 import (
-	server "burned-toast/backend/internals"
+	"burned-toast/backend/internals"
 	"burned-toast/backend/utils"
 	"fmt"
 
@@ -25,7 +25,7 @@ func CreateGroupFolders(groupId int, groupData *Data) (anyError error) {
 }
 
 func GetGroupPath(groupId int) string {
-	return server.JournalFolderPath + "/" + utils.IntToString(groupId)
+	return internals.JournalFolderPath + "/" + utils.IntToString(groupId)
 }
 
 func GetGroupMetaFilePath(groupId int) string {
@@ -34,8 +34,8 @@ func GetGroupMetaFilePath(groupId int) string {
 
 func UpdateGroupMetaFile(groupData *Data) error {
 	groupId := utils.IntToString(groupData.Id)
-	server.Cache_Update("journal-group", func(db *pogreb.DB) {
-		server.Cache_Set(db, groupId, groupData)
+	internals.Cache_Update("journal-group", func(db *pogreb.DB) {
+		internals.Cache_Set(db, groupId, groupData)
 	})
 
 	return utils.BSON_WriteFile(GetGroupMetaFilePath(groupData.Id), &groupData)

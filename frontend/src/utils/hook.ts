@@ -1,3 +1,4 @@
+import { createDropzone } from "@soorria/solid-dropzone";
 import { createSignal } from "solid-js";
 
 export function useToggleState(initialValue: boolean = false) {
