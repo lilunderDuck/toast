@@ -3,7 +3,6 @@ package backend
 import (
 	"burned-toast/backend/handler/journal"
 	"burned-toast/backend/handler/journal/blocks"
-	"burned-toast/backend/handler/journal_group"
 	"burned-toast/backend/handler/misc"
 )
 
@@ -29,28 +28,28 @@ func (a *App) Journal_Delete(currentGroupId int, journalId int) error {
 
 // ...
 
-func (a *App) JournalGroup_Create(groupSchema *journal_group.Schema) (*journal_group.Data, error) {
-	return journal_group.Create(groupSchema)
+func (a *App) JournalGroup_Create(groupSchema *journal.JournalGroupSchema) (*journal.JournalGroupData, error) {
+	return journal.Group_Create(groupSchema)
 }
 
-func (a *App) JournalGroup_Get(groupId int) (*journal_group.Data, error) {
-	return journal_group.Get(groupId)
+func (a *App) JournalGroup_Get(groupId int) (*journal.JournalGroupData, error) {
+	return journal.Group_Get(groupId)
 }
 
 func (a *App) JournalGroup_GetVirTreeData(groupId int) map[string]any {
-	return journal_group.GetVirTreeData(groupId)
+	return journal.Group_GetVirTreeData(groupId)
 }
 
-func (a *App) JournalGroup_Update(groupId int, newData *journal_group.UpdateSchema) (*journal_group.Data, error) {
-	return journal_group.Update(groupId, newData)
+func (a *App) JournalGroup_Update(groupId int, newData *journal.JournalGroupUpdateSchema) (*journal.JournalGroupData, error) {
+	return journal.Group_Update(groupId, newData)
 }
 
 func (a *App) JournalGroup_Delete(groupId int) error {
-	return journal_group.Delete(groupId)
+	return journal.Group_Delete(groupId)
 }
 
 func (a *App) JournalGroup_GetAll() []any {
-	return journal_group.GetAll()
+	return journal.Group_GetAll()
 }
 
 // ...
@@ -65,4 +64,17 @@ func (a *App) Misc_GetLibariesUsedList() (*misc.LibraryListData, error) {
 // ...
 func (a *App) Link_GetPageInformation(url string) (*blocks.WebPageInformation, error) {
 	return blocks.Link_GetPageInformation(url)
+}
+
+// ...
+func (a *App) Image_SaveImage(groupId int, fileName string, content string) string {
+	return blocks.Image_SaveImage(groupId, fileName, content)
+}
+
+func (a *App) Image_DeleteImage(groupId int, fileName string) {
+	blocks.Image_DeleteImage(groupId, fileName)
+}
+
+func (a *App) Image_GetFullPath(groupId int, fileName string) string {
+	return blocks.Image_GetFullPath(groupId, fileName)
 }

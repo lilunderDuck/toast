@@ -39,7 +39,7 @@ export interface IBlockUtils {
 
 export function createBlocks(
   buttonRow: IButtonRowUtils,
-  blockSetting: () => IEditorContext["blockSetting$"]
+  blockSetting: () => IEditorContext["blockSetting$"],
 ): IBlockUtils {
   const [data, setData] = createSignal<IBlockData[]>([])
 
@@ -63,7 +63,8 @@ export function createBlocks(
       //debug-start
       editorLog.log("(1) inserting block type", type, "with data", someData, "on the bottom with", someData)
       //debug-end
-      return setData(prev => [...prev, newData])
+      setData(prev => [...prev, newData])
+      return
     }
     
     const blockData = data()
@@ -73,7 +74,8 @@ export function createBlocks(
       //debug-start
       editorLog.log("(2) inserting block type", type, "with data", someData, "on the bottom with", someData)
       //debug-end
-      return setData(prev => [...prev, newData])
+      setData(prev => [...prev, newData])
+      return 
     }
     
     //debug-start
@@ -94,10 +96,16 @@ export function createBlocks(
 
       return prev
     })
+    //debug-start
+    editorLog.log("saved block data", blockId, "with", data)
+    //debug-end
   }
-
+  
   const deleteBlock: IBlockUtils["delete$"] = (blockId) => {
     setData(prev => thisArrayObjects(prev).remove$('id', blockId))
+    //debug-start
+    editorLog.log("block", blockId, "deleted")
+    //debug-end
   }
   
   return {

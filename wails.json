@@ -5,6 +5,7 @@
   "frontend:build": "deno task build",
   "frontend:dev:watcher": "deno task dev",
   "frontend:dev:serverUrl": "auto",
+  "devServer": "localhost:8000",
   "wailsjsdir": "./frontend/src",
   "assetdir": "./frontend/dist"
 }

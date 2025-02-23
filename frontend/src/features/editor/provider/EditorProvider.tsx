@@ -51,13 +51,21 @@ export function EditorProvider(props: ParentProps) {
   const wrappedSessionStorage: EditorSessionStorage = createStorage(sessionStorage)
   const buttonRow = createButtonRow(wrappedSessionStorage)
 
+  let previousOpenedDocumentId = -1
+  const update = () => {
+    if (previousOpenedDocumentId === -1) return
+    event.emit$('editor__onUpdate', {
+      id: previousOpenedDocumentId,
+      content: block.data$()
+    })
+  }
+
   const { blockSetting, defaultBlock } = loadBlockSettings()
   const block = createBlocks(buttonRow, () => blockSetting)
   block.insert$(null, defaultBlock.type$, defaultBlock.setting$.defaultValue$)
 
   const event = createEvent()
   const cache = new Map()
-  let previousOpenedDocumentId = -1
 
   //debug-start
   editorLog.log("Created with block setting", blockSetting)
@@ -101,13 +109,7 @@ export function EditorProvider(props: ParentProps) {
       isReadonly$: readonly,
       setIsReadonly$: setIsReadonly,
       open$: open,
-      update$() {
-        if (previousOpenedDocumentId === -1) return
-        event.emit$('editor__onUpdate', {
-          id: previousOpenedDocumentId,
-          content: block.data$()
-        })
-      }
+      update$: update
     }}>
       {props.children}
     </Context.Provider>

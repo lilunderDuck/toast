@@ -1,18 +1,40 @@
-package journal_group
+package journal
 
 import (
 	"burned-toast/backend/internals"
 	"burned-toast/backend/utils"
 	"os"
+	"time"
 
 	"github.com/akrylysov/pogreb"
 )
 
-func Create(groupSchema *Schema) (newGroupData *Data, anyError error) {
+type JournalGroupSchema struct {
+	Name        string `form:"name"        json:"name"      binding:"required"`
+	Description string `form:"description" json:"description,omitempty"`
+}
+
+type JournalGroupUpdateSchema struct {
+	Name        string      `form:"name"        json:"name,omitempty"`
+	Description string      `form:"description" json:"description,omitempty"`
+	Tree        VirTreeList `form:"tree"        json:"tree,omitempty"`
+	Item        int         `form:"item"        json:"item,omitempty"`
+}
+
+type JournalGroupData struct {
+	Id          int           `json:"id"                    cbor:"0,keyasint"`
+	Created     time.Duration `json:"created"               cbor:"1,keyasint"`
+	Modified    time.Duration `json:"modified,omitempty"    cbor:"2,keyasint,omitempty"`
+	Name        string        `json:"name"                  cbor:"3,keyasint"`
+	Description string        `json:"description,omitempty" cbor:"4,keyasint,omitempty"`
+	Tree        VirTreeData   `json:"tree"                  cbor:"5,keyasint,toarray"`
+}
+
+func Group_Create(groupSchema *JournalGroupSchema) (newGroupData *JournalGroupData, anyError error) {
 	stringRandomId, numberId := utils.GenerateRandomNumberId()
 
 	// Create new journal group data
-	data := Data{
+	data := JournalGroupData{
 		Name:        groupSchema.Name,
 		Description: groupSchema.Description,
 		Id:          numberId,
@@ -34,7 +56,7 @@ func Create(groupSchema *Schema) (newGroupData *Data, anyError error) {
 	return &data, nil
 }
 
-func Get(groupId int) (*Data, error) {
+func Group_Get(groupId int) (*JournalGroupData, error) {
 	if !IsGroupExist(groupId) {
 		return GroupNotFoundError(groupId)
 	}
@@ -43,7 +65,7 @@ func Get(groupId int) (*Data, error) {
 	thisGroupId := utils.IntToString(groupId)
 
 	// Try to get journal group data from cache.
-	var dataFromCache Data
+	var dataFromCache JournalGroupData
 	var cacheError error
 	internals.Cache_Update("journal-group", func(db *pogreb.DB) {
 		cacheError = internals.Cache_Get(db, thisGroupId, &dataFromCache)
@@ -58,7 +80,7 @@ func Get(groupId int) (*Data, error) {
 	// it will try to read the meta.dat file...
 	metaFilePath := GetGroupMetaFilePath(groupId)
 
-	var outData Data
+	var outData JournalGroupData
 	writeError := utils.BSON_ReadFile(metaFilePath, &outData)
 	// ...and if could not find it, well, this might be being corrupted or deleted.
 	if writeError != nil {
@@ -73,7 +95,7 @@ func Get(groupId int) (*Data, error) {
 	return &outData, nil
 }
 
-func GetVirTreeData(groupId int) map[string]any {
+func Group_GetVirTreeData(groupId int) map[string]any {
 	var outData map[string]any
 	internals.Cache_Update(utils.IntToString(groupId), func(db *pogreb.DB) {
 		outData = internals.Cache_GetAll(db)
@@ -82,9 +104,9 @@ func GetVirTreeData(groupId int) map[string]any {
 	return outData
 }
 
-func Update(groupId int, newData *UpdateSchema) (updatedGroupData *Data, anyError error) {
+func Group_Update(groupId int, newData *JournalGroupUpdateSchema) (updatedGroupData *JournalGroupData, anyError error) {
 	// Gets the previous data that has been saved
-	groupData, someError := Get(groupId)
+	groupData, someError := Group_Get(groupId)
 	if someError != nil {
 		return nil, someError
 	}
@@ -116,7 +138,7 @@ func Update(groupId int, newData *UpdateSchema) (updatedGroupData *Data, anyErro
 	return groupData, nil
 }
 
-func Delete(groupId int) error {
+func Group_Delete(groupId int) error {
 	// Firstly, it will delete from cache first
 	groupDataPath := GetGroupPath(groupId)
 	var updateError error
@@ -138,7 +160,7 @@ func Delete(groupId int) error {
 	return nil // ...and we're done
 }
 
-func GetAll() []any {
+func Group_GetAll() []any {
 	var out []any
 	internals.Cache_Update("journal-group", func(db *pogreb.DB) {
 		out = internals.Cache_GetAllValue(db)

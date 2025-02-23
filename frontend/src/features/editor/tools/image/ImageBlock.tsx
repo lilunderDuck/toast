@@ -1,16 +1,49 @@
-import { IBlockSetting } from "../../provider"
+import { lazy, Show } from "solid-js"
+// ...
+import { useJournalContext } from "~/features/journal"
+// ...
+import { IBlockSetting, useEditorContext } from "../../provider"
 import { IImageData } from "./Image"
-import { ImageInput } from "./ImageInput"
+import { ImageDataProvider, useImageDataContext } from "./ImageDataProvider"
+import { getImagePath } from "./utils"
 
 export function createImageBlock(): IBlockSetting<IImageData> {
+  const ImageInput = lazy(() => import('./ImageInput'))
+  const Image = lazy(() => import('./Image'))
+
+  const TheImage = () => {
+    const { data$ } = useImageDataContext()
+    const { sessionStorage$ } = useJournalContext()
+    const currentGroupId = sessionStorage$.get$('currentGroup').id
+    
+    return (
+      <Image 
+        name$={data$().imgName}
+        src$={getImagePath(currentGroupId, data$().imgName)}
+        description$={data$().description}
+      />
+    )
+  }
+
   return {
     displayName$: "Image",
     get defaultValue$() {
       return { imgName: '' }
     },
     blockComponent$(props) {
+      const { blocks$, isReadonly$ } = useEditorContext()
+
       return (
-        <ImageInput />
+        <ImageDataProvider 
+          dataIn$={props.dataIn$} 
+          onChange$={(newData) => blocks$.saveBlockData$(props.blockId$, newData)}
+        >
+          <Show when={isReadonly$()} fallback={
+            <ImageInput />
+          }>
+            <TheImage />
+          </Show>
+        </ImageDataProvider>
       )
     }
   }

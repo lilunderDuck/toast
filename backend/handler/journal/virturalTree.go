@@ -1,4 +1,4 @@
-package journal_group
+package journal
 
 // peak maximum data compression
 

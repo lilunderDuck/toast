@@ -21,6 +21,10 @@ func BytesToString(bytes []byte) string {
 	return string(bytes[:])
 }
 
+func StringToBytes(anyString string) []byte {
+	return []byte(anyString)
+}
+
 func MapToBinJSON(anyMap map[string]any) []byte {
 	json, encodeError := json.Marshal(anyMap)
 	if encodeError != nil {

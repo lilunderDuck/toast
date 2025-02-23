@@ -3,4 +3,16 @@ export interface IImageData {
   description?: string
 }
 
-export function Image() {}
+export interface IImageProps {
+  src$: string
+  name$: string
+  description$?: string
+}
+
+export default function Image(props: IImageProps) {
+  return (
+    <div>
+      <img src={props.src$} />
+    </div>
+  )
+}

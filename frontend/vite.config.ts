@@ -124,7 +124,15 @@ export default defineConfig(({ command }) => {
       ]
     },
     server: {
-      port: 1337
+      port: 1337,
+      cors: true,
+      proxy: {
+        '/data/': {
+          bypass() {
+            return false // I don't know what I am doing
+          }
+        }
+      }
     },
     resolve: {
       alias: getAliasPath(tsconfig, __dirname)

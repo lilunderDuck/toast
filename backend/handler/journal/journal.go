@@ -1,7 +1,6 @@
 package journal
 
 import (
-	"burned-toast/backend/handler/journal_group"
 	"burned-toast/backend/internals"
 	"burned-toast/backend/utils"
 	"time"
@@ -51,13 +50,12 @@ func Journal_Create(currentGroupId int, schema *JournalSchema) *JournalData {
 		Data:    []JournalContentData{},
 	}
 
-	utils.CreateDirectory(GetJournalsSavedFolder(currentGroupId))
 	utils.BSON_WriteFile(
 		GetJournalSavedFilePath(currentGroupId, newData.Id),
 		&newData,
 	)
 
-	journal_group.Update(currentGroupId, &journal_group.UpdateSchema{
+	Group_Update(currentGroupId, &JournalGroupUpdateSchema{
 		Item: numberId,
 	})
 
