@@ -40,7 +40,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
       prev[index] = newData
       context.onChange$(textsData())
       //debug-start
-      editorLog.log('[text] update text data at index', index, 'with', data, '. Data is', prev[index])
+      editorLog.logLabel('text', 'update text data at index', index, 'with', data, '. Data is', prev[index])
       //debug-end
       return prev
     })
@@ -55,7 +55,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
     })
     context.onChange$(textsData())
     //debug-start
-    editorLog.log('[text] Spawned new block')
+    editorLog.logLabel('text', 'Spawned new block')
     //debug-end
   }
 
@@ -67,7 +67,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
 
     context.onChange$(textsData())
     //debug-start
-    editorLog.log('[text] Deleted block at index', index)
+    editorLog.logLabel('text', 'Deleted block at index', index)
     //debug-end
   }
 

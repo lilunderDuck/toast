@@ -4,7 +4,7 @@ import { createStore, produce } from "solid-js/store"
 import { getRandomNumberFrom, thisArrayObjects } from "~/common"
 import { editorLog } from "~/features/debug"
 // ...
-import type { ITodoBlockData, TodoSchema, TodoSectionData, TodoSectionSchema } from "../TodoBlock"
+import type { ITodoBlockData, TodoSchema, TodoSectionData, TodoSectionSchema } from "./this"
 import type { ITodoDataProviderProps } from "./TodoDataProvider"
 
 export interface ITodoUtils {

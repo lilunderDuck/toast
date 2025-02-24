@@ -33,7 +33,9 @@ export default function ImageInput() {
     const currentGroupId = sessionStorage$.get$('currentGroup').id
 
     if (typeof targetFile === "string") {
+      //debug-start
       editorLog.logLabel("image", "loading image", targetFile)
+      //debug-end
       return api_getImageSavedPath(currentGroupId, targetFile)
     }
 

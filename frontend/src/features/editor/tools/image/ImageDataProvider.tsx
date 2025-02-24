@@ -26,7 +26,9 @@ export function ImageDataProvider(props: ParentProps<IImageDataProviderProps>) {
         }))
 
         props.onChange$(data())
+        //debug-start
         editorLog.logLabel("image", "new image data updated:", data())
+        //debug-end
       }
     }}>
       {props.children}

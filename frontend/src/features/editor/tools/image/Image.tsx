@@ -12,7 +12,7 @@ export interface IImageProps {
 export default function Image(props: IImageProps) {
   return (
     <div>
-      <img src={props.src$} />
+      <img src={props.src$} loading="lazy" />
     </div>
   )
 }

@@ -11,6 +11,7 @@ import stylex from "@stylexjs/stylex"
 import GalleryList from "./GalleryList"
 import { useGalleryDataContext } from "../data"
 import { Show } from "solid-js"
+import { useEditorContext } from "~/features/editor"
 
 const style = stylex.create({
   buttonRow: {
@@ -21,6 +22,7 @@ const style = stylex.create({
 export function GallerySideView() {
   const { sessionStorage$ } = useJournalContext()
   const { page$, galleryId$, addImages$ } = useGalleryDataContext()
+  const { isReadonly$ } = useEditorContext()
 
   const { fetch$, isLoading$ } = useResource(async(targetFile: File[]) => {
     const currentGroupId = sessionStorage$.get$('currentGroup').id
@@ -39,10 +41,12 @@ export function GallerySideView() {
       await fetch$(acceptedFiles)
     }
   })
+
+  const getGalleryListProps = () => isReadonly$() ? {} : dropzone.getRootProps()
   
   return (
     <div>
-      <GalleryList {...dropzone.getRootProps()} />
+      <GalleryList {...getGalleryListProps()} />
       <FlexCenterY {...stylex.attrs(style.buttonRow)}>
         <Button size$={ButtonSizeVariant.icon} onClick={() => page$.focusPrevious$()}>
           <BsCaretLeftFill />
