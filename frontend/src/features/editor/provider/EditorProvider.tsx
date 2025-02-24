@@ -1,7 +1,7 @@
 import { type Accessor, createContext, createSignal, type ParentProps, type Setter, useContext } from "solid-js"
 // ...
 import { editorLog } from "~/features/debug"
-import { createEvent, createStorage, type IStorage } from "~/utils"
+import { createEvent, createStorage, debounce, type IStorage } from "~/utils"
 // ...
 import { createBlocks, type IBlockUtils } from "./blocks"
 import type { IBlockSetting, EditorDocumentData, IBlockData } from "./blockData"
@@ -52,16 +52,24 @@ export function EditorProvider(props: ParentProps) {
   const buttonRow = createButtonRow(wrappedSessionStorage)
 
   let previousOpenedDocumentId = -1
-  const update = () => {
-    if (previousOpenedDocumentId === -1) return
+  const debouceUpdateData = debounce(() => {
     event.emit$('editor__onUpdate', {
       id: previousOpenedDocumentId,
       content: block.data$()
     })
+
+    //debug-start
+    editorLog.logLabel("internal", "document", previousOpenedDocumentId, "data updated")
+    //debug-end
+  }, 1000)
+  
+  const updateData = () => {
+    if (previousOpenedDocumentId === -1) return
+    debouceUpdateData()
   }
 
   const { blockSetting, defaultBlock } = loadBlockSettings()
-  const block = createBlocks(buttonRow, () => blockSetting)
+  const block = createBlocks(buttonRow, () => blockSetting, updateData)
   block.insert$(null, defaultBlock.type$, defaultBlock.setting$.defaultValue$)
 
   const event = createEvent()
@@ -109,7 +117,7 @@ export function EditorProvider(props: ParentProps) {
       isReadonly$: readonly,
       setIsReadonly$: setIsReadonly,
       open$: open,
-      update$: update
+      update$: updateData
     }}>
       {props.children}
     </Context.Provider>

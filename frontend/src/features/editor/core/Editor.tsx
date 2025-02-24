@@ -1,18 +1,20 @@
 import { For, Show } from "solid-js"
 // ...
 import { editorLog } from "~/features/debug"
-import { debounce } from "~/utils"
+import { mergeClassname } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./Editor.module.css"
+import __scrollbarStyle from "~/assets/style/scrollbar.module.css"
 // ...
 import { type IBlockData, useEditorContext } from "../provider"
-import { dontUpdateIfYouPressSomeKey } from "../utils"
 import { BlockButtonRow } from "../components"
 
 const style = stylex.create({
   editor: {
     paddingInline: 10,
+    maxHeight: 'calc(100vh - 60px)',
+    paddingBottom: '20rem'
   },
   blockList: {
     width: '100%',
@@ -30,7 +32,7 @@ const style = stylex.create({
 })
 
 export function Editor() {
-  const { blocks$, blockSetting$, buttonRow$, isReadonly$, update$ } = useEditorContext()
+  const { blocks$, blockSetting$, buttonRow$, isReadonly$ } = useEditorContext()
 
   const mouseHoverTheBlock: EventHandler<"div", "onMouseEnter"> = (mouseEvent) => {
     const currentTarget = mouseEvent.currentTarget
@@ -59,19 +61,13 @@ export function Editor() {
     )
   }
 
-  const updateDebouce = debounce(update$, 1000)
-
-  const onPressingYourKeyboard: EventHandler<"div", "onKeyUp"> = (keyboardEvent) => {
-    const keyYouJustPress = keyboardEvent.key.toLowerCase()
-    if (dontUpdateIfYouPressSomeKey(keyYouJustPress)) {
-      return // don't call update
-    }
-
-    updateDebouce()
-  }
-
   return (
-    <div {...stylex.attrs(style.editor)} onKeyUp={onPressingYourKeyboard}>
+    <div class={mergeClassname(
+      __scrollbarStyle.scrollbar,
+      __scrollbarStyle.scrollbarVertical,
+      __scrollbarStyle.invsScrollbar,
+      stylex.attrs(style.editor)
+    )}>
       <div {...stylex.attrs(style.blockList)}>
         <For each={blocks$.data$()}>
           {it => <EditorBlock {...it} />}

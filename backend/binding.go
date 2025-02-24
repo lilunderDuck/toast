@@ -67,14 +67,18 @@ func (a *App) Link_GetPageInformation(url string) (*blocks.WebPageInformation, e
 }
 
 // ...
-func (a *App) Image_SaveImage(groupId int, fileName string, content string) string {
-	return blocks.Image_SaveImage(groupId, fileName, content)
+func (a *App) Image_SaveImage(groupId int, fileName string, content string) {
+	blocks.Image_SaveImage(groupId, fileName, content)
 }
 
 func (a *App) Image_DeleteImage(groupId int, fileName string) {
 	blocks.Image_DeleteImage(groupId, fileName)
 }
 
-func (a *App) Image_GetFullPath(groupId int, fileName string) string {
-	return blocks.Image_GetFullPath(groupId, fileName)
+func (a *App) Image_DeleteGalleryImage(groupId int, galleryId int, fileName string) {
+	blocks.Image_DeleteGalleryImage(groupId, galleryId, fileName)
+}
+
+func (a *App) Image_SaveGalleryImage(groupId int, galleryId int, fileName string, content string) {
+	blocks.Image_SaveGalleryImage(groupId, galleryId, fileName, content)
 }

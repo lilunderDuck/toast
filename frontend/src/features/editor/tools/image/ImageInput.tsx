@@ -3,15 +3,13 @@ import { onMount, Show } from "solid-js"
 import { createDropzone } from "@soorria/solid-dropzone"
 // ...
 import { FlexCenter, Input, Tooltip } from "~/components"
-import { Image_DeleteImage } from "~/wailsjs/go/backend/App"
+import { api_saveImage, api_deleteImage, api_getImageSavedPath } from "~/api/media"
 import { useJournalContext } from "~/features/journal"
 import { useResource } from "~/hook"
 import { editorLog } from "~/features/debug"
 // ...
 import stylex from "@stylexjs/stylex"
-import { api_saveImage, getImagePath } from "./utils"
 import { useImageDataContext } from "./ImageDataProvider"
-import { useEditorContext } from "../.."
 
 const style = stylex.create({
   theInput: {
@@ -28,31 +26,29 @@ const style = stylex.create({
 
 export default function ImageInput() {
   const { sessionStorage$ } = useJournalContext()
-  const { update$: updateEditorData } = useEditorContext()
   const { update$, data$ } = useImageDataContext()
 
-  let prevImageName: string = data$().imgName
+  let prevImageName = data$().imgName
   const { fetch$, isLoading$, data$: localImageUrl } = useResource(async(targetFile: File | string) => {
     const currentGroupId = sessionStorage$.get$('currentGroup').id
 
     if (typeof targetFile === "string") {
       editorLog.logLabel("image", "loading image", targetFile)
-      return getImagePath(currentGroupId, targetFile)
+      return api_getImageSavedPath(currentGroupId, targetFile)
     }
 
     const newFileName = await api_saveImage(currentGroupId, targetFile)
 
     if (prevImageName) {
-      await Image_DeleteImage(currentGroupId, prevImageName)
+      await api_deleteImage(currentGroupId, prevImageName)
     }
 
     update$({
       imgName: newFileName
     })
-    updateEditorData()
 
     prevImageName = newFileName
-    return getImagePath(currentGroupId, newFileName)
+    return api_getImageSavedPath(currentGroupId, newFileName)
   })
 
   const dropzone = createDropzone({

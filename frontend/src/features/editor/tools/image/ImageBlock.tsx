@@ -1,11 +1,11 @@
 import { lazy, Show } from "solid-js"
 // ...
 import { useJournalContext } from "~/features/journal"
+import { api_getImageSavedPath } from "~/api/media"
 // ...
 import { IBlockSetting, useEditorContext } from "../../provider"
 import { IImageData } from "./Image"
 import { ImageDataProvider, useImageDataContext } from "./ImageDataProvider"
-import { getImagePath } from "./utils"
 
 export function createImageBlock(): IBlockSetting<IImageData> {
   const ImageInput = lazy(() => import('./ImageInput'))
@@ -19,7 +19,7 @@ export function createImageBlock(): IBlockSetting<IImageData> {
     return (
       <Image 
         name$={data$().imgName}
-        src$={getImagePath(currentGroupId, data$().imgName)}
+        src$={api_getImageSavedPath(currentGroupId, data$().imgName)}
         description$={data$().description}
       />
     )
