@@ -26,19 +26,18 @@ export function createPageUtils(galleryId: number, wrappedLocalStorage: GalleryL
   }
 
   const focus = (pageIndex: number) => {
-    let pageRef = document.getElementById(pageName(pageIndex))
-    if (!pageRef) {
-      //debug-start
-      editorLog.logLabel("gallery", "there is nothing else to scroll")
-      //debug-end
-      return
+    let pageRefs = document.querySelectorAll(`#gallery-${galleryId} #${pageName(pageIndex)}`)
+    for (const ref of pageRefs) {
+      ref.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center'
+      })
     }
-
-    pageRef.scrollIntoView()
 
     wrappedLocalStorage.set$(`gallery-${galleryId}-currentPage`, pageIndex)
     //debug-start
-    editorLog.logLabel("gallery", "focused page/page name/element:", pageIndex, pageName(pageIndex), pageRef)
+    editorLog.logLabel("gallery", "focused page/page name/element:", pageIndex, pageName(pageIndex), pageRefs)
     //debug-end
   }
 

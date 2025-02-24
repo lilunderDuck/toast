@@ -1,27 +1,20 @@
 import { createDropzone } from "@soorria/solid-dropzone"
-import { BsCaretLeftFill, BsCaretRightFill } from "solid-icons/bs"
+import { lazy, Show } from "solid-js"
+import { BsFullscreen } from "solid-icons/bs"
 // ...
-import { api_saveGalleryImage, api_saveImage } from "~/api/media"
-import { Button, ButtonSizeVariant, FlexCenterY, Spacer } from "~/components"
+import { api_saveGalleryImage } from "~/api/media"
+import { Button, ButtonSizeVariant, createLazyLoadedDialog, Tooltip } from "~/components"
 import { useJournalContext } from "~/features/journal"
 import { useResource } from "~/hook"
-// ...
-import stylex from "@stylexjs/stylex"
+import { useEditorContext } from "~/features/editor"
 // ...
 import GalleryList from "./GalleryList"
 import { useGalleryDataContext } from "../data"
-import { Show } from "solid-js"
-import { useEditorContext } from "~/features/editor"
-
-const style = stylex.create({
-  buttonRow: {
-    gap: 10
-  }
-})
+import GalleryButtonRow from "./GalleryButtonRow"
 
 export function GallerySideView() {
   const { sessionStorage$ } = useJournalContext()
-  const { page$, galleryId$, addImages$ } = useGalleryDataContext()
+  const { galleryId$, addImages$ } = useGalleryDataContext()
   const { isReadonly$ } = useEditorContext()
 
   const { fetch$, isLoading$ } = useResource(async(targetFile: File[]) => {
@@ -43,25 +36,24 @@ export function GallerySideView() {
   })
 
   const getGalleryListProps = () => isReadonly$() ? {} : dropzone.getRootProps()
+  const galleryDialog = createLazyLoadedDialog(
+    lazy(() => import("./dialog/GalleryDialog"))
+  )
   
   return (
-    <div>
+    <div id={`gallery-${galleryId$}`}>
       <GalleryList {...getGalleryListProps()} />
-      <FlexCenterY {...stylex.attrs(style.buttonRow)}>
-        <Button size$={ButtonSizeVariant.icon} onClick={() => page$.focusPrevious$()}>
-          <BsCaretLeftFill />
-        </Button>
-        <Button size$={ButtonSizeVariant.icon} onClick={() => page$.focusNext$()}>
-          <BsCaretRightFill />
-        </Button>
-        <Spacer />
+      <GalleryButtonRow>
+        <Tooltip label$="Open in full view">
+          <Button size$={ButtonSizeVariant.icon} onClick={() => galleryDialog.show$()}>
+            <BsFullscreen />
+          </Button>
+        </Tooltip>
         <Show when={isLoading$()}>
-          <div>Loading</div>
+          <div>Loading...</div>
         </Show>
-        <div>
-          {page$.currentPage$() + 1} / {page$.totalPage$()}
-        </div>
-      </FlexCenterY>
+      </GalleryButtonRow>
+      <galleryDialog.Modal$ />
     </div>
   )
 }

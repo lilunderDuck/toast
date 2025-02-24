@@ -1,10 +1,10 @@
-import { For } from "solid-js"
+import { For, Show, splitProps } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 // ...
 import { FlexCenterY, Tooltip } from "~/components"
-// import { useEditorContext } from "~/features/editor"
+import { useEditorContext } from "~/features/editor"
 import { mergeClassname } from "~/utils"
 import { api_getGallerySavedPath } from "~/api/media"
 import { useJournalContext } from "~/features/journal"
@@ -15,43 +15,64 @@ import { useGalleryDataContext } from "../data"
 const style = stylex.create({
   list: {
     borderRadius: 6,
-    backgroundColor: 'var(--gray3)',
     marginBottom: 10,
     gap: 10
+  },
+  list_normalView: {
+    backgroundColor: 'var(--gray3)',
+  },
+  list_fullView: {
+    backgroundColor: 'transparent'
+  },
+  item: {
+    height: 'auto !important'
   }
 })
 
 interface IGalleryListProps extends HTMLAttributes<"div"> {
-  // define your component props here
+  isOnFullScreen$?: boolean
 }
 
 export default function GalleryList(props: IGalleryListProps) {
-  // const { isReadonly$ } = useEditorContext()
+  const { isReadonly$ } = useEditorContext()
   const { sessionStorage$ } = useJournalContext()
   const { images$, page$, galleryId$ } = useGalleryDataContext()
 
+  const [other, divProps] = splitProps(props, ["isOnFullScreen$"])
+
+  const Content = () => (
+    <FlexCenterY class={mergeClassname(
+      divProps, 
+      __scrollbarStyle.scrollbarHorizontal,
+      __scrollbarStyle.invsScrollbar,
+      stylex.attrs(
+        style.list,
+        other.isOnFullScreen$ ? style.list_fullView : style.list_normalView
+      )
+    )} {...divProps}>
+      <For each={images$()}>
+        {(it, index) => (
+          <GalleryItem 
+            id={page$.pageIndexName$(index())} 
+            src$={api_getGallerySavedPath(
+              sessionStorage$.get$('currentGroup').id,
+              galleryId$,
+              it
+            )}
+          />
+        )}
+      </For>
+      <GalleryItem id="not-do-anything" />
+    </FlexCenterY>
+  )
+
   return (
-    <Tooltip label$="Choose multiple images">
-      <FlexCenterY class={mergeClassname(
-        props, 
-        __scrollbarStyle.scrollbarHorizontal,
-        __scrollbarStyle.invsScrollbar,
-        stylex.attrs(style.list)
-      )} {...props}>
-        <For each={images$()}>
-          {(it, index) => (
-            <GalleryItem 
-              id={page$.pageIndexName$(index())} 
-              src$={api_getGallerySavedPath(
-                sessionStorage$.get$('currentGroup').id,
-                galleryId$,
-                it
-              )} 
-            />
-          )}
-        </For>
-        <GalleryItem id="not-do-anything" />
-      </FlexCenterY>
-    </Tooltip>
+    <Show when={isReadonly$() || other.isOnFullScreen$} fallback={
+      <Tooltip label$="Choose multiple images">
+        <Content />
+      </Tooltip>
+    }>
+      <Content />
+    </Show>
   )
 }

@@ -1,5 +1,6 @@
-import { type TextData, Text } from "../components"
-import { IBlockSetting, useEditorContext } from "../provider"
+import { Text } from "./Text"
+import { IBlockSetting, useEditorContext } from "../../provider"
+import { TextData } from "./data"
 
 export function createTextBlock(): IBlockSetting<TextData[]> {
   return {
