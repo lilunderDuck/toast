@@ -25,8 +25,8 @@ const style = stylex.create({
     width: "100%",
     height: "100%",
     zIndex: 900,
-    backdropBlur: "blur(4px)",
-    backgroundColor: "#00000059",
+    backdropFilter: "blur(4px)",
+    backgroundColor: "#000000ab",
   },
   content: {
     paddingInline: 15,
