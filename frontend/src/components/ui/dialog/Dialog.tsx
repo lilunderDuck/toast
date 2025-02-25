@@ -18,7 +18,6 @@ const style = stylex.create({
     width: "100%",
     height: "100%",
     position: "absolute",
-    paddingBlock: 20,
     alignItems: "flex-start",
   },
   overlay: {
