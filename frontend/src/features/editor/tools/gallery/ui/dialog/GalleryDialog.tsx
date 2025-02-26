@@ -1,12 +1,15 @@
-import { Button, ButtonSizeVariant, DialogContent, Flex } from "~/components"
+import { createEffect } from "solid-js"
+// ...
+import { DialogContent, Flex } from "~/components"
+import { ImageDisplay, useZoomAndPanContext, ZoomAndPanProvider, ZoomButtonRow } from "~/features/zoom-n-pan"
+import { createStorage } from "~/utils"
+import { api_getGallerySavedPath } from "~/api/media"
 // ...
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
 // ...
-import GalleryFullViewList from "./GalleryFullViewList"
 import GalleryButtonRow from "../GalleryButtonRow"
-import { BsDash, BsPlus } from "solid-icons/bs"
-import { createSignal, Match, Switch } from "solid-js"
+import { useGalleryDataContext } from "../../data"
 
 const style = stylex.create({
   content: {
@@ -34,46 +37,40 @@ const style = stylex.create({
     paddingBottom: 10,
     position: 'absolute',
     zIndex: 10
-  },
-  scaleText: {
-    minWidth: '3rem'
   }
 })
 
 export default function GalleryDialog() {
-  const [scale, setScale] = createSignal(1)
+  const { images$, page$, galleryId$ } = useGalleryDataContext()
+  // TODO: fix this weird hack
+  const wrappedSessionStorage = createStorage(sessionStorage)
 
-  const ScaleButtonRow = () => (
-    <>
-      <Button size$={ButtonSizeVariant.icon} onClick={() => setScale(prev => prev - 0.25)}>
-        <BsDash />
-      </Button>
-      <Button size$={ButtonSizeVariant.icon} onClick={() => setScale(prev => prev + 0.25)}>
-        <BsPlus />
-      </Button>
-      <span {...stylex.attrs(style.scaleText)}>
-        <Switch fallback={<>{scale()}x</>}>
-          <Match when={scale() >= 5}>
-            Absurdly large ({scale()}x)
-          </Match>
-          <Match when={scale() == 0}>
-            *Vanished*
-          </Match>
-        </Switch>
-      </span>
-    </>
-  )
+  const AutoChangeImage = () => {
+    const { changeDisplayImage$ } = useZoomAndPanContext()
+    
+    createEffect(() => {
+      const imageChanged = page$.currentPage$()
+      changeDisplayImage$(api_getGallerySavedPath(
+        wrappedSessionStorage.get$('currentGroup').id,
+        galleryId$,
+        images$()[imageChanged]
+      ))
+    })
+
+    return undefined // renders nothing
+  }
 
   return (
     <DialogContent {...stylex.attrs(style.content)}>
-      <div {...stylex.attrs(style.innerContent)}>
+      <ZoomAndPanProvider>
+        <AutoChangeImage />
         <Flex {...stylex.attrs(style.buttonRow)}>
           <GalleryButtonRow>
-            <ScaleButtonRow />
+            <ZoomButtonRow />
           </GalleryButtonRow>
         </Flex>
-        <GalleryFullViewList scale$={scale()} />
-      </div>
+        <ImageDisplay />
+      </ZoomAndPanProvider>
     </DialogContent>
   )
 }
