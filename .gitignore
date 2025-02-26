@@ -15,3 +15,4 @@ wailsjs
 dist
 build/bin
 *.syso
+build/tools/lib_used.json
