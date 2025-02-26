@@ -40,11 +40,11 @@ export async function fetchNpmData() {
   const devDeps = Object.entries(packageJson.devDependencies)
   
   for (const [packageName, packageVersion] of deps) {
-    await fetchNpmRegistry(packageName, packageVersion, 'dep', stuff)
+    await fetchNpmRegistry(packageName, packageVersion, 0, stuff)
   }
 
   for (const [packageName, packageVersion] of devDeps) {
-    await fetchNpmRegistry(packageName, packageVersion, 'devDep', stuff)
+    await fetchNpmRegistry(packageName, packageVersion, 1, stuff)
   }
 
   console.log(stuff)

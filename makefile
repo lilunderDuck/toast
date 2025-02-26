@@ -1,5 +1,5 @@
 cold_start:
-	cd ./build/tools/ && go run binary_json.go
+	cd ./build/tools/ && deno -A fetchPackageJson.ts && go run binary_json.go
 
 dev:
 	wails dev
