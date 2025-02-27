@@ -1,27 +1,50 @@
-import { BsPlus } from "solid-icons/bs"
-import { onMount, Show } from "solid-js"
+import { BsFullscreen, BsPlus } from "solid-icons/bs"
+import { lazy, onMount, Show } from "solid-js"
 import { createDropzone } from "@soorria/solid-dropzone"
 // ...
-import { FlexCenter, Input, Tooltip } from "~/components"
+import { Button, ButtonSizeVariant, createLazyLoadedDialog, FlexCenter, FlexCenterY, Input, SpinningCube, Tooltip } from "~/components"
 import { api_saveImage, api_deleteImage, api_getImageSavedPath } from "~/api/media"
 import { useJournalContext } from "~/features/journal"
 import { useResource } from "~/hook"
 import { editorLog } from "~/features/debug"
+import { mergeClassname } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
+import __style from "./ImageInput.module.css"
+// ...
 import { useImageDataContext } from "./ImageDataProvider"
 
 const style = stylex.create({
   theInput: {
     position: 'relative',
     width: '100%',
-    marginBottom: 10
+    marginBottom: 10,
+    backgroundColor: 'var(--gray3)',
+    borderRadius: 6,
+    minWidth: '18rem'
   },
   imageEmpty: {
-    height: '15rem',
+    height: '100%',
     width: '100%',
-    position: 'absolute',
   },
+  loading: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'var(--gray5)',
+    opacity: 0.7
+  },
+  displayOnTop: {
+    position: 'absolute',
+    top: 0,
+  },
+  input: {
+    gap: 10
+  },
+  fullScreenButton: {
+    right: 0,
+    paddingTop: 5,
+    paddingRight: 5
+  }
 })
 
 export default function ImageInput() {
@@ -72,24 +95,46 @@ export default function ImageInput() {
     if (prevImageName === '') return 
     fetch$(prevImageName)
   })
+
+  const imageFullviewDialog = createLazyLoadedDialog(
+    lazy(() => import("./ImageFullviewDialog")),
+    () => ({
+      imageSrc$: localImageUrl()
+    })
+  )
   
   return (
     <div>
-      <Tooltip label$="Click to choose an image">
-        <div {...dropzone.getRootProps()} {...stylex.attrs(style.theInput)}>
-          <Show when={localImageUrl()} fallback={
-            <FlexCenter {...stylex.attrs(style.imageEmpty)}>
-              <BsPlus />
-            </FlexCenter>
-          }>
-            <img src={localImageUrl()} />
-          </Show>
-        </div>
-        <Show when={isLoading$()}>
-          <div>
-            Uploading image...
+      <Tooltip label$="Click to choose an image" class={__style.input}>
+        <div {...stylex.attrs(style.theInput)}>
+          <div {...dropzone.getRootProps()}>
+            <Show when={localImageUrl()} fallback={
+              <FlexCenter {...stylex.attrs(style.imageEmpty)}>
+                <BsPlus />
+              </FlexCenter>
+            }>
+              <img src={localImageUrl()} />
+            </Show>
+            <Show when={isLoading$()}>
+              <FlexCenter {...stylex.attrs(style.displayOnTop, style.loading)}>
+                <SpinningCube cubeSize$={36} />
+              </FlexCenter>
+            </Show>
           </div>
-        </Show>
+          <div class={mergeClassname(
+            stylex.attrs(style.displayOnTop, style.fullScreenButton),
+            __style.fullScreenButton
+          )}>
+            <Tooltip label$="Open in full view">
+              <Button size$={ButtonSizeVariant.icon} onClick={() => {
+                imageFullviewDialog.show$()
+                console.log('clicked')
+              }}>
+                <BsFullscreen />
+              </Button>
+            </Tooltip>
+          </div>
+        </div>
       </Tooltip>
       <Input 
         placeholder="Optional description here" 
@@ -97,6 +142,7 @@ export default function ImageInput() {
         value={data$().description}
         onInput={updateDescription}
       />
+      <imageFullviewDialog.Modal$ />
     </div>
   )
 }

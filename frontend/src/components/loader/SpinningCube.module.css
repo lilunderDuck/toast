@@ -1,0 +1,10 @@
+.this-cube {
+  --half-of-the-cube-size: calc(var(--cube-size) / 2);
+  --reverse-half-of-the-cube-size: calc(-1 * var(--cube-size) / 2);
+  --top-face-color: #ffc75e;
+  --right-face-color: #eb4334;
+  --bottom-face-color: #eb7134;
+  --left-face-color: #34b4eb;
+  --front-face-color: #ff78d0;
+  --back-face-color: #ff5e81;
+}
