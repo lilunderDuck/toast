@@ -1,9 +1,9 @@
 import { Accessor, createContext, createSignal, ParentProps, Signal, useContext } from "solid-js"
 // ...
 import { editorLog } from "~/features/debug"
-import { array_insert } from "~/common"
+import { array_insert, getRandomNumberFrom } from "~/common"
 // ...
-import { TextData } from "./data"
+import { TextData, TextDataAttribute } from "./data"
 
 interface ITextProviderProps {
   inputData$?: TextData[]
@@ -14,14 +14,17 @@ interface ITextContext {
   textsData$: Accessor<TextData[]>
   updateData$(index: number, data: Partial<TextData>): void
   spawnNewTextInput$(index: number): void
+  addNewLine$(currentIndex: number): void
   deleteInput$(index: number): void
   onChange$(value: TextData[]): void
   focusState$: Signal<number>
+  readonly THIS_TEXT_BLOCK_ID$: `t-${number}`
 }
 
 const Context = createContext<ITextContext>()
 
 export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
+  const thisTextBlockId = `t-${getRandomNumberFrom(1, 999_999_999)}` as const
   const [textsData, setTextsData] = createSignal<TextData[]>(props.inputData$ ?? [
     { text: '' }
   ])
@@ -37,6 +40,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
         }
       }
 
+      // @ts-ignore
       prev[index] = newData
       context.onChange$(textsData())
       //debug-start
@@ -61,9 +65,19 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
 
   const deleteInput = (index: number) => {
     setTextsData(prev => {
+      const previousBlock = textsData()[index - 1]
+      if (
+        previousBlock !== undefined &&
+        previousBlock === TextDataAttribute.newLine
+      ) {
+        prev.splice(index - 1, 2)
+        return [...prev]
+      }
+
       prev.splice(index, 1)
       return [...prev]
     })
+
 
     context.onChange$(textsData())
     //debug-start
@@ -71,13 +85,27 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
     //debug-end
   }
 
+  const addNewLine = (currentIndex: number) => {
+    setTextsData(prev => {
+      array_insert(prev, currentIndex + 1, TextDataAttribute.newLine, {
+        text: ''
+      })
+
+      return [...prev]
+    })
+
+    // setCaretToTheEnd(document.querySelector(`#${thisTextBlockId} [data-index="${currentIndex + 2}"] [contenteditable]`)!)
+  }
+
   const context = {
     focusState$: createSignal(0),
+    addNewLine$: addNewLine,
     textsData$: textsData,
     updateData$: updateData,
     spawnNewTextInput$: spawnNewTextInput,
     deleteInput$: deleteInput,
-    onChange$: props.onChange$
+    onChange$: props.onChange$,
+    THIS_TEXT_BLOCK_ID$: thisTextBlockId
   }
 
   return (

@@ -1,4 +1,4 @@
-import { For, Show } from "solid-js"
+import { For, lazy, Match, Show, Switch } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./Text.module.css"
@@ -6,65 +6,48 @@ import __style from "./Text.module.css"
 import { FlexCenterY } from "~/components"
 import { useEditorContext } from "~/features/editor/provider"
 // ...
-import { TextRenderer } from "./TextRenderer"
-import TextInput from "./TextInput"
-import { TextDataProvider, useTextDataContext } from "./TextProvider"
-import TextInputButtonRow from "./TextInputButtonRow"
-import { TextData } from "./data"
+import { BreakLine, TextInput, TextInputButtonRow } from "./ui"
+import { useTextDataContext, TextDataAttribute, TextOption } from "./provider"
 
 const style = stylex.create({
   texts: {
-    gap: 10,
     flexWrap: 'wrap'
   },
-  textinput: {
-    paddingInline: 10,
-    paddingBlock: 2,
-    borderRadius: 6,
-    backgroundColor: 'var(--gray5)',
-    willChange: 'transform',
-    width: 'fit-content'
-  },
-  noStupidOutlineThing: {
-    border: 'none',
-    outline: 'none',
+  textGap: {
+    gap: 10,
   }
 })
 
-interface ITextProps {
-  onChange$(value: TextData[]): void
-  dataIn$: TextData[]
-}
-
-export function Text(props: ITextProps) {
+export function Text() {
   const { isReadonly$ } = useEditorContext()
-
-  const __Text = () => {
-    const { textsData$ } = useTextDataContext()
-
-    return (
-      <For each={textsData$()}>
-        {(it, index) => (
-          <Show when={isReadonly$()} fallback={
-            <TextInput
-              value$={it.text}
-              currentIndex$={index()}
-            >
-              <TextInputButtonRow currentIndex$={index()} />
-            </TextInput>
-          }>
-            <TextRenderer {...it} />
-          </Show>
-        )}
-      </For>
-    )
-  }
+  const { textsData$, THIS_TEXT_BLOCK_ID$ } = useTextDataContext()
+  const TextRenderer = lazy(() => import("./TextRenderer"))
 
   return (
-    <TextDataProvider inputData$={props.dataIn$} onChange$={props.onChange$}>
-      <FlexCenterY {...stylex.attrs(style.texts)}>
-        <__Text />
-      </FlexCenterY>
-    </TextDataProvider>
+    <FlexCenterY {...stylex.attrs(
+      style.texts,
+      isReadonly$() ? {} : style.textGap
+    )} id={THIS_TEXT_BLOCK_ID$}>
+      <For each={textsData$()}>
+        {(it, index) => (
+          <Switch fallback={
+            <Show when={isReadonly$()} fallback={
+              <TextInput
+                value$={(it as TextOption).text}
+                currentIndex$={index()}
+              >
+                <TextInputButtonRow currentIndex$={index()} />
+              </TextInput>
+            }>
+              <TextRenderer {...it as TextOption} />
+            </Show>
+          }>
+            <Match when={it === TextDataAttribute.newLine}>
+              <BreakLine />
+            </Match>
+          </Switch>
+        )}
+      </For>
+    </FlexCenterY>
   )
 }

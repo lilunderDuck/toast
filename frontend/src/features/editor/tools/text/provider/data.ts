@@ -4,13 +4,12 @@ export const enum SubOrSupscript {
   superscript
 }
 
-export type TextData = {
+export const enum TextDataAttribute {
+  newLine
+}
+
+export type TextOption = {
   text: string
-  // ...
-  bold?: boolean
-  italic?: boolean
-  strikethrough?: boolean
-  underline?: boolean
   // ...
   subOrSupscript?: SubOrSupscript
   // ...
@@ -18,3 +17,5 @@ export type TextData = {
   link?: string
   bgColor?: string
 }
+
+export type TextData = TextOption | TextDataAttribute

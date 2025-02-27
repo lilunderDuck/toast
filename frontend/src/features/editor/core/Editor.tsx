@@ -19,7 +19,6 @@ const style = stylex.create({
   blockList: {
     width: '100%',
     height: '100%',
-    paddingRight: '4rem'
   },
   blockSetting: {
     position: 'absolute',
@@ -75,7 +74,7 @@ export function Editor() {
       </div>
       <Show when={!isReadonly$()}>
         <div {...stylex.attrs(style.blockSetting)} style={{
-          '--y': `${buttonRow$.currentButtonRowYPos$().y}px`,
+          '--y': `${buttonRow$.currentButtonRowYPos$().y - 40}px`,
           // '--x': `${buttonRow$.currentButtonRowYPos$().x}px`,
           '--x': `0px`,
         }}>

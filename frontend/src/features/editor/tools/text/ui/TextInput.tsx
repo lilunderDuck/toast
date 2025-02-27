@@ -1,16 +1,19 @@
+import { ParentProps } from "solid-js"
+// ...
 import stylex from "@stylexjs/stylex"
 import __style from "./TextInput.module.css"
-import { ParentProps } from "solid-js"
+// ...
 import { FlexCenterY } from "~/components"
-import { useTextDataContext } from "./TextProvider"
 import { setCaretToTheEnd } from "~/features/editor/utils"
+// ...
+import { useTextDataContext } from "../provider"
 
 const style = stylex.create({
   textinput: {
     paddingInline: 10,
     paddingBlock: 2,
     borderRadius: 6,
-    backgroundColor: 'var(--gray5)',
+    backgroundColor: 'var(--gray3)',
     willChange: 'transform',
     marginBottom: 10
   },
@@ -32,16 +35,18 @@ interface ITextInputProps {
   currentIndex$: number
 }
 
-export default function TextInput(props: ParentProps<ITextInputProps>) {
-  const { updateData$, focusState$ } = useTextDataContext()
+export function TextInput(props: ParentProps<ITextInputProps>) {
+  const { updateData$, focusState$, addNewLine$ } = useTextDataContext()
   const [, setWhatInputIsFocused] = focusState$
 
   let divAsInputRef!: Ref<"div">
   const whenYouTypingStuff: EventHandler<"div", "onKeyDown"> = (keyboardEvent) => {
     const keyYouPress = keyboardEvent.key.toLowerCase()
 
-    if (keyYouPress === 'enter') { // don't make new line
+    if (keyYouPress === 'enter') {
       keyboardEvent.preventDefault()
+      addNewLine$(props.currentIndex$)
+      return
     }
 
     if (dontUpdateIfYouPressSomeKey(keyYouPress)) {
@@ -63,7 +68,7 @@ export default function TextInput(props: ParentProps<ITextInputProps>) {
     const dontUpdateThose = [
       'control', 
       'shift', 
-      'enter'
+      'tab',
     ].includes(keyYouPress)
 
     const containArrowKey = keyYouPress.includes('arrow')

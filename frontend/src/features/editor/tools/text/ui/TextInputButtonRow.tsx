@@ -1,9 +1,12 @@
 import { BsGearFill, BsPlus, BsTrashFill } from "solid-icons/bs"
-import { FlexCenterY, createLazyLoadedDropdownMenu } from "~/components"
+import { lazy, Show } from "solid-js"
+// ...
 import __style from "./TextInput.module.css"
 import stylex from "@stylexjs/stylex"
-import { useTextDataContext } from "./TextProvider"
-import { lazy, Show } from "solid-js"
+// ...
+import { FlexCenterY, createLazyLoadedDropdownMenu } from "~/components"
+// ...
+import { useTextDataContext } from "../provider"
 
 interface ITextInputButtonRowProps extends HTMLAttributes<"div"> {
   currentIndex$: number
@@ -17,7 +20,7 @@ const style = stylex.create({
   }
 })
 
-export default function TextInputButtonRow(props: ITextInputButtonRowProps) {
+export function TextInputButtonRow(props: ITextInputButtonRowProps) {
   const { textsData$, spawnNewTextInput$, deleteInput$, focusState$ } = useTextDataContext()
   const [whatInputIsFocused] = focusState$
 

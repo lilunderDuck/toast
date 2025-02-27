@@ -1,7 +1,6 @@
 import stylex from "@stylexjs/stylex"
 import { createSignal, type Setter } from "solid-js"
 import {
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuGroupLabel,
@@ -13,9 +12,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "~/components"
-import { TextData } from "./data"
-import { useTextDataContext } from "./TextProvider"
-import { SubOrSupscript } from "./data"
+import { useTextDataContext, SubOrSupscript, TextData } from "../provider"
 
 const style = stylex.create({
   menu: {
@@ -36,10 +33,6 @@ interface ITextInputMenuProps {
 export default function TextInputMenu(props: ITextInputMenuProps) {
   const { updateData$ } = useTextDataContext()
 
-  const [bold, setBold] = createSignal(props.data$?.bold ?? false)
-  const [italic, setItalic] = createSignal(props.data$?.italic ?? false)
-  const [strikethrough, setStrikethrough] = createSignal(props.data$?.strikethrough ?? false)
-  const [underline, setUnderline] = createSignal(props.data$?.underline ?? false)
   const [subOrSuperscript, setSubOrSuperscript] = createSignal<string>(SubOrSupscript.none + '')
 
   type Handler = (input: any) => void
@@ -49,30 +42,6 @@ export default function TextInputMenu(props: ITextInputMenuProps) {
       signal(input)
     }
   }
-
-  const _setBold = handle((input: boolean) => {
-    updateData$(props.currentIndex$, {
-      bold: input
-    })
-  }, setBold)
-
-  const _setItalic = handle((input: boolean) => {
-    updateData$(props.currentIndex$, {
-      italic: input
-    })
-  }, setItalic)
-
-  const _setStrikethrough = handle((input: boolean) => {
-    updateData$(props.currentIndex$, {
-      strikethrough: input
-    })
-  }, setStrikethrough)
-
-  const _setUnderline = handle((input: boolean) => {
-    updateData$(props.currentIndex$, {
-      underline: input
-    })
-  }, setUnderline)
 
   const _setSubOrSuperscript = handle((input: string) => {
     const mode = parseInt(input) as SubOrSupscript
@@ -99,23 +68,6 @@ export default function TextInputMenu(props: ITextInputMenuProps) {
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
         </DropdownMenuSub>
-      </DropdownMenuGroup>
-      <DropdownMenuGroup>
-        <DropdownMenuGroupLabel>
-          Text styles
-        </DropdownMenuGroupLabel>
-        <DropdownMenuCheckboxItem checked={bold()} onChange={_setBold}>
-          Bold
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem checked={italic()} onChange={_setItalic}>
-          Italic
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem checked={strikethrough()} onChange={_setStrikethrough}>
-          Strikethrough
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem checked={underline()} onChange={_setUnderline}>
-          Underline
-        </DropdownMenuCheckboxItem>
       </DropdownMenuGroup>
       <DropdownMenuGroup>
         <DropdownMenuGroupLabel>

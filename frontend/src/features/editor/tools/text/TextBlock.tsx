@@ -1,6 +1,6 @@
 import { Text } from "./Text"
 import { IBlockSetting, useEditorContext } from "../../provider"
-import { TextData } from "./data"
+import { TextData, TextDataProvider } from "./provider"
 
 export function createTextBlock(): IBlockSetting<TextData[]> {
   return {
@@ -13,14 +13,11 @@ export function createTextBlock(): IBlockSetting<TextData[]> {
     blockComponent$(props) {
       const { blocks$ } = useEditorContext()
       return (
-        <div>
-          <Text 
-            onChange$={(textData) => {
-              blocks$.saveBlockData$(props.blockId$, textData)
-            }} 
-            dataIn$={props.dataIn$} 
-          />
-        </div>
+        <TextDataProvider inputData$={props.dataIn$} onChange$={(textData) => {
+          blocks$.saveBlockData$(props.blockId$, textData)
+        }}>
+          <Text />
+        </TextDataProvider>
       )
     }
   }

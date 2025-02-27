@@ -1,2 +1,2 @@
 export * from "./TextBlock"
-export * from "./data"
+export * from "./provider/data"

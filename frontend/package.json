@@ -16,6 +16,7 @@
     "solid-dnd-directive": "^0.2.0",
     "solid-icons": "^1.1.0",
     "solid-js": "^1.8.11",
+    "solid-marked": "^0.6.3",
     "solid-transition-group": "^0.2.3"
   },
   "devDependencies": {
