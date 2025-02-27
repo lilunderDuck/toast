@@ -14,7 +14,7 @@ import { mergeClassname } from "~/utils"
 const style = stylex.create({
   $tooltip: {
     overflow: "hidden",
-    zIndex: 50,
+    zIndex: 1500,
     paddingInline: "0.75rem",
     paddingBlock: "0.175rem",
     borderRadius: "0.375rem",
