@@ -9,11 +9,13 @@ import (
 	"github.com/akrylysov/pogreb"
 )
 
+// Defines the structure for creating a new journal group.
 type JournalGroupSchema struct {
 	Name        string `form:"name"        json:"name"      binding:"required"`
 	Description string `form:"description" json:"description,omitempty"`
 }
 
+// Defines the structure for updating an existing journal group.
 type JournalGroupUpdateSchema struct {
 	Name        string      `form:"name"        json:"name,omitempty"`
 	Description string      `form:"description" json:"description,omitempty"`
@@ -21,6 +23,7 @@ type JournalGroupUpdateSchema struct {
 	Item        int         `form:"item"        json:"item,omitempty"`
 }
 
+// Represents the complete data for a journal group
 type JournalGroupData struct {
 	Id          int           `json:"id"                    cbor:"0,keyasint"`
 	Created     time.Duration `json:"created"               cbor:"1,keyasint"`
@@ -30,6 +33,15 @@ type JournalGroupData struct {
 	Tree        VirTreeData   `json:"tree"                  cbor:"5,keyasint,toarray"`
 }
 
+// Creates a new journal group.
+// It generates a unique ID, creates the group data, saves it to cache, and creates the group's folder.
+//
+// Parameters:
+//   - groupSchema: The data for the new journal group.
+//
+// Returns:
+//   - *JournalGroupData: The created journal group data.
+//   - error: An error if creation fails.
 func Group_Create(groupSchema *JournalGroupSchema) (newGroupData *JournalGroupData, anyError error) {
 	stringRandomId, numberId := utils.GenerateRandomNumberId()
 
@@ -56,9 +68,18 @@ func Group_Create(groupSchema *JournalGroupSchema) (newGroupData *JournalGroupDa
 	return &data, nil
 }
 
+// Group_Get retrieves a journal group by its ID.
+// It first tries to get the data from cache, and if not found, reads it from the meta file.
+//
+// Parameters:
+//   - groupId: The ID of the journal group.
+//
+// Returns:
+//   - *JournalGroupData: The journal group data.
+//   - error: An error if the group is not found or reading fails.
 func Group_Get(groupId int) (*JournalGroupData, error) {
 	if !IsGroupExist(groupId) {
-		return GroupNotFoundError(groupId)
+		return Error_GroupNotFound(groupId)
 	}
 
 	// This is just to convert string id to number id
@@ -95,6 +116,13 @@ func Group_Get(groupId int) (*JournalGroupData, error) {
 	return &outData, nil
 }
 
+// Retrieves the virtual tree data for a journal group.
+// It retrieves the data from cache.
+//
+// Returns the virtual tree data.
+//
+// Parameters:
+//   - groupId: The ID of the journal group.
 func Group_GetVirTreeData(groupId int) map[string]any {
 	var outData map[string]any
 	internals.Cache_Update(utils.IntToString(groupId), func(db *pogreb.DB) {
@@ -104,6 +132,16 @@ func Group_GetVirTreeData(groupId int) map[string]any {
 	return outData
 }
 
+// Group_Update updates an existing journal group.
+// It retrieves the current data, merges the new data, updates the cache, and updates the meta file.
+//
+// Parameters:
+//   - groupId: The ID of the journal group to update.
+//   - newData: The new data to update the group with.
+//
+// Returns:
+//   - *JournalGroupData: The updated journal group data.
+//   - error: An error if the update fails.
 func Group_Update(groupId int, newData *JournalGroupUpdateSchema) (updatedGroupData *JournalGroupData, anyError error) {
 	// Gets the previous data that has been saved
 	groupData, someError := Group_Get(groupId)
@@ -111,8 +149,19 @@ func Group_Update(groupId int, newData *JournalGroupUpdateSchema) (updatedGroupD
 		return nil, someError
 	}
 
-	// This is a work-around to "merge" the previous data with the new one.
-	// We uses "groupData" to update directly, instead of using another variable.
+	mergeGroupData(groupData, newData)
+
+	// Make sure to update the meta data and cache data too.
+	internals.Cache_Update("journal-group", func(db *pogreb.DB) {
+		internals.Cache_Set(db, utils.IntToString(groupData.Id), &groupData)
+	})
+
+	UpdateGroupMetaFile(groupData)
+
+	return groupData, nil
+}
+
+func mergeGroupData(groupData *JournalGroupData, newData *JournalGroupUpdateSchema) {
 	if newData.Name != "" {
 		groupData.Name = newData.Name
 	}
@@ -128,16 +177,15 @@ func Group_Update(groupId int, newData *JournalGroupUpdateSchema) (updatedGroupD
 	if newData.Item != 0 {
 		groupData.Tree.List = append(groupData.Tree.List, newData.Item)
 	}
-
-	// Make sure to update the meta data and cache data too.
-	internals.Cache_Update("journal-group", func(db *pogreb.DB) {
-		internals.Cache_Set(db, utils.IntToString(groupData.Id), &groupData)
-	})
-	UpdateGroupMetaFile(groupData)
-
-	return groupData, nil
 }
 
+// Deletes a journal group by its ID.
+// It removes the group from cache and deletes the group's folder.
+//
+// Returns an error if the deletion fails.
+//
+// Parameters:
+//   - groupId: The ID of the journal group to delete.
 func Group_Delete(groupId int) error {
 	// Firstly, it will delete from cache first
 	groupDataPath := GetGroupPath(groupId)
@@ -160,6 +208,9 @@ func Group_Delete(groupId int) error {
 	return nil // ...and we're done
 }
 
+// Retrieves all journal groups from cache.
+//
+// Returns an array containing all journal group data.
 func Group_GetAll() []any {
 	var out []any
 	internals.Cache_Update("journal-group", func(db *pogreb.DB) {

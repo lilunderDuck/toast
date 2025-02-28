@@ -20,6 +20,8 @@ func openDatabase(name string) *pogreb.DB {
 	return db
 }
 
+type CacheUtils struct{}
+
 func Cache_Set[T any](db *pogreb.DB, key string, value T) error {
 	jsonInBinary, encodeError := json.Marshal(&value)
 	if encodeError != nil {

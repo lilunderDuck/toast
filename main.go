@@ -4,8 +4,6 @@ import (
 	"burned-toast/backend"
 	"burned-toast/backend/internals"
 	"embed"
-	"log"
-	"os"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -14,22 +12,20 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 )
 
+// This app's assets and stuff.
+// Make sure to change the path if you change the output path in frontend/vite.config,ts
+//
 //go:embed frontend/out/static
 var assets embed.FS
 
+// App icon used in macos
+//
 //go:embed build/appicon.png
 var icon []byte
 
 func main() {
 	// Create an instance of the app structure
 	app := backend.NewApp()
-
-	// oh great, how sketchy.
-	// just to make the damn app load the image from data folder
-	// and currently there's no way to do that without messing with vite or something
-	// and yeah, I don't know how to serve static file tho, can't really find a solution
-	// this is wonderfully insecure, I know, don't ask me.
-	os.Setenv("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--disable-web-security")
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -85,6 +81,6 @@ func main() {
 	})
 
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 }

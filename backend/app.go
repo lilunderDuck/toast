@@ -1,3 +1,7 @@
+// Provides the core logic and functionality for the application's server-side operations.
+//
+// It includes handling dynamic asserts, processing and messing with data, and interacting with the database,
+// and if you don't think it now, it's very important.
 package backend
 
 import (
