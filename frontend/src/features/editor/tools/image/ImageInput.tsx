@@ -12,6 +12,7 @@ import __style from "./ImageInput.module.css"
 // ...
 import { useImageDataContext } from "./ImageDataProvider"
 import { FullViewButton, ImageInputAndDropzone } from "./ui"
+import { useEditorContext } from "../../provider"
 
 const style = stylex.create({
   theInput: {
@@ -31,6 +32,7 @@ const style = stylex.create({
 export default function ImageInput() {
   const { sessionStorage$ } = useJournalContext()
   const { update$, data$ } = useImageDataContext()
+  const { isReadonly$ } = useEditorContext()
 
   let prevImageName = data$().imgName
   const { fetch$, isLoading$, data$: localImageUrl } = useResource(async(targetFile: File | string) => {
@@ -91,12 +93,14 @@ export default function ImageInput() {
           </Show>
         </div>
       </Tooltip>
-      <Input 
-        placeholder="Optional description here" 
-        disabled={isLoading$()} 
-        value={data$().description}
-        onInput={updateDescription}
-      />
+      <Show when={!isReadonly$()}>
+        <Input 
+          placeholder="Optional description here" 
+          disabled={isLoading$()} 
+          value={data$().description}
+          onInput={updateDescription}
+        />
+      </Show>
     </div>
   )
 }

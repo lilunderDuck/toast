@@ -1,10 +1,9 @@
 import stylex from "@stylexjs/stylex"
-import __style from "./ImageInput.module.css"
+import __style from "../ImageInput.module.css"
 import { mergeClassname } from "~/utils"
 import { Button, ButtonSizeVariant, createLazyLoadedDialog, Tooltip } from "~/components"
 import { BsFullscreen } from "solid-icons/bs"
 import { lazy } from "solid-js"
-
 
 const style = stylex.create({
   displayOnTop: {
