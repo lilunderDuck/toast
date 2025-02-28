@@ -1,88 +1,30 @@
 package blocks
 
 import (
-	"burned-toast/backend/handler/journal"
+	"burned-toast/backend/handler/journal/media"
 	"burned-toast/backend/utils"
-	"encoding/json"
-	"fmt"
-	"log"
-	"path/filepath"
-	"strings"
 )
 
-func Image_GetSavedFolderPath(groupId int) string {
-	return fmt.Sprintf(
-		"%s/image/",
-		journal.GetGroupPath(groupId),
-	)
-}
-
-func Image_GetGallerySavedFolderPath(groupId int, galleryId int) string {
-	return fmt.Sprintf(
-		"%s/gallery/%d/",
-		journal.GetGroupPath(groupId),
-		galleryId,
-	)
-}
-
-func saveImage(path string, rawImgString string) string {
-	fileContent := []byte{}
-	if err := json.Unmarshal([]byte(rawImgString), &fileContent); err != nil {
-		log.Fatal("panic: ", err)
-	}
-
-	fileName := getFileName(path)
-	if utils.IsFileExist(path) {
-		path = createNewFilePath(path)
-		fileName = getFileName(path)
-	}
-
-	utils.WriteFile(path, fileContent)
-	return fileName
-}
-
-func getFileName(path string) string {
-	return filepath.Base(path)
-}
-
-func createNewFilePath(path string) string {
-	fullFileName := getFileName(path)
-	fileDir := filepath.Dir(path)
-	fileExtension := filepath.Ext(fullFileName)
-	fileName := strings.Replace(fullFileName, fileExtension, "", 1)
-
-	randomId, _ := utils.GetRandomIntString()
-	return filepath.Join(
-		fileDir,
-		fmt.Sprintf(
-			"%s-%s%s",
-			fileName,
-			randomId,
-			fileExtension,
-		),
-	)
-}
-
 func Image_SaveImage(groupId int, fileName string, rawImgStringContent string) string {
-	imageFolderPath := Image_GetSavedFolderPath(groupId)
+	imageFolderPath := GetSavedImageFolderPath(groupId)
 	utils.CreateDirectory(imageFolderPath)
-	path := imageFolderPath + fileName
-	return saveImage(path, rawImgStringContent)
+	path := utils.JoinPath(imageFolderPath, fileName)
+	return media.SaveImage(path, rawImgStringContent)
 }
 
 func Image_DeleteImage(groupId int, fileName string) {
-	imageFolderPath := Image_GetSavedFolderPath(groupId)
-	utils.RemoveFileOrDirectory(imageFolderPath + fileName)
+	imageFolderPath := GetSavedImageFolderPath(groupId)
+	utils.RemoveFileOrDirectory(utils.JoinPath(imageFolderPath, fileName))
 }
 
 func Image_SaveGalleryImage(groupId int, galleryId int, fileName string, rawImgStringContent string) string {
-	galleryFolder := Image_GetGallerySavedFolderPath(groupId, galleryId)
+	galleryFolder := GetSavedGalleryFolderPath(groupId, galleryId)
 	utils.CreateDirectory(galleryFolder)
-	path := galleryFolder + fileName
-	return saveImage(path, rawImgStringContent)
+	path := utils.JoinPath(galleryFolder, fileName)
+	return media.SaveImage(path, rawImgStringContent)
 }
 
 func Image_DeleteGalleryImage(groupId int, galleryId int, fileName string) {
-	galleryFolder := Image_GetGallerySavedFolderPath(groupId, galleryId)
-	utils.RemoveFileOrDirectory(galleryFolder + fileName)
+	galleryFolder := GetSavedGalleryFolderPath(groupId, galleryId)
+	utils.RemoveFileOrDirectory(utils.JoinPath(galleryFolder, fileName))
 }

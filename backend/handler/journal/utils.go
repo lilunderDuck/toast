@@ -4,8 +4,6 @@ import (
 	"burned-toast/backend/internals"
 	"burned-toast/backend/utils"
 	"fmt"
-
-	"github.com/akrylysov/pogreb"
 )
 
 func CreateGroupFolders(groupId int, groupData *JournalGroupData) (anyError error) {
@@ -24,8 +22,8 @@ func CreateGroupFolders(groupId int, groupData *JournalGroupData) (anyError erro
 
 func UpdateGroupMetaFile(groupData *JournalGroupData) error {
 	groupId := utils.IntToString(groupData.Id)
-	internals.Cache_Update("journal-group", func(db *pogreb.DB) {
-		internals.Cache_Set(db, groupId, groupData)
+	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
+		cache.Set(groupId, groupData)
 	})
 
 	return utils.BSON_WriteFile(GetGroupMetaFilePath(groupData.Id), &groupData)

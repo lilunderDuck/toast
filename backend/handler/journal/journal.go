@@ -4,8 +4,6 @@ import (
 	"burned-toast/backend/internals"
 	"burned-toast/backend/utils"
 	"time"
-
-	"github.com/akrylysov/pogreb"
 )
 
 // Defines the structure for creating a new journal entry.
@@ -75,8 +73,8 @@ func Journal_Create(currentGroupId int, schema *JournalSchema) *JournalData {
 		Item: numberId,
 	})
 
-	internals.Cache_Update(utils.IntToString(currentGroupId), func(db *pogreb.DB) {
-		internals.Cache_Set(db, stringJournalId, &newData)
+	internals.ModifyCacheDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
+		cache.Set(stringJournalId, &newData)
 	})
 
 	return &newData
@@ -133,8 +131,8 @@ func Journal_Update(currentGroupId int, journalId int, newData *JournalUpdateSch
 
 	data.Modified = utils.GetCurrentDateNow()
 
-	internals.Cache_Update(utils.IntToString(currentGroupId), func(db *pogreb.DB) {
-		internals.Cache_Set(db, utils.IntToString(data.Id), &data)
+	internals.ModifyCacheDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
+		cache.Set(utils.IntToString(data.Id), &data)
 	})
 
 	writeError := utils.BSON_WriteFile(
@@ -163,8 +161,8 @@ func Journal_Delete(currentGroupId int, journalId int) error {
 		return removeError
 	}
 
-	internals.Cache_Update(utils.IntToString(currentGroupId), func(db *pogreb.DB) {
-		internals.Cache_Delete(db, utils.IntToString(journalId))
+	internals.ModifyCacheDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
+		cache.Delete(utils.IntToString(journalId))
 	})
 
 	return nil

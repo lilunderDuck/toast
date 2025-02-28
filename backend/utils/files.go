@@ -9,8 +9,66 @@ import (
 	"github.com/kardianos/osext"
 )
 
+// Takes a bunch of parts of a file path and puts them together into one complete path.
+//
+// Returns the complete file path. Example:
+//
+//	JoinPath("path", "to", "some_file.txt")
+//	// returns "path/to/some_file.txt"
+//
+// Parameters:
+//   - pathToFileName: A list of strings, where each string is a part of the file path.
+//
+// See: https://pkg.go.dev/path/filepath#Join
 func JoinPath(pathToFileName ...string) string {
 	return filepath.Join(pathToFileName...)
+}
+
+// Takes a file path and gives you just the file's name, including its extension.
+// The extension is the part at the end, like ".txt" or ".jpg".
+//
+// Returns the file name with its extension. Example:
+//
+//	GetFileNameWithExtension("path/to/some_file.txt")
+//	// returns "some_file.txt"
+//
+// Parameters:
+//   - inAnyPath: The full file path.
+//
+// See: https://pkg.go.dev/path/filepath#Base
+func GetFileNameWithExtension(inAnyPath string) string {
+	return filepath.Base(inAnyPath)
+}
+
+// Takes a file path and gives you the folder (directory) where the file is located.
+//
+// Returns the directory (folder) part of the path. Example:
+//
+//	GetFileNameWithExtension("path/to/some_file.txt")
+//	// returns "path/to"
+//
+// Parameters:
+//   - inAnyPath: The full file path.
+//
+// See: https://pkg.go.dev/path/filepath#Dir
+func GetFileDir(inAnyPath string) string {
+	return filepath.Dir(inAnyPath)
+}
+
+// Takes a file path and gives you just the file's extension.
+// The extension is the part at the end, like ".txt" or ".jpg".
+//
+// Returns the file's extension (including the dot). Example:
+//
+//	GetFileNameWithExtension("path/to/some_file.txt")
+//	// returns ".txt"
+//
+// Parameters:
+//   - inAnyPath: The full file path.
+//
+// See: https://pkg.go.dev/path/filepath#Ext
+func GetFileExtension(inAnyPath string) string {
+	return filepath.Ext(inAnyPath)
 }
 
 // Returns the path of the folder where the program is running.

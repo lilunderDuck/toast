@@ -5,8 +5,6 @@ import (
 	"burned-toast/backend/utils"
 	"os"
 	"time"
-
-	"github.com/akrylysov/pogreb"
 )
 
 // Defines the structure for creating a new journal group.
@@ -55,8 +53,8 @@ func Group_Create(groupSchema *JournalGroupSchema) (newGroupData *JournalGroupDa
 	}
 
 	// Save it to cache so we can access it later
-	internals.Cache_Update("journal-group", func(db *pogreb.DB) {
-		internals.Cache_Set(db, stringRandomId, &data)
+	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
+		cache.Set(stringRandomId, &data)
 	})
 
 	// Create the journal group data folder to save your stuffs
@@ -88,8 +86,8 @@ func Group_Get(groupId int) (*JournalGroupData, error) {
 	// Try to get journal group data from cache.
 	var dataFromCache JournalGroupData
 	var cacheError error
-	internals.Cache_Update("journal-group", func(db *pogreb.DB) {
-		cacheError = internals.Cache_Get(db, thisGroupId, &dataFromCache)
+	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
+		cacheError = cache.Get(thisGroupId, &dataFromCache)
 	})
 
 	// If success, returns it.
@@ -109,8 +107,8 @@ func Group_Get(groupId int) (*JournalGroupData, error) {
 	}
 
 	// Also make sure to save it to the cache as well.
-	internals.Cache_Update("journal-group", func(db *pogreb.DB) {
-		internals.Cache_Set(db, thisGroupId, &outData)
+	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
+		cache.Set(thisGroupId, &outData)
 	})
 
 	return &outData, nil
@@ -125,8 +123,8 @@ func Group_Get(groupId int) (*JournalGroupData, error) {
 //   - groupId: The ID of the journal group.
 func Group_GetVirTreeData(groupId int) map[string]any {
 	var outData map[string]any
-	internals.Cache_Update(utils.IntToString(groupId), func(db *pogreb.DB) {
-		outData = internals.Cache_GetAll(db)
+	internals.ModifyCacheDb(utils.IntToString(groupId), func(cache *internals.JSONCacheUtils) {
+		outData = cache.GetAll()
 	})
 
 	return outData
@@ -152,8 +150,8 @@ func Group_Update(groupId int, newData *JournalGroupUpdateSchema) (updatedGroupD
 	mergeGroupData(groupData, newData)
 
 	// Make sure to update the meta data and cache data too.
-	internals.Cache_Update("journal-group", func(db *pogreb.DB) {
-		internals.Cache_Set(db, utils.IntToString(groupData.Id), &groupData)
+	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
+		cache.Set(utils.IntToString(groupData.Id), &groupData)
 	})
 
 	UpdateGroupMetaFile(groupData)
@@ -190,8 +188,8 @@ func Group_Delete(groupId int) error {
 	// Firstly, it will delete from cache first
 	groupDataPath := GetGroupPath(groupId)
 	var updateError error
-	internals.Cache_Update("journal-group", func(db *pogreb.DB) {
-		updateError = internals.Cache_Delete(db, utils.IntToString(groupId))
+	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
+		updateError = cache.Delete(utils.IntToString(groupId))
 	})
 	if updateError != nil {
 		println(updateError.Error())
@@ -213,8 +211,8 @@ func Group_Delete(groupId int) error {
 // Returns an array containing all journal group data.
 func Group_GetAll() []any {
 	var out []any
-	internals.Cache_Update("journal-group", func(db *pogreb.DB) {
-		out = internals.Cache_GetAllValue(db)
+	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
+		out = cache.GetAllValue()
 	})
 	return out
 }

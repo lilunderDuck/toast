@@ -9,47 +9,55 @@ import (
 	"github.com/akrylysov/pogreb"
 )
 
-func openDatabase(name string) *pogreb.DB {
-	dbPath := fmt.Sprintf("%s/%s", CacheFolderPath, name)
-	db, dbError := pogreb.Open(dbPath, nil /*no options*/)
-
-	if dbError != nil {
-		panic(dbError)
-	}
-
-	return db
+// Provides methods for interacting with a JSON-based cache database.
+// It uses [pogreb] for efficient key-value storage and JSON for data serialization.
+type JSONCacheUtils struct {
+	// The underlying [pogreb] database.
+	db *pogreb.DB
 }
 
-type CacheUtils struct{}
-
-func Cache_Set[T any](db *pogreb.DB, key string, value T) error {
+// Stores a value in the cache with the given key.
+// It converts any type into json string before storing it.
+//
+// Returns an error if the value cannot be encoded to json string or stored.
+//
+// Parameters:
+//   - key: The key to store the value under.
+//   - value: The value to store, if it cannot convert into json string, it panics.
+func (cache *JSONCacheUtils) Set(key string, value any) {
 	jsonInBinary, encodeError := json.Marshal(&value)
 	if encodeError != nil {
 		panic(encodeError)
 	}
 
 	keyInBinary := []byte(key)
-	isThisKeyExist, someError := db.Has(keyInBinary)
+	isThisKeyExist, someError := cache.db.Has(keyInBinary)
 	if someError != nil {
 		panic(someError)
 	}
 
 	if isThisKeyExist {
-		Cache_Delete(db, key)
+		cache.Delete(key)
 	}
 
-	setError := db.Put(keyInBinary, jsonInBinary)
+	setError := cache.db.Put(keyInBinary, jsonInBinary)
 	if setError != nil {
 		panic(setError)
 	}
-
-	Cache_GetAllValue(db)
-
-	return nil
 }
 
-func Cache_Get[T any](db *pogreb.DB, key string, outData T) error {
-	value, readError := db.Get([]byte(key))
+// Retrieves a value from the cache with the given key.
+// It converts the stringified JSON data back to the original type.
+//
+// Returns
+//   - an error if the key is not found
+//   - or the data cannot be decoded.
+//
+// Parameters:
+//   - key: The key to retrieve the value for.
+//   - outData: A pointer to the variable where the retrieved value will be stored.
+func (cache *JSONCacheUtils) Get(key string, outData any) error {
+	value, readError := cache.db.Get([]byte(key))
 	if readError != nil {
 		return readError
 	}
@@ -58,41 +66,65 @@ func Cache_Get[T any](db *pogreb.DB, key string, outData T) error {
 	return nil
 }
 
-func Cache_Delete(db *pogreb.DB, key string) error {
-	someError := db.Delete([]byte(key))
+// Removes a value from the cache with the given key.
+//
+// Returns an error if the key cannot be deleted.
+//
+// Parameters:
+//   - key: The key to delete.
+func (cache *JSONCacheUtils) Delete(key string) error {
+	someError := cache.db.Delete([]byte(key))
 	if someError != nil {
 		panic(someError)
 	}
 
-	db.Compact()
-	db.Sync()
+	cache.db.Compact()
+	cache.db.Sync()
 
 	return nil
 }
 
-func Cache_GetAllValue(db *pogreb.DB) []any {
-	it := db.Items()
+// Retrieves all values from the cache as a slice of any type.
+//
+// Returns an array containing all values in the cache.
+func (cache *JSONCacheUtils) GetAllValue() []any {
 	var item []any
-	for {
-		_, val, err := it.Next()
-		if err == pogreb.ErrIterationDone {
-			break
-		}
-		if err != nil {
-			log.Fatal(err)
-		}
-
+	irritateEachItemOnCache(cache.db, func(key []byte, value []byte) {
 		var jsonVal any
-		json.Unmarshal(val, &jsonVal)
+		json.Unmarshal(value, &jsonVal)
 		item = append(item, jsonVal)
-	}
+	})
 
 	return item
 }
 
-func Cache_GetAll(db *pogreb.DB) map[string]any {
-	it := db.Items()
+// Retrieves all key-value pairs from the cache as a map.
+//
+// Returns a map containing all key-value pairs in the cache.
+func (cache *JSONCacheUtils) GetAll() map[string]any {
 	outMap := make(map[string]any)
+	irritateEachItemOnCache(cache.db, func(key []byte, value []byte) {
+		var jsonVal any
+		json.Unmarshal(value, &jsonVal)
+		outMap[utils.BytesToString(key)] = jsonVal
+		fmt.Println(utils.BytesToString(key), jsonVal)
+	})
+
+	return outMap
+}
+
+// A function type for iterating over cache items.
+//
+// Sounds like a javascript callback...
+type IrritateItemFn func(key []byte, value []byte)
+
+// Iterates over all items in the cache database.
+//
+// Parameters:
+//   - db: The pogreb database.
+//   - eachItem: The function to call for each item. See [IrritateItemFn]
+func irritateEachItemOnCache(db *pogreb.DB, eachItem IrritateItemFn) {
+	it := db.Items()
 	for {
 		key, val, err := it.Next()
 		if err == pogreb.ErrIterationDone {
@@ -102,21 +134,32 @@ func Cache_GetAll(db *pogreb.DB) map[string]any {
 			log.Fatal(err)
 		}
 
-		var jsonVal any
-		json.Unmarshal(val, &jsonVal)
-		outMap[utils.BytesToString(key)] = jsonVal
-		fmt.Println(utils.BytesToString(key), jsonVal)
+		eachItem(key, val)
 	}
-
-	return outMap
 }
 
-type CacheUpdateFn func(db *pogreb.DB)
+// A function type for messing with the cache database.
+type CacheModificationFn func(thisCache *JSONCacheUtils)
 
-func Cache_Update(dbName string, updateFn CacheUpdateFn) {
-	db := openDatabase(dbName)
-	defer db.Close()
+// Opens a pogreb database, calls the provided function to modify it, and closes the database.
+//
+// Note: it only deals with json value only.
+//
+// Parameters:
+//   - dbName: The name of the database.
+//   - updateFn: The function to call to modify the database.
+func ModifyCacheDb(dbName string, updateFn CacheModificationFn) {
+	dbPath := utils.JoinPath(CacheFolderPath, dbName)
+	cacheDb, dbError := pogreb.Open(dbPath, nil /*no options*/)
+
+	if dbError != nil {
+		panic(dbError)
+	}
+
+	defer cacheDb.Close()
 	println("make some mess to the server database now -> ", dbName)
 
-	updateFn(db)
+	updateFn(&JSONCacheUtils{
+		db: cacheDb,
+	})
 }
