@@ -10,7 +10,7 @@ interface ITextProviderProps {
   onChange$(value: TextData[]): void
 }
 
-interface ITextContext {
+export interface ITextContext {
   textsData$: Accessor<TextData[]>
   updateData$(index: number, data: Partial<TextData>): void
   spawnNewTextInput$(index: number): void
@@ -34,7 +34,11 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
       const prevDataOfDatIndex = prev[index]
       const newData = {...prevDataOfDatIndex, ...data}
       for (const [key, value] of Object.entries(newData)) {
-        if (value === 0 || !value) {
+        if (
+          value === 0 || 
+          value === '' ||
+          !value
+        ) {
           // @ts-ignore - should work with absolutely no weird thing happening under the hood
           delete newData[key]
         }

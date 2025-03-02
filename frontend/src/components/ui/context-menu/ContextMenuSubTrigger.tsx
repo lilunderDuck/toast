@@ -1,4 +1,4 @@
-import { DropdownMenuSubTriggerProps, SubTrigger } from "@kobalte/core/dropdown-menu"
+import { ContextMenuSubTriggerProps, SubTrigger } from "@kobalte/core/context-menu"
 import { PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
 import { ParentProps, splitProps, ValidComponent } from "solid-js"
@@ -22,17 +22,17 @@ const style = stylex.create({
   }
 })
 
-export interface IDropdownMenuSubTriggerProps<
+export interface IContextMenuSubTriggerProps<
   T extends ValidComponent = "div"
-> extends DropdownMenuSubTriggerProps<T>, ParentProps {
+> extends ContextMenuSubTriggerProps<T>, ParentProps {
   class?: string | undefined
 } 
 // ...
 
-export function DropdownMenuSubTrigger<T extends ValidComponent = "div">(
-  props: PolymorphicProps<T, IDropdownMenuSubTriggerProps<T>>
+export function ContextMenuSubTrigger<T extends ValidComponent = "div">(
+  props: PolymorphicProps<T, IContextMenuSubTriggerProps<T>>
 ) {
-  const [, rest] = splitProps(props as IDropdownMenuSubTriggerProps, ["class", "children"])
+  const [, rest] = splitProps(props as IContextMenuSubTriggerProps, ["class", "children"])
   return (
     <SubTrigger
       class={mergeClassname(

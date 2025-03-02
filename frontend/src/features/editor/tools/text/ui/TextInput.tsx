@@ -1,12 +1,13 @@
-import { ParentProps } from "solid-js"
+import { lazy, ParentProps } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./TextInput.module.css"
 // ...
-import { FlexCenterY } from "~/components"
+import { createLazyLoadedContextMenu, FlexCenterY } from "~/components"
 import { setCaretToTheEnd } from "~/features/editor/utils"
 // ...
 import { useTextDataContext } from "../provider"
+import { BsPlus } from "solid-icons/bs"
 
 const style = stylex.create({
   textinput: {
@@ -36,7 +37,7 @@ interface ITextInputProps {
 }
 
 export function TextInput(props: ParentProps<ITextInputProps>) {
-  const { updateData$, focusState$, addNewLine$ } = useTextDataContext()
+  const { updateData$, focusState$, addNewLine$, textsData$ } = useTextDataContext()
   const [, setWhatInputIsFocused] = focusState$
 
   let divAsInputRef!: Ref<"div">
@@ -83,13 +84,8 @@ export function TextInput(props: ParentProps<ITextInputProps>) {
     setCaretToTheEnd(divAsInputRef)
   }
 
-  return (
-    <FlexCenterY 
-      {...stylex.attrs(style.textinput)} 
-      id={__style.input}
-      data-index={props.currentIndex$}
-      onMouseEnter={mouseHoverTheInput}
-    >
+  const TextInputMenu = createLazyLoadedContextMenu(
+    () => (
       <div 
         {...stylex.attrs(style.noStupidOutlineThing)} 
         contenteditable 
@@ -98,6 +94,25 @@ export function TextInput(props: ParentProps<ITextInputProps>) {
       >
         {props.value$}
       </div>
+    ),
+    lazy(() => import('./TextInputMenu')),
+    () => {
+      const currentIndex = props.currentIndex$
+      return {
+        data$: textsData$()[currentIndex],
+        currentIndex$: currentIndex
+      }
+    }
+  )
+
+  return (
+    <FlexCenterY 
+      {...stylex.attrs(style.textinput)} 
+      id={__style.input}
+      data-index={props.currentIndex$}
+      onMouseEnter={mouseHoverTheInput}
+    >
+      <TextInputMenu.ContextMenu$ />
       {props.children}
     </FlexCenterY>
   )

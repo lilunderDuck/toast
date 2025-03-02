@@ -3,7 +3,7 @@ import Markdown from "solid-marked/component"
 import stylex from "@stylexjs/stylex"
 import __style from "./TextRenderer.module.css"
 // ...
-import { mergeClassname, StylexStylesAttribute } from "~/utils"
+import { convertNumberToHexString, mergeClassname, StylexStylesAttribute } from "~/utils"
 // ...
 import { TextOption, TextData } from "./provider"
 import { Dynamic } from "solid-js/web"
@@ -27,6 +27,8 @@ const style = stylex.create({
 export default function TextRenderer(props: TextOption) {
   const applyIfHas = (something: any, value: StylexStylesAttribute) => something ? value : ''
   const getText = () => props.text
+  const getTextColor = () => props.color ?? ''
+  const getBackgroundColor = () => props.bgColor ?? ''
 
   return (
     <Markdown
@@ -40,8 +42,8 @@ export default function TextRenderer(props: TextOption) {
         Root(rootProps) {
           return (
             <div class={__style.text} style={{
-              '--text-color': props.color,
-              '--text-bgColor': props.bgColor,
+              '--text-color': getTextColor(),
+              '--text-bgColor': getBackgroundColor(),
             }}>{rootProps.children}</div>
           )
         },

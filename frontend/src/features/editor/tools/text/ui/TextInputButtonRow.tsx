@@ -1,10 +1,10 @@
-import { BsGearFill, BsPlus, BsTrashFill } from "solid-icons/bs"
-import { lazy, Show } from "solid-js"
+import { BsPlus, BsTrashFill } from "solid-icons/bs"
+import { Show } from "solid-js"
 // ...
 import __style from "./TextInput.module.css"
 import stylex from "@stylexjs/stylex"
 // ...
-import { FlexCenterY, createLazyLoadedDropdownMenu } from "~/components"
+import { FlexCenterY } from "~/components"
 // ...
 import { useTextDataContext } from "../provider"
 
@@ -21,20 +21,8 @@ const style = stylex.create({
 })
 
 export function TextInputButtonRow(props: ITextInputButtonRowProps) {
-  const { textsData$, spawnNewTextInput$, deleteInput$, focusState$ } = useTextDataContext()
+  const { textsData$, deleteInput$, focusState$, spawnNewTextInput$ } = useTextDataContext()
   const [whatInputIsFocused] = focusState$
-
-  const TextInputMenu = createLazyLoadedDropdownMenu(
-    () => <BsGearFill />,
-    lazy(() => import('./TextInputMenu')),
-    () => {
-      const currentIndex = props.currentIndex$
-      return {
-        data$: textsData$()[currentIndex],
-        currentIndex$: currentIndex
-      }
-    }
-  )
 
   return (
     <FlexCenterY 
@@ -44,7 +32,6 @@ export function TextInputButtonRow(props: ITextInputButtonRowProps) {
       <div onClick={() => spawnNewTextInput$(props.currentIndex$)}>
         <BsPlus />
       </div>
-      <TextInputMenu.DropdownMenu$ />
       <Show when={textsData$().length !== 1}>
         <div onClick={() => deleteInput$(props.currentIndex$)}>
           <BsTrashFill />

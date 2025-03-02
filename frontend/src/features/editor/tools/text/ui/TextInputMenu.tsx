@@ -1,18 +1,22 @@
-import stylex from "@stylexjs/stylex"
 import { createSignal, type Setter } from "solid-js"
+// ...
+import stylex from "@stylexjs/stylex"
+// ...
 import {
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuGroupLabel,
-  DropdownMenuItem,
-  DropdownMenuPortal,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
+  ContextMenuContent,
+  ContextMenuGroup,
+  ContextMenuGroupLabel,
+  ContextMenuItemIcon,
+  ContextMenuPortal,
+  ContextMenuRadioGroup,
+  ContextMenuRadioItem,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
 } from "~/components"
-import { useTextDataContext, SubOrSupscript, TextData } from "../provider"
+// ...
+import { useTextDataContext, SubOrSupscript, TextOption } from "../provider"
+import { createBorder, createColorPicker, createPadding } from "../components"
 
 const style = stylex.create({
   menu: {
@@ -25,15 +29,18 @@ const style = stylex.create({
 })
 
 interface ITextInputMenuProps {
-  data$: TextData
+  data$: TextOption
   currentIndex$: number
-  setData$: Setter<TextData>
+  setData$: Setter<TextOption>
 }
 
 export default function TextInputMenu(props: ITextInputMenuProps) {
   const { updateData$ } = useTextDataContext()
 
   const [subOrSuperscript, setSubOrSuperscript] = createSignal<string>(SubOrSupscript.none + '')
+  const { ColorPickerSubMenu$ } = createColorPicker(props.data$, props.currentIndex$, updateData$)
+  const { PaddingSubMenu$ } = createPadding(props.data$, props.currentIndex$, updateData$)
+  const { BorderSubMenu$ } = createBorder(props.data$, props.currentIndex$, updateData$)
 
   type Handler = (input: any) => void
   const handle = (fn: AnyFunction, signal: Setter<any>): Handler => {
@@ -42,7 +49,7 @@ export default function TextInputMenu(props: ITextInputMenuProps) {
       signal(input)
     }
   }
-
+  
   const _setSubOrSuperscript = handle((input: string) => {
     const mode = parseInt(input) as SubOrSupscript
     updateData$(props.currentIndex$, {
@@ -51,40 +58,32 @@ export default function TextInputMenu(props: ITextInputMenuProps) {
   }, setSubOrSuperscript)
 
   return (
-    <DropdownMenuContent 
-      {...stylex.attrs(style.menu)}
-    >
-      <DropdownMenuGroup>
-        <DropdownMenuGroupLabel>
-          Text colors
-        </DropdownMenuGroupLabel>
-        <DropdownMenuSub overlap>
-          <DropdownMenuSubTrigger {...stylex.attrs(style.menuSubContent)}>
-            Colors
-          </DropdownMenuSubTrigger>
-          <DropdownMenuPortal>
-            <DropdownMenuSubContent>
-              <DropdownMenuItem>Nothing here</DropdownMenuItem>
-            </DropdownMenuSubContent>
-          </DropdownMenuPortal>
-        </DropdownMenuSub>
-      </DropdownMenuGroup>
-      <DropdownMenuGroup>
-        <DropdownMenuGroupLabel>
+    <ContextMenuContent {...stylex.attrs(style.menu)}>
+      <ContextMenuGroup>
+        <ContextMenuGroupLabel>
+          Text stuff
+        </ContextMenuGroupLabel>
+        <ColorPickerSubMenu$ />
+        <PaddingSubMenu$ />
+        <BorderSubMenu$ />
+      </ContextMenuGroup>
+      {/* ... */}
+      <ContextMenuGroup>
+        <ContextMenuGroupLabel>
           Subscript and superscript
-        </DropdownMenuGroupLabel>
-        <DropdownMenuRadioGroup value={subOrSuperscript()} onChange={_setSubOrSuperscript}>
-          <DropdownMenuRadioItem value={SubOrSupscript.none + ''}>
+        </ContextMenuGroupLabel>
+        <ContextMenuRadioGroup value={subOrSuperscript()} onChange={_setSubOrSuperscript}>
+          <ContextMenuRadioItem value={SubOrSupscript.none + ''}>
             None
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value={SubOrSupscript.subscript + ''}>
+          </ContextMenuRadioItem>
+          <ContextMenuRadioItem value={SubOrSupscript.subscript + ''}>
             Subscript
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value={SubOrSupscript.superscript + ''}>
+          </ContextMenuRadioItem>
+          <ContextMenuRadioItem value={SubOrSupscript.superscript + ''}>
             Superscript
-          </DropdownMenuRadioItem>
-        </DropdownMenuRadioGroup>
-      </DropdownMenuGroup>
-    </DropdownMenuContent>
+          </ContextMenuRadioItem>
+        </ContextMenuRadioGroup>
+      </ContextMenuGroup>
+    </ContextMenuContent>
   )
 }

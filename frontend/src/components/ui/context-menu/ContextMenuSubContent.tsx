@@ -1,4 +1,4 @@
-import { SubContent, type DropdownMenuSubContentProps } from "@kobalte/core/dropdown-menu"
+import { SubContent, type ContextMenuSubContentProps } from "@kobalte/core/context-menu"
 import { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { splitProps, ValidComponent } from "solid-js"
 import { mergeClassname } from "~/utils"
@@ -17,16 +17,16 @@ const style = stylex.create({
   },
 })
 
-export interface IDropdownMenuSubContentProps<
+export interface IContextMenuSubContentProps<
   T extends ValidComponent = "div"
-> extends DropdownMenuSubContentProps<T> {
+> extends ContextMenuSubContentProps<T> {
   class?: string | undefined
 }
 
-export function DropdownMenuSubContent<T extends ValidComponent = "div">(
-  props: PolymorphicProps<T, IDropdownMenuSubContentProps<T>>
+export function ContextMenuSubContent<T extends ValidComponent = "div">(
+  props: PolymorphicProps<T, IContextMenuSubContentProps<T>>
 ) {
-  const [, rest] = splitProps(props as IDropdownMenuSubContentProps, ["class"])
+  const [, rest] = splitProps(props as IContextMenuSubContentProps, ["class"])
   return (
     <SubContent
       class={mergeClassname(

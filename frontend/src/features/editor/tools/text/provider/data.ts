@@ -14,8 +14,17 @@ export type TextOption = {
   subOrSupscript?: SubOrSupscript
   // ...
   color?: string
-  link?: string
   bgColor?: string
+  // ...
+  paddingTop?: number
+  paddingBottom?: number
+  paddingLeft?: number
+  paddingRight?: number
+  // ...
+  border?: number
+  borderStyle?: string
+  borderColor?: string
+  borderRadius?: number
 }
 
 export type TextData = TextOption | TextDataAttribute

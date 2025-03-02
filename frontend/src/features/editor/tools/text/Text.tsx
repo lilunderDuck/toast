@@ -6,8 +6,9 @@ import __style from "./Text.module.css"
 import { FlexCenterY } from "~/components"
 import { useEditorContext } from "~/features/editor/provider"
 // ...
-import { BreakLine, TextInput, TextInputButtonRow } from "./ui"
+import { TextInput, TextInputButtonRow } from "./ui"
 import { useTextDataContext, TextDataAttribute, TextOption } from "./provider"
+import { BreakLine } from "./components"
 
 const style = stylex.create({
   texts: {

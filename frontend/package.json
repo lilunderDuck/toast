@@ -13,6 +13,7 @@
     "@stylexjs/stylex": "^0.7.5",
     "@thisbeyond/solid-dnd": "^0.7.5",
     "chart.js": "^4.4.7",
+    "solid-colorful": "^0.0.2",
     "solid-dnd-directive": "^0.2.0",
     "solid-icons": "^1.1.0",
     "solid-js": "^1.8.11",
