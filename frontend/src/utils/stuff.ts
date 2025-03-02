@@ -46,11 +46,3 @@ export function logThisVeryHelpfulMessage() {
     `
   )
 }
-
-export function convertNumberToHexString(num: number) {
-  return Number(num).toString(16)
-}
-
-export function convertHexStringToNumber(hexString: string) {
-  return parseInt(hexString, 16)
-}

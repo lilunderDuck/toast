@@ -1,27 +1,11 @@
 import Markdown from "solid-marked/component"
 // ...
-import stylex from "@stylexjs/stylex"
 import __style from "./TextRenderer.module.css"
 // ...
-import { convertNumberToHexString, mergeClassname, StylexStylesAttribute } from "~/utils"
+import { mergeClassname, StylexStylesAttribute } from "~/utils"
 // ...
-import { TextOption, TextData } from "./provider"
+import { TextOption } from "./provider"
 import { Dynamic } from "solid-js/web"
-
-const style = stylex.create({
-  bold: {
-    fontWeight: 'bold'
-  },
-  italic: {
-    fontStyle: 'italic'
-  },
-  underline: {
-    textDecorationLine: 'underline'
-  },
-  strikethrough: {
-    textDecoration: 'line-through'
-  }
-})
 
 // I have absolutely no idea
 export default function TextRenderer(props: TextOption) {
@@ -42,8 +26,8 @@ export default function TextRenderer(props: TextOption) {
         Root(rootProps) {
           return (
             <div class={__style.text} style={{
-              '--text-color': getTextColor(),
-              '--text-bgColor': getBackgroundColor(),
+              color: getTextColor(),
+              "background-color": getBackgroundColor(),
             }}>{rootProps.children}</div>
           )
         },

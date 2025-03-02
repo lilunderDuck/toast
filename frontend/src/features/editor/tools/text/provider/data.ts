@@ -8,6 +8,14 @@ export const enum TextDataAttribute {
   newLine
 }
 
+export type TextFormatting = Partial<{
+  pad: number
+  border: number
+  borderStyle: string
+  borderRadius: number
+  borderColor: string
+}>
+
 export type TextOption = {
   text: string
   // ...
@@ -21,10 +29,10 @@ export type TextOption = {
   paddingLeft?: number
   paddingRight?: number
   // ...
-  border?: number
-  borderStyle?: string
-  borderColor?: string
-  borderRadius?: number
+  top: TextFormatting
+  bottom: TextFormatting
+  left: TextFormatting
+  right: TextFormatting
 }
 
 export type TextData = TextOption | TextDataAttribute

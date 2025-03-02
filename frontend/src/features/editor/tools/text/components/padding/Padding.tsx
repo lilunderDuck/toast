@@ -22,25 +22,33 @@ export function createPadding(dataIn: TextOption, currentIndex: number, updateDa
 
   const updatePaddingLeft = handle((input: number) => {
     updateDataFn(currentIndex, {
-      paddingLeft: input
+      left: {
+        pad: input
+      }
     })
   }, setPaddingLeft) 
 
   const updatePaddingRight = handle((input: number) => {
     updateDataFn(currentIndex, {
-      paddingRight: input
+      right: {
+        pad: input
+      }
     })
   }, setPaddingRight) 
 
   const updatePaddingTop = handle((input: number) => {
     updateDataFn(currentIndex, {
-      paddingTop: input
+      top: {
+        pad: input
+      }
     })
   }, setPaddingTop) 
 
   const updatePaddingBottom = handle((input: number) => {
     updateDataFn(currentIndex, {
-      paddingBottom: input
+      bottom: {
+        pad: input
+      }
     })
   }, setPaddingBottom) 
 

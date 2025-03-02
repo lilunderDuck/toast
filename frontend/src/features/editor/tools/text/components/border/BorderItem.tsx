@@ -1,4 +1,4 @@
-import { DropdownMenuGroupLabel, Input } from "~/components"
+import { Input } from "~/components"
 
 import stylex from "@stylexjs/stylex"
 
@@ -9,7 +9,7 @@ const style = stylex.create({
 })
 
 interface IBorderItemProps {
-  label$: string
+  label$?: string
   value$: number
   onChange$(value: number): void
 }
@@ -30,9 +30,6 @@ export default function BorderItem(props: IBorderItemProps) {
 
   return (
     <div {...stylex.attrs(style.item)}>
-      <DropdownMenuGroupLabel>
-        {props.label$}
-      </DropdownMenuGroupLabel>
       <Input 
         type="number" 
         placeholder="in pixels" 
