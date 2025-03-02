@@ -8,6 +8,7 @@ import type { IBlockSetting, EditorDocumentData, IBlockData } from "./blockData"
 import { createButtonRow, type IButtonRowUtils } from "./buttonRow"
 import { EditorEvent } from "./event"
 import { loadBlockSettings } from "./settings"
+import { compressEditorData, decompressEditorData } from "./compression"
 
 export type EditorSessionStorage = IStorage<{
   currentBlock: number
@@ -55,7 +56,7 @@ export function EditorProvider(props: ParentProps) {
   const debouceUpdateData = debounce(() => {
     event.emit$('editor__onUpdate', {
       id: previousOpenedDocumentId,
-      content: block.data$()
+      content: compressEditorData(block.data$())
     })
 
     //debug-start
@@ -70,7 +71,9 @@ export function EditorProvider(props: ParentProps) {
 
   const { blockSetting, defaultBlock } = loadBlockSettings()
   const block = createBlocks(buttonRow, () => blockSetting, updateData)
-  block.insert$(null, defaultBlock.type$, defaultBlock.setting$.defaultValue$)
+
+  const spawnDefaultBlock = () => block.insert$(null, defaultBlock.type$, defaultBlock.setting$.defaultValue$)
+  spawnDefaultBlock()
 
   const event = createEvent()
   const cache = new Map()
@@ -89,13 +92,13 @@ export function EditorProvider(props: ParentProps) {
     //debug-start
     editorLog.log('New data will be added now')
     //debug-end
-    block.setData$(data.content)
+    block.setData$(decompressEditorData(data.content))
     
     if (data.content.length === 0) {
       //debug-start
       editorLog.log('The provided document', data, 'has no block data in it, spawning the default block...')
       //debug-end
-      block.insert$(null, defaultBlock.type$, defaultBlock.setting$.defaultValue$)
+      spawnDefaultBlock()
     }
     
     wrappedSessionStorage.delete$('currentBlock')

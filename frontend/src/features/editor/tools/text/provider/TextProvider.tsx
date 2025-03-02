@@ -3,10 +3,10 @@ import { Accessor, createContext, createSignal, ParentProps, Signal, useContext 
 import { editorLog } from "~/features/debug"
 import { array_insert, getRandomNumberFrom } from "~/common"
 // ...
-import { TextData, TextDataAttribute } from "./data"
+import { InputTextData, TextData, TextDataAttribute } from "./data"
 
 interface ITextProviderProps {
-  inputData$?: TextData[]
+  inputData$?: InputTextData
   onChange$(value: TextData[]): void
 }
 
@@ -25,7 +25,7 @@ const Context = createContext<ITextContext>()
 
 export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
   const thisTextBlockId = `t-${getRandomNumberFrom(1, 999_999_999)}` as const
-  const [textsData, setTextsData] = createSignal<TextData[]>(props.inputData$ ?? [
+  const [textsData, setTextsData] = createSignal<TextData[]>(props.inputData$?.text ?? [
     { text: '' }
   ])
 

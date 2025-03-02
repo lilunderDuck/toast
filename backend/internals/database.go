@@ -157,10 +157,12 @@ func ModifyCacheDb(dbName string, updateFn CacheModificationFn) {
 	// 	panic(dbError)
 	// }
 
-	defer cacheDb.Close()
 	println("make some mess to the server database now -> ", dbName)
 
 	updateFn(&JSONCacheUtils{
 		db: cacheDb,
 	})
+
+	println("database closed -> ", dbName)
+	cacheDb.Close()
 }

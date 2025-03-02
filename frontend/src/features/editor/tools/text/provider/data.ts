@@ -24,15 +24,14 @@ export type TextOption = {
   color?: string
   bgColor?: string
   // ...
-  paddingTop?: number
-  paddingBottom?: number
-  paddingLeft?: number
-  paddingRight?: number
-  // ...
-  top: TextFormatting
-  bottom: TextFormatting
-  left: TextFormatting
-  right: TextFormatting
+  top?: TextFormatting
+  bottom?: TextFormatting
+  left?: TextFormatting
+  right?: TextFormatting
 }
 
 export type TextData = TextOption | TextDataAttribute
+
+export type InputTextData = {
+  text: TextData[]
+}

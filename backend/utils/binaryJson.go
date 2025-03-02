@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"os"
+	"fmt"
 
 	"github.com/fxamacker/cbor/v2"
 )
@@ -18,10 +18,11 @@ import (
 func BSON_WriteFile(path string, anyObject any) (someError error) {
 	binaryData, encodeError := cbor.Marshal(anyObject)
 	if encodeError != nil {
+		fmt.Println("BSON encode error", encodeError)
 		return encodeError
 	}
 
-	writeError := os.WriteFile(path, binaryData, 0666)
+	writeError := WriteFile(path, binaryData)
 	if writeError != nil {
 		return writeError
 	}
@@ -39,7 +40,7 @@ func BSON_WriteFile(path string, anyObject any) (someError error) {
 // Returns:
 //   - An error if something went wrong while reading, or nil if it read correctly.
 func BSON_ReadFile(path string, out interface{}) (someError error) {
-	dataFromDisk, readError := os.ReadFile(path)
+	dataFromDisk, readError := ReadFile(path)
 	if readError != nil {
 		return readError
 	}

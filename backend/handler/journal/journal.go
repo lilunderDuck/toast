@@ -39,9 +39,9 @@ type JournalData struct {
 
 // Represents the data for a single content block within a journal entry.
 type JournalContentData struct {
-	Id   int    `json:"id"              cbor:"0,keyasint"`
-	Type uint16 `json:"type"            cbor:"1,keyasint"`
-	Data any    `json:"data"            cbor:"3,keyasint,toarray"`
+	Id   int            `json:"id"              cbor:"0,keyasint"`
+	Type uint16         `json:"type"            cbor:"1,keyasint"`
+	Data map[uint16]any `json:"data"            cbor:"3,keyasint"`
 }
 
 // Creates a new journal entry within a specified journal group.
@@ -131,10 +131,6 @@ func Journal_Update(currentGroupId int, journalId int, newData *JournalUpdateSch
 
 	data.Modified = utils.GetCurrentDateNow()
 
-	internals.ModifyCacheDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
-		cache.Set(utils.IntToString(data.Id), &data)
-	})
-
 	writeError := utils.BSON_WriteFile(
 		GetJournalSavedFilePath(currentGroupId, journalId),
 		&data,
@@ -143,6 +139,10 @@ func Journal_Update(currentGroupId int, journalId int, newData *JournalUpdateSch
 	if writeError != nil {
 		return nil, writeError
 	}
+
+	internals.ModifyCacheDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
+		cache.Set(utils.IntToString(data.Id), &data)
+	})
 
 	return data, nil
 }
