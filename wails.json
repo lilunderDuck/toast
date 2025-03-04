@@ -6,6 +6,6 @@
   "frontend:dev:watcher": "deno task dev",
   "frontend:dev:serverUrl": "auto",
   "devServer": "localhost:8000",
-  "wailsjsdir": "./frontend/src",
+  "wailsjsdir": "./frontend/",
   "assetdir": "./frontend/dist"
 }
