@@ -1,8 +1,10 @@
-import stylex from "@stylexjs/stylex"
-import { Button, ButtonSizeVariant, Flex, FlexCenter } from "~/components"
-import { getRandomElement } from "~/common"
-import { duck_uhhh } from "~/features/technical/assets"
 import { useNavigate } from "@solidjs/router"
+// ...
+import stylex from "@stylexjs/stylex"
+// ...
+import { Button, ButtonSizeVariant, Flex, FlexCenter } from "~/components"
+import { getRandomElement } from "~/utils"
+import { duck_uhhh } from "~/features/technical/assets"
 
 const style = stylex.create({
   thisThing: {

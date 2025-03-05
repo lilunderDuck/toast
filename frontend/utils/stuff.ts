@@ -46,27 +46,3 @@ export function logThisVeryHelpfulMessage() {
     `
   )
 }
-
-export function renamePropDeep<T extends Record<string, any>>(targetObject: T, renameMap: Record<keyof T, string>) {
-  let renameLookup = new Map(Object.entries(renameMap))
-
-  function rename(obj: T): T {
-    if (Array.isArray(obj)) {
-      return obj.map(rename)
-    }
-
-    if (typeof obj === "object" && obj !== null) {
-      const newObj = {}
-      for (const oldLabel in obj) {
-        const newLabel = renameLookup.get(oldLabel) || oldLabel
-        newObj[newLabel] = rename(obj[oldLabel])
-      }
-
-      return newObj
-    }
-
-    return obj
-  }
-
-  return rename(targetObject)
-}

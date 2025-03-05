@@ -1,3 +1,12 @@
+export type SplashTextData = {
+  text: string
+}
+
+export interface IServerResourceUsage {
+  heapUsed: number
+  totalHeap: number
+}
+
 export type LibaryData = {
   name: string
   author?: string

@@ -1,6 +1,6 @@
 import { createResource, createSignal, Show } from "solid-js"
 // ...
-import { ArrayElement } from "~/common"
+import type { ArrayElement } from "~/utils"
 import { LibaryType, LibaryData } from "~/api/misc"
 // ...
 import { LibarySearchBox, LibaryUsedList } from "../components"

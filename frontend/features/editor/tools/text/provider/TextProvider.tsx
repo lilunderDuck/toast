@@ -1,7 +1,7 @@
 import { Accessor, createContext, createSignal, ParentProps, Signal, useContext } from "solid-js"
 // ...
 import { editorLog } from "~/features/debug"
-import { array_insert, getRandomNumberFrom } from "~/common"
+import { arrayInsert, getRandomNumberFrom } from "~/utils"
 // ...
 import { InputTextData, TextData, TextDataAttribute } from "./data"
 
@@ -56,7 +56,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
 
   const spawnNewTextInput = (index: number) => {
     setTextsData(prev => {
-      array_insert(prev, index, {
+      arrayInsert(prev, index, {
         text: ''
       })
       return [...prev]
@@ -91,7 +91,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
 
   const addNewLine = (currentIndex: number) => {
     setTextsData(prev => {
-      array_insert(prev, currentIndex + 1, TextDataAttribute.newLine, {
+      arrayInsert(prev, currentIndex + 1, TextDataAttribute.newLine, {
         text: ''
       })
 

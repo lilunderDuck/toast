@@ -1,6 +1,6 @@
 import stylex from "@stylexjs/stylex"
 import { createSignal, onMount } from "solid-js"
-import { getRandomNumber } from "~/common"
+import { getRandomNumber } from "~/utils"
 
 const style = stylex.create({
   input: {

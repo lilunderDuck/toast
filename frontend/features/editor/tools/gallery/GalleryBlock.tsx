@@ -1,4 +1,4 @@
-import { getRandomNumberFrom } from "~/common"
+import { getRandomNumberFrom } from "~/utils"
 // ...
 import { IBlockSetting, useEditorContext } from "../../provider"
 import { GalleryDataProvider } from "./data"

@@ -1,7 +1,7 @@
 import type { Accessor } from "solid-js"
 import { createStore, produce } from "solid-js/store"
 // ...
-import { getRandomNumberFrom, thisArrayObjects } from "~/common"
+import { getRandomNumberFrom, thisArrayObjects } from "~/utils"
 import { editorLog } from "~/features/debug"
 // ...
 import type { ITodoBlockData, TodoSchema, TodoSectionData, TodoSectionSchema } from "./this"

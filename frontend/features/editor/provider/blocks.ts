@@ -1,6 +1,6 @@
 import { Accessor, createSignal, Setter } from "solid-js"
 // ...
-import { array_insert, getRandomNumberFrom, thisArrayObjects } from "~/common"
+import { arrayInsert, getRandomNumberFrom, thisArrayObjects } from "~/utils"
 import { editorLog } from "~/features/debug"
 // ...
 import type { IBlockData } from "./blockData"
@@ -83,7 +83,7 @@ export function createBlocks(
     //debug-start
     editorLog.log("(3) inserting block type", type, "with data", someData, "before block", beforeBlockId)
     //debug-end
-    array_insert(blockData, index, newData)
+    arrayInsert(blockData, index, newData)
     setData(blockData)
     updateData()
   }
