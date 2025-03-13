@@ -2,6 +2,7 @@ package main
 
 import (
 	"burned-toast/backend"
+	"burned-toast/backend/dynamic"
 	"burned-toast/backend/internals"
 	"embed"
 
@@ -18,7 +19,12 @@ import (
 //go:embed frontend/out/static
 var assets embed.FS
 
-// App icon used in macos
+// App icon used in macOS
+//
+// If you're on windows, just change the build/appicon.png to something else
+// and it will work :)
+//
+// Make sure the appicon.png width and height are the same.
 //
 //go:embed build/appicon.png
 var icon []byte
@@ -26,6 +32,10 @@ var icon []byte
 func main() {
 	// Create an instance of the app structure
 	app := backend.NewApp()
+
+	// stopChannel := make(chan bool)
+	// go dynamic.CreateServer(stopChannel)
+	go dynamic.CreateServer()
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -48,8 +58,7 @@ func main() {
 			app,
 		},
 		AssetServer: &assetserver.Options{
-			Assets:  assets,
-			Handler: backend.NewFileLoader(),
+			Assets: assets,
 		},
 		// Windows platform specific options
 		Windows: &windows.Options{
@@ -83,4 +92,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	// Clean ups
+	// stopChannel <- true
 }

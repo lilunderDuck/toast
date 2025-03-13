@@ -8,7 +8,8 @@
     "**/Thumbs.db": true,
     "backup": true,
     "**/node_modules": true,
-    "**/*.md5": true
+    "**/*.md5": true,
+    "frontend/out": true
   },
   "editor.tabSize": 2,
   "explorer.compactFolders": false,

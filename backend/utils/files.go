@@ -3,6 +3,7 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 
@@ -122,4 +123,65 @@ func WriteFile(pathToFile string, stuff []byte) (writeError error) {
 func ReadFile(pathToFile string) (fileContent []byte, readError error) {
 	fmt.Println("Reading:", pathToFile)
 	return os.ReadFile(pathToFile)
+}
+
+func MoveFile(sourcePath string, destPath string) error {
+	fmt.Println("Moving:", sourcePath, "to", destPath)
+	// Attempt to rename (move) the file.
+	err := os.Rename(sourcePath, destPath)
+	if err == nil {
+		return nil
+	}
+
+	// If rename fails (likely due to cross-device move), copy and remove.
+	sourceFile, err := os.Open(sourcePath)
+	if err != nil {
+		return err
+	}
+	defer sourceFile.Close()
+
+	destFile, err := os.Create(destPath)
+	if err != nil {
+		return err
+	}
+	defer destFile.Close()
+
+	_, err = io.Copy(destFile, sourceFile)
+	if err != nil {
+		// Attempt to remove the destination file in case of copy error.
+		os.Remove(destPath)
+		return err
+	}
+
+	err = os.Remove(sourcePath)
+	return err
+}
+
+func CopyFile(source, destination string) error {
+	sourceFile, err := os.Open(source)
+	if err != nil {
+		return err
+	}
+	defer sourceFile.Close()
+
+	// Ensure the destination directory exists.
+	destinationDir := filepath.Dir(destination)
+	if _, err := os.Stat(destinationDir); os.IsNotExist(err) {
+		err = os.MkdirAll(destinationDir, 0755)
+		if err != nil {
+			return err
+		}
+	}
+
+	destinationFile, err := os.Create(destination)
+	if err != nil {
+		return err
+	}
+	defer destinationFile.Close()
+
+	_, err = io.Copy(destinationFile, sourceFile)
+	if err != nil {
+		return err
+	}
+	return nil
 }

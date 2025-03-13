@@ -1,8 +1,10 @@
 import { 
+  createCodeBlock,
   createGalleryBlock,
   createImageBlock, 
   createTextBlock, 
-  createTodoBlock 
+  createTodoBlock,
+  createVideoBlock
 } from "../tools"
 import { type IBlockSetting } from "./blockData"
 
@@ -15,7 +17,9 @@ export function loadBlockSettings() {
   const blockSetting: Record<number, IBlockSetting<any>> = {
     2: createTodoBlock(),
     3: createImageBlock(),
-    4: createGalleryBlock()
+    4: createGalleryBlock(),
+    5: createCodeBlock(),
+    6: createVideoBlock()
   }
 
   const defaultBlock: DefaultBlockSetting = {

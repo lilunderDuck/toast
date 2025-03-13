@@ -23,7 +23,8 @@ export function compressEditorData(data: IBlockData[]) {
     description: '18',
     todo: '19',
     imgName: '20',
-    images: '21'
+    images: '21',
+    videoUrl: '22'
   })
 }
 
@@ -50,6 +51,7 @@ export function decompressEditorData(data: IBlockData[]) {
     '18': 'description',
     '19': 'todo',
     '20': 'imgName',
-    '21': 'images'
+    '21': 'images',
+    '22': 'videoUrl'
   })
 }

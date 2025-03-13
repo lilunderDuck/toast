@@ -5,6 +5,7 @@ import { getRandomNumber } from "~/utils"
 const style = stylex.create({
   input: {
     width: '100%',
+    maxWidth: '25rem',
     resize: 'none',
     paddingInline: 10,
     paddingBlock: 5,
@@ -26,6 +27,7 @@ export function ResizableTextarea(props: HTMLAttributes<"textarea">) {
   const onSlappingYourKeyboard = (inputEvent: InputEvent) => {
     const current = inputEvent.currentTarget as HTMLTextAreaElement
     updateTextarea(current)
+    props.onInput?.(inputEvent)
   }
 
   const updateTextarea = (someTextarea: HTMLTextAreaElement) => {
