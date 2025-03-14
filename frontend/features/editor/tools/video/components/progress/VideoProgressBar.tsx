@@ -1,12 +1,12 @@
-import { createSignal } from "solid-js"
+import { createSignal, type VoidComponent } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
 import { FlexCenterY } from "~/components"
+import { editorLog } from "~/features/debug"
 // ...
 import { progressPercentageToCurrentTime, toHHMMSS } from "../../utils"
 import VideoProgressSlider from "./VideoProgressSlider"
-import { editorLog } from "~/features/debug"
 
 const style = stylex.create({
   thisThing: {
@@ -19,9 +19,44 @@ const style = stylex.create({
   }
 })
 
-export function createVideoProgressBar(
-  onProgressBarChanged: (currentVideoDuration: number) => any
-) {
+interface IVideoProgressBarOptions {
+  /**Fired when the progress bar slider is moved.
+   * @param currentVideoDuration the video current time in seconds
+   * @returns *anything*
+   */
+  onProgressBarChanged$: (currentVideoDuration: number) => any
+}
+
+interface IVideoProgressBar {
+  /**Updates the progress bar and current duration.
+   * @param progressInSecond The current video duration in seconds.
+   * @returns *nothing*
+   */
+  updateProgressBar$(progressInSecond: number): void
+  /**Sets the total duration of the video in seconds.
+   * @param duration The total video duration in seconds.
+   * @returns *nothing*
+   * @note you should call this function when the video is loaded,
+   * otherwise the progress bar will not be displayed properly.
+   */
+  setTotalDuration$(duration: number): void
+  /**Renders the video progress bar component.
+   * It displays the current duration, a slider, and the total duration.
+   *
+   * @returns `JSX.Element`
+   */
+  ProgressBar$: VoidComponent
+}
+
+/**Creates a video progress bar controller.
+ * It manages the video's progress, current duration, and total duration.
+ * 
+ * And also handle more random stuff? I guess.
+ *
+ * @param options see {@link IVideoProgressBarOptions} for the progress bar options.
+ * @returns An object containing functions to update the progress bar, set the total duration, and render the progress bar component.
+ */
+export function createVideoProgressBar(options: IVideoProgressBarOptions): IVideoProgressBar {
   const [progress, setProgress] = createSignal(0)
   const [currentDuration, setCurrentDuration] = createSignal(0)
   const [totalDurationInSec, setTotalDurationInSec] = createSignal<number>()
@@ -31,7 +66,7 @@ export function createVideoProgressBar(
     //debug-start
     editorLog.logLabel("video", `progress bar slider updated, current time will be`, currentTime)
     //debug-end
-    onProgressBarChanged(currentTime)
+    options.onProgressBarChanged$(currentTime)
   }
 
   return {

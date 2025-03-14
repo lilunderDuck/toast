@@ -1,4 +1,4 @@
-import { lazy, Show, type VoidComponent, splitProps } from "solid-js"
+import { lazy, Show, type VoidComponent, splitProps, type ParentProps } from "solid-js"
 // ...
 import { mergeClassname } from "~/utils"
 import { FlexCenterY, FlexCenter, createLazyLoadedDialog } from "~/components"
@@ -29,22 +29,30 @@ const style = stylex.create({
   }
 })
 
-interface IVideoProps extends IVideoBlockData {
+export interface IVideoProps extends IVideoBlockData {
+  /**Whenever the video is loaded or not */
   onVideoLoaded$?: () => void
-  content$?: VoidComponent
-  showFullscreenButton$?: boolean
+  /**Whenever the video should be displayed on fullscreen or not.
+   * 
+   * Set this to `true` will:
+   * - Hide the fullscreen button
+   * 
+   * @default false
+   */
   fullScreenMode$?: boolean
 }
 
-export function Video(props: IVideoProps) {
+export function Video(props: ParentProps<IVideoProps>) {
   let thisVideoRef!: Ref<"video">
   let everythingRef!: Ref<"div">
   const { 
     ProgressBar$, 
     updateProgressBar$, 
     setTotalDuration$ 
-  } = createVideoProgressBar((currentDuration) => {
-    thisVideoRef.currentTime = currentDuration
+  } = createVideoProgressBar({
+    onProgressBarChanged$(currentDuration) {
+      thisVideoRef.currentTime = currentDuration
+    }
   })
 
   const updateVideoProgressBar: EventHandler<"video", "onTimeUpdate"> = () => {
@@ -70,14 +78,12 @@ export function Video(props: IVideoProps) {
   const videoFullscreenDialog = createLazyLoadedDialog(
     lazy(() => import("./dialog/VideoFullscreenDialog")),
     () => {
-      const [, videoData] = splitProps(props, ["content$", "fullScreenMode$", "showFullscreenButton$"])
+      const [, videoData] = splitProps(props, ["fullScreenMode$"])
       return {
         videoData$: videoData
       }
     }
   )
-
-  const VideoContent = props.content$!
 
   return (
     <FlexCenter
@@ -94,9 +100,7 @@ export function Video(props: IVideoProps) {
         preload="metadata"
       />
 
-      <Show when={VideoContent}>
-        <VideoContent />
-      </Show>
+      {props.children}
 
       <FlexCenterY class={mergeClassname(
         stylex.attrs(style.progressBar),
@@ -104,7 +108,7 @@ export function Video(props: IVideoProps) {
       )}>
         <VideoControls onClickingSomething$={controlThisVideo}>
           <ProgressBar$ />
-          <Show when={props.showFullscreenButton$ ?? true}>
+          <Show when={!props.fullScreenMode$}>
             <FullScreenButton onClick={videoFullscreenDialog.show$} />
           </Show>
         </VideoControls>

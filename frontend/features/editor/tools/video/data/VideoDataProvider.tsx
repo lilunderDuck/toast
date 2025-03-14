@@ -1,6 +1,7 @@
-import { Accessor, createContext, ParentProps, useContext } from "solid-js"
-import { IVideoBlockData } from "./data"
+import { createContext, type ParentProps, useContext } from "solid-js"
 import { createStore, Store, SetStoreFunction } from "solid-js/store"
+// ...
+import type { IVideoBlockData } from "./data"
 
 interface IVideoDataContext {
   data$: Store<IVideoBlockData>

@@ -1,16 +1,21 @@
-import { FileUploadDialogOptions, FileUploadType, OpenDialogOptions } from "./types"
+import type { 
+  CreateFileUploadOptions,
+  FileUploadComponent,
+  FileUploadType, 
+  OpenDialogOptions 
+} from "./types"
 import { getUploadDialogFn } from "./stuff"
-import { Component } from "solid-js"
 import { fileDialog } from "../debug"
 
-type FileUploadComponent = Component<HTMLAttributes<"div">>
-type CreateFileUploadOptions<T extends FileUploadType, FinishFn extends AnyFunction> = {
-  type$: T
-  options$: FileUploadDialogOptions
-  onFinish$: FinishFn
-  shouldShow$?: () => boolean
-}
-
+/**Creates a file upload component based on the provided options.
+ *
+ * @param createOptions options for creating the file upload component.
+ * @returns A {@link FileUploadComponent} that, when clicked, triggers the file upload dialog.
+ * 
+ * @see {@link FileUploadComponent}
+ * @see {@link CreateFileUploadOptions}
+ * @see {@link FileUploadType}
+*/
 // @ts-ignore - should work perfectly
 export function createFileUpload(
   createOptions: CreateFileUploadOptions<FileUploadType.file, (file: string) => any>

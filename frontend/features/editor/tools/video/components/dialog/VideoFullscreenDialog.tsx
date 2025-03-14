@@ -23,7 +23,6 @@ export default function VideoFullscreenDialog(props: IVideoFullscreenDialogProps
     <DialogContent {...stylex.attrs(style.dialogContent)}>
       <Video 
         {...props.videoData$} 
-        showFullscreenButton$={false} 
         fullScreenMode$={true}
       />
     </DialogContent>

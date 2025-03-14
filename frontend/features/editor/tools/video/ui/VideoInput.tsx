@@ -33,7 +33,6 @@ export function VideoInput(props: IVideoInputProps) {
   const { data$, setData$ } = useVideoDataContext()
 
   const isThereAVideo = () => data$.videoUrl !== ""
-  
   const [isLoading, setIsLoading] = createSignal(isThereAVideo())
   const currentGroupId = sessionStorage$.get$("currentGroup").id
 
@@ -55,29 +54,36 @@ export function VideoInput(props: IVideoInputProps) {
     shouldShow$: () => shouldShowDialog
   })
 
+  const LoadingSpinner = () => (
+    <Show when={isLoading()}>
+      <FlexCenter {...stylex.attrs(style.dialogHitbox)}>
+        <SpinningCube cubeSize$={30} />
+      </FlexCenter>
+    </Show>
+  )
+
+  const DialogInputThing = () => (
+    <Show when={!isThereAVideo()}>
+      <FlexCenter {...stylex.attrs(style.dialogHitbox)}>
+        <BsPlus />
+      </FlexCenter>
+    </Show>
+  )
+
   return (
-    <div 
+    <div
       {...stylex.attrs(isThereAVideo() ? {} : style.emptyVideo)}
     >
       <Video
         videoUrl={api_getVideoSavedPath(currentGroupId, data$.videoUrl)}
         onVideoLoaded$={() => setIsLoading(false)}
-        content$={() => (
-          <Show when={!isReadonly$()}>
-            <Show when={!isThereAVideo()}>
-              <FlexCenter {...stylex.attrs(style.dialogHitbox)}>
-                <BsPlus />
-              </FlexCenter>
-            </Show>
-            <Show when={isLoading()}>
-              <FlexCenter {...stylex.attrs(style.dialogHitbox)}>
-                <SpinningCube cubeSize$={30} />
-              </FlexCenter>
-            </Show>
-            <FileUploadDialog {...stylex.attrs(style.dialogHitbox)} />
-          </Show>
-        )}
-      />
+      >
+        <Show when={!isReadonly$()}>
+          <LoadingSpinner />
+          <DialogInputThing />
+          <FileUploadDialog {...stylex.attrs(style.dialogHitbox)} />
+        </Show>
+      </Video>
     </div>
   )
 }
