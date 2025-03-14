@@ -1,6 +1,6 @@
 import stylex from "@stylexjs/stylex"
 import { BsPlus } from "solid-icons/bs"
-import { lazy, splitProps } from "solid-js"
+import { splitProps } from "solid-js"
 import { IconTypes } from "solid-icons"
 // ...
 import { 
@@ -44,7 +44,7 @@ export function SidebarButtonsRow() {
   }
 
   const createStuffModal = createLazyLoadedDialog(
-    lazy(() => import('./CreateStuffModal'))
+    () => import('./CreateStuffModal')
   )
 
   const mode = () => isReadonly$() ? 'read-only' : 'edit'

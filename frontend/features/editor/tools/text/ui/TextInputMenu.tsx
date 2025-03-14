@@ -6,13 +6,9 @@ import {
   ContextMenuContent,
   ContextMenuGroup,
   ContextMenuGroupLabel,
-  ContextMenuItemIcon,
-  ContextMenuPortal,
   ContextMenuRadioGroup,
   ContextMenuRadioItem,
-  ContextMenuSub,
-  ContextMenuSubContent,
-  ContextMenuSubTrigger,
+  IContextMenu,
 } from "~/components"
 // ...
 import { useTextDataContext, SubOrSupscript, TextOption } from "../provider"
@@ -28,7 +24,7 @@ const style = stylex.create({
   }
 })
 
-interface ITextInputMenuProps {
+interface ITextInputMenuProps extends IContextMenu {
   data$: TextOption
   currentIndex$: number
   setData$: Setter<TextOption>

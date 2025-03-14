@@ -1,13 +1,14 @@
-import { inlineCssVar } from "~/utils"
-import JournalGridWrap from "./JournalGridWrap"
-import { lazy, onCleanup } from "solid-js"
+import { onCleanup } from "solid-js"
+import { BsPencilFill } from "solid-icons/bs"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./JournalGrid.module.css"
 // ...
+import { inlineCssVar } from "~/utils"
 import type { IJournalGroupData } from "~/api/journal"
 import { Button, ButtonSizeVariant, Flex, Spacer, createLazyLoadedDialog } from "~/components"
-import { BsPencilFill } from "solid-icons/bs"
+// ...
+import JournalGridWrap from "./JournalGridWrap"
 
 const style = stylex.create({
   grid: {
@@ -31,7 +32,7 @@ interface IJournalGridProps extends IJournalGroupData {
 
 export function JournalGrid(props: IJournalGridProps) {
   const modal = createLazyLoadedDialog(
-    lazy(() => import('./modals/EditJournalGroupModal')), 
+    () => import('./modals/EditJournalGroupModal'), 
     () => props
   )
   

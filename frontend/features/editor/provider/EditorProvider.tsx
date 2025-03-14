@@ -8,7 +8,6 @@ import type { IBlockSetting, EditorDocumentData, IBlockData } from "./blockData"
 import { createButtonRow, type IButtonRowUtils } from "./buttonRow"
 import { EditorEvent } from "./event"
 import { loadBlockSettings } from "./settings"
-import { compressEditorData, decompressEditorData } from "./compression"
 
 export type EditorSessionStorage = IStorage<{
   currentBlock: number
@@ -56,7 +55,7 @@ export function EditorProvider(props: ParentProps) {
   const debouceUpdateData = debounce(() => {
     event.emit$('editor__onUpdate', {
       id: previousOpenedDocumentId,
-      content: compressEditorData(block.data$())
+      content: block.data$()
     })
 
     //debug-start
@@ -92,7 +91,7 @@ export function EditorProvider(props: ParentProps) {
     //debug-start
     editorLog.log('New data will be added now')
     //debug-end
-    block.setData$(decompressEditorData(data.content))
+    block.setData$(data.content)
     
     if (data.content.length === 0) {
       //debug-start

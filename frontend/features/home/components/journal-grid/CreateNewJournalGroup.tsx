@@ -1,8 +1,10 @@
-import stylex from "@stylexjs/stylex"
-import JournalGridWrap from "./JournalGridWrap"
 import { BsPlus } from "solid-icons/bs"
+// ...
+import stylex from "@stylexjs/stylex"
+// ...
 import { createLazyLoadedDialog } from "~/components"
-import { lazy } from "solid-js"
+// ...
+import JournalGridWrap from "./JournalGridWrap"
 
 const style = stylex.create({
   createButton: {
@@ -12,7 +14,7 @@ const style = stylex.create({
 })
 
 export function CreateNewJournalGroup() {
-  const modal = createLazyLoadedDialog(lazy(() => import('./modals/CreateJournalGroupModal')))
+  const modal = createLazyLoadedDialog(() => import('./modals/CreateJournalGroupModal'))
 
   return (
     <>

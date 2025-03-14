@@ -1,5 +1,4 @@
 import { BsGearFill, BsPlus } from "solid-icons/bs"
-import { lazy } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -19,7 +18,7 @@ export function BlockButtonRow(props: HTMLAttributes<"div">) {
         <BsPlus />
       </Button>
     ),
-    lazy(() => import('./BlockAddListMenu'))
+    () => import('./BlockAddListMenu')
   )
 
   const SettingBlockMenu = createLazyLoadedDropdownMenu(
@@ -28,7 +27,7 @@ export function BlockButtonRow(props: HTMLAttributes<"div">) {
         <BsGearFill />
       </Button>
     ),
-    lazy(() => import('./BlockSettingMenu'))
+    () => import('./BlockSettingMenu')
   )
 
   return (

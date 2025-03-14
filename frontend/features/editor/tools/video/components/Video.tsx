@@ -1,4 +1,4 @@
-import { lazy, Show, type VoidComponent, splitProps, type ParentProps } from "solid-js"
+import { Show, splitProps, type ParentProps } from "solid-js"
 // ...
 import { mergeClassname } from "~/utils"
 import { FlexCenterY, FlexCenter, createLazyLoadedDialog } from "~/components"
@@ -76,7 +76,7 @@ export function Video(props: ParentProps<IVideoProps>) {
   }
 
   const videoFullscreenDialog = createLazyLoadedDialog(
-    lazy(() => import("./dialog/VideoFullscreenDialog")),
+    () => import("./dialog/VideoFullscreenDialog"),
     () => {
       const [, videoData] = splitProps(props, ["fullScreenMode$"])
       return {

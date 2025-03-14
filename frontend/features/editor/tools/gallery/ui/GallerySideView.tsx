@@ -1,5 +1,5 @@
 import { createDropzone } from "@soorria/solid-dropzone"
-import { lazy, Show } from "solid-js"
+import { Show } from "solid-js"
 import { BsFullscreen } from "solid-icons/bs"
 // ...
 import { api_saveGalleryImage } from "~/api/media"
@@ -37,7 +37,7 @@ export function GallerySideView() {
 
   const getGalleryListProps = () => isReadonly$() ? {} : dropzone.getRootProps()
   const galleryDialog = createLazyLoadedDialog(
-    lazy(() => import("./dialog/GalleryDialog"))
+    () => import("./dialog/GalleryDialog")
   )
   
   return (

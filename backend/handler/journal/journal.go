@@ -39,9 +39,9 @@ type JournalData struct {
 
 // Represents the data for a single content block within a journal entry.
 type JournalContentData struct {
-	Id   int            `json:"id"              cbor:"0,keyasint"`
-	Type uint16         `json:"type"            cbor:"1,keyasint"`
-	Data map[uint16]any `json:"data"            cbor:"3,keyasint"`
+	Id   int    `json:"id"              cbor:"0,keyasint"`
+	Type uint16 `json:"type"            cbor:"1,keyasint"`
+	Data any    `json:"data"            cbor:"3,keyasint"`
 }
 
 // Creates a new journal entry within a specified journal group.

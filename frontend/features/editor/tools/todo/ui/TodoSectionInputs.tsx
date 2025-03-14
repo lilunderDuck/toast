@@ -8,8 +8,8 @@ export function TodoSectionInputs() {
   const { isShowingTodoInput$, isShowingSectionInput$ } = useTodoSectionContext()
   const { isReadonly$ } = useEditorContext()
   
-  const CreateTodoInput = lazy(() => import('../ui/input/CreateTodoInput'))
-  const CreateSectionInput = lazy(() => import('../ui/input/CreateSectionInput'))
+  const CreateTodoInput = lazy(() => import('./input/CreateTodoInput'))
+  const CreateSectionInput = lazy(() => import('./input/CreateSectionInput'))
 
   return (
     <Show when={!isReadonly$()}>

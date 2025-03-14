@@ -1,15 +1,17 @@
 import { createSignal, Show } from "solid-js"
-import { SomeLazyLoadedComponent } from "./types"
+// ...
+import { LazyComponent, LazyComponentProps } from "./types"
 import { Dialog } from "../ui"
+import { createLazyComponent } from "./utils"
 
 export interface IDialog {
   close$(): void
 }
 
 export function createLazyLoadedDialog<Props extends IDialog>(
-  Component: SomeLazyLoadedComponent<Props>, 
+  Component: LazyComponent<Props>, 
   // @ts-ignore  should work
-  itProps: () => LazyLoadedComponentProps<SomeLazyLoadedComponent<Props>> = () => {}
+  itProps: () => LazyComponentProps<LazyComponent<Props>> = () => {}
 ) {
   const [showing, setIsShowing] = createSignal(false)
   const show = () => {
@@ -23,12 +25,14 @@ export function createLazyLoadedDialog<Props extends IDialog>(
     console.log('[lazy dialog] closed')
   }
 
+  const LazyComponent = createLazyComponent(Component)
+
   return {
     Modal$() {
       return (
         <Show when={showing()}>
           <Dialog defaultOpen={true} preventScroll={false} modal={true}>
-            <Component {...itProps()} close$={close} />
+            <LazyComponent {...itProps()} close$={close} />
           </Dialog>
         </Show>
       )

@@ -1,6 +1,5 @@
 import { 
   TooTechnicalPageRoot, 
-  MemoryUsage, 
   Versions, 
   LibaryUsedSection
 } from "~/features/technical"
@@ -19,10 +18,6 @@ export default function TooTechnicalPage() {
         <Versions />
       </section>
       <LibaryUsedSection />
-      <section>
-        <h2>Resource usage</h2>
-        {/* <MemoryUsage /> */}
-      </section>
     </TooTechnicalPageRoot>
   )
 }

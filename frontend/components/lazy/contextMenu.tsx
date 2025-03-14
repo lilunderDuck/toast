@@ -1,6 +1,8 @@
 import { createSignal, Show, type Component } from "solid-js"
-import { SomeLazyLoadedComponent } from "./types"
+// ...
+import { LazyComponent } from "./types"
 import { ContextMenu, ContextMenuTrigger } from "../ui"
+import { createLazyComponent } from "./utils"
 
 export interface IContextMenu {
   // ...
@@ -8,9 +10,9 @@ export interface IContextMenu {
 
 export function createLazyLoadedContextMenu<Props extends IContextMenu>(
   TriggerComponent: Component,
-  Component: SomeLazyLoadedComponent<Props>, 
+  Component: LazyComponent<Props>, 
   // @ts-ignore  should work
-  itProps: () => LazyLoadedComponentProps<SomeLazyLoadedComponent<Props>> = () => {}
+  itProps: () => LazyComponentProps<LazyComponent<Props>> = () => {}
 ) {
   const [showing, setIsShowing] = createSignal(false)
   const show = () => {
@@ -23,19 +25,22 @@ export function createLazyLoadedContextMenu<Props extends IContextMenu>(
     console.log('[lazy context menu] closed')
   }
 
+  const RIGHT_CLICK = 2
+  const LazyComponent = createLazyComponent(Component)
+
   return {
     ContextMenu$() {
       return (
         <ContextMenu>
           <ContextMenuTrigger as="div" onMouseUp={(e) => {
-            if (e.button === 2) {
+            if (e.button === RIGHT_CLICK) {
               show()
             }
           }}>
             <TriggerComponent />
           </ContextMenuTrigger>
           <Show when={showing()}>
-            <Component {...itProps()} close$={close} />
+            <LazyComponent {...itProps()} close$={close} />
           </Show>
         </ContextMenu>
       )

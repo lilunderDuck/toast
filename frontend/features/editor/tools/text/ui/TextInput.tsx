@@ -1,4 +1,4 @@
-import { lazy, ParentProps } from "solid-js"
+import { ParentProps } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./TextInput.module.css"
@@ -7,7 +7,6 @@ import { createLazyLoadedContextMenu, FlexCenterY } from "~/components"
 import { setCaretToTheEnd } from "~/features/editor/utils"
 // ...
 import { useTextDataContext } from "../provider"
-import { BsPlus } from "solid-icons/bs"
 
 const style = stylex.create({
   textinput: {
@@ -95,7 +94,7 @@ export function TextInput(props: ParentProps<ITextInputProps>) {
         {props.value$}
       </div>
     ),
-    lazy(() => import('./TextInputMenu')),
+    () => import('./TextInputMenu'),
     () => {
       const currentIndex = props.currentIndex$
       return {

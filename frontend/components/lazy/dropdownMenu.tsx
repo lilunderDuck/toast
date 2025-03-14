@@ -1,6 +1,10 @@
 import { createSignal, Show, type Component } from "solid-js"
-import { SomeLazyLoadedComponent } from "./types"
+// ...
+import { lazyLoadComponent } from "~/features/debug"
+// ...
+import { LazyComponent, LazyComponentProps } from "./types"
 import { DropdownMenu, DropdownMenuTrigger } from "../ui"
+import { createLazyComponent } from "./utils"
 
 export interface IDropdownMenu {
   // ...
@@ -8,21 +12,28 @@ export interface IDropdownMenu {
 
 export function createLazyLoadedDropdownMenu<Props extends IDropdownMenu>(
   TriggerComponent: Component,
-  Component: SomeLazyLoadedComponent<Props>, 
+  Component: LazyComponent<Props>, 
+  // still no auto-complete on lazy loaded component for some reason...
   // @ts-ignore  should work
-  itProps: () => LazyLoadedComponentProps<SomeLazyLoadedComponent<Props>> = () => {}
+  itProps: () => LazyComponentProps<LazyComponent<Props>> = () => {}
 ) {
   const [showing, setIsShowing] = createSignal(false)
   const show = () => {
     setIsShowing(false)
     setIsShowing(true)
-    console.log('[lazy dropdown menu] shown')
+    //debug-start
+    lazyLoadComponent.logLabel("dropdown menu", 'show')
+    //debug-end
   }
 
   const close = () => {
     setIsShowing(false)
-    console.log('[lazy dropdown menu] closed')
+    //debug-start
+    lazyLoadComponent.logLabel("dropdown menu", 'hide')
+    //debug-end
   }
+
+  const LazyComponent = createLazyComponent(Component)
 
   return {
     DropdownMenu$() {
@@ -32,7 +43,7 @@ export function createLazyLoadedDropdownMenu<Props extends IDropdownMenu>(
             <TriggerComponent />
           </DropdownMenuTrigger>
           <Show when={showing()}>
-            <Component {...itProps()} close$={close} />
+            <LazyComponent {...itProps()} close$={close} />
           </Show>
         </DropdownMenu>
       )

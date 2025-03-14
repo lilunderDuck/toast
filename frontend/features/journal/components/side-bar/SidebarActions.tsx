@@ -1,4 +1,4 @@
-import { createSignal, lazy } from 'solid-js'
+import { createSignal } from 'solid-js'
 // ...
 import { IJournalData } from '~/api/journal'
 import { createLazyLoadedDialog } from '~/components'
@@ -9,7 +9,7 @@ export default function SidebarActions() {
   const { event$, journal$, localStorage$ } = useJournalContext()
   const [thingToDelete, setThingToDelete] = createSignal<IJournalData>()
   const deleteJournalModal = createLazyLoadedDialog(
-    lazy(() => import('./modals/DeleteJournalModal')), 
+    () => import('./modals/DeleteJournalModal'), 
     () => ({
       journal$: thingToDelete()!
     })

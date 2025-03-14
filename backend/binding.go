@@ -82,11 +82,3 @@ func (a *App) Image_DeleteGalleryImage(groupId int, galleryId int, fileName stri
 func (a *App) Image_SaveGalleryImage(groupId int, galleryId int, fileName string, content string) string {
 	return blocks.Image_SaveGalleryImage(groupId, galleryId, fileName, content)
 }
-
-func Media_Save(groupId int, folderPath string, fileName string, rawImgStringContent string) string {
-	return blocks.Media_Save(groupId, folderPath, fileName, rawImgStringContent)
-}
-
-func Media_Delete(groupId int, folderPath string, fileName string) {
-	blocks.Media_Delete(groupId, folderPath, fileName)
-}
