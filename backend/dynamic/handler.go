@@ -62,5 +62,5 @@ func moveFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sendStatusCode(w, http.StatusOK, "Looking great")
+	sendStatusCode(w, http.StatusOK, utils.GetFileNameWithExtension(dest))
 }

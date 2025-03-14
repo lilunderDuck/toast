@@ -1,6 +1,6 @@
 .video {
   position: relative;
-  min-width: 20rem;
+  min-height: 20rem;
   width: 100%;
   height: auto;
   user-select: none;

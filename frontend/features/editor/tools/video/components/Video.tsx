@@ -1,15 +1,14 @@
-import { Show } from "solid-js"
+import { lazy, Show, type VoidComponent, splitProps } from "solid-js"
 // ...
-import { useResource, useToggleState } from "~/hook"
-import { mergeClassname, sleep } from "~/utils"
-import { FlexCenterY, SpinningCube } from "~/components"
+import { mergeClassname } from "~/utils"
+import { FlexCenterY, FlexCenter, createLazyLoadedDialog } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./Video.module.css"
 // ...
 import type { IVideoBlockData } from "../data"
-import { VideoControls, IVideoControlsProps, VideoControlState } from "./VideoControls"
-import { createVideoProgressBar } from "./VideoProgressBar"
+import { VideoControls, type IVideoControlsProps, VideoControlState } from "./VideoControls"
+import { createVideoProgressBar } from "./progress"
 import FullScreenButton from "./FullScreenButton"
 
 const style = stylex.create({
@@ -31,19 +30,32 @@ const style = stylex.create({
 })
 
 interface IVideoProps extends IVideoBlockData {
-  isLoading$?: boolean
+  onVideoLoaded$?: () => void
+  content$?: VoidComponent
+  showFullscreenButton$?: boolean
+  fullScreenMode$?: boolean
 }
 
 export function Video(props: IVideoProps) {
-  const { ProgressBar$, updateProgressBar$, setTotalDuration$ } = createVideoProgressBar()
   let thisVideoRef!: Ref<"video">
   let everythingRef!: Ref<"div">
+  const { 
+    ProgressBar$, 
+    updateProgressBar$, 
+    setTotalDuration$ 
+  } = createVideoProgressBar((currentDuration) => {
+    thisVideoRef.currentTime = currentDuration
+  })
 
   const updateVideoProgressBar: EventHandler<"video", "onTimeUpdate"> = () => {
-    setTotalDuration$(thisVideoRef.duration)
     updateProgressBar$(thisVideoRef.currentTime)
   }
-
+  
+  const onVideoLoaded: EventHandler<"video", "onLoadedData"> = () => {
+    setTotalDuration$(thisVideoRef.duration)
+    props.onVideoLoaded$?.()
+  }
+  
   const controlThisVideo: IVideoControlsProps["onClickingSomething$"] = (state) => {
     switch (state) {
       case VideoControlState.playing:
@@ -52,49 +64,53 @@ export function Video(props: IVideoProps) {
       case VideoControlState.pausing:
         thisVideoRef.pause()
         break
-      case VideoControlState.fullscreen:
-        everythingRef.requestFullscreen()
-        break
-      case VideoControlState.unfullscreen:
-        document.exitFullscreen()
-        break
     }
   }
 
-  const [isFullScreen, toggleFullscreen] = useToggleState(false)
+  const videoFullscreenDialog = createLazyLoadedDialog(
+    lazy(() => import("./dialog/VideoFullscreenDialog")),
+    () => {
+      const [, videoData] = splitProps(props, ["content$", "fullScreenMode$", "showFullscreenButton$"])
+      return {
+        videoData$: videoData
+      }
+    }
+  )
+
+  const VideoContent = props.content$!
 
   return (
-    <FlexCenterY 
+    <FlexCenter
       class={mergeClassname(
         __style.video
       )}
       ref={everythingRef}
     >
-      <video 
-        src={props.videoUrl} 
+      <video
+        src={props.videoUrl}
         ref={thisVideoRef}
         onTimeUpdate={updateVideoProgressBar}
+        onLoadedData={onVideoLoaded}
         preload="metadata"
       />
 
-      <Show when={props.isLoading$}>
-        <div>
-          <SpinningCube cubeSize$={30} />
-        </div>
+      <Show when={VideoContent}>
+        <VideoContent />
       </Show>
 
       <FlexCenterY class={mergeClassname(
-        stylex.attrs(style.progressBar), 
-        isFullScreen() ? __style.controlsInFullscreen : __style.controls
+        stylex.attrs(style.progressBar),
+        props.fullScreenMode$ ? __style.controlsInFullscreen : __style.controls
       )}>
         <VideoControls onClickingSomething$={controlThisVideo}>
           <ProgressBar$ />
-          <FullScreenButton 
-            toggle$={[isFullScreen, toggleFullscreen]} 
-            videoRef$={() => everythingRef}
-          />
+          <Show when={props.showFullscreenButton$ ?? true}>
+            <FullScreenButton onClick={videoFullscreenDialog.show$} />
+          </Show>
         </VideoControls>
       </FlexCenterY>
-    </FlexCenterY>
+
+      <videoFullscreenDialog.Modal$ />
+    </FlexCenter>
   )
 }

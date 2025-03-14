@@ -6,6 +6,8 @@ package backend
 
 import (
 	"context"
+
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct
@@ -39,4 +41,16 @@ func (a *App) BeforeClose(ctx context.Context) (prevent bool) {
 // shutdown is called at application termination
 func (a *App) Shutdown(ctx context.Context) {
 	// Perform your teardown here
+}
+
+func (a *App) OpenDirectoryDialog(options *runtime.OpenDialogOptions) (string, error) {
+	return runtime.OpenDirectoryDialog(a.ctx, *options)
+}
+
+func (a *App) OpenFileDialog(options *runtime.OpenDialogOptions) (string, error) {
+	return runtime.OpenFileDialog(a.ctx, *options)
+}
+
+func (a *App) OpenMultipleFilesDialog(options *runtime.OpenDialogOptions) ([]string, error) {
+	return runtime.OpenMultipleFilesDialog(a.ctx, *options)
 }
