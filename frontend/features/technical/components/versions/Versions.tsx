@@ -1,8 +1,9 @@
 import { For } from "solid-js"
 // ...
+import { API_VERSION, APP_BACKEND_VERSION, APP_VERSION } from "~/utils/macros" 
+// ...
 import stylex from "@stylexjs/stylex"
 import __style from "./Versions.module.css"
-import { API_VERSION, APP_BACKEND_VERSION, APP_VERSION } from "~/utils/macros" 
 
 const style = stylex.create({
   versions: {

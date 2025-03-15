@@ -1,7 +1,7 @@
 import { createSignal, Show } from "solid-js"
 import { Transition } from "solid-transition-group"
 // ...
-import { FlexCenter, FlexCenterX, FlexCenterY } from "~/components"
+import { FlexCenter, FlexCenterX } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./SplashScreen.module.css"
@@ -9,15 +9,6 @@ import cat_jumping from "../assets/cat_jumping.gif"
 // ...
 import SplashText from "./SplashText"
 import SplashProgressBar from "./SplashProgressBar"
-
-const fadeIn = stylex.keyframes({
-  from: {
-    opacity: 0
-  },
-  to: {
-    opacity: 1
-  }
-})
 
 const style = stylex.create({
   screen: {
@@ -27,9 +18,6 @@ const style = stylex.create({
     backgroundColor: 'var(--app-background-color)',
     position: 'fixed',
     zIndex: 1337
-  },
-  screen_fadeIn: {
-    animation: `${fadeIn} 0.25s ease-out 0.5s forwards`
   },
   text: {
     position: 'absolute',
@@ -46,18 +34,6 @@ const style = stylex.create({
     height: '20rem',
     background: 'center center no-repeat var(--bg)',
     backgroundSize: 'contain'
-  },
-  splashInfoText: {
-    position: 'absolute',
-    width: '100%',
-    paddingTop: 5,
-    paddingLeft: 10,
-    fontSize: 13,
-    gap: 15
-  },
-  timer: {
-    flexShrink: 1,
-    minWidth: 30
   }
 })
 
@@ -90,9 +66,6 @@ export namespace SplashScreen {
                 '--bg': `url('${cat_jumping}')`
               }} />
             </FlexCenter>
-            <FlexCenterY {...stylex.attrs(style.splashInfoText)}>
-              {text()}
-            </FlexCenterY>
             <SplashText {...stylex.attrs(style.text)} />
           </FlexCenterX>
         </Show>
