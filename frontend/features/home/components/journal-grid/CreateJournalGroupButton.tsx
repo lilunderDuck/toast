@@ -13,7 +13,7 @@ const style = stylex.create({
   }
 })
 
-export function CreateNewJournalGroup() {
+export function CreateJournalGroupButton() {
   const modal = createLazyLoadedDialog(() => import('./modals/CreateJournalGroupModal'))
 
   return (

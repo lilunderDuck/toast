@@ -1,52 +1,40 @@
-import { 
-  createForm, 
-  required, 
-  type SubmitHandler 
-} from "@modular-forms/solid"
-import IconInput from "./IconInput"
+import { createForm, required } from "@modular-forms/solid"
 // ...
 import {
   type JournalGroupSchema,
   api_createGroup
 } from "~/api/journal"
-import { 
-  Button, 
-  ButtonSizeVariant, 
-  FieldInput, 
-} from "~/components"
+import { FieldInput } from "~/components"
 import { toast } from '~/features/toast'
-import { createSignal } from "solid-js"
 import { useJournalHomeContext } from "~/features/home/provider"
+import { createSubmitForm } from "~/hook"
+// ...
+import IconInput from "./IconInput"
 
 interface ICreateJournalGroupFormProps {
   onClick: () => any
 }
 
 export default function CreateJournalGroupForm(props: ICreateJournalGroupFormProps) {
-  const [_journalGroupForm, { Field, Form }] = createForm<JournalGroupSchema>()
-  const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
+  const [, { Field, Form }] = createForm<JournalGroupSchema>()
   const { grid$ } = useJournalHomeContext()
 
-  const submit: SubmitHandler<JournalGroupSchema> = async(data) => {
-    setSubmitButtonDisabled(true)
-    const dataReturned = await toast
-      .promise(api_createGroup(data), {
+  const { Form$ } = createSubmitForm<JournalGroupSchema>(Form, {
+    submitButtonText$: "Create",
+    async onSubmit$(data) {
+      const dataReturned = await toast.promise(api_createGroup(data), {
         loading: 'Saving changes...',
         success: 'Done!',
         error: 'Failed to save changes :('
       })
-      .catch(() => setSubmitButtonDisabled(false))
-    // ...
 
-    if (!dataReturned) return
-
-    setSubmitButtonDisabled(false)
-    grid$.add$(dataReturned)
-    props.onClick()
-  }
+      grid$.add$(dataReturned)
+      props.onClick()
+    }
+  })
 
   return (
-    <Form onSubmit={submit}>
+    <Form$>
       <IconInput />
       <Field name="name" validate={[
         required('This field is required')
@@ -77,13 +65,6 @@ export default function CreateJournalGroupForm(props: ICreateJournalGroupFormPro
           />
         )}
       </Field>
-      <Button 
-        size$={ButtonSizeVariant.sm} 
-        type="submit" 
-        disabled={submitButtonDisabled()}
-      >
-        Create it!
-      </Button>
-    </Form>
+    </Form$>
   )
 }

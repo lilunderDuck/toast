@@ -13,7 +13,7 @@ export type LibaryData = {
   version: string
   description: string
   homepageUrl: string
-  type: 'dep' | 'devDep'
+  type: LibaryType
 }
 
 export type LibaryUsedData = LibaryData[]
@@ -21,5 +21,5 @@ export type LibaryUsedData = LibaryData[]
 export const enum LibaryType {
   frontend,
   backend,
-  build
+  build,
 }

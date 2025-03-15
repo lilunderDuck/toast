@@ -4,13 +4,14 @@ import {
   DialogTitle,
   type IDialog
 } from "~/components"
+import type { IJournalGroupData } from "~/api/journal"
 // ...
 import stylex from "@stylexjs/stylex"
+// ...
 import EditJournalGroupForm from "./EditJournalGroupForm"
-import type { IJournalGroupData } from "~/api/journal"
 
 const style = stylex.create({
-  $content: {
+  content: {
     width: '50%'
   }
 })
@@ -23,7 +24,7 @@ export default function EditJournalGroupModal(props: IEditJournalGroupModalProps
   return (
     <DialogContent 
       closeOnClickOutside$={false}
-      {...stylex.attrs(style.$content)}
+      {...stylex.attrs(style.content)}
     >
       <DialogTitle>
         Edit group

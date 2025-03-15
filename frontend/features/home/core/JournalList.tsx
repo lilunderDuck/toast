@@ -4,14 +4,14 @@ import type { IJournalGroupData } from "~/api/journal"
 import { Flex, FlexCenter } from "~/components"
 import { mergeClassname } from "~/utils"
 // ...
-import { CreateNewJournalGroup, JournalGrid } from "../components"
+import { CreateJournalGroupButton, JournalGrid } from "../components"
 import { useJournalHomeContext } from '../provider'
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from '../components/journal-grid/JournalGrid.module.css'
 
 const style = stylex.create({
-  journal$List: {
+  journalList: {
     gap: 15,
     flexWrap: 'wrap'
   },
@@ -28,7 +28,7 @@ export function JournalList() {
   const { grid$, event$, infoSidebar$ } = useJournalHomeContext()
 
   const [resource] = createResource(async() => {
-    await grid$.fetchJournalGroups$()
+    await grid$.fetch$()
     return true
   })
 
@@ -51,16 +51,14 @@ export function JournalList() {
     }
   }
 
-  console.log(event$)
-
-  event$['on$']('home__infoSidebarClose', () => {
+  event$.on$('home__infoSidebarClose', () => {
     deselectLastHighlightedGroupIfCan()
     lastElement = undefined
   })
 
   return (
     <Flex class={mergeClassname(
-      stylex.attrs(style.journal$List),
+      stylex.attrs(style.journalList),
       __style['journal-list']
     )}>
       <Show when={!resource.loading} fallback={
@@ -68,12 +66,12 @@ export function JournalList() {
           Spinnin'
         </FlexCenter>
       }>
-        <For each={grid$.journalGroups$()}>
+        <For each={grid$.groups$()}>
           {it => (
-            <JournalGrid {...it} on$Click={clickOnSomeJournalGroup(it)}/>
+            <JournalGrid {...it} onClick={clickOnSomeJournalGroup(it)}/>
           )}
         </For>
-        <CreateNewJournalGroup />
+        <CreateJournalGroupButton />
       </Show>
     </Flex>
   )

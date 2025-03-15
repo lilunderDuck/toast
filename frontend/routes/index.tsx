@@ -1,7 +1,9 @@
+import { BsCodeSquare } from "solid-icons/bs"
 import { 
   JournalHomeRoot, 
   JournalInfoSidebar, 
-  JournalList 
+  JournalList, 
+  JournalOtherPlace
 } from "~/features/home"
 
 export default function HomePage() {
@@ -10,11 +12,20 @@ export default function HomePage() {
       <JournalInfoSidebar />
     }>
       <h1>Home</h1>
-      <br />
+      <h2>Other places</h2>
+      <div>
+        <JournalOtherPlace 
+          href$="/too-technical"
+          icon$={BsCodeSquare}
+          name$="Technical details"
+          description$="Technical stuff about this app"
+          iconColor$=""
+        />
+      </div>
+
       <h2>Your stuff</h2>
-      {/* <Show when={!resource.loading}> */}
       <JournalList />
-      {/* </Show> */}
+
     </JournalHomeRoot>
   )
 }

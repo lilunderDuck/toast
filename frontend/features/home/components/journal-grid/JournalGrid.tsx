@@ -1,4 +1,4 @@
-import { onCleanup } from "solid-js"
+import { onCleanup, splitProps } from "solid-js"
 import { BsPencilFill } from "solid-icons/bs"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -12,28 +12,35 @@ import JournalGridWrap from "./JournalGridWrap"
 
 const style = stylex.create({
   grid: {
-    padding: 10
+    padding: 10,
+    position: 'relative'
   },
   text: {
     fontSize: 13
   },
-  // editButtonWrap: {
-  //   position: 'relative',
-  //   zIndex: 1
-  // },
+  hitbox: {
+    width: '100%',
+    height: '100%',
+    flexDirection: 'column'
+  },
   editButton: {
-    flexShrink: 0
+    flexShrink: 0,
+    position: 'absolute',
+    right: 10
   }
 })
 
 interface IJournalGridProps extends IJournalGroupData {
-  on$Click: EventHandler<"div", "onClick">
+  onClick: EventHandler<"div", "onClick">
 }
 
 export function JournalGrid(props: IJournalGridProps) {
   const modal = createLazyLoadedDialog(
     () => import('./modals/EditJournalGroupModal'), 
-    () => props
+    () => {
+      const [, stuff] = splitProps(props, ["onClick"])
+      return stuff
+    }
   )
   
   const [styleId, styleDispose] = inlineCssVar(props.icon ? {
@@ -45,23 +52,22 @@ export function JournalGrid(props: IJournalGridProps) {
   return (
     <JournalGridWrap 
       id={styleId} 
-      onClick={props.on$Click} 
       {...stylex.attrs(style.grid)}
     >
-      <Flex id={__style['journal-grid-edit-button']}>
+      <Button 
+        onClick={modal.show$}
+        id={__style.editButton}
+        size$={ButtonSizeVariant.icon} 
+        {...stylex.attrs(style.editButton)}
+      >
+        <BsPencilFill />
+      </Button>
+      <Flex {...stylex.attrs(style.hitbox)} onClick={props.onClick}>
         <Spacer />
-        <Button 
-          onClick={modal.show$}
-          size$={ButtonSizeVariant.icon} 
-          {...stylex.attrs(style.editButton)}
-        >
-          <BsPencilFill />
-        </Button>
+        <span {...stylex.attrs(style.text)}>
+          {props.name}
+        </span>
       </Flex>
-      <Spacer />
-      <span {...stylex.attrs(style.text)}>
-        {props.name}
-      </span>
       {/* ... */}
       <modal.Modal$ />
     </JournalGridWrap>

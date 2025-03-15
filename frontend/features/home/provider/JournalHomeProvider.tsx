@@ -1,27 +1,17 @@
-import { type Accessor, createContext, createSignal, type ParentProps, useContext } from "solid-js"
+import { createContext, type ParentProps, useContext } from "solid-js"
 // ...
-import { type IJournalGroupData, api_getGroup } from "~/api/journal"
-import { thisArrayObjects, createEvent, type IEvent } from "~/utils"
-import { homeLog } from "~/features/debug"
+import { createEvent, type IEvent } from "~/utils"
 // ...
+import { createInfoSidebar, type IInfoSidebarUtils } from "./infoSIdebar"
+import { createJournalGrid, type IJournalGridUtils } from "./grid"
 
-type JournalHomeEvent = {
+export type JournalHomeEvent = {
   home__infoSidebarClose(): void
 }
 
 interface IJournalHomeContext {
-  infoSidebar$: {
-    open$(data: IJournalGroupData): void
-    close$(): void
-    update$(data: IJournalGroupData): void
-    currentJournalData$: Accessor<IJournalGroupData | undefined>
-  }
-  grid$: {
-    fetchJournalGroups$(): Promise<IJournalGroupData[]>
-    journalGroups$: Accessor<IJournalGroupData[]>
-    add$(data: IJournalGroupData): void
-    update$(data: IJournalGroupData): void
-  }
+  infoSidebar$: IInfoSidebarUtils
+  grid$: IJournalGridUtils
   // ...
   event$: IEvent<JournalHomeEvent>
 }
@@ -29,56 +19,16 @@ interface IJournalHomeContext {
 const Context = createContext<IJournalHomeContext>()
 
 export function JournalHomeProvider(props: ParentProps) {
-  const [journalGroups, setJournalGroups] = createSignal<IJournalGroupData[]>([])
-  const [currentJournalData, setCurrentJournalData] = createSignal<IJournalGroupData>()
-
   const event = createEvent<JournalHomeEvent>()
+
+  const infoSidebar = createInfoSidebar(event)
+  const grid = createJournalGrid()
 
   return (
     <Context.Provider value={{
       event$: event,
-      infoSidebar$: {
-        open$(data: IJournalGroupData) {
-          setCurrentJournalData(data)
-          //debug-start
-          homeLog.logLabel('sidebar', 'opened', data)
-          //debug-end
-        },
-        close$() {
-          setCurrentJournalData(undefined)
-          event.emit$('home__infoSidebarClose')
-          //debug-start
-          homeLog.logLabel('sidebar', 'closed')
-          //debug-end
-        },
-        update$(data: IJournalGroupData) {
-          setCurrentJournalData(data)
-          //debug-start
-          homeLog.logLabel('sidebar', 'updated', data)
-          //debug-end
-        },
-        currentJournalData$: currentJournalData,
-      },
-      grid$: {
-        async fetchJournalGroups$() {
-          const data = await api_getGroup<undefined>()
-          setJournalGroups(data)
-          return data
-        },
-        journalGroups$: journalGroups,
-        add$(another) {
-          setJournalGroups(prev => [...prev, another])
-          //debug-start
-          homeLog.logLabel('grid', 'added', another)
-          //debug-end
-        },
-        update$(newOne) {
-          setJournalGroups(prev => [...thisArrayObjects(prev).replace$(it => it.id === newOne.id, newOne)])
-          //debug-start
-          homeLog.logLabel('grid', 'updated', newOne)
-          //debug-end
-        }
-      },
+      infoSidebar$: infoSidebar,
+      grid$: grid
     }}>
       {props.children}
     </Context.Provider>

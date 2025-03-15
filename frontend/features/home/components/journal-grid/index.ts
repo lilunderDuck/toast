@@ -1,2 +1,2 @@
 export * from "./JournalGrid"
-export * from "./CreateNewJournalGroup"
+export * from "./CreateJournalGroupButton"

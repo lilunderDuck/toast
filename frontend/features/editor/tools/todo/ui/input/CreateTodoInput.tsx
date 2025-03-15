@@ -3,9 +3,8 @@ import { createForm, required, SubmitHandler } from "@modular-forms/solid"
 import { resetFieldInputs } from "~/utils"
 import { FieldInput, OpenAndCloseButton } from "~/components"
 // ...
-import { TodoSchema } from "../../TodoBlock"
 import { useTodoSectionContext } from "../TodoSectionProvider"
-import { useTodoDataContext } from "../../data"
+import { TodoSchema, useTodoDataContext } from "../../data"
 
 interface ICreateTodoInputProps {
   // ...

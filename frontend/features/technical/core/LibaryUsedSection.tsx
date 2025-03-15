@@ -1,10 +1,9 @@
 import { createResource, createSignal, Show } from "solid-js"
 // ...
 import type { ArrayElement } from "~/utils"
-import { LibaryType, LibaryData } from "~/api/misc"
+import { LibaryType, LibaryData, api_getLibariesUsed } from "~/api/misc"
 // ...
 import { LibarySearchBox, LibaryUsedList } from "../components"
-import { api_getLibariesUsed } from "../utils"
 
 export function LibaryUsedSection() {
   const [libraries] = createResource(api_getLibariesUsed)
@@ -36,15 +35,15 @@ export function LibaryUsedSection() {
 
     switch(mapping[value]) {
       case LibaryType.build:
-        setLibaryList([...libList.filter(it => it.type === "devDep")])
+        setLibaryList([...libList.filter(it => it.type === LibaryType.build)])
       break
 
       case LibaryType.frontend:
-        setLibaryList([...libList.filter(it => it.type === 'dep' && isUsedInTheClient(it))])
+        setLibaryList([...libList.filter(it => it.type === LibaryType.frontend && isUsedInTheClient(it))])
       break
 
       case LibaryType.backend: 
-        setLibaryList([...libList.filter(it => it.type === 'dep' && !isUsedInTheClient(it))])
+        setLibaryList([...libList.filter(it => it.type === LibaryType.frontend && !isUsedInTheClient(it))])
       break
 
       default:

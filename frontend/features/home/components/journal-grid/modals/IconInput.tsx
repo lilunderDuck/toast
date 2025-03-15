@@ -5,7 +5,7 @@ import { createSignal, Show } from "solid-js"
 import { FlexCenter, FlexCenterX } from "~/components"
 
 const style = stylex.create({
-  icon$Input: {
+  iconInput: {
     width: '16rem',
     height: '16rem',
     borderRadius: 8,
@@ -16,7 +16,7 @@ const style = stylex.create({
     backgroundSize: 'cover',
     cursor: 'pointer',
   },
-  icon$InputWithNoImage: {
+  iconInputWithNoImage: {
     backgroundColor: 'var(--gray3)',
     ':hover': {
       backgroundColor: 'var(--gray4)',
@@ -50,8 +50,8 @@ export default function IconInput() {
     }}>
       <input {...dropzone.getInputProps()} />
       <FlexCenter {...stylex.attrs(
-        style.icon$Input, 
-        imagePreviewUrl() ? {} : style.icon$InputWithNoImage
+        style.iconInput, 
+        imagePreviewUrl() ? {} : style.iconInputWithNoImage
       )}>
         <Show when={!imagePreviewUrl()}>
           <BsFileImageFill size={30} />

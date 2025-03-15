@@ -4,6 +4,8 @@ import { LazyComponent, LazyComponentProps } from "./types"
 import { Dialog } from "../ui"
 import { createLazyComponent } from "./utils"
 
+type LazyDialogComponent<Props extends {}> = LazyComponentProps<LazyComponent<Props>>
+
 export interface IDialog {
   close$(): void
 }
@@ -11,7 +13,7 @@ export interface IDialog {
 export function createLazyLoadedDialog<Props extends IDialog>(
   Component: LazyComponent<Props>, 
   // @ts-ignore  should work
-  itProps: () => LazyComponentProps<LazyComponent<Props>> = () => {}
+  itProps: () => Omit<LazyDialogComponent<Props>, "close$"> = () => {}
 ) {
   const [showing, setIsShowing] = createSignal(false)
   const show = () => {
@@ -32,7 +34,7 @@ export function createLazyLoadedDialog<Props extends IDialog>(
       return (
         <Show when={showing()}>
           <Dialog defaultOpen={true} preventScroll={false} modal={true}>
-            <LazyComponent {...itProps()} close$={close} />
+            <LazyComponent {...itProps() as LazyDialogComponent<Props>} close$={close} />
           </Dialog>
         </Show>
       )

@@ -1,7 +1,7 @@
 /**
  *  .journal-list
  *    #journal-grid (.active)
- *      #journal-grid-edit-button
+ *      #editButton
 **/
 
 .journal-list #journal-grid {
@@ -28,11 +28,11 @@
   color: var(--gray10);
 }
 
-#journal-grid #journal-grid-edit-button {
+#journal-grid #editButton {
   opacity: 0;
   transition: all 0.15s ease-out;
 }
 
-#journal-grid:hover #journal-grid-edit-button {
+#journal-grid:hover #editButton {
   opacity: 1;
 }

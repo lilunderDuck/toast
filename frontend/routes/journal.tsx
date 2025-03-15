@@ -11,9 +11,7 @@ export default function JournalPage(props: RouteSectionProps) {
   return (
     <JournalRoot>
       <JournalSidebar />
-      <JournalEditorContent>
-        {props.children}
-      </JournalEditorContent>
+      <JournalEditorContent />
       {/* <JournalRightSidebar /> */}
     </JournalRoot>
   )
