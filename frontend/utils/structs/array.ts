@@ -7,16 +7,16 @@ export type ArrayElement<ArrayType extends readonly unknown[]> =
 // ...
 
 /**Defines a predicate function type for filtering or finding elements in an array.
- * @template Value  The type of the elements in the array.
- * @template Array  The type of the array.
- * @param value     The current element being processed.
- * @param index     The index of the current element.
- * @param obj       The entire array.
+ * @template Value      The type of the elements in the array.
+ * @template ArrayType  The type of the array.
+ * @param value         The current element being processed.
+ * @param index         The index of the current element.
+ * @param obj           The entire array.
  * @returns A boolean value indicating whether the element should be included or matched.
  */
-type Predicate<Value, Array> = (value: Value, index: number, obj: Array[]) => unknown
+type Predicate<Value, ArrayType> = (value: Value, index: number, obj: ArrayType[]) => unknown
 
-export interface IThisArrayObjects<T extends AnyObject[]> {
+export interface IArrayObjectsUtils<T extends AnyObject[]> {
   /**Removes an object from the array based on a property name and value.
    *
    * @template Element The type of the property to filter by.
@@ -28,6 +28,8 @@ export interface IThisArrayObjects<T extends AnyObject[]> {
     name: Element, value: ArrayElement<T>[Element]
   ): T
   /**Replaces an object in the array with a new one based on a predicate.
+   * 
+   * @note the old value will be merged with the new value.
    * @param whereToReplace   The predicate function to find the object to replace.
    * @param somethingElse    The new object to replace the old one with.
    * @returns The modified array.
@@ -50,24 +52,21 @@ export interface IThisArrayObjects<T extends AnyObject[]> {
  * @template T The type of the array of objects.
  * @param arrayOfObjects The array of objects to operate on.
  */
-export function thisArrayObjects<T extends AnyObject[]>(arrayOfObjects: T): IThisArrayObjects<T> {
+export function arrayObjects<T extends AnyObject[]>(arrayOfObjects: T): IArrayObjectsUtils<T> {
   return {
     remove$(name, value) {
-      // @ts-ignore
+      // @ts-ignore - it does work
       return arrayOfObjects.filter((it) => it[name] !== value) as T
-      //                                   ^^^^^^^^
-      // well, the type error is right here - [look at the arrow]
-      // but the code is working fineee...
+      //                                   ^^^^^^^^ the type error is here
     },
     replace$(whereToReplace, somethingElse) {
       const [oldData, index] = this.find$(whereToReplace)
 
-      const newData = {
+      arrayOfObjects[index] = {
         ...oldData,
         ...somethingElse,
-      }
+      } // assign to a new value
 
-      arrayOfObjects[index] = newData
       return arrayOfObjects
     },
     find$(whereToFind) {

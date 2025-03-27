@@ -5,7 +5,7 @@ import stylex from "@stylexjs/stylex"
 import { FlexCenterY } from "~/components"
 import { editorLog } from "~/features/debug"
 // ...
-import { progressPercentageToCurrentTime, toHHMMSS } from "../../utils"
+import { progressPercentageToCurrentTime, toHHMMSS } from "../utils"
 import VideoProgressSlider from "./VideoProgressSlider"
 
 const style = stylex.create({

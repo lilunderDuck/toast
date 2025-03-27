@@ -1,15 +1,24 @@
 import { createSignal, For, Show } from "solid-js"
-// @ts-ignore - did use this
 import { dndzone } from "solid-dnd-directive"
-//                      ^^^^^^^^^^^^^^^^^^^^^
-// phew, I can finally live in peace with this one, instead of writting my freaking own
-// drag and drop.
 // ...
-import { AnyVirTreeNode, isFolder, VirFileTree } from "~/api/journal"
+import { AnyVirTreeNode, FolderNode, isFolder } from "~/features/journal/utils"
 // ...
 import { useJournalContext } from "../../../context"
 import JournalCategory from "./JournalCategory"
 import Journal from "./Journal"
+
+interface IDndDragEvent<T extends number | string> extends CustomEvent {
+  detail: {
+    info: {
+      id: T
+      source: "pointer"
+      trigger: "draggedEntered"
+    }
+    items: { id: T }[]
+  }
+  srcElement: Ref<"div">
+  type: "consider" | "finalize"
+}
 
 export function FileDisplay() {
   const { fileDisplay$ } = useJournalContext()
@@ -21,39 +30,40 @@ export function FileDisplay() {
     if (!data) {
       return void console.warn('cannot get data', props)
     }
-    
+
     if (isFolder(props)) {
       return (
         <JournalCategory {...data}>
           <RecursivelyRenderItOut {...props} />
         </JournalCategory>
       )
-    } 
-    
+    }
+
     return <Journal {...data} />
   }
 
   // OooOo, scary name
-  const RecursivelyRenderItOut = (thisProps: VirFileTree.FolderNode) => {
+  const RecursivelyRenderItOut = (thisProps: FolderNode) => {
     const [items, setItems] = createSignal(thisProps.child)
 
-    type WhatTheHeckIsThisType = any
-    const handleDndEvent = (e: WhatTheHeckIsThisType) => {
-      const {items: newItems} = e.detail
+    const handleDndEvent = (preview: boolean) => (dragEvent: IDndDragEvent<number>) => {
+      const { items: newItems } = dragEvent.detail
       setItems(newItems)
-      fileDisplay$.replaceTree$(thisProps.id === ROOT_ID ? "root" : thisProps.id, newItems)
+      if (!preview) {
+        const folderId = ROOT_ID === thisProps.id ? "root" : thisProps.id
+        fileDisplay$.replaceTree$(folderId, newItems)
+      }
     }
 
     return (
-      //@ts-ignore - "use:dndzone" is a directive, maybe I should add that type somewhere...
-      <div use:dndzone={{items}} on:consider={handleDndEvent} on:finalize={handleDndEvent}>
-        <For each={items()}>  
+      <div use:dndzone={{items}} on:consider={handleDndEvent(true)} on:finalize={handleDndEvent(false)}>
+        <For each={items()}>
           {it => <RenderFolderAndFileComponent {...it} />}
         </For>
       </div>
     )
   }
-  
+
   return (
     <Show when={!fileDisplay$.isUpdating$()}>
       <RecursivelyRenderItOut child={fileDisplay$.treeSignal$()} id={ROOT_ID} />

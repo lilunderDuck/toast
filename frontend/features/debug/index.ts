@@ -10,4 +10,5 @@ export const imgZoomPanLog = createLog('Image pan/zoom', '#088a54', '#06663e')
 
 export const fileDialog = createLog('file dialog', '#ff3721', '#b52919')
 export const lazyLoadComponent = createLog('lazy', '#131862', '#172a87')
+export const apiCallLog = createLog('api call', '#131862', '#172a87')
 //debug-end

@@ -1,7 +1,8 @@
+import { lazy } from "solid-js"
+// ...
 import { getRandomNumberFrom } from "~/utils"
 // ...
 import { IBlockSetting, useEditorContext } from "../../provider"
-import { lazy } from "solid-js"
 
 export interface ICodeBlockData {
   code: string

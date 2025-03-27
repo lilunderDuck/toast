@@ -5,11 +5,11 @@ import { api_getVideoSavedPath, api_saveVideo } from "~/api/media"
 import { useJournalContext } from "~/features/journal"
 import { createFileUpload, FileUploadType } from "~/features/file-uploads"
 import { useEditorContext } from "~/features/editor/provider"
+import { Video } from "~/features/editor/common/video"
 import { FlexCenter, SpinningCube } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { Video } from "../components"
 import { useVideoDataContext } from "../data"
 
 const style = stylex.create({
@@ -29,12 +29,12 @@ interface IVideoInputProps {
 
 export function VideoInput(props: IVideoInputProps) {
   const { isReadonly$ } = useEditorContext()
-  const { sessionStorage$ } = useJournalContext()
+  const { getCurrentGroup$ } = useJournalContext()
   const { data$, setData$ } = useVideoDataContext()
 
   const isThereAVideo = () => data$.videoUrl !== ""
   const [isLoading, setIsLoading] = createSignal(isThereAVideo())
-  const currentGroupId = sessionStorage$.get$("currentGroup").id
+  const currentGroupId = getCurrentGroup$().id
 
   let shouldShowDialog = true
   const FileUploadDialog = createFileUpload({

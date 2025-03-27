@@ -1,4 +1,4 @@
-import { For, Show } from "solid-js"
+import { createEffect, createSignal, For, Show } from "solid-js"
 // ...
 import { editorLog } from "~/features/debug"
 import { mergeClassname } from "~/utils"
@@ -31,11 +31,11 @@ const style = stylex.create({
 })
 
 export function Editor() {
-  const { blocks$, blockSetting$, buttonRow$, isReadonly$ } = useEditorContext()
+  const { blocks$, blockSetting$, internal$, isReadonly$ } = useEditorContext()
 
   const mouseHoverTheBlock: EventHandler<"div", "onMouseEnter"> = (mouseEvent) => {
     const currentTarget = mouseEvent.currentTarget
-    buttonRow$.updatePosition$(currentTarget)
+    internal$.buttonRow$.updatePosition$(currentTarget)
   }
 
   const EditorBlock = (props: IBlockData) => {
@@ -60,6 +60,17 @@ export function Editor() {
     )
   }
 
+  // a weird hack to acturally show the correct data
+  // because idk why the data is being desynced
+  // what's a nightmare
+  const [shouldUpdate, setShouldUpdate] = createSignal(false)
+  createEffect(() => {
+    if (isReadonly$()) {
+      setShouldUpdate(true)
+      setShouldUpdate(false)
+    }
+  }) 
+
   return (
     <div class={mergeClassname(
       __scrollbarStyle.scrollbar,
@@ -68,13 +79,15 @@ export function Editor() {
       stylex.attrs(style.editor)
     )}>
       <div {...stylex.attrs(style.blockList)}>
-        <For each={blocks$.data$()}>
-          {it => <EditorBlock {...it} />}
-        </For>
+        <Show when={!shouldUpdate()}>
+          <For each={blocks$.data$()}>
+            {it => <EditorBlock {...it} />}
+          </For>
+        </Show>
       </div>
       <Show when={!isReadonly$()}>
         <div {...stylex.attrs(style.blockSetting)} style={{
-          '--y': `${buttonRow$.currentButtonRowYPos$().y - 40}px`,
+          '--y': `${internal$.buttonRow$.currentButtonRowYPos$().y - 40}px`,
           // '--x': `${buttonRow$.currentButtonRowYPos$().x}px`,
           '--x': `0px`,
         }}>

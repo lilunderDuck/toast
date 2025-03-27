@@ -1,16 +1,14 @@
 import { createSignal, type Component } from "solid-js"
 // ...
 import { 
-  AnyVirTreeNode,
   IJournalCategoryData,
   IJournalData,
-  VirFileTree,
   api_updateJournalVirturalFileTree,
-  isFolder
 } from "~/api/journal"
 import { journalLog } from "~/features/debug"
 // ...
 import type { JournalSessionStorage } from "./JournalContext"
+import { AnyVirTreeNode, ClientData, Data, isFolder, Tree } from "../utils"
 
 type TreeNodeType = 'file' | 'folder'
 type TreeMappingData = Record<number, IJournalCategoryData | IJournalData>
@@ -26,10 +24,10 @@ export interface IFileDisplayContext extends ReturnType<typeof createFileDisplay
 }
 
 export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
-  const [tree, setTree] = createSignal<VirFileTree.Tree>([])
+  const [tree, setTree] = createSignal<Tree>([])
   const [isUpdating, setIsUpdating] = createSignal(false)
 
-  let treeCache: VirFileTree.Data = {
+  let treeCache: Data = {
     list: [],
     data: []
   }
@@ -73,7 +71,7 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
     return update()
   }
 
-  const find = (nodeId: number, child: VirFileTree.Tree = treeCache.data) => {
+  const find = (nodeId: number, child: Tree = treeCache.data) => {
     for (const node of child) {
       if (node.id === nodeId) {
         return node
@@ -93,32 +91,37 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
     return null
   }
 
-  const replaceTree = (whichFolderId: number | 'root', tree: VirFileTree.Tree) => {
+  const replaceTree = (whichFolderId: number | 'root', tree: Tree) => {
     if (whichFolderId === 'root') {
       treeCache.data = tree
+      //debug-start
+      journalLog.logLabel("file display", 'replace', whichFolderId, "with", tree)
+      //debug-end
       return update()
     }
 
     const shouldBeAFolder = find(whichFolderId)
+    //debug-start
     if (!shouldBeAFolder) {
-      //debug-start
       journalLog.errorLabel("file display", "could not find node", whichFolderId)
-      //debug-end
       return 
     }
-
+    
     if (!isFolder(shouldBeAFolder)) {
-      //debug-start
       journalLog.errorLabel("file display", shouldBeAFolder, "is not a folder")
-      //debug-end
       return 
     }
+    //debug-end
+
+    //debug-start
+    journalLog.logLabel("file display", 'replace', whichFolderId, "with", tree)
+    //debug-end
 
     shouldBeAFolder.child = tree
     update()
   }
 
-  const wrappedSetTree = (tree: VirFileTree.Tree, data: VirFileTree.ClientData["list"]) => {
+  const wrappedSetTree = (tree: Tree, data: ClientData["list"]) => {
     mapping = data
     treeCache.data = tree
     update()

@@ -6,9 +6,9 @@ import { FlexCenterY, FlexCenter, createLazyLoadedDialog } from "~/components"
 import stylex from "@stylexjs/stylex"
 import __style from "./Video.module.css"
 // ...
-import type { IVideoBlockData } from "../data"
-import { VideoControls, type IVideoControlsProps, VideoControlState } from "./VideoControls"
+import type { IVideoBlockData } from "./data"
 import { createVideoProgressBar } from "./progress"
+import { VideoControls, type IVideoControlsProps, VideoControlState } from "./VideoControls"
 import FullScreenButton from "./FullScreenButton"
 
 const style = stylex.create({
@@ -87,9 +87,7 @@ export function Video(props: ParentProps<IVideoProps>) {
 
   return (
     <FlexCenter
-      class={mergeClassname(
-        __style.video
-      )}
+      class={mergeClassname(__style.video)}
       ref={everythingRef}
     >
       <video

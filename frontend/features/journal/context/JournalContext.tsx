@@ -1,11 +1,8 @@
 import { 
   createContext, 
-  createSignal, 
   onCleanup, 
   type ParentProps, 
-  type Signal, 
   useContext, 
-  type VoidComponent
 } from "solid-js"
 // ...
 import { createEvent, createStorage, type IEvent, type IStorage } from "~/utils"
@@ -13,7 +10,7 @@ import type { IJournalGroupData } from "~/api/journal"
 import { journalLog } from "~/features/debug"
 // ...
 import { type JournalEventMap } from "./event"
-import { createJournal, type IThisJournalContext } from "./journal"
+import { createJournal, type IJournalUtils } from "./journal"
 import { type IFileDisplayContext, createFileDisplay } from "./fileDisplay"
 
 export type JournalLocalStorage = IStorage<{
@@ -26,16 +23,14 @@ export type JournalSessionStorage = IStorage<{
 }>
 
 interface IJournalContext {
-  journal$: IThisJournalContext
+  journal$: IJournalUtils
   fileDisplay$: IFileDisplayContext
   // ...
   localStorage$: JournalLocalStorage
   sessionStorage$: JournalSessionStorage
   event$: IEvent<JournalEventMap>
   // ...
-  _sidebarComponent$: VoidComponent
-  isShowingSidebar$: Signal<boolean>
-  openSidebar$(sidebarComponent: VoidComponent): void
+  getCurrentGroup$(): IJournalGroupData
 }
 
 const Context = createContext<IJournalContext>()
@@ -53,9 +48,6 @@ export function JournalProvider(props: ParentProps) {
     //debug-end
   })
 
-  let sidebarComponent: VoidComponent = () => undefined
-  const [isShowingSidebar, setIsShowingSidebar] = createSignal(false)
-
   //debug-start
   journalLog.log('created')
   //debug-end
@@ -68,14 +60,11 @@ export function JournalProvider(props: ParentProps) {
       localStorage$: createStorage(localStorage),
       sessionStorage$: wrappedSessionStorage,
       event$: event,
-      // ...
-      get _sidebarComponent$() {
-        return sidebarComponent
-      },
-      isShowingSidebar$: [isShowingSidebar, setIsShowingSidebar],
-      openSidebar$(thisSidebarComponent) {
-        sidebarComponent = thisSidebarComponent
-        setIsShowingSidebar(true)
+      getCurrentGroup$() {
+        const currentGroup = wrappedSessionStorage.get$('currentGroup')
+        console.assert(currentGroup, '[panic] currentGroup data should NOT be null or undefined')
+
+        return currentGroup
       }
     }}>
       {props.children}

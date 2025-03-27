@@ -1,6 +1,6 @@
 import { Accessor, createSignal, Setter } from "solid-js"
 // ...
-import { arrayInsert, getRandomNumberFrom, thisArrayObjects } from "~/utils"
+import { arrayInsert, getRandomNumberFrom, arrayObjects } from "~/utils"
 import { editorLog } from "~/features/debug"
 // ...
 import type { IBlockData } from "./blockData"
@@ -52,46 +52,46 @@ export function createBlocks(
     }
   }
 
+  const insertToTheBottom = (type: number, data: IBlockData) => {
+    //debug-start
+    editorLog.log("inserting block type", type, "with data", data, "on the bottom")
+    //debug-end
+    setData(prev => [...prev, data])
+    updateData()
+  }
+
   const insert: IBlockUtils["insert$"] = (beforeBlockId, type, someData) => {
     if (!someData) {
       const thisBlockSetting = blockSetting()[type]
       someData = thisBlockSetting.defaultValue$
+      //debug-start
+      editorLog.log("no data was given with block type:", type, ". Using the default value:", thisBlockSetting.defaultValue$)
+      //debug-end
     }
 
     const newData = create(type, someData)
     if (!beforeBlockId) {
-      //debug-start
-      editorLog.log("(1) inserting block type", type, "with data", someData, "on the bottom with", someData)
-      //debug-end
-      setData(prev => [...prev, newData])
-      updateData()
-      return
+      return insertToTheBottom(type, newData)
     }
     
-    const blockData = data()
-    const arrayObject = thisArrayObjects(blockData)
-    const [, index] = arrayObject.find$(it => it.id === beforeBlockId)
-    if (blockData.length - 1 === index) {
-      //debug-start
-      editorLog.log("(2) inserting block type", type, "with data", someData, "on the bottom with", someData)
-      //debug-end
-      setData(prev => [...prev, newData])
-      updateData()
-      return 
+    const blocksData = data()
+    const [, index] = arrayObjects(blocksData).find$(it => it.id === beforeBlockId)
+    const isItTheLastBlock = blocksData.length - 1 === index
+    if (isItTheLastBlock) {
+      return insertToTheBottom(type, newData)
     }
     
     //debug-start
-    editorLog.log("(3) inserting block type", type, "with data", someData, "before block", beforeBlockId)
+    editorLog.log("inserting block type", type, "with data", someData, "before block", beforeBlockId)
     //debug-end
-    arrayInsert(blockData, index, newData)
-    setData(blockData)
+    arrayInsert(blocksData, index, newData)
+    setData(blocksData)
     updateData()
   }
 
   const saveBlockData: IBlockUtils["saveBlockData$"] = (blockId, data) => {
     setData(prev => {
-      const arrayObjects = thisArrayObjects(prev)
-      const [dataPrev, index] = arrayObjects.find$(it => it.id === blockId)
+      const [dataPrev, index] = arrayObjects(prev).find$(it => it.id === blockId)
       prev[index] = {
         ...dataPrev,
         data: data
@@ -107,7 +107,7 @@ export function createBlocks(
   }
   
   const deleteBlock: IBlockUtils["delete$"] = (blockId) => {
-    setData(prev => thisArrayObjects(prev).remove$('id', blockId))
+    setData(prev => arrayObjects(prev).remove$('id', blockId))
     updateData()
     //debug-start
     editorLog.log("block", blockId, "deleted")

@@ -1,9 +1,10 @@
 import stylex from "@stylexjs/stylex"
 // ...
 import { FlexCenter, ResizablePanel } from "~/components"
-import { Editor, useEditorContext } from "~/features/editor"
+import { useEditorContext } from "~/features/editor"
 // ...
 import { useJournalContext } from "../context"
+import { ParentProps } from "solid-js"
 
 const style = stylex.create({
   content: {
@@ -29,15 +30,15 @@ const style = stylex.create({
   }
 })
 
-export function JournalEditorContent() {
+export function JournalEditorContent(props: ParentProps) {
   const { journal$ } = useJournalContext()
-  const { event$ } = useEditorContext()
+  const { event$: editorEvent } = useEditorContext()
 
   const shouldSave = () => {
     return journal$.currentlyOpened$() !== undefined
   }
 
-  event$.on$('editor__onSwitching', async(previousData) => {
+  editorEvent.on$('editor__onSwitching', async(previousData) => {
     if (!shouldSave()) return console.log('not open anything')
 
     if (previousData) {
@@ -45,7 +46,7 @@ export function JournalEditorContent() {
     }
   })
 
-  event$.on$('editor__onUpdate', async(data) => {
+  editorEvent.on$('editor__onUpdate', async(data) => {
     if (!shouldSave()) return console.log('not open anything')
     
     await journal$.save$(data.id, data.content)
@@ -57,7 +58,7 @@ export function JournalEditorContent() {
         <FlexCenter {...stylex.attrs(style.titleBar)}>
           {journal$.currentlyOpened$() ? journal$.currentlyOpened$()?.name : '*Nothing opened*'}
         </FlexCenter>
-        <Editor />
+        {props.children}
       </div>
     </ResizablePanel>
   )

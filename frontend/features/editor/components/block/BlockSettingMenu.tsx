@@ -10,10 +10,10 @@ const style = stylex.create({
 })
 
 export default function BlockSettingMenu() {
-  const { sessionStorage$, blocks$ } = useEditorContext()
+  const { internal$, blocks$ } = useEditorContext()
 
   const deleteCurrentBlock = () => {
-    const currentBlockId = sessionStorage$.get$('currentBlock')
+    const currentBlockId = internal$.sessionStorage$.get$('currentBlock')
     blocks$.delete$(currentBlockId)
   }
 

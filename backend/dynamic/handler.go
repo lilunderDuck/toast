@@ -26,6 +26,10 @@ func dealWithAssets(w http.ResponseWriter, r *http.Request) {
 
 	requestedFile := strings.TrimPrefix(r.URL.Path, ROUTE)
 	println("[dynamic]", "requested file will be", requestedFile)
+
+	// we can't simply read the file from the disk
+	// if we have like a huge video like 1 - 2 GB for example,
+	// it will crash the app.
 	http.ServeFile(w, r, utils.JoinPath(internals.DataFolderPath, requestedFile))
 }
 

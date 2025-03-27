@@ -4,7 +4,7 @@ import stylex from "@stylexjs/stylex"
 import __style from "./TextInput.module.css"
 // ...
 import { createLazyLoadedContextMenu, FlexCenterY } from "~/components"
-import { setCaretToTheEnd } from "~/features/editor/utils"
+import { dontUpdateIfYouPressSomeKey, setCaretToTheEnd } from "~/features/editor/utils"
 // ...
 import { useTextDataContext } from "../provider"
 
@@ -49,6 +49,15 @@ export function TextInput(props: ParentProps<ITextInputProps>) {
       return
     }
 
+    if (keyYouPress === "backspace") {
+      if (!isEmpty()) return
+      const previousTextInputIndex = props.currentIndex$ - 1
+
+      if (previousTextInputIndex > 0) return // don't delete the last one
+      setWhatInputIsFocused(previousTextInputIndex)
+      setCaretToTheEnd(document.querySelector(`[data-index=${previousTextInputIndex}]`)!)
+    }
+
     if (dontUpdateIfYouPressSomeKey(keyYouPress)) {
       return // do not update
     }
@@ -64,19 +73,8 @@ export function TextInput(props: ParentProps<ITextInputProps>) {
     }, 0)
   }
 
-  const dontUpdateIfYouPressSomeKey = (keyYouPress: string) => {
-    const dontUpdateThose = [
-      'control', 
-      'shift', 
-      'tab',
-    ].includes(keyYouPress)
-
-    const containArrowKey = keyYouPress.includes('arrow')
-
-    return containArrowKey || dontUpdateThose
-  }
-
   const getInputContent = () => divAsInputRef.textContent?.trim() ?? ''
+  const isEmpty = () => getInputContent() === ""
 
   const mouseHoverTheInput: EventHandler<"div", "onMouseEnter"> = () => {
     setWhatInputIsFocused(props.currentIndex$)

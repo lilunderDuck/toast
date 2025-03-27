@@ -35,7 +35,7 @@ interface IGalleryListProps extends HTMLAttributes<"div"> {
 
 export default function GalleryList(props: IGalleryListProps) {
   const { isReadonly$ } = useEditorContext()
-  const { sessionStorage$ } = useJournalContext()
+  const { getCurrentGroup$ } = useJournalContext()
   const { images$, page$, galleryId$ } = useGalleryDataContext()
 
   const [other, divProps] = splitProps(props, ["isOnFullScreen$"])
@@ -55,7 +55,7 @@ export default function GalleryList(props: IGalleryListProps) {
           <GalleryItem 
             id={page$.pageIndexName$(index())} 
             src$={api_getGallerySavedPath(
-              sessionStorage$.get$('currentGroup').id,
+              getCurrentGroup$().id,
               galleryId$,
               it
             )}

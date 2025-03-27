@@ -17,7 +17,6 @@ export default function SidebarActions() {
 
   event$.on$('journal__openJournal', (journal) => {
     journal$.open$(journal.id)
-    journal$.setCurrentlyOpened$(journal)
   })
   
   event$.on$('journal__deleteJournal', (journal) => {

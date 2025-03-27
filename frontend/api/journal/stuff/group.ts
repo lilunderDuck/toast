@@ -1,4 +1,3 @@
-import type { VirFileTree } from "../virtural-tree"
 import type { CreatedAndModifiedDate, UniqueId } from "./commonTypes"
 
 export type JournalGroupSchema = {
@@ -8,5 +7,5 @@ export type JournalGroupSchema = {
 }
 
 export interface IJournalGroupData extends JournalGroupSchema, UniqueId, CreatedAndModifiedDate {
-  tree: VirFileTree.Data
+  // ... empty ...
 }

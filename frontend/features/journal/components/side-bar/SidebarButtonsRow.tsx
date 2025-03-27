@@ -44,7 +44,7 @@ export function SidebarButtonsRow() {
   }
 
   const createStuffModal = createLazyLoadedDialog(
-    () => import('./CreateStuffModal')
+    () => import('./modals/CreateStuffModal')
   )
 
   const mode = () => isReadonly$() ? 'read-only' : 'edit'

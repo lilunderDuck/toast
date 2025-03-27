@@ -6,6 +6,7 @@ import __style from "./Journal.module.css"
 import { type IJournalData } from "~/api/journal"
 import { FlexCenterY, Flex, Spacer } from "~/components"
 import { useJournalContext } from "~/features/journal"
+import { A } from "@solidjs/router"
 
 const style = stylex.create({
   journal: {
@@ -37,7 +38,9 @@ export interface IJournalProps extends IJournalData {
 }
 
 export default function Journal(props: IJournalProps) {
-  const { event$, journal$ } = useJournalContext()
+  const { event$, journal$, getCurrentGroup$ } = useJournalContext()
+  const currentGroupId = getCurrentGroup$().id
+
   const onClickTheJournalName = () => {
     const currentlyOpenJournalId = journal$.currentlyOpened$()?.id
     if (currentlyOpenJournalId !== props.id) {
@@ -52,20 +55,22 @@ export default function Journal(props: IJournalProps) {
   }
 
   return (
-    <FlexCenterY 
-      {...stylex.attrs(style.journal)} 
-      id={__style.journal} 
-      data-id={props.id}
-    >
-      <Flex {...stylex.attrs(style.nameAndStuff)} onClick={onClickTheJournalName}>
-        <span id={__style.name}>
-          {props.name}
-        </span>
-        <Spacer />
-      </Flex>
-      <div id={__style.button} {...stylex.attrs(style.button)} onClick={onClickRemoveButton}>
-        <BsX size={15} />
-      </div>
-    </FlexCenterY>
+    <A href={`/journal/${currentGroupId}/${props.id}`}>
+      <FlexCenterY
+        {...stylex.attrs(style.journal)}
+        id={__style.journal}
+        data-id={props.id}
+      >
+        <Flex {...stylex.attrs(style.nameAndStuff)} onClick={onClickTheJournalName}>
+          <span id={__style.name}>
+            {props.name}
+          </span>
+          <Spacer />
+        </Flex>
+        <div id={__style.button} {...stylex.attrs(style.button)} onClick={onClickRemoveButton}>
+          <BsX size={15} />
+        </div>
+      </FlexCenterY>
+    </A>
   )
 }

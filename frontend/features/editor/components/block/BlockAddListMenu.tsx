@@ -1,5 +1,7 @@
-import stylex from "@stylexjs/stylex"
 import { createSignal, For } from "solid-js"
+// ...
+import stylex from "@stylexjs/stylex"
+// ...
 import { DropdownMenuContent, DropdownMenuItem, Input } from "~/components"
 import { useEditorContext } from "~/features/editor/provider"
 

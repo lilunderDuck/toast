@@ -19,7 +19,8 @@ interface ILoadThingProps {
 export function LoadThing(props: ILoadThingProps) {
   const { fileDisplay$, sessionStorage$, localStorage$ } = useJournalContext()
   const { isReadonly$, setIsReadonly$ } = useEditorContext()
-  const currentGroupId = parseInt(props.currentGroupId$)
+
+  const CURRENT_GROUP_ID = parseInt(props.currentGroupId$)
   const [, setIsLoading] = fileDisplay$.isLoading$
 
   const updateFileDisplay = async(thisGroupData: IJournalGroupData) => {
@@ -32,17 +33,18 @@ export function LoadThing(props: ILoadThingProps) {
     delete thisGroupData.tree
     sessionStorage$.set$('currentGroup', thisGroupData)
     
-    const treeMapping = await api_getJournalVirturalFileTree(currentGroupId)
+    const treeMapping = await api_getJournalVirturalFileTree(CURRENT_GROUP_ID)
     fileDisplay$.setTree$(treeData, treeMapping)
   }
 
+  const READONLY_STATE_KEY = `readonly-${CURRENT_GROUP_ID}` as const
   const updateEditorReadonlyState = () => {
     //debug-start
     journalLog.log('Updating editor readonly state')
     //debug-end
 
     setIsReadonly$(
-      localStorage$.get$(`readonly-${currentGroupId}`) ?? false
+      localStorage$.get$(READONLY_STATE_KEY) ?? false
     )
   }
 
@@ -53,7 +55,7 @@ export function LoadThing(props: ILoadThingProps) {
     
     setIsLoading(true)
     // Attempt to get the journal group data from the backend
-    const thisGroupData = await api_getGroup(currentGroupId) as IJournalGroupData
+    const thisGroupData = await api_getGroup(CURRENT_GROUP_ID) as IJournalGroupData
     if (!thisGroupData) {
       setIsLoading(false)
       return props.onError$()
@@ -70,7 +72,7 @@ export function LoadThing(props: ILoadThingProps) {
   })
 
   createEffect(() => {
-    localStorage$.set$(`readonly-${currentGroupId}`, isReadonly$())
+    localStorage$.set$(READONLY_STATE_KEY, isReadonly$())
   })
 
   return (

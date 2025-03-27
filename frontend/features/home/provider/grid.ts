@@ -2,7 +2,7 @@ import { Accessor, createSignal } from "solid-js"
 // ...
 import { api_getGroup, IJournalGroupData } from "~/api/journal"
 import { homeLog } from "~/features/debug"
-import { thisArrayObjects } from "~/utils"
+import { arrayObjects } from "~/utils"
 
 export interface IJournalGridUtils {
   groups$: Accessor<IJournalGroupData[]>
@@ -31,7 +31,7 @@ export function createJournalGrid(): IJournalGridUtils {
       //debug-end
     },
     update$(newOne) {
-      setJournalGroups(prev => [...thisArrayObjects(prev).replace$(it => it.id === newOne.id, newOne)])
+      setJournalGroups(prev => [...arrayObjects(prev).replace$(it => it.id === newOne.id, newOne)])
       //debug-start
       homeLog.logLabel('grid', 'updated', newOne)
       //debug-end

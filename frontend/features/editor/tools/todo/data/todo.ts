@@ -1,7 +1,7 @@
 import type { Accessor } from "solid-js"
 import { createStore, produce } from "solid-js/store"
 // ...
-import { getRandomNumberFrom, thisArrayObjects } from "~/utils"
+import { getRandomNumberFrom, arrayObjects } from "~/utils"
 import { editorLog } from "~/features/debug"
 // ...
 import type { ITodoBlockData, TodoSchema, TodoSectionData, TodoSectionSchema } from "./this"
@@ -66,7 +66,7 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
       "stuff", 
       (it) => it.id === fromSectionId, 
       "todo", 
-      (todos) => thisArrayObjects(todos).replace$(it => it.id === todoId, newData)
+      (todos) => arrayObjects(todos).replace$(it => it.id === todoId, newData)
     )
 
     //debug-start
@@ -88,7 +88,7 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
       "stuff", 
       (it) => it.id === fromSectionId, 
       "todo", 
-      (todos) => thisArrayObjects(todos).remove$('id', todoId)
+      (todos) => arrayObjects(todos).remove$('id', todoId)
     )
 
     //debug-start
@@ -100,7 +100,7 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
 
   const deleteSectionData: ITodoUtils["deleteSection$"] = (sectionId) => {
     //debug-start
-    setData("stuff", (sections) => thisArrayObjects(sections).remove$('id', sectionId))
+    setData("stuff", (sections) => arrayObjects(sections).remove$('id', sectionId))
     //debug-end
     editorLog.logLabel("todo", "Todo section id", sectionId, "deleted")
     update()

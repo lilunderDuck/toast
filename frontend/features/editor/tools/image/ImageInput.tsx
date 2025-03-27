@@ -30,13 +30,13 @@ const style = stylex.create({
 })
 
 export default function ImageInput() {
-  const { sessionStorage$ } = useJournalContext()
+  const { getCurrentGroup$ } = useJournalContext()
   const { update$, data$ } = useImageDataContext()
   const { isReadonly$ } = useEditorContext()
 
   let prevImageName = data$().imgName
   const { fetch$, isLoading$, data$: localImageUrl } = useResource(async(targetFile: File | string) => {
-    const currentGroupId = sessionStorage$.get$('currentGroup').id
+    const currentGroupId = getCurrentGroup$().id
 
     if (typeof targetFile === "string") {
       //debug-start
