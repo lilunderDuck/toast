@@ -3,10 +3,12 @@ import { createSignal } from 'solid-js'
 import { IJournalData } from '~/api/journal'
 import { createLazyLoadedDialog } from '~/components'
 // ...
-import { useJournalContext } from '../../context'
+import { useJournalContext, useJournalTabContext } from '../../context'
 
 export default function SidebarActions() {
-  const { event$, journal$, localStorage$ } = useJournalContext()
+  const { event$: journalEvent, journal$, localStorage$ } = useJournalContext()
+  const { update$: updateTab } = useJournalTabContext()
+
   const [thingToDelete, setThingToDelete] = createSignal<IJournalData>()
   const deleteJournalModal = createLazyLoadedDialog(
     () => import('./modals/DeleteJournalModal'), 
@@ -15,11 +17,12 @@ export default function SidebarActions() {
     })
   )
 
-  event$.on$('journal__openJournal', (journal) => {
+  journalEvent.on$('journal__openJournal', (journal) => {
     journal$.open$(journal.id)
+    updateTab(journal.name)
   })
   
-  event$.on$('journal__deleteJournal', (journal) => {
+  journalEvent.on$('journal__deleteJournal', (journal) => {
     const deleteRightAway = localStorage$.get$('shouldShowDeleteConfirmationModal')
     console.log('should delete right away?', deleteRightAway)
     if (deleteRightAway) {
@@ -29,6 +32,7 @@ export default function SidebarActions() {
     setThingToDelete(journal)
     deleteJournalModal.show$()
   })
+  
   return (
     <>
       <deleteJournalModal.Modal$ />

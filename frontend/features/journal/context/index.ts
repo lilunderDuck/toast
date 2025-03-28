@@ -1,4 +1,5 @@
 export * from './JournalContext'
+export * from './JournalTabContext'
 export type * from './journal'
 export type * from './fileDisplay'
 export * from './event'

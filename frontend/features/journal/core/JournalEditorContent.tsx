@@ -1,10 +1,12 @@
+import { ParentProps } from "solid-js"
+// ...
 import stylex from "@stylexjs/stylex"
 // ...
 import { FlexCenter, ResizablePanel } from "~/components"
 import { useEditorContext } from "~/features/editor"
 // ...
 import { useJournalContext } from "../context"
-import { ParentProps } from "solid-js"
+import { TabList } from "../components"
 
 const style = stylex.create({
   content: {
@@ -54,6 +56,7 @@ export function JournalEditorContent(props: ParentProps) {
 
   return (
     <ResizablePanel initialSize={0.7}>
+      <TabList />
       <div {...stylex.attrs(style.content)}>
         <FlexCenter {...stylex.attrs(style.titleBar)}>
           {journal$.currentlyOpened$() ? journal$.currentlyOpened$()?.name : '*Nothing opened*'}
