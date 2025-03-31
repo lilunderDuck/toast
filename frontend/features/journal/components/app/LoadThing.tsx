@@ -25,7 +25,7 @@ export function LoadThing(props: ILoadThingProps) {
 
   const updateFileDisplay = async(thisGroupData: IJournalGroupData) => {
     //debug-start
-    journalLog.log('Updating file display and stuff')
+    journalLog.log('Updating file display and stuff', thisGroupData)
     //debug-end
 
     const treeData = thisGroupData.tree.data
@@ -57,18 +57,18 @@ export function LoadThing(props: ILoadThingProps) {
     // Attempt to get the journal group data from the backend
     const thisGroupData = await api_getGroup(CURRENT_GROUP_ID) as IJournalGroupData
     if (!thisGroupData) {
-      setIsLoading(false)
       return props.onError$()
     }
 
+    // do a bunch of updating mess
     await updateFileDisplay(thisGroupData)
     updateEditorReadonlyState()
-    setIsLoading(false)
-
+    
     //debug-start
     journalLog.log('Finish')
     journalLog.groupEnd()
     //debug-end
+    setIsLoading(false)
   })
 
   createEffect(() => {

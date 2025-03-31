@@ -1,12 +1,12 @@
 import { Show } from "solid-js"
+import { BsX } from "solid-icons/bs"
 // ...
 import { FlexCenterY, Spacer, Tooltip } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { type TabData, useJournalTabContext } from "../../context"
+import { type TabData, useJournalContext } from "../../context"
 import { tabVars } from "./tab.stylex"
-import { BsX } from "solid-icons/bs"
 
 const style = stylex.create({
   tab: {
@@ -27,20 +27,31 @@ const style = stylex.create({
     cursor: "pointer",
     transition: "0.25s ease-out",
     ":hover": {
-      backgroundColor: "var(--gray4)",
+      backgroundColor: "var(--gray5)",
       color: "var(--gray11)",
     }
+  },
+  focusTab: {
+    backgroundColor: "var(--gray2)",
+  },
+  notFocusedTab: {
+    backgroundColor: "var(--gray4)",
   }
 })
 
 export default function Tab(props: TabData) {
-  const { tabs$ } = useJournalTabContext()
+  const { tabs$, journal$ } = useJournalContext()
+
+  const isFocused = () => journal$.currentlyOpened$()?.id === props.journalId$
   
   return (
-    <FlexCenterY {...stylex.attrs(style.tab)}>
+    <FlexCenterY {...stylex.attrs(
+      style.tab,
+      isFocused() ? style.focusTab : style.notFocusedTab
+    )}>
       {props.name$}
       <Spacer />
-      <Show when={tabs$().length !== 1}>
+      <Show when={tabs$.tabs$().length !== 1}>
         <Tooltip label$="Close this tab">
           <BsX {...stylex.attrs(style.closeIcon)} />
         </Tooltip>

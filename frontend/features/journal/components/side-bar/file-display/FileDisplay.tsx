@@ -1,7 +1,9 @@
-import { createSignal, For, Show } from "solid-js"
+import { createResource, createSignal, For, Show } from "solid-js"
+// @ts-ignore
 import { dndzone } from "solid-dnd-directive"
 // ...
 import { AnyVirTreeNode, FolderNode, isFolder } from "~/features/journal/utils"
+import { api_getJournal } from "~/api/journal"
 // ...
 import { useJournalContext } from "../../../context"
 import JournalCategory from "./JournalCategory"
@@ -21,25 +23,26 @@ interface IDndDragEvent<T extends number | string> extends CustomEvent {
 }
 
 export function FileDisplay() {
-  const { fileDisplay$ } = useJournalContext()
+  const { fileDisplay$, getCurrentGroup$ } = useJournalContext()
   const ROOT_ID = 0
-  const getCache = () => fileDisplay$.mapping$
 
   const RenderFolderAndFileComponent = (props: AnyVirTreeNode) => {
-    const data = getCache()[props.id]
+    const [data] = createResource(() => api_getJournal(getCurrentGroup$().id, props.id))
     if (!data) {
       return void console.warn('cannot get data', props)
     }
 
     if (isFolder(props)) {
       return (
-        <JournalCategory {...data}>
+        // @ts-ignore
+        <JournalCategory {...data()}>
           <RecursivelyRenderItOut {...props} />
         </JournalCategory>
       )
     }
 
-    return <Journal {...data} />
+    // @ts-ignore
+    return <Journal {...data()} />
   }
 
   // OooOo, scary name
@@ -56,6 +59,7 @@ export function FileDisplay() {
     }
 
     return (
+      // @ts-ignore
       <div use:dndzone={{items}} on:consider={handleDndEvent(true)} on:finalize={handleDndEvent(false)}>
         <For each={items()}>
           {it => <RenderFolderAndFileComponent {...it} />}

@@ -3,11 +3,10 @@ import { createSignal } from 'solid-js'
 import { IJournalData } from '~/api/journal'
 import { createLazyLoadedDialog } from '~/components'
 // ...
-import { useJournalContext, useJournalTabContext } from '../../context'
+import { useJournalContext } from '../../context'
 
 export default function SidebarActions() {
-  const { event$: journalEvent, journal$, localStorage$ } = useJournalContext()
-  const { update$: updateTab } = useJournalTabContext()
+  const { event$: journalEvent, journal$, localStorage$, tabs$ } = useJournalContext()
 
   const [thingToDelete, setThingToDelete] = createSignal<IJournalData>()
   const deleteJournalModal = createLazyLoadedDialog(
@@ -19,7 +18,7 @@ export default function SidebarActions() {
 
   journalEvent.on$('journal__openJournal', (journal) => {
     journal$.open$(journal.id)
-    updateTab(journal.name)
+    tabs$.update$(journal.id)
   })
   
   journalEvent.on$('journal__deleteJournal', (journal) => {

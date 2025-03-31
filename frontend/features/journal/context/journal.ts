@@ -1,6 +1,5 @@
 import { 
   type Accessor,
-  createEffect,
   createSignal,
   type Signal, 
 } from "solid-js"
@@ -13,7 +12,7 @@ import {
   api_createJournal, 
   api_deleteJournal, 
   api_saveJournalContent,
-  api_getJournal, 
+  api_getJournal,
 } from "~/api/journal"
 import { useEditorContext } from "~/features/editor"
 import { journalLog } from "~/features/debug"
@@ -21,7 +20,6 @@ import { journalLog } from "~/features/debug"
 import { 
   createFileNodeData,
   createFolderNodeData,
-  JournalSessionStorage
 } from ".."
 import { type IFileDisplayContext } from "./fileDisplay"
 
@@ -56,29 +54,25 @@ export interface IJournalUtils {
 }
 
 export function createJournal(
-  thisSessionStorage: JournalSessionStorage,
+  getCurrentJournalGroupId: () => number,
   fileDisplayContext: IFileDisplayContext
 ): IJournalUtils {
   const { open$ } = useEditorContext()
 
   const [currentlyOpened$, setCurrentlyOpened$] = createSignal<IJournalData>()
 
-  const getCurrentJournalGroupId = () => {
-    const currentGroupId = thisSessionStorage.get$('currentGroup')?.id
-    console.assert(currentGroupId, '[panic] currentGroup data should NOT be null or undefined')
-
-    return currentGroupId
-  }
-
   const create: IJournalUtils["create$"] = async(data, type) => {
     const currentJournalGroupId = getCurrentJournalGroupId()
     const newData = await api_createJournal(currentJournalGroupId, data, type)
+    // @ts-ignore
+    delete newData.data
 
+    const newFileNode = type === JournalType.journal ? 
+      createFileNodeData(newData.id) : 
+      createFolderNodeData(newData!.id)
+    // ...
     fileDisplayContext.mapping$[newData.id] = newData
-    fileDisplayContext.add$(
-      type === JournalType.journal ? createFileNodeData(newData.id) : createFolderNodeData(newData!.id),
-      'root'
-    )
+    fileDisplayContext.add$(newFileNode, 'root')
 
     //debug-start
     journalLog.log('created new journal:', newData)
@@ -92,16 +86,8 @@ export function createJournal(
     journalLog.group("Opening", journalId)
     //debug-end
     const currentJournalGroupId = getCurrentJournalGroupId()
-    let journalData = fileDisplayContext.mapping$[journalId] as IJournalData | undefined
-    
-    if (!journalData) {
-      //debug-start
-      journalLog.log("getting the data from the other side...")
-      //debug-end
-      journalData = await api_getJournal(currentJournalGroupId, journalId)
-    }
-    
-    let journalContent = journalData.data
+    const journalData = await api_getJournal(currentJournalGroupId, journalId)
+    const journalContent = journalData.data
 
     //debug-start
     journalLog.log("journal data is:", journalData)

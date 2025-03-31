@@ -5,13 +5,14 @@ import {
   useContext, 
 } from "solid-js"
 // ...
-import { createEvent, createStorage, type IEvent, type IStorage } from "~/utils"
-import type { IJournalGroupData } from "~/api/journal"
+import { createEvent, createStorage, type IEvent, type IStorage, type IIndexedDbUtils } from "~/utils"
+import type { IJournalData, IJournalGroupData } from "~/api/journal"
 import { journalLog } from "~/features/debug"
 // ...
 import { type JournalEventMap } from "./event"
 import { createJournal, type IJournalUtils } from "./journal"
 import { type IFileDisplayContext, createFileDisplay } from "./fileDisplay"
+import { createTab, ITabUtils } from "./tabs"
 
 export type JournalLocalStorage = IStorage<{
   shouldShowDeleteConfirmationModal: boolean
@@ -22,9 +23,14 @@ export type JournalSessionStorage = IStorage<{
   currentGroup: IJournalGroupData
 }>
 
+interface IJournalProviderProps {
+  // ...
+}
+
 interface IJournalContext {
   journal$: IJournalUtils
   fileDisplay$: IFileDisplayContext
+  tabs$: ITabUtils
   // ...
   localStorage$: JournalLocalStorage
   sessionStorage$: JournalSessionStorage
@@ -35,11 +41,21 @@ interface IJournalContext {
 
 const Context = createContext<IJournalContext>()
 
-export function JournalProvider(props: ParentProps) {
+export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
+  const getCurrentGroup = () => {
+    const currentGroup = wrappedSessionStorage.get$('currentGroup')
+    console.assert(currentGroup, '[panic] currentGroup data should NOT be null or undefined')
+
+    return currentGroup
+  }
+
+  const getCurrentGroupId = () => getCurrentGroup().id
+
   const wrappedSessionStorage: JournalSessionStorage = createStorage(sessionStorage)
   const event = createEvent<JournalEventMap>()
   const fileDisplayContext = createFileDisplay(wrappedSessionStorage)
-  const journalContext = createJournal(wrappedSessionStorage, fileDisplayContext)
+  const journalContext = createJournal(getCurrentGroupId, fileDisplayContext)
+  const tabContext = createTab(getCurrentGroupId)
 
   onCleanup(() => {
     wrappedSessionStorage.delete$("currentGroup")
@@ -56,16 +72,12 @@ export function JournalProvider(props: ParentProps) {
     <Context.Provider value={{
       journal$: journalContext,
       fileDisplay$: fileDisplayContext,
+      tabs$: tabContext,
       // ...
       localStorage$: createStorage(localStorage),
       sessionStorage$: wrappedSessionStorage,
       event$: event,
-      getCurrentGroup$() {
-        const currentGroup = wrappedSessionStorage.get$('currentGroup')
-        console.assert(currentGroup, '[panic] currentGroup data should NOT be null or undefined')
-
-        return currentGroup
-      }
+      getCurrentGroup$: getCurrentGroup
     }}>
       {props.children}
     </Context.Provider>

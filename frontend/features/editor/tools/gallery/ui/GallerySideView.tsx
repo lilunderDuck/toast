@@ -13,12 +13,12 @@ import { useGalleryDataContext } from "../data"
 import GalleryButtonRow from "./GalleryButtonRow"
 
 export function GallerySideView() {
-  const { sessionStorage$ } = useJournalContext()
+  const { getCurrentGroup$ } = useJournalContext()
   const { galleryId$, addImages$ } = useGalleryDataContext()
   const { isReadonly$ } = useEditorContext()
 
   const { fetch$, isLoading$ } = useResource(async(targetFile: File[]) => {
-    const currentGroupId = sessionStorage$.get$('currentGroup').id
+    const currentGroupId = getCurrentGroup$().id
     const fileNames = []
     for (const file of targetFile) {
       const newFileName = await api_saveGalleryImage(currentGroupId, galleryId$, file)

@@ -10,9 +10,8 @@ import { journalLog } from "~/features/debug"
 import __style from './stuff.module.css'
 import stylex from '@stylexjs/stylex'
 // ...
-import { JournalProvider, JournalTabProvider } from '../context'
+import { JournalProvider } from '../context'
 import { LoadThing } from '../components'
-import { api_getJournal } from '~/api/journal'
 
 const style = stylex.create({
   thisThing: {
@@ -53,11 +52,7 @@ export function JournalRoot(props: ParentProps) {
           onError$={goHomeImmediately} 
         />
         <Resizable {...stylex.attrs(style.thisThing)}>
-          <JournalTabProvider getDisplayName$={async(tabId) => {
-            return (await api_getJournal(parseInt(param.id), tabId)).name
-          }}>
-            {props.children}
-          </JournalTabProvider>
+          {props.children}
         </Resizable>
       </JournalProvider>
     </EditorProvider>

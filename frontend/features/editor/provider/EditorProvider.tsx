@@ -80,10 +80,10 @@ export function EditorProvider(props: ParentProps) {
     //debug-end
   }
 
-  const debouceUpdateData = debounce(instantDataUpdate, 500)
+  const debouceUpdateData = debounce(instantDataUpdate, 1000)
   
   const updateData = () => {
-    if (currOpenedDocument.id === -1) return
+    if (currOpenedDocument?.id === -1) return
     debouceUpdateData()
   }
 

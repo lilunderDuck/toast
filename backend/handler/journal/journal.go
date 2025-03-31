@@ -37,6 +37,14 @@ type JournalData struct {
 	Data     []JournalContentData `json:"data"               cbor:"5,keyasint"`
 }
 
+type JournalMetaData struct {
+	Id       int           `json:"id"`
+	Type     uint8         `json:"type"`
+	Created  time.Duration `json:"created"`
+	Modified time.Duration `json:"modified,omitempty"`
+	Name     string        `json:"name"`
+}
+
 // Represents the data for a single content block within a journal entry.
 type JournalContentData struct {
 	Id   int    `json:"id"              cbor:"0,keyasint"`
@@ -61,13 +69,14 @@ func Journal_Create(currentGroupId int, schema *JournalSchema) *JournalData {
 		Type:    uint8(Type_Journal),
 		Created: utils.GetCurrentDateNow(),
 		Name:    schema.Name,
-		Data:    []JournalContentData{},
 	}
 
 	utils.BSON_WriteFile(
 		GetJournalSavedFilePath(currentGroupId, newData.Id),
 		&newData,
 	)
+
+	newData.Data = []JournalContentData{}
 
 	Group_Update(currentGroupId, &JournalGroupUpdateSchema{
 		Item: numberId,
@@ -121,19 +130,17 @@ func Journal_Update(currentGroupId int, journalId int, newData *JournalUpdateSch
 		return nil, readError
 	}
 
-	if newData.Name != "" {
-		data.Name = newData.Name
-	}
-
-	if len(newData.Data) != 0 {
-		data.Data = newData.Data
-	}
-
-	data.Modified = utils.GetCurrentDateNow()
+	mergeJournalData(data, newData)
 
 	writeError := utils.BSON_WriteFile(
 		GetJournalSavedFilePath(currentGroupId, journalId),
-		&data,
+		&JournalMetaData{
+			Id:       data.Id,
+			Type:     data.Type,
+			Created:  data.Created,
+			Modified: data.Modified,
+			Name:     data.Name,
+		},
 	)
 
 	if writeError != nil {
@@ -145,6 +152,18 @@ func Journal_Update(currentGroupId int, journalId int, newData *JournalUpdateSch
 	})
 
 	return data, nil
+}
+
+func mergeJournalData(currentJournalData *JournalData, newData *JournalUpdateSchema) {
+	if newData.Name != "" {
+		currentJournalData.Name = newData.Name
+	}
+
+	if len(newData.Data) != 0 {
+		currentJournalData.Data = newData.Data
+	}
+
+	currentJournalData.Modified = utils.GetCurrentDateNow()
 }
 
 // Deletes a journal entry by its ID from a specified journal group.

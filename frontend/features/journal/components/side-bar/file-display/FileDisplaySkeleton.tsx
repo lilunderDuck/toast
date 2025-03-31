@@ -14,7 +14,7 @@ const style = stylex.create({
 export function FileDisplaySkeleton() {
   return (
     <For each={new Array(50).fill(0)}>
-      {it => (
+      {() => (
         <Skeleton {...stylex.attrs(style.file)} />
       )}
     </For>

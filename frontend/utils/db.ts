@@ -1,46 +1,58 @@
-export function createIndexedDb(dbName: string) {
-  const openRequest = indexedDB.open(dbName)
+export interface IIndexedDbUtils<T extends {}> {
+  set$(data: T): void
+  get$(someValue: T[keyof T] | (keyof T)[]): Promise<T>
+  close$(): void
+  delete$(someValue: T[keyof T]): void
+  getAll$(): Promise<T[]>
+}
 
-  return new Promise<IDBDatabase>((resolve, reject) => {
-    openRequest.onupgradeneeded = (changeEvent) => {
-      resolve(changeEvent.target!.result as IDBDatabase)
+export function openIndexedDb<T extends {}>(dbName: string, keyPathPropName: keyof T, nameIndex: (keyof T)[]) {
+  const open = indexedDB.open(dbName, 1)
+
+  return new Promise<IIndexedDbUtils<T>>((resolve, reject) => {
+    open.onerror = () => reject("Can't even open indexeddb")
+    
+    open.onupgradeneeded = () => {
+      const db = open.result
+      const store = db.createObjectStore(dbName, { keyPath: keyPathPropName as string })
+      store.createIndex(dbName, nameIndex as string[])
     }
-  
-    openRequest.onerror = (event) => {
-      reject("Why didn't you allow my web app to use IndexedDB?!")
+    
+    open.onsuccess = () => {
+      const db = open.result
+      const tx = db.transaction(dbName, "readwrite")
+      const store = tx.objectStore(dbName)
+      const index = store.index(dbName)
+
+      resolve(createIt(db, store, index))
     }
   })
 }
 
-export interface IDBObjectMapping {
-  name$: string
-  unique$?: boolean
-}
+function createIt<T extends {}>(db: IDBDatabase, store: IDBObjectStore, index: IDBIndex): IIndexedDbUtils<T> {
+  return {
+    set$(data: T) {
+      store.put(data)
+    },
+    get$(someValue: T[keyof T]) {
+      const theStore = Array.isArray(someValue) ? index : store
+      const thisRequest = theStore.get(someValue as IDBValidKey)
 
-export function createDbObjectStore(db: IDBDatabase, name: string, mapping: IDBObjectMapping[]) {
-  const objStore = db.createObjectStore(name, {
-    keyPath: 'ssn'
-  })
-
-  for (const map of mapping) {
-    objStore.createIndex(map.name$, map.name$, {
-      unique: map.unique$
-    })
+      return new Promise((resolve, reject) => {
+        thisRequest.onsuccess = () => resolve(thisRequest.result)
+      })
+    },
+    getAll$() {
+      const thisRequest = store.getAll()
+      return new Promise((resolve, reject) => {
+        thisRequest.onsuccess = () => resolve(thisRequest.result)
+      })
+    },
+    delete$(index: T[keyof T]) {
+      store.delete(index as IDBValidKey)
+    },
+    close$() {
+      db.close()
+    }
   }
-
-  return new Promise<IDBObjectStore>((resolve, reject) => {
-    objStore.transaction.oncomplete = () => {
-      // Store values in the newly created objectStore.
-      const thisObjectStore = db
-        .transaction(name, "readwrite")
-        .objectStore(name)
-      // ...
-
-      resolve(thisObjectStore)
-    }
-
-    objStore.transaction.onerror = (event) => {
-      reject("Could not create obj store")
-    }
-  })
 }
