@@ -47,6 +47,7 @@ func BSON_ReadFile(path string, out interface{}) (someError error) {
 
 	decodeError := cbor.Unmarshal(dataFromDisk, out)
 	if decodeError != nil {
+		fmt.Println("BSON decode error", decodeError)
 		return decodeError
 	}
 

@@ -1,4 +1,4 @@
-import { Route, RoutePreloadFuncArgs, Router } from '@solidjs/router'
+import { Route, Router } from '@solidjs/router'
 import { lazy, ParentProps } from 'solid-js'
 // ...
 import { ColorAndStuff, /*Titlebar,*/ TitlebarProvider } from '~/components'
@@ -10,8 +10,7 @@ export default function App() {
   const ThisPageIsNotFound = lazy(() => import('~/routes/[...404]'))
   const TooTechnicalPage = lazy(() => import('~/routes/too-technical'))
 
-  const JournalPage = lazy(() => import('~/routes/journal/index'))
-  const JournalContentPage = lazy(() => import('~/routes/journal/content'))
+  const JournalPage = lazy(() => import('~/routes/journal'))
 
   return (
     <AppProvider>
@@ -21,10 +20,7 @@ export default function App() {
 
       <Router>
         <Route path='/' component={HomePage} />
-        <Route path='/journal/:id' component={JournalPage}>
-          <Route path="/" component={() => <div>hello 1</div>} />
-          <Route path="/:journalId" component={JournalContentPage} />
-        </Route>
+        <Route path='/journal/:id' component={JournalPage} />
         <Route path='/too-technical' component={TooTechnicalPage} />
         <Route path="*404" component={ThisPageIsNotFound} />
       </Router>

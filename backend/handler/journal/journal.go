@@ -47,10 +47,12 @@ type JournalMetaData struct {
 
 // Represents the data for a single content block within a journal entry.
 type JournalContentData struct {
-	Id   int    `json:"id"              cbor:"0,keyasint"`
-	Type uint16 `json:"type"            cbor:"1,keyasint"`
-	Data any    `json:"data"            cbor:"3,keyasint"`
+	Id   int            `json:"id"              cbor:"0,keyasint"`
+	Type uint16         `json:"type"            cbor:"1,keyasint"`
+	Data map[string]any `json:"data"            cbor:"3,keyasint"`
 }
+
+type JournalUtils struct{}
 
 // Creates a new journal entry within a specified journal group.
 // It generates a unique ID, creates the journal data, saves it to file,
@@ -61,7 +63,7 @@ type JournalContentData struct {
 // Parameters:
 //   - currentGroupId: The ID of the journal group to create the entry in.
 //   - schema: The data for the new journal entry.
-func Journal_Create(currentGroupId int, schema *JournalSchema) *JournalData {
+func (journal *JournalUtils) CreateJournal(currentGroupId int, schema *JournalSchema) *JournalData {
 	stringJournalId, numberId := utils.GenerateRandomNumberId()
 
 	newData := JournalData{
@@ -77,10 +79,6 @@ func Journal_Create(currentGroupId int, schema *JournalSchema) *JournalData {
 	)
 
 	newData.Data = []JournalContentData{}
-
-	Group_Update(currentGroupId, &JournalGroupUpdateSchema{
-		Item: numberId,
-	})
 
 	internals.ModifyCacheDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
 		cache.Set(stringJournalId, &newData)
@@ -99,7 +97,7 @@ func Journal_Create(currentGroupId int, schema *JournalSchema) *JournalData {
 // Returns:
 //   - he journal entry data.
 //   - An error if the journal entry is not found or reading fails.
-func Journal_Get(currentGroupId int, journalId int) (*JournalData, error) {
+func (journal *JournalUtils) GetJournal(currentGroupId int, journalId int) (*JournalData, error) {
 	var dataOut JournalData
 	readError := utils.BSON_ReadFile(
 		GetJournalSavedFilePath(currentGroupId, journalId),
@@ -124,8 +122,8 @@ func Journal_Get(currentGroupId int, journalId int) (*JournalData, error) {
 // Returns:
 //   - The updated journal entry data.
 //   - An error if the update fails.
-func Journal_Update(currentGroupId int, journalId int, newData *JournalUpdateSchema) (*JournalData, error) {
-	data, readError := Journal_Get(currentGroupId, journalId)
+func (journal *JournalUtils) UpdateJournal(currentGroupId int, journalId int, newData *JournalUpdateSchema) (*JournalData, error) {
+	data, readError := journal.GetJournal(currentGroupId, journalId)
 	if readError != nil {
 		return nil, readError
 	}
@@ -134,13 +132,7 @@ func Journal_Update(currentGroupId int, journalId int, newData *JournalUpdateSch
 
 	writeError := utils.BSON_WriteFile(
 		GetJournalSavedFilePath(currentGroupId, journalId),
-		&JournalMetaData{
-			Id:       data.Id,
-			Type:     data.Type,
-			Created:  data.Created,
-			Modified: data.Modified,
-			Name:     data.Name,
-		},
+		&data,
 	)
 
 	if writeError != nil {
@@ -148,22 +140,16 @@ func Journal_Update(currentGroupId int, journalId int, newData *JournalUpdateSch
 	}
 
 	internals.ModifyCacheDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
-		cache.Set(utils.IntToString(data.Id), &data)
+		cache.Set(utils.IntToString(data.Id), &JournalMetaData{
+			Id:       data.Id,
+			Type:     data.Type,
+			Created:  data.Created,
+			Modified: data.Modified,
+			Name:     data.Name,
+		})
 	})
 
 	return data, nil
-}
-
-func mergeJournalData(currentJournalData *JournalData, newData *JournalUpdateSchema) {
-	if newData.Name != "" {
-		currentJournalData.Name = newData.Name
-	}
-
-	if len(newData.Data) != 0 {
-		currentJournalData.Data = newData.Data
-	}
-
-	currentJournalData.Modified = utils.GetCurrentDateNow()
 }
 
 // Deletes a journal entry by its ID from a specified journal group.
@@ -174,7 +160,7 @@ func mergeJournalData(currentJournalData *JournalData, newData *JournalUpdateSch
 // Parameters:
 //   - currentGroupId: The ID of the journal group.
 //   - journalId: The ID of the journal entry to delete.
-func Journal_Delete(currentGroupId int, journalId int) error {
+func (journal *JournalUtils) DeleteJournal(currentGroupId int, journalId int) error {
 	removeError := utils.RemoveFileOrDirectory(GetJournalSavedFilePath(currentGroupId, journalId))
 	if removeError != nil {
 		return removeError
@@ -185,4 +171,13 @@ func Journal_Delete(currentGroupId int, journalId int) error {
 	})
 
 	return nil
+}
+
+func (journal *JournalUtils) GetAllJournal(currentGroupId int) map[string]any {
+	var out map[string]any
+	internals.ModifyCacheDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
+		out = cache.GetAll()
+	})
+
+	return out
 }

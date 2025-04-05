@@ -18,8 +18,9 @@ import { useEditorContext } from "~/features/editor"
 import { journalLog } from "~/features/debug"
 // ...
 import { 
-  createFileNodeData,
-  createFolderNodeData,
+  // createFileNodeData,
+  // createFolderNodeData,
+  JournalEvent,
 } from ".."
 import { type IFileDisplayContext } from "./fileDisplay"
 
@@ -55,7 +56,8 @@ export interface IJournalUtils {
 
 export function createJournal(
   getCurrentJournalGroupId: () => number,
-  fileDisplayContext: IFileDisplayContext
+  fileDisplayContext: IFileDisplayContext,
+  event: JournalEvent
 ): IJournalUtils {
   const { open$ } = useEditorContext()
 
@@ -64,15 +66,15 @@ export function createJournal(
   const create: IJournalUtils["create$"] = async(data, type) => {
     const currentJournalGroupId = getCurrentJournalGroupId()
     const newData = await api_createJournal(currentJournalGroupId, data, type)
-    // @ts-ignore
-    delete newData.data
 
-    const newFileNode = type === JournalType.journal ? 
-      createFileNodeData(newData.id) : 
-      createFolderNodeData(newData!.id)
-    // ...
-    fileDisplayContext.mapping$[newData.id] = newData
-    fileDisplayContext.add$(newFileNode, 'root')
+    event.emit$("journal__createdJournal$", type, newData)
+
+    // const newFileNode = type === JournalType.journal ? 
+    //   createFileNodeData(newData.id) : 
+    //   createFolderNodeData(newData!.id)
+    // // ...
+    // fileDisplayContext.mapping$[newData.id] = newData
+    // fileDisplayContext.add$(newFileNode, 'root')
 
     //debug-start
     journalLog.log('created new journal:', newData)

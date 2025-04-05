@@ -45,16 +45,14 @@ export function JournalRoot(props: ParentProps) {
   }
 
   return (
-    <EditorProvider>
-      <JournalProvider>
-        <LoadThing 
-          currentGroupId$={param.id} 
-          onError$={goHomeImmediately} 
-        />
-        <Resizable {...stylex.attrs(style.thisThing)}>
-          {props.children}
-        </Resizable>
-      </JournalProvider>
-    </EditorProvider>
+    <JournalProvider>
+      <LoadThing 
+        currentGroupId$={param.id} 
+        onError$={goHomeImmediately} 
+      />
+      <Resizable {...stylex.attrs(style.thisThing)}>
+        {props.children}
+      </Resizable>
+    </JournalProvider>
   )
 }

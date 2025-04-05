@@ -1,6 +1,5 @@
-import { type IBlockSetting, useEditorContext } from "../../provider"
-import { VideoDataProvider, type IVideoBlockData } from "./data"
-import { VideoInput } from "./ui/VideoInput"
+import { type IBlockSetting, useEditorContext } from "../provider"
+import { VideoDataProvider, type IVideoBlockData, VideoInput } from "../common/video"
 
 export function createVideoBlock(): IBlockSetting<IVideoBlockData> {
   return {

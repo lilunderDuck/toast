@@ -68,15 +68,15 @@ export function EditorProvider(props: ParentProps) {
     }
   })
 
-  let currOpenedDocument: EditorDocumentData
+  let currOpenedDocument: EditorDocumentData | undefined
   const instantDataUpdate = () => {
     event.emit$('editor__onUpdate', {
-      id: currOpenedDocument.id,
+      id: currOpenedDocument!.id,
       content: block.data$()
     })
 
     //debug-start
-    editorLog.logLabel("internal", "document", currOpenedDocument.id, "data updated")
+    editorLog.logLabel("internal", "document", currOpenedDocument!.id, "data updated")
     //debug-end
   }
 
@@ -109,6 +109,13 @@ export function EditorProvider(props: ParentProps) {
     //debug-start
     editorLog.log('New data will be added now')
     //debug-end
+
+    // checks if somehow I messed up something on the backend,
+    // which is the content is somehow null
+    if (!data.content) {
+      data.content = []
+    }
+
     block.setData$(data.content)
     
     const isNoBlockLeft = data.content.length === 0

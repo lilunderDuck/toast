@@ -28,7 +28,7 @@ export function LoadThing(props: ILoadThingProps) {
     journalLog.log('Updating file display and stuff', thisGroupData)
     //debug-end
 
-    const treeData = thisGroupData.tree.data
+    const treeData = thisGroupData.tree ?? []
     // @ts-ignore - should work
     delete thisGroupData.tree
     sessionStorage$.set$('currentGroup', thisGroupData)
@@ -50,7 +50,7 @@ export function LoadThing(props: ILoadThingProps) {
 
   onMount(async () => {
     //debug-start
-    journalLog.group('Start up')
+    journalLog.group('Start up', CURRENT_GROUP_ID)
     //debug-end
     
     setIsLoading(true)

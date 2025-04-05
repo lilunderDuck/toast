@@ -1,4 +1,4 @@
-import { IBlockSetting } from "../../provider"
+import { IBlockSetting } from "../provider"
 
 type LinkBlockData = {
   link: string

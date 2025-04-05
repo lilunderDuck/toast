@@ -26,8 +26,10 @@ export function FileDisplay() {
   const { fileDisplay$, getCurrentGroup$ } = useJournalContext()
   const ROOT_ID = 0
 
+  const getCache = () => fileDisplay$.dataMapping$
+
   const RenderFolderAndFileComponent = (props: AnyVirTreeNode) => {
-    const [data] = createResource(() => api_getJournal(getCurrentGroup$().id, props.id))
+    const data = getCache()[props.id]
     if (!data) {
       return void console.warn('cannot get data', props)
     }

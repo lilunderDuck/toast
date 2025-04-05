@@ -36,30 +36,39 @@ interface ITextInputProps {
 }
 
 export function TextInput(props: ParentProps<ITextInputProps>) {
-  const { updateData$, focusState$, addNewLine$, textsData$ } = useTextDataContext()
+  const { updateData$, focusState$, addNewLine$, textsData$, spawnNewTextInput$ } = useTextDataContext()
   const [, setWhatInputIsFocused] = focusState$
 
   let divAsInputRef!: Ref<"div">
   const whenYouTypingStuff: EventHandler<"div", "onKeyDown"> = (keyboardEvent) => {
     const keyYouPress = keyboardEvent.key.toLowerCase()
 
+    // If you press Ctrl + "="
+    if (keyboardEvent.ctrlKey && keyYouPress === "=") {
+      spawnNewTextInput$(props.currentIndex$)
+      return // don't update
+    }
+
     if (keyYouPress === 'enter') {
       keyboardEvent.preventDefault()
       addNewLine$(props.currentIndex$)
-      return
+      return // don't update
     }
 
-    if (keyYouPress === "backspace") {
-      if (!isEmpty()) return
+    const shouldDeleteCurrentInput = keyYouPress === "backspace" && isEmpty()
+    if (shouldDeleteCurrentInput) {
       const previousTextInputIndex = props.currentIndex$ - 1
 
-      if (previousTextInputIndex > 0) return // don't delete the last one
-      setWhatInputIsFocused(previousTextInputIndex)
-      setCaretToTheEnd(document.querySelector(`[data-index=${previousTextInputIndex}]`)!)
+      if (previousTextInputIndex > 0) {
+        setWhatInputIsFocused(previousTextInputIndex)
+        setCaretToTheEnd(document.querySelector(`[data-index=${previousTextInputIndex}]`)!)
+      }
+
+      // pass, to save the text data
     }
 
     if (dontUpdateIfYouPressSomeKey(keyYouPress)) {
-      return // do not update
+      return // don't update
     }
 
     // do a weird hack here because you doesn't get the correct value on the "input"

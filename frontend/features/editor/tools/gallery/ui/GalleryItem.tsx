@@ -2,7 +2,7 @@ import stylex from "@stylexjs/stylex"
 // ...
 import { FlexCenter } from "~/components"
 // ...
-import Image from "../../image/Image"
+import { Image } from "../../../common/image"
 
 const style = stylex.create({
   item: {
@@ -21,7 +21,7 @@ interface IGalleryItemProps {
 export default function GalleryItem(props: IGalleryItemProps) {
   return (
     <FlexCenter {...stylex.attrs(style.item)} id={props.id}>
-      <Image src$={props.src$ ?? ''} description$="" name$="" />
+      <Image  src$={props.src$ ?? ''} description$="" name$="" />
     </FlexCenter>
   )
 }

@@ -9,7 +9,7 @@ interface IImageDataContext {
 
 const Context = createContext<IImageDataContext>()
 
-interface IImageDataProviderProps {
+export interface IImageDataProviderProps {
   dataIn$: IImageData
   onChange$(newData: IImageData): void
 }

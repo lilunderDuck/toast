@@ -1,6 +1,8 @@
-export * from "./text"
 export * from "./todo"
-export * from "./image"
 export * from "./gallery"
 export * from "./code"
-export * from "./video"
+// ...
+export * from "./ImageBlock"
+export * from "./LinkBlock"
+export * from "./TextBlock"
+export * from "./VideoBlock"

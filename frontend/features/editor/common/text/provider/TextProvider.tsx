@@ -1,11 +1,11 @@
-import { Accessor, createContext, createSignal, ParentProps, Signal, useContext } from "solid-js"
+import { type Accessor, createContext, createSignal, type ParentProps, type Signal, useContext } from "solid-js"
 // ...
 import { editorLog } from "~/features/debug"
 import { arrayInsert, getRandomNumberFrom } from "~/utils"
 // ...
 import { InputTextData, TextData, TextDataAttribute } from "./data"
 
-interface ITextProviderProps {
+export interface ITextProviderProps {
   inputData$?: InputTextData
   onChange$(value: TextData[]): void
 }

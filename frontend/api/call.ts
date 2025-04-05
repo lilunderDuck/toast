@@ -10,11 +10,10 @@ export async function apiCall<T extends keyof ApiFn>(fnName: T, ...additionalArg
     apiCallLog.error("Could not call", fnName, ", binding function not exist.\n\nFunction list:", appBinding)
     throw new Error(`panic ${Object.values(appBinding)}`)
   }
+  
+  apiCallLog.logLabel("call", fnName, ...additionalArguments)
   //debug-end
 
-  //debug-start
-  apiCallLog.logLabel("call", fnName, additionalArguments)
-  //debug-end
   //@ts-ignore - should work without any worries
   const theReturnType = await fn(...additionalArguments) as ReturnType<ApiFn[T]>
 

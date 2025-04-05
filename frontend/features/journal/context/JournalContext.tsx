@@ -5,8 +5,8 @@ import {
   useContext, 
 } from "solid-js"
 // ...
-import { createEvent, createStorage, type IEvent, type IStorage, type IIndexedDbUtils } from "~/utils"
-import type { IJournalData, IJournalGroupData } from "~/api/journal"
+import { createEvent, createStorage, type IEvent, type IStorage } from "~/utils"
+import type { IJournalGroupData } from "~/api/journal"
 import { journalLog } from "~/features/debug"
 // ...
 import { type JournalEventMap } from "./event"
@@ -53,8 +53,8 @@ export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
 
   const wrappedSessionStorage: JournalSessionStorage = createStorage(sessionStorage)
   const event = createEvent<JournalEventMap>()
-  const fileDisplayContext = createFileDisplay(wrappedSessionStorage)
-  const journalContext = createJournal(getCurrentGroupId, fileDisplayContext)
+  const fileDisplayContext = createFileDisplay(wrappedSessionStorage, event)
+  const journalContext = createJournal(getCurrentGroupId, fileDisplayContext, event)
   const tabContext = createTab(getCurrentGroupId)
 
   onCleanup(() => {

@@ -3,12 +3,14 @@ import { createSignal, type Component } from "solid-js"
 import { 
   IJournalCategoryData,
   IJournalData,
+  JournalType,
   api_updateJournalVirturalFileTree,
 } from "~/api/journal"
 import { journalLog } from "~/features/debug"
 // ...
 import type { JournalSessionStorage } from "./JournalContext"
-import { AnyVirTreeNode, ClientData, Data, isFolder, Tree } from "../utils"
+import { AnyVirTreeNode, ClientData, createFileNodeData, createFolderNodeData, isFolder, Tree } from "../utils"
+import { JournalEvent } from "./event"
 
 type TreeNodeType = 'file' | 'folder'
 type TreeMappingData = Record<number, IJournalCategoryData | IJournalData>
@@ -23,32 +25,32 @@ export interface IFileDisplayContext extends ReturnType<typeof createFileDisplay
   // ...
 }
 
-export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
+export function createFileDisplay(
+  thisSessionStorage: JournalSessionStorage,
+  event: JournalEvent
+) {
   const [tree, setTree] = createSignal<Tree>([])
   const [isUpdating, setIsUpdating] = createSignal(false)
 
-  let treeCache: Data = {
-    list: [],
-    data: []
-  }
+  let treeCache: Tree = []
   
   let mapping: TreeMappingData = {}
   
   const update = async() => {
     const thisGroup = thisSessionStorage.get$('currentGroup')
     setIsUpdating(true)
-    const newTree = treeCache.data
+    const newTree = treeCache
     setTree(newTree)
     setIsUpdating(false)
     await api_updateJournalVirturalFileTree(thisGroup.id, newTree)
     //debug-start
-    journalLog.logLabel("file display", 'updated')
+    journalLog.logLabel("file display", 'updated, tree ->', treeCache)
     //debug-end
   }
 
   const add = (node: AnyVirTreeNode, toFolder: number | 'root') => {
     if (toFolder === 'root') {
-      treeCache.data.push(node)
+      treeCache.push(node)
       return update()
     }
 
@@ -71,7 +73,7 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
     return update()
   }
 
-  const find = (nodeId: number, child: Tree = treeCache.data) => {
+  const find = (nodeId: number, child: Tree = treeCache) => {
     for (const node of child) {
       if (node.id === nodeId) {
         return node
@@ -93,7 +95,7 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
 
   const replaceTree = (whichFolderId: number | 'root', tree: Tree) => {
     if (whichFolderId === 'root') {
-      treeCache.data = tree
+      treeCache = tree
       //debug-start
       journalLog.logLabel("file display", 'replace', whichFolderId, "with", tree)
       //debug-end
@@ -122,13 +124,22 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
   }
 
   const wrappedSetTree = (tree: Tree, data: ClientData["list"]) => {
-    mapping = data
-    treeCache.data = tree
+    mapping = data ?? {}
+    treeCache = tree
     update()
     //debug-start
     journalLog.logLabel("file display", "Tree updated with", tree, data)
     //debug-end
   }
+
+  event.on$("journal__createdJournal$", (type, data) => {
+    const newFileNode = type === JournalType.journal ? 
+      createFileNodeData(data.id) : 
+      createFolderNodeData(data!.id)
+    // ...
+    mapping[data.id] = data
+    add(newFileNode, 'root')
+  })
   
   return {
     treeSignal$: tree,
@@ -137,7 +148,7 @@ export function createFileDisplay(thisSessionStorage: JournalSessionStorage) {
     add$: add,
     replaceTree$: replaceTree,
     setTree$: wrappedSetTree,
-    get mapping$() {
+    get dataMapping$() {
       return mapping
     }
   }
