@@ -74,7 +74,9 @@ function Content(props: ICreateJournalCategoryModalProps) {
             <RadioGroupItem value={it.name$} onClick={thingSelected(it.$type)}>
               <RadioGroupItemLabel>
                 <div>{it.name$}</div>
-                <div {...stylex.attrs(style.description)}>{it.description$}</div>
+                <div {...stylex.attrs(style.description)}>
+                  {it.description$}
+                </div>
               </RadioGroupItemLabel>
             </RadioGroupItem>
           )}

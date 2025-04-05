@@ -23,6 +23,10 @@ export async function api_getJournal(currentGroupId: number, someJournalId: numb
   return await apiCall('GetJournal', currentGroupId, someJournalId) as IJournalData
 }
 
+export async function api_getAllJournal(currentGroupId: number) {
+  return await apiCall('GetAllJournal', currentGroupId) as Record<string, IJournalData>
+}
+
 export async function api_updateJournal(currentGroupId: number, someJournalId: number, data: Partial<IJournalData>) {
   const updatedData = {
     data

@@ -1,5 +1,7 @@
-import stylex from "@stylexjs/stylex"
 import { For } from "solid-js"
+// ...
+import stylex from "@stylexjs/stylex"
+// ...
 import { Skeleton } from "~/components"
 
 const style = stylex.create({

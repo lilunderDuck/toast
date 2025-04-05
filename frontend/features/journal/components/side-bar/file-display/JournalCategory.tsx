@@ -1,4 +1,4 @@
-import { ParentProps } from "solid-js"
+import { ParentProps, Show } from "solid-js"
 // ...
 import __style from "./Journal.module.css"
 import stylex from "@stylexjs/stylex"
@@ -6,6 +6,7 @@ import stylex from "@stylexjs/stylex"
 import type { IJournalCategoryData } from "~/api/journal"
 import { FlexCenterY } from "~/components"
 import { BsCaretRightFill } from "solid-icons/bs"
+import { useToggleState } from "~/hook"
 
 const style = stylex.create({
   journalCategory: {
@@ -37,21 +38,30 @@ const style = stylex.create({
 })
 
 interface IJournalCategoryProps extends IJournalCategoryData {
-  // ...
+  onClick: EventHandler<"div", "onClick">
 }
 
-export default function JournalCategory(props: ParentProps<IJournalCategoryProps>) {
+export function JournalCategory(props: ParentProps<IJournalCategoryProps>) {
+  const [isShowing, toggleShowing] = useToggleState()
+
+  const clickThisThing: EventHandler<"div", "onClick"> = (mouseEvent) => {
+    toggleShowing()
+    props.onClick?.(mouseEvent)
+  }
+
   return (
     <section id={__style.journal} {...stylex.attrs(style.journalCategory)}>
-      <FlexCenterY {...stylex.attrs(style.nameAndStuff)}>
+      <FlexCenterY {...stylex.attrs(style.nameAndStuff)} onClick={clickThisThing}>
         <BsCaretRightFill size={10} />
         <span id={__style.name}>
           {props.name}
         </span>
       </FlexCenterY>
-      <div {...stylex.attrs(style.leftPadding)}>
-        {props.children}
-      </div>
+      <Show when={isShowing()}>
+        <div {...stylex.attrs(style.leftPadding)}>
+          {props.children}
+        </div>
+      </Show>
     </section>
   )
 }

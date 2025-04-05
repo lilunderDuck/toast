@@ -1,15 +1,17 @@
-import { Show } from "solid-js"
+import { type ParentProps } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from'~/assets/style/scrollbar.module.css'
 // ...
 import { Divider } from "~/components"
 import { mergeClassname } from "~/utils"
+import { useFileDisplayContext } from "~/features/file-display"
 // ...
 import { SidebarButtonsRow } from "./SidebarButtonsRow"
-import { FileDisplay, FileDisplaySkeleton } from "./file-display"
 import SidebarActions from "./SidebarActions"
 import { useJournalContext } from "../../context"
+import { createFileNodeData, createFolderNodeData } from "../../utils"
+import { JournalType } from "~/api/journal"
 
 const style = stylex.create({
   sidebar: {
@@ -22,9 +24,24 @@ const style = stylex.create({
   }
 })
 
-export function Sidebar() {
-  const { fileDisplay$ } = useJournalContext()
-  const [isLoading] = fileDisplay$.isLoading$
+export function Sidebar(props: ParentProps) {
+  const { event$ } = useJournalContext()
+  const { add$ } = useFileDisplayContext()
+
+  event$.on$("journal__createdJournal$", (type, data) => {
+    let createNode
+    switch(type) {
+      case JournalType.journal:
+        createNode = createFileNodeData
+      break
+
+      case JournalType.category:
+        createNode = createFolderNodeData
+      break
+    }
+
+    add$(createNode(data.id), "root", data)
+  })
 
   return (
     <div 
@@ -38,9 +55,7 @@ export function Sidebar() {
         __scrollbarStyle.invsScrollbar,
         stylex.attrs(style.content)
       )}>
-        <Show when={!isLoading()} fallback={<FileDisplaySkeleton />}>
-          <FileDisplay />
-        </Show>
+        {props.children}
       </div>
 
       <SidebarActions />

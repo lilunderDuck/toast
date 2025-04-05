@@ -99,15 +99,18 @@ func (journal *JournalUtils) CreateJournal(currentGroupId int, schema *JournalSc
 //   - An error if the journal entry is not found or reading fails.
 func (journal *JournalUtils) GetJournal(currentGroupId int, journalId int) (*JournalData, error) {
 	var dataOut JournalData
+	println("does it crash here? 1")
 	readError := utils.BSON_ReadFile(
 		GetJournalSavedFilePath(currentGroupId, journalId),
 		&dataOut,
 	)
 
+	println("does it crash here? 7")
 	if readError != nil {
 		return nil, readError
 	}
 
+	println("does it crash here? 8")
 	return &dataOut, nil
 }
 

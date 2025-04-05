@@ -1,2 +1,2 @@
-export * from "./FileDisplay"
-export * from "./FileDisplaySkeleton"
+export * from "./JournalCategory"
+export * from "./Journal"

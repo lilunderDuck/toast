@@ -1,5 +1,5 @@
 import { BsHouseFill } from "solid-icons/bs"
-import { useNavigate } from "@solidjs/router"
+import { useNavigate, useParams } from "@solidjs/router"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./JournalSidebar.module.css"
@@ -10,13 +10,18 @@ import {
   ResizableHandle, 
   ResizablePanel
 } from "~/components"
+import { FileDisplay, FileDisplayProvider, FileNodeType } from "~/features/file-display"
+import { api_getAllJournal, api_getJournalVirturalFileTree, api_updateJournalVirturalFileTree, IJournalCategoryData, IJournalData } from "~/api/journal"
 // ...
 import { 
+  Journal,
+  JournalCategory,
   QuickActionBar, 
   QuickActionItem, 
   Sidebar,
   TrackerButton, 
 } from "../components"
+import { useJournalContext } from "../context"
 
 const style = stylex.create({
   sidebar: {
@@ -30,8 +35,12 @@ const style = stylex.create({
 })
 
 export function JournalSidebar() {
+  const { journal$ } = useJournalContext()
   const goTo = useNavigate()
   const goHome = () => goTo('/')
+  const param = useParams()
+
+  const currentGroupId = parseInt(param.id)
 
   return (
     <>
@@ -42,13 +51,34 @@ export function JournalSidebar() {
             label$='Go back to home'
             onClick={goHome}
           />
-          <div  />
+          <div />
           <TrackerButton />
         </FlexCenterY>
-        <Flex {...stylex.attrs(style.sidebar)}>
-          <QuickActionBar />
-          <Sidebar />
-        </Flex>
+        <FileDisplayProvider<IJournalData, IJournalCategoryData> 
+          FileComponent$={Journal}
+          FolderComponent$={JournalCategory}
+          load$={async() => {
+            return {
+              tree$: await api_getJournalVirturalFileTree(currentGroupId),
+              dataMapping$: await api_getAllJournal(currentGroupId)
+            }
+          }}
+          onOpen$={(type, data) => {
+            if (type === FileNodeType.FILE) {
+              journal$.open$(data.id)
+            }
+          }}
+          onUpdate$={(treeData) => {
+            api_updateJournalVirturalFileTree(currentGroupId, treeData)
+          }}
+        >
+          <Flex {...stylex.attrs(style.sidebar)}>
+            <QuickActionBar />
+            <Sidebar>
+              <FileDisplay />
+            </Sidebar>
+          </Flex>
+        </FileDisplayProvider>
       </ResizablePanel>
       <ResizableHandle />
     </>

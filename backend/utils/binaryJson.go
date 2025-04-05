@@ -39,17 +39,21 @@ func BSON_WriteFile(path string, anyObject any) (someError error) {
 //
 // Returns:
 //   - An error if something went wrong while reading, or nil if it read correctly.
-func BSON_ReadFile(path string, out interface{}) (someError error) {
+func BSON_ReadFile(path string, out any) (someError error) {
 	dataFromDisk, readError := ReadFile(path)
+	println("does it crash here? 2")
 	if readError != nil {
 		return readError
 	}
 
+	println("does it crash here? 3")
 	decodeError := cbor.Unmarshal(dataFromDisk, out)
+	println("does it crash here? 4")
 	if decodeError != nil {
 		fmt.Println("BSON decode error", decodeError)
 		return decodeError
 	}
+	println("does it crash here? 5")
 
 	return nil
 }

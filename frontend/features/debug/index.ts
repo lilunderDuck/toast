@@ -1,5 +1,7 @@
 import { createLog } from "./this"
 
+export * from "./this"
+
 //debug-start
 export const journalLog = createLog('journal', '#bf117f', '#119fbf')
 export const homeLog = createLog('home', '#ab5318', '#185dab')

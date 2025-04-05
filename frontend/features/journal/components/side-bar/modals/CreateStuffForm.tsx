@@ -44,6 +44,7 @@ export default function CreateJournalCategoryForm(props: ICreateJournalCategoryF
       })
     // ...
 
+    
     if (!dataReturned) return
     
     setSubmitButtonDisabled(false)

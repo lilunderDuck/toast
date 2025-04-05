@@ -33,20 +33,15 @@ const style = stylex.create({
 })
 
 export interface IJournalProps extends IJournalData {
-  // ...
+  onClick: EventHandler<"div", "onClick">
 }
 
-export default function Journal(props: IJournalProps) {
+export function Journal(props: IJournalProps) {
   const { event$, journal$, getCurrentGroup$ } = useJournalContext()
-  const currentGroupId = getCurrentGroup$().id
+  // const currentGroupId = getCurrentGroup$().id
 
   const onClickTheJournalName = () => {
-    const currentlyOpenJournalId = journal$.currentlyOpened$()?.id
-    if (currentlyOpenJournalId !== props.id) {
-      return event$.emit$('journal__openJournal', props)
-    }
-
-    console.log('No need to open', props.id, "...")
+    
   }
 
   const onClickRemoveButton = () => {
@@ -59,7 +54,7 @@ export default function Journal(props: IJournalProps) {
       id={__style.journal}
       data-id={props.id}
     >
-      <Flex {...stylex.attrs(style.nameAndStuff)} onClick={onClickTheJournalName}>
+      <Flex {...stylex.attrs(style.nameAndStuff)} onClick={props.onClick}>
         <span id={__style.name}>
           {props.name}
         </span>

@@ -29,7 +29,6 @@ interface IJournalProviderProps {
 
 interface IJournalContext {
   journal$: IJournalUtils
-  fileDisplay$: IFileDisplayContext
   tabs$: ITabUtils
   // ...
   localStorage$: JournalLocalStorage
@@ -53,8 +52,7 @@ export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
 
   const wrappedSessionStorage: JournalSessionStorage = createStorage(sessionStorage)
   const event = createEvent<JournalEventMap>()
-  const fileDisplayContext = createFileDisplay(wrappedSessionStorage, event)
-  const journalContext = createJournal(getCurrentGroupId, fileDisplayContext, event)
+  const journalContext = createJournal(getCurrentGroupId, event)
   const tabContext = createTab(getCurrentGroupId)
 
   onCleanup(() => {
@@ -71,7 +69,6 @@ export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
   return (
     <Context.Provider value={{
       journal$: journalContext,
-      fileDisplay$: fileDisplayContext,
       tabs$: tabContext,
       // ...
       localStorage$: createStorage(localStorage),

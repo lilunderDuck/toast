@@ -17,12 +17,7 @@ import {
 import { useEditorContext } from "~/features/editor"
 import { journalLog } from "~/features/debug"
 // ...
-import { 
-  // createFileNodeData,
-  // createFolderNodeData,
-  JournalEvent,
-} from ".."
-import { type IFileDisplayContext } from "./fileDisplay"
+import { JournalEvent } from "./event"
 
 export interface IJournalUtils {
   /**Accessor for the currently opened journal data. 
@@ -56,7 +51,6 @@ export interface IJournalUtils {
 
 export function createJournal(
   getCurrentJournalGroupId: () => number,
-  fileDisplayContext: IFileDisplayContext,
   event: JournalEvent
 ): IJournalUtils {
   const { open$ } = useEditorContext()

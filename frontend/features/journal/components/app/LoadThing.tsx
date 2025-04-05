@@ -17,25 +17,10 @@ interface ILoadThingProps {
  * @returns `JSX.Element`, but render nothing.
  */
 export function LoadThing(props: ILoadThingProps) {
-  const { fileDisplay$, sessionStorage$, localStorage$ } = useJournalContext()
+  const { localStorage$, sessionStorage$ } = useJournalContext()
   const { isReadonly$, setIsReadonly$ } = useEditorContext()
 
   const CURRENT_GROUP_ID = parseInt(props.currentGroupId$)
-  const [, setIsLoading] = fileDisplay$.isLoading$
-
-  const updateFileDisplay = async(thisGroupData: IJournalGroupData) => {
-    //debug-start
-    journalLog.log('Updating file display and stuff', thisGroupData)
-    //debug-end
-
-    const treeData = thisGroupData.tree ?? []
-    // @ts-ignore - should work
-    delete thisGroupData.tree
-    sessionStorage$.set$('currentGroup', thisGroupData)
-    
-    const treeMapping = await api_getJournalVirturalFileTree(CURRENT_GROUP_ID)
-    fileDisplay$.setTree$(treeData, treeMapping)
-  }
 
   const READONLY_STATE_KEY = `readonly-${CURRENT_GROUP_ID}` as const
   const updateEditorReadonlyState = () => {
@@ -53,22 +38,21 @@ export function LoadThing(props: ILoadThingProps) {
     journalLog.group('Start up', CURRENT_GROUP_ID)
     //debug-end
     
-    setIsLoading(true)
     // Attempt to get the journal group data from the backend
     const thisGroupData = await api_getGroup(CURRENT_GROUP_ID) as IJournalGroupData
     if (!thisGroupData) {
       return props.onError$()
     }
 
+    sessionStorage$.set$("currentGroup", thisGroupData)
+
     // do a bunch of updating mess
-    await updateFileDisplay(thisGroupData)
     updateEditorReadonlyState()
     
     //debug-start
     journalLog.log('Finish')
     journalLog.groupEnd()
     //debug-end
-    setIsLoading(false)
   })
 
   createEffect(() => {
