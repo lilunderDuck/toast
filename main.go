@@ -3,10 +3,12 @@ package main
 import (
 	"burned-toast/backend"
 	"burned-toast/backend/dynamic"
+	"burned-toast/backend/handler/journal"
 	"burned-toast/backend/internals"
 	"embed"
 
 	"github.com/wailsapp/wails/v2"
+	"github.com/wailsapp/wails/v2/pkg/logger"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
@@ -39,11 +41,10 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:  "Burned toast",
-		Width:  1024,
-		Height: 768,
-		// MinWidth:          1024,
-		// MinHeight:         768,
+		Title:             "Burned toast",
+		Width:             1024,
+		Height:            768,
+		LogLevel:          logger.ERROR,
 		DisableResize:     false,
 		Fullscreen:        false,
 		Frameless:         false,
@@ -56,6 +57,8 @@ func main() {
 		WindowStartState:  options.Normal,
 		Bind: []any{
 			app,
+			&journal.JournalUtils{},
+			&journal.JournalGroupUtils{},
 		},
 		AssetServer: &assetserver.Options{
 			Assets: assets,

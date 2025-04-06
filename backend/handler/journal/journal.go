@@ -47,9 +47,9 @@ type JournalMetaData struct {
 
 // Represents the data for a single content block within a journal entry.
 type JournalContentData struct {
-	Id   int            `json:"id"              cbor:"0,keyasint"`
-	Type uint16         `json:"type"            cbor:"1,keyasint"`
-	Data map[string]any `json:"data"            cbor:"3,keyasint"`
+	Id   int    `json:"id"              cbor:"0,keyasint"`
+	Type uint16 `json:"type"            cbor:"1,keyasint"`
+	Data any    `json:"data"            cbor:"3,keyasint"`
 }
 
 type JournalUtils struct{}
@@ -99,18 +99,15 @@ func (journal *JournalUtils) CreateJournal(currentGroupId int, schema *JournalSc
 //   - An error if the journal entry is not found or reading fails.
 func (journal *JournalUtils) GetJournal(currentGroupId int, journalId int) (*JournalData, error) {
 	var dataOut JournalData
-	println("does it crash here? 1")
-	readError := utils.BSON_ReadFile(
+	err := utils.BSON_ReadFile(
 		GetJournalSavedFilePath(currentGroupId, journalId),
 		&dataOut,
 	)
 
-	println("does it crash here? 7")
-	if readError != nil {
-		return nil, readError
+	if err != nil {
+		return nil, err
 	}
 
-	println("does it crash here? 8")
 	return &dataOut, nil
 }
 
@@ -126,9 +123,9 @@ func (journal *JournalUtils) GetJournal(currentGroupId int, journalId int) (*Jou
 //   - The updated journal entry data.
 //   - An error if the update fails.
 func (journal *JournalUtils) UpdateJournal(currentGroupId int, journalId int, newData *JournalUpdateSchema) (*JournalData, error) {
-	data, readError := journal.GetJournal(currentGroupId, journalId)
-	if readError != nil {
-		return nil, readError
+	data, err := journal.GetJournal(currentGroupId, journalId)
+	if err != nil {
+		return nil, err
 	}
 
 	mergeJournalData(data, newData)
@@ -153,6 +150,18 @@ func (journal *JournalUtils) UpdateJournal(currentGroupId int, journalId int, ne
 	})
 
 	return data, nil
+}
+
+func mergeJournalData(currentJournalData *JournalData, newData *JournalUpdateSchema) {
+	if newData.Name != "" {
+		currentJournalData.Name = newData.Name
+	}
+
+	if len(newData.Data) != 0 {
+		currentJournalData.Data = newData.Data
+	}
+
+	currentJournalData.Modified = utils.GetCurrentDateNow()
 }
 
 // Deletes a journal entry by its ID from a specified journal group.

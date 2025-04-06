@@ -3,6 +3,7 @@ package journal
 import (
 	"burned-toast/backend/internals"
 	"burned-toast/backend/utils"
+	"fmt"
 	"os"
 	"time"
 )
@@ -27,7 +28,7 @@ type JournalGroupData struct {
 	Modified    time.Duration `json:"modified,omitempty"    cbor:"2,keyasint,omitempty"`
 	Name        string        `json:"name"                  cbor:"3,keyasint"`
 	Description string        `json:"description,omitempty" cbor:"4,keyasint,omitempty"`
-	Tree        VirTreeData   `json:"tree"                  cbor:"5,keyasint,toarray"`
+	Tree        VirTreeData   `json:"tree"                  cbor:"5,keyasint"`
 }
 
 type JournalGroupUtils struct{}
@@ -59,7 +60,7 @@ func (group *JournalGroupUtils) CreateGroup(groupSchema *JournalGroupSchema) (ne
 	})
 
 	// Create the journal group data folder to save your stuffs
-	someError := CreateGroupFolders(numberId, &data)
+	someError := createGroupFolders(numberId, &data)
 	if someError != nil {
 		return nil, someError
 	}
@@ -67,7 +68,21 @@ func (group *JournalGroupUtils) CreateGroup(groupSchema *JournalGroupSchema) (ne
 	return &data, nil
 }
 
-// Group_Get retrieves a journal group by its ID.
+func createGroupFolders(groupId int, groupData *JournalGroupData) (anyError error) {
+	groupDirectory := GetGroupPath(groupId)
+	utils.CreateDirectory(groupDirectory)
+	utils.CreateDirectory(GetJournalsSavedFolder(groupId))
+
+	// write the journal group's metadata
+	writeError := updateGroupMetaFile(groupData)
+	if writeError != nil {
+		return writeError
+	}
+
+	return nil
+}
+
+// Retrieves a journal group by its ID.
 // It first tries to get the data from cache, and if not found, reads it from the meta file.
 //
 // Parameters:
@@ -77,14 +92,21 @@ func (group *JournalGroupUtils) CreateGroup(groupSchema *JournalGroupSchema) (ne
 //   - *JournalGroupData: The journal group data.
 //   - error: An error if the group is not found or reading fails.
 func (group *JournalGroupUtils) GetGroup(groupId int) (*JournalGroupData, error) {
-	if !IsGroupExist(groupId) {
-		return Error_GroupNotFound(groupId)
+	if !isGroupExist(groupId) {
+		return nil, fmt.Errorf("group %d not found", groupId)
 	}
 
 	var outData JournalGroupData
-	utils.BSON_ReadFile(GetGroupMetaFilePath(groupId), &outData)
+	err := utils.BSON_ReadFile(GetGroupMetaFilePath(groupId), &outData)
+	if err != nil {
+		return nil, err
+	}
 
 	return &outData, nil
+}
+
+func isGroupExist(groupId int) bool {
+	return utils.IsFileExist(GetGroupMetaFilePath(groupId))
 }
 
 // Retrieves the virtual tree data for a journal group.
@@ -102,7 +124,7 @@ func (group *JournalGroupUtils) GetGroupVirTreeData(groupId int) (*VirTreeData, 
 	return &data.Tree, err
 }
 
-// Group_Update updates an existing journal group.
+// Updates an existing journal group.
 // It retrieves the current data, merges the new data, updates the cache, and updates the meta file.
 //
 // Parameters:
@@ -112,7 +134,10 @@ func (group *JournalGroupUtils) GetGroupVirTreeData(groupId int) (*VirTreeData, 
 // Returns:
 //   - *JournalGroupData: The updated journal group data.
 //   - error: An error if the update fails.
-func (group *JournalGroupUtils) UpdateGroup(groupId int, newData *JournalGroupUpdateSchema) (updatedGroupData *JournalGroupData, anyError error) {
+func (group *JournalGroupUtils) UpdateGroup(
+	groupId int,
+	newData *JournalGroupUpdateSchema,
+) (updatedGroupData *JournalGroupData, anyError error) {
 	// Gets the previous data that has been saved
 	groupData, someError := group.GetGroup(groupId)
 	if someError != nil {
@@ -126,9 +151,32 @@ func (group *JournalGroupUtils) UpdateGroup(groupId int, newData *JournalGroupUp
 		cache.Set(utils.IntToString(groupData.Id), &groupData)
 	})
 
-	UpdateGroupMetaFile(groupData)
+	updateGroupMetaFile(groupData)
 
 	return groupData, nil
+}
+
+func updateGroupMetaFile(groupData *JournalGroupData) error {
+	groupId := utils.IntToString(groupData.Id)
+	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
+		cache.Set(groupId, groupData)
+	})
+
+	return utils.BSON_WriteFile(GetGroupMetaFilePath(groupData.Id), &groupData)
+}
+
+func mergeGroupData(groupData *JournalGroupData, newData *JournalGroupUpdateSchema) {
+	if newData.Name != "" {
+		groupData.Name = newData.Name
+	}
+
+	if newData.Description != "" {
+		groupData.Description = newData.Description
+	}
+
+	if len(newData.Tree) != 0 {
+		groupData.Tree = newData.Tree
+	}
 }
 
 // Deletes a journal group by its ID.
@@ -139,25 +187,26 @@ func (group *JournalGroupUtils) UpdateGroup(groupId int, newData *JournalGroupUp
 // Parameters:
 //   - groupId: The ID of the journal group to delete.
 func (group *JournalGroupUtils) DeleteGroup(groupId int) error {
-	// Firstly, it will delete from cache first
+	// Deletes from cache first
 	groupDataPath := GetGroupPath(groupId)
-	var updateError error
+	var err error
 	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
-		updateError = cache.Delete(utils.IntToString(groupId))
+		err = cache.Delete(utils.IntToString(groupId))
 	})
-	if updateError != nil {
-		println(updateError.Error())
-		return updateError
+
+	if err != nil {
+		fmt.Println(err)
+		return err
 	}
 
-	// Then, everything on that group's folder data...
-	removeError := os.RemoveAll(groupDataPath)
-	if removeError != nil {
-		println(removeError.Error())
-		return removeError
+	// Then everything on that group's folder data...
+	err = os.RemoveAll(groupDataPath)
+	if err != nil {
+		fmt.Println(err)
+		return err
 	}
 
-	return nil // ...and we're done
+	return nil
 }
 
 // Retrieves all journal groups from cache.

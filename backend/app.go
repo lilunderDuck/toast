@@ -5,7 +5,6 @@
 package backend
 
 import (
-	"burned-toast/backend/handler/journal"
 	"context"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -14,8 +13,6 @@ import (
 // App struct
 type App struct {
 	ctx context.Context
-	journal.JournalUtils
-	journal.JournalGroupUtils
 }
 
 // NewApp creates a new App application struct

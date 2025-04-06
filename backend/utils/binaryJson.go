@@ -2,9 +2,14 @@ package utils
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/fxamacker/cbor/v2"
+	"github.com/klauspost/compress/zstd"
 )
+
+var encoder, _ = zstd.NewWriter(nil)
+var decoder, _ = zstd.NewReader(nil, zstd.WithDecoderConcurrency(0))
 
 // Takes any kind of data (anyObject) and saves it to a file.
 // It uses a special way to store the data (called CBOR) which makes it easy to read later.
@@ -18,11 +23,13 @@ import (
 func BSON_WriteFile(path string, anyObject any) (someError error) {
 	binaryData, encodeError := cbor.Marshal(anyObject)
 	if encodeError != nil {
-		fmt.Println("BSON encode error", encodeError)
+		fmt.Println("BSON encode error ->", encodeError)
 		return encodeError
 	}
 
-	writeError := WriteFile(path, binaryData)
+	binaryData = encoder.EncodeAll(binaryData, make([]byte, 0, len(binaryData)))
+
+	writeError := os.WriteFile(path, binaryData, os.ModePerm)
 	if writeError != nil {
 		return writeError
 	}
@@ -40,20 +47,22 @@ func BSON_WriteFile(path string, anyObject any) (someError error) {
 // Returns:
 //   - An error if something went wrong while reading, or nil if it read correctly.
 func BSON_ReadFile(path string, out any) (someError error) {
-	dataFromDisk, readError := ReadFile(path)
-	println("does it crash here? 2")
+	dataFromDisk, readError := os.ReadFile(path)
 	if readError != nil {
 		return readError
 	}
 
-	println("does it crash here? 3")
+	dataFromDisk, decompressErr := decoder.DecodeAll(dataFromDisk, nil)
+	if decompressErr != nil {
+		fmt.Println("BSON decompress error ->", decompressErr)
+		return decompressErr
+	}
+
 	decodeError := cbor.Unmarshal(dataFromDisk, out)
-	println("does it crash here? 4")
 	if decodeError != nil {
-		fmt.Println("BSON decode error", decodeError)
+		fmt.Println("BSON decode error ->", decodeError)
 		return decodeError
 	}
-	println("does it crash here? 5")
 
 	return nil
 }
