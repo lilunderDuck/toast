@@ -82,7 +82,7 @@ function getEsbuildConfig(devMode: boolean, others?: ESBuildOptions): InlineConf
   }
 }
 
-const BASE_OUTPUT_DIRECTORY = './out'
+const BASE_OUTPUT_DIRECTORY = './build/out'
 const OUTPUT_DIRECTORY = BASE_OUTPUT_DIRECTORY
 const CLIENT_OUTPUT_DIRECTORY = `${BASE_OUTPUT_DIRECTORY}/static`
 

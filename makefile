@@ -2,11 +2,11 @@ cold_start:
 	cd ./build/tools/ && deno -A fetchPackageJson.ts && go run binary_json.go
 
 dev_server:
-	go build -o ./build/server.exe ./backend/main.go
-	./build/server.exe
+	go build -o ./build/out/server.exe ./backend/main.go
+	./build/out/server.exe
 
 clean:
-	del ./frontend/out
+	del ./build/out
 
 # in case I did something so horrific that I need to reinstall everything
 install:
