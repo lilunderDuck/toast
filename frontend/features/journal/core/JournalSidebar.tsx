@@ -61,7 +61,9 @@ export function JournalSidebar() {
           <TrackerButton />
         </FlexCenterY>
         <FileDisplayProvider<IJournalData, IJournalCategoryData> 
+          // @ts-ignore
           FileComponent$={Journal}
+          // @ts-ignore
           FolderComponent$={JournalCategory}
           load$={async() => {
             return {
@@ -72,10 +74,12 @@ export function JournalSidebar() {
           onOpen$={(type, data) => {
             if (type === FileNodeType.FILE) {
               journal$.open$(data.id)
+              console.log("open")
             }
           }}
           onUpdate$={(treeData) => {
             api_updateJournalVirturalFileTree(currentGroupId, treeData)
+            console.log("update")
           }}
         >
           <Flex {...stylex.attrs(style.sidebar)}>

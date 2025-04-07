@@ -119,6 +119,12 @@ export async function __callBackendApi<
     return null
   }
 
+  try {
+    result = JSON.parse(result as string)
+  } catch (error) {
+    // ignore parse error
+  }
+
   // debug-start
   if (response.status >= 400) {
     apiCallLog.errorLabel("result", response.status, result)

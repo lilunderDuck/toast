@@ -3,9 +3,11 @@ package routes
 import (
 	"burned-toast/backend/handler/journal"
 	"burned-toast/backend/utils"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	jsoniter "github.com/json-iterator/go"
 )
 
 func CreateJournalFnRoute(this *gin.RouterGroup) {
@@ -26,7 +28,15 @@ func CreateJournalFnRoute(this *gin.RouterGroup) {
 			return
 		}
 
-		ctx.JSON(http.StatusOK, journalData)
+		fmt.Printf("%v\n", journalData)
+
+		jsonData, err := jsoniter.Marshal(journalData)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err)
+			return
+		}
+
+		ctx.JSON(http.StatusOK, utils.BytesToString(jsonData))
 	})
 
 	this.POST("/journal/:groupId", func(ctx *gin.Context) {
@@ -34,9 +44,7 @@ func CreateJournalFnRoute(this *gin.RouterGroup) {
 
 		var json journal.JournalSchema
 		if err := ctx.ShouldBindJSON(&json); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
+			replyWithValidationErrMsg(ctx, err)
 			return
 		}
 
@@ -50,9 +58,7 @@ func CreateJournalFnRoute(this *gin.RouterGroup) {
 
 		var json journal.JournalUpdateSchema
 		if err := ctx.ShouldBindJSON(&json); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
+			replyWithValidationErrMsg(ctx, err)
 			return
 		}
 
@@ -70,8 +76,6 @@ func CreateJournalFnRoute(this *gin.RouterGroup) {
 		journalId := utils.StringToInt(ctx.Param("journalId"))
 
 		journal.DeleteJournal(groupId, journalId)
-		ctx.JSON(http.StatusOK, gin.H{
-			"ok": "👍",
-		})
+		replyWithOkMsg(ctx)
 	})
 }

@@ -44,9 +44,7 @@ export async function api_getJournalVirturalFileTree(currentGroupId: number) {
 }
 
 export async function api_updateJournalVirturalFileTree(currentGroupId: number, data: any[]/*<- missing type*/) {
-  return (await __callBackendApi('PATCH', `/duck/journal-group/${currentGroupId}`, {
-    data: data,
-  }))!
+  return (await __callBackendApi('PATCH', `/duck/journal-group/${currentGroupId}/tree`, data))!
 }
 
 type Group<T extends number | undefined> = T extends undefined ? IJournalGroupData[] : IJournalGroupData

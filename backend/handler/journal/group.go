@@ -16,9 +16,8 @@ type JournalGroupSchema struct {
 
 // Defines the structure for updating an existing journal group.
 type JournalGroupUpdateSchema struct {
-	Name        string      `form:"name"        json:"name,omitempty"`
-	Description string      `form:"description" json:"description,omitempty"`
-	Tree        VirTreeData `form:"tree"        json:"tree,omitempty"`
+	Name        string `form:"name"        json:"name,omitempty"`
+	Description string `form:"description" json:"description,omitempty"`
 }
 
 // Represents the complete data for a journal group
@@ -28,10 +27,7 @@ type JournalGroupData struct {
 	Modified    time.Duration `json:"modified,omitempty"    cbor:"2,keyasint,omitempty"`
 	Name        string        `json:"name"                  cbor:"3,keyasint"`
 	Description string        `json:"description,omitempty" cbor:"4,keyasint,omitempty"`
-	Tree        VirTreeData   `json:"tree"                  cbor:"5,keyasint"`
 }
-
-type JournalGroupUtils struct{}
 
 // Creates a new journal group.
 // It generates a unique ID, creates the group data, saves it to cache, and creates the group's folder.
@@ -51,7 +47,6 @@ func CreateGroup(groupSchema *JournalGroupSchema) (newGroupData *JournalGroupDat
 		Description: groupSchema.Description,
 		Id:          numberId,
 		Created:     utils.GetCurrentDateNow(),
-		Tree:        []VirTreeNode{},
 	}
 
 	// Save it to cache so we can access it later
@@ -72,6 +67,7 @@ func createGroupFolders(groupId int, groupData *JournalGroupData) (anyError erro
 	groupDirectory := GetGroupPath(groupId)
 	utils.CreateDirectory(groupDirectory)
 	utils.CreateDirectory(GetJournalsSavedFolder(groupId))
+	CreateVirTree(groupId)
 
 	// write the journal group's metadata
 	writeError := updateGroupMetaFile(groupData)
@@ -109,21 +105,6 @@ func isGroupExist(groupId int) bool {
 	return utils.IsFileExist(GetGroupMetaFilePath(groupId))
 }
 
-// Retrieves the virtual tree data for a journal group.
-// It retrieves the data from cache.
-//
-// Returns the virtual tree data.
-//
-// Parameters:
-//   - groupId: The ID of the journal group.
-func GetGroupVirTreeData(groupId int) (*VirTreeData, error) {
-	data, err := GetGroup(groupId)
-	if err != nil {
-		return nil, err
-	}
-	return &data.Tree, err
-}
-
 // Updates an existing journal group.
 // It retrieves the current data, merges the new data, updates the cache, and updates the meta file.
 //
@@ -144,7 +125,7 @@ func UpdateGroup(
 		return nil, someError
 	}
 
-	mergeGroupData(groupData, newData)
+	mergeGroupData(groupId, groupData, newData)
 
 	// Make sure to update the meta data and cache data too.
 	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
@@ -165,17 +146,13 @@ func updateGroupMetaFile(groupData *JournalGroupData) error {
 	return utils.BSON_WriteFile(GetGroupMetaFilePath(groupData.Id), &groupData)
 }
 
-func mergeGroupData(groupData *JournalGroupData, newData *JournalGroupUpdateSchema) {
+func mergeGroupData(groupId int, groupData *JournalGroupData, newData *JournalGroupUpdateSchema) {
 	if newData.Name != "" {
 		groupData.Name = newData.Name
 	}
 
 	if newData.Description != "" {
 		groupData.Description = newData.Description
-	}
-
-	if len(newData.Tree) != 0 {
-		groupData.Tree = newData.Tree
 	}
 }
 

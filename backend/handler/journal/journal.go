@@ -52,8 +52,6 @@ type JournalContentData struct {
 	Data any    `json:"data"            cbor:"3,keyasint"`
 }
 
-type JournalUtils struct{}
-
 // Creates a new journal entry within a specified journal group.
 // It generates a unique ID, creates the journal data, saves it to file,
 // updates the journal group's tree, and adds the journal to cache.

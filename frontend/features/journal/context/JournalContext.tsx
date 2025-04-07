@@ -11,7 +11,6 @@ import { journalLog } from "~/features/debug"
 // ...
 import { type JournalEventMap } from "./event"
 import { createJournal, type IJournalUtils } from "./journal"
-import { type IFileDisplayContext, createFileDisplay } from "./fileDisplay"
 import { createTab, ITabUtils } from "./tabs"
 
 export type JournalLocalStorage = IStorage<{
