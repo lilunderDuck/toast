@@ -1,5 +1,3 @@
-import { journal } from "~/wailsjs/go/models"
-// ...
 import { 
   type IJournalData, 
   type IJournalGroupData, 
@@ -8,67 +6,62 @@ import {
   type JournalSchema, 
   JournalType 
 } from "./stuff"
-import { apiCall } from "../call"
+import { __callBackendApi } from "../call"
 
 export async function api_createJournal(currentGroupId: number, data: JournalSchema, type: JournalType) {
-  const newData = await apiCall('CreateJournal', currentGroupId, data)
-  return newData
+  return await __callBackendApi('POST', `/duck/journal/${currentGroupId}`, {
+    ...data,
+    type
+  })
 }
 
 export async function api_deleteJournal(currentGroupId: number, someJournalId: number) {
-  return await apiCall('DeleteJournal', currentGroupId, someJournalId)
+  return await __callBackendApi('DELETE', `/duck/journal/${currentGroupId}/${someJournalId}`)
 }
 
 export async function api_getJournal(currentGroupId: number, someJournalId: number) {
-  return await apiCall('GetJournal', currentGroupId, someJournalId) as IJournalData
+  return (await __callBackendApi('GET', `/duck/journal/${currentGroupId}/${someJournalId}`))!
 }
 
 export async function api_getAllJournal(currentGroupId: number) {
-  return await apiCall('GetAllJournal', currentGroupId) as Record<string, IJournalData>
+  return (await __callBackendApi('GET', `/duck/journal/${currentGroupId}`))!
 }
 
 export async function api_updateJournal(currentGroupId: number, someJournalId: number, data: Partial<IJournalData>) {
-  const updatedData = {
-    data
-  } as Partial<journal.JournalUpdateSchema>
-
-  const newData = await apiCall('UpdateJournal', currentGroupId, someJournalId, updatedData as journal.JournalUpdateSchema)
-  return newData
+  return (await __callBackendApi('PATCH', `/duck/journal/${currentGroupId}/${someJournalId}`, {
+    name: data.name,
+  }))!
 }
 
 export async function api_saveJournalContent(currentGroupId: number, someJournalId: number, data: JournalContentData) {
-  const updatedData = {
-    data
-  } as Partial<journal.JournalUpdateSchema>
-  const newData = await apiCall('UpdateJournal', currentGroupId, someJournalId, updatedData as journal.JournalUpdateSchema)
-  // await (await journalDb).put(JOURNAL_OBJECT_STORE, newData, someJournalId)
-  return newData
+  return (await __callBackendApi('PATCH', `/duck/journal/${currentGroupId}/${someJournalId}`, {
+    data: data,
+  }))!
 }
 
 export async function api_getJournalVirturalFileTree(currentGroupId: number) {
-  return await apiCall('GetGroupVirTreeData', currentGroupId)/*<- missing type*/
+  return (await __callBackendApi('GET', `/duck/journal-group/${currentGroupId}/tree`))! as any[]/*<- missing type*/
 }
 
 export async function api_updateJournalVirturalFileTree(currentGroupId: number, data: any[]/*<- missing type*/) {
-  const updatedData = {
-    tree: data
-  } as Partial<journal.JournalGroupUpdateSchema>
-  return apiCall('UpdateGroup', currentGroupId, updatedData as journal.JournalGroupUpdateSchema)
+  return (await __callBackendApi('PATCH', `/duck/journal-group/${currentGroupId}`, {
+    data: data,
+  }))!
 }
 
 type Group<T extends number | undefined> = T extends undefined ? IJournalGroupData[] : IJournalGroupData
 export async function api_getGroup<T extends number | undefined>(id?: T): Promise<Group<T>> {
   if (!id) {
-    return await apiCall('GetAllGroup') as Group<undefined>
+    return await __callBackendApi('GET', `/duck/journal-group`) as Group<undefined>
   }
 
-  return await apiCall('GetGroup', id) as Group<number>
+  return await __callBackendApi('GET', `/duck/journal-group/${id}`) as Group<number>
 }
 
 export async function api_createGroup(data: JournalGroupSchema) {
-  return await apiCall('CreateGroup', data) as IJournalGroupData
+  return (await __callBackendApi('POST', `/duck/journal-group`, data))!
 } 
 
 export async function api_updateGroup(id: number, data: JournalGroupSchema) {
-  return await apiCall('UpdateGroup', id, data) as IJournalGroupData
+  return (await __callBackendApi('PATCH', `/duck/journal-group/${id}`, data))!
 }

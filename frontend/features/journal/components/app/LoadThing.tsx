@@ -1,6 +1,6 @@
 import { createEffect, onMount } from "solid-js"
 // ...
-import { api_getGroup, api_getJournalVirturalFileTree, IJournalGroupData } from "~/api/journal"
+import { api_getGroup, type IJournalGroupData } from "~/api/journal"
 import { useEditorContext } from "~/features/editor"
 import { journalLog } from "~/features/debug"
 // ...

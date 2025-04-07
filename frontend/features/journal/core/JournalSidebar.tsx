@@ -11,7 +11,13 @@ import {
   ResizablePanel
 } from "~/components"
 import { FileDisplay, FileDisplayProvider, FileNodeType } from "~/features/file-display"
-import { api_getAllJournal, api_getJournalVirturalFileTree, api_updateJournalVirturalFileTree, IJournalCategoryData, IJournalData } from "~/api/journal"
+import { 
+  api_getAllJournal, 
+  api_getJournalVirturalFileTree, 
+  api_updateJournalVirturalFileTree, 
+  type IJournalCategoryData, 
+  type IJournalData 
+} from "~/api/journal"
 // ...
 import { 
   Journal,

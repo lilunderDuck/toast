@@ -63,7 +63,7 @@ type JournalUtils struct{}
 // Parameters:
 //   - currentGroupId: The ID of the journal group to create the entry in.
 //   - schema: The data for the new journal entry.
-func (journal *JournalUtils) CreateJournal(currentGroupId int, schema *JournalSchema) *JournalData {
+func CreateJournal(currentGroupId int, schema *JournalSchema) *JournalData {
 	stringJournalId, numberId := utils.GenerateRandomNumberId()
 
 	newData := JournalData{
@@ -97,7 +97,7 @@ func (journal *JournalUtils) CreateJournal(currentGroupId int, schema *JournalSc
 // Returns:
 //   - he journal entry data.
 //   - An error if the journal entry is not found or reading fails.
-func (journal *JournalUtils) GetJournal(currentGroupId int, journalId int) (*JournalData, error) {
+func GetJournal(currentGroupId int, journalId int) (*JournalData, error) {
 	var dataOut JournalData
 	err := utils.BSON_ReadFile(
 		GetJournalSavedFilePath(currentGroupId, journalId),
@@ -122,8 +122,8 @@ func (journal *JournalUtils) GetJournal(currentGroupId int, journalId int) (*Jou
 // Returns:
 //   - The updated journal entry data.
 //   - An error if the update fails.
-func (journal *JournalUtils) UpdateJournal(currentGroupId int, journalId int, newData *JournalUpdateSchema) (*JournalData, error) {
-	data, err := journal.GetJournal(currentGroupId, journalId)
+func UpdateJournal(currentGroupId int, journalId int, newData *JournalUpdateSchema) (*JournalData, error) {
+	data, err := GetJournal(currentGroupId, journalId)
 	if err != nil {
 		return nil, err
 	}
@@ -172,7 +172,7 @@ func mergeJournalData(currentJournalData *JournalData, newData *JournalUpdateSch
 // Parameters:
 //   - currentGroupId: The ID of the journal group.
 //   - journalId: The ID of the journal entry to delete.
-func (journal *JournalUtils) DeleteJournal(currentGroupId int, journalId int) error {
+func DeleteJournal(currentGroupId int, journalId int) error {
 	removeError := utils.RemoveFileOrDirectory(GetJournalSavedFilePath(currentGroupId, journalId))
 	if removeError != nil {
 		return removeError
@@ -185,7 +185,7 @@ func (journal *JournalUtils) DeleteJournal(currentGroupId int, journalId int) er
 	return nil
 }
 
-func (journal *JournalUtils) GetAllJournal(currentGroupId int) map[string]any {
+func GetAllJournal(currentGroupId int) map[string]any {
 	var out map[string]any
 	internals.ModifyCacheDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
 		out = cache.GetAll()

@@ -10,7 +10,7 @@ import (
 
 // Defines the structure for creating a new journal group.
 type JournalGroupSchema struct {
-	Name        string `form:"name"        json:"name"      binding:"required"`
+	Name        string `form:"name"        json:"name"                   binding:"required"`
 	Description string `form:"description" json:"description,omitempty"`
 }
 
@@ -42,7 +42,7 @@ type JournalGroupUtils struct{}
 // Returns:
 //   - *JournalGroupData: The created journal group data.
 //   - error: An error if creation fails.
-func (group *JournalGroupUtils) CreateGroup(groupSchema *JournalGroupSchema) (newGroupData *JournalGroupData, anyError error) {
+func CreateGroup(groupSchema *JournalGroupSchema) (newGroupData *JournalGroupData, anyError error) {
 	stringRandomId, numberId := utils.GenerateRandomNumberId()
 
 	// Create new journal group data
@@ -91,7 +91,7 @@ func createGroupFolders(groupId int, groupData *JournalGroupData) (anyError erro
 // Returns:
 //   - *JournalGroupData: The journal group data.
 //   - error: An error if the group is not found or reading fails.
-func (group *JournalGroupUtils) GetGroup(groupId int) (*JournalGroupData, error) {
+func GetGroup(groupId int) (*JournalGroupData, error) {
 	if !isGroupExist(groupId) {
 		return nil, fmt.Errorf("group %d not found", groupId)
 	}
@@ -116,8 +116,8 @@ func isGroupExist(groupId int) bool {
 //
 // Parameters:
 //   - groupId: The ID of the journal group.
-func (group *JournalGroupUtils) GetGroupVirTreeData(groupId int) (*VirTreeData, error) {
-	data, err := group.GetGroup(groupId)
+func GetGroupVirTreeData(groupId int) (*VirTreeData, error) {
+	data, err := GetGroup(groupId)
 	if err != nil {
 		return nil, err
 	}
@@ -134,12 +134,12 @@ func (group *JournalGroupUtils) GetGroupVirTreeData(groupId int) (*VirTreeData, 
 // Returns:
 //   - *JournalGroupData: The updated journal group data.
 //   - error: An error if the update fails.
-func (group *JournalGroupUtils) UpdateGroup(
+func UpdateGroup(
 	groupId int,
 	newData *JournalGroupUpdateSchema,
 ) (updatedGroupData *JournalGroupData, anyError error) {
 	// Gets the previous data that has been saved
-	groupData, someError := group.GetGroup(groupId)
+	groupData, someError := GetGroup(groupId)
 	if someError != nil {
 		return nil, someError
 	}
@@ -186,7 +186,7 @@ func mergeGroupData(groupData *JournalGroupData, newData *JournalGroupUpdateSche
 //
 // Parameters:
 //   - groupId: The ID of the journal group to delete.
-func (group *JournalGroupUtils) DeleteGroup(groupId int) error {
+func DeleteGroup(groupId int) error {
 	// Deletes from cache first
 	groupDataPath := GetGroupPath(groupId)
 	var err error
@@ -212,7 +212,7 @@ func (group *JournalGroupUtils) DeleteGroup(groupId int) error {
 // Retrieves all journal groups from cache.
 //
 // Returns an array containing all journal group data.
-func (group *JournalGroupUtils) GetAllGroup() []any {
+func GetAllGroup() []any {
 	var out []any
 	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
 		out = cache.GetAllValue()

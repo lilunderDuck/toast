@@ -5,8 +5,6 @@ import { BsAppIndicator, BsDash, BsX } from "solid-icons/bs"
 import stylex from "@stylexjs/stylex"
 import __style from "./Titlebar.module.css"
 // ...
-import { WindowMaximise, WindowUnmaximise, WindowMinimise, WindowIsMaximised, Quit } from "~/wailsjs/runtime"
-// ...
 import { FlexCenterY, Spacer } from "../ui"
 import { TitlebarButton } from "./TitlebarButton"
 
@@ -34,7 +32,7 @@ export function Titlebar() {
           <TitlebarButton onClick={WindowMinimise}>
             <BsDash />
           </TitlebarButton>
-          <TitlebarButton onClick={async() => {
+          {/* <TitlebarButton onClick={async() => {
             if (await WindowIsMaximised()) {
               WindowUnmaximise()
             } else {
@@ -42,7 +40,7 @@ export function Titlebar() {
             }
           }}>
             <BsAppIndicator />
-          </TitlebarButton>
+          </TitlebarButton> */}
           <TitlebarButton onClick={Quit}>
             <BsX />
           </TitlebarButton>

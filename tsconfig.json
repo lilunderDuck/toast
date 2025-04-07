@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ES2021", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "types": [
+      "vite/client", 
+      "./frontend/@types/global.d.ts",
+      "./frontend/@types/internal_stuff.d.ts",
+      "@types/node"
+    ],
+    "paths": {
+      "~/*": ["./frontend/*"]
+    },
+    
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "resolveJsonModule": true,
+    "skipDefaultLibCheck": false,
+    
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true
+  }
+}

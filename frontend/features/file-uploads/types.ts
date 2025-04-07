@@ -1,5 +1,5 @@
 import { Component } from "solid-js";
-import type { OpenDirectoryDialog, OpenFileDialog, OpenMultipleFilesDialog } from "~/wailsjs/go/backend/App";
+// import type { OpenDirectoryDialog, OpenFileDialog, OpenMultipleFilesDialog } from "~/wailsjs/go/backend/App";
 
 export const enum FileUploadType {
   directory,
@@ -7,9 +7,9 @@ export const enum FileUploadType {
   multiFile
 }
 
-export type OpenDirectoryDialogFn = typeof OpenDirectoryDialog
-export type OpenFileDialogFn = typeof OpenFileDialog
-export type OpenMultiFileDialogFn = typeof OpenMultipleFilesDialog
+export type OpenDirectoryDialogFn = AnyFunction
+export type OpenFileDialogFn = AnyFunction
+export type OpenMultiFileDialogFn = AnyFunction
 export type OpenDialogOptions = Parameters<OpenDirectoryDialogFn>[0]
 export type FileUploadDialogOptions = Partial<OpenDialogOptions>
 

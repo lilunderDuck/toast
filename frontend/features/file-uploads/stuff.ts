@@ -1,8 +1,3 @@
-import { 
-  OpenDirectoryDialog, 
-  OpenFileDialog, 
-  OpenMultipleFilesDialog 
-} from "~/wailsjs/go/backend/App"
 import {
   FileUploadType, 
   type OpenDirectoryDialogFn, 
@@ -19,11 +14,11 @@ interface DialogFnMapping {
 export function getUploadDialogFn<T extends FileUploadType>(type: T) {
   switch (type) {
     case FileUploadType.directory:
-      return OpenDirectoryDialog as DialogFnMapping[T]
+      return (() => {}) as DialogFnMapping[T]
     case FileUploadType.file:
-      return OpenFileDialog as DialogFnMapping[T]
+      return (() => {}) as DialogFnMapping[T]
     case FileUploadType.multiFile:
-      return OpenMultipleFilesDialog as DialogFnMapping[T]
+      return (() => {}) as DialogFnMapping[T]
     //debug-start
     default:
       throw new Error(`[file upload] case ${type} hasn't been handled yet`)
