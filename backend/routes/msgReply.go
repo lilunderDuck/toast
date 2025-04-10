@@ -18,3 +18,10 @@ func replyWithValidationErrMsg(ctx *gin.Context, anyError error) {
 		"message": "Bad data requested",
 	})
 }
+
+func replyWithAnyErrMsg(ctx *gin.Context, anyError error) {
+	ctx.JSON(http.StatusInternalServerError, gin.H{
+		"error":   anyError.Error(),
+		"message": "There's some funky stuff goin' on",
+	})
+}

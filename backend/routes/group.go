@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateJournalGroupFnRoute(this *gin.RouterGroup) {
+func CreateJournalGroupRoute(this *gin.RouterGroup) {
 	this.GET("/journal-group", func(ctx *gin.Context) {
 		allJournals := journal.GetAllGroup()
 		ctx.JSON(http.StatusOK, allJournals)

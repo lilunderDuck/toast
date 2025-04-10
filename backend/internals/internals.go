@@ -15,8 +15,5 @@ var DataFolderPath string = utils.JoinPath(AppCurrentDirectory, "data")
 // Stores the path to the folder where the app keeps temporary data.
 var CacheFolderPath string = utils.JoinPath(DataFolderPath, "cache")
 
-// Stores the path to the folder where the web edge webview2 data is kept.
-var Webview2DataPath string = utils.JoinPath(DataFolderPath, "edgewebvieeew")
-
 // Stores the path to the folder where all the app's resources are kept.
 var ResourcesFolderPath string = utils.JoinPath(AppCurrentDirectory, "resource")

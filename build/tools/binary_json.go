@@ -15,7 +15,7 @@ func main() {
 		splashText misc.SplashTextData
 	)
 
-	var outDir string = "../bin/resource"
+	var outDir string = "../out/resource"
 
 	readJson("./lib_used.json", &libUsed)
 	readJson("./splash_text.json", &splashText)

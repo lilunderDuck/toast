@@ -10,7 +10,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-func CreateJournalFnRoute(this *gin.RouterGroup) {
+func CreateJournalRoute(this *gin.RouterGroup) {
 	this.GET("/journal/:groupId", func(ctx *gin.Context) {
 		groupId := utils.StringToInt(ctx.Param("groupId"))
 
@@ -32,7 +32,7 @@ func CreateJournalFnRoute(this *gin.RouterGroup) {
 
 		jsonData, err := jsoniter.Marshal(journalData)
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, err)
+			replyWithAnyErrMsg(ctx, err)
 			return
 		}
 

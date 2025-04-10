@@ -1,12 +1,21 @@
+OUTPUT_DIR = ./build/out
+TOOLS_DIR = ./build/tools
+
+FILE_DIALOG_DLL_NAME = theBiggestSoundSystem
+
 cold_start:
-	cd ./build/tools/ && deno -A fetchPackageJson.ts && go run binary_json.go
+	cd ${TOOLS_DIR} && deno -A fetchPackageJson.ts && go run binary_json.go
+
+build_dlls:
+	g++ -c ./backend/dlls/fileDialog.cpp -lcomdlg32 -o ${OUTPUT_DIR}/deps/${FILE_DIALOG_DLL_NAME}.o
+	g++ -shared ${OUTPUT_DIR}/deps/${FILE_DIALOG_DLL_NAME}.o -lcomdlg32 -o ${OUTPUT_DIR}/resource/${FILE_DIALOG_DLL_NAME}.dll
 
 dev_server:
-	go build -o ./build/out/server.exe ./backend/main.go
-	./build/out/server.exe
+	go build -o ${OUTPUT_DIR}/server.exe ./backend/main.go
+	${OUTPUT_DIR}/server.exe
 
 clean:
-	del ./build/out
+	del ${OUTPUT_DIR}
 
 # in case I did something so horrific that I need to reinstall everything
 install:

@@ -23,8 +23,9 @@ func main() {
 	router.Use(cors.Default())
 	apiRoute := router.Group("/duck")
 
-	routes.CreateJournalFnRoute(apiRoute)
-	routes.CreateJournalGroupFnRoute(apiRoute)
+	routes.CreateJournalRoute(apiRoute)
+	routes.CreateJournalGroupRoute(apiRoute)
+	routes.CreateExtensionRoute(apiRoute)
 	go dynamic.CreateServer()
 	router.Run(":8000")
 }

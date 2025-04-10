@@ -1,5 +1,5 @@
-import packageJson from "../../frontend/package.json" with { type: "json" }
-import type { LibaryData } from "../../frontend/src/api/misc"
+import packageJson from "../../package.json" with { type: "json" }
+import type { LibaryData } from "../../frontend/api/misc"
 // ...
 // @ts-ignore
 import { encodeUrl } from "https://deno.land/x/encodeurl@1.0.0/mod.ts"
