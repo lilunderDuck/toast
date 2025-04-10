@@ -76,7 +76,7 @@ export function FileDisplayProvider<
   const [tree, setTree] = createSignal<Tree>([])
   const [isUpdating, setIsUpdating] = createSignal(false)
 
-  let dataMapping = {}
+  let dataMapping: Record<number, any> = {}
   let treeCache: Tree = []
   const { isLoading$, fetch$ } = useResource(async() => {
     const data = await props.load$()
@@ -108,7 +108,7 @@ export function FileDisplayProvider<
   const add = (node: AnyTreeNode, toFolder: number | 'root', data: NodeData<T | U>) => {
     if (toFolder === 'root') {
       treeCache.push(node)
-      dataMapping[data.id] = data
+      dataMapping[data.id as number] = data
       return update()
     }
 
@@ -128,7 +128,7 @@ export function FileDisplayProvider<
     }
 
     thisFolder.child.push(node)
-    dataMapping[data.id] = data
+    dataMapping[data.id as number] = data
     return update()
   }
 

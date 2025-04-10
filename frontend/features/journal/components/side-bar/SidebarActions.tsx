@@ -17,7 +17,6 @@ export default function SidebarActions() {
   )
 
   journalEvent.on$('journal__openJournal', (journal) => {
-    journal$.open$(journal.id)
     tabs$.update$(journal.id)
   })
   

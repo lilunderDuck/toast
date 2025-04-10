@@ -2,14 +2,10 @@ package utils
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/fxamacker/cbor/v2"
-	"github.com/klauspost/compress/zstd"
+	// "github.com/klauspost/compress/zstd"
 )
-
-var encoder, _ = zstd.NewWriter(nil)
-var decoder, _ = zstd.NewReader(nil, zstd.WithDecoderConcurrency(0))
 
 // Takes any kind of data (anyObject) and saves it to a file.
 // It uses a special way to store the data (called CBOR) which makes it easy to read later.
@@ -21,17 +17,15 @@ var decoder, _ = zstd.NewReader(nil, zstd.WithDecoderConcurrency(0))
 // Returns:
 //   - An error if something went wrong while saving, or nil if it saved correctly.
 func BSON_WriteFile(path string, anyObject any) (someError error) {
-	binaryData, encodeError := cbor.Marshal(anyObject)
-	if encodeError != nil {
-		fmt.Println("BSON encode error ->", encodeError)
-		return encodeError
+	binaryData, err := cbor.Marshal(anyObject)
+	if err != nil {
+		fmt.Println("BSON encode error ->", err)
+		return err
 	}
 
-	binaryData = encoder.EncodeAll(binaryData, make([]byte, 0, len(binaryData)))
-
-	writeError := os.WriteFile(path, binaryData, os.ModePerm)
-	if writeError != nil {
-		return writeError
+	err = WriteFile(path, binaryData)
+	if err != nil {
+		return err
 	}
 
 	return nil
@@ -47,21 +41,15 @@ func BSON_WriteFile(path string, anyObject any) (someError error) {
 // Returns:
 //   - An error if something went wrong while reading, or nil if it read correctly.
 func BSON_ReadFile(path string, out any) (someError error) {
-	dataFromDisk, readError := os.ReadFile(path)
-	if readError != nil {
-		return readError
+	dataFromDisk, err := ReadFile(path)
+	if err != nil {
+		return err
 	}
 
-	dataFromDisk, decompressErr := decoder.DecodeAll(dataFromDisk, nil)
-	if decompressErr != nil {
-		fmt.Println("BSON decompress error ->", decompressErr)
-		return decompressErr
-	}
-
-	decodeError := cbor.Unmarshal(dataFromDisk, out)
-	if decodeError != nil {
-		fmt.Println("BSON decode error ->", decodeError)
-		return decodeError
+	err = cbor.Unmarshal(dataFromDisk, out)
+	if err != nil {
+		fmt.Println("BSON decode error ->", err)
+		return err
 	}
 
 	return nil

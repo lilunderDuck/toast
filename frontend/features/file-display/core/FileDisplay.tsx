@@ -10,24 +10,32 @@ export function FileDisplay() {
   const { internal$, replaceTree$ } = useFileDisplayContext()
   const ROOT_ID = 0
 
+  const data = (id: number) => {
+    return internal$.getDataMapping$()[id]
+  }
+
   const RenderFolderAndFileComponent = (props: AnyTreeNode) => {
-    const data = () => internal$.getDataMapping$()[props.id]
-    if (!data()) {
+    if (!data(props.id)) {
       return void console.warn('cannot get data', props)
     }
 
     if (isFolder(props)) {
       return (
         <internal$.FolderComponent$ 
-          {...data()} 
-          onClick={() => internal$.callOnOpenEvent$(FileNodeType.FOLDER, data())}
+          {...data(props.id)} 
+          onClick={() => internal$.callOnOpenEvent$(FileNodeType.FOLDER, data(props.id))}
         >
           <RecursivelyRenderItOut {...props} />
         </internal$.FolderComponent$>
       )
     }
 
-    return <internal$.FileComponent$ {...data()} onClick={() => internal$.callOnOpenEvent$(FileNodeType.FILE, data())} />
+    return (
+      <internal$.FileComponent$ 
+        {...data(props.id)} 
+        onClick={() => internal$.callOnOpenEvent$(FileNodeType.FILE, data(props.id))} 
+      />
+    )
   }
 
   // OooOo, scary name

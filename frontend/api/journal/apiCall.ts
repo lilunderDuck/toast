@@ -7,6 +7,7 @@ import {
   JournalType 
 } from "./stuff"
 import { __callBackendApi } from "../call"
+import { apiCallLog } from "~/features/debug"
 
 export async function api_createJournal(currentGroupId: number, data: JournalSchema, type: JournalType) {
   return await __callBackendApi('POST', `/duck/journal/${currentGroupId}`, {
@@ -34,7 +35,14 @@ export async function api_updateJournal(currentGroupId: number, someJournalId: n
 }
 
 export async function api_saveJournalContent(currentGroupId: number, someJournalId: number, data: JournalContentData) {
-  return (await __callBackendApi('PATCH', `/duck/journal/${currentGroupId}/${someJournalId}`, {
+  if (!someJournalId) {
+    // debug-start
+    apiCallLog.log("Refused to save journal content. The requested journal id is", someJournalId)
+    // debug-end
+    return 
+  }
+
+  (await __callBackendApi('PATCH', `/duck/journal/${currentGroupId}/${someJournalId}`, {
     data: data,
   }))!
 }

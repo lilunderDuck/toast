@@ -7,7 +7,6 @@ import (
 	"os"
 
 	"github.com/fxamacker/cbor/v2"
-	"github.com/klauspost/compress/zstd"
 )
 
 func main() {
@@ -39,16 +38,12 @@ func readJson[T any](filePathToEncode string, out *T) {
 	}
 }
 
-var encoder, _ = zstd.NewWriter(nil)
-
 func bson_writeFile(path string, anyObject any) error {
 	binaryData, encodeError := cbor.Marshal(anyObject)
 	if encodeError != nil {
 		fmt.Println("BSON encode error ->", encodeError)
 		return encodeError
 	}
-
-	binaryData = encoder.EncodeAll(binaryData, make([]byte, 0, len(binaryData)))
 
 	writeError := os.WriteFile(path, binaryData, os.ModePerm)
 	if writeError != nil {

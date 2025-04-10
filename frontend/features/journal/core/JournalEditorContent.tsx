@@ -44,6 +44,7 @@ export function JournalEditorContent(props: ParentProps) {
     if (!shouldSave()) return console.log('not open anything')
 
     if (previousData) {
+      console.log("prev data", previousData)
       await journal$.save$(previousData.id, previousData.content)
     }
   })

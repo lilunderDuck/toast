@@ -72,9 +72,10 @@ export function JournalSidebar() {
             }
           }}
           onOpen$={(type, data) => {
-            if (type === FileNodeType.FILE) {
+
+            if (type === FileNodeType.FILE && journal$.currentlyOpened$()?.id !== data.id) {
+              console.log("open", data.id)
               journal$.open$(data.id)
-              console.log("open")
             }
           }}
           onUpdate$={(treeData) => {

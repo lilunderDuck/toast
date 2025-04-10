@@ -125,6 +125,11 @@ func ReadFile(pathToFile string) (fileContent []byte, readError error) {
 	return os.ReadFile(pathToFile)
 }
 
+func OpenFile(pathToFile string) (*os.File, error) {
+	fmt.Println("Open file:", pathToFile)
+	return os.Open(pathToFile)
+}
+
 func MoveFile(sourcePath string, destPath string) error {
 	fmt.Println("Moving:", sourcePath, "to", destPath)
 	// Attempt to rename (move) the file.

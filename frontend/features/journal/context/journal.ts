@@ -99,6 +99,8 @@ export function createJournal(
       content: journalContent
     })
 
+    event.emit$("journal__openJournal", journalData)
+
     //debug-start
     journalLog.groupEnd()
     //debug-end

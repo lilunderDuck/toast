@@ -87,7 +87,7 @@ func CreateJournalGroupFnRoute(this *gin.RouterGroup) {
 			return
 		}
 
-		err := journal.SaveVirTree(groupId, &json)
+		err := journal.SaveVirTree(groupId, json)
 		if err != nil {
 			ctx.JSON(http.StatusNotFound, err)
 			return

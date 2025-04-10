@@ -20,7 +20,7 @@ type VirTreeData []VirTreeNode
 // Obscure file name, but it is basically just "virtural tree file display"
 // in short-term, that's what "vtfd" stands for.
 func getVtfdFilePath(groupId int) string {
-	return utils.JoinPath(GetGroupPath(groupId), "vtfd")
+	return utils.JoinPath(GetGroupPath(groupId), "vtfd.dat")
 }
 
 func CreateVirTree(groupId int) {
@@ -28,9 +28,9 @@ func CreateVirTree(groupId int) {
 	utils.BSON_WriteFile(whereToSave, VirTreeData{})
 }
 
-func SaveVirTree(groupId int, newTree *VirTreeData) error {
+func SaveVirTree(groupId int, newTree VirTreeData) error {
 	whereToSave := getVtfdFilePath(groupId)
-	return utils.BSON_WriteFile(whereToSave, newTree)
+	return utils.BSON_WriteFile(whereToSave, &newTree)
 }
 
 // Retrieves the virtual tree data for a journal group.
