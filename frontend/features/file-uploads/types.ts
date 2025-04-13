@@ -7,12 +7,6 @@ export const enum FileUploadType {
   multiFile
 }
 
-export type OpenDirectoryDialogFn = AnyFunction
-export type OpenFileDialogFn = AnyFunction
-export type OpenMultiFileDialogFn = AnyFunction
-export type OpenDialogOptions = Parameters<OpenDirectoryDialogFn>[0]
-export type FileUploadDialogOptions = Partial<OpenDialogOptions>
-
 /**Component type that represents a file upload click zone.
  * 
  * It's a simple div that, when clicked, shows a file upload dialog.
@@ -29,17 +23,7 @@ export type CreateFileUploadOptions<T extends FileUploadType, FinishFn extends A
    * @see {@link FileUploadType} for a full list of options.
    */
   type$: T
-  /**Provides options for the file upload dialog.
-   * @note The reason why all of {@link FileUploadDialogOptions} properties are all in `PascalCase`
-   * is because this type is coming from auto-generated type from the backend, which `wails` 
-   * handles all of that stuff.
-   * 
-   * I could just copy all of the types into here and rewrite it to `camelCase`, but
-   * I'm too lazy man.
-   * 
-   * @see https://wails.io/docs/reference/runtime/dialog/ for a full list of options
-   */
-  options$: FileUploadDialogOptions
+  filter$?: () => FilePickerAcceptType[]
   /**Fired when the file upload is complete.
    * 
    * It receives 

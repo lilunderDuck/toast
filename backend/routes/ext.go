@@ -2,18 +2,21 @@ package routes
 
 import (
 	"burned-toast/backend/internals"
-	"burned-toast/backend/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func CreateExtensionRoute(this *gin.RouterGroup) {
-	fileDialogDllPath := utils.JoinPath(internals.ResourcesFolderPath, "theBiggestSoundSystem.dll")
+	// this still doesn't work
 	this.GET("/bridge/openFileDialog", func(ctx *gin.Context) {
-		call := internals.CallDll(fileDialogDllPath)
-
-		result, err := call("openFileDialog", internals.StringToUintptr("All Files (*.*)"), internals.NULL_PTR)
+		result, err := internals.CallDll(
+			internals.FileDialogLibPath,
+			"openFileDialog",
+			internals.StringToUintptr("Hello"),
+			internals.StringToUintptr("All files\000*.*"),
+			internals.NULL_PTR,
+		)
 
 		if err != nil {
 			replyWithAnyErrMsg(ctx, err)

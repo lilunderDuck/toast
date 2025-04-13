@@ -1,17 +1,21 @@
 OUTPUT_DIR = ./build/out
 TOOLS_DIR = ./build/tools
 
-FILE_DIALOG_DLL_NAME = theBiggestSoundSystem
-
 cold_start:
 	cd ${TOOLS_DIR} && deno -A fetchPackageJson.ts && go run binary_json.go
 
+FILE_DIALOG_DLL_NAME = antiBrainrot
 build_dlls:
-	g++ -c ./backend/dlls/fileDialog.cpp -lcomdlg32 -o ${OUTPUT_DIR}/deps/${FILE_DIALOG_DLL_NAME}.o
-	g++ -shared ${OUTPUT_DIR}/deps/${FILE_DIALOG_DLL_NAME}.o -lcomdlg32 -o ${OUTPUT_DIR}/resource/${FILE_DIALOG_DLL_NAME}.dll
+	gcc ./backend/libs/file_dialog/baseDialog.c -shared -o ${OUTPUT_DIR}/resource/${FILE_DIALOG_DLL_NAME}.dll -lcomdlg32
 
-dev_server:
+build_server:
 	go build -o ${OUTPUT_DIR}/server.exe ./backend/main.go
+
+build: build_dlls build_server
+	deno task build
+	strip ${OUTPUT_DIR}/resource/${FILE_DIALOG_DLL_NAME}.dll
+
+dev_server: build_server
 	${OUTPUT_DIR}/server.exe
 
 clean:

@@ -17,3 +17,8 @@ var CacheFolderPath string = utils.JoinPath(DataFolderPath, "cache")
 
 // Stores the path to the folder where all the app's resources are kept.
 var ResourcesFolderPath string = utils.JoinPath(AppCurrentDirectory, "resource")
+
+// internals file and stuff
+var (
+	FileDialogLibPath = utils.JoinPath(ResourcesFolderPath, "antiBrainrot.dll")
+)
