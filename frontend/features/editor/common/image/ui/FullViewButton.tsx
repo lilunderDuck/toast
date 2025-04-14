@@ -17,7 +17,8 @@ const style = stylex.create({
   fullScreenButton: {
     right: 0,
     paddingTop: 5,
-    paddingRight: 5
+    paddingRight: 5,
+    zIndex: 5
   }
 })
 
@@ -39,10 +40,11 @@ export function FullViewButton(props: IFullViewButtonProps) {
       __style.fullScreenButton
     )}>
       <Tooltip label$="Open in full view">
-        <Button size$={ButtonSizeVariant.icon} onClick={() => {
-          imageFullviewDialog.show$()
-          console.log('clicked')
-        }}>
+        <Button 
+          size$={ButtonSizeVariant.icon} 
+          onClick={imageFullviewDialog.show$}
+          disabled={props.imageSrc$ === ""}
+        >
           <BsFullscreen />
         </Button>
       </Tooltip>

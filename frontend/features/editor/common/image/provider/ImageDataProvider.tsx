@@ -1,5 +1,5 @@
 import { Accessor, createContext, createSignal, ParentProps, useContext } from "solid-js"
-import { IImageData } from "./Image"
+import { IImageData } from "../Image"
 import { editorLog } from "~/features/debug"
 
 interface IImageDataContext {

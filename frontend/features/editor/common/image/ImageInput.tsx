@@ -1,18 +1,17 @@
-import { onMount, Show } from "solid-js"
-import { createDropzone } from "@soorria/solid-dropzone"
+import { Show } from "solid-js"
 // ...
-import { Input, Tooltip } from "~/components"
+import { FlexCenterY, Input } from "~/components"
 import { api_saveImage, api_deleteImage, api_getImageSavedPath } from "~/api/media"
 import { useJournalContext } from "~/features/journal"
-import { useResource } from "~/hook"
-import { editorLog } from "~/features/debug"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./ImageInput.module.css"
 // ...
-import { useImageDataContext } from "./ImageDataProvider"
-import { FullViewButton, ImageInputAndDropzone } from "./ui"
+import { useImageDataContext } from "./provider/ImageDataProvider"
+import { FullViewButton, ImageInputAndDropzone, ImageWrap } from "./ui"
 import { useEditorContext } from "../../provider"
+import { createFileUpload, FileUploadType } from "~/features/file-uploads"
+import { toast } from "~/features/toast"
 
 const style = stylex.create({
   theInput: {
@@ -34,69 +33,57 @@ export default function ImageInput() {
   const { update$, data$ } = useImageDataContext()
   const { isReadonly$ } = useEditorContext()
 
-  let prevImageName = data$().imgName
-  const { fetch$, isLoading$, data$: localImageUrl } = useResource(async(targetFile: File | string) => {
-    const currentGroupId = getCurrentGroup$().id
+  const { FileUploadZone$, isUploading$ } = createFileUpload({
+    type$: FileUploadType.file,
+    title$: "Please choose an image file.",
+    async onFinish$(file) {
+      const currentGroupId = getCurrentGroup$().id
+      const isExistPrevImage = data$().imgName !== ""
+      if (isExistPrevImage) {
+        await api_deleteImage(currentGroupId, data$().imgName)
+      }
 
-    if (typeof targetFile === "string") {
-      //debug-start
-      editorLog.logLabel("image", "loading image", targetFile)
-      //debug-end
-      return api_getImageSavedPath(currentGroupId, targetFile)
-    }
+      const newFileName = await api_saveImage(currentGroupId, file)
+      if (!newFileName) {
+        toast.error("Failed to save image")
+        return
+      }
 
-    const newFileName = await api_saveImage(currentGroupId, targetFile)
-
-    if (prevImageName) {
-      await api_deleteImage(currentGroupId, prevImageName)
-    }
-
-    update$({
-      imgName: newFileName
-    })
-
-    prevImageName = newFileName
-    return api_getImageSavedPath(currentGroupId, newFileName)
-  })
-
-  const dropzone = createDropzone({
-    accept: ['.jpg', '.png'],
-    maxFiles: 1,
-    async onDrop(acceptedFiles: File[]) {
-      const targetFile = acceptedFiles[0]
-      await fetch$(targetFile)
-    }
+      update$({
+        imgName: newFileName.result
+      })
+    },
   })
 
   const updateDescription: EventHandler<"input", "onInput"> = (inputEvent) => {
-    update$({ 
+    update$({
       description: inputEvent.currentTarget.value
     })
   }
 
-  onMount(() => {
-    if (prevImageName === '') return 
-    fetch$(prevImageName)
-  })
-  
+  const getImageSrc = () => data$().imgName !== "" ?
+    api_getImageSavedPath(getCurrentGroup$().id, data$().imgName) :
+    ""
+  // ...
+
   return (
     <div>
-      <Tooltip label$="Click to choose an image" class={__style.input}>
-        <div {...stylex.attrs(style.theInput)}>
-          <ImageInputAndDropzone 
-            dropzoneRootProps$={dropzone.getRootProps()}
-            isLoading$={isLoading$()}
-            imageSrc$={localImageUrl()} 
+      <div {...stylex.attrs(style.theInput)}>
+        <ImageWrap
+          tooltipLabel$="Click to choose an image"
+          UploadZoneComponent$={FileUploadZone$}
+        >
+          <ImageInputAndDropzone
+            isLoading$={isUploading$()}
+            imageSrc$={getImageSrc()}
           />
-          <Show when={localImageUrl()}>
-            <FullViewButton imageSrc$={localImageUrl() as string} />
-          </Show>
-        </div>
-      </Tooltip>
+        </ImageWrap>
+        <FullViewButton imageSrc$={data$().imgName} />
+      </div>
       <Show when={!isReadonly$()}>
-        <Input 
-          placeholder="Optional description here" 
-          disabled={isLoading$()} 
+        <Input
+          placeholder="Optional description here"
+          disabled={isUploading$()}
           value={data$().description}
           onInput={updateDescription}
         />

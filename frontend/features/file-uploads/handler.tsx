@@ -1,36 +1,37 @@
 import { 
   type CreateFileUploadOptions,
-  type FileUploadComponent,
+  type FileUploadStuff,
   FileUploadType, 
 } from "./types"
 import { fileDialog } from "../debug"
 import { api_openFileDialog } from "~/api/misc"
+import { createSignal } from "solid-js"
 
 /**Creates a file upload component based on the provided options.
  *
  * @param createOptions options for creating the file upload component.
- * @returns A {@link FileUploadComponent} that, when clicked, triggers the file upload dialog.
+ * @returns A {@link FileUploadStuff} that, when clicked, triggers the file upload dialog.
  * 
- * @see {@link FileUploadComponent}
+ * @see {@link FileUploadStuff}
  * @see {@link CreateFileUploadOptions}
  * @see {@link FileUploadType}
 */
 // @ts-ignore - should work perfectly
 export function createFileUpload(
   createOptions: CreateFileUploadOptions<FileUploadType.file, (file: string) => any>
-): FileUploadComponent
+): FileUploadStuff
 export function createFileUpload(
   createOptions: CreateFileUploadOptions<FileUploadType.multiFile, (manyFiles: string[]) => any>
-): FileUploadComponent
+): FileUploadStuff
 
 export function createFileUpload(
   createOptions: CreateFileUploadOptions<FileUploadType, (file: string | string[]) => any>
-): FileUploadComponent {
+): FileUploadStuff {
   const { onFinish$, shouldShow$, filter$, title$ } = createOptions
-  let isLocked = false
+  const [isLoading, setIsLoading] = createSignal(false)
 
   const onClickThis = async() => {
-    if (isLocked) {
+    if (isLoading()) {
       //debug-start
       fileDialog.log("Dialog won't be opened. Another one is already showing to you.")
       //debug-end
@@ -51,7 +52,7 @@ export function createFileUpload(
     fileDialog.log("Opening dialog now...")
     //debug-end
 
-    isLocked = true
+    setIsLoading(true)
     const result = await api_openFileDialog({
       title: title$,
       filters: filter$ ? filter$() : undefined
@@ -61,13 +62,18 @@ export function createFileUpload(
       //debug-start
       fileDialog.log("Canceled")
       //debug-end
-      isLocked = false
+      setIsLoading(false)
       return
     }
 
-    onFinish$(result.result)
-    isLocked = false
+    await onFinish$(result.result)
+    setIsLoading(false)
   }
 
-  return (props) => <div {...props} onClick={onClickThis} />
+  return {
+    FileUploadZone$(props) {
+      return <div {...props} onClick={onClickThis} />
+    },
+    isUploading$: isLoading
+  }
 }

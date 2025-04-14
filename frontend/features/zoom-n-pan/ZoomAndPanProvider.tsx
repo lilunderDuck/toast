@@ -5,6 +5,7 @@ interface IZoomAndPanContext {
   changeDisplayImage$(newImageUrl: string): void
   zoom$(): void
   unzoom$(): void
+  reset$(): void
   internal$: {
     zoomScale$: Accessor<number>
     displayImageUrl$: Accessor<string>
@@ -15,7 +16,8 @@ interface IZoomAndPanContext {
 const Context = createContext<IZoomAndPanContext>()
 
 export function ZoomAndPanProvider(props: ParentProps) {
-  const [scale, setScale] = createSignal(1)
+  const DEFAULT_ZOOM = 1
+  const [scale, setScale] = createSignal(DEFAULT_ZOOM)
   const [displayImageUrl, setDisplayImageUrl] = createSignal('')
   const [imagePosition, setImagePosition] = createSignal({
     x: null as unknown as number,
@@ -32,6 +34,7 @@ export function ZoomAndPanProvider(props: ParentProps) {
   //debug-end
   
   const STEP = 0.5
+  const STOP_SCALING = 0
   const resetImagePosition = () => {
     setImagePosition({ x: 0, y: 0 })
     //debug-start
@@ -45,17 +48,15 @@ export function ZoomAndPanProvider(props: ParentProps) {
         setScale(prev => prev + STEP)
       },
       unzoom$() {
-        setScale(prev => {
-          if (prev <= 0) {
-            return 0 // stop scaling
-          }
-          
-          return prev - STEP
-        })
+        setScale(prev => prev - STEP)
 
         if (scale() <= 1) {
           resetImagePosition()
         }
+      },
+      reset$() {
+        setScale(DEFAULT_ZOOM)
+        resetImagePosition()
       },
       changeDisplayImage$(newImageUrl) {
         setDisplayImageUrl(newImageUrl)

@@ -1,4 +1,4 @@
-import { IImageDataProviderProps, ImageDataProvider } from "./ImageDataProvider"
+import { IImageDataProviderProps, ImageDataProvider } from "./provider/"
 import ImageInput from "./ImageInput"
 
 export interface IImageData {

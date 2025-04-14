@@ -26,6 +26,7 @@ func main() {
 	routes.CreateJournalRoute(apiRoute)
 	routes.CreateJournalGroupRoute(apiRoute)
 	routes.CreateExtensionRoute(apiRoute)
+	routes.CreateMediaRoute(apiRoute)
 	go dynamic.CreateServer()
 	router.Run(":8000")
 }

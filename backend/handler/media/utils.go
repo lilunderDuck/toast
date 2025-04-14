@@ -2,9 +2,7 @@ package media
 
 import (
 	"burned-toast/backend/utils"
-	"encoding/json"
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -15,25 +13,21 @@ import (
 //
 // Parameters:
 //   - path: The desired file path to save the image.
-//   - rawImgString: A JSON string containing the string encoded image data.
-func SaveImage(path string, rawImgString string) string {
-	// this weird code here is from this discussion
-	// https://github.com/wailsapp/wails/discussions/773
-	// I have no idea why this works.
-	fileContent := []byte{}
-	if err := json.Unmarshal([]byte(rawImgString), &fileContent); err != nil {
-		log.Fatal("panic: ", err)
-	}
-
-	fileName := utils.GetFileNameWithExtension(path)
+func SaveAnyImage(fromPath string, toPath string) (string, error) {
+	fileName := utils.GetFileNameWithExtension(toPath)
 	// makes sure not to overwrite the old file.
-	if utils.IsFileExist(path) {
-		path = CreateNewFilePath(path)
-		fileName = utils.GetFileNameWithExtension(path)
+	if utils.IsFileExist(toPath) {
+		toPath = CreateNewFilePath(toPath)
+		fileName = utils.GetFileNameWithExtension(toPath)
 	}
 
-	utils.WriteFile(path, fileContent)
-	return fileName
+	fileContent, err := utils.ReadFile(fromPath)
+	if err != nil {
+		return "", err
+	}
+
+	utils.WriteFile(toPath, fileContent)
+	return fileName, nil
 }
 
 // Generates a new file path with a unique name.

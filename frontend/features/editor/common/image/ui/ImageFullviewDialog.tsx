@@ -3,6 +3,8 @@ import { ImageDisplay, useZoomAndPanContext, ZoomAndPanProvider, ZoomButtonRow }
 // ...
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from '~/assets/style/scrollbar.module.css'
+import { api_getImageSavedPath } from "~/api/media"
+import { useJournalContext } from "~/features/journal"
 
 const style = stylex.create({
   content: {
@@ -40,7 +42,8 @@ interface IImageFullviewDialogProps extends IDialog {
 export default function ImageFullviewDialog(props: IImageFullviewDialogProps) {
   const ChangeImageRightAway = () => {
     const { changeDisplayImage$ } = useZoomAndPanContext()
-    changeDisplayImage$(props.imageSrc$)
+    const { getCurrentGroup$ } = useJournalContext()
+    changeDisplayImage$(api_getImageSavedPath(getCurrentGroup$().id, props.imageSrc$))
     return undefined
   }
 

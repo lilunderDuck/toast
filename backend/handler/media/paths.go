@@ -1,4 +1,4 @@
-package blocks
+package media
 
 import (
 	"burned-toast/backend/handler/journal"

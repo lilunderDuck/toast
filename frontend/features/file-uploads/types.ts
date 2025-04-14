@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import { Accessor, Component } from "solid-js";
 import { FileDialogFilter } from "~/api/misc";
 // import type { OpenDirectoryDialog, OpenFileDialog, OpenMultipleFilesDialog } from "~/wailsjs/go/backend/App";
 
@@ -13,6 +13,11 @@ export const enum FileUploadType {
  * It's a simple div that, when clicked, shows a file upload dialog.
  */
 export type FileUploadComponent = Component<HTMLAttributes<"div">>
+
+export type FileUploadStuff = {
+  isUploading$: Accessor<boolean>
+  FileUploadZone$: FileUploadComponent
+}
 
 /**Options for creating a file upload component.
  *

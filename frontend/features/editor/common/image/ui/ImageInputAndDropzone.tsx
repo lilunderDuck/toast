@@ -29,7 +29,6 @@ const style = stylex.create({
 })
 
 interface IImageInputProps {
-  dropzoneRootProps$: HTMLAttributes<"div">
   imageSrc$?: string
   isLoading$: boolean
 }
@@ -37,7 +36,6 @@ interface IImageInputProps {
 export function ImageInputAndDropzone(props: IImageInputProps) {
   return (
     <div 
-      {...props.dropzoneRootProps$} 
       {...stylex.attrs(
         style.input_imageInput,
         props.imageSrc$ ? style.input_autoHeight : style.input_fixedHeight

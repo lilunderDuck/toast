@@ -8,6 +8,7 @@ import { useEditorContext } from "~/features/editor/provider"
 import { FlexCenter, SpinningCube, Tooltip } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
+import __style from "./VideoInput.module.css"
 // ...
 import { useVideoDataContext } from "./data"
 import { Video } from "./ui"
@@ -29,11 +30,11 @@ export function VideoInput() {
   const { data$, setData$ } = useVideoDataContext()
 
   const isThereAVideo = () => data$.videoUrl !== ""
-  const [isLoading, setIsLoading] = createSignal(isThereAVideo())
+  const [isVideoLoading, setIsVideoLoading] = createSignal(isThereAVideo())
   const currentGroupId = getCurrentGroup$().id
 
   let shouldShowDialog = true
-  const FileUploadDialog = createFileUpload({
+  const { FileUploadZone$, isUploading$ } = createFileUpload({
     type$: FileUploadType.file,
     title$: "Please choose a video file",
     filter$() {
@@ -42,16 +43,14 @@ export function VideoInput() {
       ]
     },
     async onFinish$(theFilePath) {
-      setIsLoading(true)
       const fileName = await api_saveVideo(currentGroupId, theFilePath)
       setData$("videoUrl", () => fileName)
-      setIsLoading(false)
     },
     shouldShow$: () => shouldShowDialog
   })
 
   const LoadingSpinner = () => (
-    <Show when={isLoading()}>
+    <Show when={isUploading$() || isVideoLoading()}>
       <FlexCenter {...stylex.attrs(style.dialogHitbox)}>
         <SpinningCube cubeSize$={30} />
       </FlexCenter>
@@ -72,14 +71,16 @@ export function VideoInput() {
     >
       <Video
         videoUrl={api_getVideoSavedPath(currentGroupId, data$.videoUrl)}
-        onVideoLoaded$={() => setIsLoading(false)}
+        onVideoLoaded$={() => setIsVideoLoading(false)}
       >
         <Show when={!isReadonly$()}>
           <LoadingSpinner />
           <DialogInputThing />
-          <Tooltip label$="Click to upload a video file.">
-            <FileUploadDialog {...stylex.attrs(style.dialogHitbox)} />
-          </Tooltip>
+          <FileUploadZone$ {...stylex.attrs(style.dialogHitbox)} id={__style.tooltip}>
+            <Tooltip label$="Click to upload a video file.">
+              <div {...stylex.attrs(style.dialogHitbox)} />
+            </Tooltip>
+          </FileUploadZone$>
         </Show>
       </Video>
     </div>
