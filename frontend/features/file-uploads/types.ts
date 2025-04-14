@@ -1,4 +1,5 @@
 import { Component } from "solid-js";
+import { FileDialogFilter } from "~/api/misc";
 // import type { OpenDirectoryDialog, OpenFileDialog, OpenMultipleFilesDialog } from "~/wailsjs/go/backend/App";
 
 export const enum FileUploadType {
@@ -23,7 +24,8 @@ export type CreateFileUploadOptions<T extends FileUploadType, FinishFn extends A
    * @see {@link FileUploadType} for a full list of options.
    */
   type$: T
-  filter$?: () => FilePickerAcceptType[]
+  title$: string
+  filter$?: () => FileDialogFilter[]
   /**Fired when the file upload is complete.
    * 
    * It receives 

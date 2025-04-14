@@ -6,10 +6,10 @@ import { FlexCenterY, FlexCenter, createLazyLoadedDialog } from "~/components"
 import stylex from "@stylexjs/stylex"
 import __style from "./Video.module.css"
 // ...
-import type { IVideoBlockData } from "./data"
+import type { IVideoBlockData } from "../data"
 import { createVideoProgressBar } from "./progress"
-import { VideoControls, type IVideoControlsProps, VideoControlState } from "./VideoControls"
-import FullScreenButton from "./FullScreenButton"
+import { VideoButtonControls, type IVideoButtonControlsProps, VideoControlState } from "./VideoButtonControls"
+import { FullScreenButton } from "./FullScreenButton"
 
 const style = stylex.create({
   bound: {
@@ -32,7 +32,7 @@ const style = stylex.create({
 export interface IVideoProps extends IVideoBlockData {
   /**Whenever the video is loaded or not */
   onVideoLoaded$?: () => void
-  /**Whenever the video should be displayed on fullscreen or not.
+  /**Whenever the video should be displayed on fullscreen mode or not.
    * 
    * Set this to `true` will:
    * - Hide the fullscreen button
@@ -64,19 +64,20 @@ export function Video(props: ParentProps<IVideoProps>) {
     props.onVideoLoaded$?.()
   }
   
-  const controlThisVideo: IVideoControlsProps["onClickingSomething$"] = (state) => {
+  const controlThisVideo: IVideoButtonControlsProps["onClick$"] = (state) => {
     switch (state) {
       case VideoControlState.playing:
         thisVideoRef.play()
-        break
+      break
+
       case VideoControlState.pausing:
         thisVideoRef.pause()
-        break
+      break
     }
   }
 
   const videoFullscreenDialog = createLazyLoadedDialog(
-    () => import("./dialog/VideoFullscreenDialog"),
+    () => import("../dialog/VideoFullscreenDialog"),
     () => {
       const [, videoData] = splitProps(props, ["fullScreenMode$"])
       return {
@@ -104,12 +105,12 @@ export function Video(props: ParentProps<IVideoProps>) {
         stylex.attrs(style.progressBar),
         props.fullScreenMode$ ? __style.controlsInFullscreen : __style.controls
       )}>
-        <VideoControls onClickingSomething$={controlThisVideo}>
+        <VideoButtonControls onClick$={controlThisVideo}>
           <ProgressBar$ />
           <Show when={!props.fullScreenMode$}>
             <FullScreenButton onClick={videoFullscreenDialog.show$} />
           </Show>
-        </VideoControls>
+        </VideoButtonControls>
       </FlexCenterY>
 
       <videoFullscreenDialog.Modal$ />

@@ -3,6 +3,7 @@ import { ParentProps, Show } from "solid-js"
 // ...
 import { Button, ButtonSizeVariant } from "~/components"
 import { useToggleState } from "~/hook"
+import { useVideoDataContext } from "../data"
 // ...
 
 export const enum VideoControlState {
@@ -12,20 +13,22 @@ export const enum VideoControlState {
   unfullscreen
 }
 
-export interface IVideoControlsProps {
-  onClickingSomething$?: (state: VideoControlState) => void
+export interface IVideoButtonControlsProps {
+  onClick$?: (state: VideoControlState) => void
 }
 
-export function VideoControls(props: ParentProps<IVideoControlsProps>) {
+export function VideoButtonControls(props: ParentProps<IVideoButtonControlsProps>) {
   const [isPausing, togglePausing] = useToggleState(true)
+  const { data$ } = useVideoDataContext()
 
   return (
     <>
       <Button
         size$={ButtonSizeVariant.icon}
+        disabled={data$.videoUrl === ""}
         onClick={() => {
           togglePausing()
-          props.onClickingSomething$?.(isPausing() ? VideoControlState.pausing : VideoControlState.playing)
+          props.onClick$?.(isPausing() ? VideoControlState.pausing : VideoControlState.playing)
         }}
       >
         <Show when={isPausing()} fallback={

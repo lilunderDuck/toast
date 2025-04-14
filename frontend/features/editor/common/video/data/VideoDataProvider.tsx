@@ -21,7 +21,11 @@ export function VideoDataProvider(props: ParentProps<IVideoDataProviderProps>) {
   return (
     <Context.Provider value={{
       data$: data,
-      setData$: setData
+      // @ts-ignore
+      setData$(...value) {
+        setData(...value)
+        props.onChange$(data)
+      }
     }}>
       {props.children}
     </Context.Provider>

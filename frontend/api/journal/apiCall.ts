@@ -9,7 +9,7 @@ import {
 import { __callBackendApi } from "../call"
 import { apiCallLog } from "~/features/debug"
 
-export async function api_createJournal(currentGroupId: number, data: JournalSchema, type: JournalType) {
+export async function api_createJournal(currentGroupId: number, data: JournalSchema, type: JournalType): Promise<IJournalData> {
   return await __callBackendApi('POST', `/duck/journal/${currentGroupId}`, {
     ...data,
     type
@@ -20,15 +20,15 @@ export async function api_deleteJournal(currentGroupId: number, someJournalId: n
   return await __callBackendApi('DELETE', `/duck/journal/${currentGroupId}/${someJournalId}`)
 }
 
-export async function api_getJournal(currentGroupId: number, someJournalId: number) {
+export async function api_getJournal(currentGroupId: number, someJournalId: number): Promise<IJournalData> {
   return (await __callBackendApi('GET', `/duck/journal/${currentGroupId}/${someJournalId}`))!
 }
 
-export async function api_getAllJournal(currentGroupId: number) {
+export async function api_getAllJournal(currentGroupId: number): Promise<Record<string, IJournalData>> {
   return (await __callBackendApi('GET', `/duck/journal/${currentGroupId}`))!
 }
 
-export async function api_updateJournal(currentGroupId: number, someJournalId: number, data: Partial<IJournalData>) {
+export async function api_updateJournal(currentGroupId: number, someJournalId: number, data: Partial<IJournalData>): Promise<IJournalData> {
   return (await __callBackendApi('PATCH', `/duck/journal/${currentGroupId}/${someJournalId}`, {
     name: data.name,
   }))!
@@ -47,7 +47,7 @@ export async function api_saveJournalContent(currentGroupId: number, someJournal
   }))!
 }
 
-export async function api_getJournalVirturalFileTree(currentGroupId: number) {
+export async function api_getJournalVirturalFileTree(currentGroupId: number): Promise<any[]> {
   return (await __callBackendApi('GET', `/duck/journal-group/${currentGroupId}/tree`))! as any[]/*<- missing type*/
 }
 
@@ -64,10 +64,10 @@ export async function api_getGroup<T extends number | undefined>(id?: T): Promis
   return await __callBackendApi('GET', `/duck/journal-group/${id}`) as Group<number>
 }
 
-export async function api_createGroup(data: JournalGroupSchema) {
+export async function api_createGroup(data: JournalGroupSchema): Promise<IJournalGroupData> {
   return (await __callBackendApi('POST', `/duck/journal-group`, data))!
 } 
 
-export async function api_updateGroup(id: number, data: JournalGroupSchema) {
+export async function api_updateGroup(id: number, data: JournalGroupSchema): Promise<IJournalGroupData> {
   return (await __callBackendApi('PATCH', `/duck/journal-group/${id}`, data))!
 }

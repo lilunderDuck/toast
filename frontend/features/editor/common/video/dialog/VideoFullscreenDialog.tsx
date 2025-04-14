@@ -2,8 +2,8 @@ import { DialogContent, type IDialog } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { Video } from "../Video"
-import type { IVideoBlockData } from "../../data"
+import { Video } from "../ui"
+import { IVideoBlockData } from "../data"
 
 interface IVideoFullscreenDialogProps extends IDialog {
   videoData$: IVideoBlockData

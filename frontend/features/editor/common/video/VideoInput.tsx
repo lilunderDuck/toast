@@ -5,12 +5,12 @@ import { api_getVideoSavedPath, api_saveVideo } from "~/api/media"
 import { useJournalContext } from "~/features/journal"
 import { createFileUpload, FileUploadType } from "~/features/file-uploads"
 import { useEditorContext } from "~/features/editor/provider"
-import { Video } from "~/features/editor/common/video"
-import { FlexCenter, SpinningCube } from "~/components"
+import { FlexCenter, SpinningCube, Tooltip } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { useVideoDataContext } from "../data"
+import { useVideoDataContext } from "./data"
+import { Video } from "./ui"
 
 const style = stylex.create({
   dialogHitbox: {
@@ -23,11 +23,7 @@ const style = stylex.create({
   }
 })
 
-interface IVideoInputProps {
-  // ...
-}
-
-export function VideoInput(props: IVideoInputProps) {
+export function VideoInput() {
   const { isReadonly$ } = useEditorContext()
   const { getCurrentGroup$ } = useJournalContext()
   const { data$, setData$ } = useVideoDataContext()
@@ -39,10 +35,10 @@ export function VideoInput(props: IVideoInputProps) {
   let shouldShowDialog = true
   const FileUploadDialog = createFileUpload({
     type$: FileUploadType.file,
-    options$: {
-      Title: "Please choose a video file",
-      Filters: [
-        { DisplayName: "Ofc you need a video file here", Pattern: "*.mp4" }
+    title$: "Please choose a video file",
+    filter$() {
+      return [
+        { name: "Ofc you need a video file here", extension: "mp4" }
       ]
     },
     async onFinish$(theFilePath) {
@@ -81,7 +77,9 @@ export function VideoInput(props: IVideoInputProps) {
         <Show when={!isReadonly$()}>
           <LoadingSpinner />
           <DialogInputThing />
-          <FileUploadDialog {...stylex.attrs(style.dialogHitbox)} />
+          <Tooltip label$="Click to upload a video file.">
+            <FileUploadDialog {...stylex.attrs(style.dialogHitbox)} />
+          </Tooltip>
         </Show>
       </Video>
     </div>

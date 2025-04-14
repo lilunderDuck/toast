@@ -1,2 +1,3 @@
-export * from './apiCalls'
+export * from './random'
 export * from './stuff'
+export * from './dialog'

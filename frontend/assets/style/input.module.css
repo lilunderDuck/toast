@@ -1,0 +1,31 @@
+.inputRange {
+  appearance: none;
+  width: 200px;
+  height: 12px;
+  border: 1px solid #333333;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #377494 30%, #dddddd 30%);
+  cursor: pointer;
+}
+
+/* Thumb: for Chrome, Safari, Edge */
+.inputRange::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #333333;
+  border-radius: 9999px;
+  background: #06b6d4;
+  box-shadow: none;
+}
+
+/* Thumb: for Firefox */
+.inputRange::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #333333;
+  border-radius: 9999px;
+  background: #06b6d4;
+  box-shadow: none;
+}

@@ -5,7 +5,7 @@ import stylex from "@stylexjs/stylex"
 import { FlexCenterY } from "~/components"
 import { editorLog } from "~/features/debug"
 // ...
-import { progressPercentageToCurrentTime, toHHMMSS } from "../utils"
+import { getCurrentTimeByPercentage, getVideoPercentage, toHHMMSS } from "../../utils"
 import VideoProgressSlider from "./VideoProgressSlider"
 
 const style = stylex.create({
@@ -29,17 +29,17 @@ interface IVideoProgressBarOptions {
 
 interface IVideoProgressBar {
   /**Updates the progress bar and current duration.
-   * @param progressInSecond The current video duration in seconds.
+   * @param progressInSeconds The current video duration in seconds.
    * @returns *nothing*
    */
-  updateProgressBar$(progressInSecond: number): void
+  updateProgressBar$(progressInSeconds: number): void
   /**Sets the total duration of the video in seconds.
-   * @param duration The total video duration in seconds.
+   * @param durationInSeconds The total video duration in seconds.
    * @returns *nothing*
    * @note you should call this function when the video is loaded,
    * otherwise the progress bar will not be displayed properly.
    */
-  setTotalDuration$(duration: number): void
+  setTotalDuration$(durationInSeconds: number): void
   /**Renders the video progress bar component.
    * It displays the current duration, a slider, and the total duration.
    *
@@ -61,26 +61,30 @@ export function createVideoProgressBar(options: IVideoProgressBarOptions): IVide
   const [currentDuration, setCurrentDuration] = createSignal(0)
   const [totalDurationInSec, setTotalDurationInSec] = createSignal<number>()
 
+  const getTotalVideoDuration = () => totalDurationInSec() ?? -1
+
   const progressBarChanged = (currentProgress: number) => {
-    const currentTime = progressPercentageToCurrentTime(currentProgress, totalDurationInSec() ?? -1)
+    const currentTime = getCurrentTimeByPercentage(currentProgress, getTotalVideoDuration())
     //debug-start
     editorLog.logLabel("video", `progress bar slider updated, current time will be`, currentTime)
     //debug-end
     options.onProgressBarChanged$(currentTime)
   }
 
+  const DEFALT_PLACEHOLDER = "--:--:--"
+
   return {
-    updateProgressBar$(progressInSecond: number) {
-      setProgress(progressInSecond / (totalDurationInSec() ?? -1) * 100)
-      setCurrentDuration(progressInSecond)
+    updateProgressBar$(progressInSeconds: number) {
+      setProgress(getVideoPercentage(progressInSeconds, getTotalVideoDuration()))
+      setCurrentDuration(progressInSeconds)
       //debug-start
       editorLog.logLabel("video", `current progress: ${progress()}%, current duration: ${currentDuration()}s`)
       //debug-end
     },
-    setTotalDuration$(duration: number) {
-      setTotalDurationInSec(duration)
+    setTotalDuration$(durationInSeconds: number) {
+      setTotalDurationInSec(durationInSeconds)
       //debug-start
-      editorLog.logLabel("video", `total video duration updated:`, duration)
+      editorLog.logLabel("video", `total video duration updated:`, durationInSeconds)
       //debug-end
     },
     ProgressBar$() {
@@ -91,7 +95,7 @@ export function createVideoProgressBar(options: IVideoProgressBarOptions): IVide
           </span>
           <VideoProgressSlider progress$={progress()} onChange$={progressBarChanged} />
           <span {...stylex.attrs(style.time)}>
-            {totalDurationInSec() ? toHHMMSS(totalDurationInSec()!) : "--:--:--"}
+            {totalDurationInSec() ? toHHMMSS(totalDurationInSec()!) : DEFALT_PLACEHOLDER}
           </span>
         </FlexCenterY>
       )

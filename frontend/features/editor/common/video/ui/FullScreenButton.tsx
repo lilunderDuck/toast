@@ -1,11 +1,17 @@
 import { BsFullscreen } from "solid-icons/bs"
+// ...
 import { Button, ButtonSizeVariant, Tooltip } from "~/components"
+// ...
+import { useVideoDataContext } from "../data"
 
-export default function FullScreenButton(props: HTMLAttributes<"button">) {
+export function FullScreenButton(props: HTMLAttributes<"button">) {
+  const { data$ } = useVideoDataContext()
+  
   return (
     <Tooltip label$="Enter fullscreen">
       <Button
         {...props}
+        disabled={data$.videoUrl === ""}
         size$={ButtonSizeVariant.icon}
       >
         <BsFullscreen size={15} />

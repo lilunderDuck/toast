@@ -1,67 +1,6 @@
 import { apiCallLog } from "../features/debug"
-import { IJournalData, IJournalGroupData, JournalType } from "./journal"
 
 type MethodVerb = "GET" | "POST" | "PATCH" | "DELETE"
-
-type ApiFnMapping = {
-  [route: `GET /duck/journal/${number}`]: {
-    in: null,
-    out: Record<string, IJournalData>
-  }
-  [route: `GET /duck/journal/${number}/${number}`]: {
-    in: null,
-    out: IJournalData
-  }
-  [route: `POST /duck/journal/${number}`]: {
-    in: {
-      type: JournalType
-      name: string
-    }
-    out: IJournalData
-  }
-  [route: `PATCH /duck/journal/${number}/${number}`]: {
-    in: {
-      name?: string
-      data?: any[] // <- missing type
-    }
-    out: IJournalData
-  }
-  [route: `DELETE /duck/journal/${number}/${number}`]: {
-    in: null
-    out: null
-  }
-
-  "GET /duck/journal-group": {
-    in: null
-    out: IJournalGroupData[]
-  }
-  [route: `GET /duck/journal-group/${number}`]: {
-    in: null
-    out: IJournalGroupData
-  }
-  [route: `GET /duck/journal-group/${number}/tree`]: {
-    in: null
-    out: any[]
-  }
-  "POST /duck/journal-group": {
-    in: {
-      name: string
-      description?: string
-    }
-    out: IJournalGroupData
-  }
-  [route: `PATCH /duck/journal-group/${number}`]: {
-    in: {
-      name: string
-      description?: string
-    }
-    out: IJournalGroupData
-  }
-  [route: `DELETE /duck/journal-group/${number}`]: {
-    in: null
-    out: null
-  }
-}
 
 export async function __callBackendApi<
   M extends MethodVerb,
@@ -69,10 +8,8 @@ export async function __callBackendApi<
 >(
   method: M, 
   route: R, 
-  // @ts-ignore - forced to work
-  whatToSend: ApiFnMapping[`${M} ${R}`]["in"] = null
-  // @ts-ignore - also being forced to work
-): Promise<ApiFnMapping[`${M} ${R}`]["out"] | null> {
+  whatToSend: any = null
+): Promise<any> {
   // debug-start
   apiCallLog.groupLabel(method, route)
   // a bunch or checks in case I misused this
@@ -106,7 +43,7 @@ export async function __callBackendApi<
   // debug-end
 
   // @ts-ignore
-  type ApiCallResult = ApiFnMapping[`${M} ${R}`]["out"]
+  type ApiCallResult = ApiFnMapping[R][M]["out"]
   let response: Response, result: ApiCallResult
   try {
     response = await fetch(route, options)
