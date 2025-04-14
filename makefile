@@ -4,16 +4,11 @@ TOOLS_DIR = ./build/tools
 cold_start:
 	cd ${TOOLS_DIR} && deno -A fetchPackageJson.ts && go run binary_json.go
 
-FILE_DIALOG_DLL_NAME = antiBrainrot
-build_dlls:
-	gcc ./backend/libs/file_dialog/baseDialog.c -shared -o ${OUTPUT_DIR}/resource/${FILE_DIALOG_DLL_NAME}.dll -lcomdlg32
-
 build_server:
 	go build -o ${OUTPUT_DIR}/server.exe ./backend/main.go
 
 build: build_dlls build_server
 	deno task build
-	strip ${OUTPUT_DIR}/resource/${FILE_DIALOG_DLL_NAME}.dll
 
 dev_server: build_server
 	${OUTPUT_DIR}/server.exe
