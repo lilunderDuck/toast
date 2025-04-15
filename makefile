@@ -7,7 +7,7 @@ cold_start:
 build_server:
 	go build -o ${OUTPUT_DIR}/server.exe ./backend/main.go
 
-build: build_dlls build_server
+build: build_server
 	deno task build
 
 dev_server: build_server

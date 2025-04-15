@@ -27,6 +27,13 @@ export interface IArrayObjectsUtils<T extends AnyObject[]> {
   remove$<Element extends keyof ArrayElement<T>>(
     name: Element, value: ArrayElement<T>[Element]
   ): T
+  /**Removes an object from the array based on its index.
+   *
+   * @template Element The type of the property to filter by.
+   * @param index
+   * @returns A new array with the specified object removed.
+   */
+  removeByIndex$(index: number): T
   /**Replaces an object in the array with a new one based on a predicate.
    * 
    * @note the old value will be merged with the new value.
@@ -58,6 +65,10 @@ export function arrayObjects<T extends AnyObject[]>(arrayOfObjects: T): IArrayOb
       // @ts-ignore - it does work
       return arrayOfObjects.filter((it) => it[name] !== value) as T
       //                                   ^^^^^^^^ the type error is here
+    },
+    removeByIndex$(index) {
+      arrayOfObjects.splice(index, 1);
+      return arrayOfObjects
     },
     replace$(whereToReplace, somethingElse) {
       const [oldData, index] = this.find$(whereToReplace)

@@ -6,8 +6,11 @@ import { arrayInsert, getRandomNumberFrom } from "~/utils"
 import { InputTextData, TextData, TextDataAttribute } from "./data"
 
 export interface ITextProviderProps {
+  allowNewLine$?: boolean
   inputData$?: InputTextData
   onChange$(value: TextData[]): void
+  onAddingNewLine$?: () => any
+  onEmpty?: () => any
 }
 
 export interface ITextContext {
@@ -16,7 +19,6 @@ export interface ITextContext {
   spawnNewTextInput$(index: number): void
   addNewLine$(currentIndex: number): void
   deleteInput$(index: number): void
-  onChange$(value: TextData[]): void
   focusState$: Signal<number>
   readonly THIS_TEXT_BLOCK_ID$: `t-${number}`
 }
@@ -28,6 +30,8 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
   const [textsData, setTextsData] = createSignal<TextData[]>(props.inputData$?.text ?? [
     { text: '' }
   ])
+
+  const isAllowNewLine = props.allowNewLine$ ?? true
 
   const updateData = (index: number, data: Partial<TextData>) => {
     setTextsData(prev => {
@@ -46,7 +50,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
 
       // @ts-ignore
       prev[index] = newData
-      context.onChange$(textsData())
+      props.onChange$(textsData())
       //debug-start
       editorLog.logLabel('text', 'update text data at index', index, 'with', data, '. Data is', prev[index])
       //debug-end
@@ -61,7 +65,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
       })
       return [...prev]
     })
-    context.onChange$(textsData())
+    props.onChange$(textsData())
     //debug-start
     editorLog.logLabel('text', 'Spawned new block')
     //debug-end
@@ -82,14 +86,14 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
       return [...prev]
     })
 
-
-    context.onChange$(textsData())
+    props.onChange$(textsData())
     //debug-start
     editorLog.logLabel('text', 'Deleted block at index', index)
     //debug-end
   }
 
   const addNewLine = (currentIndex: number) => {
+    if (!isAllowNewLine) return
     setTextsData(prev => {
       arrayInsert(prev, currentIndex + 1, TextDataAttribute.newLine, {
         text: ''
@@ -108,7 +112,6 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
     updateData$: updateData,
     spawnNewTextInput$: spawnNewTextInput,
     deleteInput$: deleteInput,
-    onChange$: props.onChange$,
     THIS_TEXT_BLOCK_ID$: thisTextBlockId
   }
 

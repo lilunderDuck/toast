@@ -15,7 +15,7 @@ const style = stylex.create({
     borderRadius: 6,
     backgroundColor: 'var(--gray3)',
     willChange: 'transform',
-    marginBottom: 10
+    marginBottom: 2
   },
   noStupidOutlineThing: {
     border: 'none',
