@@ -16,9 +16,11 @@ export interface IBlockUtils {
    * @param beforeBlockId the block id of the block to insert before, set it to `null` to insert at the end.
    * @param type the type of the new block.
    * @param someData optional data for the new block.
+   * @param silentUpdate default: `false`, set this to `true` to prevent the editor emitting
+   * `editor__onUpdate` event.
    * @returns *nothing*
    */
-  insert$(beforeBlockId: number | null, type: number, someData?: any): void
+  insert$(beforeBlockId: number | null, type: number, someData?: any, silentUpdate?: boolean): void
   /**Saves the block data.
    * @returns The saved block data.
    */
@@ -52,15 +54,15 @@ export function createBlocks(
     }
   }
 
-  const insertToTheBottom = (type: number, data: IBlockData) => {
+  const insertToTheBottom = (type: number, data: IBlockData, silentUpdate = false) => {
     //debug-start
     editorLog.log("inserting block type", type, "with data", data, "on the bottom")
     //debug-end
     setData(prev => [...prev, data])
-    updateData()
+    if (!silentUpdate) updateData()
   }
 
-  const insert: IBlockUtils["insert$"] = (beforeBlockId, type, someData) => {
+  const insert: IBlockUtils["insert$"] = (beforeBlockId, type, someData, silentUpdate = false) => {
     if (!someData) {
       const thisBlockSetting = blockSetting()[type]
       someData = thisBlockSetting.defaultValue$
@@ -71,14 +73,14 @@ export function createBlocks(
 
     const newData = create(type, someData)
     if (!beforeBlockId) {
-      return insertToTheBottom(type, newData)
+      return insertToTheBottom(type, newData, silentUpdate)
     }
     
     const blocksData = data()
     const [, index] = arrayObjects(blocksData).find$(it => it.id === beforeBlockId)
     const isItTheLastBlock = blocksData.length - 1 === index
     if (isItTheLastBlock) {
-      return insertToTheBottom(type, newData)
+      return insertToTheBottom(type, newData, silentUpdate)
     }
     
     //debug-start
@@ -86,7 +88,7 @@ export function createBlocks(
     //debug-end
     arrayInsert(blocksData, index, newData)
     setData(blocksData)
-    updateData()
+    if (!silentUpdate) updateData()
   }
 
   const saveBlockData: IBlockUtils["saveBlockData$"] = (blockId, data) => {

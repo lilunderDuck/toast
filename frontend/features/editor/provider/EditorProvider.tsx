@@ -91,7 +91,7 @@ export function EditorProvider(props: ParentProps) {
   const block = createBlocks(buttonRow, () => blockSetting, updateData)
 
   const spawnDefaultBlock = () => {
-    block.insert$(null, defaultBlock.type$, defaultBlock.setting$.defaultValue$)
+    block.insert$(null, defaultBlock.type$, defaultBlock.setting$.defaultValue$, true)
   }
 
   const event = createEvent()

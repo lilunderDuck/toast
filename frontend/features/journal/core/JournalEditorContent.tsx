@@ -3,7 +3,7 @@ import { ParentProps, Show } from "solid-js"
 import stylex from "@stylexjs/stylex"
 // ...
 import { FlexCenter, ResizablePanel } from "~/components"
-import { useEditorContext } from "~/features/editor"
+import { type EditorDocumentData, useEditorContext } from "~/features/editor"
 // ...
 import { useJournalContext } from "../context"
 import { TabList, WelcomePage } from "../components"

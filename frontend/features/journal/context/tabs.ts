@@ -3,7 +3,6 @@ import { type Accessor, createSignal } from "solid-js"
 import {  } from "~/utils"
 import { api_getJournal } from "~/api/journal"
 // ...
-import { IJournalUtils } from "./journal"
 
 export type TabData = {
   name$: string

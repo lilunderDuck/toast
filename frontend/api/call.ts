@@ -11,14 +11,14 @@ export async function __callBackendApi<
   whatToSend: any = null
 ): Promise<any> {
   // debug-start
-  apiCallLog.groupLabel(method, route)
+  apiCallLog.log(method, route)
   // a bunch or checks in case I misused this
   if (
     route.startsWith("http") ||
     route.startsWith("https")
   ) {
     apiCallLog.errorLabel(method, route, "Force stop.")
-    apiCallLog.groupEndLabel()
+
     throw new Error(`This function only be used to call api from the backend only.`)
   }
 
@@ -51,7 +51,6 @@ export async function __callBackendApi<
   } catch (error) {
     // debug-start
     apiCallLog.error(error)
-    apiCallLog.groupEndLabel()
     // debug-end
     return null
   }
@@ -65,12 +64,10 @@ export async function __callBackendApi<
   // debug-start
   if (response.status >= 400) {
     apiCallLog.errorLabel("result", response.status, result)
-    apiCallLog.groupEndLabel()
     return null
   }
 
   apiCallLog.logLabel("result", response.status, result)
-  apiCallLog.groupEndLabel()
   // debug-end
 
   return result
