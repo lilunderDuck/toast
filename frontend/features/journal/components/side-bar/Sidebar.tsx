@@ -3,15 +3,13 @@ import { type ParentProps } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from'~/assets/style/scrollbar.module.css'
 // ...
-import { Divider } from "~/components"
 import { mergeClassname } from "~/utils"
 import { useFileDisplayContext } from "~/features/file-display"
+import { JournalType } from "~/api/journal"
 // ...
-import { SidebarButtonsRow } from "./SidebarButtonsRow"
 import SidebarActions from "./SidebarActions"
 import { useJournalContext } from "../../context"
 import { createFileNodeData, createFolderNodeData } from "../../utils"
-import { JournalType } from "~/api/journal"
 
 const style = stylex.create({
   sidebar: {
@@ -44,11 +42,7 @@ export function Sidebar(props: ParentProps) {
   })
 
   return (
-    <div 
-      {...stylex.attrs(style.sidebar)} 
-    >
-      <SidebarButtonsRow />
-      <Divider />
+    <div {...stylex.attrs(style.sidebar)}>
       <div class={mergeClassname(
         __scrollbarStyle.scrollbar,
         __scrollbarStyle.scrollbarVertical,

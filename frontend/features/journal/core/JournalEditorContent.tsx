@@ -1,4 +1,4 @@
-import { ParentProps } from "solid-js"
+import { ParentProps, Show } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -6,7 +6,7 @@ import { FlexCenter, ResizablePanel } from "~/components"
 import { useEditorContext } from "~/features/editor"
 // ...
 import { useJournalContext } from "../context"
-import { TabList } from "../components"
+import { TabList, WelcomePage } from "../components"
 
 const style = stylex.create({
   content: {
@@ -21,7 +21,7 @@ const style = stylex.create({
     whiteSpace: 'nowrap',
     flexWrap: 'nowrap'
   },
-  editor: {
+  stuffInside: {
     height: 'calc(100vh - 72px)'
   },
   titleBar: {
@@ -62,7 +62,13 @@ export function JournalEditorContent(props: ParentProps) {
         <FlexCenter {...stylex.attrs(style.titleBar)}>
           {journal$.currentlyOpened$() ? journal$.currentlyOpened$()?.name : '*Nothing opened*'}
         </FlexCenter>
-        {props.children}
+        <div {...stylex.attrs(style.stuffInside)}>
+          <Show when={journal$.currentlyOpened$()} fallback={
+            <WelcomePage />
+          }>
+            {props.children}
+          </Show>
+        </div>
       </div>
     </ResizablePanel>
   )

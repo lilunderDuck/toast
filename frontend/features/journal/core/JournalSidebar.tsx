@@ -5,10 +5,10 @@ import stylex from "@stylexjs/stylex"
 import __style from "./JournalSidebar.module.css"
 // ...
 import { 
-  Flex, 
   FlexCenterY, 
   ResizableHandle, 
-  ResizablePanel
+  ResizablePanel,
+  Spacer
 } from "~/components"
 import { FileDisplay, FileDisplayProvider, FileNodeType } from "~/features/file-display"
 import { 
@@ -22,10 +22,9 @@ import {
 import { 
   Journal,
   JournalCategory,
-  QuickActionBar, 
   QuickActionItem, 
   Sidebar,
-  TrackerButton, 
+  SidebarButtonsRow,
 } from "../components"
 import { useJournalContext } from "../context"
 
@@ -57,8 +56,8 @@ export function JournalSidebar() {
             label$='Go back to home'
             onClick={goHome}
           />
-          <div />
-          <TrackerButton />
+          <Spacer />
+          <SidebarButtonsRow />
         </FlexCenterY>
         <FileDisplayProvider<IJournalData, IJournalCategoryData> 
           // @ts-ignore
@@ -72,23 +71,17 @@ export function JournalSidebar() {
             }
           }}
           onOpen$={(type, data) => {
-
             if (type === FileNodeType.FILE && journal$.currentlyOpened$()?.id !== data.id) {
-              console.log("open", data.id)
               journal$.open$(data.id)
             }
           }}
           onUpdate$={(treeData) => {
             api_updateJournalVirturalFileTree(currentGroupId, treeData)
-            console.log("update")
           }}
         >
-          <Flex {...stylex.attrs(style.sidebar)}>
-            <QuickActionBar />
-            <Sidebar>
-              <FileDisplay />
-            </Sidebar>
-          </Flex>
+          <Sidebar>
+            <FileDisplay />
+          </Sidebar>
         </FileDisplayProvider>
       </ResizablePanel>
       <ResizableHandle />

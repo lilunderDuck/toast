@@ -15,7 +15,7 @@ const style = stylex.create({
     flexWrap: 'wrap'
   },
   textGap: {
-    gap: 10,
+    gap: 4,
   }
 })
 

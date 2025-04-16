@@ -5,7 +5,7 @@ import { BsX } from "solid-icons/bs"
 import stylex from "@stylexjs/stylex"
 import "./ColorInputs.css"
 // ...
-import { FlexCenterY, Button, ButtonSizeVariant, Tooltip } from "../ui"
+import { FlexCenterY, Button, ButtonSizeVariant, Tooltip, HoverCard, HoverCardTrigger, HoverCardContent } from "../ui"
 
 const style = stylex.create({
   wholeColorInput: {
@@ -34,6 +34,9 @@ const style = stylex.create({
   resetButton: {
     flexShrink: 0
   },
+  popoverCard_content: {
+    width: "15rem"
+  }
 })
 
 interface IHexColorInputProps {
@@ -71,5 +74,20 @@ export function HexColorInput(props: IHexColorInputProps) {
         }} />
       </FlexCenterY>
     </div>
+  )
+}
+
+export function PopoverHexColorInput(props: IHexColorInputProps) {
+  return (
+    <HoverCard>
+      <HoverCardTrigger>
+        <div {...stylex.attrs(style.colorPreview)} style={{
+          '--color': props.color$()
+        }} />
+      </HoverCardTrigger>
+      <HoverCardContent {...stylex.attrs(style.popoverCard_content)}>
+        <HexColorInput {...props} />
+      </HoverCardContent>
+    </HoverCard>
   )
 }

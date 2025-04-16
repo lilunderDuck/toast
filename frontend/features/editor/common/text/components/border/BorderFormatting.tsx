@@ -1,9 +1,11 @@
-import { DropdownMenuGroupLabel, FlexCenterY, Tooltip } from "~/components";
+import { createSignal } from "solid-js";
+// ...
+import stylex from "@stylexjs/stylex"
+// ...
+import { DropdownMenuGroupLabel, FlexCenterY, PopoverHexColorInput, Tooltip } from "~/components";
+// ...
 import BorderItem from "./BorderItem";
 import BorderStyleSelectMenu from "./BorderStyleSelectMenu";
-
-import stylex from "@stylexjs/stylex"
-import { createSignal } from "solid-js";
 import { ITextContext, TextFormatting } from "../../provider";
 import { handle } from "../../utils";
 
@@ -13,6 +15,9 @@ const style = stylex.create({
   },
   input: {
     width: '5rem'
+  },
+  colorPicker: {
+    flexShrink: 1
   }
 })
 
@@ -22,10 +27,11 @@ export default function createBorderFormatting(
   currentIndex: number, 
   updateDataFn: ITextContext["updateData$"]
 ) {
+  const BORDER_STYLE_PLACEHOLDER = 'default'
+
   const [thiccness, setThiccness] = createSignal(dataIn.border ?? 0)
-  const [radius, setRadius] = createSignal(dataIn.borderRadius ?? 0)
   const [color, setColor] = createSignal(dataIn.borderColor ?? '#000')
-  const [borderStyle, setBorderStyle] = createSignal('')
+  const [borderStyle, setBorderStyle] = createSignal(BORDER_STYLE_PLACEHOLDER)
 
   const updateBorderThiccness = handle((input: number) => {
     updateDataFn(currentIndex, {
@@ -35,14 +41,6 @@ export default function createBorderFormatting(
     })
   }, setThiccness)
 
-  const updateBorderRadius = handle((input: number) => {
-    updateDataFn(currentIndex, {
-      [where]: {
-        borderRadius: input
-      }
-    })
-  }, setRadius)
-
   const updateBorderColor = handle((input: string) => {
     updateDataFn(currentIndex, {
       [where]: {
@@ -51,7 +49,6 @@ export default function createBorderFormatting(
     })
   }, setColor)
 
-  const BORDER_STYLE_PLACEHOLDER = 'No style'
   const updateBorderStyle = handle((input: string) => {
     if (input === BORDER_STYLE_PLACEHOLDER) {
       return updateDataFn(currentIndex, {
@@ -89,20 +86,20 @@ export default function createBorderFormatting(
         </div>
         <Tooltip label$="Change border style">
           <BorderStyleSelectMenu 
-            placeholder$={'Default'}
+            placeholder$={BORDER_STYLE_PLACEHOLDER}
             defaultValue$={borderStyle()}
             onChange$={updateBorderStyle}
           />
         </Tooltip>
-        <div {...stylex.attrs(style.input)}>
-          <Tooltip label$="Change border radius">
-            <BorderItem 
-              {...stylex.attrs(style.input)}
-              value$={radius()} 
-              onChange$={updateBorderRadius} 
-            />
-          </Tooltip>
-        </div>
+        <PopoverHexColorInput 
+          color$={color} 
+          setColor$={updateBorderColor} 
+          onReset$={() => updateDataFn(currentIndex, {
+            [where]: {
+              borderColor: ""
+            }
+          })} 
+        />
       </FlexCenterY>
     </>
   )

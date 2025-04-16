@@ -4,7 +4,6 @@ import { onCleanup, type ParentProps } from 'solid-js'
 import { bodyClasslist } from '~/utils'
 import { Resizable } from '~/components'
 import { toast } from '~/features/toast'
-import { EditorProvider } from '~/features/editor'
 import { journalLog } from "~/features/debug"
 // ...
 import __style from './stuff.module.css'

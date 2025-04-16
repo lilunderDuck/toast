@@ -103,10 +103,6 @@ export function EditorProvider(props: ParentProps) {
   const open: IEditorContext["open$"] = (data) => {
     event.emit$('editor__onSwitching', currOpenedDocument?.content)
     //debug-start
-    editorLog.log('Deleting previous cache data from memory:', currOpenedDocument?.id)
-    //debug-end
-
-    //debug-start
     editorLog.log('New data will be added now')
     //debug-end
 

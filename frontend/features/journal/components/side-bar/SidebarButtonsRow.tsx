@@ -40,7 +40,7 @@ export function SidebarButtonsRow() {
   const { journal$ } = useJournalContext()
   const { isReadonly$, setIsReadonly$ } = useEditorContext()
   const toggleEditOrReadonlyMode = () => {
-    setIsReadonly$(prev => !prev)
+    setIsReadonly$(!isReadonly$())
   }
 
   const createStuffModal = createLazyLoadedDialog(
@@ -56,7 +56,6 @@ export function SidebarButtonsRow() {
         icon$={BsPlus}
         label$='New journal'
       />
-      <Spacer />
       <ButtonItem 
         onClick={toggleEditOrReadonlyMode}
         disabled={!journal$.currentlyOpened$()}

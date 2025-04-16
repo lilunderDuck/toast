@@ -1,4 +1,5 @@
 export * from "./BreakLine"
-export * from "./ColorPicker"
+// ...
+export * from "./color-pickers"
 export * from "./padding"
 export * from "./border"

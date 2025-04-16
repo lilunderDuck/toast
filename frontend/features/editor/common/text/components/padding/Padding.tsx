@@ -77,7 +77,5 @@ export function createPadding(dataIn: TextOption, currentIndex: number, updateDa
     </ContextMenuSub>
   )
 
-  return {
-    PaddingSubMenu$: PaddingSubMenu
-  }
+  return PaddingSubMenu
 }

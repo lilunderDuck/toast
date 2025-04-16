@@ -10,8 +10,7 @@ const style = stylex.create({
     zIndex: 50,
     padding: "0.25rem",
     borderRadius: "0.375rem",
-    backgroundColor: 'var(--gray2)',
-    border: '1px solid var(--gray4)',
+    backgroundColor: 'var(--gray3)',
   }
 })
 

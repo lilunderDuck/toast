@@ -36,7 +36,5 @@ export function createBorder(dataIn: TextFormatting, currentIndex: number, updat
     </ContextMenuSub>
   )
 
-  return {
-    BorderSubMenu$: BorderSubMenu
-  }
+  return BorderSubMenu
 }

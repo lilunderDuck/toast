@@ -34,9 +34,9 @@ export default function TextInputMenu(props: ITextInputMenuProps) {
   const { updateData$ } = useTextDataContext()
 
   const [subOrSuperscript, setSubOrSuperscript] = createSignal<string>(SubOrSupscript.none + '')
-  const { ColorPickerSubMenu$ } = createColorPicker(props.data$, props.currentIndex$, updateData$)
-  const { PaddingSubMenu$ } = createPadding(props.data$, props.currentIndex$, updateData$)
-  const { BorderSubMenu$ } = createBorder(props.data$, props.currentIndex$, updateData$)
+  const ColorPickerSubMenu = createColorPicker(props.data$, props.currentIndex$, updateData$)
+  const PaddingSubMenu = createPadding(props.data$, props.currentIndex$, updateData$)
+  const BorderSubMenu = createBorder(props.data$, props.currentIndex$, updateData$)
 
   type Handler = (input: any) => void
   const handle = (fn: AnyFunction, signal: Setter<any>): Handler => {
@@ -57,11 +57,11 @@ export default function TextInputMenu(props: ITextInputMenuProps) {
     <ContextMenuContent {...stylex.attrs(style.menu)}>
       <ContextMenuGroup>
         <ContextMenuGroupLabel>
-          Text stuff
+          Text styling options
         </ContextMenuGroupLabel>
-        <ColorPickerSubMenu$ />
-        <PaddingSubMenu$ />
-        <BorderSubMenu$ />
+        <ColorPickerSubMenu />
+        <PaddingSubMenu />
+        <BorderSubMenu />
       </ContextMenuGroup>
       {/* ... */}
       <ContextMenuGroup>
