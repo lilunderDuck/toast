@@ -21,16 +21,12 @@ export function createLazyLoadedDropdownMenu<Props extends IDropdownMenu>(
   const show = () => {
     setIsShowing(false)
     setIsShowing(true)
-    //debug-start
-    lazyLoadComponent.logLabel("dropdown menu", 'show')
-    //debug-end
+    isDevMode && lazyLoadComponent.logLabel("dropdown menu", 'show')
   }
 
   const close = () => {
     setIsShowing(false)
-    //debug-start
-    lazyLoadComponent.logLabel("dropdown menu", 'hide')
-    //debug-end
+    isDevMode && lazyLoadComponent.logLabel("dropdown menu", 'hide')
   }
 
   const LazyComponent = createLazyComponent(Component)

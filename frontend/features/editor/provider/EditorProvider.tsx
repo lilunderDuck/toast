@@ -61,23 +61,21 @@ export function EditorProvider(props: ParentProps) {
 
   createEffect(() => {
     if (readonly()) {
-      //debug-start
-      editorLog.logLabel("internal", "force saving...")
-      //debug-end
+      isDevMode && editorLog.logLabel("internal", "force saving...")
+      
       instantDataUpdate()
     }
   })
 
   let currOpenedDocument: EditorDocumentData | undefined
   const instantDataUpdate = () => {
-    event.emit$('editor__onUpdate', {
+    event.emit$('editor__onUpdate$', {
       id: currOpenedDocument!.id,
       content: block.data$()
     })
 
-    //debug-start
-    editorLog.logLabel("internal", "document", currOpenedDocument!.id, "data updated")
-    //debug-end
+    isDevMode && editorLog.logLabel("internal", "document", currOpenedDocument!.id, "data updated")
+    
   }
 
   const debouceUpdateData = debounce(instantDataUpdate, 1000)
@@ -96,16 +94,12 @@ export function EditorProvider(props: ParentProps) {
 
   const event = createEvent()
 
-  //debug-start
-  editorLog.log("Created with block setting", blockSetting)
-  //debug-end
+  isDevMode && editorLog.log("Created with block setting", blockSetting)
 
   const open: IEditorContext["open$"] = (data) => {
-    event.emit$('editor__onSwitching', currOpenedDocument?.content)
-    //debug-start
-    editorLog.log('New data will be added now')
-    //debug-end
-
+    event.emit$('editor__onSwitching$', currOpenedDocument?.content)
+    isDevMode && editorLog.log('New data will be added now')
+    
     // checks if somehow I messed up something on the backend,
     // which is the content is somehow null
     if (!data.content) {
@@ -116,17 +110,14 @@ export function EditorProvider(props: ParentProps) {
     
     const isNoBlockLeft = data.content.length === 0
     if (isNoBlockLeft) {
-      //debug-start
-      editorLog.log('The provided document', data, 'has no block data in it, spawning the default block...')
-      //debug-end
+      isDevMode && editorLog.log('The provided document', data, 'has no block data in it, spawning the default block...')
+      
       spawnDefaultBlock()
     }
     
     wrappedSessionStorage.delete$('currentBlock')
     currOpenedDocument = data
-    //debug-start
-    editorLog.log('Finished')
-    //debug-end
+    isDevMode && editorLog.log('Finished')
   }
 
   return (

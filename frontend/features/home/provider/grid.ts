@@ -18,23 +18,17 @@ export function createJournalGrid(): IJournalGridUtils {
     async fetch$() {
       const data = await api_getGroup<undefined>()
       setJournalGroups(data)
-      //debug-start
-      homeLog.logLabel('grid', 'data fetched:', data)
-      //debug-end
+      isDevMode && homeLog.logLabel('grid', 'data fetched:', data)
       return data
     },
     groups$: journalGroups,
     add$(another) {
       setJournalGroups(prev => [...prev, another])
-      //debug-start
-      homeLog.logLabel('grid', 'added', another)
-      //debug-end
+      isDevMode && homeLog.logLabel('grid', 'added', another)
     },
     update$(newOne) {
       setJournalGroups(prev => [...arrayObjects(prev).replace$(it => it.id === newOne.id, newOne)])
-      //debug-start
-      homeLog.logLabel('grid', 'updated', newOne)
-      //debug-end
+      isDevMode && homeLog.logLabel('grid', 'updated', newOne)
     }
   }
 }

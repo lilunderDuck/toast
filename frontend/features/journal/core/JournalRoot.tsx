@@ -36,9 +36,8 @@ export function JournalRoot(props: ParentProps) {
    * @returns *nothing*
    */
   const goHomeImmediately = () => {
-    //debug-start
-    journalLog.error(`Failed to get some data from ${param.id}. You're now going back to home page...`)
-    //debug-end
+    isDevMode && journalLog.error(`Failed to get some data from ${param.id}. You're now going back to home page...`)
+    
     toast.error('Failed to open that journal group. It may be deleted or corrupted.')
     return goHome()
   }

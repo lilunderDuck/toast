@@ -19,22 +19,16 @@ export function createInfoSidebar(event: IEvent<JournalHomeEvent>): IInfoSidebar
   return {
     open$(data) {
       setCurrentJournalData(data)
-      //debug-start
-      homeLog.logLabel('sidebar', 'opened', data)
-      //debug-end
+      isDevMode && homeLog.logLabel('sidebar', 'opened', data)
     },
     close$() {
       setCurrentJournalData(undefined)
-      event.emit$('home__infoSidebarClose')
-      //debug-start
-      homeLog.logLabel('sidebar', 'closed')
-      //debug-end
+      event.emit$('home__infoSidebarClose$')
+      isDevMode && homeLog.logLabel('sidebar', 'closed')
     },
     update$(data) {
       setCurrentJournalData(data)
-      //debug-start
-      homeLog.logLabel('sidebar', 'updated', data)
-      //debug-end
+      isDevMode && homeLog.logLabel('sidebar', 'updated', data)
     },
     currentJournalData$: currentJournalData,
   }

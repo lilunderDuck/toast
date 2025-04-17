@@ -10,23 +10,24 @@ export async function __callBackendApi<
   route: R, 
   whatToSend: any = null
 ): Promise<any> {
-  // debug-start
-  apiCallLog.log(method, route)
-  // a bunch or checks in case I misused this
-  if (
-    route.startsWith("http") ||
-    route.startsWith("https")
-  ) {
-    apiCallLog.errorLabel(method, route, "Force stop.")
-
-    throw new Error(`This function only be used to call api from the backend only.`)
-  }
-
-  // redirect call to my backend, only works on dev mode tho.
-  // @ts-ignore - type error here but I'm lazy
-  route = "http://localhost:8000" + route
-  // debug-end
-
+  isDevMode && (() => {
+    apiCallLog.log(method, route)
+    
+    // a bunch or checks in case I misused this
+    if (
+      route.startsWith("http") ||
+      route.startsWith("https")
+    ) {
+      apiCallLog.errorLabel(method, route, "Force stop.")
+  
+      throw new Error(`This function only be used to call api from the backend only.`)
+    }
+  
+    // redirect call to my backend, only works on dev mode tho.
+    // @ts-ignore - type error here but I'm lazy
+    route = "http://localhost:8000" + route
+  })()
+  
   const options = {
     method: method,
     headers: {
@@ -38,9 +39,7 @@ export async function __callBackendApi<
     options.body = JSON.stringify(whatToSend)
   }
 
-  // debug-start
-  apiCallLog.log("options:", options)
-  // debug-end
+  isDevMode && apiCallLog.log("options:", options)
 
   // @ts-ignore
   type ApiCallResult = ApiFnMapping[R][M]["out"]
@@ -49,9 +48,8 @@ export async function __callBackendApi<
     response = await fetch(route, options)
     result = await response.json()
   } catch (error) {
-    // debug-start
-    apiCallLog.error(error)
-    // debug-end
+    isDevMode && apiCallLog.error(error)
+    
     return null
   }
 
@@ -61,14 +59,10 @@ export async function __callBackendApi<
     // ignore parse error
   }
 
-  // debug-start
-  if (response.status >= 400) {
-    apiCallLog.errorLabel("result", response.status, result)
-    return null
-  }
+  console.assert(response.status >= 400, result)
 
-  apiCallLog.logLabel("result", response.status, result)
-  // debug-end
+  isDevMode && apiCallLog.logLabel("result", response.status, result)
+  
 
   return result
 }

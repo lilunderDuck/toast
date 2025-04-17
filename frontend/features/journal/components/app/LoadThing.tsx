@@ -24,9 +24,8 @@ export function LoadThing(props: ILoadThingProps) {
 
   const READONLY_STATE_KEY = `readonly-${CURRENT_GROUP_ID}` as const
   const updateEditorReadonlyState = () => {
-    //debug-start
-    journalLog.log('Updating editor readonly state')
-    //debug-end
+    isDevMode && journalLog.log('Updating editor readonly state')
+    
 
     setIsReadonly$(
       localStorage$.get$(READONLY_STATE_KEY) ?? false
@@ -34,9 +33,8 @@ export function LoadThing(props: ILoadThingProps) {
   }
 
   onMount(async () => {
-    //debug-start
-    journalLog.group('Start up', CURRENT_GROUP_ID)
-    //debug-end
+    isDevMode && journalLog.group('Start up', CURRENT_GROUP_ID)
+    
     
     // Attempt to get the journal group data from the backend
     const thisGroupData = await api_getGroup(CURRENT_GROUP_ID) as IJournalGroupData
@@ -49,10 +47,9 @@ export function LoadThing(props: ILoadThingProps) {
     // do a bunch of updating mess
     updateEditorReadonlyState()
     
-    //debug-start
-    journalLog.log('Finish')
+    isDevMode && journalLog.log('Finish')
     journalLog.groupEnd()
-    //debug-end
+    
   })
 
   createEffect(() => {

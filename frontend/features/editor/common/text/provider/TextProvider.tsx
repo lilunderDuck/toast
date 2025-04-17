@@ -51,9 +51,11 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
       // @ts-ignore
       prev[index] = newData
       props.onChange$(textsData())
-      //debug-start
-      editorLog.logLabel('text', 'update text data at index', index, 'with', data, '. Data is', prev[index])
-      //debug-end
+      isDevMode && editorLog.logLabel(
+        'text', 
+        'update text data at index', index, 'with', data, '. Data is', prev[index]
+      )
+      
       return prev
     })
   }
@@ -66,9 +68,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
       return [...prev]
     })
     props.onChange$(textsData())
-    //debug-start
-    editorLog.logLabel('text', 'Spawned new block')
-    //debug-end
+    isDevMode && editorLog.logLabel('text', 'Spawned new block')
   }
 
   const deleteInput = (index: number) => {
@@ -87,9 +87,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
     })
 
     props.onChange$(textsData())
-    //debug-start
-    editorLog.logLabel('text', 'Deleted block at index', index)
-    //debug-end
+    isDevMode && editorLog.logLabel('text', 'Deleted block at index', index)
   }
 
   const addNewLine = (currentIndex: number) => {
@@ -101,8 +99,6 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
 
       return [...prev]
     })
-
-    // setCaretToTheEnd(document.querySelector(`#${thisTextBlockId} [data-index="${currentIndex + 2}"] [contenteditable]`)!)
   }
 
   const context = {

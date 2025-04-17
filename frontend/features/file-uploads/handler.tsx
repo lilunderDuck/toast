@@ -32,25 +32,20 @@ export function createFileUpload(
 
   const onClickThis = async() => {
     if (isLoading()) {
-      //debug-start
-      fileDialog.log("Dialog won't be opened. Another one is already showing to you.")
-      //debug-end
+      isDevMode && fileDialog.log("Dialog won't be opened. Another one is already showing to you.")
+      
       return
     }
     const shouldShowDialog = shouldShow$?.() ?? true
-    //debug-start
-    fileDialog.log("Opening dialog with options:", createOptions)
-    //debug-end
+    isDevMode && fileDialog.log("Opening dialog with options:", createOptions)
+    
     if (!shouldShowDialog) {
-      //debug-start
-      fileDialog.log("Dialog won't be opened.")
-      //debug-end
+      isDevMode && fileDialog.log("Dialog won't be opened.")
+      
       return
     }
     
-    //debug-start
-    fileDialog.log("Opening dialog now...")
-    //debug-end
+    isDevMode && fileDialog.log("Opening dialog now...")
 
     setIsLoading(true)
     const result = await api_openFileDialog({
@@ -59,9 +54,8 @@ export function createFileUpload(
     })
 
     if (!result?.result || result?.result === "") {
-      //debug-start
-      fileDialog.log("Canceled")
-      //debug-end
+      isDevMode && fileDialog.log("Canceled")
+      
       setIsLoading(false)
       return
     }

@@ -1,6 +1,7 @@
 backup/*
 node_modules
 out
+dist
 *.lock
 package-lock.json
 

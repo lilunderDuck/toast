@@ -6,7 +6,7 @@ import { createInfoSidebar, type IInfoSidebarUtils } from "./infoSIdebar"
 import { createJournalGrid, type IJournalGridUtils } from "./grid"
 
 export type JournalHomeEvent = {
-  home__infoSidebarClose(): void
+  home__infoSidebarClose$(): void
 }
 
 interface IJournalHomeContext {

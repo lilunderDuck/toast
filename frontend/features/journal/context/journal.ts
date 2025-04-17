@@ -70,55 +70,44 @@ export function createJournal(
     // fileDisplayContext.mapping$[newData.id] = newData
     // fileDisplayContext.add$(newFileNode, 'root')
 
-    //debug-start
-    journalLog.log('created new journal:', newData)
-    //debug-end
+    isDevMode && journalLog.log('created new journal:', newData)
 
     return newData
   }
 
   const open: IJournalUtils["open$"] = async(journalId) => {
-    //debug-start
-    journalLog.group("Opening", journalId)
-    //debug-end
+    isDevMode && journalLog.group("Opening", journalId)
+    
     const currentJournalGroupId = getCurrentJournalGroupId()
     const journalData = await api_getJournal(currentJournalGroupId, journalId)
     const journalContent = journalData.data
 
-    //debug-start
-    journalLog.log("journal data is:", journalData)
-    //debug-end
+    isDevMode && journalLog.log("journal data is:", journalData)
     
     setCurrentlyOpened$(journalData)
     
-    //debug-start
-    journalLog.log("journal should open now")
-    //debug-end
+    isDevMode && journalLog.log("journal should open now")
+    
     open$({
       id: journalId,
       content: journalContent
     })
 
-    event.emit$("journal__openJournal", journalData)
+    event.emit$("journal__openJournal$", journalData)
 
-    //debug-start
-    journalLog.groupEnd()
-    //debug-end
+    isDevMode && journalLog.groupEnd()
   }
 
   const deleteJournal: IJournalUtils["delete$"] = async(journalId) => {
     const currentJournalGroupId = getCurrentJournalGroupId()
     await api_deleteJournal(currentJournalGroupId, journalId)
     setCurrentlyOpened$(undefined)
-    //debug-start
-    journalLog.log("deleted:", journalId)
-    //debug-end
+    isDevMode && journalLog.log("deleted:", journalId)
   }
 
   const save: IJournalUtils["save$"] = async(journalId, data) => {
-    //debug-start
-    journalLog.log("saving", journalId)
-    //debug-end
+    isDevMode && journalLog.log("saving", journalId)
+    
     const currentJournalGroupId = getCurrentJournalGroupId()
     await api_saveJournalContent(currentJournalGroupId, journalId, data)
   }

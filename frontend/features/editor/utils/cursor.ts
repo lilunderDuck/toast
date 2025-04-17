@@ -3,11 +3,8 @@
  * @returns *nothing*
  */
 export function setCaretToTheEnd(someElement: HTMLElement) {
-  //debug-start
-  if (!someElement) {
-    return console.log("Element not found")
-  }
-  //debug-end
+  console.assert(!someElement, "Element not found")
+  
   // focus the element 
   someElement.focus()
 

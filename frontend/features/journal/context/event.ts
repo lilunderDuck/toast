@@ -7,8 +7,8 @@ interface ICreatedJournalEventMapping {
 }
 
 export type JournalEventMap = {
-  journal__openJournal(data: IJournalData): void
-  journal__deleteJournal(data: IJournalData): void
+  journal__openJournal$(data: IJournalData): void
+  journal__deleteJournal$(data: IJournalData): void
   journal__createdJournal$<T extends JournalType>(type: T, ...stuff: ICreatedJournalEventMapping[T]): any
 }
 

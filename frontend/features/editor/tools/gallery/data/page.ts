@@ -36,9 +36,7 @@ export function createPageUtils(galleryId: number, wrappedLocalStorage: GalleryL
     }
 
     wrappedLocalStorage.set$(`gallery-${galleryId}-currentPage`, pageIndex)
-    //debug-start
-    editorLog.logLabel("gallery", "focused page/page name/element:", pageIndex, pageName(pageIndex), pageRefs)
-    //debug-end
+    isDevMode && editorLog.logLabel("gallery", "focused page/page name/element:", pageIndex, pageName(pageIndex), pageRefs)
   }
 
   const capDisplay = (counter: number) => {

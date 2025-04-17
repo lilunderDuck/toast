@@ -40,7 +40,7 @@ export function JournalEditorContent(props: ParentProps) {
     return journal$.currentlyOpened$() !== undefined
   }
 
-  editorEvent.on$('editor__onSwitching', async(previousData) => {
+  editorEvent.on$('editor__onSwitching$', async(previousData) => {
     if (!shouldSave()) return console.log('not open anything')
 
     if (previousData) {
@@ -49,7 +49,7 @@ export function JournalEditorContent(props: ParentProps) {
     }
   })
 
-  editorEvent.on$('editor__onUpdate', async(data) => {
+  editorEvent.on$('editor__onUpdate$', async(data) => {
     if (!shouldSave()) return console.log('not open anything')
     
     await journal$.save$(data.id, data.content)

@@ -56,14 +56,10 @@ export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
 
   onCleanup(() => {
     wrappedSessionStorage.delete$("currentGroup")
-    //debug-start
-    journalLog.log('clean up')
-    //debug-end
+    isDevMode && journalLog.log('clean up')
   })
 
-  //debug-start
-  journalLog.log('created')
-  //debug-end
+  isDevMode && journalLog.log('created')
 
   return (
     <Context.Provider value={{

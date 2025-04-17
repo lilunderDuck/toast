@@ -9,6 +9,8 @@ build_server:
 
 build: build_server
 	deno task build
+	deno -A npm:esbuild --platform=node --format=esm --bundle --outfile=./build/dist/mangle_props.js ${TOOLS_DIR}/mangle_props/index.ts
+	deno --allow-read --allow-write ./build/dist/mangle_props.js
 
 dev_server: build_server
 	${OUTPUT_DIR}/server.exe

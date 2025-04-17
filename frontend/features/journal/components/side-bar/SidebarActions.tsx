@@ -16,11 +16,11 @@ export default function SidebarActions() {
     })
   )
 
-  journalEvent.on$('journal__openJournal', (journal) => {
+  journalEvent.on$('journal__openJournal$', (journal) => {
     tabs$.update$(journal.id)
   })
   
-  journalEvent.on$('journal__deleteJournal', (journal) => {
+  journalEvent.on$('journal__deleteJournal$', (journal) => {
     const deleteRightAway = localStorage$.get$('shouldShowDeleteConfirmationModal')
     console.log('should delete right away?', deleteRightAway)
     if (deleteRightAway) {

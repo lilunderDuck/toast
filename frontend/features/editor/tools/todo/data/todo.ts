@@ -38,9 +38,8 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
       sectionsData.todo.push(newTodoData)
     }))
 
-    //debug-start
-    editorLog.logLabel("todo", "Created new todo data", newTodoData, "from section", fromSectionId)
-    //debug-end
+    isDevMode && editorLog.logLabel("todo", "Created new todo data", newTodoData, "from section", fromSectionId)
+    
     update()
   }
 
@@ -55,9 +54,8 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
       sectionsData.push(newSectionData)
     }))
 
-    //debug-start
-    editorLog.logLabel("todo", "Created new todo section data", newSectionData)
-    //debug-end
+    isDevMode && editorLog.logLabel("todo", "Created new todo section data", newSectionData)
+    
     update()
   }
 
@@ -69,17 +67,15 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
       (todos) => arrayObjects(todos).replace$(it => it.id === todoId, newData)
     )
 
-    //debug-start
-    editorLog.logLabel("todo", "Todo", todoId, "from section id", fromSectionId, "updated with", newData)
-    //debug-end
+    isDevMode && editorLog.logLabel("todo", "Todo", todoId, "from section id", fromSectionId, "updated with", newData)
+    
     update()
   }
 
   const updateSectionData: ITodoUtils["updateSection$"] = (sectionId, newData) => {
     setData("stuff", (it) => it.id === sectionId, 'name', newData.name)
-    //debug-start
-    editorLog.logLabel("todo", "Todo section id", sectionId, "updated with", newData)
-    //debug-end
+    isDevMode && editorLog.logLabel("todo", "Todo section id", sectionId, "updated with", newData)
+    
     update()
   }
 
@@ -91,26 +87,23 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
       (todos) => arrayObjects(todos).remove$('id', todoId)
     )
 
-    //debug-start
-    editorLog.logLabel("todo", "Todo", todoId, "from", fromSectionId, "deleted")
-    //debug-end
+    isDevMode && editorLog.logLabel("todo", "Todo", todoId, "from", fromSectionId, "deleted")
+    
 
     update()
   }
 
   const deleteSectionData: ITodoUtils["deleteSection$"] = (sectionId) => {
-    //debug-start
-    setData("stuff", (sections) => arrayObjects(sections).remove$('id', sectionId))
-    //debug-end
+    isDevMode && setData("stuff", (sections) => arrayObjects(sections).remove$('id', sectionId))
+    
     editorLog.logLabel("todo", "Todo section id", sectionId, "deleted")
     update()
   }
   
   const updateTitle: ITodoUtils["updateTitle$"] = (newTitle) => {
     setData("title", newTitle)
-    //debug-start
-    editorLog.logLabel("todo", "Updated this todo title to", newTitle)
-    //debug-end
+    isDevMode && editorLog.logLabel("todo", "Updated this todo title to", newTitle)
+    
     update()
   }
 

@@ -36,9 +36,8 @@ export async function api_updateJournal(currentGroupId: number, someJournalId: n
 
 export async function api_saveJournalContent(currentGroupId: number, someJournalId: number, data: JournalContentData) {
   if (!someJournalId) {
-    // debug-start
-    apiCallLog.log("Refused to save journal content. The requested journal id is", someJournalId)
-    // debug-end
+    isDevMode && apiCallLog.log("Refused to save journal content. The requested journal id is", someJournalId)
+    
     return 
   }
 

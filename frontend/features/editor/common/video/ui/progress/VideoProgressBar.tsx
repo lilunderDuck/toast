@@ -65,9 +65,8 @@ export function createVideoProgressBar(options: IVideoProgressBarOptions): IVide
 
   const progressBarChanged = (currentProgress: number) => {
     const currentTime = getCurrentTimeByPercentage(currentProgress, getTotalVideoDuration())
-    //debug-start
-    editorLog.logLabel("video", `progress bar slider updated, current time will be`, currentTime)
-    //debug-end
+    isDevMode && editorLog.logLabel("video", `progress bar slider updated, current time will be`, currentTime)
+    
     options.onProgressBarChanged$(currentTime)
   }
 
@@ -77,15 +76,12 @@ export function createVideoProgressBar(options: IVideoProgressBarOptions): IVide
     updateProgressBar$(progressInSeconds: number) {
       setProgress(getVideoPercentage(progressInSeconds, getTotalVideoDuration()))
       setCurrentDuration(progressInSeconds)
-      //debug-start
-      editorLog.logLabel("video", `current progress: ${progress()}%, current duration: ${currentDuration()}s`)
-      //debug-end
+      isDevMode && editorLog.logLabel("video", `current progress: ${progress()}%, current duration: ${currentDuration()}s`)
+      
     },
     setTotalDuration$(durationInSeconds: number) {
       setTotalDurationInSec(durationInSeconds)
-      //debug-start
-      editorLog.logLabel("video", `total video duration updated:`, durationInSeconds)
-      //debug-end
+      isDevMode && editorLog.logLabel("video", `total video duration updated:`, durationInSeconds)
     },
     ProgressBar$() {
       return (

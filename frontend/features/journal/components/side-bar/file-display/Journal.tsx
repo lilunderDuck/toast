@@ -45,7 +45,7 @@ export function Journal(props: IJournalProps) {
   }
 
   const onClickRemoveButton = () => {
-    event$.emit$('journal__deleteJournal', props)
+    event$.emit$('journal__deleteJournal$', props)
   }
 
   return (

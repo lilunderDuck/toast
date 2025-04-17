@@ -63,9 +63,8 @@ interface IFileDisplayContext<
 // Really don't want to fix type errors, "<any, any>" is here for a reason.
 const Context = createContext<IFileDisplayContext<any, any>>()
 
-//debug-start
 const fileDisplayLog = createLog("file display", "#827e0d", "#bab516")
-//debug-end
+
 
 export function FileDisplayProvider<
   T extends FileNodeProps,
@@ -83,9 +82,8 @@ export function FileDisplayProvider<
     treeCache = data.tree$
     dataMapping = data.dataMapping$
     update(false)
-    //debug-start
-    fileDisplayLog.log("Data fetched")
-    //debug-end
+    isDevMode && fileDisplayLog.log("Data fetched")
+    
     return data
   })
 
@@ -99,10 +97,8 @@ export function FileDisplayProvider<
     if (shouldCallEvent) {
       props.onUpdate$(newTree)
     }
-    // await api_updateJournalVirturalFileTree(thisGroup.id, newTree)
-    //debug-start
-    fileDisplayLog.log('updated, tree ->', treeCache, dataMapping)
-    //debug-end
+    
+    isDevMode && fileDisplayLog.log('updated, tree ->', treeCache, dataMapping)
   }
 
   const add = (node: AnyTreeNode, toFolder: number | 'root', data: NodeData<T | U>) => {
@@ -114,16 +110,12 @@ export function FileDisplayProvider<
 
     const thisFolder = find(toFolder)
     if (!thisFolder) {
-      //debug-start
-      fileDisplayLog.error("Could not insert", node, "to", toFolder)
-      //debug-end
+      isDevMode && fileDisplayLog.error("Could not insert", node, "to", toFolder)
       return 
     }
 
     if (!isFolder(thisFolder)) {
-      //debug-start
-      fileDisplayLog.error(toFolder, "is not a folder")
-      //debug-end
+      isDevMode && fileDisplayLog.error(toFolder, "is not a folder")
       return
     }
 
@@ -155,29 +147,24 @@ export function FileDisplayProvider<
   const replaceTree = (whichFolderId: number | 'root', tree: Tree) => {
     if (whichFolderId === 'root') {
       treeCache = tree
-      //debug-start
-      fileDisplayLog.log('replace', whichFolderId, "with", tree)
-      //debug-end
+      isDevMode && fileDisplayLog.log('replace', whichFolderId, "with", tree)
       return update()
     }
 
     const shouldBeAFolder = find(whichFolderId)
-    //debug-start
-    if (!shouldBeAFolder) {
-      fileDisplayLog.error("could not find node", whichFolderId)
-      return 
-    }
+    isDevMode && (() => {
+      if (!shouldBeAFolder) {
+        fileDisplayLog.error("could not find node", whichFolderId)
+        return 
+      }
+    })()
     
     if (!isFolder(shouldBeAFolder)) {
       fileDisplayLog.error(shouldBeAFolder, "is not a folder")
       return 
     }
-    //debug-end
 
-    //debug-start
-    fileDisplayLog.log('replace', whichFolderId, "with", tree)
-    //debug-end
-
+    isDevMode && fileDisplayLog.log('replace', whichFolderId, "with", tree)
     shouldBeAFolder.child = tree
     update()
   }

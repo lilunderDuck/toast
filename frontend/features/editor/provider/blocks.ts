@@ -55,9 +55,8 @@ export function createBlocks(
   }
 
   const insertToTheBottom = (type: number, data: IBlockData, silentUpdate = false) => {
-    //debug-start
-    editorLog.log("inserting block type", type, "with data", data, "on the bottom")
-    //debug-end
+    isDevMode && editorLog.log("inserting block type", type, "with data", data, "on the bottom")
+    
     setData(prev => [...prev, data])
     if (!silentUpdate) updateData()
   }
@@ -66,9 +65,8 @@ export function createBlocks(
     if (!someData) {
       const thisBlockSetting = blockSetting()[type]
       someData = thisBlockSetting.defaultValue$
-      //debug-start
-      editorLog.log("no data was given with block type:", type, ". Using the default value:", thisBlockSetting.defaultValue$)
-      //debug-end
+      isDevMode && editorLog.log("no data was given with block type:", type, ". Using the default value:", thisBlockSetting.defaultValue$)
+      
     }
 
     const newData = create(type, someData)
@@ -83,9 +81,8 @@ export function createBlocks(
       return insertToTheBottom(type, newData, silentUpdate)
     }
     
-    //debug-start
-    editorLog.log("inserting block type", type, "with data", someData, "before block", beforeBlockId)
-    //debug-end
+    isDevMode && editorLog.log("inserting block type", type, "with data", someData, "before block", beforeBlockId)
+    
     arrayInsert(blocksData, index, newData)
     setData(blocksData)
     if (!silentUpdate) updateData()
@@ -103,17 +100,13 @@ export function createBlocks(
     })
 
     updateData()
-    //debug-start
-    editorLog.log("saved block data", blockId, "with", data)
-    //debug-end
+    isDevMode && editorLog.log("saved block data", blockId, "with", data)
   }
   
   const deleteBlock: IBlockUtils["delete$"] = (blockId) => {
     setData(prev => arrayObjects(prev).remove$('id', blockId))
     updateData()
-    //debug-start
-    editorLog.log("block", blockId, "deleted")
-    //debug-end
+    isDevMode && editorLog.log("block", blockId, "deleted")
   }
   
   return {

@@ -1,4 +1,4 @@
-import { Accessor, createContext, createEffect, createSignal, ParentProps, Signal, useContext } from "solid-js"
+import { Accessor, createContext, createEffect, createSignal, type ParentProps, type Signal, useContext } from "solid-js"
 import { imgZoomPanLog } from "../debug"
 
 interface IZoomAndPanContext {
@@ -24,22 +24,17 @@ export function ZoomAndPanProvider(props: ParentProps) {
     y: null as unknown as number
   })
 
-  //debug-start
-  createEffect(() => {
+  isDevMode && createEffect(() => {
+    imgZoomPanLog.log("Display image changed to", displayImageUrl() === '' ? '[nothing]' : displayImageUrl())
     imgZoomPanLog.log("Image scale changed to:", scale())
   })
-  createEffect(() => {
-    imgZoomPanLog.log("Display image changed to", displayImageUrl() === '' ? '[nothing]' : displayImageUrl())
-  })
-  //debug-end
+  
   
   const STEP = 0.5
   const STOP_SCALING = 0
   const resetImagePosition = () => {
     setImagePosition({ x: 0, y: 0 })
-    //debug-start
-    imgZoomPanLog.log("Image position reset")
-    //debug-end
+    isDevMode && imgZoomPanLog.log("Image position reset")
   }
 
   return (

@@ -8,13 +8,14 @@ import App from './App'
 import { logThisVeryHelpfulMessage } from './utils'
 
 const root = document.getElementById('duck')
-// debug-start
-if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
-  throw new Error(
-    'Root element not found. Did you forget to add it to your index.html? Or maybe the id attribute got misspelled?',
-  )
-}
-// debug-end
+isDevMode && (() => {
+  if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
+    throw new Error(
+      'Root element not found. Did you forget to add it to your index.html? Or maybe the id attribute got misspelled?',
+    )
+  }
+})()
+
 logThisVeryHelpfulMessage()
 
 render(() => <App />, root!)

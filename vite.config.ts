@@ -10,8 +10,6 @@ import solidPlugin from 'vite-plugin-solid'
 import { optimizeCssModules } from 'vite-plugin-optimize-css-modules'
 import { stylex as stylexPlugin } from 'vite-plugin-stylex-dev'
 import { ViteImageOptimizer as imageOptimizer } from 'vite-plugin-image-optimizer'
-// @ts-ignore
-import stripCodePlugin from 'vite-plugin-strip-code'
 // ...
 import tsconfig from './tsconfig.json'
 import path from 'node:path'
@@ -56,9 +54,9 @@ function getAliasPath(config: typeof tsconfig, basePath: string) {
 }
 
 function getEsbuildConfig(devMode: boolean, others?: ESBuildOptions): InlineConfig {
-  // break app unexpectedly, won't enable this until find a new way
-  // const PROP_ENDS_WITH_DOLLAR_SIGN = /\$$/
   const onlyManglePropsInProdMode: ESBuildOptions = devMode ? {} : {
+    // break app unexpectedly, won't enable this until find a new way
+    // update: new way discovered - write my own props mangler instead.
     // mangleProps: PROP_ENDS_WITH_DOLLAR_SIGN,
     // mangleQuoted: true,
     legalComments: 'none',
@@ -82,9 +80,9 @@ function getEsbuildConfig(devMode: boolean, others?: ESBuildOptions): InlineConf
   }
 }
 
-const BASE_OUTPUT_DIRECTORY = './build/out'
-const OUTPUT_DIRECTORY = BASE_OUTPUT_DIRECTORY
-const CLIENT_OUTPUT_DIRECTORY = `${BASE_OUTPUT_DIRECTORY}/static`
+const BASE_OUTPUT_DIRECTORY = './build'
+const OUTPUT_DIRECTORY = `${BASE_OUTPUT_DIRECTORY}/out`
+const CLIENT_OUTPUT_DIRECTORY = `${OUTPUT_DIRECTORY}/static`
 
 const rollupOutputOptions: Rollup.OutputOptions = {
   chunkFileNames: `[hash].js`,
@@ -100,23 +98,10 @@ export default defineConfig(({ command }) => {
       optimizeCssModules() as Plugin,
       solidPlugin(),
       stylexPlugin(),
-      imageOptimizer() as Plugin,
-      stripCodePlugin({
-        blocks: [
-          {
-            start: 'debug-start',
-            end: 'debug-end',
-            prefix: '//',
-            suffix: '',
-          },
-        ],
-      })
+      imageOptimizer() as Plugin
     ],
     define: {
       "isDevMode": `${devMode}`,
-      "__version": `"1.0.0-beta"`,
-      "__apiVersion": `"1.0.0-beta"`,
-      "__backendVersion": `"golang v1.23.4"`,
     },
     optimizeDeps: {
       include: [
@@ -130,7 +115,7 @@ export default defineConfig(({ command }) => {
       alias: getAliasPath(tsconfig, __dirname)
     },
     ...getEsbuildConfig(devMode),
-    cacheDir: OUTPUT_DIRECTORY,
+    cacheDir: `${BASE_OUTPUT_DIRECTORY}/dist`,
     build: {
       outDir: CLIENT_OUTPUT_DIRECTORY,
       rollupOptions: {

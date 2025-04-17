@@ -23,25 +23,21 @@ export function TodoSectionProvider(props: ParentProps<ITodoSectionProviderProps
   const [isShowingTodoInput, setIsShowingTodoInput] = createSignal(false)
 
   const showTodoInput = () => {
-    //debug-start
-    editorLog.logLabel("todo", "Showing todo input...")
-    //debug-end
+    isDevMode && editorLog.logLabel("todo", "Showing todo input...")
+    
     setIsShowingTodoInput(true)
     setIsShowingSectionInput(false)
   }
   
   const showSectionInput = () => {
-    //debug-start
-    editorLog.logLabel("todo", "Showing todo section input...")
-    //debug-end
+    isDevMode && editorLog.logLabel("todo", "Showing todo section input...")
+    
     setIsShowingSectionInput(true)
     setIsShowingTodoInput(false)
   }
   
-  //debug-start
-  editorLog.logLabel("todo", "TodoSectionProvider created with section id:", props.sectionId$)
-  //debug-end
-
+  isDevMode && editorLog.logLabel("todo", "TodoSectionProvider created with section id:", props.sectionId$)
+  
   return (
     <Context.Provider value={{
       sectionId$: props.sectionId$,
@@ -51,15 +47,11 @@ export function TodoSectionProvider(props: ParentProps<ITodoSectionProviderProps
       showSectionInput$: showSectionInput,
       closeTodoInput$: () => {
         setIsShowingTodoInput(false)
-        //debug-start
-        editorLog.logLabel("todo", "todo input closed")
-        //debug-end
+        isDevMode && editorLog.logLabel("todo", "todo input closed")
       },
       closeSectionInput$: () => {
         setIsShowingSectionInput(false)
-        //debug-start
-        editorLog.logLabel("todo", "todo section input closed")
-        //debug-end
+        isDevMode && editorLog.logLabel("todo", "todo section input closed")
       },
     }}>
       {props.children}
