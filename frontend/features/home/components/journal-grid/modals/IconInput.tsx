@@ -1,8 +1,9 @@
-import { createDropzone } from "@soorria/solid-dropzone"
 import stylex from "@stylexjs/stylex"
 import { BsFileImageFill } from "solid-icons/bs"
 import { createSignal, Show } from "solid-js"
-import { FlexCenter, FlexCenterX } from "~/components"
+import { api_uploadJournalGroupPreviewIcon } from "~/api/media"
+import { FlexCenter } from "~/components"
+import { createFileUpload, FileUploadType } from "~/features/file-uploads"
 
 const style = stylex.create({
   iconInput: {
@@ -24,31 +25,33 @@ const style = stylex.create({
   }
 })
 
-export default function IconInput() {
+interface IIconInputProps {
+  choosenFilePath$(file: string | undefined): any
+}
+
+export default function IconInput(props: IIconInputProps) {
   const [imagePreviewUrl, setImagePreviewUrl] = createSignal()
-  const dropzone = createDropzone({
-    accept: ['.jpg', '.png'],
-    maxFiles: 1,
-    onDrop(acceptedFiles: File[]) {
-      const reader = new FileReader()
 
-      reader.onabort = () => console.log('file reading was aborted')
-      reader.onerror = () => console.log('file reading has failed')
-      reader.onload = () => {
-        // Do whatever you want with the file contents
-        const binaryStr = reader.result
-        setImagePreviewUrl(binaryStr)
-      }
-
-      reader.readAsDataURL(acceptedFiles[0])
-    }
+  const { FileUploadZone$ } = createFileUpload({
+    title$: "Please select an image file",
+    type$: FileUploadType.file,
+    filter$() {
+      return [
+        { name: "*.png", extension: "png" },
+        { name: "*.jpeg", extension: "jpeg" },
+      ]
+    },
+    async onFinish$(file) {
+      await api_uploadJournalGroupPreviewIcon(file)
+      setImagePreviewUrl("http://localhost:8080/dynamic/cache/preview.png")
+      props.choosenFilePath$(file)
+    },
   })
 
   return (
-    <FlexCenterX {...dropzone.getRootProps()} style={{
+    <FileUploadZone$ style={{
       '--image-preview-url': `url('${imagePreviewUrl()}')`
     }}>
-      <input {...dropzone.getInputProps()} />
       <FlexCenter {...stylex.attrs(
         style.iconInput, 
         imagePreviewUrl() ? {} : style.iconInputWithNoImage
@@ -57,6 +60,6 @@ export default function IconInput() {
           <BsFileImageFill size={30} />
         </Show>
       </FlexCenter>
-    </FlexCenterX>
+    </FileUploadZone$>
   )
 }

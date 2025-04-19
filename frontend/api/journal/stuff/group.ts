@@ -6,6 +6,6 @@ export type JournalGroupSchema = {
   icon?: string
 }
 
-export interface IJournalGroupData extends JournalGroupSchema, UniqueId, CreatedAndModifiedDate {
-  // ... empty ...
+export interface IJournalGroupData extends Omit<JournalGroupSchema, "icon">, UniqueId, CreatedAndModifiedDate {
+  hasIcon: boolean
 }

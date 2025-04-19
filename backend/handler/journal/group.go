@@ -12,12 +12,14 @@ import (
 type JournalGroupSchema struct {
 	Name        string `form:"name"        json:"name"                   binding:"required"`
 	Description string `form:"description" json:"description,omitempty"`
+	Icon        string `form:"icon"        json:"icon,omitempty"`
 }
 
 // Defines the structure for updating an existing journal group.
 type JournalGroupUpdateSchema struct {
 	Name        string `form:"name"        json:"name,omitempty"`
 	Description string `form:"description" json:"description,omitempty"`
+	Icon        string `form:"icon"        json:"icon,omitempty"`
 }
 
 // Represents the complete data for a journal group
@@ -27,6 +29,7 @@ type JournalGroupData struct {
 	Modified    time.Duration `json:"modified,omitempty"    cbor:"2,keyasint,omitempty"`
 	Name        string        `json:"name"                  cbor:"3,keyasint"`
 	Description string        `json:"description,omitempty" cbor:"4,keyasint,omitempty"`
+	HasIcon     bool          `json:"hasIcon"               cbor:"5,keyasint"`
 }
 
 // Creates a new journal group.
@@ -47,6 +50,7 @@ func CreateGroup(groupSchema *JournalGroupSchema) (newGroupData *JournalGroupDat
 		Description: groupSchema.Description,
 		Id:          numberId,
 		Created:     utils.GetCurrentDateNow(),
+		HasIcon:     groupSchema.Icon != "",
 	}
 
 	// Save it to cache so we can access it later
@@ -153,6 +157,11 @@ func mergeGroupData(groupId int, groupData *JournalGroupData, newData *JournalGr
 
 	if newData.Description != "" {
 		groupData.Description = newData.Description
+	}
+
+	if newData.Icon != "" {
+		groupData.HasIcon = true
+		utils.CopyFile(newData.Icon, utils.JoinPath(GetGroupPath(groupId), "icon.png"))
 	}
 }
 

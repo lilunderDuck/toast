@@ -1,4 +1,5 @@
 import { JSX, splitProps } from "solid-js"
+// ...
 import __style from './sidebar.module.css' 
 
 interface ISectionProps extends HTMLAttributes<"div"> {

@@ -53,6 +53,7 @@ export function JournalInfoSidebar() {
         <BackgroundShowcase 
           heading$={infoSidebar$.currentJournalData$()?.name}
           sectionText$={infoSidebar$.currentJournalData$()?.description}
+          icon$={infoSidebar$.currentJournalData$()?.hasIcon ? `url('http://localhost:8080/dynamic/journals/${infoSidebar$.currentJournalData$()?.id}/icon.png')` : undefined}
         />
         <InfoList {...infoSidebar$.currentJournalData$()!} />
         <OpenAndCloseButton 

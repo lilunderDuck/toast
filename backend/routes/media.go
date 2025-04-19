@@ -2,6 +2,7 @@ package routes
 
 import (
 	"burned-toast/backend/handler/media"
+	"burned-toast/backend/internals"
 	"burned-toast/backend/utils"
 	"errors"
 	"fmt"
@@ -15,6 +16,24 @@ func CreateMediaRoute(this *gin.RouterGroup) {
 
 	imageMediaRoute(mediaRoute)
 	galleryMediaRoute(mediaRoute)
+	previewJournalGroupIconRoute(mediaRoute)
+}
+
+func previewJournalGroupIconRoute(this *gin.RouterGroup) {
+	this.POST("/preview", func(ctx *gin.Context) {
+		filePath := ctx.Query("filePath")
+		if !shouldProcessImage(ctx, filePath) {
+			return
+		}
+
+		err := utils.CopyFile(filePath, utils.JoinPath(internals.CacheFolderPath, "preview.png"))
+		if err != nil {
+			replyWithAnyErrMsg(ctx, err)
+			return
+		}
+
+		replyWithOkMsg(ctx)
+	})
 }
 
 func imageMediaRoute(this *gin.RouterGroup) {

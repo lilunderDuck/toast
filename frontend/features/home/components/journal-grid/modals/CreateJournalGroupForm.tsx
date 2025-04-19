@@ -19,9 +19,11 @@ export default function CreateJournalGroupForm(props: ICreateJournalGroupFormPro
   const [, { Field, Form }] = createForm<JournalGroupSchema>()
   const { grid$ } = useJournalHomeContext()
 
+  let choosenFilePath: string | undefined
   const { Form$ } = createSubmitForm<JournalGroupSchema>(Form, {
     submitButtonText$: "Create",
     async onSubmit$(data) {
+      data.icon = choosenFilePath
       const dataReturned = await toast.promise(api_createGroup(data), {
         loading: 'Saving changes...',
         success: 'Done!',
@@ -35,7 +37,7 @@ export default function CreateJournalGroupForm(props: ICreateJournalGroupFormPro
 
   return (
     <Form$>
-      <IconInput />
+      <IconInput choosenFilePath$={(file) => choosenFilePath = file} />
       <Field name="name" validate={[
         required('This field is required')
       ]}>

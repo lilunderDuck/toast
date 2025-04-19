@@ -51,7 +51,7 @@ export function JournalList() {
     }
   }
 
-  event$.on$('home__infoSidebarClose', () => {
+  event$.on$('home__infoSidebarClose$', () => {
     deselectLastHighlightedGroupIfCan()
     lastElement = undefined
   })

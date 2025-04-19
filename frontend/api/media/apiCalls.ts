@@ -25,3 +25,7 @@ export function api_deleteGalleryImage(currentGroupId: number, galleryId: number
 export function api_saveVideo(currentGroupId: number, targetFilePath: string) {
   return saveMediaFile(targetFilePath, `/journals/${currentGroupId}/vid`)
 }
+
+export function api_uploadJournalGroupPreviewIcon(targetFilePath: string) {
+  return __callBackendApi("POST", `/duck/journal-media/preview?filePath=${targetFilePath}`)
+}
