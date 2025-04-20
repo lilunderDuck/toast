@@ -1,0 +1,5 @@
+#tabs {
+  --tab-list-thiccness: var(--journal-header);
+  --tab-top-margin: 9px;
+  --tab-width: calc(var(--tab-list-thiccness) - var(--tab-top-margin));
+}

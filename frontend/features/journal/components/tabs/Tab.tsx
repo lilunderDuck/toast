@@ -6,21 +6,20 @@ import { FlexCenterY, Spacer, Tooltip } from "~/components"
 import stylex from "@stylexjs/stylex"
 // ...
 import { type TabData, useJournalContext } from "../../context"
-import { tabVars } from "./tab.stylex"
 
 const style = stylex.create({
   tab: {
     width: '10rem',
-    marginTop: tabVars.tabTopMargin,
-    height: tabVars.tabThiccness,
+    marginTop: "var(--tab-top-margin)",
+    height: "var(--tab-width)",
     backgroundColor: "var(--gray2)",
     paddingInline: 12,
     borderTopLeftRadius: 6,
     borderTopRightRadius: 6
   },
   closeIcon: {
-    width: `calc(${tabVars.tabThiccness} - 5px)`,
-    height: `calc(${tabVars.tabThiccness} - 5px)`,
+    width: `calc(var(--tab-width) - 5px)`,
+    height: `calc(var(--tab-width) - 5px)`,
     padding: 4,
     borderRadius: 6,
     color: "var(--gray11)",

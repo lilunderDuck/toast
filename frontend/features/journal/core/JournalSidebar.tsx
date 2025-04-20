@@ -35,7 +35,8 @@ const style = stylex.create({
   },
   titleBar: {
     padding: 5,
-    gap: 5
+    gap: 5,
+    height: "var(--journal-header)"
   }
 })
 
@@ -74,6 +75,7 @@ export function JournalSidebar() {
             if (type === FileNodeType.FILE && journal$.currentlyOpened$()?.id !== data.id) {
               journal$.open$(data.id)
             }
+            console.log("open", type, data)
           }}
           onUpdate$={(treeData) => {
             api_updateJournalVirturalFileTree(currentGroupId, treeData)

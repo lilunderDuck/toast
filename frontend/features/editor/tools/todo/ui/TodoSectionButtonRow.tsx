@@ -1,9 +1,12 @@
-import { Button, ButtonSizeVariant, FlexCenterY } from "~/components";
-
+import { BsListCheck, BsUiChecks } from "solid-icons/bs"
+import { Show } from "solid-js"
+// ...
 import stylex from "@stylexjs/stylex"
-import { useTodoDataContext } from "../data";
-import { Show } from "solid-js";
-import { useTodoSectionContext } from "./TodoSectionProvider";
+// ...
+import { Button, ButtonSizeVariant, FlexCenterY, Tooltip } from "~/components"
+// ...
+import { useTodoDataContext } from "../data"
+import { useTodoSectionContext } from "./TodoSectionProvider"
 
 const style = stylex.create({
   buttonRow: {
@@ -18,13 +21,17 @@ export function TodoSectionButtonRow() {
 
   return (
     <FlexCenterY {...stylex.attrs(style.buttonRow)}>
-      <Button size$={ButtonSizeVariant.sm} onClick={showTodoInput$}>
-        Create todo
-      </Button>
-      <Show when={sectionId$ === -1337}>
-        <Button size$={ButtonSizeVariant.sm} onClick={showSectionInput$}>
-          Create section
+      <Tooltip label$="Create todo">
+        <Button size$={ButtonSizeVariant.icon} onClick={showTodoInput$}>
+          <BsUiChecks />
         </Button>
+      </Tooltip>
+      <Show when={sectionId$ === -1337}>
+        <Tooltip label$="Create section">
+          <Button size$={ButtonSizeVariant.icon} onClick={showSectionInput$}>
+            <BsListCheck />
+          </Button>
+        </Tooltip>
       </Show>
     </FlexCenterY>
   )

@@ -30,6 +30,7 @@ func CreateJournalRoute(this *gin.RouterGroup) {
 
 		fmt.Printf("%v\n", journalData)
 
+		// force to marshal this because idk why the server keep crashing.
 		jsonData, err := jsoniter.Marshal(journalData)
 		if err != nil {
 			replyWithAnyErrMsg(ctx, err)

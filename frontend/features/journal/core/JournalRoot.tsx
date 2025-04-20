@@ -6,7 +6,7 @@ import { Resizable } from '~/components'
 import { toast } from '~/features/toast'
 import { journalLog } from "~/features/debug"
 // ...
-import __style from './stuff.module.css'
+import __style from './JournalRoot.module.css'
 import stylex from '@stylexjs/stylex'
 // ...
 import { JournalProvider } from '../context'

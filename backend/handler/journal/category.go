@@ -1,6 +1,10 @@
 package journal
 
-import "time"
+import (
+	"burned-toast/backend/internals"
+	"burned-toast/backend/utils"
+	"time"
+)
 
 // Defines how a new category should be created.
 type CategorySchema struct {
@@ -21,4 +25,31 @@ type CategoryData struct {
 	Created  time.Duration `json:"created"            cbor:"2,keyasint"`
 	Modified time.Duration `json:"modified,omitempty" cbor:"3,keyasint,omitempty"`
 	Name     string        `json:"name"               cbor:"4,keyasint"`
+}
+
+func CreateCategory(groupId int, schema *CategorySchema) *CategoryData {
+	stringCategoryId, categoryId := utils.GenerateRandomNumberId()
+
+	newData := CategoryData{
+		Id:      categoryId,
+		Type:    uint8(Type_Journal),
+		Created: utils.GetCurrentDateNow(),
+		Name:    schema.Name,
+	}
+
+	internals.ModifyCacheDb(utils.IntToString(groupId), func(thisCache *internals.JSONCacheUtils) {
+		thisCache.Set(stringCategoryId, &newData)
+	})
+
+	utils.BSON_WriteFile(GetJournalSavedFilePath(groupId, categoryId), &newData)
+
+	return &newData
+}
+
+func DeleteCategory(groupId int, categoryId int) {
+	utils.RemoveFileOrDirectory(GetJournalSavedFilePath(groupId, categoryId))
+
+	internals.ModifyCacheDb(utils.IntToString(groupId), func(thisCache *internals.JSONCacheUtils) {
+		thisCache.Delete(utils.IntToString(categoryId))
+	})
 }

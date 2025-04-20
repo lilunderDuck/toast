@@ -19,14 +19,14 @@ func GetJournalsSavedFolder(groupId int) string {
 	return GetGroupPath(groupId) + "/stuff"
 }
 
-// Gets the path to a specific journal entry's file
+// Gets the path to (any) specific journal file
 //
 // Returns the path to the journal group's folder, which is "~/data/journals/[groupId]/stuff/[journalId].dat"
 //
 // Parameters:
-//   - groupId: The ID of the journal group.
-func GetJournalSavedFilePath(groupId int, journalId int) string {
-	requestedFile := utils.IntToString(journalId) + ".dat"
+//   - groupId: The ID of the journal/category/(anything id inside that folder).
+func GetJournalSavedFilePath(groupId int, id int) string {
+	requestedFile := utils.IntToString(id) + ".dat"
 	return utils.JoinPath(GetJournalsSavedFolder(groupId), requestedFile)
 }
 

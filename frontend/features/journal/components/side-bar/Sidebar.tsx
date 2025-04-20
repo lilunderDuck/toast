@@ -18,7 +18,7 @@ const style = stylex.create({
     paddingTop: 5
   },
   content: {
-    height: 'calc(100vh - (20px + 100px))'
+    height: 'calc(100vh - var(--journal-header))'
   }
 })
 

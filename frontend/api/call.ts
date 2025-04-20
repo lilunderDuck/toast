@@ -59,7 +59,7 @@ export async function __callBackendApi<
     // ignore parse error
   }
 
-  console.assert(response.status >= 400, result)
+  console.assert(!(response.status >= 400), result)
 
   isDevMode && apiCallLog.logLabel("result", response.status, result)
   

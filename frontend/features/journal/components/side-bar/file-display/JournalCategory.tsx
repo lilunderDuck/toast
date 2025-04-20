@@ -12,7 +12,6 @@ const style = stylex.create({
   journalCategory: {
     transition: '0.15s ease-out',
     userSelect: 'none',
-    // paddingLeft: 4,
     paddingRight: 10,
   },
   nameAndStuff: {
@@ -34,6 +33,9 @@ const style = stylex.create({
   },
   leftPadding: {
     paddingLeft: 5
+  },
+  arrow: {
+    rotate: "90deg"
   }
 })
 
@@ -52,7 +54,10 @@ export function JournalCategory(props: ParentProps<IJournalCategoryProps>) {
   return (
     <section id={__style.journal} {...stylex.attrs(style.journalCategory)}>
       <FlexCenterY {...stylex.attrs(style.nameAndStuff)} onClick={clickThisThing}>
-        <BsCaretRightFill size={10} />
+        <BsCaretRightFill 
+          {...stylex.attrs(isShowing() ? style.arrow : {})} 
+          size={10} 
+        />
         <span id={__style.name}>
           {props.name}
         </span>

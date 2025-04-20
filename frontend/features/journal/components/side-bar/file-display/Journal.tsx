@@ -37,12 +37,7 @@ export interface IJournalProps extends IJournalData {
 }
 
 export function Journal(props: IJournalProps) {
-  const { event$, journal$, getCurrentGroup$ } = useJournalContext()
-  // const currentGroupId = getCurrentGroup$().id
-
-  const onClickTheJournalName = () => {
-    
-  }
+  const { event$ } = useJournalContext()
 
   const onClickRemoveButton = () => {
     event$.emit$('journal__deleteJournal$', props)
