@@ -1,9 +1,9 @@
-import { For } from "solid-js";
-import { useTodoDataContext } from "../data";
-import { TodoSection } from "../variant/TodoSection";
+import { For } from "solid-js"
+import { useTodoDataContext } from "../../data"
+import { TodoSection } from "../../variant/TodoSection"
 
 interface ITodoSectionListProps {
-  // define your component props here
+  // ...
 }
 
 export function TodoSectionList(props: ITodoSectionListProps) {
@@ -11,7 +11,7 @@ export function TodoSectionList(props: ITodoSectionListProps) {
   
   return (
     <div>
-      <For each={data$().stuff}>
+      <For each={data$.todos}>
         {it => <TodoSection {...it} />}
       </For>
     </div>

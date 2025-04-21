@@ -1,5 +1,5 @@
-import { IBlockSetting, useEditorContext } from "../../provider"
-import { ITodoBlockData, TodoDataProvider, UncategorizedTodoSectionData } from "./data"
+import { type IBlockSetting, useEditorContext } from "../../provider"
+import { ITodoBlockData, TodoDataProvider } from "./data"
 import { TodoSectionList } from "./ui"
 
 export function createTodoBlock(): IBlockSetting<ITodoBlockData> {
@@ -7,9 +7,8 @@ export function createTodoBlock(): IBlockSetting<ITodoBlockData> {
     displayName$: "Todo",
     get defaultValue$() {
       return {
-        title: '',
-        stuff: [
-          { id: -1337, todo: [] } as UncategorizedTodoSectionData,
+        todos: [
+          { todo: [], name: "Unnamed section", id: 0 }
         ]
       }
     },
@@ -20,7 +19,6 @@ export function createTodoBlock(): IBlockSetting<ITodoBlockData> {
           dataIn$={props.dataIn$} 
           onChange$={(value) => {
             blocks$.saveBlockData$(props.blockId$, value)
-            console.log(value)
           }}
         >
           <TodoSectionList />

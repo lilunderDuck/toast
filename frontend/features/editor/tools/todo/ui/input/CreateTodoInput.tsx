@@ -6,7 +6,7 @@ import { FieldInput, OpenAndCloseButton } from "~/components"
 import { useTodoSectionContext } from "../TodoSectionProvider"
 import { TodoSchema, useTodoDataContext } from "../../data"
 
-interface ICreateTodoInputProps {
+interface ICreateTodoInputProps extends Partial<TodoSchema> {
   // ...
 }
 
@@ -31,7 +31,7 @@ export default function CreateTodoInput(props: ICreateTodoInputProps) {
             type="text"
             autocomplete="off"
             required
-            value={field.value}
+            value={field.value || props.name}
             error={field.error}
           />
         )}

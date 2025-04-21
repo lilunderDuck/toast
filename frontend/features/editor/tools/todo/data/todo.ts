@@ -1,4 +1,3 @@
-import type { Accessor } from "solid-js"
 import { createStore, produce } from "solid-js/store"
 // ...
 import { getRandomNumberFrom, arrayObjects } from "~/utils"
@@ -8,21 +7,23 @@ import type { ITodoBlockData, TodoSchema, TodoSectionData, TodoSectionSchema } f
 import type { ITodoDataProviderProps } from "./TodoDataProvider"
 
 export interface ITodoUtils {
-  data$: Accessor<ITodoBlockData>
+  data$: ITodoBlockData
   createTodo$(fromSectionId: number, data: TodoSchema): void 
   createSection$(data: TodoSectionSchema): void
   updateTodo$(fromSectionId: number, todoId: number, newData: TodoSchema): void
   updateSection$(sectionId: number, newData: Partial<TodoSectionSchema>): void
   deleteTodo$(fromSectionId: number, todoId: number): void
   deleteSection$(sectionId: number): void
-  updateTitle$(newTitle: string): void
 }
 
 export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderProps["onChange$"]): ITodoUtils {
   const [data, setData] = createStore(dataIn)
 
   const generateId = () => getRandomNumberFrom(0, 999_999_999)
-  const update = () => onChange(data)
+  const update = () => {
+    isDevMode && editorLog.logLabel("todo", "data:", data)
+    onChange(data)
+  }
 
   const createTodoData: ITodoUtils["createTodo$"] = (fromSectionId, todoData) => {
     if (todoData.description === "") {
@@ -34,7 +35,7 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
       id: generateId()
     }
 
-    setData("stuff", (it) => it.id === fromSectionId, produce((sectionsData) => {
+    setData("todos", (it) => it.id === fromSectionId, produce((sectionsData) => {
       sectionsData.todo.push(newTodoData)
     }))
 
@@ -50,7 +51,7 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
       id: generateId()
     }
 
-    setData("stuff", produce((sectionsData) => {
+    setData("todos", produce((sectionsData) => {
       sectionsData.push(newSectionData)
     }))
 
@@ -61,7 +62,7 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
 
   const updateTodoData: ITodoUtils["updateTodo$"] = (fromSectionId, todoId, newData) => {
     setData(
-      "stuff", 
+      "todos", 
       (it) => it.id === fromSectionId, 
       "todo", 
       (todos) => arrayObjects(todos).replace$(it => it.id === todoId, newData)
@@ -73,7 +74,7 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
   }
 
   const updateSectionData: ITodoUtils["updateSection$"] = (sectionId, newData) => {
-    setData("stuff", (it) => it.id === sectionId, 'name', newData.name)
+    setData("todos", (it) => it.id === sectionId, 'name', newData.name!)
     isDevMode && editorLog.logLabel("todo", "Todo section id", sectionId, "updated with", newData)
     
     update()
@@ -81,7 +82,7 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
 
   const deleteTodoData: ITodoUtils["deleteTodo$"] = (fromSectionId, todoId) => {
     setData(
-      "stuff", 
+      "todos", 
       (it) => it.id === fromSectionId, 
       "todo", 
       (todos) => arrayObjects(todos).remove$('id', todoId)
@@ -94,27 +95,19 @@ export function createTodo(dataIn: ITodoBlockData, onChange: ITodoDataProviderPr
   }
 
   const deleteSectionData: ITodoUtils["deleteSection$"] = (sectionId) => {
-    isDevMode && setData("stuff", (sections) => arrayObjects(sections).remove$('id', sectionId))
+    isDevMode && setData("todos", (sections) => arrayObjects(sections).remove$('id', sectionId))
     
     editorLog.logLabel("todo", "Todo section id", sectionId, "deleted")
     update()
   }
-  
-  const updateTitle: ITodoUtils["updateTitle$"] = (newTitle) => {
-    setData("title", newTitle)
-    isDevMode && editorLog.logLabel("todo", "Updated this todo title to", newTitle)
-    
-    update()
-  }
 
   return {
-    data$: () => data,
+    data$: data,
     createTodo$: createTodoData,
     createSection$: createSectionData,
     updateTodo$: updateTodoData,
     updateSection$: updateSectionData,
     deleteTodo$: deleteTodoData,
     deleteSection$: deleteSectionData,
-    updateTitle$: updateTitle
   }
 }

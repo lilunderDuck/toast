@@ -16,8 +16,7 @@ const style = stylex.create({
 })
 
 export function TodoSectionButtonRow() {
-  const {  } = useTodoDataContext()
-  const { sectionId$, showSectionInput$, showTodoInput$ } = useTodoSectionContext()
+  const { showSectionInput$, showTodoInput$ } = useTodoSectionContext()
 
   return (
     <FlexCenterY {...stylex.attrs(style.buttonRow)}>
@@ -26,13 +25,11 @@ export function TodoSectionButtonRow() {
           <BsUiChecks />
         </Button>
       </Tooltip>
-      <Show when={sectionId$ === -1337}>
-        <Tooltip label$="Create section">
-          <Button size$={ButtonSizeVariant.icon} onClick={showSectionInput$}>
-            <BsListCheck />
-          </Button>
-        </Tooltip>
-      </Show>
+      <Tooltip label$="Create section">
+        <Button size$={ButtonSizeVariant.icon} onClick={showSectionInput$}>
+          <BsListCheck />
+        </Button>
+      </Tooltip>
     </FlexCenterY>
   )
 }

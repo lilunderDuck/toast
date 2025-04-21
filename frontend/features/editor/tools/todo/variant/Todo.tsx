@@ -5,8 +5,8 @@ import { Checkbox, FlexCenterY, Spacer } from "~/components"
 import stylex from "@stylexjs/stylex"
 import __style from "./Todo.module.css"
 // ...
-import { TodoData } from "../TodoBlock"
 import { TodoButtonRow } from "../ui"
+import { type TodoData } from "../data"
 
 const style = stylex.create({
   todo: {
@@ -36,9 +36,13 @@ export function Todo(props: ITodoProps) {
         <Checkbox />
       </div>
       <div>
-        <div>{props.name}</div>
+        <div>
+          {props.name}
+        </div>
         <Show when={props.description}>
-          <div {...stylex.attrs(style.description)}>{props.description}</div>
+          <div {...stylex.attrs(style.description)}>
+            {props.description}
+          </div>
         </Show>
       </div>
       <Spacer />

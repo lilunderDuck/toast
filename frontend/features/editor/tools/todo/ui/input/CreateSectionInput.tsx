@@ -1,24 +1,36 @@
-import { createForm, required, SubmitHandler } from "@modular-forms/solid"
+import { createForm, required, type SubmitHandler } from "@modular-forms/solid"
 // ...
 import { FieldInput, OpenAndCloseButton } from "~/components"
 import { resetFieldInputs } from "~/utils"
 // ...
-import type { TodoSectionSchema } from "../../TodoBlock"
-import { useTodoDataContext } from "../../data"
-import { useTodoSectionContext } from "../TodoSectionProvider"
+import { 
+  type TodoSectionData, 
+  useTodoDataContext, 
+  type TodoSectionSchema 
+} from "../../data"
+import { 
+  useTodoSectionContext 
+} from "../TodoSectionProvider"
 
 interface ICreateSectionInputProps {
-  // ...
+  previousData$?: Partial<TodoSectionData>
+  onCancel$?: () => void
+  onComplete$?: () => void
 }
 
 export default function CreateSectionInput(props: ICreateSectionInputProps) {
   const [sectionForm, { Form, Field }] = createForm<TodoSectionSchema>()
-  const { createSection$ } = useTodoDataContext()
+  const { createSection$, updateSection$ } = useTodoDataContext()
   const { closeSectionInput$ } = useTodoSectionContext()
 
   const onSubmit: SubmitHandler<TodoSectionSchema> = (data) => {
-    createSection$(data)
+    if (props.previousData$) {
+      updateSection$(props.previousData$.id!, data)
+    } else {
+      createSection$(data)
+    }
     resetFieldInputs(sectionForm, { name: '' })
+    props.onComplete$?.()
   }
 
   return (
@@ -32,7 +44,7 @@ export default function CreateSectionInput(props: ICreateSectionInputProps) {
             type="text"
             autocomplete="off"
             required
-            value={field.value}
+            value={field.value || props.previousData$?.name}
             error={field.error}
           />
         )}
@@ -42,7 +54,10 @@ export default function CreateSectionInput(props: ICreateSectionInputProps) {
           type: 'submit'
         }}
         closeButtonProps$={{
-          onClick: closeSectionInput$
+          onClick: () => {
+            closeSectionInput$()
+            props.onCancel$?.()
+          }
         }}
         closeText$='Cancel'
         openText$="Create"
