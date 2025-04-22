@@ -13,19 +13,14 @@ init:
 resource_files:
 	cd ${TOOLS_DIR} && deno -A fetchPackageJson.ts && go run binary_json.go
 
-# generate execuable icon and stuff
-execuable_icon:
-	go-winres make
-
 # builds server
 build_server:
 	go build -o ${OUTPUT_DIR}/server.exe ./backend/main.go
 
 # builds everything
-build: execuable_icon build_server
+build: build_server
 	deno task build
 	deno --allow-read --allow-write ./build/dist/mangle_props.js
-	del *.syso
 
 dev_server: build_server
 	${OUTPUT_DIR}/server.exe
@@ -48,3 +43,4 @@ install:
 	go get github.com/charmbracelet/log
 	go get github.com/gin-gonic/gin
 	go get github.com/gin-contrib/cors
+	go get github.com/gin-contrib/static

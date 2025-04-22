@@ -2,9 +2,11 @@ package main
 
 import (
 	"burned-toast/backend/dynamic"
+	"burned-toast/backend/internals"
 	"burned-toast/backend/routes"
 
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/theritikchoure/logx"
 )
@@ -15,12 +17,10 @@ func init() {
 
 func main() {
 	router := gin.Default()
-	// router.Use(cors.New(cors.Config{
-	// 	AllowCredentials: true,
-	// 	AllowOrigins: []string{"http://localhost:1337"},
-	// 	AllowHeaders: []string{"Origin", "Content-Type", "Accept"},
-	// }))
+
 	router.Use(cors.Default())
+	router.Use(static.Serve("/", static.LocalFile(internals.StaticFolderPath, false)))
+
 	apiRoute := router.Group("/duck")
 
 	routes.CreateJournalRoute(apiRoute)
