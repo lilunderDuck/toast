@@ -16,7 +16,13 @@ export type TextFormatting = Partial<{
   borderColor: string
 }>
 
+export const enum TextType {
+  text,
+  newLine
+}
+
 export type TextOption = {
+  type: TextType.text
   text: string
   // ...
   subOrSupscript?: SubOrSupscript
@@ -30,8 +36,13 @@ export type TextOption = {
   right?: TextFormatting
 }
 
-export type TextData = TextOption | TextDataAttribute
+export type TextData = 
+  TextOption |
+  { type: TextType.newLine }
 
 export type InputTextData = {
   text: TextData[]
 }
+
+export const DEFAULT_TEXT_DATA: TextOption = { type: TextType.text, text: '' }
+export const DEFAULT_NEWLINE_DATA =          { type: TextType.newLine }

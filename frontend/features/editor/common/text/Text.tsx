@@ -7,7 +7,7 @@ import { FlexCenterY } from "~/components"
 import { useEditorContext } from "~/features/editor/provider"
 // ...
 import { TextInput, TextInputButtonRow } from "./ui"
-import { useTextDataContext, TextDataAttribute, TextOption, TextDataProvider, ITextProviderProps } from "./provider"
+import { useTextDataContext, TextOption, TextDataProvider, ITextProviderProps, TextType } from "./provider"
 import { BreakLine } from "./components"
 
 const style = stylex.create({
@@ -54,7 +54,7 @@ function TextContent() {
             <TextRenderer {...it as TextOption} />
           </Show>
         }>
-          <Match when={it === TextDataAttribute.newLine}>
+          <Match when={it.type === TextType.newLine}>
             <BreakLine />
           </Match>
         </Switch>

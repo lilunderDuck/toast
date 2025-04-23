@@ -3,7 +3,7 @@ import { type Accessor, createContext, createSignal, type ParentProps, type Sign
 import { editorLog } from "~/features/debug"
 import { arrayInsert, getRandomNumberFrom } from "~/utils"
 // ...
-import { InputTextData, TextData, TextDataAttribute } from "./data"
+import { DEFAULT_NEWLINE_DATA, DEFAULT_TEXT_DATA, InputTextData, TextData, TextType } from "./data"
 
 export interface ITextProviderProps {
   allowNewLine$?: boolean
@@ -27,8 +27,9 @@ const Context = createContext<ITextContext>()
 
 export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
   const thisTextBlockId = `t-${getRandomNumberFrom(1, 999_999_999)}` as const
+
   const [textsData, setTextsData] = createSignal<TextData[]>(props.inputData$?.text ?? [
-    { text: '' }
+    DEFAULT_TEXT_DATA
   ])
 
   const isAllowNewLine = props.allowNewLine$ ?? true
@@ -62,9 +63,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
 
   const spawnNewTextInput = (index: number) => {
     setTextsData(prev => {
-      arrayInsert(prev, index, {
-        text: ''
-      })
+      arrayInsert(prev, index, DEFAULT_TEXT_DATA)
       return [...prev]
     })
     props.onChange$(textsData())
@@ -76,7 +75,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
       const previousBlock = textsData()[index - 1]
       if (
         previousBlock !== undefined &&
-        previousBlock === TextDataAttribute.newLine
+        previousBlock.type === TextType.newLine
       ) {
         prev.splice(index - 1, 2)
         return [...prev]
@@ -93,9 +92,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
   const addNewLine = (currentIndex: number) => {
     if (!isAllowNewLine) return
     setTextsData(prev => {
-      arrayInsert(prev, currentIndex + 1, TextDataAttribute.newLine, {
-        text: ''
-      })
+      arrayInsert(prev, currentIndex + 1, DEFAULT_NEWLINE_DATA, DEFAULT_TEXT_DATA)
 
       return [...prev]
     })

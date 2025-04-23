@@ -1,6 +1,7 @@
 package journal
 
 import (
+	"burned-toast/backend/handler/editor_data"
 	"burned-toast/backend/internals"
 	"burned-toast/backend/utils"
 	"time"
@@ -47,9 +48,9 @@ type JournalMetaData struct {
 
 // Represents the data for a single content block within a journal entry.
 type JournalContentData struct {
-	Id   int    `json:"id"              cbor:"0,keyasint"`
-	Type uint16 `json:"type"            cbor:"1,keyasint"`
-	Data any    `json:"data"            cbor:"3,keyasint"`
+	Id   int                    `json:"id"              cbor:"0,keyasint"`
+	Type uint16                 `json:"type"            cbor:"1,keyasint"`
+	Data editor_data.EditorData `json:"data"            cbor:"3,keyasint"`
 }
 
 // Creates a new journal entry within a specified journal group.
