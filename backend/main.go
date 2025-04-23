@@ -8,16 +8,21 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
-	"github.com/theritikchoure/logx"
 )
 
+// the app mode, this will be overwritten to "dev" when in dev mode.
+var appMode string = "prod"
+var router *gin.Engine
+
 func init() {
-	logx.ColoringEnabled = true // Enable colorized logging
+	if appMode == "prod" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
+	router = gin.Default()
 }
 
 func main() {
-	router := gin.Default()
-
 	router.Use(cors.Default())
 	router.Use(static.Serve("/", static.LocalFile(internals.StaticFolderPath, false)))
 

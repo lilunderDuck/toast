@@ -6,6 +6,10 @@ TOOLS_DIR = ./build/tools
 
 TOOL_SCRIPTS = deno -A npm:esbuild --platform=node --format=esm --bundle --outfile
 
+# avoid this message
+#   mingw32-make: '[something]' is up to date.
+.PHONY: build
+
 init:
 	${TOOL_SCRIPTS}=./build/dist/mangle_props.js ${TOOLS_DIR}/mangle_props/index.ts
 
@@ -13,16 +17,16 @@ init:
 resource_files:
 	cd ${TOOLS_DIR} && deno -A fetchPackageJson.ts && go run binary_json.go
 
-# builds server
-build_server:
-	go build -o ${OUTPUT_DIR}/server.exe ./backend/main.go
-
 # builds everything
-build: build_server
+WEIRD_FLAGS_TO_REDUCE_SIZE = -gcflags=all="-l -B" -ldflags="-w -s"
+build:
 	deno task build
 	deno --allow-read --allow-write ./build/dist/mangle_props.js
+	go build ${WEIRD_FLAGS_TO_REDUCE_SIZE} -o ${OUTPUT_DIR}/server_stript.exe ./backend/main.go
+	go build -o ${OUTPUT_DIR}/server_no_strip.exe ./backend/main.go
 
-dev_server: build_server
+dev_server:
+	go build -ldflags="-X 'appMode=dev'" -o ${OUTPUT_DIR}/server.exe ./backend/main.go
 	${OUTPUT_DIR}/server.exe
 
 # clean the mess I made
