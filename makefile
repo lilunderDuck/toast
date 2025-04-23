@@ -22,8 +22,7 @@ WEIRD_FLAGS_TO_REDUCE_SIZE = -gcflags=all="-l -B" -ldflags="-w -s"
 build:
 	deno task build
 	deno --allow-read --allow-write ./build/dist/mangle_props.js
-	go build ${WEIRD_FLAGS_TO_REDUCE_SIZE} -o ${OUTPUT_DIR}/server_stript.exe ./backend/main.go
-	go build -o ${OUTPUT_DIR}/server_no_strip.exe ./backend/main.go
+	go build ${WEIRD_FLAGS_TO_REDUCE_SIZE} -o ${OUTPUT_DIR}/server.exe ./backend/main.go
 
 dev_server:
 	go build -ldflags="-X 'appMode=dev'" -o ${OUTPUT_DIR}/server.exe ./backend/main.go
