@@ -32,7 +32,7 @@ func CreateCategory(groupId int, schema *CategorySchema) *CategoryData {
 
 	newData := CategoryData{
 		Id:      categoryId,
-		Type:    uint8(Type_Journal),
+		Type:    uint8(TYPE_CATEGORY),
 		Created: utils.GetCurrentDateNow(),
 		Name:    schema.Name,
 	}
@@ -41,13 +41,13 @@ func CreateCategory(groupId int, schema *CategorySchema) *CategoryData {
 		thisCache.Set(stringCategoryId, &newData)
 	})
 
-	utils.BSON_WriteFile(GetJournalSavedFilePath(groupId, categoryId), &newData)
+	utils.BSON_WriteFile(GetCategorySavedFilePath(groupId, categoryId), &newData)
 
 	return &newData
 }
 
 func DeleteCategory(groupId int, categoryId int) {
-	utils.RemoveFileOrDirectory(GetJournalSavedFilePath(groupId, categoryId))
+	utils.RemoveFileOrDirectory(GetCategorySavedFilePath(groupId, categoryId))
 
 	internals.ModifyCacheDb(utils.IntToString(groupId), func(thisCache *internals.JSONCacheUtils) {
 		thisCache.Delete(utils.IntToString(categoryId))

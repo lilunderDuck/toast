@@ -79,7 +79,7 @@ export function createJournal(
     isDevMode && journalLog.group("Opening", journalId)
     
     const currentJournalGroupId = getCurrentJournalGroupId()
-    const journalData = await api_getJournal(currentJournalGroupId, journalId)
+    const journalData = await api_getJournal(currentJournalGroupId, journalId, JournalType.journal)
     const journalContent = journalData.data
 
     isDevMode && journalLog.log("journal data is:", journalData)

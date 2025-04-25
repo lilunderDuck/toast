@@ -17,9 +17,10 @@ import {
   type AnyTreeNode, 
   FileNodeType, 
   isFolder,
-  type NodeData
+  type NodeData,
+  A_SPECIAL_CONSTANT_THAT_SHOULD_SAVE_THE_DATA
 } from "../utils"
-import { createLog } from "~/features/debug"
+import { fileDisplayLog } from "~/features/debug"
 
 // unnecessarily generic code stuff
 
@@ -58,13 +59,11 @@ interface IFileDisplayContext<
   internal$: IFileDislayInternals<T, U>
   add$(node: AnyTreeNode, toFolder: number | 'root', data: NodeData<T | U>): void
   replaceTree$(whichFolderId: number | 'root', tree: Tree): void
+  getCurrentlySelectedFolderNodeId$(): number
 }
 
 // Really don't want to fix type errors, "<any, any>" is here for a reason.
 const Context = createContext<IFileDisplayContext<any, any>>()
-
-const fileDisplayLog = createLog("file display", "#827e0d", "#bab516")
-
 
 export function FileDisplayProvider<
   T extends FileNodeProps,
@@ -119,8 +118,14 @@ export function FileDisplayProvider<
       return
     }
 
-    thisFolder.child.push(node)
+    if (thisFolder.child[0].id === A_SPECIAL_CONSTANT_THAT_SHOULD_SAVE_THE_DATA) {
+      thisFolder.child[0] = node
+    } else {
+      thisFolder.child.push(node)
+    }
+
     dataMapping[data.id as number] = data
+    isDevMode && fileDisplayLog.error("Inserted node", node, "to", toFolder)
     return update()
   }
 
@@ -169,13 +174,22 @@ export function FileDisplayProvider<
     update()
   }
 
+  let currentOpenedId = -1
   return (
     <Context.Provider value={{
       add$: add,
       replaceTree$: replaceTree,
+      getCurrentlySelectedFolderNodeId$() {
+        return currentOpenedId
+      },
       internal$: {
         isLoading$,
-        callOnOpenEvent$: props.onOpen$,
+        callOnOpenEvent$(type, data) {
+          props.onOpen$(type, data)
+          if (type === FileNodeType.FOLDER) {
+            currentOpenedId = data.id as number
+          }
+        },
         tree$: tree,
         isUpdating$: isUpdating,
         FileComponent$: props.FileComponent$,

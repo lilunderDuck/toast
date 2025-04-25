@@ -1,7 +1,7 @@
 import { type Accessor, createSignal } from "solid-js"
 // ...
 import {  } from "~/utils"
-import { api_getJournal } from "~/api/journal"
+import { api_getJournal, JournalType } from "~/api/journal"
 // ...
 
 export type TabData = {
@@ -23,7 +23,7 @@ export function createTab(getCurrentJournalGroupId: () => number): ITabUtils {
   let currentActiveTabIndex = 0
 
   const createTabData = async (tabId: number) => {
-    const thisJournal = await api_getJournal(getCurrentJournalGroupId(), tabId)
+    const thisJournal = await api_getJournal(getCurrentJournalGroupId(), tabId, JournalType.journal)
     return {
       name$: thisJournal.name,
       journalId$: tabId

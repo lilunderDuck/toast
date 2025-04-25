@@ -4,12 +4,11 @@ import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from'~/assets/style/scrollbar.module.css'
 // ...
 import { mergeClassname } from "~/utils"
-import { useFileDisplayContext } from "~/features/file-display"
+import { createFileNodeData, createFolderNodeData, useFileDisplayContext } from "~/features/file-display"
 import { JournalType } from "~/api/journal"
 // ...
 import SidebarActions from "./SidebarActions"
 import { useJournalContext } from "../../context"
-import { createFileNodeData, createFolderNodeData } from "../../utils"
 
 const style = stylex.create({
   sidebar: {
@@ -24,7 +23,7 @@ const style = stylex.create({
 
 export function Sidebar(props: ParentProps) {
   const { event$ } = useJournalContext()
-  const { add$ } = useFileDisplayContext()
+  const { add$, getCurrentlySelectedFolderNodeId$ } = useFileDisplayContext()
 
   event$.on$("journal__createdJournal$", (type, data) => {
     let createNode
@@ -38,7 +37,8 @@ export function Sidebar(props: ParentProps) {
       break
     }
 
-    add$(createNode(data.id), "root", data)
+    const selectedFolderId = getCurrentlySelectedFolderNodeId$()
+    add$(createNode(data.id), selectedFolderId === -1 ? "root" : selectedFolderId, data)
   })
 
   return (

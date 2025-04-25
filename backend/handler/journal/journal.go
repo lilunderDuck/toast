@@ -18,16 +18,6 @@ type JournalUpdateSchema struct {
 	Data []JournalContentData `form:"data" json:"data"`
 }
 
-// Represents the type of a journal entry.
-type JournalType uint8
-
-const (
-	// A regular journal.
-	Type_Journal JournalType = 0
-	// A category entry, think of it as a folder.
-	Type_Category JournalType = 1
-)
-
 // Represents the complete data for a journal entry,
 type JournalData struct {
 	Id       int                  `json:"id"                 cbor:"0,keyasint"`
@@ -67,7 +57,7 @@ func CreateJournal(currentGroupId int, schema *JournalSchema) *JournalData {
 
 	newData := JournalData{
 		Id:      numberId,
-		Type:    uint8(Type_Journal),
+		Type:    uint8(TYPE_JOURNAL),
 		Created: utils.GetCurrentDateNow(),
 		Name:    schema.Name,
 	}

@@ -25,7 +25,7 @@ build:
 	go build ${WEIRD_FLAGS_TO_REDUCE_SIZE} -o ${OUTPUT_DIR}/server.exe ./backend/main.go
 
 dev_server:
-	go build -ldflags="-X 'appMode=dev'" -o ${OUTPUT_DIR}/server.exe ./backend/main.go
+	go build -ldflags="-X 'main.appMode=dev'" -o ${OUTPUT_DIR}/server.exe ./backend/main.go
 	${OUTPUT_DIR}/server.exe
 
 # clean the mess I made

@@ -25,3 +25,13 @@ func replyWithAnyErrMsg(ctx *gin.Context, anyError error) {
 		"message": "There's some funky stuff goin' on",
 	})
 }
+
+func validate[T any](ctx *gin.Context, jsonInput T) (ok bool) {
+	err := ctx.ShouldBindJSON(jsonInput)
+	if err != nil {
+		replyWithValidationErrMsg(ctx, err)
+		return false
+	}
+
+	return true
+}

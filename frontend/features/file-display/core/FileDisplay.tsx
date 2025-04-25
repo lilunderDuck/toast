@@ -1,4 +1,4 @@
-import { createSignal, For, Show } from "solid-js"
+import { createSignal, ErrorBoundary, For, Show } from "solid-js"
 // @ts-ignore
 import { dndzone } from "solid-dnd-directive"
 // ...
@@ -43,6 +43,9 @@ export function FileDisplay() {
     const [items, setItems] = createSignal(thisProps.child)
 
     const handleDndEvent = (preview: boolean) => (dragEvent: IDndDragEvent<number>) => {
+      if (!dragEvent.detail?.items) {
+        return console.warn('we have run into a case that this thing started to freak out.')
+      }
       const { items: newItems } = dragEvent.detail
       setItems(newItems)
       if (!preview) {

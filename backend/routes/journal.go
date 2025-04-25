@@ -40,18 +40,7 @@ func CreateJournalRoute(this *gin.RouterGroup) {
 		ctx.JSON(http.StatusOK, utils.BytesToString(jsonData))
 	})
 
-	this.POST("/journal/:groupId", func(ctx *gin.Context) {
-		groupId := utils.StringToInt(ctx.Param("groupId"))
-
-		var json journal.JournalSchema
-		if err := ctx.ShouldBindJSON(&json); err != nil {
-			replyWithValidationErrMsg(ctx, err)
-			return
-		}
-
-		journalData := journal.CreateJournal(groupId, &json)
-		ctx.JSON(http.StatusOK, journalData)
-	})
+	this.POST("/journal/:groupId", handleCreateAllKindOfJournal)
 
 	this.PATCH("/journal/:groupId/:journalId", func(ctx *gin.Context) {
 		groupId := utils.StringToInt(ctx.Param("groupId"))
@@ -79,4 +68,33 @@ func CreateJournalRoute(this *gin.RouterGroup) {
 		journal.DeleteJournal(groupId, journalId)
 		replyWithOkMsg(ctx)
 	})
+}
+
+func handleCreateAllKindOfJournal(ctx *gin.Context) {
+	journalType := ctx.Query("type")
+	groupId := utils.StringToInt(ctx.Param("groupId"))
+
+	switch journalType {
+	case "":
+		replyWithValidationErrMsg(ctx, fmt.Errorf("missing query param: 'type'"))
+		return
+	case "0":
+		var json journal.JournalSchema
+		if !validate(ctx, &json) {
+			return
+		}
+
+		journalData := journal.CreateJournal(groupId, &json)
+		ctx.JSON(http.StatusOK, journalData)
+		return
+	case "1":
+		var input journal.CategorySchema
+		if !validate(ctx, &input) {
+			return
+		}
+
+		data := journal.CreateCategory(groupId, &input)
+		ctx.JSON(http.StatusOK, data)
+		return
+	}
 }

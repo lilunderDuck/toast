@@ -2,8 +2,7 @@ import type { AnyTreeNode, FileNode, FolderNode } from "./types"
 
 export function isFolder(node: AnyTreeNode): node is FolderNode {
   return (
-    typeof node === "object" &&
-    Array.isArray((node as FolderNode)?.child)
+    typeof node === "object" && 'child' in node
   ) 
 }
 
@@ -30,10 +29,22 @@ export function insertBefore<Node extends AnyTreeNode>(
   return newChild
 }
 
+/**This exist is the backend used CBOR to make the data saved to disk smaller.
+ * 
+ * Empty array will cause it to return like this
+ * ```
+ * { "id": <some id>          }
+ * //               ^^^^^^^^^ missing "child" prop
+ * ```
+ */
+export const A_SPECIAL_CONSTANT_THAT_SHOULD_SAVE_THE_DATA = -1337
+
 export function createFolderNodeData(id: number): FolderNode {
   return {
     id,
-    child: []
+    child: [
+      createFileNodeData(A_SPECIAL_CONSTANT_THAT_SHOULD_SAVE_THE_DATA)
+    ]
   }
 }
 
