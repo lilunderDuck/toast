@@ -1,4 +1,4 @@
-import { createSignal, ErrorBoundary, For, Show } from "solid-js"
+import { createSignal, For, Show } from "solid-js"
 // @ts-ignore
 import { dndzone } from "solid-dnd-directive"
 // ...

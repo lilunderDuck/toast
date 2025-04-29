@@ -4,6 +4,7 @@ import { editorLog } from "~/features/debug"
 import { arrayInsert, getRandomNumberFrom } from "~/utils"
 // ...
 import { DEFAULT_NEWLINE_DATA, DEFAULT_TEXT_DATA, InputTextData, TextData, TextType } from "./data"
+import { setCaretToTheEnd } from "~/features/editor/utils"
 
 export interface ITextProviderProps {
   allowNewLine$?: boolean
@@ -39,11 +40,8 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
       const prevDataOfDatIndex = prev[index]
       const newData = {...prevDataOfDatIndex, ...data}
       for (const [key, value] of Object.entries(newData)) {
-        if (
-          value === 0 || 
-          value === '' ||
-          !value
-        ) {
+        const valueThatShouldNotBeSaved = value === 0 || value === '' || !value
+        if (valueThatShouldNotBeSaved) {
           // @ts-ignore - should work with absolutely no weird thing happening under the hood
           delete newData[key]
         }
@@ -67,6 +65,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
       return [...prev]
     })
     props.onChange$(textsData())
+    setCaretToTheEnd(document.querySelector(`#${thisTextBlockId} [data-index="${index}"]`)!)
     isDevMode && editorLog.logLabel('text', 'Spawned new block')
   }
 
@@ -98,18 +97,16 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
     })
   }
 
-  const context = {
-    focusState$: createSignal(0),
-    addNewLine$: addNewLine,
-    textsData$: textsData,
-    updateData$: updateData,
-    spawnNewTextInput$: spawnNewTextInput,
-    deleteInput$: deleteInput,
-    THIS_TEXT_BLOCK_ID$: thisTextBlockId
-  }
-
   return (
-    <Context.Provider value={context}>
+    <Context.Provider value={{
+      focusState$: createSignal(0),
+      addNewLine$: addNewLine,
+      textsData$: textsData,
+      updateData$: updateData,
+      spawnNewTextInput$: spawnNewTextInput,
+      deleteInput$: deleteInput,
+      THIS_TEXT_BLOCK_ID$: thisTextBlockId
+    }}>
       {props.children}
     </Context.Provider>
   )

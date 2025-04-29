@@ -10,7 +10,7 @@ import { useTextDataContext } from "../provider"
 
 const style = stylex.create({
   textinput: {
-    paddingInline: 10,
+    paddingInline: 4,
     paddingBlock: 2,
     borderRadius: 6,
     backgroundColor: 'var(--gray3)',
@@ -43,8 +43,8 @@ export function TextInput(props: ParentProps<ITextInputProps>) {
   const whenYouTypingStuff: EventHandler<"div", "onKeyDown"> = (keyboardEvent) => {
     const keyYouPress = keyboardEvent.key.toLowerCase()
 
-    // If you press Ctrl + "="
-    if (keyboardEvent.ctrlKey && keyYouPress === "=") {
+    // If you press Ctrl + "I"
+    if (keyboardEvent.ctrlKey && keyYouPress === "i") {
       spawnNewTextInput$(props.currentIndex$)
       return // don't update
     }
@@ -61,7 +61,7 @@ export function TextInput(props: ParentProps<ITextInputProps>) {
 
       if (previousTextInputIndex > 0) {
         setWhatInputIsFocused(previousTextInputIndex)
-        setCaretToTheEnd(document.querySelector(`[data-index=${previousTextInputIndex}]`)!)
+        setCaretToTheEnd(document.querySelector(`[data-index="${previousTextInputIndex}"]`)!)
       }
 
       // pass, to save the text data

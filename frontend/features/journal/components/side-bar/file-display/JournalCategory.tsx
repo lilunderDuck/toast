@@ -1,4 +1,4 @@
-import { ParentProps, Show } from "solid-js"
+import { onCleanup, ParentProps, Show } from "solid-js"
 // ...
 import __style from "./Journal.module.css"
 import stylex from "@stylexjs/stylex"
@@ -43,11 +43,24 @@ interface IJournalCategoryProps extends IJournalCategoryData {
   onClick: EventHandler<"div", "onClick">
 }
 
+let currentlyOpened: number[] = []
 export function JournalCategory(props: ParentProps<IJournalCategoryProps>) {
-  const [isShowing, toggleShowing] = useToggleState()
+  const [isShowing, toggleShowing] = useToggleState(currentlyOpened.includes(props.id))
+
+  onCleanup(() => {
+    currentlyOpened = []
+  })
 
   const clickThisThing: EventHandler<"div", "onClick"> = (mouseEvent) => {
     toggleShowing()
+    if (isShowing()) {
+      currentlyOpened.push(props.id)
+    } else {
+      let index = currentlyOpened.findIndex(it => it === props.id)
+      currentlyOpened.splice(index, 1)
+    }
+    console.log(currentlyOpened)
+    // @ts-ignore
     props.onClick?.(mouseEvent)
   }
 

@@ -1,4 +1,4 @@
-import { For, lazy, Match, Show, Switch } from "solid-js"
+import { For, Match, Show, Switch } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./Text.module.css"
@@ -9,6 +9,7 @@ import { useEditorContext } from "~/features/editor/provider"
 import { TextInput, TextInputButtonRow } from "./ui"
 import { useTextDataContext, TextOption, TextDataProvider, ITextProviderProps, TextType } from "./provider"
 import { BreakLine } from "./components"
+import TextRenderer from "./TextRenderer"
 
 const style = stylex.create({
   texts: {
@@ -22,22 +23,29 @@ const style = stylex.create({
 export function Text(props: ITextProviderProps) {
   const { isReadonly$ } = useEditorContext()
 
-  return (
-    <FlexCenterY {...stylex.attrs(
-      style.texts,
-      isReadonly$() ? {} : style.textGap
-    )}>
-      <TextDataProvider {...props}>
+  const Content = () => {
+    const { THIS_TEXT_BLOCK_ID$ } = useTextDataContext()
+
+    return (
+      <FlexCenterY id={THIS_TEXT_BLOCK_ID$} {...stylex.attrs(
+        style.texts,
+        isReadonly$() ? {} : style.textGap
+      )}>
         <TextContent />
-      </TextDataProvider>
-    </FlexCenterY>
+      </FlexCenterY>
+    )
+  }
+
+  return (
+    <TextDataProvider {...props}>
+      <Content />
+    </TextDataProvider>
   )
 }
 
 function TextContent() {
   const { isReadonly$ } = useEditorContext()
   const { textsData$ } = useTextDataContext()
-  const TextRenderer = lazy(() => import("./TextRenderer"))
 
   return (
     <For each={textsData$()}>

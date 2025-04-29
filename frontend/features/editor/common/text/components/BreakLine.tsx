@@ -6,7 +6,7 @@ const style = stylex.create({
     flexBasis: '100%'
   },
   breakLineOnReadonly: {
-    padding: 7,
+    padding: 10,
     width: '100%'
   }
 })
