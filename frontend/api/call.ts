@@ -1,4 +1,4 @@
-import { apiCallLog } from "../features/debug"
+import { __run, apiCallLog } from "../features/debug"
 
 type MethodVerb = "GET" | "POST" | "PATCH" | "DELETE"
 
@@ -10,7 +10,7 @@ export async function __callBackendApi<
   route: R, 
   whatToSend: any = null
 ): Promise<any> {
-  isDevMode && (() => {
+  isDevMode && __run(() => {
     apiCallLog.log(method, route)
     
     // a bunch or checks in case I misused this
@@ -26,7 +26,7 @@ export async function __callBackendApi<
     // redirect call to my backend, only works on dev mode tho.
     // @ts-ignore - type error here but I'm lazy
     route = "http://localhost:8000" + route
-  })()
+  })
   
   const options = {
     method: method,

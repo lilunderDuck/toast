@@ -25,7 +25,7 @@ interface GalleryDataProviderProps {
 }
 
 export function GalleryDataProvider(props: ParentProps<GalleryDataProviderProps>) {
-  const [images, setImages] = createSignal(props.dataIn$.images)
+  const [images, setImages] = createSignal(props.dataIn$?.images ?? [])
 
   const galleryId = props.dataIn$.id
   const wrappedLocalStorage: GalleryLocalStorage = createStorage(localStorage)

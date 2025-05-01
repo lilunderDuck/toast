@@ -20,7 +20,7 @@ import {
   type NodeData,
   A_SPECIAL_CONSTANT_THAT_SHOULD_SAVE_THE_DATA
 } from "../utils"
-import { fileDisplayLog } from "~/features/debug"
+import { __run, fileDisplayLog } from "~/features/debug"
 
 // unnecessarily generic code stuff
 
@@ -140,9 +140,7 @@ export function FileDisplayProvider<
           return node
         }
 
-        node.child
-
-        find(nodeId, node.child)
+        return find(nodeId, node.child)
       }
     }
  
@@ -157,12 +155,12 @@ export function FileDisplayProvider<
     }
 
     const shouldBeAFolder = find(whichFolderId)
-    isDevMode && (() => {
+    isDevMode && __run(() => {
       if (!shouldBeAFolder) {
         fileDisplayLog.error("could not find node", whichFolderId)
         return 
       }
-    })()
+    })
     
     if (!isFolder(shouldBeAFolder)) {
       fileDisplayLog.error(shouldBeAFolder, "is not a folder")

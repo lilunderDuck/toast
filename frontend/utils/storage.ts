@@ -13,6 +13,7 @@ export interface IStorage<Mapping extends Record<string, any>> {
    * @param key The key to delete.
    */
   delete$<T extends keyof Mapping>(key: T): void
+  update$<T extends keyof Mapping>(key: T, updateFn: (prevValue: Mapping[T]) => Mapping[T]): void
 }
 
 /**Create a type-safe version of `localStorage`, `sessionStorage`, ...
@@ -44,23 +45,32 @@ export interface IStorage<Mapping extends Record<string, any>> {
  * @see {@link IStorage}
  */
 export function createStorage<Mapping extends Record<string, any>>(storage: Storage): IStorage<Mapping> {
-  return {
-    get$(key) {
-      const data = storage.getItem(key as string)
-      if (!data) return data
+  const getValueInStorage = (key: any) => {
+    const data = storage.getItem(key as string)
+    if (!data) return data
 
-      if (data === 'undefined') return undefined
-      try {
-        return JSON.parse(data)
-      } catch (error) {
-        return data
-      }
-    },
-    set$(key, value) {
-      storage.setItem(key as string, JSON. stringify(value))
-    },
+    if (data === 'undefined') return undefined
+    try {
+      return JSON.parse(data)
+    } catch (error) {
+      return data
+    }
+  }
+
+  const setValue = (key: any, value: any) => {
+    storage.setItem(key as string, JSON.stringify(value))
+  }
+
+  return {
+    get$: getValueInStorage,
+    set$: setValue,
     delete$(key) {
       storage.removeItem(key as string)
+    },
+    update$(key, updateFn) {
+      const prevValue = getValueInStorage(key)
+      const newValue = updateFn(prevValue)
+      setValue(key, newValue)
     }
   }
 }

@@ -1,12 +1,15 @@
 import { onCleanup, ParentProps, Show } from "solid-js"
+import { BsCaretRightFill } from "solid-icons/bs"
 // ...
 import __style from "./Journal.module.css"
 import stylex from "@stylexjs/stylex"
 // ...
 import type { IJournalCategoryData } from "~/api/journal"
 import { FlexCenterY } from "~/components"
-import { BsCaretRightFill } from "solid-icons/bs"
 import { useToggleState } from "~/hook"
+import { useJournalContext } from "~/features/journal/context"
+import { createEffect } from "solid-js"
+import { arrayObjects } from "~/utils"
 
 const style = stylex.create({
   journalCategory: {
@@ -32,7 +35,10 @@ const style = stylex.create({
     }
   },
   leftPadding: {
-    paddingLeft: 5
+    // somehow, you want a 4.2 pixels margin here, please don't @me
+    marginLeft: 4.2,
+    paddingLeft: 5,
+    borderLeft: "2px solid var(--gray5)"
   },
   arrow: {
     rotate: "90deg"
@@ -45,7 +51,22 @@ interface IJournalCategoryProps extends IJournalCategoryData {
 
 let currentlyOpened: number[] = []
 export function JournalCategory(props: ParentProps<IJournalCategoryProps>) {
+  const { localStorage$ } = useJournalContext()
+
   const [isShowing, toggleShowing] = useToggleState(currentlyOpened.includes(props.id))
+
+  createEffect(() => {
+    localStorage$.update$("explorer", (prev) => {
+      prev = prev ? prev : []
+      if (isShowing()) {
+        prev.push(props.id)
+      } else {
+        arrayObjects(prev).removeByIndex$(prev.indexOf(props.id))
+      }
+
+      return prev
+    })
+  })
 
   onCleanup(() => {
     currentlyOpened = []
@@ -67,9 +88,9 @@ export function JournalCategory(props: ParentProps<IJournalCategoryProps>) {
   return (
     <section id={__style.journal} {...stylex.attrs(style.journalCategory)}>
       <FlexCenterY {...stylex.attrs(style.nameAndStuff)} onClick={clickThisThing}>
-        <BsCaretRightFill 
-          {...stylex.attrs(isShowing() ? style.arrow : {})} 
-          size={10} 
+        <BsCaretRightFill
+          {...stylex.attrs(isShowing() ? style.arrow : {})}
+          size={10}
         />
         <span id={__style.name}>
           {props.name}

@@ -1,8 +1,10 @@
 import { Show } from "solid-js"
 // ...
-import { FlexCenterY, Input } from "~/components"
+import { Input } from "~/components"
 import { api_saveImage, api_deleteImage, api_getImageSavedPath } from "~/api/media"
 import { useJournalContext } from "~/features/journal"
+import { createFileUpload, FileUploadType } from "~/features/file-uploads"
+import { toast } from "~/features/toast"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./ImageInput.module.css"
@@ -10,8 +12,6 @@ import __style from "./ImageInput.module.css"
 import { useImageDataContext } from "./provider/ImageDataProvider"
 import { FullViewButton, ImageInputAndDropzone, ImageWrap } from "./ui"
 import { useEditorContext } from "../../provider"
-import { createFileUpload, FileUploadType } from "~/features/file-uploads"
-import { toast } from "~/features/toast"
 
 const style = stylex.create({
   theInput: {
