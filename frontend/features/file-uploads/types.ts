@@ -16,6 +16,7 @@ export type FileUploadComponent = Component<HTMLAttributes<"div">>
 
 export type FileUploadStuff = {
   isUploading$: Accessor<boolean>
+  error$: Accessor<any> // missing type
   FileUploadZone$: FileUploadComponent
 }
 

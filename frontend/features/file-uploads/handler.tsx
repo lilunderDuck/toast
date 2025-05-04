@@ -6,6 +6,7 @@ import {
 import { fileDialog } from "../debug"
 import { api_openFileDialog } from "~/api/misc"
 import { createSignal } from "solid-js"
+import { sleep } from "~/utils"
 
 /**Creates a file upload component based on the provided options.
  *
@@ -29,19 +30,19 @@ export function createFileUpload(
 ): FileUploadStuff {
   const { onFinish$, shouldShow$, filter$, title$ } = createOptions
   const [isLoading, setIsLoading] = createSignal(false)
+  const [error, setError] = createSignal()
 
   const onClickThis = async() => {
     if (isLoading()) {
       isDevMode && fileDialog.log("Dialog won't be opened. Another one is already showing to you.")
-      
       return
     }
+
     const shouldShowDialog = shouldShow$?.() ?? true
     isDevMode && fileDialog.log("Opening dialog with options:", createOptions)
     
     if (!shouldShowDialog) {
       isDevMode && fileDialog.log("Dialog won't be opened.")
-      
       return
     }
     
@@ -55,12 +56,16 @@ export function createFileUpload(
 
     if (!result?.result || result?.result === "") {
       isDevMode && fileDialog.log("Canceled")
-      
       setIsLoading(false)
       return
     }
 
-    await onFinish$(result.result)
+    try {
+      await onFinish$(result.result)
+    } catch (error) {
+      setError(error)
+      sleep(5_000).then(() => setError(undefined))
+    }
     setIsLoading(false)
   }
 
@@ -68,6 +73,7 @@ export function createFileUpload(
     FileUploadZone$(props) {
       return <div {...props} onClick={onClickThis} />
     },
-    isUploading$: isLoading
+    isUploading$: isLoading,
+    error$: error
   }
 }

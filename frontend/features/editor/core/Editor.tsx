@@ -19,21 +19,14 @@ const style = stylex.create({
   blockList: {
     width: '100%',
     height: '100%',
-  },
-  blockSetting: {
-    position: 'absolute',
-    transform: 'translate(calc(var(--x) * -1), var(--y))',
-    right: 0,
-    top: 0,
-    willChange: 'transform',
-    marginRight: 10
   }
 })
 
 export function Editor() {
   const { blocks$, blockSetting$, internal$, isReadonly$ } = useEditorContext()
 
-  const mouseHoverTheBlock: EventHandler<"div", "onMouseEnter"> = (mouseEvent) => {
+  let scrollableElement!: Ref<"div">
+  const moveTheButtonRow: EventHandler<"div", "onMouseEnter"> = (mouseEvent) => {
     const currentTarget = mouseEvent.currentTarget
     internal$.buttonRow$.updatePosition$(currentTarget)
   }
@@ -47,7 +40,7 @@ export function Editor() {
   
     return (
       <Show when={isReadonly$()} fallback={
-        <div id={__style.block} data-id={props.id} onMouseEnter={mouseHoverTheBlock}>
+        <div id={__style.block} data-id={props.id} onMouseEnter={moveTheButtonRow}>
           <BlockComponent dataIn$={props.data} blockId$={props.id} />
         </div>
       }>
@@ -75,7 +68,7 @@ export function Editor() {
       __scrollbarStyle.scrollbarVertical,
       __scrollbarStyle.invsScrollbar,
       stylex.attrs(style.editor)
-    )}>
+    )} ref={scrollableElement}>
       <div {...stylex.attrs(style.blockList)}>
         <Show when={!shouldUpdate()}>
           <For each={blocks$.data$()}>
@@ -84,13 +77,7 @@ export function Editor() {
         </Show>
       </div>
       <Show when={!isReadonly$()}>
-        <div {...stylex.attrs(style.blockSetting)} style={{
-          '--y': `${internal$.buttonRow$.currentButtonRowYPos$().y - 40}px`,
-          // '--x': `${buttonRow$.currentButtonRowYPos$().x}px`,
-          '--x': `0px`,
-        }}>
-          <BlockButtonRow />
-        </div>
+        <BlockButtonRow currentYPosition$={internal$.buttonRow$.currentPosition$().y} />
       </Show>
     </div>
   )

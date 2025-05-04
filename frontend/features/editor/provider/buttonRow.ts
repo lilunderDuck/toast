@@ -1,6 +1,8 @@
 import { type Accessor, createSignal } from "solid-js"
-import type { EditorSessionStorage } from "./EditorProvider"
 // ...
+import { editorLog } from "~/features/debug"
+// ...
+import type { EditorSessionStorage } from "./EditorProvider"
 
 export interface IButtonRowUtils {
   /**Updates the position of the button row and also set `"currentBlock"` to `sessionStorage` to...
@@ -10,30 +12,32 @@ export interface IButtonRowUtils {
    */
   updatePosition$(blockRef: HTMLDivElement): void
   /**An accessor for the current position of the button row. */
-  currentButtonRowYPos$: Accessor<{
+  currentPosition$: Accessor<{
     x: number,
     y: number
   }>
 }
 
 export function createButtonRow(wrappedSessionStorage: EditorSessionStorage) {
-  const [currentButtonRowYPos, setCurrentButtonRowYPos] = createSignal({
+  const [currentPos, setCurrentPos] = createSignal({
     x: 0,
     y: 0
   })
 
   const updatePosition: IButtonRowUtils["updatePosition$"] = (blockRef) => {
-    const boundRect = blockRef.getBoundingClientRect()
-    setCurrentButtonRowYPos({
-      x: boundRect.x,
-      y: boundRect.y
-    })
+    const newPosition = {
+      x: 0, // ignored
+      y: blockRef.offsetTop
+    }
+
+    setCurrentPos(newPosition)
 
     wrappedSessionStorage.set$('currentBlock', parseInt(blockRef.dataset!.id ?? ''))
+    isDevMode && editorLog.log("Moved button row to", newPosition)
   }
 
   return {
     updatePosition$: updatePosition,
-    currentButtonRowYPos$: currentButtonRowYPos
+    currentPosition$: currentPos
   }
 }

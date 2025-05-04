@@ -75,7 +75,6 @@ export function EditorProvider(props: ParentProps) {
     })
 
     isDevMode && editorLog.logLabel("internal", "document", currOpenedDocument!.id, "data updated")
-    
   }
 
   const debouceUpdateData = debounce(instantDataUpdate, 1000)
@@ -86,11 +85,8 @@ export function EditorProvider(props: ParentProps) {
   }
 
   const { blockSetting, defaultBlock } = loadBlockSettings()
-  const block = createBlocks(buttonRow, () => blockSetting, updateData)
 
-  const spawnDefaultBlock = () => {
-    block.insert$(null, defaultBlock.type$, defaultBlock.setting$.defaultValue$, true)
-  }
+  const block = createBlocks(buttonRow, blockSetting, updateData, defaultBlock)
 
   const event = createEvent()
 
@@ -112,7 +108,7 @@ export function EditorProvider(props: ParentProps) {
     if (isNoBlockLeft) {
       isDevMode && editorLog.log('The provided document', data, 'has no block data in it, spawning the default block...')
       
-      spawnDefaultBlock()
+      block.spawnDefaultBlock$()
     }
     
     wrappedSessionStorage.delete$('currentBlock')

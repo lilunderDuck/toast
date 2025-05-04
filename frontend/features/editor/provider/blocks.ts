@@ -6,6 +6,7 @@ import { editorLog } from "~/features/debug"
 import type { IBlockData } from "./blockData"
 import type { IButtonRowUtils } from "./buttonRow"
 import type { IEditorContext } from "./EditorProvider"
+import { DefaultBlockSetting } from "./settings"
 
 export interface IBlockUtils {
   /**The block data */
@@ -37,12 +38,14 @@ export interface IBlockUtils {
    * @returns *nothing*
    */
   delete$(blockId: number): void
+  spawnDefaultBlock$(): void
 }
 
 export function createBlocks(
   buttonRow: IButtonRowUtils,
-  blockSetting: () => IEditorContext["blockSetting$"],
-  updateData: () => void
+  blockSetting: IEditorContext["blockSetting$"],
+  updateData: () => void,
+  defaultBlock: DefaultBlockSetting
 ): IBlockUtils {
   const [data, setData] = createSignal<IBlockData[]>([])
 
@@ -63,10 +66,9 @@ export function createBlocks(
 
   const insert: IBlockUtils["insert$"] = (beforeBlockId, type, someData, silentUpdate = false) => {
     if (!someData) {
-      const thisBlockSetting = blockSetting()[type]
+      const thisBlockSetting = blockSetting[type]
       someData = thisBlockSetting.defaultValue$
       isDevMode && editorLog.log("no data was given with block type:", type, ". Using the default value:", thisBlockSetting.defaultValue$)
-      
     }
 
     const newData = create(type, someData)
@@ -105,8 +107,18 @@ export function createBlocks(
   
   const deleteBlock: IBlockUtils["delete$"] = (blockId) => {
     setData(prev => arrayObjects(prev).remove$('id', blockId))
+    // make sure to spawn default block if the editor has no data
+    if (data().length === 0) {
+      spawnDefaultBlock()
+    }
+
     updateData()
     isDevMode && editorLog.log("block", blockId, "deleted")
+  }
+
+  const spawnDefaultBlock: IBlockUtils["spawnDefaultBlock$"] = () => {
+    insert(null, defaultBlock.type$, defaultBlock.setting$.defaultValue$, true)
+    isDevMode && editorLog.log("default block spawned", defaultBlock)
   }
   
   return {
@@ -115,6 +127,7 @@ export function createBlocks(
     insert$: insert,
     save$: data,
     saveBlockData$: saveBlockData,
-    delete$: deleteBlock
+    delete$: deleteBlock,
+    spawnDefaultBlock$: spawnDefaultBlock
   }
 }

@@ -16,7 +16,7 @@ export function GallerySideView() {
   const { galleryId$, addImages$ } = useGalleryDataContext()
   const { isReadonly$ } = useEditorContext()
 
-  const { FileUploadZone$, isUploading$ } = createFileUpload({
+  const { FileUploadZone$, isUploading$, error$ } = createFileUpload({
     title$: "Please choose a file.",
     type$: FileUploadType.multiFile,
     filter$() {
@@ -55,8 +55,11 @@ export function GallerySideView() {
             <BsFullscreen />
           </Button>
         </Tooltip>
-        <Show when={isUploading$()}>
+        <Show when={isUploading$() && !error$()}>
           <div>Loading...</div>
+        </Show>
+        <Show when={error$()}>
+          <div>Failed to upload.</div>
         </Show>
       </GalleryButtonRow>
       <galleryDialog.Modal$ />
