@@ -1,9 +1,12 @@
 import { __throw, apiCallLog } from "~/features/debug"
 import { __callBackendApi } from "../call"
 import { IJournalData, JournalContentData, JournalSchema, JournalType } from "./stuff"
+import { macro_urlBuilder } from "macro_def"
 
 export async function api_createJournal(currentGroupId: number, data: JournalSchema, type: JournalType): Promise<IJournalData> {
-  return await __callBackendApi('POST', `/duck/journal/${currentGroupId}?type=${type}`, {
+  return await __callBackendApi('POST', macro_urlBuilder(`/duck/journal/${currentGroupId}`, {
+    type: type
+  }), {
     ...data
   })
 }
@@ -14,7 +17,9 @@ export async function api_deleteJournal(currentGroupId: number, someJournalId: n
 
 // can't think of a way to get the correct journal by just the journalId
 export async function api_getJournal(currentGroupId: number, someJournalId: number, type: JournalType): Promise<IJournalData> {
-  return await __callBackendApi('GET', `/duck/journal/${currentGroupId}/${someJournalId}?type=${type}`)
+  return await __callBackendApi('GET', macro_urlBuilder(`/duck/journal/${currentGroupId}/${someJournalId}`, {
+    type: type
+  }))
 }
 
 export async function api_getAllJournal(currentGroupId: number): Promise<Record<string, IJournalData>> {

@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"burned-toast/backend/handler/journal"
 	"burned-toast/backend/handler/media"
 	"burned-toast/backend/internals"
 	"burned-toast/backend/utils"
@@ -14,6 +15,41 @@ import (
 func CreateMediaRoute(this *gin.RouterGroup) {
 	mediaRoute := this.Group("/journal-media")
 
+	// POST /api/journal-media/upload?filePath=...&dest=...
+	mediaRoute.POST("/upload", func(ctx *gin.Context) {
+		filePath := ctx.Query("filePath")
+		dest := ctx.Query("dest")
+		if filePath == "" {
+			replyWithValidationErrMsg(ctx, errors.New("missing 'filePath' query parameter"))
+			return
+		}
+
+		if dest == "" {
+			replyWithValidationErrMsg(ctx, errors.New("missing 'dest' query parameter"))
+			return
+		}
+
+		err := utils.CopyFile(filePath, utils.JoinPath(internals.DataFolderPath, dest))
+		if err != nil {
+			replyWithAnyErrMsg(ctx, err)
+			return
+		}
+
+		replyWithOkMsg(ctx)
+	})
+
+	// POST /api/journal-media/delete?filePath=...
+	mediaRoute.POST("/delete", func(ctx *gin.Context) {
+		filePath := ctx.Query("filePath")
+		err := utils.RemoveFileOrDirectory(utils.JoinPath(journal.JournalFolderPath, filePath))
+		if err != nil {
+			replyWithAnyErrMsg(ctx, err)
+			return
+		}
+
+		replyWithOkMsg(ctx)
+	})
+
 	imageMediaRoute(mediaRoute)
 	galleryMediaRoute(mediaRoute)
 	previewJournalGroupIconRoute(mediaRoute)
@@ -26,7 +62,7 @@ func previewJournalGroupIconRoute(this *gin.RouterGroup) {
 			return
 		}
 
-		err := utils.CopyFile(filePath, utils.JoinPath(internals.CacheFolderPath, "preview.png"))
+		err := utils.CopyFile(filePath, utils.JoinPath(journal.JournalFolderPath, "preview.png"))
 		if err != nil {
 			replyWithAnyErrMsg(ctx, err)
 			return

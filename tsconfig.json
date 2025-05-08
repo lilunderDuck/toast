@@ -10,6 +10,7 @@
       "vite/client", 
       "./frontend/@types/global.d.ts",
       "./frontend/@types/internal_stuff.d.ts",
+      "./config/macro/types.d.ts",
       "@types/node"
     ],
     "paths": {

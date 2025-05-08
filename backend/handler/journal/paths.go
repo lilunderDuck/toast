@@ -8,7 +8,7 @@ import (
 
 // Stores the path to the folder where all the journal files are kept,
 // which is "~/data/journals"
-var journalFolderPath string = utils.JoinPath(internals.DataFolderPath, "journals")
+var JournalFolderPath string = utils.JoinPath(internals.DataFolderPath, "journals")
 
 // Gets the path to the folder where a specific journal group's files are saved.
 //
@@ -43,7 +43,7 @@ func GetCategorySavedFilePath(groupId int, id int) string {
 // Parameters:
 //   - groupId: The ID of the journal group.
 func GetGroupPath(groupId int) string {
-	return utils.JoinPath(journalFolderPath, utils.IntToString(groupId))
+	return utils.JoinPath(JournalFolderPath, utils.IntToString(groupId))
 }
 
 // Fets the full path to a journal group's metadata file.
