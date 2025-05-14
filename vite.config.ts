@@ -45,6 +45,7 @@ export default defineConfig(({ command }) => {
       rollupOptions: {
         output: rollupOutputOptions
       }
-    }
+    },
+    publicDir: "./frontend/public"
   }
 })

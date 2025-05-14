@@ -17,10 +17,14 @@ export async function getAllFiles(): Promise<FileData[]> {
       continue
     }
 
-    datas.push({
-      name: dir.name,
-      content: await fs.readFile(`${PATH}/${dir.name}`, { encoding: 'utf-8' })
-    })
+    try {
+      datas.push({
+        name: dir.name,
+        content: await fs.readFile(`${PATH}/${dir.name}`, { encoding: 'utf-8' })
+      })
+    } catch(error) {
+      console.log("could not read", dir.name, ", this is a directory")
+    }
   }
 
   return datas

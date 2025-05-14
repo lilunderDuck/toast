@@ -47,6 +47,8 @@ function TextContent() {
   const { isReadonly$ } = useEditorContext()
   const { textsData$ } = useTextDataContext()
 
+  const Content = () => {}
+
   return (
     <For each={textsData$()}>
       {(it, index) => (
