@@ -1,17 +1,17 @@
 package media
 
 import (
-	"burned-toast/backend/handler/journal"
+	"burned-toast/backend/internals"
 	"burned-toast/backend/utils"
 )
 
 func GetSavedImageFolderPath(groupId int) string {
-	return utils.JoinPath(journal.GetGroupPath(groupId), "image")
+	return utils.JoinPath(internals.GetGroupPath(groupId), "image")
 }
 
 func GetSavedGalleryFolderPath(groupId int, galleryId int) string {
 	return utils.JoinPath(
-		journal.GetGroupPath(groupId),
+		internals.GetGroupPath(groupId),
 		"gallery",
 		utils.IntToString(galleryId),
 	)

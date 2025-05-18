@@ -1,6 +1,9 @@
 package journal
 
-import "burned-toast/backend/utils"
+import (
+	"burned-toast/backend/internals"
+	"burned-toast/backend/utils"
+)
 
 // peak maximum data compression
 
@@ -20,7 +23,7 @@ type VirTreeData []VirTreeNode
 // Obscure file name, but it is basically just "virtural tree file display"
 // in short-term, that's what "vtfd" stands for.
 func getVtfdFilePath(groupId int) string {
-	return utils.JoinPath(GetGroupPath(groupId), "vtfd.dat")
+	return utils.JoinPath(internals.GetGroupPath(groupId), "vtfd.dat")
 }
 
 func CreateVirTree(groupId int) {

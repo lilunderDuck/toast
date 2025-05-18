@@ -47,3 +47,4 @@ install:
 	go get github.com/gin-gonic/gin
 	go get github.com/gin-contrib/cors
 	go get github.com/gin-contrib/static
+	go get github.com/gabriel-vasile/mimetype

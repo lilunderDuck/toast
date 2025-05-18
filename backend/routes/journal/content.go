@@ -1,4 +1,4 @@
-package routes
+package journal_route
 
 import (
 	"burned-toast/backend/handler/journal"
@@ -10,7 +10,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-func CreateJournalRoute(this *gin.RouterGroup) {
+func contentRoute(this *gin.RouterGroup) {
 	this.GET("/journal/:groupId", func(ctx *gin.Context) {
 		groupId := utils.StringToInt(ctx.Param("groupId"))
 
@@ -33,7 +33,7 @@ func CreateJournalRoute(this *gin.RouterGroup) {
 		// force to marshal this because idk why the server keep crashing.
 		jsonData, err := jsoniter.Marshal(journalData)
 		if err != nil {
-			replyWithAnyErrMsg(ctx, err)
+			utils.ReplyWithAnyErrMsg(ctx, err)
 			return
 		}
 
@@ -48,7 +48,7 @@ func CreateJournalRoute(this *gin.RouterGroup) {
 
 		var json journal.JournalUpdateSchema
 		if err := ctx.ShouldBindJSON(&json); err != nil {
-			replyWithValidationErrMsg(ctx, err)
+			utils.ReplyWithValidationErrMsg(ctx, err)
 			return
 		}
 
@@ -66,7 +66,7 @@ func CreateJournalRoute(this *gin.RouterGroup) {
 		journalId := utils.StringToInt(ctx.Param("journalId"))
 
 		journal.DeleteJournal(groupId, journalId)
-		replyWithOkMsg(ctx)
+		utils.ReplyWithOkMsg(ctx)
 	})
 }
 
@@ -76,11 +76,11 @@ func handleCreateAllKindOfJournal(ctx *gin.Context) {
 
 	switch journalType {
 	case "":
-		replyWithValidationErrMsg(ctx, fmt.Errorf("missing query param: 'type'"))
+		utils.ReplyWithValidationErrMsg(ctx, fmt.Errorf("missing query param: 'type'"))
 		return
 	case "0":
 		var json journal.JournalSchema
-		if !validate(ctx, &json) {
+		if !utils.Validate(ctx, &json) {
 			return
 		}
 
@@ -89,7 +89,7 @@ func handleCreateAllKindOfJournal(ctx *gin.Context) {
 		return
 	case "1":
 		var input journal.CategorySchema
-		if !validate(ctx, &input) {
+		if !utils.Validate(ctx, &input) {
 			return
 		}
 

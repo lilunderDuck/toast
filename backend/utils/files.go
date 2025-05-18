@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 
@@ -106,7 +107,15 @@ func RemoveFileOrDirectory(path string) (removeError error) {
 // Returns true if the file exists, and false if it doesn't.
 func IsFileExist(pathToFile string) (existOrNot bool) {
 	_, err := os.Stat(pathToFile)
-	return !errors.Is(err, os.ErrNotExist)
+	if err == nil {
+		return true
+	}
+
+	if errors.Is(err, fs.ErrNotExist) {
+		return false
+	}
+
+	return false
 }
 
 // Writes the given data (stuff) to a file at the given path.

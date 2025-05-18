@@ -3,7 +3,10 @@ package main
 import (
 	"burned-toast/backend/dynamic"
 	"burned-toast/backend/internals"
+
+	// ...
 	"burned-toast/backend/routes"
+	journal_route "burned-toast/backend/routes/journal"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
@@ -28,7 +31,7 @@ func main() {
 
 	apiRoute := router.Group("/duck")
 
-	routes.CreateJournalRoute(apiRoute)
+	journal_route.CreateJournalRoute(apiRoute)
 	routes.CreateJournalGroupRoute(apiRoute)
 	routes.CreateExtensionRoute(apiRoute)
 	routes.CreateMediaRoute(apiRoute)

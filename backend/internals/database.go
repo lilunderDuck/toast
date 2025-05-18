@@ -148,10 +148,9 @@ type CacheModificationFn func(thisCache *JSONCacheUtils)
 // Parameters:
 //   - dbName: The name of the database.
 //   - updateFn: The function to call to modify the database.
-func ModifyCacheDb(dbName string, updateFn CacheModificationFn) {
+func OpenDb(dbName string, updateFn CacheModificationFn) {
 	dbPath := utils.JoinPath(CacheFolderPath, dbName)
 	cacheDb, dbError := pogreb.Open(dbPath, nil /*no options*/)
-	// cacheDb, _ := pogreb.Open(dbPath, nil /*no options*/)
 
 	if dbError != nil {
 		fmt.Println("[cache] db error", dbError)
@@ -164,6 +163,6 @@ func ModifyCacheDb(dbName string, updateFn CacheModificationFn) {
 		db: cacheDb,
 	})
 
-	fmt.Println("[cache] database closed -> ", dbName)
 	cacheDb.Close()
+	fmt.Println("[cache] database closed -> ", dbName)
 }

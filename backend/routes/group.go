@@ -29,7 +29,7 @@ func CreateJournalGroupRoute(this *gin.RouterGroup) {
 	this.POST("/journal-group", func(ctx *gin.Context) {
 		var json journal.JournalGroupSchema
 		if err := ctx.ShouldBindJSON(&json); err != nil {
-			replyWithValidationErrMsg(ctx, err)
+			utils.ReplyWithValidationErrMsg(ctx, err)
 			return
 		}
 
@@ -47,7 +47,7 @@ func CreateJournalGroupRoute(this *gin.RouterGroup) {
 
 		var json journal.JournalGroupUpdateSchema
 		if err := ctx.ShouldBindJSON(&json); err != nil {
-			replyWithValidationErrMsg(ctx, err)
+			utils.ReplyWithValidationErrMsg(ctx, err)
 			return
 		}
 
@@ -64,7 +64,7 @@ func CreateJournalGroupRoute(this *gin.RouterGroup) {
 		groupId := utils.StringToInt(ctx.Param("groupId"))
 
 		journal.DeleteGroup(groupId)
-		replyWithOkMsg(ctx)
+		utils.ReplyWithOkMsg(ctx)
 	})
 
 	this.GET("/journal-group/:groupId/tree", func(ctx *gin.Context) {
@@ -83,7 +83,7 @@ func CreateJournalGroupRoute(this *gin.RouterGroup) {
 		groupId := utils.StringToInt(ctx.Param("groupId"))
 		var json journal.VirTreeData
 		if err := ctx.ShouldBindJSON(&json); err != nil {
-			replyWithValidationErrMsg(ctx, err)
+			utils.ReplyWithValidationErrMsg(ctx, err)
 			return
 		}
 
@@ -93,6 +93,6 @@ func CreateJournalGroupRoute(this *gin.RouterGroup) {
 			return
 		}
 
-		replyWithOkMsg(ctx)
+		utils.ReplyWithOkMsg(ctx)
 	})
 }

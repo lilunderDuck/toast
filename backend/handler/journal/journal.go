@@ -63,13 +63,13 @@ func CreateJournal(currentGroupId int, schema *JournalSchema) *JournalData {
 	}
 
 	utils.BSON_WriteFile(
-		GetJournalSavedFilePath(currentGroupId, newData.Id),
+		internals.GetJournalSavedFilePath(currentGroupId, newData.Id),
 		&newData,
 	)
 
 	newData.Data = []JournalContentData{}
 
-	internals.ModifyCacheDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
+	internals.OpenDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
 		cache.Set(stringJournalId, &newData)
 	})
 
@@ -89,7 +89,7 @@ func CreateJournal(currentGroupId int, schema *JournalSchema) *JournalData {
 func GetJournal(currentGroupId int, journalId int) (*JournalData, error) {
 	var dataOut JournalData
 	err := utils.BSON_ReadFile(
-		GetJournalSavedFilePath(currentGroupId, journalId),
+		internals.GetJournalSavedFilePath(currentGroupId, journalId),
 		&dataOut,
 	)
 
@@ -120,7 +120,7 @@ func UpdateJournal(currentGroupId int, journalId int, newData *JournalUpdateSche
 	mergeJournalData(data, newData)
 
 	writeError := utils.BSON_WriteFile(
-		GetJournalSavedFilePath(currentGroupId, journalId),
+		internals.GetJournalSavedFilePath(currentGroupId, journalId),
 		&data,
 	)
 
@@ -128,7 +128,7 @@ func UpdateJournal(currentGroupId int, journalId int, newData *JournalUpdateSche
 		return nil, writeError
 	}
 
-	internals.ModifyCacheDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
+	internals.OpenDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
 		cache.Set(utils.IntToString(data.Id), &JournalMetaData{
 			Id:       data.Id,
 			Type:     data.Type,
@@ -162,12 +162,12 @@ func mergeJournalData(currentJournalData *JournalData, newData *JournalUpdateSch
 //   - currentGroupId: The ID of the journal group.
 //   - journalId: The ID of the journal entry to delete.
 func DeleteJournal(currentGroupId int, journalId int) error {
-	removeError := utils.RemoveFileOrDirectory(GetJournalSavedFilePath(currentGroupId, journalId))
+	removeError := utils.RemoveFileOrDirectory(internals.GetJournalSavedFilePath(currentGroupId, journalId))
 	if removeError != nil {
 		return removeError
 	}
 
-	internals.ModifyCacheDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
+	internals.OpenDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
 		cache.Delete(utils.IntToString(journalId))
 	})
 
@@ -176,7 +176,7 @@ func DeleteJournal(currentGroupId int, journalId int) error {
 
 func GetAllJournal(currentGroupId int) map[string]any {
 	var out map[string]any
-	internals.ModifyCacheDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
+	internals.OpenDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
 		out = cache.GetAll()
 	})
 

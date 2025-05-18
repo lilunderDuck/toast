@@ -54,7 +54,7 @@ func CreateGroup(groupSchema *JournalGroupSchema) (newGroupData *JournalGroupDat
 	}
 
 	// Save it to cache so we can access it later
-	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
+	internals.OpenDb("journal-group", func(cache *internals.JSONCacheUtils) {
 		cache.Set(stringRandomId, &data)
 	})
 
@@ -68,9 +68,9 @@ func CreateGroup(groupSchema *JournalGroupSchema) (newGroupData *JournalGroupDat
 }
 
 func createGroupFolders(groupId int, groupData *JournalGroupData) (anyError error) {
-	groupDirectory := GetGroupPath(groupId)
+	groupDirectory := internals.GetGroupPath(groupId)
 	utils.CreateDirectory(groupDirectory)
-	utils.CreateDirectory(GetJournalsSavedFolder(groupId))
+	utils.CreateDirectory(internals.GetJournalsSavedFolder(groupId))
 	CreateVirTree(groupId)
 
 	// write the journal group's metadata
@@ -97,7 +97,7 @@ func GetGroup(groupId int) (*JournalGroupData, error) {
 	}
 
 	var outData JournalGroupData
-	err := utils.BSON_ReadFile(GetGroupMetaFilePath(groupId), &outData)
+	err := utils.BSON_ReadFile(internals.GetGroupMetaFilePath(groupId), &outData)
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +106,7 @@ func GetGroup(groupId int) (*JournalGroupData, error) {
 }
 
 func isGroupExist(groupId int) bool {
-	return utils.IsFileExist(GetGroupMetaFilePath(groupId))
+	return utils.IsFileExist(internals.GetGroupMetaFilePath(groupId))
 }
 
 // Updates an existing journal group.
@@ -132,7 +132,7 @@ func UpdateGroup(
 	mergeGroupData(groupId, groupData, newData)
 
 	// Make sure to update the meta data and cache data too.
-	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
+	internals.OpenDb("journal-group", func(cache *internals.JSONCacheUtils) {
 		cache.Set(utils.IntToString(groupData.Id), &groupData)
 	})
 
@@ -143,11 +143,11 @@ func UpdateGroup(
 
 func updateGroupMetaFile(groupData *JournalGroupData) error {
 	groupId := utils.IntToString(groupData.Id)
-	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
+	internals.OpenDb("journal-group", func(cache *internals.JSONCacheUtils) {
 		cache.Set(groupId, groupData)
 	})
 
-	return utils.BSON_WriteFile(GetGroupMetaFilePath(groupData.Id), &groupData)
+	return utils.BSON_WriteFile(internals.GetGroupMetaFilePath(groupData.Id), &groupData)
 }
 
 func mergeGroupData(groupId int, groupData *JournalGroupData, newData *JournalGroupUpdateSchema) {
@@ -161,7 +161,7 @@ func mergeGroupData(groupId int, groupData *JournalGroupData, newData *JournalGr
 
 	if newData.Icon != "" {
 		groupData.HasIcon = true
-		utils.CopyFile(newData.Icon, utils.JoinPath(GetGroupPath(groupId), "icon.png"))
+		utils.CopyFile(newData.Icon, utils.JoinPath(internals.GetGroupPath(groupId), "icon.png"))
 	}
 }
 
@@ -174,9 +174,9 @@ func mergeGroupData(groupId int, groupData *JournalGroupData, newData *JournalGr
 //   - groupId: The ID of the journal group to delete.
 func DeleteGroup(groupId int) error {
 	// Deletes from cache first
-	groupDataPath := GetGroupPath(groupId)
+	groupDataPath := internals.GetGroupPath(groupId)
 	var err error
-	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
+	internals.OpenDb("journal-group", func(cache *internals.JSONCacheUtils) {
 		err = cache.Delete(utils.IntToString(groupId))
 	})
 
@@ -200,7 +200,7 @@ func DeleteGroup(groupId int) error {
 // Returns an array containing all journal group data.
 func GetAllGroup() []any {
 	var out []any
-	internals.ModifyCacheDb("journal-group", func(cache *internals.JSONCacheUtils) {
+	internals.OpenDb("journal-group", func(cache *internals.JSONCacheUtils) {
 		out = cache.GetAllValue()
 	})
 	return out

@@ -1,19 +1,21 @@
-import { type Accessor, createContext, createSignal, ParentProps, type Setter, useContext } from "solid-js"
+import { type Accessor, createContext, createSignal, onMount, ParentProps, useContext } from "solid-js"
 // ...
 import { type IGalleryBlockData } from "../GalleryBlock"
 import { type IPageUtils, createPageUtils } from "./page"
 import { createStorage, IStorage } from "~/utils"
+import { editorLog } from "~/features/debug"
+import { api_getGallery, api_saveGalleryItem, IGalleryItemData } from "~/api/journal"
+import { useJournalContext } from "~/features/journal"
 
 export type GalleryLocalStorage = IStorage<{
-  [key: `gallery-${number}-currentPage`]: number
+  [key: `gallery-${string}-currentPage`]: number
 }>
 
 interface IGalleryDataContext {
   page$: IPageUtils
-  galleryId$: number
-  images$: Accessor<IGalleryBlockData["images"]>
-  setImages$: Setter<IGalleryBlockData["images"]>
-  addImages$(newImages: string[]): void
+  galleryId$: string
+  images$: Accessor<IGalleryItemData[]>
+  addImages$(newImages: string): Promise<void>
   localStorage$: GalleryLocalStorage
 }
 
@@ -25,28 +27,46 @@ interface GalleryDataProviderProps {
 }
 
 export function GalleryDataProvider(props: ParentProps<GalleryDataProviderProps>) {
-  const [images, setImages] = createSignal(props.dataIn$?.images ?? [])
+  const { getCurrentGroup$ } = useJournalContext()
+  const [images, setImages] = createSignal<IGalleryItemData[]>([])
 
-  const galleryId = props.dataIn$.id
+  let galleryId = props.dataIn$.galleryId
   const wrappedLocalStorage: GalleryLocalStorage = createStorage(localStorage)
   const pageUtils = createPageUtils(galleryId, wrappedLocalStorage)
 
   pageUtils.setTotalPage$(images().length === 0 ? 0 : images().length)
 
+  const currentGroup = getCurrentGroup$().id
+
+  onMount(async() => {
+    const items = await api_getGallery(currentGroup, galleryId)
+    setImages(items)
+    isDevMode && editorLog.logLabel("gallery", items)
+  })
+
+  // make sure to save this so we don't have any weird data desync problem 
+  // under the hood.
+  props.onChange$(props.dataIn$) 
+
   return (
     <Context.Provider value={{
-      galleryId$: galleryId,
+      get galleryId$() {
+        return galleryId
+      },
       page$: pageUtils,
-      images$: images, 
-      setImages$: setImages,
+      get images$() {
+        return images
+      }, 
       localStorage$: wrappedLocalStorage,
-      addImages$(newImages) {
-        setImages(prev => [...prev, ...newImages])
+      async addImages$(newImages) {
+        // this assert exists is because in case I mess up something, 
+        // it might be a reminder to me. 
+        console.assert(galleryId, "galleryId should not be null or undefined")
+        const file = await api_saveGalleryItem(currentGroup, galleryId, newImages)
+        setImages(prev => [...prev, file]) 
         pageUtils.setTotalPage$(images().length)
-        props.onChange$({
-          id: galleryId,
-          images: images()
-        })
+
+        isDevMode && editorLog.logLabel("gallery", "added", newImages)
       }
     }}>
       {props.children}

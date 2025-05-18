@@ -37,19 +37,19 @@ func CreateCategory(groupId int, schema *CategorySchema) *CategoryData {
 		Name:    schema.Name,
 	}
 
-	internals.ModifyCacheDb(utils.IntToString(groupId), func(thisCache *internals.JSONCacheUtils) {
+	internals.OpenDb(utils.IntToString(groupId), func(thisCache *internals.JSONCacheUtils) {
 		thisCache.Set(stringCategoryId, &newData)
 	})
 
-	utils.BSON_WriteFile(GetCategorySavedFilePath(groupId, categoryId), &newData)
+	utils.BSON_WriteFile(internals.GetCategorySavedFilePath(groupId, categoryId), &newData)
 
 	return &newData
 }
 
 func DeleteCategory(groupId int, categoryId int) {
-	utils.RemoveFileOrDirectory(GetCategorySavedFilePath(groupId, categoryId))
+	utils.RemoveFileOrDirectory(internals.GetCategorySavedFilePath(groupId, categoryId))
 
-	internals.ModifyCacheDb(utils.IntToString(groupId), func(thisCache *internals.JSONCacheUtils) {
+	internals.OpenDb(utils.IntToString(groupId), func(thisCache *internals.JSONCacheUtils) {
 		thisCache.Delete(utils.IntToString(categoryId))
 	})
 }

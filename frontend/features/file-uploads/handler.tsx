@@ -71,7 +71,12 @@ export function createFileUpload(
 
   return {
     FileUploadZone$(props) {
-      return <div {...props} onClick={onClickThis} />
+      return isDevMode ? (
+        // add a attribute so I can find which one is a file upload div.
+        <div {...props} onClick={onClickThis} data-debug="file upload" />
+      ) : (
+        <div {...props} onClick={onClickThis} />
+      )
     },
     isUploading$: isLoading,
     error$: error

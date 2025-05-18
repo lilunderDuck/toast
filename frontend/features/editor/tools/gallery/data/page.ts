@@ -13,7 +13,7 @@ export interface IPageUtils {
   setTotalPage$: Setter<number>
 }
 
-export function createPageUtils(galleryId: number, wrappedLocalStorage: GalleryLocalStorage): IPageUtils {
+export function createPageUtils(galleryId: string, wrappedLocalStorage: GalleryLocalStorage): IPageUtils {
   const FIRST_PAGE = 0
   const initialPage = wrappedLocalStorage.get$(`gallery-${galleryId}-currentPage`) ?? FIRST_PAGE
   const [currentPage, setCurrentPage] = createSignal(initialPage)

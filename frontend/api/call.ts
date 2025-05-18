@@ -60,9 +60,7 @@ export async function __callBackendApi<
   }
 
   console.assert(!(response.status >= 400), result)
-
-  isDevMode && apiCallLog.logLabel("result", response.status, result)
-  
+  isDevMode && apiCallLog.logLabel("result", method, route, "\n | ", response.status, result)
 
   return result
 }

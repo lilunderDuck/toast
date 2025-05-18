@@ -1,1 +1,2 @@
-export * from "./GallerySideView"
+export * from "./GalleryButtonRow"
+export * from "./GalleryList"

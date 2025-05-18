@@ -1,39 +1,52 @@
-import type { ParentProps } from "solid-js"
-import { BsCaretLeftFill, BsCaretRightFill } from "solid-icons/bs"
-// ...
+import { BsFolderPlus, BsUpload } from "solid-icons/bs";
+import { Button, ButtonSizeVariant, FlexCenterY, Tooltip } from "~/components";
+
 import stylex from "@stylexjs/stylex"
-// ...
-import { Button, ButtonSizeVariant, FlexCenterY, Spacer, Tooltip } from "~/components"
-// ...
-import { useGalleryDataContext } from "../data"
+import { createFileUpload, FileUploadType } from "~/features/file-uploads";
+import { useGalleryDataContext } from "../data";
 
 const style = stylex.create({
   buttonRow: {
-    gap: 10,
-    userSelect: 'none'
+    gap: 10
   }
 })
 
-export default function GalleryButtonRow(props: ParentProps) {
-  const { page$ } = useGalleryDataContext()
+export function GalleryButtonRow() {
+  const { addImages$ } = useGalleryDataContext()
+  const fileUpload = createFileUpload({
+    type$: FileUploadType.file,
+    title$: "Please select a file",
+    async onFinish$(filePath) {
+      await addImages$(filePath)
+    },
+  })
+
+  const directoryUpload = createFileUpload({
+    type$: FileUploadType.file,
+    title$: "Please select a file",
+    async onFinish$(filePath) {
+      await addImages$(filePath)
+    },
+  })
+
+  const shouldDisableButtons = () => directoryUpload.isUploading$() || fileUpload.isUploading$()
 
   return (
     <FlexCenterY {...stylex.attrs(style.buttonRow)}>
-      <Tooltip label$="Previous">
-        <Button size$={ButtonSizeVariant.icon} onClick={() => page$.focusPrevious$()}>
-          <BsCaretLeftFill />
-        </Button>
+      <Tooltip label$="Select a file">
+        <fileUpload.FileUploadZone$>
+          <Button size$={ButtonSizeVariant.icon} disabled={shouldDisableButtons()}>
+            <BsUpload />
+          </Button>
+        </fileUpload.FileUploadZone$>
       </Tooltip>
-      <Tooltip label$="Next">
-        <Button size$={ButtonSizeVariant.icon} onClick={() => page$.focusNext$()}>
-          <BsCaretRightFill />
-        </Button>
+      <Tooltip label$="Select a folder">
+        <directoryUpload.FileUploadZone$>
+          <Button size$={ButtonSizeVariant.icon} disabled={shouldDisableButtons()}>
+            <BsFolderPlus />
+          </Button>
+        </directoryUpload.FileUploadZone$>
       </Tooltip>
-      <Spacer />
-      {props.children}
-      <div>
-        {page$.currentPage$() + 1} / {page$.totalPage$()}
-      </div>
     </FlexCenterY>
   )
 }
