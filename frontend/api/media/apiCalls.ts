@@ -14,16 +14,15 @@ export const GET_FILES_ROUTE = "/duck/media/files" as const
 
 export async function api_saveImage(currentGroupId: number, targetFile: string): Promise<{ result: string }> {
   // return __callBackendApi("POST", `/duck/media/image/${currentGroupId}?filePath=${targetFile}`)
-  return __callBackendApi("POST", macro_urlBuilder(UPLOAD_ROUTE, {
-    filePath: targetFile,
-    dest: `/${currentGroupId}/image/`
-  }))
+  return __callBackendApi("POST", `/duck/journal/${currentGroupId}/image`, {
+    filePath: targetFile
+  })
 }
 
 export function api_deleteImage(currentGroupId: number, fileName: string) {
-  return __callBackendApi("POST", macro_urlBuilder(DELETE_ROUTE, {
-    filePath: `/${currentGroupId}/image/${fileName}`,
-  }))
+  return __callBackendApi("DELETE", `/duck/journal/${currentGroupId}/image`, {
+    fileName: fileName
+  })
 }
 
 export function api_saveVideo(currentGroupId: number, targetFilePath: string) {

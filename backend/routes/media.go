@@ -15,7 +15,7 @@ func CreateMediaRoute(this *gin.RouterGroup) {
 
 	// POST /api/media/upload?filePath=...&dest=...
 	mediaRoute.POST("/upload", func(ctx *gin.Context) {
-		data, err := utils.HandleFileUpload(ctx, internals.DataFolderPath)
+		data, err := utils.HandleFileUpload(ctx, "")
 		if err == nil {
 			ctx.JSON(http.StatusOK, data)
 		}
@@ -23,7 +23,7 @@ func CreateMediaRoute(this *gin.RouterGroup) {
 
 	// POST /api/media/delete?filePath=...
 	mediaRoute.POST("/delete", func(ctx *gin.Context) {
-		data, err := utils.HandleFileDelete(ctx, internals.JournalFolderPath)
+		data, err := utils.HandleFileDelete(ctx, "")
 		if err == nil {
 			ctx.JSON(http.StatusOK, data)
 		}

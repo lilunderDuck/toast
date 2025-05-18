@@ -38,6 +38,32 @@ func Validate[T any](ctx *gin.Context, jsonInput T) (ok bool) {
 	return true
 }
 
+type MediaUploadSchema struct {
+	FilePath string `form:"filePath"  json:"filePath" binding:"required"`
+}
+
+func ValidateMediaUploadStuff(ctx *gin.Context) *MediaUploadSchema {
+	var this MediaUploadSchema
+	if !Validate(ctx, &this) {
+		return nil
+	}
+
+	return &this
+}
+
+type MediaDeleteSchema struct {
+	FileName string `form:"fileName"  json:"fileName" binding:"required"`
+}
+
+func ValidateMediaDeleteStuff(ctx *gin.Context) *MediaDeleteSchema {
+	var this MediaDeleteSchema
+	if !Validate(ctx, &this) {
+		return nil
+	}
+
+	return &this
+}
+
 type FileUploadResult struct {
 	Name string
 	Type string
