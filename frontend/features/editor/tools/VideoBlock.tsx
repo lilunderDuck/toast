@@ -6,7 +6,7 @@ export function createVideoBlock(): IBlockSetting<IVideoBlockData> {
     displayName$: "Video",
     get defaultValue$() {
       return {
-        videoUrl: ''
+        videoName: ''
       }
     },
     blockComponent$(props) {

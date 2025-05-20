@@ -11,7 +11,7 @@ export function FullScreenButton(props: HTMLAttributes<"button">) {
     <Tooltip label$="Enter fullscreen">
       <Button
         {...props}
-        disabled={data$.videoUrl === ""}
+        disabled={data$.videoName === ""}
         size$={ButtonSizeVariant.icon}
       >
         <BsFullscreen size={15} />

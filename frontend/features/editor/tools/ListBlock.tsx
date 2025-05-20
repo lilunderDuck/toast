@@ -3,11 +3,12 @@ import { Dynamic } from "solid-js/web"
 import { BsX } from "solid-icons/bs"
 // ...
 import stylex from "@stylexjs/stylex"
+import __style from "./ListBlock.module.css"
 // ...
 import { arrayObjects } from "~/utils"
 import { Button, ButtonSizeVariant, FlexCenterY, Spacer } from "~/components"
 // ...
-import { ITextProviderProps, Text, TextData } from "../common/text"
+import { DEFAULT_TEXT_DATA, type ITextProviderProps, Text, type TextData } from "../common/text"
 import { BlockComponentProps, IBlockSetting, useEditorContext } from "../provider"
 
 const enum ListType {
@@ -20,14 +21,13 @@ interface IListBlockData {
   type: ListType
 }
 
-const DEFAULT_TEXT_DATA = [{ text: '' }]
 export function createListBlock(): IBlockSetting<IListBlockData> {
   return {
     displayName$: "List",
     get defaultValue$() {
       return {
         items: [
-          DEFAULT_TEXT_DATA
+          [DEFAULT_TEXT_DATA]
         ],
         type: ListType.ordered
       }
@@ -63,7 +63,7 @@ function ListBlock(props: BlockComponentProps<IListBlockData>) {
     setData(prev => {
       const items = prev.items
 
-      items.push(DEFAULT_TEXT_DATA)
+      items.push([DEFAULT_TEXT_DATA])
       return { ...prev, items }
     })
     blocks$.saveBlockData$(props.blockId$, data())
@@ -77,6 +77,7 @@ function ListBlock(props: BlockComponentProps<IListBlockData>) {
     blocks$.saveBlockData$(props.blockId$, data())
   }
 
+  // uncomfortably deeply nesting components/element
   return (
     <div>
       <Show when={!isReadonly$()}>
@@ -89,7 +90,7 @@ function ListBlock(props: BlockComponentProps<IListBlockData>) {
       <Dynamic component={data().type === ListType.ordered ? "ol" : "ul"}>
         <For each={data().items}>
           {(it, listIndex) => (
-            <li>
+            <li class={__style.item}>
               <FlexCenterY {...stylex.attrs(style.listItem)}>
                 <Text
                   inputData$={{ text: it }}
@@ -98,7 +99,11 @@ function ListBlock(props: BlockComponentProps<IListBlockData>) {
                 />
                 <Show when={!isReadonly$()}>
                   <Spacer />
-                  <Button size$={ButtonSizeVariant.icon} onClick={() => deleteItem(listIndex())}>
+                  <Button 
+                    class={__style.deleteButton} 
+                    size$={ButtonSizeVariant.icon} 
+                    onClick={() => deleteItem(listIndex())}
+                  >
                     <BsX />
                   </Button>
                 </Show>

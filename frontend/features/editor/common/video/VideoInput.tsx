@@ -29,7 +29,7 @@ export function VideoInput() {
   const { getCurrentGroup$ } = useJournalContext()
   const { data$, setData$ } = useVideoDataContext()
 
-  const isThereAVideo = () => data$.videoUrl !== ""
+  const isThereAVideo = () => data$.videoName !== ""
   const [isVideoLoading, setIsVideoLoading] = createSignal(isThereAVideo())
   const currentGroupId = getCurrentGroup$().id
 
@@ -44,7 +44,7 @@ export function VideoInput() {
     },
     async onFinish$(theFilePath) {
       const fileName = await api_saveVideo(currentGroupId, theFilePath)
-      setData$("videoUrl", () => fileName)
+      setData$("videoName", () => fileName.result)
     },
     shouldShow$: () => shouldShowDialog
   })
@@ -70,7 +70,7 @@ export function VideoInput() {
       {...stylex.attrs(isThereAVideo() ? {} : style.emptyVideo)}
     >
       <Video
-        videoUrl={api_getVideoSavedPath(currentGroupId, data$.videoUrl)}
+        videoName={api_getVideoSavedPath(currentGroupId, data$.videoName)}
         onVideoLoaded$={() => setIsVideoLoading(false)}
       >
         <Show when={!isReadonly$()}>

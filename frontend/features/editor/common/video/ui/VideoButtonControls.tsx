@@ -25,7 +25,7 @@ export function VideoButtonControls(props: ParentProps<IVideoButtonControlsProps
     <>
       <Button
         size$={ButtonSizeVariant.icon}
-        disabled={data$.videoUrl === ""}
+        disabled={data$.videoName === ""}
         onClick={() => {
           togglePausing()
           props.onClick$?.(isPausing() ? VideoControlState.pausing : VideoControlState.playing)

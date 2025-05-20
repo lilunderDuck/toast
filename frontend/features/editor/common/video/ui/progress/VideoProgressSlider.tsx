@@ -8,10 +8,6 @@ const PROGRESS_BAR_HEIGHT = 5
 const style = stylex.create({
   progress: {
     width: '100%',
-    // backgroundColor: 'var(--gray9)',
-    // height: PROGRESS_BAR_HEIGHT,
-    // borderRadius: 5,
-    // position: 'relative'
   },
   progressIndiciator: {
     width: 'var(--progress)',
@@ -60,7 +56,7 @@ export default function VideoProgressSlider(props: IVideoProgressSliderProps) {
       <input 
         id={__style.inputRange}
         type="range"
-        disabled={data$.videoUrl === ""}
+        disabled={data$.videoName === ""}
         min={0}
         max={100}
         step={0.0001}

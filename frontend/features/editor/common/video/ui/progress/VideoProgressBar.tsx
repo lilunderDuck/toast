@@ -7,6 +7,7 @@ import { editorLog } from "~/features/debug"
 // ...
 import { getCurrentTimeByPercentage, getVideoPercentage, toHHMMSS } from "../../utils"
 import VideoProgressSlider from "./VideoProgressSlider"
+import { useVideoDataContext } from "../../data"
 
 const style = stylex.create({
   thisThing: {
@@ -57,8 +58,10 @@ interface IVideoProgressBar {
  * @returns An object containing functions to update the progress bar, set the total duration, and render the progress bar component.
  */
 export function createVideoProgressBar(options: IVideoProgressBarOptions): IVideoProgressBar {
-  const [progress, setProgress] = createSignal(0)
-  const [currentDuration, setCurrentDuration] = createSignal(0)
+  const { currentVideoDuration$, currentVideoProgress$ } = useVideoDataContext()
+
+  const [progress, setProgress] = currentVideoProgress$
+  const [currentDuration, setCurrentDuration] = currentVideoDuration$
   const [totalDurationInSec, setTotalDurationInSec] = createSignal<number>()
 
   const getTotalVideoDuration = () => totalDurationInSec() ?? -1
@@ -77,7 +80,6 @@ export function createVideoProgressBar(options: IVideoProgressBarOptions): IVide
       setProgress(getVideoPercentage(progressInSeconds, getTotalVideoDuration()))
       setCurrentDuration(progressInSeconds)
       isDevMode && editorLog.logLabel("video", `current progress: ${progress()}%, current duration: ${currentDuration()}s`)
-      
     },
     setTotalDuration$(durationInSeconds: number) {
       setTotalDurationInSec(durationInSeconds)

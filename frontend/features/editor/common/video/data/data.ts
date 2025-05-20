@@ -11,7 +11,7 @@ export interface IVideoChapterData {
 }
 
 export interface IVideoBlockData {
-  videoUrl: string
+  videoName: string
   subtitles?: IVideoSubtitleData[]
   chapters?: IVideoChapterData[]
 }

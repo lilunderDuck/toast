@@ -172,6 +172,7 @@ func MoveFile(sourcePath string, destPath string) error {
 }
 
 func CopyFile(source, destination string) error {
+	fmt.Println("Copying:", source, "to", destination)
 	sourceFile, err := os.Open(source)
 	if err != nil {
 		return err

@@ -6,7 +6,7 @@ import { FlexCenterY, FlexCenter, createLazyLoadedDialog } from "~/components"
 import stylex from "@stylexjs/stylex"
 import __style from "./Video.module.css"
 // ...
-import type { IVideoBlockData } from "../data"
+import { type IVideoBlockData } from "../data"
 import { createVideoProgressBar } from "./progress"
 import { VideoButtonControls, type IVideoButtonControlsProps, VideoControlState } from "./VideoButtonControls"
 import { FullScreenButton } from "./FullScreenButton"
@@ -45,25 +45,26 @@ export interface IVideoProps extends IVideoBlockData {
 export function Video(props: ParentProps<IVideoProps>) {
   let thisVideoRef!: Ref<"video">
   let everythingRef!: Ref<"div">
+
   const { 
     ProgressBar$, 
     updateProgressBar$, 
     setTotalDuration$ 
   } = createVideoProgressBar({
-    onProgressBarChanged$(currentDuration) {
-      thisVideoRef.currentTime = currentDuration
+    onProgressBarChanged$(thisVideoCurrentDuration) {
+      thisVideoRef.currentTime = thisVideoCurrentDuration
     }
   })
 
-  const updateVideoProgressBar: EventHandler<"video", "onTimeUpdate"> = () => {
+  const updateVideoProgressBar = () => {
     updateProgressBar$(thisVideoRef.currentTime)
   }
   
-  const onVideoLoaded: EventHandler<"video", "onLoadedData"> = () => {
+  const onVideoLoaded = () => {
     setTotalDuration$(thisVideoRef.duration)
     props.onVideoLoaded$?.()
   }
-  
+
   const controlThisVideo: IVideoButtonControlsProps["onClick$"] = (state) => {
     switch (state) {
       case VideoControlState.playing:
@@ -86,15 +87,20 @@ export function Video(props: ParentProps<IVideoProps>) {
     }
   )
 
+  const goFullScreen = () => {
+    controlThisVideo(VideoControlState.pausing)
+    videoFullscreenDialog.show$()
+  }
+
   return (
     <FlexCenter
       class={mergeClassname(__style.video)}
       ref={everythingRef}
     >
       <video
-        src={props.videoUrl}
+        src={props.videoName}
         ref={thisVideoRef}
-        onTimeUpdate={updateVideoProgressBar}
+        onTimeUpdate={() => updateVideoProgressBar()}
         onLoadedData={onVideoLoaded}
         preload="metadata"
       />
@@ -108,7 +114,7 @@ export function Video(props: ParentProps<IVideoProps>) {
         <VideoButtonControls onClick$={controlThisVideo}>
           <ProgressBar$ />
           <Show when={!props.fullScreenMode$}>
-            <FullScreenButton onClick={videoFullscreenDialog.show$} />
+            <FullScreenButton onClick={goFullScreen} />
           </Show>
         </VideoButtonControls>
       </FlexCenterY>

@@ -10,7 +10,7 @@ import (
 )
 
 func galleryJournalRoute(this *gin.RouterGroup) {
-	this.GET("/journal/:groupId/gallery/:galleryId", func(ctx *gin.Context) {
+	this.GET("/gallery/:galleryId", func(ctx *gin.Context) {
 		// groupId := utils.StringToInt(ctx.Param("groupId"))
 		galleryId := ctx.Param("galleryId")
 		thisGallery := editor_data.GalleryData{
@@ -26,7 +26,7 @@ func galleryJournalRoute(this *gin.RouterGroup) {
 		ctx.JSON(http.StatusOK, data)
 	})
 
-	this.POST("/journal/:groupId/gallery/:galleryId", func(ctx *gin.Context) {
+	this.POST("/gallery/:galleryId", func(ctx *gin.Context) {
 		groupId := utils.StringToInt(ctx.Param("groupId"))
 		galleryId := ctx.Param("galleryId")
 
@@ -55,7 +55,7 @@ func galleryJournalRoute(this *gin.RouterGroup) {
 		})
 	})
 
-	this.DELETE("/journal/:groupId/gallery/:galleryId", func(ctx *gin.Context) {
+	this.DELETE("/gallery/:galleryId", func(ctx *gin.Context) {
 		groupId := utils.StringToInt(ctx.Param("groupId"))
 		galleryId := ctx.Param("galleryId")
 

@@ -24,7 +24,12 @@ export default function VideoFullscreenDialog(props: IVideoFullscreenDialogProps
       <Video 
         {...props.videoData$} 
         fullScreenMode$={true}
-      />
+      >
+        {/**Empty element, to avoid file dialog accidentally being shown by clicking
+          * anywhere on the video.
+          */}
+        <></>
+      </Video>
     </DialogContent>
   )
 }

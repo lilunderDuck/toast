@@ -3,7 +3,7 @@ export function api_getImageSavedPath(currentGroupId: number, fileName: string) 
 }
 
 export function api_getVideoSavedPath(currentGroupId: number, fileName: string) {
-  return `http://localhost:8080/dynamic/journals/${currentGroupId}/vid/${fileName}` as const
+  return `http://localhost:8080/dynamic/journals/${currentGroupId}/video/${fileName}` as const
 }
 
 export function api_getJournalGroupIconPath(currentGroupId: number) {

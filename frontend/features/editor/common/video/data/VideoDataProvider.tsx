@@ -1,4 +1,4 @@
-import { createContext, type ParentProps, useContext } from "solid-js"
+import { createContext, createSignal, type ParentProps, Signal, useContext } from "solid-js"
 import { createStore, Store, SetStoreFunction } from "solid-js/store"
 // ...
 import type { IVideoBlockData } from "~/features/editor/common/video"
@@ -6,6 +6,8 @@ import type { IVideoBlockData } from "~/features/editor/common/video"
 interface IVideoDataContext {
   data$: Store<IVideoBlockData>
   setData$: SetStoreFunction<IVideoBlockData>
+  currentVideoDuration$: Signal<number>
+  currentVideoProgress$: Signal<number>
 }
 
 interface IVideoDataProviderProps {
@@ -23,9 +25,12 @@ export function VideoDataProvider(props: ParentProps<IVideoDataProviderProps>) {
       data$: data,
       // @ts-ignore
       setData$(...value) {
+        // @ts-ignore
         setData(...value)
         props.onChange$(data)
-      }
+      },
+      currentVideoDuration$: createSignal(0),
+      currentVideoProgress$: createSignal(0),
     }}>
       {props.children}
     </Context.Provider>

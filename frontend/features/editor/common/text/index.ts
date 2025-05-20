@@ -1,2 +1,2 @@
 export * from "./Text"
-export type * from "./provider"
+export * from "./provider"

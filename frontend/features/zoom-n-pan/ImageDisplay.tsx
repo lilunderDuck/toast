@@ -25,6 +25,9 @@ const style = stylex.create({
     userDrag: 'none',
     userSelect: 'none'
   },
+  limitImgHeight: {
+    maxHeight: "100vh"
+  },
   scrollContainer: {
     width: '100%',
     height: '100%',
@@ -102,7 +105,10 @@ export function ImageDisplay() {
     >
       <div
         class={mergeClassname(
-          stylex.attrs(style.imageWrap, internal$.zoomScale$() > 1 ? style.grabCursor : {})
+          stylex.attrs(
+            style.imageWrap, 
+            internal$.zoomScale$() > 1 ? style.grabCursor : {},
+          )
         )}
         style={{
           '--image-scale': internal$.zoomScale$(),
@@ -111,7 +117,7 @@ export function ImageDisplay() {
         ref={draggableRef}
       >
         <img
-          {...stylex.attrs(style.image)}
+          {...stylex.attrs(style.image, internal$.zoomScale$() <= 1 ? style.limitImgHeight : {})}
           draggable={false}
           src={internal$.displayImageUrl$()}
         />

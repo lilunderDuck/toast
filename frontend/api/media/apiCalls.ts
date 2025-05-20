@@ -2,31 +2,32 @@ import { macro_urlBuilder } from "macro_def"
 // ...
 import { __callBackendApi } from "../call"
 
-async function saveMediaFile(filePath: string, targetDest: string) {
-  return await fetch(`http://localhost:8080/upload?requestedFile=${filePath}&dest=${targetDest}`, {
-    method: "POST"
-  }).then(it => it.text())
-}
-
-export const UPLOAD_ROUTE = "/duck/media/upload" as const
-export const DELETE_ROUTE = "/duck/media/delete" as const
-export const GET_FILES_ROUTE = "/duck/media/files" as const
-
 export async function api_saveImage(currentGroupId: number, targetFile: string): Promise<{ result: string }> {
-  // return __callBackendApi("POST", `/duck/media/image/${currentGroupId}?filePath=${targetFile}`)
-  return __callBackendApi("POST", `/duck/journal/${currentGroupId}/image`, {
-    filePath: targetFile
+  return __callBackendApi("POST", `/duck/journal/${currentGroupId}/media`, {
+    filePath: targetFile,
+    folderPath: "image"
   })
 }
 
 export function api_deleteImage(currentGroupId: number, fileName: string) {
-  return __callBackendApi("DELETE", `/duck/journal/${currentGroupId}/image`, {
-    fileName: fileName
+  return __callBackendApi("DELETE", `/duck/journal/${currentGroupId}/media`, {
+    fileName: fileName,
+    folderPath: "image"
   })
 }
 
-export function api_saveVideo(currentGroupId: number, targetFilePath: string) {
-  return saveMediaFile(targetFilePath, `/journals/${currentGroupId}/vid`)
+export function api_saveVideo(currentGroupId: number, targetFilePath: string): Promise<{ result: string }> {
+  return __callBackendApi("POST", `/duck/journal/${currentGroupId}/media`, {
+    filePath: targetFilePath,
+    folderPath: "video"
+  })
+}
+
+export function api_saveDelete(currentGroupId: number, targetFileName: string) {
+  return __callBackendApi("DELETE", `/duck/journal/${currentGroupId}/media`, {
+    filePath: targetFileName,
+    folderPath: "video"
+  })
 }
 
 export function api_uploadJournalGroupPreviewIcon(targetFilePath: string) {

@@ -1,7 +1,7 @@
 import { Show } from "solid-js"
 // ...
 import { Input } from "~/components"
-import { api_saveImage, api_deleteImage, api_getImageSavedPath } from "~/api/media"
+import { api_saveImage, api_getImageSavedPath } from "~/api/media"
 import { useJournalContext } from "~/features/journal"
 import { createFileUpload, FileUploadType } from "~/features/file-uploads"
 import { toast } from "~/features/toast"
@@ -38,11 +38,6 @@ export default function ImageInput() {
     title$: "Please choose an image file.",
     async onFinish$(file) {
       const currentGroupId = getCurrentGroup$().id
-      const isExistPrevImage = data$().imgName !== ""
-      if (isExistPrevImage) {
-        await api_deleteImage(currentGroupId, data$().imgName)
-      }
-
       const newFileName = await api_saveImage(currentGroupId, file)
       if (!newFileName) {
         toast.error("Failed to save image")

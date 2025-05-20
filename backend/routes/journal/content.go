@@ -11,14 +11,14 @@ import (
 )
 
 func contentRoute(this *gin.RouterGroup) {
-	this.GET("/journal/:groupId", func(ctx *gin.Context) {
+	this.GET("", func(ctx *gin.Context) {
 		groupId := utils.StringToInt(ctx.Param("groupId"))
 
 		allJournals := journal.GetAllJournal(groupId)
 		ctx.JSON(http.StatusOK, allJournals)
 	})
 
-	this.GET("/journal/:groupId/:journalId", func(ctx *gin.Context) {
+	this.GET("/:journalId", func(ctx *gin.Context) {
 		groupId := utils.StringToInt(ctx.Param("groupId"))
 		journalId := utils.StringToInt(ctx.Param("journalId"))
 
@@ -40,9 +40,9 @@ func contentRoute(this *gin.RouterGroup) {
 		ctx.JSON(http.StatusOK, utils.BytesToString(jsonData))
 	})
 
-	this.POST("/journal/:groupId", handleCreateAllKindOfJournal)
+	this.POST("", handleCreateAllKindOfJournal)
 
-	this.PATCH("/journal/:groupId/:journalId", func(ctx *gin.Context) {
+	this.PATCH("/:journalId", func(ctx *gin.Context) {
 		groupId := utils.StringToInt(ctx.Param("groupId"))
 		journalId := utils.StringToInt(ctx.Param("journalId"))
 
@@ -61,7 +61,7 @@ func contentRoute(this *gin.RouterGroup) {
 		ctx.JSON(http.StatusOK, journalData)
 	})
 
-	this.DELETE("/journal/:groupId/:journalId", func(ctx *gin.Context) {
+	this.DELETE("/:journalId", func(ctx *gin.Context) {
 		groupId := utils.StringToInt(ctx.Param("groupId"))
 		journalId := utils.StringToInt(ctx.Param("journalId"))
 

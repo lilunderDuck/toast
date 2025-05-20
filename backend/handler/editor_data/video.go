@@ -1,7 +1,7 @@
 package editor_data
 
 type VideoData struct {
-	VideoUrl  string              `json:"videoUrl,omitempty"     cbor:"20,keyasint,omitempty"`
+	VideoName string              `json:"videoName,omitempty"    cbor:"20,keyasint,omitempty"`
 	Subtitles []VideoSubtitleData `json:"subtitles,omitempty"    cbor:"21,keyasint,omitempty"`
 	Chapters  []VideoChapterData  `json:"chapters,omitempty"     cbor:"22,keyasint,omitempty"`
 }
