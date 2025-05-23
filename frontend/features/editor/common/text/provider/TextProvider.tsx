@@ -4,7 +4,7 @@ import { editorLog } from "~/features/debug"
 import { arrayInsert, getRandomNumberFrom } from "~/utils"
 // ...
 import { DEFAULT_NEWLINE_DATA, DEFAULT_TEXT_DATA, InputTextData, TextData, TextType } from "./data"
-import { setCaretToTheEnd } from "~/features/editor/utils"
+import { setCursorToTheEnd } from "~/features/editor/utils"
 
 export interface ITextProviderProps {
   allowNewLine$?: boolean
@@ -22,6 +22,7 @@ export interface ITextContext {
   deleteInput$(index: number): void
   focusState$: Signal<number>
   readonly THIS_TEXT_BLOCK_ID$: `t-${number}`
+  getInputElement$(index: number): HTMLDivElement
 }
 
 const Context = createContext<ITextContext>()
@@ -65,7 +66,7 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
       return [...prev]
     })
     props.onChange$(textsData())
-    setCaretToTheEnd(document.querySelector(`#${thisTextBlockId} [data-index="${index}"]`)!)
+    setCursorToTheEnd(document.querySelector(`#${thisTextBlockId} [data-index="${index}"]`)!)
     isDevMode && editorLog.logLabel('text', 'Spawned new block')
   }
 
@@ -105,7 +106,12 @@ export function TextDataProvider(props: ParentProps<ITextProviderProps>) {
       updateData$: updateData,
       spawnNewTextInput$: spawnNewTextInput,
       deleteInput$: deleteInput,
-      THIS_TEXT_BLOCK_ID$: thisTextBlockId
+      THIS_TEXT_BLOCK_ID$: thisTextBlockId,
+      getInputElement$(index: number) {
+        let e = document.querySelector<HTMLDivElement>(`#${thisTextBlockId} [data-index="${index}"] [contenteditable]`)!
+        console.log(e)
+        return e
+      }
     }}>
       {props.children}
     </Context.Provider>

@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"fmt"
+	"burned-toast/backend/debug"
 
 	"github.com/fxamacker/cbor/v2"
 	// "github.com/klauspost/compress/zstd"
@@ -19,7 +19,7 @@ import (
 func BSON_WriteFile(path string, anyObject any) (someError error) {
 	binaryData, err := cbor.Marshal(anyObject)
 	if err != nil {
-		fmt.Println("BSON encode error ->", err)
+		debug.Err(err, "->", "BSON encode error")
 		return err
 	}
 
@@ -48,7 +48,7 @@ func BSON_ReadFile(path string, out any) (someError error) {
 
 	err = cbor.Unmarshal(dataFromDisk, out)
 	if err != nil {
-		fmt.Println("BSON decode error ->", err)
+		debug.Err(err, "->", "BSON decode error")
 		return err
 	}
 

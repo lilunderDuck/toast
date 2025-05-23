@@ -6,7 +6,7 @@ type LinkBlockData = {
 
 export function createLinkBlock(): IBlockSetting<LinkBlockData> {
   return {
-    displayName$: "Text",
+    displayName$: "Link",
     get defaultValue$() {
       return {
         link: ''
@@ -14,7 +14,7 @@ export function createLinkBlock(): IBlockSetting<LinkBlockData> {
     },
     blockComponent$(props) {
       return (
-        null
+        <div></div>       
       )
     }
   }

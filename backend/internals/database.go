@@ -1,9 +1,9 @@
 package internals
 
 import (
+	"burned-toast/backend/debug"
 	"burned-toast/backend/utils"
 	"encoding/json"
-	"fmt"
 	"log"
 
 	"github.com/akrylysov/pogreb"
@@ -25,24 +25,27 @@ type JSONCacheUtils struct {
 //   - key: The key to store the value under.
 //   - value: The value to store, if it cannot convert into json string, it panics.
 func (cache *JSONCacheUtils) Set(key string, value any) {
-	jsonInBinary, encodeError := json.Marshal(&value)
-	if encodeError != nil {
-		panic(encodeError)
+	jsonInBinary, err := json.Marshal(&value)
+	if err != nil {
+		debug.Err(err)
+		return
 	}
 
 	keyInBinary := []byte(key)
-	isThisKeyExist, someError := cache.db.Has(keyInBinary)
-	if someError != nil {
-		panic(someError)
+	isThisKeyExist, err := cache.db.Has(keyInBinary)
+	if err != nil {
+		debug.Err(err)
+		return
 	}
 
 	if isThisKeyExist {
 		cache.Delete(key)
 	}
 
-	setError := cache.db.Put(keyInBinary, jsonInBinary)
-	if setError != nil {
-		panic(setError)
+	err = cache.db.Put(keyInBinary, jsonInBinary)
+	if err != nil {
+		debug.Err(err)
+		return
 	}
 }
 
@@ -57,8 +60,10 @@ func (cache *JSONCacheUtils) Set(key string, value any) {
 //   - key: The key to retrieve the value for.
 //   - outData: A pointer to the variable where the retrieved value will be stored.
 func (cache *JSONCacheUtils) Get(key string, outData any) error {
+	debug.Infof(" | Get: %s", key)
 	value, readError := cache.db.Get([]byte(key))
 	if readError != nil {
+		debug.Err(" | ", "err", readError)
 		return readError
 	}
 
@@ -73,9 +78,11 @@ func (cache *JSONCacheUtils) Get(key string, outData any) error {
 // Parameters:
 //   - key: The key to delete.
 func (cache *JSONCacheUtils) Delete(key string) error {
-	someError := cache.db.Delete([]byte(key))
-	if someError != nil {
-		panic(someError)
+	debug.Infof(" | Delete: %s", key)
+	err := cache.db.Delete([]byte(key))
+	if err != nil {
+		debug.Err(" | ", "err", err)
+		return err
 	}
 
 	cache.db.Compact()
@@ -107,7 +114,7 @@ func (cache *JSONCacheUtils) GetAll() map[string]any {
 		var jsonVal any
 		json.Unmarshal(value, &jsonVal)
 		outMap[utils.BytesToString(key)] = jsonVal
-		fmt.Println(utils.BytesToString(key), jsonVal)
+		debug.Info(" | ", utils.BytesToString(key), jsonVal)
 	})
 
 	return outMap
@@ -153,16 +160,16 @@ func OpenDb(dbName string, updateFn CacheModificationFn) {
 	cacheDb, dbError := pogreb.Open(dbPath, nil /*no options*/)
 
 	if dbError != nil {
-		fmt.Println("[cache] db error", dbError)
+		debug.Err(dbError)
 		return
 	}
 
-	fmt.Println("[cache] make some mess to the server database now -> ", dbName)
+	debug.Info("[cache db] make some mess to the server database now -> ", "name", dbName)
 
 	updateFn(&JSONCacheUtils{
 		db: cacheDb,
 	})
 
 	cacheDb.Close()
-	fmt.Println("[cache] database closed -> ", dbName)
+	debug.Info("[cache db] database closed -> ", "name", dbName)
 }

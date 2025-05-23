@@ -31,7 +31,6 @@ export function ZoomAndPanProvider(props: ParentProps) {
   
   
   const STEP = 0.5
-  const STOP_SCALING = 0
   const resetImagePosition = () => {
     setImagePosition({ x: 0, y: 0 })
     isDevMode && imgZoomPanLog.log("Image position reset")

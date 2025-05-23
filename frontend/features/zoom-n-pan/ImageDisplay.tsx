@@ -47,6 +47,7 @@ export function ImageDisplay() {
   // slightly modified from https://gist.github.com/stephanbogner/75de4e84687ae6065fb0a4d81917543e
   let targetElement!: Ref<"div">
   let draggableRef!: Ref<"div">
+  let imgRef!: Ref<"img">
 
   let dragStartMouseX = 0, dragStartMouseY = 0, diffX = 0, diffY = 0, positionX = 0, positionY = 0
   const dragStart = (e: MouseEvent) => {
@@ -72,6 +73,24 @@ export function ImageDisplay() {
     
     let newX = positionX - diffX
     let newY = positionY - diffY
+
+    // complex image bound checking stuff to make sure the image 
+    // is not being dragged out of the page
+    // 
+    // note: this bound check is not really complete
+    if (newX > imgRef.width / 2 || newX < imgRef.width / 2 * -1) {
+      return setImagePosition(prev => ({
+        ...prev,
+        y: newY
+      }))
+    }
+
+    if (newY > imgRef.height / 2 || newY < imgRef.height / 2 * -1) {
+      return setImagePosition(prev => ({
+        ...prev,
+        x: newX
+      }))
+    }
 
     setImagePosition({
       x: newX,
@@ -120,6 +139,7 @@ export function ImageDisplay() {
           {...stylex.attrs(style.image, internal$.zoomScale$() <= 1 ? style.limitImgHeight : {})}
           draggable={false}
           src={internal$.displayImageUrl$()}
+          ref={imgRef}
         />
       </div>
     </FlexCenter>

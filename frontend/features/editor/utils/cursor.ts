@@ -2,7 +2,7 @@
  * @param someElement The HTML element to set the cursor to the end of.
  * @returns *nothing*
  */
-export function setCaretToTheEnd(someElement: HTMLElement) {
+export function setCursorToTheEnd(someElement: HTMLElement) {
   console.assert(someElement, "Element not found")
   
   // focus the element 
@@ -22,4 +22,17 @@ export function setCaretToTheEnd(someElement: HTMLElement) {
   selection.addRange(range)
   // focus the element again to actually make you type
   someElement.focus()
+}
+
+export function setCursorToTheStart(someElement: HTMLElement) {
+  // focus the element 
+  someElement.focus()
+
+  const range = document.createRange()
+  range.selectNodeContents(someElement)
+  range.collapse(true)
+
+  const selection = window.getSelection()!
+  selection.removeAllRanges()
+  selection.addRange(range)
 }

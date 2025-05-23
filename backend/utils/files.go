@@ -1,8 +1,8 @@
 package utils
 
 import (
+	"burned-toast/backend/debug"
 	"errors"
-	"fmt"
 	"io"
 	"io/fs"
 	"os"
@@ -90,7 +90,7 @@ func GetCurrentDir() (currentPath string) {
 //
 // Returns an error if something goes wrong.
 func CreateDirectory(path string) (makeDirError error) {
-	fmt.Println("Creating directory:", path)
+	debug.Infof("Creating directory: %s", path)
 	return os.MkdirAll(path, 0666)
 }
 
@@ -98,7 +98,7 @@ func CreateDirectory(path string) (makeDirError error) {
 //
 // Returns an error if something goes wrong.
 func RemoveFileOrDirectory(path string) (removeError error) {
-	fmt.Println("Removing:", path)
+	debug.Infof("Removing: %s", path)
 	return os.Remove(path)
 }
 
@@ -122,7 +122,7 @@ func IsFileExist(pathToFile string) (existOrNot bool) {
 //
 // Returns an error if something goes wrong.
 func WriteFile(pathToFile string, stuff []byte) (writeError error) {
-	fmt.Println("Writing:", pathToFile)
+	debug.Infof("Writing: %s", pathToFile)
 	return os.WriteFile(pathToFile, stuff, os.ModePerm)
 }
 
@@ -130,17 +130,17 @@ func WriteFile(pathToFile string, stuff []byte) (writeError error) {
 //
 // Returns the data as a byte array and an error if something goes wrong.
 func ReadFile(pathToFile string) (fileContent []byte, readError error) {
-	fmt.Println("Reading:", pathToFile)
+	debug.Infof("Reading: %s", pathToFile)
 	return os.ReadFile(pathToFile)
 }
 
 func OpenFile(pathToFile string) (*os.File, error) {
-	fmt.Println("Open file:", pathToFile)
+	debug.Infof("Opening: %s", pathToFile)
 	return os.Open(pathToFile)
 }
 
 func MoveFile(sourcePath string, destPath string) error {
-	fmt.Println("Moving:", sourcePath, "to", destPath)
+	debug.Infof("Moving \"%s\" to \"%s\"", sourcePath, destPath)
 	// Attempt to rename (move) the file.
 	err := os.Rename(sourcePath, destPath)
 	if err == nil {
@@ -172,7 +172,7 @@ func MoveFile(sourcePath string, destPath string) error {
 }
 
 func CopyFile(source, destination string) error {
-	fmt.Println("Copying:", source, "to", destination)
+	debug.Infof("Moving \"%s\" to \"%s\"", source, destination)
 	sourceFile, err := os.Open(source)
 	if err != nil {
 		return err

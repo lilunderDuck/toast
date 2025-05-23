@@ -18,10 +18,12 @@ resource_files:
 	cd ${TOOLS_DIR} && deno -A fetchPackageJson.ts && go run binary_json.go
 
 # builds everything
-WEIRD_FLAGS_TO_REDUCE_SIZE = -gcflags=all="-l -B" -ldflags="-w -s"
-build:
+build: build_server
 	deno task build
 	deno --allow-read --allow-write ./build/dist/mangle_props.js
+
+WEIRD_FLAGS_TO_REDUCE_SIZE = -gcflags=all="-l -B" -ldflags="-w -s" -tags production
+build_server:
 	go build ${WEIRD_FLAGS_TO_REDUCE_SIZE} -o ${OUTPUT_DIR}/server.exe ./backend/main.go
 
 dev_server:

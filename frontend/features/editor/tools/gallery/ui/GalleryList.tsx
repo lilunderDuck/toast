@@ -1,24 +1,32 @@
-import stylex from "@stylexjs/stylex"
 import { For, Match, Switch } from "solid-js"
-import { useGalleryDataContext } from "../data"
+// ...
+import stylex from "@stylexjs/stylex"
+// ...
 import { 
   getGalleryItemUrl, 
   MEDIA_TYPE__IMAGE 
 } from "~/api/journal"
 import { useJournalContext } from "~/features/journal"
+import { FlexCenterY } from "~/components"
+// ...
+import { useGalleryDataContext } from "../data"
 
 const style = stylex.create({
   gallery: {
     backgroundColor: 'var(--gray3)',
     borderRadius: 10,
-    minHeight: '10rem',
+    minHeight: 60,
     marginBottom: 10,
     paddingBlock: 10,
-    paddingInline: 15
+    paddingInline: 15,
+    gap: 10,
+    flexWrap: "wrap"
   },
   galleryItem: {
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
+    borderRadius: 6,
+    flexShrink: 0
   }
 })
 
@@ -27,7 +35,7 @@ export function GalleryList() {
   const { getCurrentGroup$ } = useJournalContext()
   
   return (
-    <div {...stylex.attrs(style.gallery)}>
+    <FlexCenterY {...stylex.attrs(style.gallery)}>
       <For each={images$()}>
         {it => (
           <Switch>
@@ -40,6 +48,6 @@ export function GalleryList() {
           </Switch>
         )}
       </For>
-    </div>
+    </FlexCenterY>
   )
 }

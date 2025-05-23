@@ -1,6 +1,10 @@
 package file_dialog
 
-import "github.com/sqweek/dialog"
+import (
+	"burned-toast/backend/debug"
+
+	"github.com/sqweek/dialog"
+)
 
 func OpenFileDialog(options *FileDialogOptions) (string, error) {
 	fileDialog := dialog.File().Title(options.Title)
@@ -11,5 +15,11 @@ func OpenFileDialog(options *FileDialogOptions) (string, error) {
 		}
 	}
 
-	return fileDialog.Load()
+	debug.Info("File dialog will show with options:", "options", options)
+	path, err := fileDialog.Load()
+	if err != nil {
+		debug.Err(err)
+	}
+
+	return path, err
 }

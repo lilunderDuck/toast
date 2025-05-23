@@ -1,6 +1,7 @@
 package main
 
 import (
+	"burned-toast/backend/debug"
 	"burned-toast/backend/dynamic"
 	"burned-toast/backend/internals"
 
@@ -18,6 +19,7 @@ var appMode string = "prod"
 var router *gin.Engine
 
 func init() {
+	debug.Info("Server will start")
 	if appMode == "prod" {
 		gin.SetMode(gin.ReleaseMode)
 	}

@@ -22,9 +22,7 @@ var (
 )
 
 // internals file and stuff
-var (
-	FileDialogLibPath = utils.JoinPath(ResourcesFolderPath, "antiBrainrot.dll")
-)
+// ... empty ...
 
 // Stores the path to the folder where all the journal files are kept,
 // which is "~/data/journals"
