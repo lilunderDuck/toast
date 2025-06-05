@@ -50,13 +50,14 @@ export interface IEditorContext {
    * @param data The editor document data.
    */
   open$(data: EditorDocumentData): void
+  localStorage$: IStorage<Record<string, any>>
 }
 
 const Context = createContext<IEditorContext>()
 
 export function EditorProvider(props: ParentProps) {
   const [readonly, setIsReadonly] = createSignal(false)
-  const wrappedSessionStorage: EditorSessionStorage = createStorage(sessionStorage)
+  const wrappedSessionStorage: EditorSessionStorage = createStorage(sessionStorage, "editor")
   const buttonRow = createButtonRow(wrappedSessionStorage)
 
   createEffect(() => {
@@ -122,6 +123,7 @@ export function EditorProvider(props: ParentProps) {
         buttonRow$: buttonRow,
         sessionStorage$: wrappedSessionStorage,
       },
+      localStorage$: createStorage(localStorage, "editor"),
       blocks$: block,
       blockSetting$: blockSetting,
       event$: event,

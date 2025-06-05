@@ -6,9 +6,7 @@ export function createTextBlock(): IBlockSetting<InputTextData> {
     displayName$: "Text",
     get defaultValue$() {
       return {
-        text: [
-          { text: '' }
-        ] as TextData[]
+        text: ''
       }
     },
     blockComponent$(props) {

@@ -3,26 +3,31 @@ import { Accessor, createSignal, Setter } from "solid-js"
 import { editorLog } from "~/features/debug"
 // ...
 import type { GalleryLocalStorage } from "./GalleryDataProvider"
+import { useEditorContext } from "~/features/editor/provider"
 
 export interface IPageUtils {
   focusNext$(): void
   focusPrevious$(): void
-  pageIndexName$(index: number): `page-${number}`
+  setCurrentPage$(index: number): void
+  pageIndexName$(index: number): string
   currentPage$: Accessor<number>
   totalPage$: Accessor<number>
   setTotalPage$: Setter<number>
 }
 
 export function createPageUtils(galleryId: string, wrappedLocalStorage: GalleryLocalStorage): IPageUtils {
+  const { localStorage$ } = useEditorContext()
+
+  const STORAGE_KEY = `gallery_curr_page_${galleryId}`
   const FIRST_PAGE = 0
-  const initialPage = wrappedLocalStorage.get$(`gallery-${galleryId}-currentPage`) ?? FIRST_PAGE
-  const [currentPage, setCurrentPage] = createSignal(initialPage)
+  const INITIAL_PAGE = localStorage$.get$(STORAGE_KEY) ?? FIRST_PAGE
+
+  const [currentPage, setCurrentPage] = createSignal(INITIAL_PAGE)
   const [totalPage, setTotalPage] = createSignal(0)
 
   const getLastPage = () => totalPage() - 1
-
   const pageName: IPageUtils["pageIndexName$"] = (index) => {
-    return `page-${index}` as const
+    return `p${index}` as const
   }
 
   const focus = (pageIndex: number) => {
@@ -35,7 +40,7 @@ export function createPageUtils(galleryId: string, wrappedLocalStorage: GalleryL
       })
     }
 
-    wrappedLocalStorage.set$(`gallery-${galleryId}-currentPage`, pageIndex)
+    localStorage$.set$(STORAGE_KEY, pageIndex)
     isDevMode && editorLog.logLabel("gallery", "focused page/page name/element:", pageIndex, pageName(pageIndex), pageRefs)
   }
 
@@ -52,12 +57,15 @@ export function createPageUtils(galleryId: string, wrappedLocalStorage: GalleryL
     return counter
   }
 
-  if (initialPage !== FIRST_PAGE) {
-    focus(initialPage)
+  if (INITIAL_PAGE !== FIRST_PAGE) {
+    focus(INITIAL_PAGE)
   }
 
   return {
     currentPage$: currentPage,
+    setCurrentPage$(index) {
+      setCurrentPage(index)
+    },
     focusNext$() {
       setCurrentPage(prev => capDisplay(prev + 1))
       focus(currentPage())

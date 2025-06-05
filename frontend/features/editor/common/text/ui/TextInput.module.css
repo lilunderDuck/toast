@@ -1,7 +1,0 @@
-#input #buttonRow {
-  display: none !important
-}
-
-#input:hover #buttonRow, #buttonRowFocused {
-  display: flex !important
-}

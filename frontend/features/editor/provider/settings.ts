@@ -2,7 +2,6 @@ import {
   createCodeBlock,
   createGalleryBlock,
   createImageBlock, 
-  createListBlock, 
   createTextBlock, 
   createTodoBlock,
   createVideoBlock
@@ -21,7 +20,6 @@ export function loadBlockSettings() {
     4: createGalleryBlock(),
     5: createCodeBlock(),
     6: createVideoBlock(),
-    7: createListBlock()
   }
 
   const defaultBlock: DefaultBlockSetting = {

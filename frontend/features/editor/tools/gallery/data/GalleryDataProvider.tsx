@@ -1,21 +1,22 @@
 import { type Accessor, createContext, createSignal, onMount, ParentProps, useContext } from "solid-js"
 // ...
-import { type IGalleryBlockData } from "../GalleryBlock"
-import { type IPageUtils, createPageUtils } from "./page"
 import { createStorage, IStorage } from "~/utils"
 import { editorLog } from "~/features/debug"
 import { api_getGallery, api_saveGalleryItem, IGalleryItemData } from "~/api/journal"
 import { useJournalContext } from "~/features/journal"
+// ...
+import { type IGalleryBlockData } from "../GalleryBlock"
+import { type IPageUtils, createPageUtils } from "./page"
 
 export type GalleryLocalStorage = IStorage<{
   [key: `gallery-${string}-currentPage`]: number
 }>
 
-interface IGalleryDataContext {
+export interface IGalleryDataContext {
   page$: IPageUtils
   galleryId$: string
-  images$: Accessor<IGalleryItemData[]>
-  addImages$(newImages: string): Promise<void>
+  galleryItem$: Accessor<IGalleryItemData[]>
+  addGalleryItem$(newImages: string): Promise<void>
   localStorage$: GalleryLocalStorage
 }
 
@@ -54,11 +55,11 @@ export function GalleryDataProvider(props: ParentProps<GalleryDataProviderProps>
         return galleryId
       },
       page$: pageUtils,
-      get images$() {
+      get galleryItem$() {
         return images
       }, 
       localStorage$: wrappedLocalStorage,
-      async addImages$(newImages) {
+      async addGalleryItem$(newImages) {
         // this assert exists is because in case I mess up something, 
         // it might be a reminder to me. 
         console.assert(galleryId, "galleryId should not be null or undefined")

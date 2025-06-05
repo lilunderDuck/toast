@@ -41,7 +41,7 @@ export type TextData =
   { type: TextType.newLine }
 
 export type InputTextData = {
-  text: TextData[]
+  text: string
 }
 
 export const DEFAULT_TEXT_DATA: TextOption = { type: TextType.text, text: '' }

@@ -31,12 +31,12 @@ const style = stylex.create({
 })
 
 export function GalleryList() {
-  const { images$, galleryId$ } = useGalleryDataContext()
+  const { galleryItem$, galleryId$ } = useGalleryDataContext()
   const { getCurrentGroup$ } = useJournalContext()
   
   return (
     <FlexCenterY {...stylex.attrs(style.gallery)}>
-      <For each={images$()}>
+      <For each={galleryItem$()}>
         {it => (
           <Switch>
             <Match when={it.type === MEDIA_TYPE__IMAGE}>

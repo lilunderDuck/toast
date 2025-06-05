@@ -1,6 +1,6 @@
 import stylex from "@stylexjs/stylex"
 import { BsPlus } from "solid-icons/bs"
-import { Show } from "solid-js"
+import { Show, splitProps } from "solid-js"
 import { FlexCenter, SpinningCube } from "~/components"
 
 const style = stylex.create({
@@ -28,12 +28,14 @@ const style = stylex.create({
   }
 })
 
-interface IImageInputProps {
+interface IImageInputProps extends HTMLAttributes<"img"> {
   imageSrc$?: string
   isLoading$: boolean
 }
 
 export function ImageInputAndDropzone(props: IImageInputProps) {
+  const [, itsProps] = splitProps(props, ["imageSrc$", "isLoading$"])
+
   return (
     <div 
       {...stylex.attrs(
@@ -46,7 +48,7 @@ export function ImageInputAndDropzone(props: IImageInputProps) {
           <BsPlus />
         </FlexCenter>
       }>
-        <img src={props.imageSrc$} />
+        <img src={props.imageSrc$} {...itsProps} />
       </Show>
       <Show when={props.isLoading$}>
         <FlexCenter {...stylex.attrs(style.input_loading)}>

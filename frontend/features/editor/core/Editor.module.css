@@ -6,3 +6,9 @@
 #block > * {
   width: 100%;
 }
+
+#everythingInEditor {
+  --sb-track-color: var(--gray2);
+  --sb-thumb-color: var(--blue9);
+  --sb-size: 15px;
+}

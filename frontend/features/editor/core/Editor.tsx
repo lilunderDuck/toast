@@ -63,12 +63,15 @@ export function Editor() {
   }) 
 
   return (
-    <div class={mergeClassname(
-      __scrollbarStyle.scrollbar,
-      __scrollbarStyle.scrollbarVertical,
-      __scrollbarStyle.invsScrollbar,
-      stylex.attrs(style.editor)
-    )} ref={scrollableElement}>
+    <div 
+      class={mergeClassname(
+        __scrollbarStyle.scrollbar,
+        __scrollbarStyle.scrollbarVertical,
+        stylex.attrs(style.editor)
+      )} 
+      id={__style.everythingInEditor} 
+      ref={scrollableElement}
+    >
       <div {...stylex.attrs(style.blockList)}>
         <Show when={!shouldUpdate()}>
           <For each={blocks$.data$()}>

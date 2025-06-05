@@ -44,9 +44,12 @@ export interface IStorage<Mapping extends Record<string, any>> {
  * @returns objects contain a few methods to interect with the browser storage.
  * @see {@link IStorage}
  */
-export function createStorage<Mapping extends Record<string, any>>(storage: Storage): IStorage<Mapping> {
+export function createStorage<Mapping extends Record<string, any>>(
+  storage: Storage,
+  prefix: string = ''
+): IStorage<Mapping> {
   const getValueInStorage = (key: any) => {
-    const data = storage.getItem(key as string)
+    const data = storage.getItem(storageKeyWrap(prefix, key))
     if (!data) return data
 
     if (data === 'undefined') return undefined
@@ -58,14 +61,14 @@ export function createStorage<Mapping extends Record<string, any>>(storage: Stor
   }
 
   const setValue = (key: any, value: any) => {
-    storage.setItem(key as string, JSON.stringify(value))
+    storage.setItem(storageKeyWrap(prefix, key), JSON.stringify(value))
   }
 
   return {
     get$: getValueInStorage,
     set$: setValue,
     delete$(key) {
-      storage.removeItem(key as string)
+      storage.removeItem(storageKeyWrap(prefix, key as string))
     },
     update$(key, updateFn) {
       const prevValue = getValueInStorage(key)
@@ -75,11 +78,9 @@ export function createStorage<Mapping extends Record<string, any>>(storage: Stor
   }
 }
 
-export function updateStorage<
-  Mapping extends Record<string, any>,
-  Key extends keyof Mapping
->(storage: IStorage<Mapping>, key: Key, call: (prev: Mapping[Key] | null) => Mapping[Key]) {
-  const previous = storage.get$(key)
-  const newValue = call(previous)
-  storage.set$(key, newValue)
+function storageKeyWrap(prefix: string, keyName: string) {
+  if (prefix == '') {
+    return keyName
+  }
+  return `${prefix}.${keyName}`
 }
