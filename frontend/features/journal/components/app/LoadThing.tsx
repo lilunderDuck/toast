@@ -1,7 +1,6 @@
-import { createEffect, onMount } from "solid-js"
+import { onMount } from "solid-js"
 // ...
 import { api_getGroup, type IJournalGroupData } from "~/api/journal"
-import { useEditorContext } from "~/features/editor"
 import { journalLog } from "~/features/debug"
 // ...
 import { useJournalContext } from "../../context"
@@ -17,24 +16,12 @@ interface ILoadThingProps {
  * @returns `JSX.Element`, but render nothing.
  */
 export function LoadThing(props: ILoadThingProps) {
-  const { localStorage$, sessionStorage$ } = useJournalContext()
-  const { isReadonly$, setIsReadonly$ } = useEditorContext()
+  const { sessionStorage$ } = useJournalContext()
 
   const CURRENT_GROUP_ID = parseInt(props.currentGroupId$)
 
-  const READONLY_STATE_KEY = `readonly-${CURRENT_GROUP_ID}` as const
-  const updateEditorReadonlyState = () => {
-    isDevMode && journalLog.log('Updating editor readonly state')
-    
-
-    setIsReadonly$(
-      localStorage$.get$(READONLY_STATE_KEY) ?? false
-    )
-  }
-
   onMount(async () => {
     isDevMode && journalLog.group('Start up', CURRENT_GROUP_ID)
-    
     
     // Attempt to get the journal group data from the backend
     const thisGroupData = await api_getGroup(CURRENT_GROUP_ID) as IJournalGroupData
@@ -45,15 +32,9 @@ export function LoadThing(props: ILoadThingProps) {
     sessionStorage$.set$("currentGroup", thisGroupData)
 
     // do a bunch of updating mess
-    updateEditorReadonlyState()
     
     isDevMode && journalLog.log('Finish')
     journalLog.groupEnd()
-    
-  })
-
-  createEffect(() => {
-    localStorage$.set$(READONLY_STATE_KEY, isReadonly$())
   })
 
   return (

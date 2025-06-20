@@ -3,12 +3,14 @@
 
 package debug
 
-// LogDebug does nothing in production builds
 func Info(msg string, stuff ...any) {
 	// ... empty ...
 }
 
-// LogInfo does nothing in production builds
-func InfoLabel(msg string, stuff ...any) {
+func Err(msg any, stuff ...any) {
+	// ... empty ...
+}
+
+func Infof(msg string, stuff ...any) {
 	// ... empty ...
 }

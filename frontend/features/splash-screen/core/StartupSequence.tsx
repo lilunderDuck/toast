@@ -1,15 +1,19 @@
-import { createResource } from "solid-js"
+import { sleep } from "~/utils"
 // ...
 import { SplashScreen } from "../components"
-import { fetchStuffFromServer } from "../utils"
+import { SplashScreenProvider } from "../provider"
 
 export function StartupSequence() {
-  const [resource] = createResource(fetchStuffFromServer)
-
   return (
-    <>
-      {void SplashScreen.setIsVisible$(resource.loading)}
-      <SplashScreen.Screen$ />
-    </>
+    <SplashScreenProvider checkList$={[
+      {
+        msg$: 'Lift off!',
+        async run() {
+          await sleep(1500)
+        }
+      }
+    ]}>
+      <SplashScreen />
+    </SplashScreenProvider>
   )
 }

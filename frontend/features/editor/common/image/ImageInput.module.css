@@ -1,7 +1,0 @@
-.input .fullScreenButton {
-  display: none;
-}
-
-.input:hover .fullScreenButton {
-  display: block;
-}

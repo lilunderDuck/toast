@@ -1,7 +1,6 @@
 package journal
 
 import (
-	"burned-toast/backend/handler/editor_data"
 	"burned-toast/backend/internals"
 	"burned-toast/backend/utils"
 	"time"
@@ -14,18 +13,18 @@ type JournalSchema struct {
 
 // Defines the structure for updating an existing journal entry.
 type JournalUpdateSchema struct {
-	Name string               `form:"name" json:"name"`
-	Data []JournalContentData `form:"data" json:"data"`
+	Name string             `form:"name" json:"name"`
+	Data JournalContentData `form:"data" json:"data"`
 }
 
 // Represents the complete data for a journal entry,
 type JournalData struct {
-	Id       int                  `json:"id"                 cbor:"0,keyasint"`
-	Type     uint8                `json:"type"               cbor:"1,keyasint"`
-	Created  time.Duration        `json:"created"            cbor:"2,keyasint"`
-	Modified time.Duration        `json:"modified,omitempty" cbor:"3,keyasint,omitempty"`
-	Name     string               `json:"name"               cbor:"4,keyasint"`
-	Data     []JournalContentData `json:"data"               cbor:"5,keyasint"`
+	Id       int                `json:"id"                 cbor:"0,keyasint"`
+	Type     uint8              `json:"type"               cbor:"1,keyasint"`
+	Created  time.Duration      `json:"created"            cbor:"2,keyasint"`
+	Modified time.Duration      `json:"modified,omitempty" cbor:"3,keyasint,omitempty"`
+	Name     string             `json:"name"               cbor:"4,keyasint"`
+	Data     JournalContentData `json:"data"               cbor:"5,keyasint"`
 }
 
 type JournalMetaData struct {
@@ -36,11 +35,27 @@ type JournalMetaData struct {
 	Name     string        `json:"name"`
 }
 
-// Represents the data for a single content block within a journal entry.
+// ----------- Editor data zone -------------
+
 type JournalContentData struct {
-	Id   int                    `json:"id"              cbor:"0,keyasint"`
-	Type uint16                 `json:"type"            cbor:"1,keyasint"`
-	Data editor_data.EditorData `json:"data"            cbor:"3,keyasint"`
+	Type    string               `json:"type"            cbor:"0,keyasint"`
+	Attrs   EditorAttributes     `json:"attrs,omitempty" cbor:"1,keyasint"`
+	Marks   []EditorMarks        `json:"marks,omitempty" cbor:"2,keyasint"`
+	Content []JournalContentData `json:"content"         cbor:"3,keyasint"`
+	Text    string               `json:"text,omitempty"  cbor:"4,keyasint"`
+}
+
+type EditorAttributes struct {
+	// ------ table attribute -------
+
+	Colspan  uint `json:"colspan,omitempty"    cbor:"0,keyasint"`
+	Rowspan  uint `json:"rowspan,omitempty"    cbor:"1,keyasint"`
+	Colwidth uint `json:"colwidth,omitempty"   cbor:"2,keyasint"`
+}
+
+type EditorMarks struct {
+	Type string `json:"type"             cbor:"0,keyasint"`
+	Text string `json:"text,omitempty"   cbor:"1,keyasint"`
 }
 
 // Creates a new journal entry within a specified journal group.
@@ -60,14 +75,13 @@ func CreateJournal(currentGroupId int, schema *JournalSchema) *JournalData {
 		Type:    uint8(TYPE_JOURNAL),
 		Created: utils.GetCurrentDateNow(),
 		Name:    schema.Name,
+		Data:    JournalContentData{},
 	}
 
 	utils.BSON_WriteFile(
 		internals.GetJournalSavedFilePath(currentGroupId, newData.Id),
 		&newData,
 	)
-
-	newData.Data = []JournalContentData{}
 
 	internals.OpenDb(utils.IntToString(currentGroupId), func(cache *internals.JSONCacheUtils) {
 		cache.Set(stringJournalId, &newData)
@@ -146,7 +160,7 @@ func mergeJournalData(currentJournalData *JournalData, newData *JournalUpdateSch
 		currentJournalData.Name = newData.Name
 	}
 
-	if len(newData.Data) != 0 {
+	if len(newData.Data.Content) != 0 {
 		currentJournalData.Data = newData.Data
 	}
 

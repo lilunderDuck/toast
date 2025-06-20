@@ -39,6 +39,6 @@ export async function api_saveJournalContent(currentGroupId: number, someJournal
   }
 
   await __callBackendApi('PATCH', `/duck/journal/${currentGroupId}/${someJournalId}`, {
-    data: data,
+    data: data
   })
 }

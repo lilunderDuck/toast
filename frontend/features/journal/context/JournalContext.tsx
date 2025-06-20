@@ -49,7 +49,7 @@ export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
 
   const getCurrentGroupId = () => getCurrentGroup().id
 
-  const wrappedSessionStorage: JournalSessionStorage = createStorage(sessionStorage)
+  const wrappedSessionStorage: JournalSessionStorage = createStorage(sessionStorage, 'journal')
   const event = createEvent<JournalEventMap>()
   const journalContext = createJournal(getCurrentGroupId, event)
   const tabContext = createTab(getCurrentGroupId)
@@ -66,7 +66,7 @@ export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
       journal$: journalContext,
       tabs$: tabContext,
       // ...
-      localStorage$: createStorage(localStorage),
+      localStorage$: createStorage(localStorage, 'journal'),
       sessionStorage$: wrappedSessionStorage,
       event$: event,
       getCurrentGroup$: getCurrentGroup

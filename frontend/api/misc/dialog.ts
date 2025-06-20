@@ -15,5 +15,5 @@ export type FileDialogResult = {
 }
 
 export async function api_openFileDialog(options: FileDialogOptions): Promise<FileDialogResult> {
-  return await __callBackendApi("POST", "/duck/bridge/openFileDialog", options)
+  return await __callBackendApi("POST", "/native/openFileDialog", options)
 }

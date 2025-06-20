@@ -1,6 +1,6 @@
 import stylex from "@stylexjs/stylex"
-import { BsPlus } from "solid-icons/bs"
-import { splitProps } from "solid-js"
+import { BsBookFill, BsPencilFill, BsPlus } from "solid-icons/bs"
+import { Show, splitProps } from "solid-js"
 import { IconTypes } from "solid-icons"
 // ...
 import { 
@@ -8,10 +8,9 @@ import {
   ButtonSizeVariant, 
   createLazyLoadedDialog, 
   FlexCenterY, 
-  Spacer, 
   Tooltip 
 } from "~/components"
-import { EditOrReadonlyIcon, useEditorContext } from "~/features/editor"
+import { useEditorContext } from "~/features/editor"
 // ...
 import { useJournalContext } from "../../context"
 
@@ -59,7 +58,13 @@ export function SidebarButtonsRow() {
       <ButtonItem 
         onClick={toggleEditOrReadonlyMode}
         disabled={!journal$.currentlyOpened$()}
-        icon$={EditOrReadonlyIcon}
+        icon$={() => (
+          <Show when={isReadonly$()} fallback={
+            <BsBookFill size={15} />
+          }>
+            <BsPencilFill size={15} />
+          </Show>
+        )}
         label$={`Toggle ${mode()} mode`}
       />
       {/* ... */}

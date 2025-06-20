@@ -10,7 +10,7 @@ const style = stylex.create({
     width: 'var(--progress)',
     height: 5,
     transition: '0.25s ease-out',
-    backgroundImage: '#ffbe31ff',
+    backgroundColor: '#ffbe31ff',
   }
 })
 

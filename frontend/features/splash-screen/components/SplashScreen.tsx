@@ -1,4 +1,4 @@
-import { createSignal, Show } from "solid-js"
+import { createSignal, onMount, Show } from "solid-js"
 import { Transition } from "solid-transition-group"
 // ...
 import { FlexCenter, FlexCenterX } from "~/components"
@@ -9,6 +9,7 @@ import cat_jumping from "../assets/cat_jumping.gif"
 // ...
 import SplashText from "./SplashText"
 import SplashProgressBar from "./SplashProgressBar"
+import { useSplashScreenContext } from "../provider"
 
 const style = stylex.create({
   screen: {
@@ -34,42 +35,45 @@ const style = stylex.create({
     height: '20rem',
     background: 'center center no-repeat var(--bg)',
     backgroundSize: 'contain'
+  },
+  topText: {
+    width: '100%',
+    position: 'absolute',
+    marginTop: 5,
+    marginLeft: 2,
+    fontSize: 13
   }
 })
 
-export namespace SplashScreen {
-  const [progress, setProgress] = createSignal(0)
-  const [text, setText] = createSignal('')
-  const [isVisible, setIsVisible] = createSignal(true)
+export function SplashScreen() {
+  const { isVisible$, progress$, topText$, start$, setIsVisible$ } = useSplashScreenContext()
 
-  export const 
-    setProgress$ = setProgress,
-    setText$ = setText,
-    setIsVisible$ = setIsVisible
-  // 
+  onMount(start$)
 
-  export function Screen$() {
-    return (
-      <Transition 
-        onExit={(el, done) => {
-          const a = el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200 })
-          a.finished.then(done)
-        }}
-      >
-        <Show when={isVisible()}>
-          <FlexCenterX {...stylex.attrs(style.screen)}>
-            <SplashProgressBar style={{
-              '--progress': `${progress()}%`
+  return (
+    <Transition 
+      onExit={(el, done) => {
+        const a = el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200 })
+        a.finished.then(done)
+      }}
+    >
+      {void setIsVisible$(start$.loading)}
+      <Show when={isVisible$()}>
+        <FlexCenterX {...stylex.attrs(style.screen)}>
+          <SplashProgressBar style={{
+            '--progress': `${progress$()}%`
+          }} />
+          <div {...stylex.attrs(style.topText)}>
+            {topText$()}
+          </div>
+          <FlexCenter {...stylex.attrs(style.iconHolder)}>
+            <div {...stylex.attrs(style.icon)} style={{
+              '--bg': `url('${cat_jumping}')`
             }} />
-            <FlexCenter {...stylex.attrs(style.iconHolder)}>
-              <div {...stylex.attrs(style.icon)} style={{
-                '--bg': `url('${cat_jumping}')`
-              }} />
-            </FlexCenter>
-            <SplashText {...stylex.attrs(style.text)} />
-          </FlexCenterX>
-        </Show>
-      </Transition>
-    )
-  }
+          </FlexCenter>
+          <SplashText {...stylex.attrs(style.text)} />
+        </FlexCenterX>
+      </Show>
+    </Transition>
+  )
 }

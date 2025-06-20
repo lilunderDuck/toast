@@ -31,12 +31,13 @@ func main() {
 	router.Use(cors.Default())
 	router.Use(static.Serve("/", static.LocalFile(internals.StaticFolderPath, false)))
 
+	routes.CreateExtensionRoute(router)
+	// ... api routes ...
 	apiRoute := router.Group("/duck")
-
 	journal_route.CreateJournalRoute(apiRoute)
 	routes.CreateJournalGroupRoute(apiRoute)
-	routes.CreateExtensionRoute(apiRoute)
 	routes.CreateMediaRoute(apiRoute)
+
 	go dynamic.CreateServer()
 	router.Run(":8000")
 }
