@@ -1,2 +1,2 @@
-export * from "./sidebar"
-export * from "./journal-grid"
+export * from "./JournalBlock"
+export * from "./CreateJournalButton"

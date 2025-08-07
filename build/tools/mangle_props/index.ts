@@ -41,6 +41,12 @@ for (const propName of propList) {
   propsToken.set(propName, randomGenerator.next().value!)
 }
 
+const MANUAL_MANGLE = [
+  '__vite__mapDeps',
+  'indeterminate',
+  'stopPropagation'
+]
+
 for (let i = 0; i < fileData.length; i++) {
   const file = fileData[i];
   let fileContent = file.content

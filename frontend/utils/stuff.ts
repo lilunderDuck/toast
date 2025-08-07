@@ -1,5 +1,3 @@
-import { API_VERSION, APP_VERSION } from "~/utils/macros" 
-
 /**Pauses execution for a specified number of milliseconds.
  * @param delayInMs The number of milliseconds to delay.
  * @returns A Promise that resolves after the delay.
@@ -21,28 +19,14 @@ export function debounce<Fn extends AnyFunction>(callback: Fn, wait: number) {
   }
 }
 
-export function logThisVeryHelpfulMessage() {
-  /*@__PURE__*/console.log(
-    "%cOkay, hold on.", "font-size:25px",
-    "\nThis is a very scary place you know? Pasting any code into here result in *no consequence* whatsoever, because it's just you and yourself.",
-    "\n\n",
-    "\n---- You're now looking at the app information ----",
-    `\nyou                   :  ${navigator.userAgent}`,
-    `\napp version           :  ${APP_VERSION}`,
-    `\napi version           :  ${API_VERSION}`,
-    '\nusing solidjs version :  v1.8.11',
-    '\n\n',
-    "\n---- You're now looking at this cute cat ----",
-    `
-      .        ／＞　 フ
-              | 　_　_| 
-            ／\` ミ__^ノ 
-           /　　　　 |
-          /　 ヽ　　 ﾉ              ╱|、
-         /　　 |　|　|            (˚ˎ 。7  
-        ／￣|　　 |　|　|          |、˜〵          
-        (￣ヽ＿_  ヽ_)__)         じしˍ,)ノ
-        ＼二)
-    `
-  )
+export function isObject(someValue: any): someValue is object {
+  return toString.call(someValue) === '[object Object]'
+}
+
+export function getFilenameFromUrl(url: string) {
+  return url.split("/").pop()!
+}
+
+export function trimFileExtension(fileName: string) {
+  return fileName.split('.').slice(0, -1).join('.')
 }

@@ -1,1 +1,1 @@
-export * from './JournalHomeProvider'
+export * from "./JournalHomeProvider"

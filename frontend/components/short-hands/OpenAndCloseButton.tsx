@@ -1,8 +1,6 @@
 import stylex from "@stylexjs/stylex"
 import { 
   Button, 
-  ButtonSizeVariant,
-  ButtonVariant, 
   Flex, 
   Spacer 
 } from "../ui"
@@ -38,7 +36,7 @@ export function OpenAndCloseButton(props: IOpenAndCloseButtonProps) {
     <Flex {...divProps} {...stylex.attrs(style.theThing)}>
       <Spacer />
       <Button 
-        size$={ButtonSizeVariant.sm} 
+        size$={ButtonSize.sm} 
         variant$={ButtonVariant.danger}
         onClick={props.onClickingClose$}
         {...stuff.closeButtonProps$}
@@ -46,7 +44,7 @@ export function OpenAndCloseButton(props: IOpenAndCloseButtonProps) {
         {props.closeText$}
       </Button>
       <Button 
-        size$={ButtonSizeVariant.sm} 
+        size$={ButtonSize.sm} 
         onClick={props.onClickingOpen$}
         {...stuff.openButtonProps$}
       >

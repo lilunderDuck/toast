@@ -1,0 +1,4 @@
+.file[aria-current=page] > button {
+  color: var(--gray12) !important;
+  background-color: var(--gray5) !important;
+}

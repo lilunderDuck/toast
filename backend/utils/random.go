@@ -2,6 +2,7 @@ package utils
 
 import (
 	"math/rand"
+	"strconv"
 
 	gonanoid "github.com/matoous/go-nanoid/v2"
 )
@@ -9,8 +10,9 @@ import (
 // Generates a random 8-character string containing only digits (1-9).
 //
 // Returns the generated string and an error if (for some reason) there's a problem generating it.
-func GetRandomIntString() (string, error) {
-	return gonanoid.Generate("123456789", 8)
+func GetRandomInt() int {
+	result, _ := strconv.Atoi(gonanoid.MustGenerate("123456789", 8))
+	return result
 }
 
 // Selects a random element from the given array.
@@ -23,21 +25,4 @@ func GetRandomIntString() (string, error) {
 func GetRandomElementFromArray[T any](someArray []T) (choosenElement T) {
 	randomIndex := rand.Intn(len(someArray))
 	return someArray[randomIndex]
-}
-
-// Creates a random numeric ID as a string and its integer equivalent.
-//
-// If an error occurs during string generation, it panics (stops the program),
-// in extremely rare cases. Let's just say that this function works in 100% "all of the cases"
-//
-// Returns both of the the string ID and the integer ID.
-func GenerateRandomNumberId() (string, int) {
-	randomId, randomError := GetRandomIntString()
-	if randomError != nil {
-		panic(randomError)
-	}
-
-	idNumber := StringToInt(randomId)
-
-	return randomId, idNumber
 }

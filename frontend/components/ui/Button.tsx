@@ -8,22 +8,6 @@ import __style from "./Button.module.css"
 // ...
 import { defaultValueOrElse, mergeClassname, type StylexStylesAttribute } from "../../utils"
 
-export const enum ButtonVariant {
-  default,
-  danger,
-  outline,
-  secondary,
-  ghost,
-  link
-}
-
-export const enum ButtonSizeVariant {
-  default,
-  sm,
-  lg,
-  icon
-}
-
 const style = stylex.create({
   base: {
     display: "inline-flex",
@@ -82,11 +66,11 @@ const variantMapping: Record<ButtonVariant, StylexStylesAttribute> = {
   // link: "text-primary underline-offset-4 hover:underline"
 }
 
-const sizeMapping: Record<ButtonSizeVariant, StylexStylesAttribute> = {
-  [ButtonSizeVariant.default]: stylex.attrs(style.size_default),
-  [ButtonSizeVariant.sm]: stylex.attrs(style.size_small),
-  [ButtonSizeVariant.lg]: stylex.attrs(style.size_large),
-  [ButtonSizeVariant.icon]: stylex.attrs(style.size_icon)
+const sizeMapping: Record<ButtonSize, StylexStylesAttribute> = {
+  [ButtonSize.default]: stylex.attrs(style.size_default),
+  [ButtonSize.sm]: stylex.attrs(style.size_small),
+  [ButtonSize.lg]: stylex.attrs(style.size_large),
+  [ButtonSize.icon]: stylex.attrs(style.size_icon)
 }
  
 export type ButtonProps<T extends ValidComponent = "button"> = ButtonRootProps<T> &
@@ -94,7 +78,7 @@ export type ButtonProps<T extends ValidComponent = "button"> = ButtonRootProps<T
     class?: string | undefined
     children?: JSX.Element 
     variant$?: ButtonVariant
-    size$?: ButtonSizeVariant
+    size$?: ButtonSize
   }
 // ...
 
@@ -110,7 +94,7 @@ export function Button<T extends ValidComponent = "button">(
         __style.button,
         stylex.attrs(style.base),
         defaultValueOrElse(variantMapping, local.variant$, ButtonVariant.default),
-        defaultValueOrElse(sizeMapping, local.size$, ButtonSizeVariant.default),
+        defaultValueOrElse(sizeMapping, local.size$, ButtonSize.default),
       )}
     />
   )

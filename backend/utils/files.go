@@ -1,76 +1,76 @@
 package utils
 
 import (
-	"burned-toast/backend/debug"
 	"errors"
 	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/kardianos/osext"
 )
 
 // Takes a bunch of parts of a file path and puts them together into one complete path.
 //
-// Returns the complete file path. Example:
-//
 //	JoinPath("path", "to", "some_file.txt")
 //	// returns "path/to/some_file.txt"
-//
-// Parameters:
-//   - pathToFileName: A list of strings, where each string is a part of the file path.
-//
-// See: https://pkg.go.dev/path/filepath#Join
 func JoinPath(pathToFileName ...string) string {
 	return filepath.Join(pathToFileName...)
 }
 
 // Takes a file path and gives you just the file's name, including its extension.
-// The extension is the part at the end, like ".txt" or ".jpg".
-//
-// Returns the file name with its extension. Example:
 //
 //	GetFileNameWithExtension("path/to/some_file.txt")
 //	// returns "some_file.txt"
-//
-// Parameters:
-//   - inAnyPath: The full file path.
-//
-// See: https://pkg.go.dev/path/filepath#Base
 func GetFileNameWithExtension(inAnyPath string) string {
 	return filepath.Base(inAnyPath)
 }
 
+// Takes a file path and gives you just the file's name.
+//
+// Not to be confused with [utils.GetFileNameWithExtension()], it include
+// the file extension. This function does not.
+//
+//	GetFileName("path/to/some_file.txt")
+//	// returns "some_file"
+func GetFileName(path string) string {
+	fileNameWithExt := GetFileNameWithExtension(path)
+	fileExt := GetFileExtension(path)
+	return strings.TrimSuffix(fileNameWithExt, fileExt)
+}
+
 // Takes a file path and gives you the folder (directory) where the file is located.
 //
-// Returns the directory (folder) part of the path. Example:
-//
-//	GetFileNameWithExtension("path/to/some_file.txt")
-//	// returns "path/to"
-//
-// Parameters:
-//   - inAnyPath: The full file path.
-//
-// See: https://pkg.go.dev/path/filepath#Dir
+//	GetFileDir("path/to/some_file.txt")
+//	// returns "path/to/"
 func GetFileDir(inAnyPath string) string {
 	return filepath.Dir(inAnyPath)
 }
 
 // Takes a file path and gives you just the file's extension.
-// The extension is the part at the end, like ".txt" or ".jpg".
 //
-// Returns the file's extension (including the dot). Example:
-//
-//	GetFileNameWithExtension("path/to/some_file.txt")
+//	GetFileExtension("path/to/some_file.txt")
 //	// returns ".txt"
-//
-// Parameters:
-//   - inAnyPath: The full file path.
-//
-// See: https://pkg.go.dev/path/filepath#Ext
 func GetFileExtension(inAnyPath string) string {
 	return filepath.Ext(inAnyPath)
+}
+
+// Takes a file path and rename the file in a path.
+//
+// Note: this does not do anything to rename the file name in the file system.
+//
+//	RenameFileInPath("path/to/old_file.txt", func(oldFilename string) string {
+//	  return "new_file"
+//	})
+//	// returns "path/to/new_file.txt"
+func RenameFileInPath(path string, newName func(oldFilename string) string) string {
+	baseDir := GetFileDir(path)
+	fileExt := GetFileExtension(path)
+	fileName := GetFileName(path)
+
+	newFileName := newName(fileName)
+	return JoinPath(baseDir, newFileName+fileExt)
 }
 
 // Returns the path of the folder where the program is running.
@@ -87,24 +87,16 @@ func GetCurrentDir() (currentPath string) {
 
 // Makes a new folder at the given path.
 // It will create all the folders in the path if they don't exist.
-//
-// Returns an error if something goes wrong.
 func CreateDirectory(path string) (makeDirError error) {
-	debug.Infof("Creating directory: %s", path)
 	return os.MkdirAll(path, 0666)
 }
 
 // Deletes a file or a folder at the given path.
-//
-// Returns an error if something goes wrong.
 func RemoveFileOrDirectory(path string) (removeError error) {
-	debug.Infof("Removing: %s", path)
 	return os.Remove(path)
 }
 
 // Checks if a file exists at the given path.
-//
-// Returns true if the file exists, and false if it doesn't.
 func IsFileExist(pathToFile string) (existOrNot bool) {
 	_, err := os.Stat(pathToFile)
 	if err == nil {
@@ -119,28 +111,20 @@ func IsFileExist(pathToFile string) (existOrNot bool) {
 }
 
 // Writes the given data (stuff) to a file at the given path.
-//
-// Returns an error if something goes wrong.
 func WriteFile(pathToFile string, stuff []byte) (writeError error) {
-	debug.Infof("Writing: %s", pathToFile)
 	return os.WriteFile(pathToFile, stuff, os.ModePerm)
 }
 
 // Reads the data from a file at the given path.
-//
-// Returns the data as a byte array and an error if something goes wrong.
 func ReadFile(pathToFile string) (fileContent []byte, readError error) {
-	debug.Infof("Reading: %s", pathToFile)
 	return os.ReadFile(pathToFile)
 }
 
 func OpenFile(pathToFile string) (*os.File, error) {
-	debug.Infof("Opening: %s", pathToFile)
 	return os.Open(pathToFile)
 }
 
 func MoveFile(sourcePath string, destPath string) error {
-	debug.Infof("Moving \"%s\" to \"%s\"", sourcePath, destPath)
 	// Attempt to rename (move) the file.
 	err := os.Rename(sourcePath, destPath)
 	if err == nil {
@@ -172,7 +156,6 @@ func MoveFile(sourcePath string, destPath string) error {
 }
 
 func CopyFile(source, destination string) error {
-	debug.Infof("Moving \"%s\" to \"%s\"", source, destination)
 	sourceFile, err := os.Open(source)
 	if err != nil {
 		return err

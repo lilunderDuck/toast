@@ -1,78 +1,37 @@
-import { createResource, For, Show } from "solid-js"
-// ...
-import type { IJournalGroupData } from "~/api/journal"
-import { Flex, FlexCenter } from "~/components"
-import { mergeClassname } from "~/utils"
-// ...
-import { CreateJournalGroupButton, JournalGrid } from "../components"
-import { useJournalHomeContext } from '../provider'
+import { For, ParentProps, Show } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
-import __style from '../components/journal-grid/JournalGrid.module.css'
+import __style from "./JournalList.module.css"
+// ...
+import { shorthands } from "~/styles/shorthands"
+// ...
+import { CreateJournalButton, JournalBlock } from "../components"
+import { useJournalHomeContext } from "../provider"
+import { JournalListSkeleton } from "./JournalListSkeleton"
 
 const style = stylex.create({
-  journalList: {
-    gap: 15,
-    flexWrap: 'wrap'
-  },
-  loadingJournalList: {
-    width: '100%',
-    height: '8rem',
-    backgroundColor: 'var(--gray2)'
+  list: {
+    gap: 10,
+    flexWrap: "wrap"
   }
 })
 
-type OnClickingJournalGroup = (data: IJournalGroupData) => EventHandler<"div", "onClick">
+interface IJournalListProps {
+}
 
-export function JournalList() {
-  const { grid$, event$, infoSidebar$ } = useJournalHomeContext()
-
-  const [resource] = createResource(async() => {
-    await grid$.fetch$()
-    return true
-  })
-
-  let lastElement: HTMLDivElement | undefined
-  const clickOnSomeJournalGroup: OnClickingJournalGroup = (data) => (mouseEvent) => {
-    highlightJournalGroup(mouseEvent.currentTarget)
-    infoSidebar$.open$(data)
-  }
+export function JournalList(props: ParentProps<IJournalListProps>) {
+  const { groups$, isLoading$ } = useJournalHomeContext()
   
-  const highlightJournalGroup = (someElement: HTMLDivElement) => {
-    deselectLastHighlightedGroupIfCan()
-
-    someElement.classList.add(__style.active)
-    lastElement = someElement
-  }
-
-  const deselectLastHighlightedGroupIfCan = () => {
-    if (lastElement) {
-      lastElement.classList.remove(__style.active)
-    }
-  }
-
-  event$.on$('home__infoSidebarClose$', () => {
-    deselectLastHighlightedGroupIfCan()
-    lastElement = undefined
-  })
-
   return (
-    <Flex class={mergeClassname(
-      stylex.attrs(style.journalList),
-      __style['journal-list']
-    )}>
-      <Show when={!resource.loading} fallback={
-        <FlexCenter {...stylex.attrs(style.loadingJournalList)}>
-          Spinnin'
-        </FlexCenter>
+    <div {...stylex.attrs(style.list, shorthands.flex$)} id={__style.list}>
+      <Show when={!isLoading$()} fallback={
+        <JournalListSkeleton />
       }>
-        <For each={grid$.groups$()}>
-          {it => (
-            <JournalGrid {...it} onClick={clickOnSomeJournalGroup(it)}/>
-          )}
+        <For each={groups$()}>
+          {it => <JournalBlock {...it} />}
         </For>
-        <CreateJournalGroupButton />
       </Show>
-    </Flex>
+      <CreateJournalButton />
+    </div>
   )
 }

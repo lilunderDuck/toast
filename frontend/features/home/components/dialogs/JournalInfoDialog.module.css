@@ -1,0 +1,7 @@
+#dialogContent button[aria-label="Dismiss"] {
+  z-index: 10;
+}
+
+#content label {
+  font-weight: bold;
+}

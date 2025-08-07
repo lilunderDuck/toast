@@ -1,38 +1,34 @@
-import { createContext, type ParentProps, useContext } from "solid-js"
+import { Accessor, createContext, createResource, createSignal, ParentProps, useContext } from "solid-js"
 // ...
-import { createEvent, type IEvent } from "~/utils"
-// ...
-import { createInfoSidebar, type IInfoSidebarUtils } from "./infoSIdebar"
-import { createJournalGrid, type IJournalGridUtils } from "./grid"
-
-export type JournalHomeEvent = {
-  home__infoSidebarClose$(): void
-}
+import { GetAllGroups } from "~/wailsjs/go/journal/GroupExport"
+import { journal } from "~/wailsjs/go/models"
 
 interface IJournalHomeContext {
-  infoSidebar$: IInfoSidebarUtils
-  grid$: IJournalGridUtils
-  // ...
-  event$: IEvent<JournalHomeEvent>
+  groups$: Accessor<journal.JournalGroupData[]>
+  isLoading$: () => boolean
+  addGroup$(data: journal.JournalGroupData): void
 }
 
 const Context = createContext<IJournalHomeContext>()
 
 export function JournalHomeProvider(props: ParentProps) {
-  const event = createEvent<JournalHomeEvent>()
-
-  const infoSidebar = createInfoSidebar(event)
-  const grid = createJournalGrid()
+  const [resource] = createResource(GetAllGroups)
+  const [groups, setGroups] = createSignal([])
 
   return (
     <Context.Provider value={{
-      event$: event,
-      infoSidebar$: infoSidebar,
-      grid$: grid
+      groups$: groups,
+      isLoading$: () => resource.loading,
+      addGroup$(data) {
+        setGroups(prev => [data, ...prev])
+      }
     }}>
+      {void setGroups(resource())}
       {props.children}
     </Context.Provider>
   )
 }
 
-export const useJournalHomeContext = () => useContext(Context)!
+export function useJournalHomeContext() {
+  return useContext(Context)!
+}

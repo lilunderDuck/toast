@@ -1,22 +1,36 @@
 /* @refresh reload */
-import { render } from 'solid-js/web'
+import '~/styles/index.css'
+import '~/styles/dark.css'
 // ...
-import './assets/style/index.css'
-import './assets/colors/dark.css'
+import { render } from 'solid-js/web'
+import { Router } from '@solidjs/router'
+// ...
+import routes from '~solid-pages'
 // ...
 import App from './App'
-import { logThisVeryHelpfulMessage } from './utils'
-import { __run } from './features/debug'
 
-const root = document.getElementById('duck')
-isDevMode && __run(() => {
-  if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
-    throw new Error(
-      'Root element not found. Did you forget to add it to your index.html? Or maybe the id attribute got misspelled?',
-    )
-  }
-})
+const root = document.getElementById('root')!
 
-logThisVeryHelpfulMessage()
+console.assert(
+  import.meta.env.DEV && (root instanceof HTMLElement),
+  '(This error should not have been thrown) Root element not found. Did you forget to add it to your index.html? Or maybe the id attribute got misspelled?'
+)
 
-render(() => <App />, root!)
+// the follow code here designed to confuse the heck of react dev tools,
+// so you believe that the app used react
+// @ts-ignore
+const shouldConfuseYou = window.__REACT_DEVTOOLS_GLOBAL_HOOK__
+if (shouldConfuseYou) {
+  shouldConfuseYou.inject("duck")
+}
+
+console.log(routes)
+
+render(
+  () => (
+    <Router root={(props) => <App>{props.children}</App>}>
+      {routes}
+    </Router>
+  ),
+  root,
+)

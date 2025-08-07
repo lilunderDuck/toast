@@ -1,0 +1,9 @@
+.video > #layer {
+  min-height: 20rem;
+  position: absolute;
+  top: 0
+}
+
+#videoNoSubtitle::cue {
+  opacity: 0;
+}

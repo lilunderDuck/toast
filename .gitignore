@@ -1,21 +1,45 @@
-backup/*
-node_modules
-out
-dist
-*.lock
-package-lock.json
+.wrangler
+.output
+.vercel
+.netlify
+.vinxi
 
-logs
-*.log
-*.config.ts.timestamp-*.mjs
-
+# ----- Wails build files ----- 
+*.syso
 *.exe.tmp-*
-
 *.md5
 wailsjs
-dist
-build/bin
-*.syso
-build/tools/lib_used.json
 
-config/macro/types.d.ts
+# ----- Environment ----- 
+.env
+.env*.local
+
+# ----- Dependencies & package manager ----- 
+/node_modules
+deno.lock
+
+# ----- IDEs and editors ----- 
+/.idea
+.project
+.classpath
+*.launch
+.settings/
+
+# ----- System Files ----- 
+.DS_Store
+Thumbs.db
+
+# ----- Auto generated files directly in this project ----- 
+# Library used information
+build/tools/resource/lib_used.json
+build/tools/*.exe
+# App built folder location
+build/out
+# Build cache and stuff
+build/dist
+# Auto generated types
+enum_generated.d.ts
+macro_def.d.ts
+# vite config stuff
+app.config.timestamp_*.js
+*.config.ts.timestamp-*.mjs

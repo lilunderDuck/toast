@@ -1,0 +1,30 @@
+import { SolidNodeViewContextProps, useSolidNodeView, Attrs } from "./useSolidNodeView"
+import { Component, JSX, splitProps } from "solid-js"
+import { Dynamic } from "solid-js/web"
+
+export interface NodeViewWrapperProps {
+  [key: string]: unknown
+  style?: JSX.CSSProperties
+  ref?: Element
+  as?: string | Component<Record<string, unknown>>
+}
+
+export function NodeViewWrapper<T extends HTMLTags>(props: HTMLAttributes<T> & {
+  as?: T
+}) {
+  const { state } = useSolidNodeView() as SolidNodeViewContextProps<Attrs>
+  const [local, otherProps] = splitProps(props, ["as"])
+
+  return (
+    <Dynamic
+      component={local.as || "div"}
+      {...otherProps}
+      onDragStart={state().onDragStart}
+      data-node-view-wrapper
+      // style={{
+      //   ...props.style,
+      //   whiteSpace: "normal"
+      // }}
+    />
+  )
+}

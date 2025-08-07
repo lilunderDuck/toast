@@ -5,7 +5,7 @@ import { BsX } from "solid-icons/bs"
 import stylex from "@stylexjs/stylex"
 import "./ColorInputs.css"
 // ...
-import { FlexCenterY, Button, ButtonSizeVariant, Tooltip, HoverCard, HoverCardTrigger, HoverCardContent } from "../ui"
+import { FlexCenterY, Button, Tooltip, HoverCard, HoverCardTrigger, HoverCardContent } from "../ui"
 
 const style = stylex.create({
   wholeColorInput: {
@@ -59,7 +59,7 @@ export function HexColorInput(props: IHexColorInputProps) {
         <div {...stylex.attrs(style.resetButton)}>
           <Tooltip label$="Reset color">
             <Button 
-              size$={ButtonSizeVariant.icon} 
+              size$={ButtonSize.icon} 
               onClick={() => {
                 props.setColor$("#000000")
                 props.onReset$?.()

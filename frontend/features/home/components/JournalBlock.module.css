@@ -1,0 +1,7 @@
+#block #editButton {
+  opacity: 0;
+}
+
+#block:hover #editButton {
+  opacity: 1;
+}

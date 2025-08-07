@@ -1,7 +1,5 @@
 import { createSignal, Show, type Component } from "solid-js"
 // ...
-import { lazyLoadComponent } from "~/features/debug"
-// ...
 import { LazyComponent, LazyComponentProps } from "./types"
 import { DropdownMenu, DropdownMenuTrigger } from "../ui"
 import { createLazyComponent } from "./utils"
@@ -21,12 +19,10 @@ export function createLazyLoadedDropdownMenu<Props extends IDropdownMenu>(
   const show = () => {
     setIsShowing(false)
     setIsShowing(true)
-    isDevMode && lazyLoadComponent.logLabel("dropdown menu", 'show')
   }
 
   const close = () => {
     setIsShowing(false)
-    isDevMode && lazyLoadComponent.logLabel("dropdown menu", 'hide')
   }
 
   const LazyComponent = createLazyComponent(Component)

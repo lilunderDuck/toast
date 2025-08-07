@@ -13,7 +13,7 @@ export function useNodeState<Data extends Attrs>() {
     return state().selected
   }
 
-  const attrs = () => {
+  const attrs = (): Data => {
     return state().node.attrs
   }
 

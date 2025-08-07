@@ -1,0 +1,20 @@
+{
+  "name": "toast",
+  "outputfilename": "toast-making-machine",
+
+  "build:dir": "./build/out",
+  "assetdir": "./build/out/app",
+  "wailsjsdir": "./frontend",
+
+  "frontend:dir": "./frontend",
+  "frontend:install": "deno install",
+  "frontend:build": "deno task build",
+  "frontend:dev:watcher": "deno task dev",
+  "frontend:dev:serverUrl": "auto",
+  
+  "author": {
+    "companyName": "The ducks",
+    "name": "",
+    "email": ""
+  }
+}

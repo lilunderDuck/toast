@@ -1,0 +1,12 @@
+.journal {
+  --sidebar-panel-bg: var(--gray1);
+  --content-panel-bg: var(--gray2);
+  --top-header-height: 34px;
+  --top-header-content-side-bg: var(--sidebar-panel-bg);
+}
+
+.journal [id=root] {
+  padding-top: 10px;
+  padding-inline: 5%;
+  overflow-y: auto;
+}

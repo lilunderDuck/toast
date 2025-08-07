@@ -1,8 +1,0 @@
-.journal {
-  --journal-header: 35px;
-}
-
-.journal [root] {
-  display: grid;
-  grid-template-rows: 1fr auto;
-}

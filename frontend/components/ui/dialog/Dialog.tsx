@@ -6,19 +6,18 @@ import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { mergeClassname } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
-import __style from './Dialog.module.css'
-import __scrollbarStyle from'~/assets/style/scrollbar.module.css'
-// ...
-import { FlexCenterX } from "../Flex"
-import { FadeInFadeOutAnimation } from "../../animation"
+import __scrollbarStyle from'~/styles/scrollbar.module.css'
 
 const style = stylex.create({
   portal: {
     zIndex: 900,
     width: "100%",
     height: "100%",
-    position: "absolute",
-    alignItems: "flex-start",
+    position: "fixed",
+    display: "flex",
+    justifyContent: "center",
+    // alignItems: "flex-start",
+    alignItems: "center",
   },
   overlay: {
     position: "fixed",
@@ -44,6 +43,7 @@ const style = stylex.create({
     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
     transitionDuration: "300ms",
     opacity: 0.7,
+    zIndex: 10,
     outline: "none",
     backgroundColor: "var(--gray5)",
     ":hover": {
@@ -98,15 +98,9 @@ const DialogPortal: Component<IDialogPortalProps> = (props) => {
       >
         <div dont-close {...stylex.attrs(style.overlay)} />
       </Show>
-      <FadeInFadeOutAnimation>
-        <FlexCenterX class={mergeClassname(
-          __scrollbarStyle.scrollBar, 
-          __scrollbarStyle.scrollbarVertical,
-          stylex.attrs(style.portal)
-        )}>
-          {props.children}
-        </FlexCenterX>
-      </FadeInFadeOutAnimation>
+      <div {...stylex.attrs(style.portal)}>
+        {props.children}
+      </div>
     </DialogPrimitive.Portal>
   )
 }
@@ -175,10 +169,11 @@ const DialogContent = <T extends ValidComponent = "div">(
   )
 }
 
-const DialogHeader: Component<ComponentProps<"div">> = (props) => {
-  const [, rest] = splitProps(props, ["class"])
+const DialogHeader: Component<ComponentProps<"h2">> = (props) => {
+  // const [, rest] = splitProps(props, ["class"])
   return (
-    <div class={mergeClassname(props, stylex.attrs(style.header))} {...rest} />
+    // <h2 class={mergeClassname(props, stylex.attrs(style.header))} {...rest} />
+    <h2 {...props} />
   )
 }
 

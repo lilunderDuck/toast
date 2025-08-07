@@ -1,37 +1,36 @@
-import { 
-  defineConfig, 
-  type Plugin,
-} from 'vite'
-// ...
+import { defineConfig } from 'vite'
 import solidPlugin from 'vite-plugin-solid'
-import { optimizeCssModules } from 'vite-plugin-optimize-css-modules'
-import { stylex as stylexPlugin } from 'vite-plugin-stylex-dev'
-import { ViteImageOptimizer as imageOptimizer } from 'vite-plugin-image-optimizer'
-// ...
+import pagesPlugin from 'vite-plugin-pages'
+import { stylex as stylexPlugin } from "vite-plugin-stylex-dev"
+import { optimizeCssModules } from "vite-plugin-optimize-css-modules"
+// ... 
 import tsconfig from './tsconfig.json'
-import { 
-  BASE_OUTPUT_DIRECTORY,
-  CLIENT_OUTPUT_DIRECTORY,
-  getAliasPath,
-  getEsbuildConfig,
-  macroPlugin,
-  rollupOutputOptions
-} from './config'
+import { defineAllEnum, getAliasPath } from "./build/config"
 
-export default defineConfig(({ command }) => {
-  const devMode = command === "serve"
+export default defineConfig(() => {
+  const BUILD_SAVED_PATH = "./build/out/bin/app"
+  const { generateType, getDefineList } = defineAllEnum()
+
+  generateType()
 
   return {
     plugins: [
-      optimizeCssModules() as Plugin,
+      pagesPlugin({
+        dirs: ['./frontend/pages'],
+      }),
       solidPlugin(),
       stylexPlugin(),
-      imageOptimizer() as Plugin,
-      macroPlugin
+      optimizeCssModules()
     ],
-    define: {
-      "isDevMode": `${devMode}`,
+    server: {
+      port: 3000,
+      watch: {
+        // make sure any wails stuff excluded from the watch list
+        // so vite doesn't crash randomly on dev mode.
+        ignored: ["**/*.syso", "**/out/*"]
+      }
     },
+    define: getDefineList(),
     optimizeDeps: {
       // for some reason adding all of these packages, the error gone
       include: [
@@ -56,20 +55,19 @@ export default defineConfig(({ command }) => {
         "@tiptap/starter-kit",
       ]
     },
-    server: {
-      port: 1337
+    build: {
+      target: 'esnext',
+      outDir: BUILD_SAVED_PATH,
+      rollupOptions: {
+        output: {
+          assetFileNames: "[hash].[ext]",
+          chunkFileNames: "[hash].js",
+          entryFileNames: "[hash].js",
+        }
+      }
     },
     resolve: {
       alias: getAliasPath(tsconfig, __dirname)
     },
-    ...getEsbuildConfig(devMode),
-    cacheDir: `${BASE_OUTPUT_DIRECTORY}/dist`,
-    build: {
-      outDir: CLIENT_OUTPUT_DIRECTORY,
-      rollupOptions: {
-        output: rollupOutputOptions
-      }
-    },
-    publicDir: "./frontend/public"
   }
 })

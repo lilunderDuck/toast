@@ -1,0 +1,15 @@
+#buttonRow button {
+  outline: none;
+  background-color: transparent;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--gray11);
+}
+
+#buttonRow button:hover {
+  color: var(--gray12);
+}

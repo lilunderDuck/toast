@@ -1,0 +1,16 @@
+#tagInput > * {
+  margin-top: 0 !important;
+}
+
+#tagInput input[type=color] {
+  padding: 0 !important;
+}
+
+#tagInput div:last-child {
+  width: 2rem;
+  height: 2rem;
+}
+
+#tagInput div:first-child {
+  width: 100% !important;
+}

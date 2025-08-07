@@ -35,6 +35,9 @@ async function fetchNpmRegistry(
  * @returns all package informations.
  */
 export async function fetchNpmData() {
+  try {
+    return fs.readFileSync("../tools/resource/lib_used.json")
+  } catch (error) {}
   const stuff: LibaryData[] = []
   const deps = Object.entries(packageJson.dependencies)
   const devDeps = Object.entries(packageJson.devDependencies)
@@ -101,4 +104,4 @@ export type NpmRegistryResponse = {
   readme: string
 }
 
-fs.writeFileSync("lib_used.json", JSON.stringify(await fetchNpmData()))
+fs.writeFileSync("../tools/resource/lib_used.json", JSON.stringify(await fetchNpmData()))

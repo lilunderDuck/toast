@@ -1,0 +1,29 @@
+/* Black magik css code to make everything gray out except for the item you hover into. */
+#list [data-block] {
+  cursor: pointer;
+  background-color: var(--gray2);
+  transition: all 0.15s ease-out;
+}
+
+#list [data-block]::before:not(button) {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+}
+
+#list [data-block]:not(.active):hover {
+  background-color: var(--gray3);
+  color: var(--gray12);
+}
+
+#list [data-block].active {
+  background-color: var(--gray4);
+  color: var(--gray12);
+}
+
+#list:hover [data-block]:not(:hover):not(.active) {
+  color: var(--gray10);
+  filter: blur(2px);
+}

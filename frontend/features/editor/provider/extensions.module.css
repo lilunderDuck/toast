@@ -1,0 +1,16 @@
+.details {
+  position: relative;
+}
+
+.details.detailsOpened {}
+
+.details summary {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  font-weight: bold;
+}
+
+.taskItem[data-checked=true] {
+  color: var(--gray10)
+}
