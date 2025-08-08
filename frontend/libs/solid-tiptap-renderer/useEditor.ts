@@ -1,6 +1,7 @@
-import { SolidEditor } from "./editor"
-import { createSignal, onCleanup } from "solid-js"
 import { EditorOptions } from "@tiptap/core"
+import { createSignal, onCleanup } from "solid-js"
+// ...
+import { SolidEditor } from "./editor"
 
 // const useForceUpdate = (): (() => void) => {
 //   const [, setValue] = createSignal(0)

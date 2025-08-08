@@ -9,8 +9,8 @@ import {
 } from "solid-js"
 // ...
 import { createEvent, createStorage, debounce, type IEvent, type IStorage } from "~/utils"
+import { type SolidEditor, useEditor } from '~/libs/solid-tiptap-renderer'
 // ...
-import { type SolidEditor, useEditor } from '../components'
 import { getExtensions } from './extensions'
 
 export type EditorSessionStorage = IStorage<{

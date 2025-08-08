@@ -1,13 +1,9 @@
 import { A } from "@solidjs/router"
 // ...
-import { journal } from "~/wailsjs/go/models"
+import { mergeClassname } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./File.module.css"
-import { mergeClassname } from "~/utils"
-import { useEditorContext } from "~/features/editor"
-import { GetJournal } from "~/wailsjs/go/journal/GroupExport"
-import { useJournalContext } from "../../provider"
 
 const style = stylex.create({
   file: {
@@ -39,13 +35,6 @@ interface IFileProps {
 }
 
 export function File(props: IFileProps) {
-  const { open$ } = useEditorContext()
-  const { getJournal$ } = useJournalContext()
-
-  const fetchJournalContent = () => {
-    const journalData = getJournal$(props.journalId$)
-  }
-
   return (
     <div>
       <A

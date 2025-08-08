@@ -7,8 +7,9 @@ import __scrollbarStyle from "~/styles/scrollbar.module.css"
 import "./Editor.css"
 // ...
 import { mergeClassname } from "~/utils"
+import { SolidEditorContent } from "~/libs/solid-tiptap-renderer"
 // ...
-import { AttributeEditor, BubbleMenu, FloatingMenu, SolidEditorContent } from "../components"
+import { AttributeEditor, BubbleMenu, FloatingMenu } from "../components"
 import { useEditorContext } from "../provider"
 
 const style = stylex.create({
