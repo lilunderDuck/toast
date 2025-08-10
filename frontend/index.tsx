@@ -1,6 +1,5 @@
 /* @refresh reload */
-import '~/styles/index.css'
-import '~/styles/dark.css'
+import "~/styles/index.css"
 // ...
 import { render } from 'solid-js/web'
 import { Router } from '@solidjs/router'

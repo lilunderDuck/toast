@@ -31,6 +31,7 @@ export default defineConfig(() => {
       }
     },
     define: getDefineList(),
+    publicDir: "./frontend/public/",
     optimizeDeps: {
       // for some reason adding all of these packages, the error gone
       include: [
