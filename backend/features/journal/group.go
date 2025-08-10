@@ -3,32 +3,8 @@ package journal
 import (
 	"time"
 	"toast/backend/db"
-	internal "toast/backend/internals"
 	"toast/backend/utils"
 )
-
-// The paths where all of the journal groups metadata are being stored,
-// which is "~/data/groups"
-var GROUP_CACHE_DATA_PATH string = utils.JoinPath(internal.DATA_FOLDER_PATH, "groups")
-
-// Gets the journal group's saved path, which is "~/data/groups/(group id)"
-func GetSavedPath(groupId int) string {
-	return utils.JoinPath(
-		internal.JOURNAL_FOLDER_PATH,
-		utils.ToString(groupId),
-	)
-}
-
-// Save the journal group icon by the given path.
-//   - @param data - the journal group data
-//   - @param iconPath - the icon path that you want to change. Later, it will be saved at
-//     this location: "~/data/journals/[groupId]/icons/(whatever icon filename is)"
-func saveAndUpdateIcon(data *JournalGroupData, iconPath string) {
-	fileName := utils.GetFileNameWithExtension(iconPath)
-	newLocation := utils.JoinPath(GetSavedPath(data.Id), "icons", fileName)
-	utils.MoveFile(iconPath, newLocation)
-	data.Icon = fileName
-}
 
 // Handling journal group metadata updates. This will both update the new data to 2 locations:
 //   - Journal groups metadata database: "~/data/groups"
@@ -42,7 +18,7 @@ func batchUpdate(groupId int, data JournalGroupData) {
 		db.SetObject(groupId, data)
 	})
 
-	utils.BSON_WriteFile(utils.JoinPath(GetSavedPath(groupId), "meta.dat"), data)
+	utils.BSON_WriteFile(getJournalGroupMetaSavedPath(groupId), data)
 }
 
 func (group *GroupExport) CreateGroup(options JournalGroupOptions) (*JournalGroupData, error) {

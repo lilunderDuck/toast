@@ -1,6 +1,7 @@
 import stylex from "@stylexjs/stylex"
 // ...
-import { NodeViewWrapper } from "../../components"
+import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
+// ...
 import { GalleryButtonRow, GalleryContent, LeftButtonSide, RightButtonSide } from "./components"
 import { GalleryProvider } from "./provider"
 

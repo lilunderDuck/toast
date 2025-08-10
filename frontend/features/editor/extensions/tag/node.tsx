@@ -3,9 +3,10 @@ import { onMount } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import { shorthands } from "~/styles/shorthands"
 // ...
+import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
+// ...
 import { useNodeState } from "../../utils"
 import { TagAttribute } from "./extension"
-import { NodeViewWrapper } from "../../components"
 
 const style = stylex.create({
   tag: {

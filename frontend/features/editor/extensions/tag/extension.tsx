@@ -1,6 +1,7 @@
 import { Attribute, InputRule, Node } from "@tiptap/core"
 // ...
-import { SolidNodeViewRenderer } from "../../components"
+import { SolidNodeViewRenderer } from "~/libs/solid-tiptap-renderer"
+// ...
 import { insertNodeAtCurrentPosition } from "../../utils"
 import TagNodeView from "./node"
 

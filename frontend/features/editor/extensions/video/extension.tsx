@@ -1,6 +1,7 @@
 import { type Attribute, Node } from '@tiptap/core'
 // ...
-import { NodeViewWrapper, SolidNodeViewRenderer } from '../../components'
+import { NodeViewWrapper, SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
+// ...
 import { useNodeState } from '../../utils'
 import { VideoAttribute } from './data'
 import { Video } from './Video'

@@ -1,4 +1,4 @@
-import { type Attrs, useSolidNodeView } from "../components"
+import { type Attrs, useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 
 export const META_ALLOW_INTENTIONAL_DELETION = "non-sense"
 

@@ -2,39 +2,10 @@ package journal
 
 import (
 	"toast/backend/db"
-	"toast/backend/internals"
 	"toast/backend/utils"
 )
 
 // ------ utils functions start here ------
-
-// Gets the folder path where all of the journals metadata are being stored.
-// Which is "~/data/journals/(group id)/jouwnyaws"
-//
-// Before you asking, "jouwnyaws" is literally "journals" but owoified.
-//
-// Yeah I don't know how to name this folder, you know.
-func getJournalsDatabasePath(groupId int) string {
-	return utils.JoinPath(internals.JOURNAL_FOLDER_PATH, utils.ToString(groupId), "jouwnyaws")
-}
-
-// Gets the folder path where all of the journals content should be stored
-// Which is "~/data/journals/(group id)/stuff"
-//
-// Not to be confused with [getJournalContentSavedFilePath()], that function
-// gets the *file* path, this one gets the *folder* path.
-func getJournalContentSavedPath(groupId int) string {
-	return utils.JoinPath(internals.JOURNAL_FOLDER_PATH, utils.ToString(groupId), "stuff")
-}
-
-// Gets the file path where all of the journals content should be stored
-// Which is "~/data/journals/(group id)/stuff/(journal id).dat"
-//
-// Not to be confused with [getJournalContentSavedPath()], that function
-// gets the *folder* path, this one gets the *file* path.
-func getJournalContentSavedFilePath(groupId, journalId int) string {
-	return utils.JoinPath(getJournalContentSavedPath(groupId), utils.ToString(journalId)+".dat")
-}
 
 // Save journal data to disk.
 //

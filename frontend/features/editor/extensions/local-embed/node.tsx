@@ -3,7 +3,7 @@ import { createFileUpload, FileUploadType } from "~/features/native"
 import stylex from "@stylexjs/stylex"
 import { shorthands } from "~/styles/shorthands"
 // ...
-import { NodeViewWrapper } from "../../components"
+import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
 import { useLocalEmbedContext } from "./provider"
 import { Show } from "solid-js"
 
