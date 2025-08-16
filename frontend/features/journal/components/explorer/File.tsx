@@ -29,7 +29,7 @@ const style = stylex.create({
 })
 
 interface IFileProps {
-  groupId$: string
+  groupId$: number
   journalId$: number
   onClick?: HTMLAttributes<"button">["onClick"]
 }

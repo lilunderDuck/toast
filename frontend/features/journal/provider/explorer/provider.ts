@@ -1,11 +1,11 @@
-import { Accessor, type Component, createContext, createSignal, type ParentComponent, type ParentProps, useContext } from "solid-js"
+import { Accessor, type Component, createSignal, type ParentComponent } from "solid-js"
 // ...
 import { createStorage, type IStorage } from "~/utils"
 import { journal } from "~/wailsjs/go/models"
 // ...
-import { ROOT_FOLDER } from "./consts"
+import { ROOT_FOLDER } from "./data"
 
-interface IFileExplorerContext {
+export interface IFileExplorerContext {
   tree$: IExplorerTree
   components$: {
     File$: Component<{
@@ -30,22 +30,21 @@ interface IExplorerTree {
   replace$(folderId: number, newTree: journal.ExplorerNode[]): void
 }
 
-const Context = createContext<IFileExplorerContext>()
-
-export interface IFileExplorerProviderProps {
+export interface IFileExplorerProviderOptions {
   components$: IFileExplorerContext["components$"]
   getDataMapping$: IFileExplorerContext["getDataMapping$"]
   onTreeUpdate$(tree: journal.ExplorerNode[]): any
+  getInitialTree$?: () => journal.ExplorerNode[]
 }
 
-export function FileExplorerProvider(props: ParentProps<IFileExplorerProviderProps>) {
-  let treeCache: journal.ExplorerNode[] = []
+export function createFileExplorerContext(options: IFileExplorerProviderOptions) {
+  let treeCache: journal.ExplorerNode[] = options.getInitialTree$?.() ?? []
   const [isUpdating, setIsUpdating] = createSignal(false)
 
-  const update = async() => {
+  const update = async () => {
     setIsUpdating(true)
     setIsUpdating(false)
-    props.onTreeUpdate$(treeCache)
+    options.onTreeUpdate$(treeCache)
   }
 
   const add = (nodeData: journal.ExplorerNode, toFolder: number, data: any) => {
@@ -57,7 +56,7 @@ export function FileExplorerProvider(props: ParentProps<IFileExplorerProviderPro
     const thisFolder = find(toFolder)
     if (!thisFolder) {
       console.error("Could not insert", nodeData, "to", toFolder)
-      return 
+      return
     }
 
     if (!thisFolder.child) {
@@ -85,7 +84,7 @@ export function FileExplorerProvider(props: ParentProps<IFileExplorerProviderPro
         return find(id, node.child)
       }
     }
- 
+
     return null
   }
 
@@ -99,12 +98,12 @@ export function FileExplorerProvider(props: ParentProps<IFileExplorerProviderPro
     const shouldBeAFolder = find(whichFolderId)
     if (!shouldBeAFolder) {
       console.error("could not find node", whichFolderId)
-      return 
+      return
     }
-    
+
     if (!shouldBeAFolder.child) {
       console.error(shouldBeAFolder, "is not a folder")
-      return 
+      return
     }
 
     console.log('replace', whichFolderId, "with", tree)
@@ -112,26 +111,18 @@ export function FileExplorerProvider(props: ParentProps<IFileExplorerProviderPro
     update()
   }
 
-  return (
-    <Context.Provider value={{
-      isUpdating$: isUpdating,
-      onTreeUpdate$: props.onTreeUpdate$,
-      tree$: {
-        create$: add,
-        replace$: replaceTree,
-        get data$() {
-          return treeCache
-        }
-      },
-      components$: props.components$,
-      getDataMapping$: props.getDataMapping$,
-      sessionStorage$: createStorage(sessionStorage, "explorer")
-    }}>
-      {props.children}
-    </Context.Provider>
-  )
-}
-
-export function useFileExplorerContext() {
-  return useContext(Context)!
+  return {
+    isUpdating$: isUpdating,
+    onTreeUpdate$: options.onTreeUpdate$,
+    tree$: {
+      create$: add,
+      replace$: replaceTree,
+      get data$() {
+        return treeCache
+      }
+    },
+    components$: options.components$,
+    getDataMapping$: options.getDataMapping$,
+    sessionStorage$: createStorage(sessionStorage, "explorer")
+  }
 }

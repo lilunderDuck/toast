@@ -2,6 +2,7 @@ import { BsBlockquoteLeft, BsCheck2Square, BsTable } from "solid-icons/bs"
 import { For } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
+import __scrollbarStyle from "~/styles/scrollbar.module.css"
 // ...
 import { mergeClassname } from "~/utils"
 // ...
@@ -15,15 +16,21 @@ interface IFloatingMenuProps {
 
 const style = stylex.create({
   menu: {
-    paddingInline: 15,
+    paddingInline: 5,
     paddingBlock: 10,
     borderRadius: 6,
+    width: "10rem",
     height: "100%",
     userSelect: "none",
-    display: "flex"
+    display: "flex",
+    backgroundColor: "var(--gray4)"
   },
   menu__option: {
-    color: "var(--gray11)"
+    color: "var(--gray11)",
+    ":hover": {
+      backgroundColor: "var(--gray7)",
+      color: "var(--gray12)",
+    }
   },
   menu__name: {
     display: "flex",
@@ -69,10 +76,18 @@ export function FloatingMenu(props: IFloatingMenuProps) {
   ]
 
   return (
-    <div class={mergeClassname(stylex.attrs(style.menu), props)} ref={props.ref}>
+    <div 
+      class={mergeClassname(
+        stylex.attrs(style.menu),
+        __scrollbarStyle.scrollbarVertical,
+        __scrollbarStyle.invsScrollbar,
+        props
+      )} 
+      ref={props.ref}
+    >
       <For each={floatingMenuOptions}>
         {it => (
-          <div onClick={it.run$} {...stylex.attrs(style.menu__option)}>
+          <button onClick={it.run$} {...stylex.attrs(style.menu__option)}>
             <div {...stylex.attrs(style.menu__name)}>
               <it.icon$ />
               <span>
@@ -80,7 +95,7 @@ export function FloatingMenu(props: IFloatingMenuProps) {
               </span>
             </div>
             <p></p>
-          </div>
+          </button>
         )}
       </For>
     </div>

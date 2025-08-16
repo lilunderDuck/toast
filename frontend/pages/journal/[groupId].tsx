@@ -1,16 +1,27 @@
-import { onCleanup, ParentProps } from "solid-js"
+import { onCleanup, ParentProps, Show } from "solid-js"
 import { Root, Panel, Handle } from '@corvu/resizable'
 import { useParams } from "@solidjs/router"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "~/features/journal/styles/index.module.css"
 // ...
-import { FileExplorer, FileExplorerProvider, IFileExplorerProviderProps } from "~/features/explorer"
-import { CurrentlyOpened, File, Folder, QuickActionBar, TopHeaderButtonRow, JournalProvider, useJournalContext } from "~/features/journal"
+import { 
+  CurrentlyOpened, 
+  File, 
+  Folder, 
+  QuickActionBar, 
+  TopHeaderButtonRow, 
+  JournalProvider, 
+  useJournalContext, 
+  FileExplorerRenderer,
+  IFileExplorerProviderOptions,
+  JournalLoadingScreen
+} from "~/features/journal"
 import { EditorProvider } from "~/features/editor"
 import { AppTitleBarButton, AppTitleBarDraggable, Spacer } from "~/components"
 import { UpdateExplorerTree } from "~/wailsjs/go/journal/GroupExport"
 // ...
+import journalGroupData from "./[groupId].data"
 
 const style = stylex.create({
   home: {
@@ -49,29 +60,18 @@ const style = stylex.create({
 
 export default function JournalHome(props: ParentProps) {
   const param = useParams()
+  const currentGroupId = () => parseInt(param.groupId)
 
   document.body.classList.add(__style.journal)
   onCleanup(() => document.body.classList.remove(__style.journal))
 
-  const currentGroupId = () => parseInt(param.groupId)
-
-  const Loader = () => {
-    const { sessionStorage$ } = useJournalContext()
-    sessionStorage$.set$('journal_data$', {
-      groupId$: currentGroupId()
-    })
-
-    return <></>
-  }
-
   return (
     <Providers groupId$={currentGroupId()}>
-      <Loader />
       <Root {...stylex.attrs(style.home)} id={__style.journal}>
         <Panel {...stylex.attrs(style.home__sidebarPanel)} initialSize={0.3}>
           <TopHeaderButtonRow {...stylex.attrs(style.home__header)} />
           <QuickActionBar>
-            <FileExplorer />
+            <FileExplorerRenderer />
           </QuickActionBar>
         </Panel>
         <Handle {...stylex.attrs(style.home__resizePanelHandle)} />
@@ -91,12 +91,15 @@ export default function JournalHome(props: ParentProps) {
 }
 
 function Providers(props: ParentProps<{ groupId$: number }>) {
-  const fileExplorerOption: IFileExplorerProviderProps = {
+  const journalData = journalGroupData(props.groupId$)
+  const fileExplorerOption: IFileExplorerProviderOptions = {
     components$: {
-      File$: (fileProps) => <File
-        groupId$={props.groupId$}
-        journalId$={fileProps.id}
-      />,
+      File$: (fileProps) => (
+        <File
+          groupId$={props.groupId$}
+          journalId$={fileProps.id}
+        />
+      ),
       Folder$: (props) => (
         <Folder
           folderId$={props.id}
@@ -107,20 +110,35 @@ function Providers(props: ParentProps<{ groupId$: number }>) {
       )
     },
     getDataMapping$() {
-      return {}
+      return {} // empty
+    },
+    getInitialTree$() {
+      return journalData()?.explorerTreeData$
     },
     onTreeUpdate$(newTree) {
       UpdateExplorerTree(props.groupId$, newTree)
     }
   }
 
+  const Loader = () => {
+    const { sessionStorage$ } = useJournalContext()
+    sessionStorage$.set$('journal_data$', {
+      groupId$: props.groupId$
+    })
+
+    return <></>
+  }
+
   return (
-    <FileExplorerProvider {...fileExplorerOption}>
-      <EditorProvider id$={props.groupId$}>
-        <JournalProvider>
+    <EditorProvider id$={props.groupId$}>
+      <Show when={journalData()} fallback={
+        <JournalLoadingScreen />
+      }>
+        <JournalProvider explorerOptions$={fileExplorerOption}>
+          <Loader />
           {props.children}
         </JournalProvider>
-      </EditorProvider>
-    </FileExplorerProvider>
+      </Show>
+    </EditorProvider>
   )
 }

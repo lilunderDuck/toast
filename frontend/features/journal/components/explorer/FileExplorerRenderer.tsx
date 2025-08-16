@@ -1,12 +1,11 @@
-import { createSignal, For, Setter, Show } from "solid-js"
+import { createSignal, For, Show } from "solid-js"
 // @ts-ignore - used as a directive
 import { dndzone } from "solid-dnd-directive"
 // ...
 import stylex from "@stylexjs/stylex"
-import __style from "./FileExplorer.module.css"
+import __style from "./FileExplorerRenderer.module.css"
 // ...
-import { DONT_RENDER, TreeNode, useFileExplorerContext } from "../provider"
-import type { IDndConsiderEvent, IDndFinalizeEvent, IDndOptions } from "../utils"
+import { DONT_RENDER, type IDndConsiderEvent, type IDndFinalizeEvent, type IDndOptions, TreeNode, useJournalContext } from "~/features/journal"
 
 declare module "solid-js" {
   namespace JSX {
@@ -30,32 +29,34 @@ const style = stylex.create({
   }
 })
 
-interface IFileExplorerProps {
+export function FileExplorerRenderer() {
+  const { explorerTree$, sessionStorage$ } = useJournalContext()
+
+  const retriveData = (id: number) => explorerTree$.getDataMapping$()[id]
+  const sessionStorageKey = (props: { tree$: TreeNode }) => 
+    `explorer.${props.tree$.id}` as const
   // 
-}
-
-export function FileExplorer(props: IFileExplorerProps) {
-  const { tree$, components$, sessionStorage$, getDataMapping$, isUpdating$, onTreeUpdate$ } = useFileExplorerContext()
-
-  const retriveData = (id: number) => getDataMapping$()[id]
 
   const FolderComponent = (props: { tree$: TreeNode }) => {
     const [isFolderContentShowing, setIsFolderContentShowing] = createSignal(
-      sessionStorage$.get$(props.tree$.id) ?? false
+      sessionStorage$.get$(sessionStorageKey(props)) ?? false
     )
 
     return (
-      <components$.Folder$
+      <explorerTree$.components$.Folder$
         {...retriveData(props.tree$.id)}
         id={props.tree$.id}
         onClick={() => {
           setIsFolderContentShowing(prev => !prev)
-          sessionStorage$.set$(props.tree$.id, isFolderContentShowing())
+          sessionStorage$.set$(sessionStorageKey(props), isFolderContentShowing())
         }}
         isCollapsed$={isFolderContentShowing()}
       >
-        <RecursiveRender child$={props.tree$.child} folderId$={props.tree$.id} />
-      </components$.Folder$>
+        <RecursiveRender 
+          child$={props.tree$.child!} 
+          folderId$={props.tree$.id} 
+        />
+      </explorerTree$.components$.Folder$>
     )
   }
   
@@ -69,13 +70,13 @@ export function FileExplorer(props: IFileExplorerProps) {
 
     const saveItems: EventHandler<"section", "on:finalize"> = (dragEvent) => {
       const newItems = dragEvent.detail.items
-      if (JSON.stringify(tree$.data$ /*old tree*/) === JSON.stringify(newItems)) {
+      if (JSON.stringify(explorerTree$.tree$.data$ /*old tree*/) === JSON.stringify(newItems)) {
         return // don't update
       }
 
       // @ts-ignore - it should works fine
       tree$.replace$(props.folderId$, newItems)
-      onTreeUpdate$(tree$.data$)
+      explorerTree$.onTreeUpdate$(explorerTree$.tree$.data$)
     }
 
     return (
@@ -88,7 +89,7 @@ export function FileExplorer(props: IFileExplorerProps) {
 
             return (
               <Show when={it.child} fallback={
-                <components$.File$
+                <explorerTree$.components$.File$
                   {...retriveData(it.id)}
                   id={it.id}
                 />
@@ -104,8 +105,8 @@ export function FileExplorer(props: IFileExplorerProps) {
 
   return (
     <div {...stylex.attrs(style.everything)} id={__style.fileExplorer}>
-      <Show when={!isUpdating$()}>
-        <RecursiveRender child$={tree$.data$} folderId$={0} />
+      <Show when={!explorerTree$.isUpdating$()}>
+        <RecursiveRender child$={explorerTree$.tree$.data$} folderId$={0} />
       </Show>
     </div>
   )

@@ -44,12 +44,13 @@ export function Editor() {
     pluginKey: crypto.randomUUID(),
     element: element,
     tippyOptions: {
-      hideOnClick: "toggle",
+      hideOnClick: "toggle"
     }
   })
 
   onMount(() => {
     editor$().registerPlugin(
+      // @ts-ignore - stop yelling at me, typescript
       FloatingMenuPlugin(getOption(floatingMenuRef))
     )
 

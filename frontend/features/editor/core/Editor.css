@@ -137,7 +137,7 @@ p.is-editor-empty:first-child::before {
   pointer-events: none;
 }
 
-#tippy-1 {
+/* #tippy-1 {
   margin-top: 6rem !important;
   max-height: 20rem;
   overflow-y: scroll;
@@ -147,4 +147,4 @@ p.is-editor-empty:first-child::before {
 
 #tippy-1::-webkit-scrollbar {
   opacity: 0;
-}
+} */

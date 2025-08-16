@@ -131,3 +131,8 @@ export interface IDndConsiderEvent extends DndEvent {
 export interface IDndFinalizeEvent extends DndEvent {
   type: "finalize"
 }
+
+export type TreeNode = { 
+  id: number, 
+  child?: TreeNode[] 
+}
