@@ -1,6 +1,6 @@
 {
   "name": "toast",
-  "outputfilename": "toast-making-machine",
+  "outputfilename": "toast",
 
   "build:dir": "./build/out",
   "assetdir": "./build/out/app",
