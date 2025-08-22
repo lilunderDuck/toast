@@ -1,12 +1,18 @@
 import { createAsync } from "@solidjs/router"
+import { onCleanup } from "solid-js"
 // ...
-import { GetExplorerTree } from "~/wailsjs/go/journal/GroupExport"
+import { GetExplorerTree, InitJournal, CleanUpJournal } from "~/wailsjs/go/journal/GroupExport"
 import { journal } from "~/wailsjs/go/models"
 
 export default function journalGroupData(groupId: number) {
+  onCleanup(() => {
+    CleanUpJournal(groupId)
+  })
+
   return createAsync(async() => {
     const [explorerTreeData] = await Promise.all([
-      GetExplorerTree(groupId)
+      GetExplorerTree(groupId),
+      InitJournal(groupId)
     ])
 
     return {

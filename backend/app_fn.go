@@ -2,15 +2,9 @@ package backend
 
 import (
 	"context"
-	// "fmt"
-	// "os"
-	// "toast/backend/internals"
-	// "toast/backend/utils"
+	"toast/backend/db"
+	"toast/backend/features/journal"
 
-	// "github.com/wailsapp/wails/v2"
-	// "github.com/wailsapp/wails/v2/pkg/application"
-	// "github.com/wailsapp/wails/v2/pkg/options"
-	// "github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -26,6 +20,7 @@ func New() *App {
 
 // Called at application startup
 func (a *App) startup(ctx context.Context) {
+	journal.InitGroup()
 	a.ctx = ctx
 }
 
@@ -37,6 +32,7 @@ func (a App) domReady(ctx context.Context) {
 // either by clicking the window close button or calling runtime.Quit.
 // Returning true will cause the application to continue, false will continue shutdown as normal.
 func (a *App) beforeClose(ctx context.Context) (prevent bool) {
+	db.CloseAll()
 	return false
 }
 

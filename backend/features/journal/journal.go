@@ -1,7 +1,6 @@
 package journal
 
 import (
-	"fmt"
 	"toast/backend/db"
 	"toast/backend/utils"
 )
@@ -26,12 +25,21 @@ func updateJournal(groupId, journalId int, data *JournalData) error {
 
 	// make sure to save the journal metadata only, instead of both the metadata + content
 	data.Data = JournalContentData{}
-	return db.OpenThenClose(getJournalsDatabasePath(groupId), func(db *db.LevelDb) {
-		db.SetObject(journalId, data)
-	})
+	// return db.OpenThenClose(getJournalsDatabasePath(groupId), func(db *db.LevelDb) {
+	// 	db.SetObject(journalId, data)
+	// })
+	return db.GetInstance(getJournalsDatabasePath(groupId)).SetObject(journalId, data)
 }
 
 // ------ actural implementation start here ------
+
+func (*GroupExport) InitJournal(groupId int) {
+	db.Open(getJournalsDatabasePath(groupId))
+}
+
+func (*GroupExport) CleanUpJournal(groupId int) {
+	db.Close(getJournalsDatabasePath(groupId))
+}
 
 func (*GroupExport) CreateJournal(groupId int, journalType uint8, options JournalOptions) (*JournalData, error) {
 	journalId := utils.GetRandomInt()
@@ -54,9 +62,7 @@ func (*GroupExport) CreateJournal(groupId int, journalType uint8, options Journa
 func (*GroupExport) GetJournal(groupId, journalId int) (*JournalData, error) {
 	// Step 1. get the journal metadata
 	var metadata JournalData
-	err := db.OpenThenClose(getJournalsDatabasePath(groupId), func(db *db.LevelDb) {
-		db.GetObject(journalId, &metadata)
-	})
+	err := db.GetInstance(getJournalsDatabasePath(groupId)).GetObject(journalId, &metadata)
 
 	if err != nil {
 		return nil, err
@@ -68,8 +74,6 @@ func (*GroupExport) GetJournal(groupId, journalId int) (*JournalData, error) {
 		getJournalContentSavedFilePath(groupId, journalId),
 		&journalContent,
 	)
-
-	fmt.Printf("meta: %#v, content: %#v\n", metadata, journalContent)
 
 	// Damn, is there a way to ignore this? This error handling thing is
 	// painful as hell man.
@@ -95,7 +99,6 @@ func (group *GroupExport) UpdateJournal(groupId, journalId int, newData *Journal
 
 	if len(newData.Data) != 0 && newData.Data[0].Type == "doc" {
 		data.Data = newData.Data[0]
-		println("data updated")
 	}
 
 	updateJournal(groupId, journalId, data)
@@ -105,7 +108,5 @@ func (group *GroupExport) UpdateJournal(groupId, journalId int, newData *Journal
 
 func (*GroupExport) DeleteJournal(groupId, journalId int) {
 	utils.RemoveFileOrDirectory(getJournalContentSavedFilePath(groupId, journalId))
-	db.OpenThenClose(getJournalsDatabasePath(groupId), func(db *db.LevelDb) {
-		db.DeleteObject(groupId)
-	})
+	db.GetInstance(getJournalsDatabasePath(groupId)).DeleteObject(journalId)
 }

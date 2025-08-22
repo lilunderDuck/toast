@@ -14,11 +14,12 @@ import (
 //   - @param groupId - the journal group id you want to update.
 //   - @param data - the journal group data
 func batchUpdate(groupId int, data JournalGroupData) {
-	db.OpenThenClose(GROUP_CACHE_DATA_PATH, func(db *db.LevelDb) {
-		db.SetObject(groupId, data)
-	})
-
+	db.GetInstance(GROUP_CACHE_DATA_PATH).SetObject(groupId, data)
 	utils.BSON_WriteFile(getJournalGroupMetaSavedPath(groupId), data)
+}
+
+func InitGroup() {
+	db.Open(GROUP_CACHE_DATA_PATH)
 }
 
 func (group *GroupExport) CreateGroup(options JournalGroupOptions) (*JournalGroupData, error) {
@@ -47,24 +48,17 @@ func (group *GroupExport) CreateGroup(options JournalGroupOptions) (*JournalGrou
 
 func (*GroupExport) GetAllGroups() []any {
 	var data JournalGroupData
-	var out []any
-	db.OpenThenClose(GROUP_CACHE_DATA_PATH, func(db *db.LevelDb) {
-		out = db.GetAllObject(&data)
-	})
-	return out
+	return db.GetInstance(GROUP_CACHE_DATA_PATH).GetAllObject(&data)
 }
 
 func (*GroupExport) GetGroup(groupId int) JournalGroupData {
 	var data JournalGroupData
-	db.OpenThenClose(GROUP_CACHE_DATA_PATH, func(db *db.LevelDb) {
-		err := db.GetObject(groupId, &data)
-		if err == nil {
-			return
-		}
-
-		utils.BSON_ReadFile(GetSavedPath(groupId), data)
-		db.SetObject(groupId, data)
-	})
+	dbInstance := db.GetInstance(GROUP_CACHE_DATA_PATH)
+	err := dbInstance.GetObject(groupId, &data)
+	if err != nil {
+		utils.BSON_ReadFile(GetSavedPath(groupId), &data)
+		dbInstance.SetObject(groupId, data)
+	}
 
 	return data
 }
@@ -91,9 +85,6 @@ func (group *GroupExport) UpdateGroup(groupId int, newData *JournalGroupOptions)
 }
 
 func (*GroupExport) DeleteGroup(groupId int) {
-	db.OpenThenClose(GROUP_CACHE_DATA_PATH, func(db *db.LevelDb) {
-		db.DeleteObject(groupId)
-	})
-
+	db.GetInstance(GROUP_CACHE_DATA_PATH).DeleteObject(groupId)
 	utils.RemoveFileOrDirectory(GetSavedPath(groupId))
 }
