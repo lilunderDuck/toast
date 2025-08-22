@@ -13,14 +13,14 @@ export default function JournalContent() {
   event$.on$('editor__onSwitching$', (oldData) => {
     updateJournal$(oldData.id, {
       // @ts-ignore
-      data: oldData.content
+      data: [oldData.content]
     })
   })
 
   event$.on$('editor__onUpdate$', (data) => {
     updateJournal$(data.id, {
       // @ts-ignore
-      data: data.content
+      data: [data.content]
     })
   })
 
@@ -37,7 +37,7 @@ export default function JournalContent() {
 
   return (
     <Suspense>
-      <Editor />
+      <Editor  />
     </Suspense>
   )
 }

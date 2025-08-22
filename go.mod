@@ -17,6 +17,7 @@ require (
 	github.com/fxamacker/cbor/v2 v2.8.0
 	github.com/gin-gonic/gin v1.10.1
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0
+	github.com/wailsapp/mimetype v1.4.1
 	github.com/yuin/gopher-lua v1.1.1
 )
 
@@ -45,7 +46,6 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/wailsapp/go-webview2 v1.0.19 // indirect
-	github.com/wailsapp/mimetype v1.4.1 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	golang.org/x/exp v0.0.0-20250210185358-939b2ce775ac // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect

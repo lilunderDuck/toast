@@ -54,10 +54,14 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
     },
   }))
 
-  let currentData = { content: null, id: -1 } as EditorData
+  let currentlyOpenedId = -1
+  const getCurrentData = () => ({
+    content: editor().getJSON(),
+    id: currentlyOpenedId
+  })
+
   const delayUpdate = debounce(() => {
-    currentData.content = editor().getJSON()
-    event.emit$('editor__onUpdate$', currentData)
+    event.emit$('editor__onUpdate$', getCurrentData())
   }, 1000)
 
   onMount(() => {
@@ -74,13 +78,19 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
       },
       isReadonly$: readonly,
       open$(data) {
-        if (currentData.id !== -1) {
-          currentData.content = editor().getJSON()
-          event.emit$('editor__onSwitching$', currentData)
+        if (currentlyOpenedId === data.id) {
+          return console.log("already opened")
+        }
+        
+        if (currentlyOpenedId !== -1) {
+          event.emit$('editor__onSwitching$', getCurrentData())
         }
 
-        editor().commands.setContent(data.content, false)
-        currentData = data
+        console.log("incoming json data", data)
+        editor().commands.setContent(data.content, true, undefined, {
+          errorOnInvalidContent: true
+        })
+        currentlyOpenedId = data.id
       },
       event$: event
     }}>

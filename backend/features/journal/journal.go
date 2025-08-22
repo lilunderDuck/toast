@@ -1,6 +1,7 @@
 package journal
 
 import (
+	"fmt"
 	"toast/backend/db"
 	"toast/backend/utils"
 )
@@ -10,7 +11,7 @@ import (
 // Save journal data to disk.
 //
 // The data is actually being saved into 2 places:
-//   - The journal metadata will be saved into the leveldb's database, saved at "jouwnyaws" folder.
+//   - The journal metadata will be saved into the leveldb's database, saved at ".journal" folder.
 //   - The rest of the journal content (or document, let's call like that)
 //     is stored at the "stuff" folder.
 //
@@ -19,7 +20,6 @@ import (
 // the journal's content, we just need the metadata to render it.
 func updateJournal(groupId, journalId int, data *JournalData) error {
 	err := utils.BSON_WriteFile(getJournalContentSavedFilePath(groupId, journalId), data.Data)
-
 	if err != nil {
 		return err
 	}
@@ -69,6 +69,8 @@ func (*GroupExport) GetJournal(groupId, journalId int) (*JournalData, error) {
 		&journalContent,
 	)
 
+	fmt.Printf("meta: %#v, content: %#v\n", metadata, journalContent)
+
 	// Damn, is there a way to ignore this? This error handling thing is
 	// painful as hell man.
 	if err != nil {
@@ -91,8 +93,9 @@ func (group *GroupExport) UpdateJournal(groupId, journalId int, newData *Journal
 		data.Name = newData.Name
 	}
 
-	if len(newData.Data.Content) != 0 {
-		data.Data = newData.Data
+	if len(newData.Data) != 0 && newData.Data[0].Type == "doc" {
+		data.Data = newData.Data[0]
+		println("data updated")
 	}
 
 	updateJournal(groupId, journalId, data)
