@@ -27,6 +27,7 @@ const style = stylex.create({
 
 interface IFolderProps {
   folderId$: number
+  name$: string
   onClick?: HTMLAttributes<"div">["onClick"]
 }
 
@@ -36,7 +37,7 @@ export function Folder(props: ParentProps<IFolderProps>) {
       <div {...stylex.attrs(style.folder__nameWrap)} onClick={props.onClick}>
         <BsCaretRightFill size={14} />
         <span {...stylex.attrs(style.folder__name)}>
-          {props.folderId$}
+          {props.name$}
         </span>
       </div>
       <div {...stylex.attrs(style.folder__content)}>

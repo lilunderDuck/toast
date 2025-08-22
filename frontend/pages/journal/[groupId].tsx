@@ -92,25 +92,43 @@ export default function JournalHome(props: ParentProps) {
 
 function Providers(props: ParentProps<{ groupId$: number }>) {
   const journalData = journalGroupData(props.groupId$)
+
+  let cacheData: Record<number, string>
+  const getMapping = () => {
+    if (!cacheData) {
+      cacheData = journalData()!.journalsMetadata$.reduce((thisMap, current) => {
+        thisMap[current.id] = current.name
+        return thisMap
+      }, {} as Record<number, string>)
+    }
+
+    return cacheData
+  }
+
   const fileExplorerOption: IFileExplorerProviderOptions = {
     components$: {
       File$: (fileProps) => (
         <File
           groupId$={props.groupId$}
           journalId$={fileProps.id}
+          name$={getMapping()[fileProps.id]}
         />
       ),
       Folder$: (props) => (
         <Folder
           folderId$={props.id}
           onClick={props.onClick}
+          name$={getMapping()[props.id]}
         >
           {props.children}
         </Folder>
       )
     },
     getDataMapping$() {
-      return {} // empty
+      return journalData()!.journalsMetadata$.reduce((thisMap, current) => {
+        thisMap[current.id] = current.name
+        return thisMap
+      }, {} as Record<number, string>)
     },
     getInitialTree$() {
       return journalData()?.explorerTreeData$

@@ -31,6 +31,7 @@ const style = stylex.create({
 interface IFileProps {
   groupId$: number
   journalId$: number
+  name$: string
   onClick?: HTMLAttributes<"button">["onClick"]
 }
 
@@ -41,7 +42,7 @@ export function File(props: IFileProps) {
         href={`/journal/${props.groupId$}/${props.journalId$}`}
         class={mergeClassname(stylex.attrs(style.file, style.file__name), __style.file)}
       >
-        {props.journalId$}
+        {props.name$}
       </A>
     </div>
   )

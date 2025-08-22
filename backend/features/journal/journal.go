@@ -86,6 +86,10 @@ func (*GroupExport) GetJournal(groupId, journalId int) (*JournalData, error) {
 	return &metadata, nil // We done
 }
 
+func (*GroupExport) GetAllJournal(groupId int) []any {
+	return db.GetInstance(getJournalsDatabasePath(groupId)).GetAllObject(&JournalData{})
+}
+
 func (group *GroupExport) UpdateJournal(groupId, journalId int, newData *JournalOptions) (*JournalData, error) {
 	data, err := group.GetJournal(groupId, journalId)
 	if err != nil {
