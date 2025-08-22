@@ -7,14 +7,14 @@ This is just my personal project to waste some time though.
 If you still want to try messing around with this app code, even after you read the above lines, here's how you can do it.
 
 ### Prerequisites
-Make sure you have [Go](https://go.dev/dl/), [GCC](https://gcc.gnu.org/) (to use `make` command), and [Deno](https://deno.com/) (or `npm` if you like, but requires modification) installed in your machine.
+Make sure you have [Go](https://go.dev/dl/), [GCC](https://gcc.gnu.org/) to use `make` command, and [Deno](https://deno.com/) (or `npm` if you like, but requires modification) installed in your machine.
 
 For easier management, this project uses [scoop](https://scoop.sh/) to install other packages. However, this is not required.
 
 If one of those above isn't installed, you can try installing it:
 - `Go`: Go to https://go.dev/dl/ and select the latest version (v1.23 or above)
-- `GCC`: Run `scoop install gcc`
-- `Deno`: Run `irm https://deno.land/install.ps1 | iex` or go to their download site: https://deno.com/
+- `make`: Run `scoop install make`
+- `Deno`: Run `irm https://deno.land/install.ps1 | iex` or go to their download page: https://deno.com/
 
 ### Installation
 1. Clone the repo
