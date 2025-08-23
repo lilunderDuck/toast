@@ -1,20 +1,31 @@
-import { Match, Switch } from "solid-js"
+import { Show } from "solid-js"
 // ...
 import { IGalleryContext, useGalleryContext } from "../provider"
-import { Video } from "../../video"
+import { FileContentDisplay, IVideoProps } from "../../files"
 
 interface IGalleryContentProps {
   context$?: IGalleryContext
 }
 
 export function GalleryContent(props: IGalleryContentProps) {
-  const { getDisplayUrl$, currentItem$ } = useGalleryContext() ?? props.context$
+  const { getDisplayUrl$, currentItem$, isFullscreen$ } = useGalleryContext() ?? props.context$
+
+  const dataMapping = () => {
+    switch(currentItem$()?.type) {
+      case FileType.VIDEO: return { 
+        path: getDisplayUrl$(currentItem$()!.name),
+        // enable auto play when on fullscreen mode
+        autoplay$: isFullscreen$()
+      } as IVideoProps
+    }
+  }
 
   return (
-    <Switch>
-      <Match when={currentItem$()?.type === 1}>
-        <Video path={getDisplayUrl$(currentItem$().name)} />
-      </Match>
-    </Switch>
+    <Show when={currentItem$()}>
+      <FileContentDisplay data$={{
+        props$: dataMapping()!,
+        type$: currentItem$()!.type
+      }} />
+    </Show>
   )
 }

@@ -68,9 +68,7 @@ export function createFileUpload(
   }
 
   return {
-    FileUploadZone$(props) {
-      return <div {...props} onClick={onClickThis} />
-    },
+    open$: onClickThis,
     isUploading$: isLoading,
     error$: error
   }

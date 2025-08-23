@@ -16,7 +16,7 @@ export type FileUploadComponent = Component<HTMLAttributes<"div">>
 export type UploadDialog = {
   isUploading$: Accessor<boolean>
   error$: Accessor<any> // missing type
-  FileUploadZone$: FileUploadComponent
+  open$(): Promise<void>
 }
 
 /**Options for creating a file upload component.

@@ -46,7 +46,7 @@ interface IGalleryDirectoryUploadDialogProps extends IDialog {}
 export default function GalleryDirectoryUploadDialog(props: IGalleryDirectoryUploadDialogProps) {
   const [selectedPath, setSelectedPath] = createSignal('')
   const [selectedOption, setSelectedOption] = createSignal('everything$')
-  const { FileUploadZone$ } = createFileUpload({
+  const { open$ } = createFileUpload({
     type$: FileUploadType.directory,
     dialogOptions$: {
       Title: "Select a directory."
@@ -67,11 +67,9 @@ export default function GalleryDirectoryUploadDialog(props: IGalleryDirectoryUpl
       <section>
         <label>Directory to upload</label>
         <Tooltip label$="Select directory to upload">
-          <FileUploadZone$>
-            <button {...stylex.attrs(style.dialog__uploadZone)}>
-              {isEmpty() ? <i>No directory selected</i> : selectedPath()}
-            </button>
-          </FileUploadZone$>
+          <button {...stylex.attrs(style.dialog__uploadZone)} onClick={open$}>
+            {isEmpty() ? <i>No directory selected</i> : selectedPath()}
+          </button>
         </Tooltip>
       </section>
 

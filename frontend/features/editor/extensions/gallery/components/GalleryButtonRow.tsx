@@ -1,11 +1,11 @@
-import { BsFullscreen, BsPlus, BsUpload } from "solid-icons/bs"
+import { Show } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { Button, ButtonRow, createLazyLoadedDialog, Spacer, Tooltip } from "~/components"
+import { ButtonRow, Spacer } from "~/components"
+// ...
 import { useGalleryContext } from "../provider"
-import { Show } from "solid-js"
-import { NextAndPrevButtons } from "./NextAndPrevButtons"
+import { FullscreenButton, UploadButton, NextAndPrevButtons } from "./buttons"
 
 const style = stylex.create({
   buttonRow: {
@@ -24,53 +24,19 @@ const style = stylex.create({
 })
 
 export function GalleryButtonRow() {
-  const { data$, currentItem$ } = useGalleryContext()
-  const GalleryFullscreenDialog = createLazyLoadedDialog(
-    () => import("./dialog/GalleryFullviewDialog"),
-    () => useGalleryContext()
-  )
-
-  const GalleryDirectoryUploadDialog = createLazyLoadedDialog(
-    () => import("./dialog/GalleryDirectoryUploadDialog")
-  )
+  const { currentItem$ } = useGalleryContext()
 
   return (
     <ButtonRow {...stylex.attrs(style.buttonRow)} direction$="custom$">
+      <UploadButton />
+      <FullscreenButton />
       <Show when={currentItem$()}>
         <div {...stylex.attrs(style.buttonRow__name)}>
-          {currentItem$().name}
+          {currentItem$()?.name}
         </div>
       </Show>
-      <Tooltip label$={<>Upload a <i>single</i> media</>}>
-        <Button
-          size$={ButtonSize.icon}
-          disabled={!data$()}
-        >
-          <BsPlus />
-        </Button>
-      </Tooltip>
-      <Tooltip label$={<>Upload the <i>whole directory</i></>}>
-        <Button
-          size$={ButtonSize.icon}
-          disabled={!data$()}
-          onClick={GalleryDirectoryUploadDialog.show$}
-        >
-          <BsUpload />
-        </Button>
-      </Tooltip>
-      <Tooltip label$="Fullscreen mode">
-        <Button
-          size$={ButtonSize.icon}
-          disabled={!data$()}
-          onClick={GalleryFullscreenDialog.show$}
-        >
-          <BsFullscreen />
-        </Button>
-      </Tooltip>
       <Spacer />
       <NextAndPrevButtons />
-      <GalleryFullscreenDialog.Modal$ />
-      <GalleryDirectoryUploadDialog.Modal$ />
     </ButtonRow>
   )
 }

@@ -35,6 +35,9 @@ type EditorAttributes struct {
 	Colspan  uint `json:"colspan,omitempty"    cbor:"0,keyasint"`
 	Rowspan  uint `json:"rowspan,omitempty"    cbor:"1,keyasint"`
 	Colwidth uint `json:"colwidth,omitempty"   cbor:"2,keyasint"`
+
+	// ------ generic custom node attribute
+	Id int `json:"id,omitempty"   cbor:"3,keyasint"`
 }
 
 type EditorMarks struct { // impls cbor.Marshaler, cbor.Unmarshaler

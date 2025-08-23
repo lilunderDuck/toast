@@ -87,7 +87,8 @@ func (*GroupExport) GetJournal(groupId, journalId int) (*JournalData, error) {
 }
 
 func (*GroupExport) GetAllJournal(groupId int) []any {
-	return db.GetInstance(getJournalsDatabasePath(groupId)).GetAllObject(&JournalData{})
+	mapping := JournalData{}
+	return db.GetInstance(getJournalsDatabasePath(groupId)).GetAllObject(&mapping)
 }
 
 func (group *GroupExport) UpdateJournal(groupId, journalId int, newData *JournalOptions) (*JournalData, error) {

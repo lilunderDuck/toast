@@ -4,7 +4,9 @@ import stylex from "@stylexjs/stylex"
 // ...
 import { GalleryContent } from "../GalleryContent"
 import { IGalleryContext, ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "../../provider"
-import { NextAndPrevButtons } from "../NextAndPrevButtons"
+import { NextAndPrevButtons } from "../buttons/NextAndPrevButtons"
+import { onCleanup, Show } from "solid-js"
+import { BsBox2Heart, BsBox2HeartFill } from "solid-icons/bs"
 
 const style = stylex.create({
   dialog: {
@@ -24,18 +26,34 @@ const style = stylex.create({
   dialog__content: {
     width: "100%",
     height: "100%",
+    userSelect: "none"
   },
   dialog__fileName: {
     borderRadius: 6,
     paddingInline: 10,
     paddingBlock: 5,
     backgroundColor: "var(--gray3)"
+  },
+  dialog__emptyGallery: {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexFlow: "column",
+    gap: 10
   }
 })
 
 interface IGalleryFullviewProps extends IDialog, IGalleryContext { }
 
 export default function GalleryFullview(props: IGalleryFullviewProps) {
+  props._setIsFullscreen$(true)
+
+  onCleanup(() => {
+    props._setIsFullscreen$(false)
+  })
+
   return (
     <DialogContent {...stylex.attrs(style.dialog)}>
       <ZoomAndPanProvider>
@@ -48,9 +66,16 @@ export default function GalleryFullview(props: IGalleryFullviewProps) {
           <NextAndPrevButtons context$={props} />
         </ButtonRow>
         <div {...stylex.attrs(style.dialog__content)}>
-          <ZoomDisplay>
-            <GalleryContent context$={props} />
-          </ZoomDisplay>
+          <Show when={props.data$().items.length === 0} fallback={
+            <ZoomDisplay>
+              <GalleryContent context$={props} />
+            </ZoomDisplay>
+          }>
+            <div {...stylex.attrs(style.dialog__emptyGallery)}>
+              <BsBox2HeartFill size={40} />
+              Nothing in here, try uploading some files.
+            </div>
+          </Show>
         </div>
       </ZoomAndPanProvider>
     </DialogContent>

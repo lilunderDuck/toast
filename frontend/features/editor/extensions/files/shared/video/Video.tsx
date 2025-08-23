@@ -7,7 +7,7 @@ import { mergeClassname, sleep } from "~/utils"
 import stylex from "@stylexjs/stylex"
 import __style from "./Video.module.css"
 // ...
-import { VideoAttribute } from "./data"
+import { VideoAttribute, VideoPlayerStatus } from "./data"
 import { getThisVideoSubtitlePath, reloadVideo } from "./utils"
 
 const style = stylex.create({
@@ -34,20 +34,14 @@ const style = stylex.create({
   }
 })
 
-type VideoStatus =
-  "video__startLoading$" |
-  "video__finishLoading$" |
-  "video__error$" 
-// 
-
-interface IVideoProps extends VideoAttribute {
-  autoplay?: boolean
+export interface IVideoProps extends VideoAttribute {
+  autoplay$?: boolean
 }
 
 export function Video(props: ParentProps<IVideoProps>) {
   let videoRef!: Ref<"video">
 
-  const [videoStatus, setVideoStatus] = createSignal<VideoStatus>('video__startLoading$')
+  const [videoStatus, setVideoStatus] = createSignal<VideoPlayerStatus>('video__startLoading$')
   const [subtitlePath, setSubtitlePath] = createSignal<string>()
   const thisVideoIsLoaded: EventHandler<"video", "onLoadedData"> = async () => {
     await tryGettingThisVideoSubtitle()
@@ -82,7 +76,7 @@ export function Video(props: ParentProps<IVideoProps>) {
       <video
         {...stylex.attrs(style.video)}
         controls
-        autoplay={props.autoplay}
+        autoplay={props.autoplay$}
         src={props.path}
         onLoadedData={thisVideoIsLoaded}
         onLoad={loadStart}

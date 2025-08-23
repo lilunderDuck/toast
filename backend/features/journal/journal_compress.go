@@ -118,6 +118,7 @@ func (data *EditorMarks) UnmarshalCBOR(input []byte) error {
 	}
 
 	data.Type = editorMarkType
+	data.Text = out.Text
 
 	return nil
 }

@@ -12,6 +12,8 @@ declare module '@tiptap/core' {
   }
 }
 
+export const DEFAULT_GALLERY_ID = 0
+
 export type GalleryAttribute = {
   id: number
 }
@@ -24,7 +26,7 @@ export const GalleryExtension = Node.create({
   addAttributes(): Record<keyof GalleryAttribute, Attribute> {
     return {
       id: {
-        default: 0
+        default: DEFAULT_GALLERY_ID
       }
     }
   },

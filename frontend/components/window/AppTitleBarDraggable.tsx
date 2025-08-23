@@ -5,7 +5,7 @@ import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({
   titleBar: {
-    height: 32,
+    height: 35,
     width: "100%",
     userSelect: "none",
     display: "flex",

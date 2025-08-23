@@ -13,7 +13,7 @@ const (
 	FILE_TYPE__IMAGE   uint8 = 1
 	FILE_TYPE__VIDEO   uint8 = 2
 	FILE_TYPE__TEXT    uint8 = 3
-	FILE_TYPE__AUDIO   uint8 = 3
+	FILE_TYPE__AUDIO   uint8 = 4
 )
 
 var mimeTypeMapping = map[string]uint8{

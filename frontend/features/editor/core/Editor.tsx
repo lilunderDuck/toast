@@ -13,19 +13,11 @@ import { AttributeEditor, BubbleMenu, FloatingMenu } from "../components"
 import { useEditorContext } from "../provider"
 
 const style = stylex.create({
-  bubbleMenu: {
-    gap: 5,
-    flexFlow: "column",
-  },
   editor: {
     paddingInline: 10,
     maxHeight: 'calc(100vh - 85px)',
     paddingBottom: '20rem',
-  },
-  floatingMenu: {
-    height: "10rem"
-  },
-  menuName: {}
+  }
 })
 
 export function Editor() {
@@ -68,15 +60,13 @@ export function Editor() {
           stylex.attrs(style.editor),
           __scrollbarStyle.scrollbar,
           __scrollbarStyle.scrollbarVertical
-        )} 
+        )}
       />
       <BubbleMenu 
-        {...stylex.attrs(style.bubbleMenu)}
         ref={bubbleMenuRef}
         toggleHeading$={toggleHeading}
       />
       <FloatingMenu 
-        {...stylex.attrs(style.bubbleMenu, style.floatingMenu)}
         ref={floatingMenuRef} 
         toggleHeading$={toggleHeading}
       />

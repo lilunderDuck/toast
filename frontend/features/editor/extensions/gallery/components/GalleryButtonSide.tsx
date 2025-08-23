@@ -30,12 +30,7 @@ const style = stylex.create({
   }
 })
 
-
-interface IButtonSideProps {
-  // define your component props here
-}
-
-export function LeftButtonSide(props: IButtonSideProps) {
+export function LeftButtonSide() {
   const { previous$, data$, currentIndex$ } = useGalleryContext()
   return (
     <div {...stylex.attrs(style.gallery__buttonOnTheSide, style.gallery__backButtonWrap)}>
@@ -51,7 +46,7 @@ export function LeftButtonSide(props: IButtonSideProps) {
   )
 }
 
-export function RightButtonSide(props: IButtonSideProps) {
+export function RightButtonSide() {
   const { next$, data$, currentIndex$ } = useGalleryContext()
 
   return (

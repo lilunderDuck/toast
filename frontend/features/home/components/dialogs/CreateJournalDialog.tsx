@@ -9,9 +9,9 @@ import { Button, DialogContent, DialogHeader, FieldInput, type IDialog } from "~
 import { createSubmitForm } from "~/hooks"
 import { createFileUpload, FileUploadType } from "~/features/native"
 import { CreateGroup } from "~/wailsjs/go/journal/GroupExport"
+import { journal } from "~/wailsjs/go/models"
 // ...
 import IconUploadInput from "./IconUploadInput"
-import { journal } from "~/wailsjs/go/models"
 
 const style = stylex.create({
   inputWrap: {
@@ -63,7 +63,7 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
     )
   })
 
-  const { FileUploadZone$, isUploading$ } = createFileUpload({
+  const { open$, isUploading$ } = createFileUpload({
     type$: FileUploadType.file,
     dialogOptions$: {
       Title: "Choose an image file for your journal group cover.",
@@ -86,7 +86,7 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
           <div {...stylex.attrs(style.imageInput)} id={__style.imageInput}>
             <IconUploadInput 
               isUploading$={isUploading$}
-              uploadComponent$={FileUploadZone$}
+              uploadComponent$={() => <div onClick={open$} />}
               iconPath$={iconPath}
             />
           </div>

@@ -3,7 +3,8 @@ import stylex from "@stylexjs/stylex"
 import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
 // ...
 import { GalleryButtonRow, GalleryContent, LeftButtonSide, RightButtonSide } from "./components"
-import { GalleryProvider } from "./provider"
+import { GalleryProvider, useGalleryContext } from "./provider"
+import { Show } from "solid-js"
 
 const style = stylex.create({
   gallery: {
@@ -21,14 +22,25 @@ const style = stylex.create({
 })
 
 export default function GalleryNodeView() {
+  const Content = () => {
+    const { isFullscreen$ } = useGalleryContext()
+
+    return (
+      // Avoid file from being loaded 2 times when gallery on fullscreen.
+      <div {...stylex.attrs(style.gallery__content)}>
+        <Show when={!isFullscreen$()}>
+          <GalleryContent />
+        </Show>
+      </div>
+    )
+  }
+
   return (
     <NodeViewWrapper {...stylex.attrs(style.gallery)}>
       <GalleryProvider>
         <GalleryButtonRow />
         <LeftButtonSide />
-        <div {...stylex.attrs(style.gallery__content)}>
-          <GalleryContent />
-        </div>
+        <Content />
         <RightButtonSide />
       </GalleryProvider>
     </NodeViewWrapper>

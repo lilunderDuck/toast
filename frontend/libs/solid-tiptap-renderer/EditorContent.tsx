@@ -1,7 +1,7 @@
 import { SolidEditor } from "./editor"
 import { SolidRenderer } from "./SolidRenderer"
 import { createRef } from "./ref"
-import { Component, For, createEffect, on, onCleanup, JSX, splitProps } from "solid-js"
+import { For, createEffect, on, onCleanup, JSX, splitProps } from "solid-js"
 import { Dynamic, Portal } from "solid-js/web"
 
 interface IPortalsProps {
@@ -61,9 +61,14 @@ export function SolidEditorContent(props: ISolidEditorContentProps) {
     }
 
     if (!editor.isDestroyed) {
-      editor.view.setProps({
-        nodeViews: {}
-      })
+      // Don't know why this throws an error, so I hacked a quick fix.
+      try {
+        editor.view.setProps({
+          nodeViews: {}
+        })
+      } catch(error) {
+        console.warn("[anti-crashing]", error)
+      }
     }
 
     if (!editor.options.element.firstChild) {

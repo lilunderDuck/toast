@@ -80,6 +80,16 @@ export function defineAllEnum() {
     CHECKBOX: null,
   })
 
+  // 1 to 1 mapping from ./backend/features/editor/utils.go
+  defineEnum('FileType', {
+    DEFAULT: 0,
+    ERROR: 255,
+    IMAGE: 1,
+    VIDEO: 2,
+    TEXT: 3,
+    AUDIO: 4
+  })
+
   return {
     generateType() {
       let content = "// this file is auto-generate when on dev/build mode\nexport {};"

@@ -1,4 +1,4 @@
-import { createEffect, Suspense } from "solid-js"
+import { createEffect } from "solid-js"
 // ...
 import { Editor, useEditorContext } from "~/features/editor"
 import { useJournalContext } from "~/features/journal"
@@ -36,8 +36,6 @@ export default function JournalContent() {
   })
 
   return (
-    <Suspense>
-      <Editor  />
-    </Suspense>
+    <Editor />
   )
 }

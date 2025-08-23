@@ -40,7 +40,7 @@ const style = stylex.create({
 export default function LocalEmbedNode() {
   const { isEmpty$, isFullscreen$, setRootRef$, upload$, getEmbedUrl$ } = useLocalEmbedContext()
 
-  const { FileUploadZone$ } = createFileUpload({
+  const { open$ } = createFileUpload({
     type$: FileUploadType.file,
     dialogOptions$: {
       Title: "Choose a html file to embed into your journal.",
@@ -56,9 +56,10 @@ export default function LocalEmbedNode() {
 
   return (
     <NodeViewWrapper>
-      <FileUploadZone$
+      <div
         {...stylex.attrs(style.embed, isFullscreen$() ? style.embed__fullscreen : {})} 
         ref={setRootRef$}
+        onClick={open$}
       >
         <Show when={!isEmpty$()} fallback={
           <div {...stylex.attrs(style.embed__empty)}>
@@ -74,7 +75,7 @@ export default function LocalEmbedNode() {
             onError={() => console.log('error fired')}
           />
         </Show>
-      </FileUploadZone$>
+      </div>
     </NodeViewWrapper>
   )
 }

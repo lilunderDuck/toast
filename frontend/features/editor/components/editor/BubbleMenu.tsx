@@ -2,13 +2,23 @@ import { BsBlockquoteLeft, BsSubscript, BsSuperscript, BsTypeBold, BsTypeItalic,
 import { RiEditorH1, RiEditorH2, RiEditorH3, RiEditorH4, RiEditorH5, RiEditorH6 } from "solid-icons/ri"
 import { For } from "solid-js"
 // ...
-import { shorthands } from "~/styles/shorthands"
 import stylex from "@stylexjs/stylex"
 // ...
 import { Button, Tooltip } from "~/components"
 import { mergeClassname } from "~/utils"
 // ...
 import { useEditorContext } from "../../provider"
+
+const style = stylex.create({
+  menu: {
+    gap: 5,
+    display: "flex",
+    flexFlow: "row"
+  },
+  menu__icon: {
+    flexShrink: 0
+  }
+})
 
 interface IBubbleMenuProps {
   toggleHeading$: (level: 1 | 2 | 3 | 4 | 5 | 6) => boolean
@@ -47,12 +57,13 @@ export function BubbleMenu(props: IBubbleMenuProps) {
   ]
 
   return (
-    <div class={mergeClassname(stylex.attrs(shorthands.flex$), props)} ref={props.ref}>
+    <div class={mergeClassname(stylex.attrs(style.menu), props)} ref={props.ref}>
       <For each={menuOptions}>
         {it => (
           <Tooltip label$={it.name$}>
             <Button size$={ButtonSize.icon} onClick={it.run$}>
-              <it.icon$ />
+              {/* @ts-ignore */}
+              <it.icon$ {...stylex.attrs(style.menu__icon)} />
             </Button>
           </Tooltip>
         )}

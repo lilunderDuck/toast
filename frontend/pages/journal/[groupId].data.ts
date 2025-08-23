@@ -10,10 +10,15 @@ export default function journalGroupData(groupId: number) {
   })
 
   return createAsync(async() => {
+    // The app must initialize all neccessary stuff in the backend
+    // before start doing anything, otherwise, weird stuff will happen
+    await InitJournal(groupId)
+    
     const [explorerTreeData, journalsMetadata] = await Promise.all([
       GetExplorerTree(groupId),
       GetAllJournal(groupId),
-      InitJournal(groupId),
+      // Example: infinite loading screen (this is because the app doesn't finish in time)
+      // await InitJournal(groupId)
     ])
 
     return {

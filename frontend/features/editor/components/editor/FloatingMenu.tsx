@@ -20,7 +20,7 @@ const style = stylex.create({
     paddingBlock: 10,
     borderRadius: 6,
     width: "10rem",
-    height: "100%",
+    height: "10rem",
     userSelect: "none",
     display: "flex",
     backgroundColor: "var(--gray4)"
@@ -61,6 +61,7 @@ export function FloatingMenu(props: IFloatingMenuProps) {
     {
       name$: "details", 
       icon$: BsTable, 
+      // @ts-ignore
       run$: () => chainCommand().setDetails().run() 
     },
     {

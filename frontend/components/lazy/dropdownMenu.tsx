@@ -1,4 +1,4 @@
-import { createSignal, Show, type Component } from "solid-js"
+import { createSignal, ParentProps, Show, type Component } from "solid-js"
 // ...
 import { LazyComponent, LazyComponentProps } from "./types"
 import { DropdownMenu, DropdownMenuTrigger } from "../ui"
@@ -9,7 +9,6 @@ export interface IDropdownMenu {
 }
 
 export function createLazyLoadedDropdownMenu<Props extends IDropdownMenu>(
-  TriggerComponent: Component,
   Component: LazyComponent<Props>, 
   // still no auto-complete on lazy loaded component for some reason...
   // @ts-ignore  should work
@@ -28,11 +27,11 @@ export function createLazyLoadedDropdownMenu<Props extends IDropdownMenu>(
   const LazyComponent = createLazyComponent(Component)
 
   return {
-    DropdownMenu$() {
+    DropdownMenu$(props: ParentProps) {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger as="div" onClick={show}>
-            <TriggerComponent />
+            {props.children}
           </DropdownMenuTrigger>
           <Show when={showing()}>
             <LazyComponent {...itProps()} close$={close} />

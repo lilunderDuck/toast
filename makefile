@@ -8,9 +8,12 @@
 build:
 	wails build -ldflags="-s -w" -skipembedcreate -trimpath
 
+build_debug:
+	wails build -ldflags="-s -w" -skipembedcreate -trimpath -windowsconsole -race
+
 dev:
 	wails dev
 
 # clean the mess I made
 clean:
-	del ./out/bin
+	del ./build/out/bin

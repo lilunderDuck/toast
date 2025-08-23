@@ -49,8 +49,9 @@ const style = stylex.create({
     height: "var(--top-header-height)"
   },
   home__mainContent: {
-    height: "100%",
-    width: "100%"
+    height: "calc(100% - 35px)",
+    width: "100%",
+    marginTop: 35
   },
   home__titleBar: {
     position: "absolute",

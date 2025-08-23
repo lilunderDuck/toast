@@ -51,7 +51,8 @@ func (*EditorExport) UpdateGalleryData(groupId, galleryId int, updatedData Galle
 
 func (*EditorExport) UploadOneFile(groupId, galleryId int, pathToFile string) (newData *GalleryItem, _ error) {
 	basePath := getGallerySavedPath(groupId, galleryId)
-	err := utils.CopyFile(pathToFile, basePath)
+	fileName := filepath.Base(pathToFile)
+	err := utils.CopyFile(pathToFile, filepath.Join(basePath, fileName))
 	if err != nil {
 		return nil, err
 	}

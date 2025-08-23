@@ -11,7 +11,7 @@ const style = stylex.create({
   titleBar: {
     display: "flex",
     alignItems: "center",
-    height: 32,
+    height: 35,
     gap: 5
   },
   titleBar__otherButton: {
