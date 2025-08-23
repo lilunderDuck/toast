@@ -5,6 +5,7 @@ package db
 
 import (
 	"fmt"
+	"sync"
 
 	"github.com/syndtr/goleveldb/leveldb"
 )
@@ -28,7 +29,10 @@ func (db *LevelDb) Close() error {
 // with the database path as the key.
 //
 // Notes: this is **not** thread safe
-var globalDbInstance = map[string]*LevelDb{}
+var (
+	globalDbInstance = map[string]*LevelDb{}
+	lock             sync.Mutex
+)
 
 // Opens a LevelDB database at the specified file path.
 // Returns a instance of LevelDb.
@@ -36,6 +40,9 @@ var globalDbInstance = map[string]*LevelDb{}
 // If the database for the given path is already open, it returns the existing instance.
 func Open(path string) (*LevelDb, error) {
 	fmt.Println("Opening: ", path)
+	lock.Lock()
+	defer lock.Unlock()
+
 	if instance, ok := globalDbInstance[path]; ok {
 		return instance, nil
 	}
@@ -57,12 +64,18 @@ func Open(path string) (*LevelDb, error) {
 // Closes the LevelDB instance at the specified path and removes it
 // from the global map.
 func Close(path string) {
+	lock.Lock()
+	defer lock.Unlock()
+
 	globalDbInstance[path].Close()
 	delete(globalDbInstance, path)
 }
 
 // Closes all opened LevelDB instances and clears the global singleton map.
 func CloseAll() {
+	lock.Lock()
+	defer lock.Unlock()
+
 	for dbPath, db := range globalDbInstance {
 		db.Close()
 		delete(globalDbInstance, dbPath)
@@ -76,6 +89,9 @@ func CloseAll() {
 // Note: while this function attempts to handle a missing instance,
 // it is better to call [Open()] explicitly to handle errors.
 func GetInstance(path string) *LevelDb {
+	lock.Lock()
+	defer lock.Unlock()
+
 	instance, ok := globalDbInstance[path]
 	if !ok {
 		fmt.Println("No instance found: ", path, ". Try opening it.")
