@@ -1,4 +1,4 @@
-import { Accessor, type Component, createSignal, type ParentComponent } from "solid-js"
+import { type Accessor, type Component, createSignal, type ParentComponent } from "solid-js"
 // ...
 import { createStorage, type IStorage } from "~/utils"
 import { journal } from "~/wailsjs/go/models"

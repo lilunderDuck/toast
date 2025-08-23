@@ -6,7 +6,7 @@ import { shorthands } from "~/styles/shorthands"
 import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
 // ...
 import { useNodeState } from "../../utils"
-import { TagAttribute } from "./extension"
+import type { TagAttribute } from "./extension"
 
 const style = stylex.create({
   tag: {

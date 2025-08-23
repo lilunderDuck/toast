@@ -1,4 +1,4 @@
-import { Accessor, JSX } from "solid-js";
+import type { Accessor, JSX } from "solid-js";
 
 /**Options for creating `solid-dnd-directive`'s drag and drop. Briefly copied their 
  * documentation to here, because the package has no documentation.

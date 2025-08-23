@@ -3,10 +3,10 @@ import { splitProps } from "solid-js"
 
 import {
   Root,
-  type TooltipRootProps,
   Trigger,
   Portal,
-  Content
+  Content,
+  type TooltipRootOptions
 } from "@kobalte/core/tooltip"
 import stylex from "@stylexjs/stylex"
 import { mergeClassname } from "~/utils"
@@ -29,7 +29,7 @@ const style = stylex.create({
 })
 
 export interface ITooltipOptions {
-  tooltipOptions$?: TooltipRootProps
+  tooltipOptions$?: TooltipRootOptions
   label$: JSX.Element
 }
 

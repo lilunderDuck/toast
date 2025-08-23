@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex"
-import { ParentProps } from "solid-js"
+import type { ParentProps } from "solid-js"
 
 const style = stylex.create({
   kbd: {

@@ -5,9 +5,10 @@ import { stylex as stylexPlugin } from "vite-plugin-stylex-dev"
 import { optimizeCssModules } from "vite-plugin-optimize-css-modules"
 // ... 
 import tsconfig from './tsconfig.json'
-import { defineAllEnum, getAliasPath } from "./build/config"
+import { defineAllEnum, getAliasPath, ESBUILD_OPTIONS } from "./build/config"
 
-export default defineConfig(() => {
+export default defineConfig(({ command }) => {
+  const isDevMode = command !== "build"
   const BUILD_SAVED_PATH = "./build/out/bin/app"
   const { generateType, getDefineList } = defineAllEnum()
 
@@ -67,6 +68,7 @@ export default defineConfig(() => {
         }
       }
     },
+    esbuild: isDevMode ? undefined : ESBUILD_OPTIONS,
     resolve: {
       alias: getAliasPath(tsconfig, __dirname)
     },

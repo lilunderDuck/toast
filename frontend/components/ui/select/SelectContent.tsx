@@ -1,7 +1,7 @@
-import { PolymorphicProps } from "@kobalte/core/polymorphic"
-import { Content, Listbox, Portal, SelectContentProps } from "@kobalte/core/select"
+import { type PolymorphicProps } from "@kobalte/core/polymorphic"
+import { Content, Listbox, Portal, type SelectContentProps } from "@kobalte/core/select"
 import stylex from "@stylexjs/stylex"
-import { splitProps, ValidComponent } from "solid-js"
+import { splitProps, type ValidComponent } from "solid-js"
 import { mergeClassname } from "~/utils"
 import __style from "./SelectContent.module.css"
 

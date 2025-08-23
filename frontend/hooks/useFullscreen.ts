@@ -2,8 +2,8 @@
  * 
  * Solid-js implementation is from https://github.com/solidjs-use/solidjs-use/blob/66d98a33c283ce44ee6271784c4cf577410be41d/packages/core/src/useFullscreen/index.ts#L162
  */
-import { Accessor, createMemo, createSignal, onCleanup } from 'solid-js'
-import { ConfigurableDocument } from './types'
+import { type Accessor, createMemo, createSignal, onCleanup } from 'solid-js'
+import { type ConfigurableDocument } from './types'
 import { useEventListener } from './useEventListener'
 
 export interface UseFullscreenOptions extends ConfigurableDocument {

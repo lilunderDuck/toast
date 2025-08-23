@@ -4,7 +4,7 @@ import {
   Flex, 
   Spacer 
 } from "../ui"
-import { JSX, splitProps } from "solid-js"
+import { type JSX, splitProps } from "solid-js"
 
 const style = stylex.create({
   theThing: {

@@ -1,6 +1,6 @@
 import { splitProps, type ValidComponent } from "solid-js"
 import { Content, Portal, type DropdownMenuContentProps } from "@kobalte/core/dropdown-menu"
-import { PolymorphicProps } from "@kobalte/core/polymorphic"
+import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import { mergeClassname } from "~/utils"
 import stylex from "@stylexjs/stylex"
 

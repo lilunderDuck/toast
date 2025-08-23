@@ -3,7 +3,7 @@ import { For } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import { shorthands } from "~/styles/shorthands"
 // ...
-import { ISettingConfig, useSettingContext } from "./SettingProvider"
+import { type ISettingConfig, useSettingContext } from "./SettingProvider"
 
 const style = stylex.create({
   settingSection: {

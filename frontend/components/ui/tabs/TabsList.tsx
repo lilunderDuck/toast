@@ -2,7 +2,7 @@ import type { ValidComponent } from "solid-js"
 import { splitProps } from "solid-js"
  
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
-import { TabsListProps, List } from "@kobalte/core/tabs"
+import { type TabsListProps, List } from "@kobalte/core/tabs"
 import stylex from "@stylexjs/stylex"
 import { mergeClassname } from "~/utils"
 

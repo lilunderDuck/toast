@@ -1,6 +1,6 @@
-import { createSignal, ParentProps, Show, type Component } from "solid-js"
+import { createSignal, type ParentProps, Show } from "solid-js"
 // ...
-import { LazyComponent, LazyComponentProps } from "./types"
+import type { LazyComponent, LazyComponentProps } from "./types"
 import { DropdownMenu, DropdownMenuTrigger } from "../ui"
 import { createLazyComponent } from "./utils"
 

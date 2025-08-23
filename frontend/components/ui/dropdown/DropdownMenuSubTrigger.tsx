@@ -1,7 +1,7 @@
-import { DropdownMenuSubTriggerProps, SubTrigger } from "@kobalte/core/dropdown-menu"
-import { PolymorphicProps } from "@kobalte/core/polymorphic"
+import { type DropdownMenuSubTriggerProps, SubTrigger } from "@kobalte/core/dropdown-menu"
+import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
-import { ParentProps, splitProps, ValidComponent } from "solid-js"
+import { type ParentProps, splitProps, type ValidComponent } from "solid-js"
 import { mergeClassname } from "~/utils"
 import { FlexCenterY, Spacer } from "../Flex"
 

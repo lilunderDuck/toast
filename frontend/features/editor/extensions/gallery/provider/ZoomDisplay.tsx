@@ -3,7 +3,7 @@ import __style from "./ZoomDisplay.module.css"
 import { FlexCenter } from "~/components"
 import { useZoomAndPanContext } from "./ZoomAndPanProvider"
 import { mergeClassname } from "~/utils"
-import { ParentProps } from "solid-js"
+import type { ParentProps } from "solid-js"
 
 const style = stylex.create({
   imageDisplay: {

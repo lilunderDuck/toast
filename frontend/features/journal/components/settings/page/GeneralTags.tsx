@@ -1,6 +1,6 @@
 import { createSignal, For, lazy, Show } from "solid-js"
 // ...
-import { TagData } from "~/features/journal/provider"
+import { type TagData } from "~/features/journal/provider"
 import { Button, Input, Spacer, Tag } from "~/components"
 import { CustomSettingSection } from "~/features/setting"
 // ...

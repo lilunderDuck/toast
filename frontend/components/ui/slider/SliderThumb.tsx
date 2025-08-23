@@ -1,7 +1,7 @@
-import { PolymorphicProps } from "@kobalte/core/polymorphic"
-import { Input, SliderThumbProps, Thumb } from "@kobalte/core/slider"
+import { type PolymorphicProps } from "@kobalte/core/polymorphic"
+import { Input, type SliderThumbProps, Thumb } from "@kobalte/core/slider"
 import stylex from "@stylexjs/stylex"
-import { ParentProps, splitProps, ValidComponent } from "solid-js"
+import { type ParentProps, splitProps, type ValidComponent } from "solid-js"
 import { mergeClassname } from "~/utils"
 
 const style = stylex.create({

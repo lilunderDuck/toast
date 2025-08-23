@@ -1,11 +1,11 @@
-import { NodeConfig } from "@tiptap/core"
+import { type NodeConfig } from "@tiptap/core"
 import { Transaction } from "prosemirror-state"
 
 export function createExtension() {
   // Extension.create
 }
 
-export type ThisNodeInputRule = ThisParameterType<NodeConfig["addCommands"]>
+export type ThisNodeInputRule = ThisParameterType<NonNullable<NodeConfig["addCommands"]>>
 
 export function insertNodeAtCurrentPosition<T extends {}>(
   thisInputRule: ThisNodeInputRule,

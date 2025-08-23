@@ -1,7 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import { mergeClassname } from "~/utils"
 import { shorthands } from "~/styles/shorthands"
-import { Match, mergeProps, Show, splitProps, Switch } from "solid-js"
+import { Match, splitProps, Switch } from "solid-js"
 import { Spacer } from "../ui"
 
 const style = stylex.create({

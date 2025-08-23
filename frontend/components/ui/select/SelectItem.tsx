@@ -1,4 +1,4 @@
-import { PolymorphicProps } from "@kobalte/core/polymorphic"
+import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import { Item, ItemIndicator, ItemLabel, type SelectItemProps } from "@kobalte/core/select"
 import stylex from "@stylexjs/stylex"
 import { splitProps, type ParentProps, type ValidComponent } from "solid-js"

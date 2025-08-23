@@ -4,7 +4,7 @@ import { splitProps } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import {
   Root,
-  SliderRootProps
+  type SliderRootProps
 } from "@kobalte/core/slider"
  
 

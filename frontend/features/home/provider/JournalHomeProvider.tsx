@@ -1,4 +1,4 @@
-import { Accessor, createContext, createResource, createSignal, ParentProps, useContext } from "solid-js"
+import { type Accessor, createContext, createResource, createSignal, type ParentProps, useContext } from "solid-js"
 // ...
 import { GetAllGroups } from "~/wailsjs/go/journal/GroupExport"
 import { journal } from "~/wailsjs/go/models"

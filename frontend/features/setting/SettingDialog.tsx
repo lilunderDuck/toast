@@ -1,6 +1,6 @@
 import { For, Match, Switch } from "solid-js"
 // ...
-import { DialogContent, IDialog } from "~/components"
+import { DialogContent, type IDialog } from "~/components"
 import { mergeClassname } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -9,7 +9,7 @@ import __style from "./SettingDialog.module.css"
 import __scrollbarStyle from "~/styles/scrollbar.module.css"
 // ...
 import { SettingSidebarItem } from "./SettingSidebarItem"
-import { ISettingProviderProps, SettingProvider, useSettingContext } from "./SettingProvider"
+import { type ISettingProviderProps, SettingProvider, useSettingContext } from "./SettingProvider"
 
 const style = stylex.create({
   root: {

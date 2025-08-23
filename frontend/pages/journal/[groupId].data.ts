@@ -2,7 +2,7 @@ import { createAsync } from "@solidjs/router"
 import { onCleanup } from "solid-js"
 // ...
 import { GetExplorerTree, InitJournal, CleanUpJournal, GetAllJournal } from "~/wailsjs/go/journal/GroupExport"
-import { journal } from "~/wailsjs/go/models"
+import type { journal } from "~/wailsjs/go/models"
 
 export default function journalGroupData(groupId: number) {
   onCleanup(() => {
@@ -22,7 +22,7 @@ export default function journalGroupData(groupId: number) {
     ])
 
     return {
-      explorerTreeData$: explorerTreeData as journal.ExplorerTree,
+      explorerTreeData$: explorerTreeData as journal.ExplorerNode[],
       journalsMetadata$: journalsMetadata as journal.JournalData[]
     }
   })

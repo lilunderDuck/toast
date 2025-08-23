@@ -1,5 +1,5 @@
-import { Ref } from "./ref"
-import { Component, JSX, splitProps } from "solid-js"
+import { type Ref } from "./ref"
+import { type Component, type JSX, splitProps } from "solid-js"
 import { Dynamic } from "solid-js/web"
 
 export interface NodeViewContentProps {

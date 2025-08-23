@@ -1,5 +1,5 @@
 import { 
-  IVideoProps, 
+  type IVideoProps, 
   Video 
 } from "../shared"
 

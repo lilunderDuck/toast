@@ -3,10 +3,10 @@ import { ButtonRow, DialogContent, Spacer, type IDialog } from "~/components"
 import stylex from "@stylexjs/stylex"
 // ...
 import { GalleryContent } from "../GalleryContent"
-import { IGalleryContext, ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "../../provider"
+import { type IGalleryContext, ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "../../provider"
 import { NextAndPrevButtons } from "../buttons/NextAndPrevButtons"
 import { onCleanup, Show } from "solid-js"
-import { BsBox2Heart, BsBox2HeartFill } from "solid-icons/bs"
+import { BsBox2HeartFill } from "solid-icons/bs"
 
 const style = stylex.create({
   dialog: {

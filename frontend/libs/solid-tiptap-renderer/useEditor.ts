@@ -1,4 +1,4 @@
-import { EditorOptions } from "@tiptap/core"
+import type { EditorOptions } from "@tiptap/core"
 import { createSignal, onCleanup } from "solid-js"
 // ...
 import { SolidEditor } from "./editor"

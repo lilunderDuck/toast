@@ -1,7 +1,7 @@
 import { type ContextMenuSeparatorProps, Separator } from "@kobalte/core/context-menu"
-import { PolymorphicProps } from "@kobalte/core/polymorphic"
+import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
-import { splitProps, ValidComponent } from "solid-js"
+import { splitProps, type ValidComponent } from "solid-js"
 import { mergeClassname } from "~/utils"
 
 const style = stylex.create({

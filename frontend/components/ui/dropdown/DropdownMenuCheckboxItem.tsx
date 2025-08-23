@@ -1,6 +1,6 @@
 import { splitProps, type ParentProps, type ValidComponent } from "solid-js"
 import { CheckboxItem, ItemIndicator, type DropdownMenuCheckboxItemProps } from "@kobalte/core/dropdown-menu"
-import { PolymorphicProps } from "@kobalte/core/polymorphic"
+import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import { mergeClassname } from "~/utils"
 import stylex from "@stylexjs/stylex"
 

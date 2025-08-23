@@ -1,15 +1,15 @@
-import { createContext, type ParentProps, type Accessor, useContext, createSignal, onMount, Setter } from "solid-js"
+import { createContext, type ParentProps, type Accessor, useContext, createSignal, onMount, type Setter } from "solid-js"
 import { createStore } from "solid-js/store"
 // ...
 import { useNodeState } from "~/features/editor/utils"
 import { createStorage } from "~/utils"
 import { ASSETS_SERVER_URL } from "~/api"
 import { useJournalContext } from "~/features/journal"
-import { editor } from "~/wailsjs/go/models"
+import type { editor } from "~/wailsjs/go/models"
 import { CreateGalleryData, GetGalleryData, UploadOneFile, UpdateGalleryData } from "~/wailsjs/go/editor/EditorExport"
 // ...
-import { GallerySessionStorage } from "./data"
-import { DEFAULT_GALLERY_ID, GalleryAttribute } from "../extension"
+import type { GallerySessionStorage } from "./data"
+import { DEFAULT_GALLERY_ID, type GalleryAttribute } from "../extension"
 
 export interface IGalleryContext {
   /**Gets the current gallery data. */

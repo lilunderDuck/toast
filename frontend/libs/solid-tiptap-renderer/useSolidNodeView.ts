@@ -1,6 +1,6 @@
 import { SolidEditor } from "./editor"
-import { Accessor, Context, createContext, useContext } from "solid-js"
-import { NodeViewProps, NodeViewRendererProps } from "@tiptap/core"
+import { type Accessor, type Context, createContext, useContext } from "solid-js"
+import { type NodeViewProps, type NodeViewRendererProps } from "@tiptap/core"
 import { Node as ProseMirrorNode } from "@tiptap/pm/model"
 
 export type Attrs = Record<string, any>

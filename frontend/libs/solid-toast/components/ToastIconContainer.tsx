@@ -2,7 +2,7 @@ import { Match, Switch } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { IconTheme, Renderable, ToastType } from "../util"
+import type { IconTheme, Renderable, ToastType } from "../util"
 import { Error, Loader, Success } from '.'
 
 const style = stylex.create({

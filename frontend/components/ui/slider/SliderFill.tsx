@@ -1,6 +1,6 @@
-import { PolymorphicProps } from "@kobalte/core/polymorphic"
-import { Fill, SliderFillProps } from "@kobalte/core/slider"
-import { splitProps, ValidComponent } from "solid-js"
+import { type PolymorphicProps } from "@kobalte/core/polymorphic"
+import { Fill, type SliderFillProps } from "@kobalte/core/slider"
+import { splitProps, type ValidComponent } from "solid-js"
 import { mergeClassname } from "~/utils"
 
 import stylex from "@stylexjs/stylex"

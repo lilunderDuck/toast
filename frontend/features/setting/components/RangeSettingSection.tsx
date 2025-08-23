@@ -4,8 +4,8 @@ import stylex from "@stylexjs/stylex"
 // ...
 import { Input, Spacer } from "~/components"
 import { shorthands } from "~/styles/shorthands"
-import { RootSettingDescription, RootSettingName, RootSettingSection, sectionStyle } from "./RootSettingSection"
-import { ISettingSectionProps, SettingSectionOptions } from "../types"
+import { RootSettingDescription, RootSettingName, RootSettingSection } from "./RootSettingSection"
+import type { ISettingSectionProps, SettingSectionOptions } from "../types"
 
 const style = stylex.create({
   section: {

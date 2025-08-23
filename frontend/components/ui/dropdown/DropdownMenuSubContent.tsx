@@ -1,6 +1,6 @@
 import { SubContent, type DropdownMenuSubContentProps } from "@kobalte/core/dropdown-menu"
-import { PolymorphicProps } from "@kobalte/core/polymorphic"
-import { splitProps, ValidComponent } from "solid-js"
+import { type PolymorphicProps } from "@kobalte/core/polymorphic"
+import { splitProps, type ValidComponent } from "solid-js"
 import { mergeClassname } from "~/utils"
 import stylex from "@stylexjs/stylex"
 

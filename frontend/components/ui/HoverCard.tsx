@@ -1,7 +1,7 @@
 import type { ValidComponent } from "solid-js"
 import { splitProps } from "solid-js"
 
-import { Content, HoverCardContentProps, HoverCardRootProps, Portal, Root, Trigger } from "@kobalte/core/hover-card"
+import { Content, type HoverCardContentProps, type HoverCardRootProps, Portal, Root, Trigger } from "@kobalte/core/hover-card"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
 import { mergeClassname } from "../../utils"

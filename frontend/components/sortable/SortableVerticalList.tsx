@@ -6,9 +6,9 @@ import {
   SortableProvider,
   createSortable,
   closestCenter,
-  DragEventHandler,
+  type DragEventHandler,
 } from "@thisbeyond/solid-dnd"
-import { createSignal, For, JSX, Signal, splitProps } from "solid-js"
+import { createSignal, For, type JSX, type Signal, splitProps } from "solid-js"
 import { mergeClassname } from "../../utils"
 
 interface ISortableVerticalItemProps extends HTMLAttributes<"div"> {

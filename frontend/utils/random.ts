@@ -1,4 +1,4 @@
-import { ArrayElement } from "./structs"
+import type { ArrayElement } from "./structs"
 
 /**Generates a random number between 0 and the specified `bound`.
  *

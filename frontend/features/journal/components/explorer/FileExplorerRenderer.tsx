@@ -5,7 +5,7 @@ import { dndzone } from "solid-dnd-directive"
 import stylex from "@stylexjs/stylex"
 import __style from "./FileExplorerRenderer.module.css"
 // ...
-import { DONT_RENDER, type IDndConsiderEvent, type IDndFinalizeEvent, type IDndOptions, TreeNode, useJournalContext } from "~/features/journal"
+import { DONT_RENDER, type IDndConsiderEvent, type IDndFinalizeEvent, type IDndOptions, type TreeNode, useJournalContext } from "~/features/journal"
 
 declare module "solid-js" {
   namespace JSX {

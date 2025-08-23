@@ -1,6 +1,6 @@
 import { type Accessor, type Component, createSignal, type Setter } from "solid-js"
 import { SolidEditor } from "./editor"
-import { Attrs, SolidNodeViewProps } from "./useSolidNodeView"
+import type { Attrs, SolidNodeViewProps } from "./useSolidNodeView"
 
 export interface SolidRendererOptions<S = SolidNodeViewProps> {
   editor: SolidEditor

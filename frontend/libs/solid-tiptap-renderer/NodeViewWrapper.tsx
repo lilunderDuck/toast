@@ -1,5 +1,5 @@
-import { SolidNodeViewContextProps, useSolidNodeView, Attrs } from "./useSolidNodeView"
-import { Component, JSX, splitProps } from "solid-js"
+import { type SolidNodeViewContextProps, useSolidNodeView, type Attrs } from "./useSolidNodeView"
+import { type Component, type JSX, splitProps } from "solid-js"
 import { Dynamic } from "solid-js/web"
 
 export interface NodeViewWrapperProps {

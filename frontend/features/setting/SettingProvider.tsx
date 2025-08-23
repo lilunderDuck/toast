@@ -1,5 +1,5 @@
 import { type Accessor, createContext, createSignal, type JSX, lazy, type ParentProps, type Setter, useContext } from "solid-js"
-import { IconTypes } from "solid-icons"
+import { type IconTypes } from "solid-icons"
 // ...
 
 export interface ISettingConfig {

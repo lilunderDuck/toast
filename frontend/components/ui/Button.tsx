@@ -1,7 +1,7 @@
 import type { JSX, ValidComponent } from "solid-js"
 import { splitProps } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
-import { ButtonRootProps, Root } from "@kobalte/core/button"
+import { type ButtonRootProps, Root } from "@kobalte/core/button"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./Button.module.css"

@@ -1,7 +1,7 @@
-import { SolidEditor } from "./editor"
-import { SolidRenderer } from "./SolidRenderer"
+import type { SolidEditor } from "./editor"
+import type { SolidRenderer } from "./SolidRenderer"
 import { createRef } from "./ref"
-import { For, createEffect, on, onCleanup, JSX, splitProps } from "solid-js"
+import { For, createEffect, on, onCleanup, type JSX, splitProps } from "solid-js"
 import { Dynamic, Portal } from "solid-js/web"
 
 interface IPortalsProps {

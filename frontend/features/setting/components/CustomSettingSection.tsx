@@ -1,8 +1,8 @@
 import stylex from "@stylexjs/stylex"
 import { RootSettingDescription, RootSettingName, RootSettingSection } from "./RootSettingSection"
 import { shorthands } from "~/styles/shorthands"
-import { ISettingSectionProps } from "../types"
-import { ParentProps } from "solid-js"
+import { type ISettingSectionProps } from "../types"
+import { type ParentProps } from "solid-js"
 
 interface ICustomSettingSectionProps extends ISettingSectionProps<number> {
   // ...

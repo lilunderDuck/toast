@@ -4,7 +4,7 @@ import { shorthands } from "~/styles/shorthands"
 import { Checkbox, Spacer } from "~/components"
 // ...
 import { RootSettingDescription, RootSettingName, RootSettingSection } from "./RootSettingSection"
-import { ISettingSectionProps, SettingSectionOptions } from "../types"
+import type { ISettingSectionProps, SettingSectionOptions } from "../types"
 
 const style = stylex.create({
   section: {

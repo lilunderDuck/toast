@@ -1,11 +1,12 @@
+import { For, Show } from "solid-js"
+import { BsCalendar2Date, BsPencilFill } from "solid-icons/bs"
+import { A } from "@solidjs/router"
+// ...
 import __style from "./JournalInfoDialog.module.css"
 import stylex from "@stylexjs/stylex"
 // ...
 import { Button, ButtonRow, DialogContent, type IDialog } from "~/components"
 import { shorthands } from "~/styles/shorthands"
-import { BsCalendar2Date, BsPencilFill } from "solid-icons/bs"
-import { For, Show } from "solid-js"
-import { A } from "@solidjs/router"
 import { journal } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 

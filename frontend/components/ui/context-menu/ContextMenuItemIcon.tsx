@@ -1,6 +1,6 @@
 import stylex from "@stylexjs/stylex"
 import { FlexCenter } from "../Flex"
-import { ParentProps } from "solid-js"
+import type { ParentProps } from "solid-js"
 
 const style = stylex.create({
   iconWrap: {

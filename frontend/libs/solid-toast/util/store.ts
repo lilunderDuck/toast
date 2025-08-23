@@ -1,4 +1,4 @@
-import { Toast } from './toast';
+import type { Toast } from './toast';
 
 export type Action =
   | {

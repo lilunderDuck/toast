@@ -16,4 +16,5 @@
   "material-icon-theme.hidesExplorerArrows": true,
   "deno.enable": false,
   "makefile.configureOnOpen": true,
+  "typescript.preferences.preferTypeOnlyAutoImports": true
 }

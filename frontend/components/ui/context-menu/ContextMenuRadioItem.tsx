@@ -1,6 +1,6 @@
 import { type ParentProps, splitProps, type ValidComponent } from "solid-js"
-import { ContextMenuRadioItemProps, ItemIndicator, RadioItem } from "@kobalte/core/context-menu"
-import { PolymorphicProps } from "@kobalte/core/polymorphic"
+import { type ContextMenuRadioItemProps, ItemIndicator, RadioItem } from "@kobalte/core/context-menu"
+import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import { mergeClassname } from "~/utils"
 import stylex from "@stylexjs/stylex"
 

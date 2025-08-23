@@ -1,8 +1,8 @@
 import { createForm, required } from "@modular-forms/solid"
 import { onMount } from "solid-js"
 // ...
-import { Button, ButtonRow, FieldInput, IDialog } from "~/components"
-import { TagData } from "~/features/journal/provider"
+import { Button, ButtonRow, FieldInput, type IDialog } from "~/components"
+import { type TagData } from "~/features/journal/provider"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./TagInputDialog.module.css"

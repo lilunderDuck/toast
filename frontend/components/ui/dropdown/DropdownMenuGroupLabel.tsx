@@ -1,6 +1,6 @@
 import { splitProps, type ValidComponent } from "solid-js"
-import { DropdownMenuGroupLabelProps, GroupLabel } from "@kobalte/core/dropdown-menu"
-import { PolymorphicProps } from "@kobalte/core/polymorphic"
+import { type DropdownMenuGroupLabelProps, GroupLabel } from "@kobalte/core/dropdown-menu"
+import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import { mergeClassname } from "~/utils"
 import stylex from "@stylexjs/stylex"
 

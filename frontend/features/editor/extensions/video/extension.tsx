@@ -3,7 +3,7 @@ import { type Attribute, Node } from '@tiptap/core'
 import { NodeViewWrapper, SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
 // ...
 import { useNodeState } from '../../utils'
-import { Video, VideoAttribute } from '../files'
+import { Video, type VideoAttribute } from '../files'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {

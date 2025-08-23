@@ -1,11 +1,11 @@
 import { BsPlus } from "solid-icons/bs"
-import { Accessor, Show } from "solid-js"
+import { type Accessor, Show } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import { shorthands } from "~/styles/shorthands"
 // ...
 import { SpinningCube, Tooltip } from "~/components"
-import { FileUploadComponent } from "~/features/native"
+import { type FileUploadComponent } from "~/features/native"
 import { ASSETS_SERVER_URL } from "~/api"
 
 const style = stylex.create({

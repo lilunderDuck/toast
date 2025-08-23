@@ -3,7 +3,7 @@ import { createSignal, Match, Switch } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import __style from "./GalleryDirectoryUploadDialog.module.css"
 // ...
-import { Button, ButtonRow, DialogContent, DialogHeader, IDialog, RadioGroup, RadioGroupItem, RadioGroupItemLabel, Tooltip } from "~/components"
+import { Button, ButtonRow, DialogContent, DialogHeader, type IDialog, RadioGroup, RadioGroupItem, RadioGroupItemLabel, Tooltip } from "~/components"
 import { createFileUpload, FileUploadType } from "~/features/native"
 
 const style = stylex.create({

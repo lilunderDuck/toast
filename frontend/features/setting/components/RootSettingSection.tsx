@@ -1,6 +1,6 @@
 import stylex from "@stylexjs/stylex"
-import { ISettingSectionProps } from "../types"
-import { JSX, Show } from "solid-js"
+import { type ISettingSectionProps } from "../types"
+import { type JSX, Show } from "solid-js"
 import { Input } from "~/components"
 import { shorthands } from "~/styles/shorthands"
 

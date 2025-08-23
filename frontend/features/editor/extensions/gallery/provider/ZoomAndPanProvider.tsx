@@ -1,4 +1,4 @@
-import { Accessor, createContext, createSignal, type ParentProps, type Signal, useContext } from "solid-js"
+import { type Accessor, createContext, createSignal, type ParentProps, type Signal, useContext } from "solid-js"
 
 interface IZoomAndPanContext {
   changeDisplayImage$(newImageUrl: string): void

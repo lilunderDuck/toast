@@ -5,7 +5,7 @@ import type {
   ToastPosition 
 } from './toast'
 import stylex from '@stylexjs/stylex'
-import { NO_STYLE, StylexStylesAttribute } from '~/utils'
+import { NO_STYLE, type StylexStylesAttribute } from '~/utils'
 
 export const generateID = (() => {
   let count = 0

@@ -1,4 +1,4 @@
-import { Action, type State } from '../util/store'
+import { type Action, type State } from '../util/store'
 import type { Toast } from '../util/toast'
 import { createStore, produce as p } from 'solid-js/store'
 

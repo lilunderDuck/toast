@@ -1,5 +1,5 @@
 import { Button, Tooltip } from "~/components"
-import { IGalleryContext, useGalleryContext } from "../../provider"
+import { type IGalleryContext, useGalleryContext } from "../../provider"
 import { BsArrowLeft, BsArrowRight } from "solid-icons/bs"
 
 interface INextAndPrevButtons {

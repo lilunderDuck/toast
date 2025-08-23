@@ -1,5 +1,5 @@
-import { Accessor, createContext, createSignal, onCleanup, ParentProps, Setter, useContext } from "solid-js"
-import { LocalEmbedAttribute } from "../extension"
+import { type Accessor, createContext, createSignal, onCleanup, type ParentProps, type Setter, useContext } from "solid-js"
+import { type LocalEmbedAttribute } from "../extension"
 import { useNodeState } from "~/features/editor/utils"
 import { useFullscreen } from "~/hooks"
 import { ASSETS_SERVER_URL } from "~/api"

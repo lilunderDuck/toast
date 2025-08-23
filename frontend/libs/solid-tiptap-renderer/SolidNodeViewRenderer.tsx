@@ -1,18 +1,18 @@
-import { Decoration, NodeView as ProseMirrorNodeView } from "@tiptap/pm/view"
+import { Decoration, type NodeView as ProseMirrorNodeView } from "@tiptap/pm/view"
 import {
-  DecorationWithType,
+  type DecorationWithType,
   NodeView,
-  NodeViewRenderer,
-  NodeViewRendererOptions,
-  NodeViewRendererProps,
+  type NodeViewRenderer,
+  type NodeViewRendererOptions,
+  type NodeViewRendererProps,
 } from "@tiptap/core"
-import { Component, createMemo } from "solid-js"
+import { type Component, createMemo } from "solid-js"
 import { Dynamic } from "solid-js/web"
 import { Node as ProseMirrorNode } from "@tiptap/pm/model"
 // ...
 import {
   SolidNodeViewContext,
-  SolidNodeViewProps,
+  type SolidNodeViewProps,
 } from "./useSolidNodeView"
 import { SolidEditor } from "./editor"
 import { SolidRenderer } from "./SolidRenderer"

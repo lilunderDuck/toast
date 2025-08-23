@@ -1,9 +1,9 @@
-import { For, JSX, ParentProps } from "solid-js"
+import { For, type JSX, type ParentProps } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
-import { ITooltipOptions, Tooltip } from "~/components"
+import { type ITooltipOptions, Tooltip } from "~/components"
 import { shorthands } from "~/styles/shorthands"
-import { IconTypes } from "solid-icons"
+import { type IconTypes } from "solid-icons"
 import { A } from "@solidjs/router"
 
 const style = stylex.create({

@@ -1,4 +1,4 @@
-import { onCleanup, ParentProps, Show } from "solid-js"
+import { onCleanup, type ParentProps, Show } from "solid-js"
 import { Root, Panel, Handle } from '@corvu/resizable'
 import { useParams } from "@solidjs/router"
 // ...
@@ -14,7 +14,7 @@ import {
   JournalProvider, 
   useJournalContext, 
   FileExplorerRenderer,
-  IFileExplorerProviderOptions,
+  type IFileExplorerProviderOptions,
   JournalLoadingScreen
 } from "~/features/journal"
 import { EditorProvider } from "~/features/editor"
@@ -132,7 +132,7 @@ function Providers(props: ParentProps<{ groupId$: number }>) {
       }, {} as Record<number, string>)
     },
     getInitialTree$() {
-      return journalData()?.explorerTreeData$
+      return journalData()!.explorerTreeData$
     },
     onTreeUpdate$(newTree) {
       UpdateExplorerTree(props.groupId$, newTree)

@@ -3,6 +3,8 @@ import type { JSX } from "solid-js"
 export {}
 
 declare global {
+  type HTMLTags = keyof HTMLElementTagNameMap
+
   /**Short-hand for
    * ```
    * import { JSX } from "solid-js"
@@ -21,12 +23,12 @@ declare global {
    * 
    * @template ElementName the html element name, example: `'div'`
    */
-  type HTMLAttributes<ElementName extends keyof HTMLElementTagNameMap> = 
+  type HTMLAttributes<ElementName extends HTMLTags> = 
     JSX.HTMLElementTags[ElementName]
   // ...
 
   type EventHandler<
-    ElementName extends keyof HTMLElementTagNameMap, 
+    ElementName extends HTMLTags, 
     EventName extends keyof HTMLAttributes<ElementName>
   > =
     HTMLAttributes<ElementName>[EventName]
@@ -35,7 +37,7 @@ declare global {
   /**A type representing an reference to a DOM element 
    * @template ElementName the html element name, example: `'div'` 
    */
-  type Ref<ElementName extends keyof HTMLElementTagNameMap> = HTMLElementTagNameMap[ElementName]
+  type Ref<ElementName extends HTMLTags> = HTMLElementTagNameMap[ElementName]
   
   /**A type representing any function, regardless of its parameters or return type. */
   type AnyFunction = (...anything: any[]) => any

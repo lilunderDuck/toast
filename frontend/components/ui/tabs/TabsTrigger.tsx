@@ -1,4 +1,4 @@
-import { splitProps, ValidComponent } from "solid-js"
+import { splitProps, type ValidComponent } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { type TabsTriggerProps, Trigger } from "@kobalte/core/tabs"
 import { mergeClassname } from "~/utils"

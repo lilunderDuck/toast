@@ -14,7 +14,7 @@ import {
   Legend,
   Tooltip
 } from "chart.js"
-import { Component, createEffect, createSignal, mergeProps, on, onCleanup, onMount, Ref } from "solid-js"
+import { type Component, createEffect, createSignal, mergeProps, on, onCleanup, onMount, type Ref } from "solid-js"
 import { unwrap } from "solid-js/store"
 import { showTooltip } from "./tooltip"
 

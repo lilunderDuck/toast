@@ -8,7 +8,7 @@ import __style from "./QuickActionBar.module.css"
 import __scrollbarStyle from "~/styles/scrollbar.module.css"
 import { shorthands } from "~/styles/shorthands"
 // ...
-import { ButtonRow, IButtonRowProps, INSERT_SPACER_HERE } from "./ButtonRow"
+import { ButtonRow, type IButtonRowProps, INSERT_SPACER_HERE } from "./ButtonRow"
 import { createJournalSettingPage } from "../settings"
 import { createLazyLoadedDialog } from "~/components"
 import { useJournalContext } from "../../provider"

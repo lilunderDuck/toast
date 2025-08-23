@@ -1,7 +1,7 @@
 import { Show } from "solid-js"
 // ...
-import { IGalleryContext, useGalleryContext } from "../provider"
-import { FileContentDisplay, IVideoProps } from "../../files"
+import { type IGalleryContext, useGalleryContext } from "../provider"
+import { FileContentDisplay, type IVideoProps } from "../../files"
 
 interface IGalleryContentProps {
   context$?: IGalleryContext

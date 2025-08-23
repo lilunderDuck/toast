@@ -7,7 +7,7 @@ import { mergeClassname, sleep } from "~/utils"
 import stylex from "@stylexjs/stylex"
 import __style from "./Video.module.css"
 // ...
-import { VideoAttribute, VideoPlayerStatus } from "./data"
+import type { VideoAttribute, VideoPlayerStatus } from "./data"
 import { getThisVideoSubtitlePath, reloadVideo } from "./utils"
 
 const style = stylex.create({

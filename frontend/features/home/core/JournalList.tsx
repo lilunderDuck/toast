@@ -1,4 +1,4 @@
-import { For, ParentProps, Show } from "solid-js"
+import { For, type ParentProps, Show } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./JournalList.module.css"
