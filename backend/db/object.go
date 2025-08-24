@@ -1,9 +1,12 @@
 package db
 
-import "github.com/fxamacker/cbor/v2"
+import (
+	"github.com/fxamacker/cbor/v2"
+	"github.com/lotusdblabs/lotusdb/v2"
+)
 
-func (db *LevelDb) GetObject(key int, out any) error {
-	data, err := db.internal.Get(getKey(key), nil)
+func (db *DbInstance) GetObject(key int, out any) error {
+	data, err := db.internal.Get(getKey(key))
 	if err != nil {
 		return err
 	}
@@ -11,23 +14,23 @@ func (db *LevelDb) GetObject(key int, out any) error {
 	return cbor.Unmarshal(data, out)
 }
 
-func (db *LevelDb) SetObject(key int, value any) error {
+func (db *DbInstance) SetObject(key int, value any) error {
 	data, err := cbor.Marshal(value)
 	if err != nil {
 		return err
 	}
 
-	return db.internal.Put(getKey(key), data, nil)
+	return db.internal.Put(getKey(key), data)
 }
 
-func (db *LevelDb) DeleteObject(key int) error {
-	return db.internal.Delete(getKey(key), nil)
+func (db *DbInstance) DeleteObject(key int) error {
+	return db.internal.Delete(getKey(key))
 }
 
-func (db *LevelDb) GetAllObject(thisInterf any) []any {
-	iter := db.internal.NewIterator(nil, nil)
+func (db *DbInstance) GetAllObject(thisInterf any) []any {
+	iter, _ := db.internal.NewIterator(lotusdb.IteratorOptions{})
 	content := []any{}
-	for iter.Next() {
+	for iter.Valid() {
 		value := iter.Value()
 		err := cbor.Unmarshal(value, thisInterf)
 		if err != nil {
@@ -35,7 +38,8 @@ func (db *LevelDb) GetAllObject(thisInterf any) []any {
 		}
 
 		content = append(content, thisInterf)
+		iter.Next()
 	}
-	iter.Release()
+	iter.Close()
 	return content
 }

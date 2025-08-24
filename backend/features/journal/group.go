@@ -37,7 +37,7 @@ func (group *GroupExport) CreateGroup(options JournalGroupOptions) (*JournalGrou
 	utils.CreateDirectory(getJournalContentSavedPath(groupId))
 
 	batchUpdate(groupId, data)
-	group.SetExplorerTree(groupId, ExplorerTree{})
+	group.SetExplorerTree(groupId, ExplorerData{})
 	createSettingFile(groupId)
 
 	if options.Icon != "" {
@@ -78,7 +78,7 @@ func (group *GroupExport) UpdateGroup(groupId int, newData *JournalGroupOptions)
 		saveAndUpdateIcon(&oldData, newData.Icon)
 	}
 
-	if len(newData.Tree) != 0 {
+	if len(newData.Tree.Tree) != 0 {
 		group.SetExplorerTree(groupId, newData.Tree)
 	}
 

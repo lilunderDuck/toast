@@ -44,7 +44,7 @@ export function FileExplorerRenderer() {
 
     return (
       <explorerTree$.components$.Folder$
-        {...retriveData(props.tree$.id)}
+        name={retriveData(props.tree$.id)}
         id={props.tree$.id}
         onClick={() => {
           setIsFolderContentShowing(prev => !prev)
@@ -74,9 +74,7 @@ export function FileExplorerRenderer() {
         return // don't update
       }
 
-      // @ts-ignore - it should works fine
-      tree$.replace$(props.folderId$, newItems)
-      explorerTree$.onTreeUpdate$(explorerTree$.tree$.data$)
+      explorerTree$.tree$.replace$(props.folderId$, newItems)
     }
 
     return (
@@ -90,7 +88,7 @@ export function FileExplorerRenderer() {
             return (
               <Show when={it.child} fallback={
                 <explorerTree$.components$.File$
-                  {...retriveData(it.id)}
+                  name={retriveData(it.id)}
                   id={it.id}
                 />
               }>

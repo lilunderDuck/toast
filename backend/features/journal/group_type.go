@@ -7,7 +7,7 @@ type JournalGroupOptions struct {
 	Name        string       `form:"name"        json:"name,omitempty"`
 	Description string       `form:"description" json:"description,omitempty"`
 	Icon        string       `form:"icon"        json:"icon,omitempty"`
-	Tree        ExplorerTree `form:"tree"        json:"tree,omitempty"`
+	Tree        ExplorerData `form:"tree"        json:"tree,omitempty"`
 }
 
 // Represents the complete data for a journal group

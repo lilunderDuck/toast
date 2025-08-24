@@ -1,7 +1,9 @@
 package db
 
-func (db *LevelDb) GetString(key string) (string, error) {
-	data, err := db.internal.Get([]byte(key), nil)
+// import "github.com/lotusdblabs/lotusdb/v2"
+
+func (db *DbInstance) GetString(key string) (string, error) {
+	data, err := db.internal.Get([]byte(key))
 	if err != nil {
 		return "", err
 	}
@@ -9,22 +11,26 @@ func (db *LevelDb) GetString(key string) (string, error) {
 	return string(data), nil
 }
 
-func (db *LevelDb) SetString(key string, value string) error {
-	return db.internal.Put([]byte(key), []byte(value), nil)
+func (db *DbInstance) SetString(key string, value string) error {
+	return db.internal.Put([]byte(key), []byte(value))
 }
 
-func (db *LevelDb) DeleteString(key string) error {
-	return db.internal.Delete([]byte(key), nil)
+func (db *DbInstance) DeleteString(key string) error {
+	return db.internal.Delete([]byte(key))
 }
 
-func (db *LevelDb) GetAllString() []string {
-	iter := db.internal.NewIterator(nil, nil)
-	content := []string{}
-	for iter.Next() {
-		value := string(iter.Value())
+// func (db *DbInstance) GetAllString() []string {
+// 	iter, err := db.internal.NewIterator(lotusdb.IteratorOptions{})
+// 	if err != nil {
+// 		panic(err)
+// 	}
 
-		content = append(content, value)
-	}
-	iter.Release()
-	return content
-}
+// 	content := []string{}
+// 	for iter.Next() {
+// 		value := string(iter.Value())
+
+// 		content = append(content, value)
+// 	}
+// 	iter.Release()
+// 	return content
+// }

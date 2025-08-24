@@ -35,7 +35,6 @@ export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
       explorerTree$: explorerTree,
       sessionStorage$: wrappedSessionStorage,
       async createJournal$(type, data) {
-        debugger
         const newData = await CreateJournal(groupId(), type, data)
         const explorerNode = (type == 1 ? createFolderNode : createFileNode)(newData.id)
         // @ts-ignore

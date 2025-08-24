@@ -15,35 +15,35 @@ type simpleDbInput struct {
 
 func createApiRoute(server *http.ServeMux) {
 	server.HandleFunc("POST /api/db", func(res http.ResponseWriter, req *http.Request) {
-		batch(res, req, true, func(db *db.LevelDb, key, value string) {
+		batch(res, req, true, func(db *db.DbInstance, key, value string) {
 			db.SetString(key, value)
 		})
 	})
 
 	server.HandleFunc("DELETE /api/db", func(res http.ResponseWriter, req *http.Request) {
-		batch(res, req, false, func(db *db.LevelDb, key, value string) {
+		batch(res, req, false, func(db *db.DbInstance, key, value string) {
 			db.DeleteString(key)
 		})
 	})
 
-	server.HandleFunc("GET /api/db", func(res http.ResponseWriter, req *http.Request) {
-		getAll := req.URL.Query().Get("all")
-		batch(res, req, false, func(db *db.LevelDb, key, value string) {
-			var result any
-			if getAll == "1" {
-				result = db.GetAllString()
-			} else {
-				result, _ = db.GetString(key)
-			}
+	// server.HandleFunc("GET /api/db", func(res http.ResponseWriter, req *http.Request) {
+	// 	getAll := req.URL.Query().Get("all")
+	// 	batch(res, req, false, func(db *db.DbInstance, key, value string) {
+	// 		var result any
+	// 		if getAll == "1" {
+	// 			result = db.GetAllString()
+	// 		} else {
+	// 			result, _ = db.GetString(key)
+	// 		}
 
-			responseInJson(res, 200, JSON{
-				"result": result,
-			})
-		})
-	})
+	// 		responseInJson(res, 200, JSON{
+	// 			"result": result,
+	// 		})
+	// 	})
+	// })
 }
 
-type batchFn func(db *db.LevelDb, key, value string)
+type batchFn func(db *db.DbInstance, key, value string)
 
 func batch(res http.ResponseWriter, req *http.Request, valueRequired bool, batchFn batchFn) {
 	dbName := req.URL.Query().Get("dbName")
@@ -67,7 +67,7 @@ func batch(res http.ResponseWriter, req *http.Request, valueRequired bool, batch
 	}
 
 	dbSavedLocation := utils.JoinPath(internal.EMBED_SAVED_PATH, embedName, "db", dbName)
-	err = db.OpenThenClose(dbSavedLocation, func(db *db.LevelDb) {
+	err = db.OpenThenClose(dbSavedLocation, func(db *db.DbInstance) {
 		batchFn(db, out.Key, out.Value)
 	})
 

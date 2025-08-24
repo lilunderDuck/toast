@@ -30,12 +30,6 @@ func getJournalGroupMetaSavedPath(groupId int) string {
 	return utils.JoinPath(GetSavedPath(groupId), "meta.dat")
 }
 
-// Gets the folder path where all of the journals metadata are being stored.
-// Which is "~/data/journals/(group id)/.journal"
-func getJournalsDatabasePath(groupId int) string {
-	return utils.JoinPath(internals.JOURNAL_FOLDER_PATH, utils.ToString(groupId), ".journal")
-}
-
 // Gets the folder path where all of the journals content should be stored,
 // which is "~/data/journals/(group id)/stuff"
 //

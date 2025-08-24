@@ -5,14 +5,14 @@ import { useParams } from "@solidjs/router"
 import stylex from "@stylexjs/stylex"
 import __style from "~/features/journal/styles/index.module.css"
 // ...
-import { 
-  CurrentlyOpened, 
-  File, 
-  Folder, 
-  QuickActionBar, 
-  TopHeaderButtonRow, 
-  JournalProvider, 
-  useJournalContext, 
+import {
+  CurrentlyOpened,
+  File,
+  Folder,
+  QuickActionBar,
+  TopHeaderButtonRow,
+  JournalProvider,
+  useJournalContext,
   FileExplorerRenderer,
   type IFileExplorerProviderOptions,
   JournalLoadingScreen
@@ -96,13 +96,16 @@ function Providers(props: ParentProps<{ groupId$: number }>) {
 
   const fileExplorerOption: IFileExplorerProviderOptions = {
     components$: {
-      File$: (fileProps) => (
-        <File
-          groupId$={props.groupId$}
-          journalId$={fileProps.id}
-          name$={fileProps.name}
-        />
-      ),
+      File$: (fileProps) => {
+        console.dir(JSON.parse(JSON.stringify(fileProps)))
+        return (
+          <File
+            groupId$={props.groupId$}
+            journalId$={fileProps.id}
+            name$={fileProps.name}
+          />
+        )
+      },
       Folder$: (props) => (
         <Folder
           folderId$={props.id}
@@ -113,16 +116,7 @@ function Providers(props: ParentProps<{ groupId$: number }>) {
         </Folder>
       )
     },
-    getDataMapping$() {
-      const cacheData = {} as Record<number, string>
-      for (const data of journalData()!.journalsMetadata$) {
-        cacheData[data.id] = data.name
-        console.log(data)
-      }
-
-      return cacheData
-    },
-    getInitialTree$() {
+    getData$() {
       return journalData()!.explorerTreeData$
     },
     onTreeUpdate$(newTree) {

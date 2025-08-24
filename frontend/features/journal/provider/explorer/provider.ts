@@ -1,58 +1,105 @@
 import { type Accessor, type Component, createSignal, type ParentComponent } from "solid-js"
 // ...
 import { createStorage, type IStorage } from "~/utils"
-import { journal } from "~/wailsjs/go/models"
+import type { journal } from "~/wailsjs/go/models"
 // ...
 import { ROOT_FOLDER } from "./data"
+import { createFolderNode, createFileNode } from "./data" // documentation only
 
+/**This interface deals with everything releated to file explorer syncing,
+ * rendering, and saving.
+ */
 export interface IFileExplorerContext {
+  /**If you want to manipulate the explorer tree, access it from here. */
   tree$: IExplorerTree
+  /**Options for rendering your own file and folder component. */
   components$: {
     File$: Component<{
-      onClick: EventHandler<"div", "onClick">
+      /**The unique identifier of this file node. */
       id: number
+      /**The display name of this file. */
+      name: string
     }>
     Folder$: ParentComponent<{
       onClick: EventHandler<"div", "onClick">
+      /**The unique identifier of this folder node. */
       id: number
+      /**The display name of this folder. */
+      name: string
+      /**A state to check if the folder is collapsed or expanded. */
       isCollapsed$: boolean
     }>
   }
+  /**Gets the mapping of node IDs to their corresponding name. */
   getDataMapping$(): Record<string | number, any>
+  /**A private internal storage used to manage the collapsed state of folders in the file explorer. */
   sessionStorage$: IStorage<Record<number, boolean>>
+  /**Indicating whether the file explorer is currently being updated. 
+   * @default () => false // not updating
+   */
   isUpdating$: Accessor<boolean>
-  onTreeUpdate$(tree: journal.ExplorerNode[]): any
 }
 
 interface IExplorerTree {
+  /**The explorer node data itself, representing the file tree structure. */
   data$: journal.ExplorerNode[]
+  /**Creates a new node within a specified folder.
+   * @param nodeData The data for the new node to be created. Possible value:
+   * - If it's a file node: `{ id: <unique id> }`
+   * - If it's a folder node: `{ id: <unique id>, child: [] }`
+   * @param toFolder The id of the folder to create the node in. If you pass in `0`,
+   * the node will be inserted into the top root folder.
+   * @param data Additional node data.
+   * @returns *nothing*
+   * @see {@link createFileNode()}
+   * @see {@link createFolderNode()}
+   */
   create$(nodeData: journal.ExplorerNode, toFolder: number, data: any): void
+  /**Replaces an entire folder's contents with a new content.
+   * @param folderId The id of the folder whose contents will be replaced.
+   * @param newTree The new array of nodes to replace the folder's children.
+   * @returns *nothing*
+   */
   replace$(folderId: number, newTree: journal.ExplorerNode[]): void
 }
 
 export interface IFileExplorerProviderOptions {
+  /**The components to use for rendering files and folders.*/
   components$: IFileExplorerContext["components$"]
-  getDataMapping$: IFileExplorerContext["getDataMapping$"]
-  onTreeUpdate$(tree: journal.ExplorerNode[]): any
-  getInitialTree$?: () => journal.ExplorerNode[]
+  /**A function to fetch the initial file explorer data. */
+  getData$: () => journal.ExplorerData
+  /**Fired when the file explorer tree is updated. 
+   * 
+   * Every method inside {@link IExplorerTree} will eventurally fire this callback 
+   * function, if nothing on fire.
+   * @param tree the updated tree data
+   * @see {@link IExplorerTree}
+   */
+  onTreeUpdate$(tree: journal.ExplorerData): any
 }
 
-export function createFileExplorerContext(options: IFileExplorerProviderOptions) {
-  let treeCache: journal.ExplorerNode[] = options.getInitialTree$?.() ?? []
-  const treeDisplayNameCache = options.getDataMapping$()
+export function createFileExplorerContext(options: IFileExplorerProviderOptions): IFileExplorerContext {
+  const data = options.getData$()
+
+  let treeCache: journal.ExplorerNode[] = data.tree ?? []
+  const treeDisplayNameCache = data.mapping ?? {}
   const [isUpdating, setIsUpdating] = createSignal(false)
 
   const update = async () => {
     setIsUpdating(true)
     setIsUpdating(false)
-    options.onTreeUpdate$(treeCache)
+    // @ts-ignore
+    options.onTreeUpdate$({
+      mapping: treeDisplayNameCache,
+      tree: treeCache
+    })
   }
 
   const add = (nodeData: journal.ExplorerNode, toFolder: number, data: any) => {
     console.log("Adding node", nodeData, "to", toFolder)
     if (toFolder === ROOT_FOLDER) {
       treeCache.push(nodeData)
-      treeDisplayNameCache[data.id] = data
+      treeDisplayNameCache[data.id] = data.name
       return update()
     }
 
@@ -68,7 +115,7 @@ export function createFileExplorerContext(options: IFileExplorerProviderOptions)
     }
 
     thisFolder.child.push(nodeData)
-    treeDisplayNameCache[data.id] = data
+    treeDisplayNameCache[data.id] = data.name
 
     console.log("Inserted node", nodeData, "to", toFolder)
     return update()
@@ -117,7 +164,6 @@ export function createFileExplorerContext(options: IFileExplorerProviderOptions)
 
   return {
     isUpdating$: isUpdating,
-    onTreeUpdate$: options.onTreeUpdate$,
     tree$: {
       create$: add,
       replace$: replaceTree,
