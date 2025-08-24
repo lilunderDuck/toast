@@ -1,5 +1,5 @@
 export type VideoAttribute = {
-  path: string
+  name: string
 }
 
 export type VideoPlayerStatus =

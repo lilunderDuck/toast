@@ -19,7 +19,7 @@ import {
 } from "~/features/journal"
 import { EditorProvider } from "~/features/editor"
 import { AppTitleBarButton, AppTitleBarDraggable, Spacer } from "~/components"
-import { UpdateExplorerTree } from "~/wailsjs/go/journal/GroupExport"
+import { SetExplorerTree } from "~/wailsjs/go/journal/GroupExport"
 // ...
 import journalGroupData from "./[groupId].data"
 
@@ -94,48 +94,40 @@ export default function JournalHome(props: ParentProps) {
 function Providers(props: ParentProps<{ groupId$: number }>) {
   const journalData = journalGroupData(props.groupId$)
 
-  let cacheData: Record<number, string>
-  const getMapping = () => {
-    if (!cacheData) {
-      cacheData = journalData()!.journalsMetadata$.reduce((thisMap, current) => {
-        thisMap[current.id] = current.name
-        return thisMap
-      }, {} as Record<number, string>)
-    }
-
-    return cacheData
-  }
-
   const fileExplorerOption: IFileExplorerProviderOptions = {
     components$: {
       File$: (fileProps) => (
         <File
           groupId$={props.groupId$}
           journalId$={fileProps.id}
-          name$={getMapping()[fileProps.id]}
+          name$={fileProps.name}
         />
       ),
       Folder$: (props) => (
         <Folder
           folderId$={props.id}
           onClick={props.onClick}
-          name$={getMapping()[props.id]}
+          name$={props.name}
         >
           {props.children}
         </Folder>
       )
     },
     getDataMapping$() {
-      return journalData()!.journalsMetadata$.reduce((thisMap, current) => {
-        thisMap[current.id] = current.name
-        return thisMap
-      }, {} as Record<number, string>)
+      const cacheData = {} as Record<number, string>
+      for (const data of journalData()!.journalsMetadata$) {
+        cacheData[data.id] = data.name
+        console.log(data)
+      }
+
+      return cacheData
     },
     getInitialTree$() {
       return journalData()!.explorerTreeData$
     },
     onTreeUpdate$(newTree) {
-      UpdateExplorerTree(props.groupId$, newTree)
+      console.log("new tree:", newTree)
+      SetExplorerTree(props.groupId$, newTree)
     }
   }
 

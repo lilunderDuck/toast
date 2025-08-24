@@ -39,6 +39,7 @@ export interface IFileExplorerProviderOptions {
 
 export function createFileExplorerContext(options: IFileExplorerProviderOptions) {
   let treeCache: journal.ExplorerNode[] = options.getInitialTree$?.() ?? []
+  const treeDisplayNameCache = options.getDataMapping$()
   const [isUpdating, setIsUpdating] = createSignal(false)
 
   const update = async () => {
@@ -48,8 +49,10 @@ export function createFileExplorerContext(options: IFileExplorerProviderOptions)
   }
 
   const add = (nodeData: journal.ExplorerNode, toFolder: number, data: any) => {
+    console.log("Adding node", nodeData, "to", toFolder)
     if (toFolder === ROOT_FOLDER) {
       treeCache.push(nodeData)
+      treeDisplayNameCache[data.id] = data
       return update()
     }
 
@@ -65,6 +68,7 @@ export function createFileExplorerContext(options: IFileExplorerProviderOptions)
     }
 
     thisFolder.child.push(nodeData)
+    treeDisplayNameCache[data.id] = data
 
     console.log("Inserted node", nodeData, "to", toFolder)
     return update()
@@ -122,7 +126,7 @@ export function createFileExplorerContext(options: IFileExplorerProviderOptions)
       }
     },
     components$: options.components$,
-    getDataMapping$: options.getDataMapping$,
+    getDataMapping$: () => treeDisplayNameCache,
     sessionStorage$: createStorage(sessionStorage, "explorer")
   }
 }

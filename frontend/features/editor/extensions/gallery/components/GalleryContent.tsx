@@ -1,7 +1,7 @@
 import { Show } from "solid-js"
 // ...
 import { type IGalleryContext, useGalleryContext } from "../provider"
-import { FileContentDisplay, type IVideoProps } from "../../files"
+import { FileContentDisplay, type IImageProps, type IVideoProps } from "../../files"
 
 interface IGalleryContentProps {
   context$?: IGalleryContext
@@ -10,13 +10,19 @@ interface IGalleryContentProps {
 export function GalleryContent(props: IGalleryContentProps) {
   const { getDisplayUrl$, currentItem$, isFullscreen$ } = useGalleryContext() ?? props.context$
 
+  const fileName = () => currentItem$()!.name
+
   const dataMapping = () => {
     switch(currentItem$()?.type) {
       case FileType.VIDEO: return { 
-        path: getDisplayUrl$(currentItem$()!.name),
+        src$: getDisplayUrl$(fileName()),
         // enable auto play when on fullscreen mode
         autoplay$: isFullscreen$()
       } as IVideoProps
+
+      case FileType.IMAGE: return {
+        src$: getDisplayUrl$(fileName())
+      } as IImageProps
     }
   }
 

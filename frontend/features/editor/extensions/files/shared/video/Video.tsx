@@ -7,7 +7,7 @@ import { mergeClassname, sleep } from "~/utils"
 import stylex from "@stylexjs/stylex"
 import __style from "./Video.module.css"
 // ...
-import type { VideoAttribute, VideoPlayerStatus } from "./data"
+import type { VideoPlayerStatus } from "./data"
 import { getThisVideoSubtitlePath, reloadVideo } from "./utils"
 
 const style = stylex.create({
@@ -34,8 +34,9 @@ const style = stylex.create({
   }
 })
 
-export interface IVideoProps extends VideoAttribute {
+export interface IVideoProps {
   autoplay$?: boolean
+  src$: string
 }
 
 export function Video(props: ParentProps<IVideoProps>) {
@@ -49,7 +50,7 @@ export function Video(props: ParentProps<IVideoProps>) {
   }
 
   const tryGettingThisVideoSubtitle = async () => {
-    const subtitlePath = await getThisVideoSubtitlePath(props.path)
+    const subtitlePath = await getThisVideoSubtitlePath(props.src$)
     if (subtitlePath) {
       setSubtitlePath(subtitlePath)
     }
@@ -77,7 +78,7 @@ export function Video(props: ParentProps<IVideoProps>) {
         {...stylex.attrs(style.video)}
         controls
         autoplay={props.autoplay$}
-        src={props.path}
+        src={props.src$}
         onLoadedData={thisVideoIsLoaded}
         onLoad={loadStart}
         onError={async() => {

@@ -23,24 +23,29 @@ type JournalData struct {
 
 type JournalContentData struct { // impls cbor.Marshaler, cbor.Unmarshaler
 	Type    string               `json:"type"             cbor:"0,keyasint"`
-	Attrs   EditorAttributes     `json:"attrs,omitempty"  cbor:"1,keyasint"`
-	Marks   []EditorMarks        `json:"marks,omitempty"  cbor:"2,keyasint"`
+	Attrs   EditorAttributes     `json:"attrs,omitempty"  cbor:"1,keyasint,omitempty"`
+	Marks   []EditorMarks        `json:"marks,omitempty"  cbor:"2,keyasint,omitempty"`
 	Content []JournalContentData `json:"content"          cbor:"3,keyasint"`
-	Text    string               `json:"text,omitempty"   cbor:"4,keyasint"`
+	Text    string               `json:"text,omitempty"   cbor:"4,keyasint,omitempty"`
 }
 
 type EditorAttributes struct {
 	// ------ table attribute -------
 
-	Colspan  uint `json:"colspan,omitempty"    cbor:"0,keyasint"`
-	Rowspan  uint `json:"rowspan,omitempty"    cbor:"1,keyasint"`
-	Colwidth uint `json:"colwidth,omitempty"   cbor:"2,keyasint"`
+	Colspan  uint `json:"colspan,omitempty"    cbor:"0,keyasint,omitempty"`
+	Rowspan  uint `json:"rowspan,omitempty"    cbor:"1,keyasint,omitempty"`
+	Colwidth uint `json:"colwidth,omitempty"   cbor:"2,keyasint,omitempty"`
 
-	// ------ generic custom node attribute
-	Id int `json:"id,omitempty"   cbor:"3,keyasint"`
+	// ------ generic custom node attribute ------
+
+	Id int `json:"id,omitempty"   cbor:"3,keyasint,omitempty"`
+
+	//
+	Name  string `json:"name,omitempty"   cbor:"4,keyasint,omitempty"`
+	Color string `json:"color,omitempty" cbor:"5,keyasint,omitempty"`
 }
 
 type EditorMarks struct { // impls cbor.Marshaler, cbor.Unmarshaler
 	Type string `json:"type"             cbor:"0,keyasint"`
-	Text string `json:"text,omitempty"   cbor:"1,keyasint"`
+	Text string `json:"text,omitempty"   cbor:"1,keyasint,omitempty"`
 }

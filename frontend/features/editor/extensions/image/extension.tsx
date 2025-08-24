@@ -3,23 +3,23 @@ import { type Attribute, Node } from '@tiptap/core'
 import { NodeViewWrapper, SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
 // ...
 import { useNodeState } from '../../utils'
-import { Video, type VideoAttribute } from '../files'
+import { Image, type ImageAttribute } from '../files'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
-    video: {
-      insertVideo$: () => ReturnType
+    image: {
+      insertImage$: () => ReturnType
     }
   }
 }
 
 export const VideoNode = Node.create({
   name: 'video',
-  group: 'inline',
+  group: 'block',
   inline: true,
   selectable: false,
   atom: true,
-  addAttributes(): Record<keyof VideoAttribute, Attribute> {
+  addAttributes(): Record<keyof ImageAttribute, Attribute> {
     return {
       name: {
         default: null,
@@ -29,7 +29,7 @@ export const VideoNode = Node.create({
   addCommands() {
     return {
       insertVideo$: () => ({ tr, dispatch }) => {
-        const node = this.type.create({ name: '' } satisfies VideoAttribute)
+        const node = this.type.create({ name: '' } satisfies ImageAttribute)
 
         if (dispatch) {
           tr.replaceRangeWith(tr.selection.from, tr.selection.to, node)
@@ -40,11 +40,11 @@ export const VideoNode = Node.create({
     }
   },
   addNodeView: () => SolidNodeViewRenderer(() => {
-    const { data$ } = useNodeState<VideoAttribute>()
+    const { data$ } = useNodeState<ImageAttribute>()
 
     return (
       <NodeViewWrapper>
-        <Video src$={data$().name} />
+        <Image src$={data$().name} />
       </NodeViewWrapper>
     )
   }),

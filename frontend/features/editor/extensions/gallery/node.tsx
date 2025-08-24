@@ -2,7 +2,7 @@ import stylex from "@stylexjs/stylex"
 // ...
 import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
 // ...
-import { GalleryButtonRow, GalleryContent, LeftButtonSide, RightButtonSide } from "./components"
+import { GalleryButtonRow, GalleryContent } from "./components"
 import { GalleryProvider, useGalleryContext } from "./provider"
 import { Show } from "solid-js"
 
@@ -15,9 +15,13 @@ const style = stylex.create({
   },
   gallery__content: {
     width: "100%",
-    height: "100%",
+    height: "19rem",
     position: "absolute",
-    zIndex: 1
+    zIndex: 1,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden"
   }
 })
 
@@ -39,9 +43,7 @@ export default function GalleryNodeView() {
     <NodeViewWrapper {...stylex.attrs(style.gallery)}>
       <GalleryProvider>
         <GalleryButtonRow />
-        <LeftButtonSide />
         <Content />
-        <RightButtonSide />
       </GalleryProvider>
     </NodeViewWrapper>
   )

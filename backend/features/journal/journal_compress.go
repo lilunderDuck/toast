@@ -10,10 +10,10 @@ type compressed_JournalContentData struct {
 	// Originally, this field is a string type, but it's converted to a uint8
 	// just to save spaces, ofc.
 	Type    uint8                `json:"type"             cbor:"0,keyasint"`
-	Attrs   EditorAttributes     `json:"attrs,omitempty"  cbor:"1,keyasint"`
-	Marks   []EditorMarks        `json:"marks,omitempty"  cbor:"2,keyasint"`
+	Attrs   EditorAttributes     `json:"attrs,omitempty"  cbor:"1,keyasint,omitempty"`
+	Marks   []EditorMarks        `json:"marks,omitempty"  cbor:"2,keyasint,omitempty"`
 	Content []JournalContentData `json:"content"          cbor:"3,keyasint"`
-	Text    string               `json:"text,omitempty"   cbor:"4,keyasint"`
+	Text    string               `json:"text,omitempty"   cbor:"4,keyasint,omitempty"`
 }
 
 var editorContentTypeMap = map[string]uint8{
@@ -25,6 +25,8 @@ var editorContentTypeMap = map[string]uint8{
 	"paragraph":   5,
 	"text":        6,
 	"gallery":     7,
+	"localEmbed":  8,
+	"tag":         9,
 	"":            255,
 }
 
@@ -37,6 +39,8 @@ var editorContentTypeRemap = map[uint8]string{
 	5:   "paragraph",
 	6:   "text",
 	7:   "gallery",
+	8:   "localEmbed",
+	9:   "tag",
 	255: "",
 }
 
@@ -81,7 +85,7 @@ type compressed_EditorMarks struct {
 	// Originally, this field is a string type, but it's converted to a uint8
 	// just to save spaces, ofc.
 	Type uint8  `json:"type"             cbor:"0,keyasint"`
-	Text string `json:"text,omitempty"   cbor:"1,keyasint"`
+	Text string `json:"text,omitempty"   cbor:"1,keyasint,omitempty"`
 }
 
 var editorMarkTypeMap = map[string]uint8{

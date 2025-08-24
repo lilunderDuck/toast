@@ -1,19 +1,22 @@
 import { 
+  type IImageProps,
+  Image,
   type IVideoProps, 
   Video 
 } from "../shared"
 
 export type FileContentPropsMapping = {
   [FileType.VIDEO]: IVideoProps
+  [FileType.IMAGE]: IImageProps
 }
 
-type FileContentData<T extends FileType.VIDEO> = { type$: T, props$: FileContentPropsMapping[T] }
+// @ts-ignore
+type FileContentData<T extends FileType> = { type$: T, props$: FileContentPropsMapping[T] }
 
 interface IFileContentDisplayProps {
-  // data$: 
   data$: 
-    FileContentData<FileType.VIDEO>
-    // { type$: FileType.VIDEO, props$: IVideoProps }
+    FileContentData<FileType.VIDEO> |
+    FileContentData<FileType.IMAGE>
   // 
 }
 
@@ -21,6 +24,7 @@ export function FileContentDisplay(props: IFileContentDisplayProps) {
   const componentProps = () => props.data$.props$!
   switch (props.data$.type$) {
     case FileType.VIDEO: return <Video {...componentProps()} />
+    case FileType.IMAGE: return <Image {...componentProps()} />
     default:
       break
   }

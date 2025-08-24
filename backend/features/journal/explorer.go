@@ -2,7 +2,7 @@ package journal
 
 import "toast/backend/utils"
 
-func (*GroupExport) UpdateExplorerTree(groupId int, data ExplorerTree) error {
+func (*GroupExport) SetExplorerTree(groupId int, data ExplorerTree) error {
 	return utils.BSON_WriteFile(getExplorerTreeDataSavedPath(groupId), data)
 }
 

@@ -1,4 +1,4 @@
-import { BsBlockquoteLeft, BsCheck2Square, BsTable } from "solid-icons/bs"
+import { BsArchiveFill, BsBlockquoteLeft, BsCheck2Square, BsTable, BsWindowSplit } from "solid-icons/bs"
 import { For } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -23,19 +23,19 @@ const style = stylex.create({
     height: "10rem",
     userSelect: "none",
     display: "flex",
-    backgroundColor: "var(--gray4)"
+    backgroundColor: "var(--gray4)",
+    flexFlow: "column",
+    gap: 3,
   },
   menu__option: {
     color: "var(--gray11)",
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
     ":hover": {
       backgroundColor: "var(--gray7)",
       color: "var(--gray12)",
     }
-  },
-  menu__name: {
-    display: "flex",
-    alignItems: "center",
-    gap: 10
   }
 })
 
@@ -50,12 +50,12 @@ export function FloatingMenu(props: IFloatingMenuProps) {
     },
     {
       name$: "gallery", 
-      icon$: BsTable, 
+      icon$: BsArchiveFill, 
       run$: () => chainCommand().insertGallery$().run() 
     },
     {
       name$: "local embed", 
-      icon$: BsTable, 
+      icon$: BsWindowSplit, 
       run$: () => chainCommand().insertLocalEmbed$().run() 
     },
     {
@@ -88,14 +88,11 @@ export function FloatingMenu(props: IFloatingMenuProps) {
     >
       <For each={floatingMenuOptions}>
         {it => (
-          <button onClick={it.run$} {...stylex.attrs(style.menu__option)}>
-            <div {...stylex.attrs(style.menu__name)}>
-              <it.icon$ />
-              <span>
-                {it.name$}
-              </span>
-            </div>
-            <p></p>
+          <button onClick={it.run$} {...stylex.attrs(style.menu__option)} tabindex={1}>
+            <it.icon$ />
+            <span>
+              {it.name$}
+            </span>
           </button>
         )}
       </For>

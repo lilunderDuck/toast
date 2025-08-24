@@ -4,7 +4,7 @@ import { createStorage, type IStorage } from "~/utils"
 import { CreateJournal, GetJournal, UpdateJournal } from "~/wailsjs/go/journal/GroupExport"
 import type { journal } from "~/wailsjs/go/models"
 // ...
-import { createFileExplorerContext, FILE_NODE, FOLDER_NODE, type IFileExplorerContext, type IFileExplorerProviderOptions, ROOT_FOLDER } from "./explorer"
+import { createFileExplorerContext, createFileNode, createFolderNode, type IFileExplorerContext, type IFileExplorerProviderOptions, ROOT_FOLDER } from "./explorer"
 
 export interface IJournalContext {
   sessionStorage$: IStorage<{
@@ -35,9 +35,9 @@ export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
       explorerTree$: explorerTree,
       sessionStorage$: wrappedSessionStorage,
       async createJournal$(type, data) {
+        debugger
         const newData = await CreateJournal(groupId(), type, data)
-        const explorerNode = type == 1 ? FOLDER_NODE : FILE_NODE
-        explorerNode.id = newData.id
+        const explorerNode = (type == 1 ? createFolderNode : createFileNode)(newData.id)
         // @ts-ignore
         explorerTree.tree$.create$(explorerNode, ROOT_FOLDER, newData)
         return newData

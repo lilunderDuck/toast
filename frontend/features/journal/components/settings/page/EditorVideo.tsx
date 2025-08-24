@@ -1,10 +1,11 @@
 import { createSignal } from "solid-js"
 // ...
+import sampleVideo from "~/assets/le_fishe_full.mp4"
+// ...
 import { CheckboxSettingSection, CustomSettingSection, RangeSettingSection, SubSetting } from "~/features/setting"
-// import { Video } from "~/features/editor/extensions/video"
+import { Video } from "~/features/editor/extensions/files"
 // ...
 import stylex from "@stylexjs/stylex"
-import { shorthands } from "~/styles/shorthands"
 
 const style = stylex.create({
   subSetting: {
@@ -30,14 +31,6 @@ export default function EditorVideo() {
   console.log(delayOptions, delayOptions)
   return (
     <>
-      <CheckboxSettingSection 
-        name$="Show pause indicator."
-        description$="Show this little thing on the bottom-center of the video (while the video is in fullscreen)"
-      />
-      <div {...stylex.attrs(style.videoIndicatorPreview, shorthands.w_full$, shorthands.flex_center$)}>
-        {/* <VideoPausedIndicator /> */}
-      </div>
-
       <CheckboxSettingSection
         name$="Gradually increase/decrease volume when play/pause video."
         description$="Prevent you being earraped. For headphone user when you paused for a while, and then you play the video again."
@@ -65,7 +58,7 @@ export default function EditorVideo() {
         name$="Testing section for lazies."
         description$="A little preview for you, because going in and out of setting page does talking some times"
       >
-        {/* <Video path={testVideo} /> */}
+        <Video src$={sampleVideo} />
       </CustomSettingSection>
     </>
   )

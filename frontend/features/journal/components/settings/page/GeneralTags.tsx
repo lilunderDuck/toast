@@ -42,15 +42,6 @@ export default function GeneralTags() {
 
 function TagListTable() {
   const tagListData: TagData[] = [
-    { name: "test", description: "test description" },
-    { name: "test-2", description: "test description" },
-    { name: "test-2", description: "test description" },
-    { name: "test-2", description: "test description" },
-    { name: "test-2", description: "test description" },
-    { name: "test-2", description: "test description" },
-    { name: "test-2", description: "test description" },
-    { name: "test-2", description: "test description" },
-    { name: "test-2", description: "test description" },
   ]
 
   const [isShowingInput, setIsShowingInput] = createSignal(false)

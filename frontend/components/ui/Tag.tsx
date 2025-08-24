@@ -1,20 +1,44 @@
 import stylex from "@stylexjs/stylex";
 import { mergeClassname } from "~/utils";
-import { FlexCenterY } from "./Flex";
 
 const style = stylex.create({
   tag: {
-    height: '1.35rem',
-    paddingInline: '0.5rem',
+    borderRadius: 6,
+    textAlign: "left",
+    color: "var(--color)",
     fontSize: 13,
-    backgroundColor: 'var(--gray4)',
-    borderRadius: 7,
-    userSelect: 'none'
-  }
+    userSelect: "none",
+    width: "fit-content",
+    position: "relative",
+    display: "flex",
+    justifyContent: "center",
+    "::before": {
+      content: '',
+      position: "absolute",
+      width: "100%",
+      height: "100%",
+      backgroundColor: "var(--color)",
+      filter: "opacity(0.7) brightness(0.525)",
+      borderRadius: 6,
+      zIndex: -1
+    }
+  },
+  tag__content: {
+    paddingBlock: 1,
+    paddingInline: 5,
+  },
 })
 
 export function Tag(props: HTMLAttributes<"span">) {
   return (
-    <FlexCenterY as$="span" class={mergeClassname(props, stylex.attrs(style.tag))} {...props} />
+    <span
+      {...props}
+      class={mergeClassname(props, stylex.attrs(style.tag))}
+      style={{ "--color": props.color ?? "var(--gray11)" }}
+    >
+      <span {...stylex.attrs(style.tag__content)}>
+        {props.children}
+      </span>
+    </span>
   )
 }
