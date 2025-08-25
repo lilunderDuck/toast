@@ -34,7 +34,7 @@ Thumbs.db
 build/tools/resource/lib_used.json
 build/tools/*.exe
 # App built folder location
-build/out
+build/out/bin
 # Build cache and stuff
 build/dist
 # Auto generated types
