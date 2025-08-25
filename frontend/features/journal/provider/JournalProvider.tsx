@@ -42,7 +42,10 @@ export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
         return newData
       },
       getJournal$: (journalId) => GetJournal(groupId(), journalId),
-      updateJournal$: (journalId, newData) => UpdateJournal(groupId(), journalId, newData)
+      updateJournal$: (journalId, newData) => {
+        console.log("saving:", journalId, newData)
+        return UpdateJournal(groupId(), journalId, newData)
+      }
     }}>
       {props.children}
     </Context.Provider>

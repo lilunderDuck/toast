@@ -87,10 +87,10 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
         }
 
         console.log("incoming json data", data)
+        currentlyOpenedId = data.id
         editor().commands.setContent(data.content, true, undefined, {
           errorOnInvalidContent: true
         })
-        currentlyOpenedId = data.id
       },
       event$: event
     }}>
