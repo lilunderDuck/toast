@@ -6,13 +6,17 @@ import (
 
 var (
 	// The current path where this executable located.
+	//
+	// To simplify explaination, let's call the current execuable path -> "~/"
 	CURRENT_EXECUTABLE_PATH string = utils.GetCurrentDir()
-	// The frontend source code path.
-	STATIC_FOLDER_PATH        = utils.JoinPath(CURRENT_EXECUTABLE_PATH, "app")
-	DATA_FOLDER_PATH          = utils.JoinPath(CURRENT_EXECUTABLE_PATH, "data")
+	// This is where all of the built frontend stuff is stored, which is "~/app".
+	APP_FOLDER_PATH = utils.JoinPath(CURRENT_EXECUTABLE_PATH, "app")
+	// All of generic cache data is stored, which is "~/cache".
+	CACHE_FOLDER_PATH = utils.JoinPath(CURRENT_EXECUTABLE_PATH, "cache")
+	// [preserved for future use?]
 	GLOBAL_ASSETS_FOLDER_PATH = utils.JoinPath(CURRENT_EXECUTABLE_PATH, "global")
-
-	JOURNAL_FOLDER_PATH    = utils.JoinPath(DATA_FOLDER_PATH, "journals")
-	GROUPS_DATA_SAVED_PATH = utils.JoinPath(DATA_FOLDER_PATH, "group")
-	EMBED_SAVED_PATH       = utils.JoinPath(DATA_FOLDER_PATH, "embed")
+	// The path where all of your local embed are stored, which is "~/embed".
+	//
+	// Yes, you can embed your own web page, that's why it's called "local embed".
+	EMBED_SAVED_PATH = utils.JoinPath(CURRENT_EXECUTABLE_PATH, "embed")
 )

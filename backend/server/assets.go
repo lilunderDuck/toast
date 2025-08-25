@@ -12,7 +12,7 @@ import (
 )
 
 func createAssetsRoute(server *http.ServeMux) {
-	serveStatic(server, "/local-assets", internal.JOURNAL_FOLDER_PATH)
+	serveStatic(server, "/local-assets", internal.GROUP_FOLDER_PATH)
 	serveStatic(server, "/global", internal.GLOBAL_ASSETS_FOLDER_PATH)
 
 	server.HandleFunc("/preview", func(res http.ResponseWriter, req *http.Request) {

@@ -2,12 +2,12 @@ package editor
 
 import (
 	"path/filepath"
-	"toast/backend/features/journal"
+	"toast/backend/internals"
 	"toast/backend/utils"
 )
 
 func getGallerySavedPath(groupId int, galleryId int) string {
-	return utils.JoinPath(journal.GetSavedPath(groupId), "gallery", utils.ToString(galleryId))
+	return utils.JoinPath(internals.GroupSavedPath(groupId), "gallery", utils.ToString(galleryId))
 }
 
 func getGalleryDataSavedPath(groupId int, galleryId int) string {

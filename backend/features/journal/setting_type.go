@@ -1,7 +1,7 @@
 package journal
 
 import (
-	"path/filepath"
+	"toast/backend/internals"
 	"toast/backend/utils"
 )
 
@@ -15,20 +15,16 @@ type TagData struct {
 	Description string `json:"description,omitempty"   cbor:"2,keyasint"`
 }
 
-func settingFileSavedPath(groupId int) string {
-	return filepath.Join(GetSavedPath(groupId), "setting.dat")
-}
-
 func createSettingFile(groupId int) {
-	utils.BSON_WriteFile(settingFileSavedPath(groupId), Setting{})
+	utils.BSON_WriteFile(internals.SettingFileSavedPath(groupId), Setting{})
 }
 
 func (*GroupExport) GetSetting(groupId int) (*Setting, error) {
 	var out Setting
-	err := utils.BSON_ReadFile(settingFileSavedPath(groupId), &out)
+	err := utils.BSON_ReadFile(internals.SettingFileSavedPath(groupId), &out)
 	return &out, err
 }
 
 func (*GroupExport) SetSetting(groupId int, data *Setting) error {
-	return utils.BSON_ReadFile(settingFileSavedPath(groupId), data)
+	return utils.BSON_ReadFile(internals.SettingFileSavedPath(groupId), data)
 }

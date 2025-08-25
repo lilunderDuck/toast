@@ -21,7 +21,7 @@ func GetAppConfig(icon []byte, appInstance *App) *options.App {
 		Width:     1024,
 		Height:    768,
 		AssetServer: &assetserver.Options{
-			Assets: os.DirFS(internals.STATIC_FOLDER_PATH),
+			Assets: os.DirFS(internals.APP_FOLDER_PATH),
 			// Well, my intrusive thoughts *thought* that it'd be better to merge everything into
 			// one single server, instead of ones for the assets, and other for journal and stuff.
 			//
@@ -49,7 +49,7 @@ func GetAppConfig(icon []byte, appInstance *App) *options.App {
 		Windows: &windows.Options{
 			WebviewIsTransparent: false,
 			WindowIsTranslucent:  false,
-			WebviewUserDataPath:  internals.DATA_FOLDER_PATH,
+			WebviewUserDataPath:  internals.CURRENT_EXECUTABLE_PATH,
 		},
 		// Mac platform specific options
 		Mac: &mac.Options{

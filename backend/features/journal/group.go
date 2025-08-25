@@ -3,6 +3,7 @@ package journal
 import (
 	"time"
 	"toast/backend/db"
+	"toast/backend/internals"
 	"toast/backend/utils"
 
 	"github.com/fxamacker/cbor/v2"
@@ -16,17 +17,16 @@ import (
 //   - @param groupId - the journal group id you want to update.
 //   - @param data - the journal group data
 func batchUpdate(groupId int, data *JournalGroupData) {
-	db.GetInstance(GROUP_CACHE_DATA_PATH).SetObject(groupId, data)
-	utils.BSON_WriteFile(getJournalGroupMetaSavedPath(groupId), data)
+	db.GetInstance(internals.GROUPS_DATA_DB_PATH).SetObject(groupId, data)
+	utils.BSON_WriteFile(internals.JournalGroupMetaSavedPath(groupId), data)
 }
 
 func InitGroup() {
-	db.Open(GROUP_CACHE_DATA_PATH)
+	db.Open(internals.GROUPS_DATA_DB_PATH)
 }
 
 func (group *GroupExport) CreateGroup(options JournalGroupOptions) (*JournalGroupData, error) {
 	groupId := utils.GetRandomInt()
-	basePath := GetSavedPath(groupId)
 	data := &JournalGroupData{
 		Id:          groupId,
 		Created:     time.Duration(time.Now().Nanosecond()),
@@ -35,8 +35,8 @@ func (group *GroupExport) CreateGroup(options JournalGroupOptions) (*JournalGrou
 	}
 
 	// Make sure to create the directory so we can save our stuff.
-	utils.CreateDirectory(utils.JoinPath(basePath, "icons"))
-	utils.CreateDirectory(getJournalContentSavedPath(groupId))
+	utils.CreateDirectory(internals.GroupIconSavedPath(groupId, ""))
+	utils.CreateDirectory(internals.JournalContentSavedPath(groupId))
 
 	batchUpdate(groupId, data)
 	group.SetExplorerTree(groupId, ExplorerData{})
@@ -51,7 +51,7 @@ func (group *GroupExport) CreateGroup(options JournalGroupOptions) (*JournalGrou
 
 func (*GroupExport) GetAllGroups() []JournalGroupData {
 	var content []JournalGroupData
-	db.GetInstance(GROUP_CACHE_DATA_PATH).Iterate(func(data []byte) {
+	db.GetInstance(internals.GROUPS_DATA_DB_PATH).Iterate(func(data []byte) {
 		var out JournalGroupData
 		err := cbor.Unmarshal(data, &out)
 		if err != nil {
@@ -66,10 +66,10 @@ func (*GroupExport) GetAllGroups() []JournalGroupData {
 
 func (*GroupExport) GetGroup(groupId int) JournalGroupData {
 	var data JournalGroupData
-	dbInstance := db.GetInstance(GROUP_CACHE_DATA_PATH)
+	dbInstance := db.GetInstance(internals.GROUPS_DATA_DB_PATH)
 	err := dbInstance.GetObject(groupId, &data)
 	if err != nil {
-		utils.BSON_ReadFile(GetSavedPath(groupId), &data)
+		utils.BSON_ReadFile(internals.GroupSavedPath(groupId), &data)
 		dbInstance.SetObject(groupId, data)
 	}
 
@@ -98,6 +98,6 @@ func (group *GroupExport) UpdateGroup(groupId int, newData *JournalGroupOptions)
 }
 
 func (*GroupExport) DeleteGroup(groupId int) {
-	db.GetInstance(GROUP_CACHE_DATA_PATH).DeleteObject(groupId)
-	utils.RemoveFileOrDirectory(GetSavedPath(groupId))
+	db.GetInstance(internals.GROUPS_DATA_DB_PATH).DeleteObject(groupId)
+	utils.RemoveFileOrDirectory(internals.GroupSavedPath(groupId))
 }
