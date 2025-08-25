@@ -4,6 +4,8 @@ import (
 	"time"
 	"toast/backend/db"
 	"toast/backend/utils"
+
+	"github.com/fxamacker/cbor/v2"
 )
 
 // Handling journal group metadata updates. This will both update the new data to 2 locations:
@@ -13,7 +15,7 @@ import (
 // ----------------------------------------------------------------------------
 //   - @param groupId - the journal group id you want to update.
 //   - @param data - the journal group data
-func batchUpdate(groupId int, data JournalGroupData) {
+func batchUpdate(groupId int, data *JournalGroupData) {
 	db.GetInstance(GROUP_CACHE_DATA_PATH).SetObject(groupId, data)
 	utils.BSON_WriteFile(getJournalGroupMetaSavedPath(groupId), data)
 }
@@ -25,7 +27,7 @@ func InitGroup() {
 func (group *GroupExport) CreateGroup(options JournalGroupOptions) (*JournalGroupData, error) {
 	groupId := utils.GetRandomInt()
 	basePath := GetSavedPath(groupId)
-	data := JournalGroupData{
+	data := &JournalGroupData{
 		Id:          groupId,
 		Created:     time.Duration(time.Now().Nanosecond()),
 		Name:        options.Name,
@@ -41,15 +43,25 @@ func (group *GroupExport) CreateGroup(options JournalGroupOptions) (*JournalGrou
 	createSettingFile(groupId)
 
 	if options.Icon != "" {
-		saveAndUpdateIcon(&data, options.Icon)
+		saveAndUpdateIcon(data, options.Icon)
 	}
 
-	return &data, nil
+	return data, nil
 }
 
-func (*GroupExport) GetAllGroups() []any {
-	var data JournalGroupData
-	return db.GetInstance(GROUP_CACHE_DATA_PATH).GetAllObject(&data)
+func (*GroupExport) GetAllGroups() []JournalGroupData {
+	var content []JournalGroupData
+	db.GetInstance(GROUP_CACHE_DATA_PATH).Iterate(func(data []byte) {
+		var out JournalGroupData
+		err := cbor.Unmarshal(data, &out)
+		if err != nil {
+			return
+		}
+
+		content = append(content, out)
+	})
+
+	return content
 }
 
 func (*GroupExport) GetGroup(groupId int) JournalGroupData {
@@ -82,7 +94,7 @@ func (group *GroupExport) UpdateGroup(groupId int, newData *JournalGroupOptions)
 		group.SetExplorerTree(groupId, newData.Tree)
 	}
 
-	batchUpdate(groupId, oldData)
+	batchUpdate(groupId, &oldData)
 }
 
 func (*GroupExport) DeleteGroup(groupId int) {

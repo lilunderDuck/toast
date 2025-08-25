@@ -27,19 +27,12 @@ func (db *DbInstance) DeleteObject(key int) error {
 	return db.internal.Delete(getKey(key))
 }
 
-func (db *DbInstance) GetAllObject(thisInterf any) []any {
+func (db *DbInstance) Iterate(fn func(data []byte)) {
 	iter, _ := db.internal.NewIterator(lotusdb.IteratorOptions{})
-	content := []any{}
 	for iter.Valid() {
 		value := iter.Value()
-		err := cbor.Unmarshal(value, thisInterf)
-		if err != nil {
-			continue
-		}
-
-		content = append(content, thisInterf)
+		fn(value)
 		iter.Next()
 	}
 	iter.Close()
-	return content
 }
