@@ -18,7 +18,7 @@ import {
   JournalLoadingScreen
 } from "~/features/journal"
 import { EditorProvider } from "~/features/editor"
-import { AppTitleBarButton, AppTitleBarDraggable, Spacer } from "~/components"
+import { AppTitleBarDraggable } from "~/components"
 import { SetExplorerTree } from "~/wailsjs/go/journal/GroupExport"
 // ...
 import journalGroupData from "./[groupId].data"
@@ -79,8 +79,6 @@ export default function JournalHome(props: ParentProps) {
         <Panel {...stylex.attrs(style.home__contentPanel)} initialSize={0.7}>
           <AppTitleBarDraggable {...stylex.attrs(style.home__titleBar)}>
             <CurrentlyOpened groupId$={currentGroupId()} />
-            <Spacer />
-            <AppTitleBarButton />
           </AppTitleBarDraggable>
           <main {...stylex.attrs(style.home__mainContent)}>
             {props.children}

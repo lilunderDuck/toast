@@ -1,7 +1,7 @@
 import { type Accessor, createContext, createResource, createSignal, type ParentProps, useContext } from "solid-js"
 // ...
 import { GetAllGroups } from "~/wailsjs/go/journal/GroupExport"
-import { journal } from "~/wailsjs/go/models"
+import type { journal } from "~/wailsjs/go/models"
 
 interface IJournalHomeContext {
   groups$: Accessor<journal.JournalGroupData[]>
@@ -13,7 +13,7 @@ const Context = createContext<IJournalHomeContext>()
 
 export function JournalHomeProvider(props: ParentProps) {
   const [resource] = createResource(GetAllGroups)
-  const [groups, setGroups] = createSignal([])
+  const [groups, setGroups] = createSignal<journal.JournalGroupData[]>([])
 
   return (
     <Context.Provider value={{
@@ -23,7 +23,7 @@ export function JournalHomeProvider(props: ParentProps) {
         setGroups(prev => [data, ...prev])
       }
     }}>
-      {void setGroups(resource())}
+      {void setGroups(resource() ?? [])}
       {props.children}
     </Context.Provider>
   )

@@ -5,11 +5,12 @@ import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({
   titleBar: {
-    height: 35,
+    height: "var(--title-bar-thiccness)",
     width: "100%",
     userSelect: "none",
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    zIndex: 9
   }
 })
 

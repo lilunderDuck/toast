@@ -1,8 +1,12 @@
+html {
+  --title-bar-thiccness: 32px;
+}
+
 #buttonRow button {
   outline: none;
   background-color: transparent;
-  width: 32px;
-  height: 32px;
+  width: var(--title-bar-thiccness);
+  height: var(--title-bar-thiccness);
   padding: 0;
   display: flex;
   justify-content: center;

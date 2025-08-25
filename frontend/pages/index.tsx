@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex"
-import { AppTitleBarButton, AppTitleBarDraggable, Spacer } from "~/components"
+import { AppTitleBarDraggable } from "~/components"
 // ...
 import { JournalHomeProvider, JournalList } from "~/features/home"
 import { shorthands } from "~/styles/shorthands"
@@ -14,16 +14,13 @@ const style = stylex.create({
     position: "fixed",
     top: 0,
     left: 0
-  }
+  },
 })
 
 export default function Home() {
   return (
     <JournalHomeProvider>
-      <AppTitleBarDraggable {...stylex.attrs(style.home__titleBar)}>
-        <Spacer />
-        <AppTitleBarButton />
-      </AppTitleBarDraggable>
+      <AppTitleBarDraggable {...stylex.attrs(style.home__titleBar)} />
       <section {...stylex.attrs(style.home, shorthands.h_full$)}>
         <h1>Your journals</h1>
         <JournalList />
