@@ -12,7 +12,7 @@ import stylex from "@stylexjs/stylex"
 import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
-  $tooltip: {
+  tooltip: {
     overflow: "hidden",
     zIndex: 1500,
     paddingInline: "0.75rem",
@@ -23,7 +23,7 @@ const style = stylex.create({
     lineHeight: "1.25rem",
     boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
     backgroundColor: 'var(--gray2)',
-    border: '1px solid var(--gray6)',
+    border: '1px solid var(--gray5)',
     userSelect: 'none'
   },
 })
@@ -52,7 +52,7 @@ export function Tooltip(
       <Portal>
         <Content
           {...others}
-          class={mergeClassname(stylex.attrs(style.$tooltip), others)}
+          class={mergeClassname(stylex.attrs(style.tooltip), others)}
         >
           {local.label$}
         </Content>

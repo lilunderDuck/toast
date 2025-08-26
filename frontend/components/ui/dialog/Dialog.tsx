@@ -7,6 +7,7 @@ import { mergeClassname } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from'~/styles/scrollbar.module.css'
+import { BsX } from "solid-icons/bs"
 
 const style = stylex.create({
   portal: {
@@ -31,6 +32,7 @@ const style = stylex.create({
     paddingInline: 15,
     paddingBlock: 10,
     backgroundColor: "var(--gray2)",
+    position: "relative"
   },
   closeButton: {
     position: "absolute",
@@ -124,12 +126,15 @@ const DialogOverlay = <T extends ValidComponent = "div">(
   )
 }
 
+// export type DialogContentOp
+
 type DialogContentProps<T extends ValidComponent = "div"> =
   & DialogPrimitive.DialogContentProps<T>
   & {
     class?: string | undefined
     children?: JSX.Element
     closeOnClickOutside$?: boolean
+    showCloseButton$?: boolean
   }
 // ...
 
@@ -140,6 +145,7 @@ const DialogContent = <T extends ValidComponent = "div">(
     "class",
     "children",
     "closeOnClickOutside$",
+    "showCloseButton$"
   ])
 
   return (
@@ -149,21 +155,11 @@ const DialogContent = <T extends ValidComponent = "div">(
         {...rest}
       >
         {props.children}
-        <DialogPrimitive.CloseButton {...stylex.attrs(style.closeButton)}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="size-4"
-          >
-            <path d="M18 6l-12 12" />
-            <path d="M6 6l12 12" />
-          </svg>
-        </DialogPrimitive.CloseButton>
+        <Show when={props.showCloseButton$ ?? true}>
+          <DialogPrimitive.CloseButton {...stylex.attrs(style.closeButton)}>
+            <BsX />
+          </DialogPrimitive.CloseButton>
+        </Show>
       </DialogPrimitive.Content>
     </DialogPortal>
   )

@@ -8,6 +8,7 @@ import __style from "./AppTitleBar.module.css"
 import { WindowFullscreen, WindowMinimise, WindowUnfullscreen } from "~/wailsjs/runtime/runtime"
 import { WindowClose } from "~/wailsjs/go/backend/App"
 import { useToggle } from "~/hooks"
+import { Portal } from "solid-js/web"
 
 const style = stylex.create({
   titleBar: {
@@ -18,7 +19,7 @@ const style = stylex.create({
     position: "fixed",
     right: 0,
     top: 0,
-    zIndex: 10
+    zIndex: 1000
   },
   titleBar__otherButton: {
     ":hover": {
@@ -36,23 +37,25 @@ export function AppTitleBarButton() {
   const [isFullscreen, toggleFullscreen] = useToggle()
 
   return (
-    <div {...stylex.attrs(style.titleBar)} id={__style.buttonRow}>
-      <button onClick={WindowMinimise}>
-        <BsDash />
-      </button>
-      <button onClick={() => {
-        toggleFullscreen()
-        isFullscreen() ? WindowFullscreen() : WindowUnfullscreen()
-      }}>
-        <Show when={isFullscreen()} fallback={
-          <FaRegularWindowMaximize />
-        }>
-          <FaRegularWindowRestore />
-        </Show>
-      </button>
-      <button onClick={WindowClose}>
-        <BsX />
-      </button>
-    </div>
+    <Portal>
+      <div {...stylex.attrs(style.titleBar)} id={__style.buttonRow}>
+        <button onClick={WindowMinimise}>
+          <BsDash />
+        </button>
+        <button onClick={() => {
+          toggleFullscreen()
+          isFullscreen() ? WindowFullscreen() : WindowUnfullscreen()
+        }}>
+          <Show when={isFullscreen()} fallback={
+            <FaRegularWindowMaximize />
+          }>
+            <FaRegularWindowRestore />
+          </Show>
+        </button>
+        <button onClick={WindowClose}>
+          <BsX />
+        </button>
+      </div>
+    </Portal>
   )
 }

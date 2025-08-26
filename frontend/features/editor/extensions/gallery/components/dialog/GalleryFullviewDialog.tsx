@@ -55,15 +55,14 @@ export default function GalleryFullview(props: IGalleryFullviewProps) {
   })
 
   return (
-    <DialogContent {...stylex.attrs(style.dialog)}>
+    <DialogContent {...stylex.attrs(style.dialog)} showCloseButton$={false}>
       <ZoomAndPanProvider>
         <ButtonRow direction$="custom$" {...stylex.attrs(style.dialog__buttonRow)}>
           <ZoomButtonRow />
+          <NextAndPrevButtons context$={props} />
           <div {...stylex.attrs(style.dialog__fileName)}>
             {props.currentItem$()?.name}
           </div>
-          <Spacer />
-          <NextAndPrevButtons context$={props} />
         </ButtonRow>
         <div {...stylex.attrs(style.dialog__content)}>
           <Show when={props.data$().items.length === 0} fallback={
