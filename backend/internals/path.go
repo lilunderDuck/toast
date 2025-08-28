@@ -19,4 +19,6 @@ var (
 	//
 	// Yes, you can embed your own web page, that's why it's called "local embed".
 	EMBED_SAVED_PATH = utils.JoinPath(CURRENT_EXECUTABLE_PATH, "embed")
+	// The path where all of the app resource files are stored, which is "~/resource"
+	RESOURCE_FOLDER_PATH = utils.JoinPath(CURRENT_EXECUTABLE_PATH, "resource")
 )

@@ -1,61 +1,11 @@
 import packageJson from "../../package.json" with { type: "json" }
-import type { LibaryData } from "../../frontend/api/misc"
 // ...
 // @ts-ignore
 import { encodeUrl } from "https://deno.land/x/encodeurl@1.0.0/mod.ts"
 import fs from "node:fs"
+import path from "node:path"
 
-async function fetchNpmRegistry(
-  packageName: string, 
-  packageVersion: string, 
-  type: LibaryData["type"],
-  out: LibaryData[]
-) {
-  try {
-    console.log('Fetching', packageName)
-    const response = await fetch(`https://registry.npmjs.org/${encodeUrl(packageName)}`)
-    const metadata: NpmRegistryResponse = await response.json()
-
-    out.push({
-      name: packageName,
-      author: metadata.author?.name,
-      version: packageVersion,
-      description: metadata.description,
-      homepageUrl: metadata.homepage,
-      type
-    })
-  } catch(it) {
-    console.error(it)
-  }
-}
-
-/**Fetch all package informations inside `package.json`, both of the `dependencies` and `devDependencies`.
- * 
- * Before you scream at me, this function is poorly optimized.
- * @returns all package informations.
- */
-export async function fetchNpmData() {
-  try {
-    return fs.readFileSync("../tools/resource/lib_used.json")
-  } catch (error) {}
-  const stuff: LibaryData[] = []
-  const deps = Object.entries(packageJson.dependencies)
-  const devDeps = Object.entries(packageJson.devDependencies)
-  
-  for (const [packageName, packageVersion] of deps) {
-    await fetchNpmRegistry(packageName, packageVersion, 0, stuff)
-  }
-
-  for (const [packageName, packageVersion] of devDeps) {
-    await fetchNpmRegistry(packageName, packageVersion, 1, stuff)
-  }
-
-  console.log(stuff)
-
-  return stuff
-}
-
-export type NpmRegistryVersion = {
+type NpmRegistryVersion = {
   name: string
   description: string
   author: {
@@ -76,7 +26,7 @@ type Maintainer = {
   email: string
 }
 
-export type NpmRegistryResponse = {
+type NpmRegistryResponse = {
   _id: string
   _rev: string
   name: string
@@ -104,4 +54,64 @@ export type NpmRegistryResponse = {
   readme: string
 }
 
-fs.writeFileSync("../tools/resource/lib_used.json", JSON.stringify(await fetchNpmData()))
+type LibaryData = {
+  id: number
+  name: string
+  description: string
+  maintainers: number
+  author: {
+    url?: string
+    name: string
+  }
+  license: string
+  homepage: string
+  version: number[]
+}
+
+let currentId = 0
+const DATA_OUT: LibaryData[] = []
+async function fetchNpmRegistry(
+  packageName: string, 
+  packageVersion: string, 
+  type: number,
+) {
+  try {
+    console.log('Fetching', packageName)
+    const response = await fetch(`https://registry.npmjs.org/${encodeUrl(packageName)}`)
+    const metadata: NpmRegistryResponse = await response.json()
+
+    DATA_OUT.push({
+      name: packageName,
+      author: metadata.author,
+      version: packageVersion.replace("^", "").split('.').map(it => parseInt(it)),
+      description: metadata.description,
+      homepage: metadata.homepage,
+      type,
+      id: currentId
+    })
+
+    currentId += 1
+  } catch(it) {
+    console.error(it)
+  }
+}
+
+try {
+  if (
+    fs.existsSync(path.join(import.meta.dirname, "./lib_used.json"))
+  ) {
+    process.exit()
+  }
+} catch (error) {
+  console.error(error)
+}
+
+for (const [packageName, packageVersion] of Object.entries(packageJson.dependencies)) {
+  await fetchNpmRegistry(packageName, packageVersion, 0)
+}
+
+for (const [packageName, packageVersion] of Object.entries(packageJson.devDependencies)) {
+  await fetchNpmRegistry(packageName, packageVersion, 1)
+}
+
+fs.writeFileSync(path.join(import.meta.dirname, "./lib_used.json"), JSON.stringify(DATA_OUT))

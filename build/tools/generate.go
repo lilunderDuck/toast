@@ -1,36 +1,32 @@
-// package main
+package main
 
-// import (
-// 	"encoding/json"
-// 	"os"
-// 	"toast/backend/utils"
-// )
+import (
+	"encoding/json"
+	"os"
+	"path/filepath"
+	"toast/backend/features/misc"
+	"toast/backend/utils"
+)
 
-// func main() {
-// 	var (
-// 		libUsed    misc.LibraryListData
-// 		splashText misc.SplashTextData
-// 	)
+func main() {
+	var outDir string = "../out/bin/resource"
+	currentExe, _ := os.Executable()
+	currentExe = filepath.Dir(currentExe)
+	os.MkdirAll(filepath.Join(currentExe, outDir), os.ModePerm)
 
-// 	var outDir string = "../out/resource"
+	var libUsed []misc.PackageContentData
+	readJson(filepath.Join(currentExe, "lib_used.json"), &libUsed)
+	utils.BSON_WriteFile(filepath.Join(currentExe, outDir, "pkl.res"), libUsed)
+}
 
-// 	readJson("./resouce/lib_used.json", &libUsed)
-// 	readJson("./resouce/splash_text.json", &splashText)
+func readJson[T any](filePathToEncode string, out *T) {
+	dataFromDisk, readError := os.ReadFile(filePathToEncode)
+	if readError != nil {
+		panic(readError)
+	}
 
-// 	os.MkdirAll(outDir, os.ModePerm)
-
-// 	utils.BSON_WriteFile(outDir+"/splashText.bin", &splashText)
-// 	utils.BSON_WriteFile(outDir+"/libUsed.bin", &libUsed)
-// }
-
-// func readJson[T any](filePathToEncode string, out *T) {
-// 	dataFromDisk, readError := os.ReadFile(filePathToEncode)
-// 	if readError != nil {
-// 		panic(readError)
-// 	}
-
-// 	decodeError := json.Unmarshal(dataFromDisk, out)
-// 	if decodeError != nil {
-// 		panic(decodeError)
-// 	}
-// }
+	decodeError := json.Unmarshal(dataFromDisk, out)
+	if decodeError != nil {
+		panic(decodeError)
+	}
+}
