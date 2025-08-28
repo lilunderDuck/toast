@@ -1,7 +1,6 @@
 package journal
 
 import (
-	"time"
 	"toast/backend/db"
 	"toast/backend/internals"
 	"toast/backend/utils"
@@ -29,7 +28,7 @@ func (group *GroupExport) CreateGroup(options JournalGroupOptions) (*JournalGrou
 	groupId := utils.GetRandomInt()
 	data := &JournalGroupData{
 		Id:          groupId,
-		Created:     time.Duration(time.Now().Nanosecond()),
+		Created:     utils.GetCurrentDateNow(),
 		Name:        options.Name,
 		Description: options.Description,
 	}
@@ -76,7 +75,7 @@ func (*GroupExport) GetGroup(groupId int) JournalGroupData {
 	return data
 }
 
-func (group *GroupExport) UpdateGroup(groupId int, newData *JournalGroupOptions) {
+func (group *GroupExport) UpdateGroup(groupId int, newData *JournalGroupOptions) *JournalGroupData {
 	oldData := group.GetGroup(groupId)
 	if newData.Name != "" {
 		oldData.Name = newData.Name
@@ -94,7 +93,10 @@ func (group *GroupExport) UpdateGroup(groupId int, newData *JournalGroupOptions)
 		group.SetExplorerTree(groupId, newData.Tree)
 	}
 
+	oldData.Modified = utils.GetCurrentDateNow()
+
 	batchUpdate(groupId, &oldData)
+	return &oldData
 }
 
 func (*GroupExport) DeleteGroup(groupId int) {

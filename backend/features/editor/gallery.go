@@ -26,14 +26,17 @@ func mergeGalleryData(oldData *GalleryData, newData *GalleryUpdatedData) {
 	if newData.Name != "" {
 		oldData.Name = newData.Name
 	}
+
+	oldData.Modified = utils.GetCurrentDateNow()
 }
 
 func (*EditorExport) CreateGalleryData(groupId int) *GalleryData {
 	galleryId := utils.GetRandomInt()
 	basePath := getGallerySavedPath(groupId, galleryId)
 	newData := GalleryData{
-		Id:    galleryId,
-		Items: []GalleryItem{},
+		Id:      galleryId,
+		Items:   []GalleryItem{},
+		Created: utils.GetCurrentDateNow(),
 	}
 
 	utils.CreateDirectory(basePath)

@@ -28,11 +28,10 @@ func saveAndUpdateIcon(data *JournalGroupData, iconPath string) {
 func (*GroupExport) CreateJournal(groupId int, journalType uint8, options JournalOptions) (*JournalData, error) {
 	journalId := utils.GetRandomInt()
 	newData := JournalData{
-		Id:       journalId,
-		Type:     journalType,
-		Created:  0,
-		Modified: 0,
-		Name:     options.Name,
+		Id:      journalId,
+		Type:    journalType,
+		Created: utils.GetCurrentDateNow(),
+		Name:    options.Name,
 	}
 
 	if err := writeJournalData(groupId, journalId, &newData); err != nil {
@@ -62,6 +61,8 @@ func (group *GroupExport) UpdateJournal(groupId, journalId int, newData *Journal
 	if len(newData.Data) != 0 && newData.Data[0].Type == "doc" {
 		data.Data = newData.Data[0]
 	}
+
+	data.Modified = utils.GetCurrentDateNow()
 
 	writeJournalData(groupId, journalId, data)
 

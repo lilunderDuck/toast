@@ -9,6 +9,7 @@ import { Button, ButtonRow, DialogContent, type IDialog } from "~/components"
 import { shorthands } from "~/styles/shorthands"
 import { journal } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
+import { formatDate, goTimeToDate } from "~/utils"
 
 const style = stylex.create({
   dialog: {
@@ -58,8 +59,8 @@ interface IJournalInfoDialogProps extends IDialog, journal.JournalGroupData {
 
 export default function JournalInfoDialog(props: IJournalInfoDialogProps) {
   const data = [
-    { icon$: BsCalendar2Date, name$: "Created", value$: props.created },
-    { icon$: BsPencilFill, name$: "Modified", value$: props.modified },
+    { icon$: BsCalendar2Date, name$: "Created", value$: formatDate(goTimeToDate(props.created)) },
+    { icon$: BsPencilFill, name$: "Modified", value$: props.modified ? formatDate(goTimeToDate(props.modified)) : props.modified },
   ]
 
   return (

@@ -3,13 +3,12 @@ import { createForm, required } from "@modular-forms/solid"
 // ...
 import { shorthands } from "~/styles/shorthands"
 import stylex from "@stylexjs/stylex"
-import __style from "./CreateJournalDialog.module.css"
+import __style from "./CreateOrEditJournalDialog.module.css"
 // ...
 import { Button, DialogContent, DialogHeader, FieldInput, type IDialog } from "~/components"
 import { createSubmitForm } from "~/hooks"
 import { createFileUpload, FileUploadType } from "~/features/native"
-import { CreateGroup } from "~/wailsjs/go/journal/GroupExport"
-import { journal } from "~/wailsjs/go/models"
+import type { journal } from "~/wailsjs/go/models"
 // ...
 import IconUploadInput from "./IconUploadInput"
 
@@ -37,21 +36,37 @@ const style = stylex.create({
 
 interface ICreateJournalDialogProps extends IDialog {
   prevData$?: journal.JournalGroupData
-  onSubmit$(data: journal.JournalGroupData): any
+  onSubmit$?: (data: journal.JournalGroupOptions) => any
+  onUpdate$?: (data: journal.JournalGroupOptions & {
+    id: number
+  }) => any
+}
+
+type JournalGroupOptionSchema = {
+  name: string
+  description?: string
+  icon?: string
 }
 
 export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
-  const [, { Field, Form }] = createForm<journal.JournalGroupData>()
+  const [, { Field, Form }] = createForm<JournalGroupOptionSchema>()
   const [iconPath, setIconPath] = createSignal(props.prevData$?.icon ?? "")
 
-  const { Form$ } = createSubmitForm<journal.JournalGroupData>(Form, {
+  const getText = () => props.prevData$ ? "Edit" : "Create"
+
+  const { Form$ } = createSubmitForm<JournalGroupOptionSchema>(Form, {
     async onSubmit$(data) {
-      data.icon = iconPath()
-      const newData = await CreateGroup(data)
-      props.onSubmit$(newData)
+      if (props.prevData$) {
+        const newData = { ...props.prevData$, ...data as journal.JournalGroupOptions }
+        props.onUpdate$?.(newData)
+      } else {
+        data.icon = iconPath()
+        props.onSubmit$?.(data as journal.JournalGroupOptions)
+      }
+
       props.close$()
     },
-    submitButtonText$: "Create",
+    submitButtonText$: getText(),
     buttonRow$: (
       <Button
         size$={ButtonSize.sm}
@@ -79,14 +94,14 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
   return (
     <DialogContent>
       <DialogHeader>
-        Create new journal group
+        {getText()} journal group
       </DialogHeader>
       <Form$>
         <div {...stylex.attrs(style.inputWrap, shorthands.flex$)}>
           <div {...stylex.attrs(style.imageInput)} id={__style.imageInput}>
             <IconUploadInput 
               isUploading$={isUploading$}
-              uploadComponent$={() => <div onClick={open$} />}
+              uploadComponent$={(props) => <div {...props} onClick={open$} />}
               iconPath$={iconPath}
             />
           </div>
@@ -97,7 +112,7 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
                 placeholder="The quick brown fox"
                 label="Name"
                 error={field.error}
-                value={props.prevData$?.name ?? field.value}
+                value={field.value || props.prevData$?.name}
               />}
             </Field>
 
@@ -108,7 +123,7 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
                 multiline={true}
                 label="Description"
                 error={field.error}
-                value={props.prevData$?.description ?? field.value}
+                value={field.value || props.prevData$?.description}
               />}
             </Field>
           </div>

@@ -6,9 +6,9 @@ import { shorthands } from "~/styles/shorthands"
 // ...
 import { Button, createLazyLoadedDialog } from "~/components"
 import { journal } from "~/wailsjs/go/models"
-import { UpdateGroup } from "~/wailsjs/go/journal/GroupExport"
 import { ASSETS_SERVER_URL } from "~/api"
 // ...
+import { useJournalHomeContext } from "../provider"
 
 const style = stylex.create({
   block: {
@@ -39,18 +39,18 @@ interface IJournalBlockProps extends journal.JournalGroupData {
 }
 
 export function JournalBlock(props: IJournalBlockProps) {
+  const { addGroup$, editGroup$ } = useJournalHomeContext()
   const JournalInfoDialog = createLazyLoadedDialog(
-    () => import("./dialogs/JournalInfoDialog"),
+    () => import("./dialog/JournalInfoDialog"),
     () => props
   )
 
   const EditJournalDialog = createLazyLoadedDialog(
-    () => import("./dialogs/CreateJournalDialog"),
+    () => import("./dialog/editing/CreateOrEditJournalDialog"),
     () => ({
       prevData$: props,
-      async onSubmit$(data) {
-        await UpdateGroup(props.id, data)
-      },
+      onSubmit$: (data) => addGroup$(data),
+      onUpdate$: (data) => editGroup$(data.id, data)
     })
   )
 
