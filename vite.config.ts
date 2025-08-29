@@ -5,7 +5,7 @@ import { stylex as stylexPlugin } from "vite-plugin-stylex-dev"
 import { optimizeCssModules } from "vite-plugin-optimize-css-modules"
 // ... 
 import tsconfig from './tsconfig.json'
-import { defineAllEnum, getAliasPath, ESBUILD_OPTIONS } from "./build/config"
+import { defineAllEnum, getAliasPath, ESBUILD_OPTIONS, OUTPUT_FILENAME } from "./build/config"
 
 export default defineConfig(({ command }) => {
   const isDevMode = command !== "build"
@@ -61,11 +61,7 @@ export default defineConfig(({ command }) => {
       target: 'esnext',
       outDir: BUILD_SAVED_PATH,
       rollupOptions: {
-        output: {
-          assetFileNames: "[hash].[ext]",
-          chunkFileNames: "[hash].js",
-          entryFileNames: "[hash].js",
-        }
+        output: OUTPUT_FILENAME
       }
     },
     esbuild: isDevMode ? undefined : ESBUILD_OPTIONS,

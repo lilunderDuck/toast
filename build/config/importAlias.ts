@@ -1,5 +1,5 @@
 import path from 'node:path'
-import type tsconfig from '../tsconfig.json'
+import type tsconfig from '../../tsconfig.json'
 
 /**Extracts and resolves aliases from a TypeScript configuration file (`tsconfig.json`).
  * ```
