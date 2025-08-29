@@ -7,8 +7,8 @@ import (
 
 var packageListFile = utils.JoinPath(internals.RESOURCE_FOLDER_PATH, "pkl.res")
 
-func (*MiscExport) GetPackageListData() (*PackageMetadata, error) {
-	var out PackageMetadata
+func (*MiscExport) GetPackageListData() ([]PackageContentData, error) {
+	var out []PackageContentData
 	err := utils.BSON_ReadFile(packageListFile, &out)
-	return &out, err
+	return out, err
 }

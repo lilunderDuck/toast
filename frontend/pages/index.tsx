@@ -1,7 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import { AppTitleBarDraggable } from "~/components"
 // ...
-import { JournalHomeProvider, JournalList } from "~/features/home"
+import { JournalHomeProvider, JournalList, JournalListHeader } from "~/features/home"
 import { shorthands } from "~/styles/shorthands"
 
 const style = stylex.create({
@@ -22,7 +22,7 @@ export default function Home() {
     <JournalHomeProvider>
       <AppTitleBarDraggable {...stylex.attrs(style.home__titleBar)} />
       <section {...stylex.attrs(style.home, shorthands.h_full$)}>
-        <h1>Your journals</h1>
+        <JournalListHeader name$="Your journal" />
         <JournalList />
       </section>
     </JournalHomeProvider>

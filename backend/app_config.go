@@ -4,6 +4,7 @@ import (
 	"os"
 	"toast/backend/features/editor"
 	"toast/backend/features/journal"
+	"toast/backend/features/misc"
 	"toast/backend/internals"
 
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -44,6 +45,7 @@ func GetAppConfig(icon []byte, appInstance *App) *options.App {
 			appInstance,
 			&journal.GroupExport{},
 			&editor.EditorExport{},
+			&misc.MiscExport{},
 		},
 		// Windows platform specific options
 		Windows: &windows.Options{

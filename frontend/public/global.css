@@ -103,6 +103,10 @@ a:not([data-link-no-color]) {
   color: var(--blue10);
 }
 
+a:not([data-link-no-color]):hover {
+  text-decoration: underline;
+}
+
 * ::backdrop {
   backdrop-filter: blur(2px);
 }
