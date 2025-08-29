@@ -1,8 +1,9 @@
-import stylex from "@stylexjs/stylex"
-import { RootSettingDescription, RootSettingName, RootSettingSection } from "./RootSettingSection"
-import { shorthands } from "~/styles/shorthands"
-import { type ISettingSectionProps } from "../types"
 import { type ParentProps } from "solid-js"
+// ...
+import stylex from "@stylexjs/stylex"
+// ...
+import { RootSettingDescription, RootSettingName, RootSettingSection } from "./RootSettingSection"
+import { type ISettingSectionProps } from "../types"
 
 interface ICustomSettingSectionProps extends ISettingSectionProps<number> {
   // ...
@@ -10,6 +11,7 @@ interface ICustomSettingSectionProps extends ISettingSectionProps<number> {
 
 const style = stylex.create({
   section: {
+    display: "flex",
     flexFlow: "column",
   }
 })
@@ -17,7 +19,7 @@ const style = stylex.create({
 export function CustomSettingSection(props: ParentProps<ICustomSettingSectionProps>) {
   return (
     <RootSettingSection>
-      <div {...stylex.attrs(style.section, shorthands.flex$)}>
+      <div {...stylex.attrs(style.section)}>
         <RootSettingName {...props} />
         <RootSettingDescription {...props} />
       </div>

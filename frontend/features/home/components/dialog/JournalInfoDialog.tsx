@@ -5,8 +5,7 @@ import { A } from "@solidjs/router"
 import __style from "./JournalInfoDialog.module.css"
 import stylex from "@stylexjs/stylex"
 // ...
-import { Button, ButtonRow, DialogContent, type IDialog } from "~/components"
-import { shorthands } from "~/styles/shorthands"
+import { Button, ButtonRow, DialogContent, Spacer, type IDialog } from "~/components"
 import { journal } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 import { formatDate, goTimeToDate } from "~/utils"
@@ -24,10 +23,16 @@ const style = stylex.create({
     backgroundSize: "cover",
     backgroundPosition: "50% 50%",
     filter: "blur(7px)",
+    width: "100%",
+    height: "100%",
     "::before": {
       content: "",
       display: "block",
-      backgroundColor: "#000000a1"
+      backgroundColor: "#000000a1",
+      background: "center center no-repeat var(--img-url)",
+      backgroundSize: "cover",
+      width: "100%",
+      height: "100%",
     }
   },
   content: {
@@ -43,7 +48,9 @@ const style = stylex.create({
   },
   infoLine: {
     gap: 10,
-    marginBottom: 2
+    marginBottom: 2,
+    display: "flex",
+    alignItems: "center"
   },
   infoContent: {
     paddingLeft: 10
@@ -64,7 +71,7 @@ export default function JournalInfoDialog(props: IJournalInfoDialogProps) {
   ]
 
   return (
-    <DialogContent 
+    <DialogContent
       {...stylex.attrs(style.dialog)}
       style={`--img-url:url("${ASSETS_SERVER_URL}/local-assets/${props.id}/icons/${props.icon}")`}
       id={__style.dialogContent}
@@ -89,7 +96,7 @@ export default function JournalInfoDialog(props: IJournalInfoDialogProps) {
                 if (!it.value$) return
 
                 return (
-                  <li {...stylex.attrs(shorthands.flex_y_center$, style.infoLine)}>
+                  <li {...stylex.attrs(style.infoLine)}>
                     <it.icon$ /> <b>{it.name$}</b>: {it.value$}
                   </li>
                 )
@@ -98,7 +105,7 @@ export default function JournalInfoDialog(props: IJournalInfoDialogProps) {
           </ul>
         </section>
 
-        <div {...stylex.attrs(shorthands.flex$, shorthands.spacer$)} />
+        <Spacer />
 
         <ButtonRow>
           <Button size$={ButtonSize.sm} variant$={ButtonVariant.danger}>
@@ -111,7 +118,7 @@ export default function JournalInfoDialog(props: IJournalInfoDialogProps) {
       </main>
 
       <Show when={props.icon}>
-        <div {...stylex.attrs(style.background, shorthands.wh_full$, shorthands.wh_full_before$, shorthands.background_image$)} />
+        <div {...stylex.attrs(style.background)} />
       </Show>
     </DialogContent>
   )

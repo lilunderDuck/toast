@@ -1,8 +1,7 @@
 import { For, type JSX, type ParentProps } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
-import { type ITooltipOptions, Tooltip } from "~/components"
-import { shorthands } from "~/styles/shorthands"
+import { type ITooltipOptions, Spacer, Tooltip } from "~/components"
 import { type IconTypes } from "solid-icons"
 import { A } from "@solidjs/router"
 
@@ -17,6 +16,9 @@ const style = stylex.create({
     borderRadius: 6,
     backgroundColor: "transparent",
     color: "var(--gray10)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     ":hover": {
       backgroundColor: "var(--gray4)",
       color: "var(--gray12)",
@@ -53,7 +55,7 @@ export function ButtonRow(props: IButtonRowProps) {
               placement: it.tooltipDirection$
             }}>
               <Wrapper href={it.href}>
-                <button {...stylex.attrs(style.button, shorthands.flex_center$)} onClick={it.onClick$}>
+                <button {...stylex.attrs(style.button)} onClick={it.onClick$}>
                   <it.icon$ />
                 </button>
               </Wrapper>
@@ -61,7 +63,7 @@ export function ButtonRow(props: IButtonRowProps) {
           )
         }
 
-        return <div {...stylex.attrs(shorthands.spacer$)} />
+        return <Spacer />
       }}
     </For>
   )

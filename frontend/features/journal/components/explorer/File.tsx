@@ -41,6 +41,7 @@ export function File(props: IFileProps) {
       <A
         href={`/journal/${props.groupId$}/${props.journalId$}`}
         class={mergeClassname(stylex.attrs(style.file, style.file__name), __style.file)}
+        data-link-no-color
       >
         {props.name$}
       </A>

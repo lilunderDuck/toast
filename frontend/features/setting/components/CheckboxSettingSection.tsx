@@ -1,5 +1,4 @@
 import stylex from "@stylexjs/stylex"
-import { shorthands } from "~/styles/shorthands"
 // ...
 import { Checkbox, Spacer } from "~/components"
 // ...
@@ -8,6 +7,7 @@ import type { ISettingSectionProps, SettingSectionOptions } from "../types"
 
 const style = stylex.create({
   section: {
+    display: "flex",
     flexFlow: "column",
   }
 })
@@ -18,7 +18,7 @@ interface ICheckboxSettingSectionProps extends ISettingSectionProps<boolean> {
 
 export function CheckboxSettingSection(props: ICheckboxSettingSectionProps) {
   return (
-    <RootSettingSection {...stylex.attrs(style.section, shorthands.flex$)}>
+    <RootSettingSection {...stylex.attrs(style.section)}>
       <RootSettingName {...props} inline$={
         <>
           <Spacer />

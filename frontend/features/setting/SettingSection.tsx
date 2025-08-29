@@ -3,16 +3,16 @@ import { Match, type ParentProps, Show, Switch } from "solid-js"
 import { Checkbox, Input, Spacer } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
-import { shorthands } from "~/styles/shorthands"
 
 const style = stylex.create({
-  thisThing: {
+  section: {
     marginTop: 10,
     ":first-child": {
       marginTop: 0
     }
   },
-  section: {
+  section__content: {
+    display: "flex",
     flexFlow: "column",
   },
   description: {
@@ -20,20 +20,25 @@ const style = stylex.create({
     color: "var(--gray11)",
     paddingRight: "2rem"
   },
-  disabled_name: {
+  section__disabledName: {
     color: "var(--gray10)",
   },
-  disabled_description: {
+  section__disabledDescription: {
     color: "var(--gray9)",
   },
-  input: {
+  section__input: {
     width: '8rem',
     paddingBlock: 5
   },
-  inputRange: {
+  seciton__inputRange: {
+    display: "flex",
     flexFlow: "column",
     width: "100%",
     flexShrink: 0
+  },
+  seciton__inputEverythingElse: {
+    display: "flex",
+    alignItems: "center"
   }
 })
 
@@ -62,14 +67,13 @@ interface ISettingSectionProps<T extends SettingType> {
 
 export function SettingSection<T extends SettingType>(props: ParentProps<ISettingSectionProps<T>>) {
   return (
-    <section {...stylex.attrs(style.thisThing)}>
-      <div {...stylex.attrs(style.section, shorthands.flex$)}>
+    <section {...stylex.attrs(style.section)}>
+      <div {...stylex.attrs(style.section__content)}>
         <div {...stylex.attrs(
-          props.type$ === SettingType.RANGE ? style.inputRange : shorthands.flex_y_center$,
-          props.type$ === SettingType.RANGE ? shorthands.flex$ : {}
+          props.type$ === SettingType.RANGE ? style.seciton__inputRange : style.seciton__inputEverythingElse
         )}>
           <h4 {...stylex.attrs(
-            props.disabled$ ? style.disabled_name : {},
+            props.disabled$ ? style.section__disabledName : {},
           )}>
             {props.name$}
           </h4>
@@ -87,7 +91,7 @@ export function SettingSection<T extends SettingType>(props: ParentProps<ISettin
             }>
               <Input 
                 {...props.options$}
-                {...stylex.attrs(style.input)}
+                {...stylex.attrs(style.section__input)}
                 disabled={props.disabled$} 
                 onInput={(e) => (props as ISettingSectionProps<SettingType.INPUT>).onChange$?.(parseInt(e.currentTarget.value))} 
               />
@@ -95,7 +99,7 @@ export function SettingSection<T extends SettingType>(props: ParentProps<ISettin
           </Switch>
         </div>
         <Show when={props.description$}>
-          <p {...stylex.attrs(style.description, props.disabled$ ? style.disabled_description : {})}>
+          <p {...stylex.attrs(style.description, props.disabled$ ? style.section__disabledDescription : {})}>
             {props.description$}
           </p>
         </Show>

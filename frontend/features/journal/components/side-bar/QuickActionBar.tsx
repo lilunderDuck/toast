@@ -2,20 +2,20 @@ import { type ParentProps } from "solid-js"
 import { BsGearFill, BsPlusSquareFill } from "solid-icons/bs"
 // ...
 import { mergeClassname } from "~/utils"
+import { createLazyLoadedDialog } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./QuickActionBar.module.css"
 import __scrollbarStyle from "~/styles/scrollbar.module.css"
-import { shorthands } from "~/styles/shorthands"
 // ...
 import { ButtonRow, type IButtonRowProps, INSERT_SPACER_HERE } from "./ButtonRow"
 import { createJournalSettingPage } from "../settings"
-import { createLazyLoadedDialog } from "~/components"
 import { useJournalContext } from "../../provider"
 
 const style = stylex.create({
   bar: {
-    // gap: 5
+    display: "flex",
+    height: "100%"
   },
   content: {
     flexShrink: 0,
@@ -25,12 +25,15 @@ const style = stylex.create({
     paddingInline: 5,
     gap: 10,
     paddingBlock: 5,
-    flexFlow: "column"
+    display: "flex",
+    justifyContent: "center",
+    flexFlow: "column",
   },
   explorer: {
     width: "calc(100% - 7 * 5px)",
     paddingLeft: 5,
     paddingBlock: 5,
+    height: "100%"
   }
 })
 
@@ -60,12 +63,11 @@ export function QuickActionBar(props: ParentProps) {
   ]
 
   return (
-    <aside {...stylex.attrs(style.bar, shorthands.flex$, shorthands.h_full$)}>
+    <aside {...stylex.attrs(style.bar)}>
       <div 
         {...stylex.attrs(
           style.content, 
-          style.actionBar, 
-          shorthands.flex_x_center$
+          style.actionBar,
         )}
         id={__style.bar}
       >
@@ -73,7 +75,7 @@ export function QuickActionBar(props: ParentProps) {
       </div>
       <div 
         class={mergeClassname(
-          stylex.attrs(style.content, style.explorer, shorthands.h_full$),
+          stylex.attrs(style.content, style.explorer),
           __scrollbarStyle.scrollbar,
           __scrollbarStyle.scrollbarVertical,
         )}

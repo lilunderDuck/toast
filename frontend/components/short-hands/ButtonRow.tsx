@@ -1,6 +1,5 @@
 import stylex from "@stylexjs/stylex"
 import { mergeClassname } from "~/utils"
-import { shorthands } from "~/styles/shorthands"
 import { Match, splitProps, Switch } from "solid-js"
 import { Spacer } from "../ui"
 
@@ -8,7 +7,9 @@ const style = stylex.create({
   buttonRow: {
     gap: 10,
     marginTop: 10,
-    userSelect: "none"
+    userSelect: "none",
+    display: "flex",
+    alignItems: "center"
   }
 })
 
@@ -20,7 +21,7 @@ export function ButtonRow(props: IButtonRowProps) {
   const [, itsProps] = splitProps(props, ["direction$"])
 
   return (
-    <div {...itsProps} class={mergeClassname(props, stylex.attrs(style.buttonRow, shorthands.flex_y_center$))}>
+    <div {...itsProps} class={mergeClassname(props, stylex.attrs(style.buttonRow))}>
       <Switch fallback={
         <>
           <Spacer />

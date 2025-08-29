@@ -1,15 +1,14 @@
 import { For } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
-import { shorthands } from "~/styles/shorthands"
 // ...
 import { type ISettingConfig, useSettingContext } from "./SettingProvider"
 
 const style = stylex.create({
-  settingSection: {
+  item: {
     marginBottom: 20
   },
-  label: {
+  item__label: {
     marginBottom: 5,
     paddingInline: 9,
     paddingBlock: 2,
@@ -17,9 +16,10 @@ const style = stylex.create({
     backgroundColor: "var(--gray5)",
     display: "block",
     color: "var(--gray11)",
-    fontSize: 14
+    fontSize: 14,
+    height: "100%"
   },
-  item: {
+  item__button: {
     paddingInline: 10,
     paddingBlock: 5,
     borderRadius: 6,
@@ -28,6 +28,10 @@ const style = stylex.create({
     transition: "0.15s ease-out",
     backgroundColor: "transparent",
     textAlign: "left",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
     ":hover": {
       color: "var(--gray12)",
       backgroundColor: "var(--gray4)",
@@ -39,19 +43,15 @@ export function SettingSidebarItem(props: ISettingConfig) {
   const { setCurrentPage$ } = useSettingContext()
 
   return (
-    <section {...stylex.attrs(style.settingSection)}>
-      <label {...stylex.attrs(style.label, shorthands.h_full$)}>
+    <section {...stylex.attrs(style.item)}>
+      <label {...stylex.attrs(style.item__label)}>
         {props.label$}
       </label>
       <For each={props.items$}>
         {item => (
           <button
             onClick={() => setCurrentPage$(item.pageId$)}
-            {...stylex.attrs(
-              style.item,
-              shorthands.w_full$,
-              shorthands.flex_y_center$
-            )}
+            {...stylex.attrs(style.item__button)}
           >
             <item.icon$ />
             {item.name$}

@@ -1,11 +1,13 @@
+import { Spacer } from "~/components"
+// ...
 import stylex from "@stylexjs/stylex"
-import { shorthands } from "~/styles/shorthands"
+// ...
 import { RootSettingDescription, RootSettingInput, RootSettingName, RootSettingSection } from "./RootSettingSection"
 import type { ISettingSectionProps } from "../types"
-import { Spacer } from "~/components"
 
 const style = stylex.create({
   section: {
+    display: "flex",
     flexFlow: "column",
   }
 })
@@ -15,7 +17,7 @@ interface INumberSettingSectionProps extends ISettingSectionProps<number> {
 
 export function NumberSettingSection(props: INumberSettingSectionProps) {
   return (
-    <RootSettingSection {...stylex.attrs(style.section, shorthands.flex$)}>
+    <RootSettingSection {...stylex.attrs(style.section)}>
       <RootSettingName {...props} inline$={
         <>
           <Spacer />

@@ -6,7 +6,6 @@ import { type TagData } from "~/features/journal/provider"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./TagInputDialog.module.css"
-import { shorthands } from "~/styles/shorthands"
 
 const style = stylex.create({
   form: {
@@ -16,8 +15,11 @@ const style = stylex.create({
     marginTop: 10,
     borderRadius: 6
   },
-  nameInput: {
-    gap: 10
+  form__nameInput: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
   }
 })
 
@@ -38,7 +40,7 @@ export default function TagInputDialog(props: ITagInputDialogProps) {
       {...stylex.attrs(style.form)}
     >
       <label>Name</label>
-      <div {...stylex.attrs(style.nameInput, shorthands.flex_y_center$)} id={__style.tagInput}>
+      <div {...stylex.attrs(style.form__nameInput)} id={__style.tagInput}>
         <Field name="name" validate={[required('Please insert the tag name.')]}>
           {(field, inputProps) => <FieldInput
             {...inputProps}

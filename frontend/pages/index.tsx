@@ -2,13 +2,13 @@ import stylex from "@stylexjs/stylex"
 import { AppTitleBarDraggable } from "~/components"
 // ...
 import { JournalHomeProvider, JournalList, JournalListHeader } from "~/features/home"
-import { shorthands } from "~/styles/shorthands"
 
 const style = stylex.create({
   home: {
     paddingInline: "2rem",
     paddingTop: "1rem",
-    overflowY: "auto"
+    overflowY: "auto",
+    height: "100%"
   },
   home__titleBar: {
     position: "fixed",
@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <JournalHomeProvider>
       <AppTitleBarDraggable {...stylex.attrs(style.home__titleBar)} />
-      <section {...stylex.attrs(style.home, shorthands.h_full$)}>
+      <section {...stylex.attrs(style.home)}>
         <JournalListHeader name$="Your journal" />
         <JournalList />
       </section>

@@ -2,9 +2,8 @@ import { BsPencilFill } from "solid-icons/bs"
 // ...
 import __style from './JournalBlock.module.css'
 import stylex from "@stylexjs/stylex"
-import { shorthands } from "~/styles/shorthands"
 // ...
-import { Button, createLazyLoadedDialog } from "~/components"
+import { Button, createLazyLoadedDialog, Spacer } from "~/components"
 import { journal } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 // ...
@@ -16,20 +15,28 @@ const style = stylex.create({
     height: "10rem",
     position: "relative",
   },
-  block_defaultBg: {
+  block__withImage: {
+    background: "center center no-repeat var(--img-url)",
+    backgroundSize: "cover"
+  },
+  block__defaultBg: {
     backgroundColor: "var(--gray2)"
   },
-  editButton: {
+  block__editButton: {
     position: "absolute",
     transition: "0.25s ease-out",
     right: 0,
     marginTop: 10,
     marginRight: 10,
   },
-  content: {
-    padding: 10
+  block__content: {
+    padding: 10,
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column"
   },
-  name: {
+  block__name: {
     fontSize: 13
   }
 })
@@ -58,7 +65,7 @@ export function JournalBlock(props: IJournalBlockProps) {
     <div 
       {...stylex.attrs(
         style.block, 
-        props.icon ? shorthands.background_image$ : style.block_defaultBg
+        props.icon ? style.block__withImage : style.block__defaultBg
       )} 
       id={__style.block}
       data-block
@@ -68,18 +75,18 @@ export function JournalBlock(props: IJournalBlockProps) {
     >
       <Button 
         size$={ButtonSize.icon} 
-        {...stylex.attrs(style.editButton)} 
+        {...stylex.attrs(style.block__editButton)} 
         id={__style.editButton} 
         onClick={EditJournalDialog.show$}
       >
         <BsPencilFill />
       </Button>
       <div 
-        {...stylex.attrs(style.content, shorthands.wh_full$, shorthands.flex_flow_colum)}
+        {...stylex.attrs(style.block__content)}
         onClick={JournalInfoDialog.show$}
       >
-        <div {...stylex.attrs(shorthands.spacer$)} />
-        <span {...stylex.attrs(style.name)}>
+        <Spacer />
+        <span {...stylex.attrs(style.block__name)}>
           {props.name}
         </span>
       </div>

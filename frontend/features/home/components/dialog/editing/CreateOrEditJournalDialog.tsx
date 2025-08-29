@@ -1,7 +1,6 @@
 import { createSignal } from "solid-js"
 import { createForm, required } from "@modular-forms/solid"
 // ...
-import { shorthands } from "~/styles/shorthands"
 import stylex from "@stylexjs/stylex"
 import __style from "./CreateOrEditJournalDialog.module.css"
 // ...
@@ -15,7 +14,8 @@ import IconUploadInput from "./IconUploadInput"
 const style = stylex.create({
   inputWrap: {
     marginTop: 10,
-    gap: 10
+    gap: 10,
+    display: "flex"
   },
   imageInput: {
     width: '15rem',
@@ -97,7 +97,7 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
         {getText()} journal group
       </DialogHeader>
       <Form$>
-        <div {...stylex.attrs(style.inputWrap, shorthands.flex$)}>
+        <div {...stylex.attrs(style.inputWrap)}>
           <div {...stylex.attrs(style.imageInput)} id={__style.imageInput}>
             <IconUploadInput 
               isUploading$={isUploading$}

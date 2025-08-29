@@ -1,17 +1,23 @@
-import stylex from "@stylexjs/stylex"
-import { type ISettingSectionProps } from "../types"
 import { type JSX, Show } from "solid-js"
+// ...
+import stylex from "@stylexjs/stylex"
+// ...
 import { Input } from "~/components"
-import { shorthands } from "~/styles/shorthands"
+// ...
+import { type ISettingSectionProps } from "../types"
 
-export const sectionStyle = stylex.create({
+const style = stylex.create({
   thisThing$: {
     marginTop: 15,
     ":first-child": {
       marginTop: 0
     }
   },
-  name_disabled$: {
+  name: {
+    display: "flex",
+    alignItems: "center"
+  },
+  name_disabled: {
     color: "var(--gray10)"
   },
   description: {
@@ -30,7 +36,7 @@ export const sectionStyle = stylex.create({
 
 export function RootSettingSection(props: HTMLAttributes<"section">) {
   return (
-    <section {...props} {...stylex.attrs(sectionStyle.thisThing$)} />
+    <section {...props} {...stylex.attrs(style.thisThing$)} />
   )
 }
 
@@ -38,7 +44,7 @@ export function RootSettingName(props: ISettingSectionProps<any> & {
   inline$?: JSX.Element
 }) {
   return (
-    <h4 {...stylex.attrs(props.disabled$ ? sectionStyle.name_disabled$ : {}, shorthands.flex_y_center$)}>
+    <h4 {...stylex.attrs(props.disabled$ ? style.name_disabled : {}, style.name)}>
       {props.name$}
       {props.inline$}
     </h4>
@@ -49,8 +55,8 @@ export function RootSettingDescription(props: Pick<ISettingSectionProps<any>, "d
   return (
     <Show when={props.description$}>
       <p {...stylex.attrs(
-        sectionStyle.description,
-        props.disabled$ ? sectionStyle.description_disabled$ : {}
+        style.description,
+        props.disabled$ ? style.description_disabled$ : {}
       )}>
         {props.description$}
       </p>
@@ -62,7 +68,7 @@ export function RootSettingInput(props: HTMLAttributes<"input">) {
   return (
     <Input 
       {...props}
-      {...stylex.attrs(props.type !== "range" ? sectionStyle.input : {})}
+      {...stylex.attrs(props.type !== "range" ? style.input : {})}
     />
   )
 }

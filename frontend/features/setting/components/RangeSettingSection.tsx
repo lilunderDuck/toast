@@ -3,12 +3,13 @@ import { For } from "solid-js"
 import stylex from "@stylexjs/stylex"
 // ...
 import { Input, Spacer } from "~/components"
-import { shorthands } from "~/styles/shorthands"
+// ...
 import { RootSettingDescription, RootSettingName, RootSettingSection } from "./RootSettingSection"
 import type { ISettingSectionProps, SettingSectionOptions } from "../types"
 
 const style = stylex.create({
   section: {
+    display: "flex",
     flexFlow: "column",
   },
   input: {
@@ -18,7 +19,8 @@ const style = stylex.create({
     justifyContent: "space-between",
     fontSize: 11,
     marginBottom: 5,
-    color: "var(--gray11)"
+    color: "var(--gray11)",
+    display: "flex"
   }
 })
 
@@ -31,7 +33,7 @@ export function RangeSettingSection(props: IRangeSettingSectionProps) {
   const markerName = crypto.randomUUID()
 
   return (
-    <RootSettingSection {...stylex.attrs(style.section, shorthands.flex$)}>
+    <RootSettingSection {...stylex.attrs(style.section)}>
       <RootSettingName {...props} />
       <Spacer />
       <Input
@@ -42,7 +44,7 @@ export function RangeSettingSection(props: IRangeSettingSectionProps) {
         list={markerName}
         onInput={(e) => props.onChange$?.(parseInt(e.currentTarget.value))} 
       />
-      <datalist id={markerName} {...stylex.attrs(style.dataList, shorthands.flex$)}>
+      <datalist id={markerName} {...stylex.attrs(style.dataList)}>
         <For each={props.markerValue$}>
           {it => (
             <option value={it.value$} label={it.name$} />

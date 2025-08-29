@@ -1,9 +1,12 @@
 import stylex from "@stylexjs/stylex"
-import { shorthands } from "~/styles/shorthands"
 
 const style = stylex.create({
   everything: {
-    // ...
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+      height: "100%",
   },
   content: {
     width: "20rem",
@@ -12,7 +15,7 @@ const style = stylex.create({
 
 export default function JournalWelcomePage() {
   return (
-    <div {...stylex.attrs(shorthands.flex_center$, shorthands.wh_full$)}>
+    <div {...stylex.attrs(style.everything)}>
       <div {...stylex.attrs(style.content)}>
         <h1>Welcome, home.</h1>
       </div>

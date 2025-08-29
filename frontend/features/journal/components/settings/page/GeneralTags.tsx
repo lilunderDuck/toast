@@ -6,22 +6,25 @@ import { CustomSettingSection } from "~/features/setting"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./GeneralTags.module.css"
-import { shorthands } from "~/styles/shorthands"
 // ...
 
 const style = stylex.create({
-  tagList: {
+  tag__list: {
     marginTop: 10
   },
-  tagCreateHeader: {
+  tag__createHeader: {
     gap: 10,
-    marginBottom: 10
+    marginBottom: 10,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
   },
-  createTagButton: {
+  tag__createTagButton: {
     flexShrink: 0
   },
-  tagTable: {
-    textAlign: "left"
+  tag__table: {
+    textAlign: "left",
+    width: "100%",
   }
 })
 
@@ -32,16 +35,16 @@ export default function GeneralTags() {
         name$="Journal tags"
         description$="Defines a list of tag(s) to be used accoss your journal group. You can use them to categorize your journal too."
       >
-        <div {...stylex.attrs(style.tagList)}>
-          <TagListTable />
+        <div {...stylex.attrs(style.tag__list)}>
+          <Tag__listTable />
         </div>
       </CustomSettingSection>
     </>
   )
 }
 
-function TagListTable() {
-  const tagListData: TagData[] = [
+function Tag__listTable() {
+  const tag__listData: TagData[] = [
   ]
 
   const [isShowingInput, setIsShowingInput] = createSignal(false)
@@ -49,18 +52,18 @@ function TagListTable() {
 
   return (
     <>
-      <header {...stylex.attrs(style.tagCreateHeader, shorthands.flex_y_center$)}>
+      <header {...stylex.attrs(style.tag__createHeader)}>
         <Input type="text" placeholder="Search tag" />
         <Spacer />
         <Button
           size$={ButtonSize.sm}
           onClick={() => setIsShowingInput(true)}
-          {...stylex.attrs(style.createTagButton)}
+          {...stylex.attrs(style.tag__createTagButton)}
         >
           Create tag
         </Button>
       </header>
-      <table {...stylex.attrs(style.tagTable, shorthands.w_full$)}>
+      <table {...stylex.attrs(style.tag__table)}>
         <thead>
           <tr>
             <th style="width:35%">Tag</th>
@@ -68,7 +71,7 @@ function TagListTable() {
           </tr>
         </thead>
         <tbody id={__style.tableBodyContent}>
-          <For each={tagListData}>
+          <For each={tag__listData}>
             {it => <TagTableLine {...it} />}
           </For>
         </tbody>

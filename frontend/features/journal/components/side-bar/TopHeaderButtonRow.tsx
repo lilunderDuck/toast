@@ -1,17 +1,17 @@
-import { BsArrowLeft, BsHouseFill, BsPencilFill } from "solid-icons/bs"
+import { BsArrowLeft } from "solid-icons/bs"
+import { A } from "@solidjs/router"
 // ...
-import { shorthands } from "~/styles/shorthands"
 import stylex from "@stylexjs/stylex"
 // ...
 import { mergeClassname } from "~/utils"
-import { ButtonRow, INSERT_SPACER_HERE } from "./ButtonRow"
 import { AppTitleBarDraggable, Spacer, Tooltip } from "~/components"
-import { A } from "@solidjs/router"
 
 const style = stylex.create({
   header: {
     paddingInline: 5,
-    width: "100%"
+    width: "100%",
+    display: "flex",
+    alignItems: "center"
   },
   header__titleBar: {
     width: "100%"
@@ -23,6 +23,9 @@ const style = stylex.create({
     borderRadius: 6,
     backgroundColor: "transparent",
     color: "var(--gray10)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     ":hover": {
       backgroundColor: "var(--gray4)",
       color: "var(--gray12)",
@@ -37,12 +40,12 @@ export function TopHeaderButtonRow(props: HTMLAttributes<"header">) {
         {...props}
         class={mergeClassname(
           props,
-          stylex.attrs(style.header, shorthands.flex_y_center$)
+          stylex.attrs(style.header)
         )}
       >
         <Tooltip label$="Go back" tooltipOptions$={{ placement: "right" }}>
           <A href="/">
-            <button {...stylex.attrs(style.button, shorthands.flex_center$)}>
+            <button {...stylex.attrs(style.button)}>
               <BsArrowLeft />
             </button>
           </A>

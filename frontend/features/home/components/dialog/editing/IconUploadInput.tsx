@@ -2,7 +2,6 @@ import { BsPlus } from "solid-icons/bs"
 import { type Accessor, Show } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
-import { shorthands } from "~/styles/shorthands"
 // ...
 import { SpinningCube, Tooltip } from "~/components"
 import { type FileUploadComponent } from "~/features/native"
@@ -12,11 +11,20 @@ const style = stylex.create({
   uploadZone: {
     cursor: "pointer",
     borderRadius: 6,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: "100%",
     ":hover": {
       border: "2px solid var(--gray7)"
     }
   },
-  uploadZoneNoImage: {
+  uploadZone__withImage: {
+    background: "center center no-repeat var(--img-url)",
+    backgroundSize: "cover"
+  },
+  uploadZone__noImage: {
     backgroundColor: "var(--gray3)",
   }
 })
@@ -33,9 +41,7 @@ export default function IconUploadInput(props: IIconUploadInputProps) {
       <props.uploadComponent$ 
         {...stylex.attrs(
           style.uploadZone,
-          props.iconPath$() !== "" ? shorthands.background_image$ : style.uploadZoneNoImage,
-          shorthands.wh_full$,
-          shorthands.flex_center$,
+          props.iconPath$() !== "" ? style.uploadZone__withImage : style.uploadZone__noImage,
         )}
         style={{
           "--img-url": `url(${ASSETS_SERVER_URL}/preview?path=${encodeURIComponent(props.iconPath$())})`

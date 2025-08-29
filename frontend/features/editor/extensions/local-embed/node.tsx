@@ -1,7 +1,6 @@
 import { createFileUpload, FileUploadType } from "~/features/native"
 // ...
 import stylex from "@stylexjs/stylex"
-import { shorthands } from "~/styles/shorthands"
 // ...
 import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
 import { useLocalEmbedContext } from "./provider"
@@ -70,7 +69,7 @@ export default function LocalEmbedNode() {
             src={getEmbedUrl$()}
             sandbox="allow-scripts allow-same-origin allow-modals allow-popups"
             referrerPolicy="origin"
-            {...stylex.attrs(style.embed__iframe, shorthands.w_full$)}
+            {...stylex.attrs(style.embed__iframe)}
             // onLoad={() => setIsEmbedLoading(true)}
             onError={() => console.log('error fired')}
           />
