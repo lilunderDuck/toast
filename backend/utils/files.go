@@ -7,54 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/kardianos/osext"
 )
-
-// Takes a bunch of parts of a file path and puts them together into one complete path.
-//
-//	JoinPath("path", "to", "some_file.txt")
-//	// returns "path/to/some_file.txt"
-func JoinPath(pathToFileName ...string) string {
-	return filepath.Join(pathToFileName...)
-}
-
-// Takes a file path and gives you just the file's name, including its extension.
-//
-//	GetFileNameWithExtension("path/to/some_file.txt")
-//	// returns "some_file.txt"
-func GetFileNameWithExtension(inAnyPath string) string {
-	return filepath.Base(inAnyPath)
-}
-
-// Takes a file path and gives you just the file's name.
-//
-// Not to be confused with [utils.GetFileNameWithExtension()], it include
-// the file extension. This function does not.
-//
-//	GetFileName("path/to/some_file.txt")
-//	// returns "some_file"
-func GetFileName(path string) string {
-	fileNameWithExt := GetFileNameWithExtension(path)
-	fileExt := GetFileExtension(path)
-	return strings.TrimSuffix(fileNameWithExt, fileExt)
-}
-
-// Takes a file path and gives you the folder (directory) where the file is located.
-//
-//	GetFileDir("path/to/some_file.txt")
-//	// returns "path/to/"
-func GetFileDir(inAnyPath string) string {
-	return filepath.Dir(inAnyPath)
-}
-
-// Takes a file path and gives you just the file's extension.
-//
-//	GetFileExtension("path/to/some_file.txt")
-//	// returns ".txt"
-func GetFileExtension(inAnyPath string) string {
-	return filepath.Ext(inAnyPath)
-}
 
 // Takes a file path and rename the file in a path.
 //
@@ -65,24 +18,24 @@ func GetFileExtension(inAnyPath string) string {
 //	})
 //	// returns "path/to/new_file.txt"
 func RenameFileInPath(path string, newName func(oldFilename string) string) string {
-	baseDir := GetFileDir(path)
-	fileExt := GetFileExtension(path)
-	fileName := GetFileName(path)
+	baseDir := filepath.Dir(path)
+	fileExt := filepath.Ext(path)
+	fileName := strings.TrimSuffix(fileExt, fileExt)
 
 	newFileName := newName(fileName)
-	return JoinPath(baseDir, newFileName+fileExt)
+	return filepath.Join(baseDir, newFileName+fileExt)
 }
 
 // Returns the path of the folder where the program is running.
 //
 // If it can't find the folder, it will stop the program and show an error.
 func GetCurrentDir() (currentPath string) {
-	folderPath, err := osext.ExecutableFolder()
+	folderPath, err := os.Executable()
 	if err != nil {
 		panic(err)
 	}
 
-	return folderPath
+	return filepath.Dir(folderPath)
 }
 
 // Makes a new folder at the given path.

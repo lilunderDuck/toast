@@ -1,6 +1,7 @@
 package journal
 
 import (
+	"path/filepath"
 	"toast/backend/internals"
 	"toast/backend/utils"
 )
@@ -17,8 +18,8 @@ func writeJournalData(groupId, journalId int, data *JournalData) error {
 //   - @param iconPath - the icon path that you want to change. Later, it will be saved at
 //     this location: "~/data/journals/[groupId]/icons/(whatever icon filename is)"
 func saveAndUpdateIcon(data *JournalGroupData, iconPath string) {
-	fileName := utils.GetFileNameWithExtension(iconPath)
-	newLocation := utils.JoinPath(internals.GroupSavedPath(data.Id), "icons", fileName)
+	fileName := filepath.Base(iconPath)
+	newLocation := filepath.Join(internals.GroupSavedPath(data.Id), "icons", fileName)
 	utils.MoveFile(iconPath, newLocation)
 	data.Icon = fileName
 }

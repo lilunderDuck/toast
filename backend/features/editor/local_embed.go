@@ -2,21 +2,22 @@ package editor
 
 import (
 	"os"
+	"path/filepath"
 	"strings"
-	internal "toast/backend/internals"
+	"toast/backend/internals"
 	"toast/backend/utils"
 )
 
 func (*EditorExport) SaveLocalEmbed(pathToHtmlFile string) (string, error) {
-	basePath := utils.GetFileDir(pathToHtmlFile)
-	htmlFileName := utils.GetFileNameWithExtension(pathToHtmlFile)
+	basePath := filepath.Dir(pathToHtmlFile)
+	htmlFileName := filepath.Base(pathToHtmlFile)
 	folderName := strings.Split(basePath, "/")[len(basePath)-1]
-	if utils.StringContains(pathToHtmlFile, internal.EMBED_SAVED_PATH) {
+	if utils.StringContains(pathToHtmlFile, internals.EMBED_SAVED_PATH) {
 		return folderName + "/" + htmlFileName, nil
 	}
 
 	err := os.CopyFS(
-		utils.JoinPath(internal.EMBED_SAVED_PATH, folderName),
+		filepath.Join(internals.EMBED_SAVED_PATH, folderName),
 		os.DirFS(basePath),
 	)
 

@@ -17,7 +17,6 @@ require (
 	github.com/daku10/go-lz-string v0.0.6
 	github.com/fxamacker/cbor/v2 v2.8.0
 	github.com/gin-gonic/gin v1.10.1
-	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0
 	github.com/lotusdblabs/lotusdb/v2 v2.1.0
 	github.com/wailsapp/mimetype v1.4.1
 	github.com/yuin/gopher-lua v1.1.1

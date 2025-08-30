@@ -7,11 +7,11 @@ import (
 )
 
 func getGallerySavedPath(groupId int, galleryId int) string {
-	return utils.JoinPath(internals.GroupSavedPath(groupId), "gallery", utils.ToString(galleryId))
+	return filepath.Join(internals.GroupSavedPath(groupId), "gallery", utils.ToString(galleryId))
 }
 
 func getGalleryDataSavedPath(groupId int, galleryId int) string {
-	return utils.JoinPath(getGallerySavedPath(groupId, galleryId), "meta.dat")
+	return filepath.Join(getGallerySavedPath(groupId, galleryId), "meta.dat")
 }
 
 func mergeGalleryData(oldData *GalleryData, newData *GalleryUpdatedData) {

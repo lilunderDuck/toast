@@ -1,19 +1,13 @@
 package server
 
 import (
-	// "net/http"
-	// "os"
-	// "time"
 	"net/http"
-	internal "toast/backend/internals"
-	// "toast/backend/utils"
-	// "github.com/gin-gonic/gin"
-	// "github.com/wailsapp/mimetype"
+	"toast/backend/internals"
 )
 
 func createAssetsRoute(server *http.ServeMux) {
-	serveStatic(server, "/local-assets", internal.GROUP_FOLDER_PATH)
-	serveStatic(server, "/global", internal.GLOBAL_ASSETS_FOLDER_PATH)
+	serveStatic(server, "/local-assets", internals.GROUP_FOLDER_PATH)
+	serveStatic(server, "/global", internals.GLOBAL_ASSETS_FOLDER_PATH)
 
 	server.HandleFunc("/preview", func(res http.ResponseWriter, req *http.Request) {
 		requestedFile := req.URL.Query().Get("path")

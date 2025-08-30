@@ -15,11 +15,11 @@ import (
 
 // Everything related to wails's config basically.
 func GetAppConfig(icon []byte, appInstance *App) *options.App {
-	windowTitle := "Toast making machine"
+	const WINDOW_TITLE = "Toast making machine"
 	return &options.App{
-		Title:     windowTitle,
+		Title:     WINDOW_TITLE,
 		Frameless: true,
-		Width:     1024,
+		Width:     1000,
 		Height:    768,
 		AssetServer: &assetserver.Options{
 			Assets: os.DirFS(internals.APP_FOLDER_PATH),
@@ -67,7 +67,7 @@ func GetAppConfig(icon []byte, appInstance *App) *options.App {
 			WebviewIsTransparent: true,
 			WindowIsTranslucent:  true,
 			About: &mac.AboutInfo{
-				Title:   windowTitle,
+				Title:   WINDOW_TITLE,
 				Message: "",
 				Icon:    icon,
 			},

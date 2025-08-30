@@ -3,9 +3,9 @@ package server
 import (
 	"errors"
 	"net/http"
+	"path/filepath"
 	"toast/backend/db"
-	internal "toast/backend/internals"
-	"toast/backend/utils"
+	"toast/backend/internals"
 )
 
 type simpleDbInput struct {
@@ -66,7 +66,7 @@ func batch(res http.ResponseWriter, req *http.Request, valueRequired bool, batch
 		return
 	}
 
-	dbSavedLocation := utils.JoinPath(internal.EMBED_SAVED_PATH, embedName, "db", dbName)
+	dbSavedLocation := filepath.Join(internals.EMBED_SAVED_PATH, embedName, "db", dbName)
 	err = db.OpenThenClose(dbSavedLocation, func(db *db.DbInstance) {
 		batchFn(db, out.Key, out.Value)
 	})

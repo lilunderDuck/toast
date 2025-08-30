@@ -6,7 +6,7 @@ import (
 )
 
 // The path where all of journal groups data are stored, which is "~/groups".
-var GROUP_FOLDER_PATH string = utils.JoinPath(CURRENT_EXECUTABLE_PATH, "groups")
+var GROUP_FOLDER_PATH string = filepath.Join(CURRENT_EXECUTABLE_PATH, "groups")
 
 var GROUPS_DATA_DB_PATH string = filepath.Join(CACHE_FOLDER_PATH, "groups")
 
