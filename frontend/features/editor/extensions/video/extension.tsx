@@ -5,6 +5,8 @@ import { NodeViewWrapper, SolidNodeViewRenderer } from '~/libs/solid-tiptap-rend
 import { useNodeState } from '../../utils'
 import { Video, type VideoAttribute } from '../files'
 
+import stylex from "@stylexjs/stylex"
+
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     video: {

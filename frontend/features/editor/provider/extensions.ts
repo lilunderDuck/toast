@@ -16,7 +16,7 @@ import { DetailsSummary, DetailsContent, Details } from '@tiptap/extension-detai
 import { Color } from '@tiptap/extension-color'
 import { common, createLowlight } from 'lowlight'
 // ...
-import { LocalEmbedExtension, TagExtension, GalleryExtension } from "../extensions"
+import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension, ImageSplitViewExtension } from "../extensions"
 import __style from "./extensions.module.css"
 
 import stylex from "@stylexjs/stylex"
@@ -95,6 +95,8 @@ export function getExtensions() {
     // ------- custom extension zone -------
     TagExtension,
     LocalEmbedExtension,
-    GalleryExtension
+    GalleryExtension,
+    ImageExtension,
+    ImageSplitViewExtension
   ]
 }

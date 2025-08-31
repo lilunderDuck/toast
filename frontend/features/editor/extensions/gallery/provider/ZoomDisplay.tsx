@@ -79,25 +79,25 @@ export function ZoomDisplay(props: ParentProps) {
     let newX = positionX - diffX
     let newY = positionY - diffY
 
-    const elementWidth = imgRef.offsetWidth, elementHeight = imgRef.offsetHeight
+    // const elementWidth = imgRef.offsetWidth, elementHeight = imgRef.offsetHeight
 
-    // complex image bound checking stuff to make sure the image 
-    // is not being dragged out of the page
-    // 
-    // note: this bound check is not really complete
-    if (newX > elementWidth / 2 || newX < elementWidth / 2 * -1) {
-      return setImagePosition(prev => ({
-        ...prev,
-        y: newY
-      }))
-    }
+    // // complex image bound checking stuff to make sure the image 
+    // // is not being dragged out of the page
+    // // 
+    // // note: this bound check is not really complete
+    // if (newX > elementWidth / 2 || newX < elementWidth / 2 * -1) {
+    //   return setImagePosition(prev => ({
+    //     ...prev,
+    //     y: newY
+    //   }))
+    // }
 
-    if (newY > elementHeight / 2 || newY < elementHeight / 2 * -1) {
-      return setImagePosition(prev => ({
-        ...prev,
-        x: newX
-      }))
-    }
+    // if (newY > elementHeight / 2 || newY < elementHeight / 2 * -1) {
+    //   return setImagePosition(prev => ({
+    //     ...prev,
+    //     x: newX
+    //   }))
+    // }
 
     setImagePosition({
       x: newX,

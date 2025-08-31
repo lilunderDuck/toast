@@ -17,17 +17,19 @@ type compressed_JournalContentData struct {
 }
 
 var editorContentTypeMap = map[string]uint8{
-	"doc":         0,
-	"table":       1,
-	"tableRow":    2,
-	"tableHeader": 3,
-	"tableCell":   4,
-	"paragraph":   5,
-	"text":        6,
-	"gallery":     7,
-	"localEmbed":  8,
-	"tag":         9,
-	"":            255,
+	"doc":            0,
+	"table":          1,
+	"tableRow":       2,
+	"tableHeader":    3,
+	"tableCell":      4,
+	"paragraph":      5,
+	"text":           6,
+	"gallery":        7,
+	"localEmbed":     8,
+	"tag":            9,
+	"image":          10,
+	"imageSplitView": 11,
+	"":               255,
 }
 
 var editorContentTypeRemap = map[uint8]string{
@@ -41,6 +43,8 @@ var editorContentTypeRemap = map[uint8]string{
 	7:   "gallery",
 	8:   "localEmbed",
 	9:   "tag",
+	10:  "image",
+	11:  "imageSplitView",
 	255: "",
 }
 

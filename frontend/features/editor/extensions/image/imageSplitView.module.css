@@ -1,0 +1,4 @@
+#imageNode > div:not([class]) {
+  width: 100%;
+  height: 100%;
+}

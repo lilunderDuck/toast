@@ -1,0 +1,7 @@
+#input #buttonRow {
+  visibility: hidden;
+}
+
+#input:hover #buttonRow {
+  visibility: visible !important;
+}

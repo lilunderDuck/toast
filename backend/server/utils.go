@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"path/filepath"
-	"toast/backend/internals"
 	"toast/backend/utils"
 )
 
@@ -15,7 +14,7 @@ func serveStatic(serverInstance *http.ServeMux, path string, whatPath string) {
 	//    /basically/anything
 	//    ...
 	serverInstance.HandleFunc(path+"/{anything...}", func(res http.ResponseWriter, req *http.Request) {
-		serveFile(res, req, filepath.Join(internals.EMBED_SAVED_PATH, req.PathValue("anything")))
+		serveFile(res, req, filepath.Join(whatPath, req.PathValue("anything")))
 	})
 }
 

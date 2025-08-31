@@ -1,1 +1,1 @@
-export const ASSETS_SERVER_URL = "http://localhost:8000" 
+export const ASSETS_SERVER_URL = "http://localhost:8000"

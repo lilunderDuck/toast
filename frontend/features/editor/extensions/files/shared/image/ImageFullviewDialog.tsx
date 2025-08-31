@@ -1,0 +1,42 @@
+import { AppTitleBarDraggable, DialogContent, type IDialog } from "~/components";
+import { ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "../../../gallery";
+import { Image } from "./Image";
+
+import stylex from "@stylexjs/stylex"
+
+const style = stylex.create({
+  dialog: {
+    padding: "0 !important",
+    width: "100%",
+    height: "100%",
+    backgroundColor: "transparent !important",
+  },
+  dialog__buttonRow: {
+    position: "absolute",
+    margin: 10,
+    zIndex: 10
+  },
+  dialog__draggableTitleBar: {
+    position: "fixed"
+  }
+})
+
+interface IImageFullviewDialogProps extends IDialog {
+  src$: string
+}
+
+export default function ImageFullviewDialog(props: IImageFullviewDialogProps) {
+  return (
+    <DialogContent {...stylex.attrs(style.dialog)} showCloseButton$={false}>
+      <AppTitleBarDraggable {...stylex.attrs(style.dialog__draggableTitleBar)} />
+      <ZoomAndPanProvider>
+        <div {...stylex.attrs(style.dialog__buttonRow)}>
+          <ZoomButtonRow />
+        </div>
+        <ZoomDisplay>
+          <Image src$={props.src$} />
+        </ZoomDisplay>
+      </ZoomAndPanProvider>
+    </DialogContent>
+  )
+}

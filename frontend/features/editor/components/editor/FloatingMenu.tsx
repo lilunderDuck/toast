@@ -1,4 +1,4 @@
-import { BsArchiveFill, BsBlockquoteLeft, BsCheck2Square, BsTable, BsWindowSplit } from "solid-icons/bs"
+import { BsArchiveFill, BsBlockquoteLeft, BsCheck2Square, BsImageFill, BsImages, BsTable, BsWindowSplit } from "solid-icons/bs"
 import { For } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -43,6 +43,16 @@ export function FloatingMenu(props: IFloatingMenuProps) {
   const { editor$ } = useEditorContext()
   const chainCommand = () => editor$().chain().focus()
   const floatingMenuOptions = [
+    {
+      name$: "image", 
+      icon$: BsImageFill, 
+      run$: () => chainCommand().insertImage$().run() 
+    },
+    {
+      name$: "image split view", 
+      icon$: BsImages, 
+      run$: () => chainCommand().insertImageSplitView$().run() 
+    },
     {
       name$: "table", 
       icon$: BsTable, 

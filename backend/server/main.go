@@ -13,7 +13,7 @@ func StartServer() {
 	server := http.NewServeMux()
 
 	createAssetsRoute(server)
-	createApiRoute(server)
+	// createApiRoute(server)
 	server.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		println("Handle request:", r.URL.Path)
 	})

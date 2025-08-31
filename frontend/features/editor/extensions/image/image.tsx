@@ -3,7 +3,18 @@ import { type Attribute, Node } from '@tiptap/core'
 import { NodeViewWrapper, SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
 // ...
 import { useNodeState } from '../../utils'
-import { Image, type ImageAttribute } from '../files'
+import { ImageInput, type ImageAttribute } from '../files'
+import stylex from "@stylexjs/stylex"
+
+const style = stylex.create({
+  node: {
+    width: "100%",
+    minHeight: "17rem",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  }
+})
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -13,10 +24,9 @@ declare module '@tiptap/core' {
   }
 }
 
-export const VideoNode = Node.create({
-  name: 'video',
+export const ImageExtension = Node.create({
+  name: 'image',
   group: 'block',
-  inline: true,
   selectable: false,
   atom: true,
   addAttributes(): Record<keyof ImageAttribute, Attribute> {
@@ -28,7 +38,7 @@ export const VideoNode = Node.create({
   },
   addCommands() {
     return {
-      insertVideo$: () => ({ tr, dispatch }) => {
+      insertImage$: () => ({ tr, dispatch }) => {
         const node = this.type.create({ name: '' } satisfies ImageAttribute)
 
         if (dispatch) {
@@ -40,11 +50,16 @@ export const VideoNode = Node.create({
     }
   },
   addNodeView: () => SolidNodeViewRenderer(() => {
-    const { data$ } = useNodeState<ImageAttribute>()
+    const { data$, updateAttribute$ } = useNodeState<ImageAttribute>()
 
     return (
-      <NodeViewWrapper>
-        <Image src$={data$().name} />
+      <NodeViewWrapper {...stylex.attrs(style.node)}>
+        <ImageInput 
+          onChange$={(fileName) => {
+            updateAttribute$("name", fileName)
+          }} 
+          data$={data$()} 
+        />
       </NodeViewWrapper>
     )
   }),
