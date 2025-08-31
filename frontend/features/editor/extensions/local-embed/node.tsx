@@ -5,6 +5,7 @@ import stylex from "@stylexjs/stylex"
 import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
 import { useLocalEmbedContext } from "./provider"
 import { Show } from "solid-js"
+import { SpinningCube } from "~/components"
 
 const style = stylex.create({
   embed: {
@@ -12,6 +13,7 @@ const style = stylex.create({
     height: "20rem",
     overflow: "hidden",
     userSelect: "none",
+    position: "relative"
   },
   embed__fullscreen: {
     paddingBlock: "2rem",
@@ -33,13 +35,21 @@ const style = stylex.create({
   embed__iframe: {
     width: "100%",
     height: "-webkit-fill-available"
+  },
+  embed__loadingLayer: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
   }
 })
 
 export default function LocalEmbedNode() {
   const { isEmpty$, isFullscreen$, setRootRef$, upload$, getEmbedUrl$ } = useLocalEmbedContext()
 
-  const { open$ } = createFileUpload({
+  const { open$, isUploading$ } = createFileUpload({
     type$: FileUploadType.file,
     dialogOptions$: {
       Title: "Choose a html file to embed into your journal.",
@@ -48,8 +58,7 @@ export default function LocalEmbedNode() {
       ]
     },
     async onFinish$(path) {
-      console.log(path)
-      upload$() // todo
+      upload$(path)
     }
   })
 
@@ -60,6 +69,11 @@ export default function LocalEmbedNode() {
         ref={setRootRef$}
         onClick={open$}
       >
+        <Show when={isUploading$()}>
+          <div {...stylex.attrs(style.embed__loadingLayer)}>
+            <SpinningCube cubeSize$={30} />
+          </div>
+        </Show>
         <Show when={!isEmpty$()} fallback={
           <div {...stylex.attrs(style.embed__empty)}>
             Click here to upload your embed.
@@ -70,7 +84,6 @@ export default function LocalEmbedNode() {
             sandbox="allow-scripts allow-same-origin allow-modals allow-popups"
             referrerPolicy="origin"
             {...stylex.attrs(style.embed__iframe)}
-            // onLoad={() => setIsEmbedLoading(true)}
             onError={() => console.log('error fired')}
           />
         </Show>

@@ -4,6 +4,7 @@ import { useNodeState } from "~/features/editor/utils"
 import { useFullscreen } from "~/hooks"
 import { ASSETS_SERVER_URL } from "~/api"
 import { BrowserOpenURL } from "~/wailsjs/runtime/runtime"
+import { SaveLocalEmbed } from "~/wailsjs/go/editor/EditorExport"
 
 interface ILocalEmbedContext {
   setRootRef$: Setter<Ref<"div">>
@@ -12,7 +13,7 @@ interface ILocalEmbedContext {
   isEmpty$: () => boolean
   openInBrowser$(): void
   openInFullscreen$(): void
-  upload$(): void
+  upload$(htmlFilePath: string): void
   reload$(): void
 }
 
@@ -26,8 +27,9 @@ export function LocalEmbedProvider(props: ParentProps) {
   const isEmpty = () => data$().name == ""
   const getEmbedUrl = () => `${ASSETS_SERVER_URL}/embed/${data$().name}` as const
 
-  let iframeRef: Ref<"iframe">
+  let iframeRef!: Ref<"iframe">
   onCleanup(() => {
+    // @ts-ignore
     iframeRef = null
   })
 
@@ -42,12 +44,13 @@ export function LocalEmbedProvider(props: ParentProps) {
       },
       isEmpty$: isEmpty,
       isFullscreen$: isFullscreen$,
-      upload$() {
-        // 
+      async upload$(htmlFilePath) {
+        const entry = await SaveLocalEmbed(htmlFilePath)
+        updateAttribute$("name", entry)
       },
       reload$() {
         if (!iframeRef) {
-          iframeRef = rootRef().querySelector("iframe")
+          iframeRef = rootRef()?.querySelector("iframe")!
         }
 
         iframeRef.src = `${getEmbedUrl()}?v=${Math.random()}`

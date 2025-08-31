@@ -63,6 +63,17 @@ func IsFileExist(pathToFile string) (existOrNot bool) {
 	return false
 }
 
+func IsDirectoryExist(path string) (existOrNot bool) {
+	info, err := os.Stat(path)
+	if err == nil {
+		return info.IsDir()
+	}
+	if os.IsNotExist(err) {
+		return false
+	}
+	return false
+}
+
 // Writes the given data (stuff) to a file at the given path.
 func WriteFile(pathToFile string, stuff []byte) (writeError error) {
 	return os.WriteFile(pathToFile, stuff, os.ModePerm)
