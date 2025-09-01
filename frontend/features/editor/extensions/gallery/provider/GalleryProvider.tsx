@@ -52,10 +52,8 @@ export interface IGalleryContext {
    * @default () => false
    */
   isFullscreen$: Accessor<boolean>
-  /**A internal setter method to change if the gallery should go to fullscreen or not.
-   * @private
-   */
-  _setIsFullscreen$: Setter<boolean>
+  /**Change if the gallery should go to fullscreen or not. */
+  setIsFullscreen$: Setter<boolean>
 }
 
 const Context = createContext<IGalleryContext>()
@@ -149,7 +147,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
       currentIndex$: () => currentIndex,
       next$: next,
       isFullscreen$: isFullscreen,
-      _setIsFullscreen$: setIsFullscreen,
+      setIsFullscreen$: setIsFullscreen,
       previous$: previous,
       currentItem$: currentItem,
       getDisplayUrl$: getDisplayUrl,

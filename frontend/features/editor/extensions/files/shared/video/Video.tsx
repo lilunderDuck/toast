@@ -29,7 +29,8 @@ const style = stylex.create({
   },
   video: {
     width: "100%",
-    minHeight: "20rem"
+    minHeight: "20rem",
+    outline: "none"
   }
 })
 

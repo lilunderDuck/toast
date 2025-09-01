@@ -7,7 +7,7 @@ interface INextAndPrevButtons {
 }
 
 export function NextAndPrevButtons(props: INextAndPrevButtons) {
-  const { next$, previous$ } = useGalleryContext() ?? props.context$
+  const { next$, previous$, currentIndex$, data$ } = useGalleryContext() ?? props.context$
 
   return (
     <>
@@ -15,6 +15,7 @@ export function NextAndPrevButtons(props: INextAndPrevButtons) {
         <Button
           size$={ButtonSize.ICON}
           onClick={previous$}
+          disabled={currentIndex$() === 0}
         >
           <BsArrowLeft />
         </Button>
@@ -23,6 +24,7 @@ export function NextAndPrevButtons(props: INextAndPrevButtons) {
         <Button
           size$={ButtonSize.ICON}
           onClick={next$}
+          disabled={currentIndex$() === data$()?.items?.length - 1}
         >
           <BsArrowRight />
         </Button>

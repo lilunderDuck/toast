@@ -1,4 +1,4 @@
-import { ButtonRow, DialogContent, Spacer, type ILazyDialog } from "~/components"
+import { ButtonRow, DialogContent, type ILazyDialog } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -7,6 +7,7 @@ import { type IGalleryContext, ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } 
 import { NextAndPrevButtons } from "../buttons/NextAndPrevButtons"
 import { onCleanup, Show } from "solid-js"
 import { BsBox2HeartFill } from "solid-icons/bs"
+import { useEventListener } from "~/hooks"
 
 const style = stylex.create({
   dialog: {
@@ -48,10 +49,16 @@ const style = stylex.create({
 interface IGalleryFullviewProps extends ILazyDialog, IGalleryContext { }
 
 export default function GalleryFullview(props: IGalleryFullviewProps) {
-  props._setIsFullscreen$(true)
+  props.setIsFullscreen$(true)
 
   onCleanup(() => {
-    props._setIsFullscreen$(false)
+    props.setIsFullscreen$(false)
+  })
+
+  useEventListener("keydown", (keyboardEvent) => {
+    if (keyboardEvent.key === "Escape") {
+      props.setIsFullscreen$(false)
+    }
   })
 
   return (

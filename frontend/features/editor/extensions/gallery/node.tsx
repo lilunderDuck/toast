@@ -5,6 +5,7 @@ import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
 import { GalleryButtonRow, GalleryContent } from "./components"
 import { GalleryProvider, useGalleryContext } from "./provider"
 import { Show } from "solid-js"
+import { BsDisplayFill } from "solid-icons/bs"
 
 const style = stylex.create({
   gallery: {
@@ -33,7 +34,9 @@ export default function GalleryNodeView() {
     return (
       // Avoid file from being loaded 2 times when gallery on fullscreen.
       <div {...stylex.attrs(style.gallery__content)}>
-        <Show when={!isFullscreen$()}>
+        <Show when={!isFullscreen$()} fallback={
+          <BsDisplayFill size={30} />
+        }>
           <GalleryContent />
         </Show>
       </div>
