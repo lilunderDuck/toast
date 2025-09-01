@@ -1,8 +1,54 @@
-import { type Attrs, useSolidNodeView } from "~/libs/solid-tiptap-renderer"
+import { type Attrs, type SolidNodeViewContextProps, useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 
 export const META_ALLOW_INTENTIONAL_DELETION = "non-sense"
 
-export function useNodeState<Data extends Attrs>() {
+interface INodeState<Data extends Attrs> {
+  /**Updates a single attribute on the current node.
+   * @template T The key of the attribute to update.
+   * @param key The key of the attribute to update.
+   * @param value The new value for the attribute.
+   * @returns *nothing*
+   */
+  updateAttribute$<T extends keyof Data>(key: T, value: Data[T]): void
+  /**Gets the options of this node's extension. */
+  options$(): any
+  /**Returns whether this node is selected. */
+  selected$(): boolean
+  /**Gets the data/attributes of this node. */
+  data$(): Data
+  /**Deletes this node from the editor.
+   * @returns *nothing*
+   */
+  delete$(): void
+  state$: SolidNodeViewContextProps["state"]
+}
+
+/**A hook to access the state and attributes of a TipTap node within a `SolidNodeView`.
+ * @example
+ * ```tsx
+ * import { Node } from '@tiptap/core'
+ * 
+ * type SampleNodeAttribute = {
+ *   // define your node attribute here
+ * }
+ * 
+ * export const SampleNode = Node.create({
+ *   // ... node related stuff ...
+ *   addNodeView: () => SolidNodeViewRenderer(() => {
+ *     const { data$ } = useNodeState<SampleNodeAttribute>()
+ * 
+ *     return (
+ *       <NodeViewWrapper>
+ *         Do something with the node state here
+ *       </NodeViewWrapper>
+ *     )
+ *   }),
+ * })
+ * ```
+ * @template Data The type of the node's attributes.
+ * @returns An object containing accessors and functions to interact with the node's state.
+ */
+export function useNodeState<Data extends Attrs>(): INodeState<Data> {
   const { state } = useSolidNodeView<Data>()
   const updateAttribute = <T extends keyof Data>(key: T, value: Data[T]) => {
     state().updateAttributes({ [key]: value })
@@ -13,7 +59,7 @@ export function useNodeState<Data extends Attrs>() {
     return state().selected
   }
 
-  const attrs = (): Data => {
+  const data = (): Data => {
     return state().node.attrs
   }
 
@@ -37,7 +83,7 @@ export function useNodeState<Data extends Attrs>() {
     updateAttribute$: updateAttribute,
     options$: options,
     selected$: selected,
-    data$: attrs,
+    data$: data,
     state$: state,
     delete$: deleteCurrentNode
   }

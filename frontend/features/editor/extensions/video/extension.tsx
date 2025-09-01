@@ -2,10 +2,8 @@ import { type Attribute, Node } from '@tiptap/core'
 // ...
 import { NodeViewWrapper, SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
 // ...
-import { useNodeState } from '../../utils'
+import { insertNodeAtCurrentPosition, useNodeState } from '../../utils'
 import { Video, type VideoAttribute } from '../files'
-
-import stylex from "@stylexjs/stylex"
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -30,14 +28,8 @@ export const VideoNode = Node.create({
   },
   addCommands() {
     return {
-      insertVideo$: () => ({ tr, dispatch }) => {
-        const node = this.type.create({ name: '' } satisfies VideoAttribute)
-
-        if (dispatch) {
-          tr.replaceRangeWith(tr.selection.from, tr.selection.to, node)
-        }
-
-        return true
+      insertVideo$: () => ({ tr }) => {
+        return insertNodeAtCurrentPosition<VideoAttribute>(this, tr, { name: '' })
       },
     }
   },

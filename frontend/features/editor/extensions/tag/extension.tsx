@@ -27,16 +27,13 @@ export const TagExtension = Node.create<TagAttribute>({
       }
     }
   },
-  addNodeView() {
-    return SolidNodeViewRenderer(TagNodeView)
-  },
   addInputRules() {
     return [
       // Tiptap extension code sometime is very confusing for my small brain.
       // Here, have some code commend, future me.
       new InputRule({
         find: /#([a-zA-Z0-9_-]+)\s$/,
-        handler: ({ state, range, match, chain }) => {
+        handler: ({ state, range, match }) => {
           // example text: #any-tag-name, as the input
           const { tr } = state
           const [text] = match as [string, number]
@@ -44,10 +41,11 @@ export const TagExtension = Node.create<TagAttribute>({
           tr.deleteRange(range.from, range.to)
           // replace it with our own tag component
           insertNodeAtCurrentPosition<TagAttribute>(this, tr, { name: text.replace("#", "") })
-
-          return tr
         },
       })
     ]
+  },
+  addNodeView() {
+    return SolidNodeViewRenderer(TagNodeView)
   },
 })

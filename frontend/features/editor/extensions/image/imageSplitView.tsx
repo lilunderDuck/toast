@@ -5,7 +5,7 @@ import __style from "./imageSplitView.module.css"
 // ...
 import { NodeViewWrapper, SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
 // ...
-import { useNodeState } from '../../utils'
+import { insertNodeAtCurrentPosition, useNodeState } from '../../utils'
 import { ImageInput, type ImageAttribute } from '../files'
 
 const style = stylex.create({
@@ -55,14 +55,9 @@ export const ImageSplitViewExtension = Node.create({
   },
   addCommands() {
     return {
-      insertImageSplitView$: () => ({ tr, dispatch }) => {
-        const node = this.type.create({ left: null, right: null })
-
-        if (dispatch) {
-          tr.replaceRangeWith(tr.selection.from, tr.selection.to, node)
-        }
-
-        return true
+      insertImageSplitView$: () => ({ tr }) => {
+        // @ts-ignore
+        return insertNodeAtCurrentPosition<ImageSplitViewAttribute>(this, tr, { leftImage: null, rightImage: null })
       },
     }
   },

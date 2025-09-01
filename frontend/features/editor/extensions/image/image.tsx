@@ -2,7 +2,7 @@ import { type Attribute, Node } from '@tiptap/core'
 // ...
 import { NodeViewWrapper, SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
 // ...
-import { useNodeState } from '../../utils'
+import { insertNodeAtCurrentPosition, useNodeState } from '../../utils'
 import { ImageInput, type ImageAttribute } from '../files'
 import stylex from "@stylexjs/stylex"
 
@@ -38,14 +38,8 @@ export const ImageExtension = Node.create({
   },
   addCommands() {
     return {
-      insertImage$: () => ({ tr, dispatch }) => {
-        const node = this.type.create({ name: '' } satisfies ImageAttribute)
-
-        if (dispatch) {
-          tr.replaceRangeWith(tr.selection.from, tr.selection.to, node)
-        }
-
-        return true
+      insertImage$: () => ({ tr }) => {
+        return insertNodeAtCurrentPosition<ImageAttribute>(this, tr, { name: '' })
       },
     }
   },

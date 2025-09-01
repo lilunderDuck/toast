@@ -32,7 +32,7 @@ export const LocalEmbedExtension = Node.create({
   },
   addCommands() {
     return {
-      insertLocalEmbed$: () => ({ tr, dispatch }) => {
+      insertLocalEmbed$: () => ({ tr }) => {
         return insertNodeAtCurrentPosition<LocalEmbedAttribute>(this, tr, { name: '' })
       },
     }
