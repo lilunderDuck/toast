@@ -19,10 +19,6 @@ export function debounce<Fn extends AnyFunction>(callback: Fn, wait: number) {
   }
 }
 
-export function isObject(someValue: any): someValue is object {
-  return toString.call(someValue) === '[object Object]'
-}
-
 export function getFilenameFromUrl(url: string) {
   return url.split("/").pop()!
 }

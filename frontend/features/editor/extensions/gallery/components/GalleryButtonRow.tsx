@@ -27,7 +27,7 @@ export function GalleryButtonRow() {
   const { currentItem$ } = useGalleryContext()
 
   return (
-    <ButtonRow {...stylex.attrs(style.buttonRow)} direction$="custom$">
+    <ButtonRow {...stylex.attrs(style.buttonRow)} direction$={ButtonRowDirection.CUSTOM}>
       <UploadButton />
       <FullscreenButton />
       <Show when={currentItem$()}>

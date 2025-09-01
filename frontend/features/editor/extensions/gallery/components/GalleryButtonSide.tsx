@@ -35,7 +35,7 @@ export function LeftButtonSide() {
   return (
     <div {...stylex.attrs(style.gallery__buttonOnTheSide, style.gallery__backButtonWrap)}>
       <Button
-        size$={ButtonSize.icon}
+        size$={ButtonSize.ICON}
         onClick={previous$}
         disabled={currentIndex$() === 0 || !data$()}
         {...stylex.attrs(style.gallery__button)}
@@ -52,7 +52,7 @@ export function RightButtonSide() {
   return (
     <div {...stylex.attrs(style.gallery__buttonOnTheSide, style.gallery__nextButtonWrap)}>
       <Button
-        size$={ButtonSize.icon}
+        size$={ButtonSize.ICON}
         onClick={next$}
         disabled={currentIndex$() === data$()?.items?.length || !data$()}
         {...stylex.attrs(style.gallery__button)}

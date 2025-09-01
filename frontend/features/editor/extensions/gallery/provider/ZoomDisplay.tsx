@@ -1,6 +1,5 @@
 import stylex from "@stylexjs/stylex"
 import __style from "./ZoomDisplay.module.css"
-import { FlexCenter } from "~/components"
 import { useZoomAndPanContext } from "./ZoomAndPanProvider"
 import { mergeClassname } from "~/utils"
 import type { ParentProps } from "solid-js"
@@ -10,7 +9,10 @@ const style = stylex.create({
     width: '100%',
     height: '100%',
     // positon: 'relative',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: 'center',
   },
   wrapRoot: {
     width: '100%',
@@ -124,7 +126,7 @@ export function ZoomDisplay(props: ParentProps) {
   }
 
   return (
-    <FlexCenter 
+    <div 
       {...stylex.attrs(style.imageDisplay)} 
       onMouseDown={dragStart}
       ref={targetElement}
@@ -150,6 +152,6 @@ export function ZoomDisplay(props: ParentProps) {
           {props.children}
         </div>
       </div>
-    </FlexCenter>
+    </div>
   )
 }

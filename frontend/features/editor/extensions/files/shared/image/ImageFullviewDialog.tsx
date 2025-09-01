@@ -1,4 +1,4 @@
-import { AppTitleBarDraggable, DialogContent, type IDialog } from "~/components";
+import { AppTitleBarDraggable, DialogContent, type ILazyDialog } from "~/components";
 import { ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "../../../gallery";
 import { Image } from "./Image";
 
@@ -21,7 +21,7 @@ const style = stylex.create({
   }
 })
 
-interface IImageFullviewDialogProps extends IDialog {
+interface IImageFullviewDialogProps extends ILazyDialog {
   src$: string
 }
 

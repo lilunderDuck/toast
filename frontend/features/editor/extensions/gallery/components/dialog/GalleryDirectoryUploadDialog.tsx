@@ -3,8 +3,8 @@ import { createSignal, Match, Switch } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import __style from "./GalleryDirectoryUploadDialog.module.css"
 // ...
-import { Button, ButtonRow, DialogContent, DialogHeader, type IDialog, RadioGroup, RadioGroupItem, RadioGroupItemLabel, Tooltip } from "~/components"
-import { createFileUpload, FileUploadType } from "~/features/native"
+import { Button, ButtonRow, DialogContent, DialogHeader, type ILazyDialog, RadioGroup, RadioGroupItem, RadioGroupItemLabel, Tooltip } from "~/components"
+import { createFileUpload } from "~/features/native"
 
 const style = stylex.create({
   dialog: {
@@ -41,13 +41,13 @@ const style = stylex.create({
   }
 })
 
-interface IGalleryDirectoryUploadDialogProps extends IDialog {}
+interface IGalleryDirectoryUploadDialogProps extends ILazyDialog {}
 
 export default function GalleryDirectoryUploadDialog(props: IGalleryDirectoryUploadDialogProps) {
   const [selectedPath, setSelectedPath] = createSignal('')
   const [selectedOption, setSelectedOption] = createSignal('everything$')
   const { open$ } = createFileUpload({
-    type$: FileUploadType.directory,
+    type$: FileUploadType.DIRECTORY,
     dialogOptions$: {
       Title: "Select a directory."
     },
@@ -113,10 +113,10 @@ export default function GalleryDirectoryUploadDialog(props: IGalleryDirectoryUpl
       </section>
 
       <ButtonRow>
-        <Button size$={ButtonSize.sm} variant$={ButtonVariant.danger} onClick={props.close$}>
+        <Button size$={ButtonSize.SMALL} variant$={ButtonVariant.DANGER} onClick={props.close$}>
           Dismiss
         </Button>
-        <Button size$={ButtonSize.sm} disabled={isEmpty()}>
+        <Button size$={ButtonSize.SMALL} disabled={isEmpty()}>
           Upload
         </Button>
       </ButtonRow>

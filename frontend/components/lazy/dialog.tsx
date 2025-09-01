@@ -6,11 +6,11 @@ import { createLazyComponent } from "./utils"
 
 type LazyDialogComponent<Props extends {}> = LazyComponentProps<LazyComponent<Props>>
 
-export interface IDialog {
+export interface ILazyDialog {
   close$(): void
 }
 
-export function createLazyLoadedDialog<Props extends IDialog>(
+export function createLazyLoadedDialog<Props extends ILazyDialog>(
   Component: LazyComponent<Props>, 
   // @ts-ignore  should work
   itProps: () => Omit<LazyDialogComponent<Props>, "close$"> = () => {}
@@ -30,7 +30,7 @@ export function createLazyLoadedDialog<Props extends IDialog>(
   const LazyComponent = createLazyComponent(Component)
 
   return {
-    Modal$() {
+    Dialog$() {
       return (
         <Show when={showing()}>
           <Dialog defaultOpen={true} preventScroll={false} modal={true}>

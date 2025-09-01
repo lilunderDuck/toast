@@ -1,7 +1,7 @@
 import { createForm, required } from "@modular-forms/solid"
 import stylex from "@stylexjs/stylex"
 import __style from "./CreateJournalDialog.module.css"
-import { DialogContent, DialogHeader, FieldInput, type IDialog, RadioGroup, RadioGroupItem, RadioGroupItemLabel } from "~/components"
+import { DialogContent, DialogHeader, FieldInput, type ILazyDialog, RadioGroup, RadioGroupItem, RadioGroupItemLabel } from "~/components"
 import { createSubmitForm } from "~/hooks"
 import { type IJournalContext } from "~/features/journal/provider"
 import { createSignal } from "solid-js"
@@ -20,7 +20,7 @@ type JournalOptionsSchema = {
 
 type JournalTypeStr = 'type_journal$' | 'type_folder$'
 
-interface ICreateJournalDialogProps extends IDialog {
+interface ICreateJournalDialogProps extends ILazyDialog {
   context$: IJournalContext
 }
 

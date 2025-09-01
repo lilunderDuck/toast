@@ -5,7 +5,7 @@ import { A } from "@solidjs/router"
 import __style from "./JournalInfoDialog.module.css"
 import stylex from "@stylexjs/stylex"
 // ...
-import { Button, ButtonRow, DialogContent, Spacer, type IDialog } from "~/components"
+import { Button, ButtonRow, DialogContent, Spacer, type ILazyDialog } from "~/components"
 import { journal } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 import { formatDate, goTimeToDate } from "~/utils"
@@ -60,7 +60,7 @@ const style = stylex.create({
   }
 })
 
-interface IJournalInfoDialogProps extends IDialog, journal.JournalGroupData {
+interface IJournalInfoDialogProps extends ILazyDialog, journal.JournalGroupData {
   // 
 }
 
@@ -108,11 +108,11 @@ export default function JournalInfoDialog(props: IJournalInfoDialogProps) {
         <Spacer />
 
         <ButtonRow>
-          <Button size$={ButtonSize.sm} variant$={ButtonVariant.danger}>
+          <Button size$={ButtonSize.SMALL} variant$={ButtonVariant.DANGER}>
             Close
           </Button>
           <A href={`/journal/${props.id}`}>
-            <Button size$={ButtonSize.sm}>Open</Button>
+            <Button size$={ButtonSize.SMALL}>Open</Button>
           </A>
         </ButtonRow>
       </main>

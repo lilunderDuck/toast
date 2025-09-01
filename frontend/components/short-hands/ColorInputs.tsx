@@ -5,12 +5,14 @@ import { BsX } from "solid-icons/bs"
 import stylex from "@stylexjs/stylex"
 import "./ColorInputs.css"
 // ...
-import { FlexCenterY, Button, Tooltip, HoverCard, HoverCardTrigger, HoverCardContent } from "../ui"
+import { Button, Tooltip, HoverCard, HoverCardTrigger, HoverCardContent } from "../ui"
 
 const style = stylex.create({
   wholeColorInput: {
     marginTop: 10,
-    gap: 15
+    gap: 15,
+    display: "flex",
+    alignItems: 'center',
   },
   colorPicker: {
     width: '100%'
@@ -50,7 +52,7 @@ export function HexColorInput(props: IHexColorInputProps) {
   return (
     <div class={props.class}>
       <HexColorPicker color={props.color$()} onChange={props.setColor$} />
-      <FlexCenterY {...stylex.attrs(style.wholeColorInput)}>
+      <div {...stylex.attrs(style.wholeColorInput)}>
         <_HexColorInput 
           color={props.color$()} 
           onChange={props.setColor$}
@@ -59,7 +61,7 @@ export function HexColorInput(props: IHexColorInputProps) {
         <div {...stylex.attrs(style.resetButton)}>
           <Tooltip label$="Reset color">
             <Button 
-              size$={ButtonSize.icon} 
+              size$={ButtonSize.ICON} 
               onClick={() => {
                 props.setColor$("#000000")
                 props.onReset$?.()
@@ -72,7 +74,7 @@ export function HexColorInput(props: IHexColorInputProps) {
         <div {...stylex.attrs(style.colorPreview)} style={{
           '--color': props.color$()
         }} />
-      </FlexCenterY>
+      </div>
     </div>
   )
 }

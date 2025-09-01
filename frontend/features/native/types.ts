@@ -1,17 +1,6 @@
-import type { Accessor, Component } from "solid-js"
-import type { frontend } from "~/wailsjs/go/models";
-
-export const enum FileUploadType {
-  directory,
-  file,
-  multiFile
-}
-
-/**Component type that represents a file upload click zone.
- * 
- * It's a simple div that, when clicked, shows a file upload dialog.
- */
-export type FileUploadComponent = Component<HTMLAttributes<"div">>
+import type { Accessor } from "solid-js"
+// ...
+import type { frontend } from "~/wailsjs/go/models"
 
 export type UploadDialog = {
   isUploading$: Accessor<boolean>
@@ -33,9 +22,9 @@ export type CreateFileUploadOptions<T extends FileUploadType, FinishFn extends A
   /**Fired when the file upload is complete.
    * 
    * It receives 
-   * - the selected file if you set the type to `FileUploadType.file`
-   * - the selected directory if you set the type to `FileUploadType.directory`
-   * - a list of selected file if you set the type to `FileUploadType.multiFile`
+   * - the selected file if you set the type to `FileUploadType.FILE`
+   * - the selected directory if you set the type to `FileUploadType.DIRECTORY`
+   * - a list of selected file if you set the type to `FileUploadType.MULTI_FILE`
    */
   onFinish$: FinishFn
   disable$?: boolean

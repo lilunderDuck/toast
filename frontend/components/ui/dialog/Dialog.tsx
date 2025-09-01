@@ -1,13 +1,13 @@
 import type { Component, ComponentProps, JSX, ValidComponent } from "solid-js"
 import { Show, splitProps } from "solid-js"
-import * as DialogPrimitive from "@kobalte/core/dialog"
+import { BsX } from "solid-icons/bs"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
-// ...
-import { mergeClassname } from "~/utils"
+import { CloseButton, Content, Description, Overlay, Portal, Root, Title, Trigger, type DialogContentProps, type DialogDescriptionProps, type DialogOverlayProps, type DialogPortalProps, type DialogTitleProps } from "@kobalte/core/dialog"
 // ...
 import stylex from "@stylexjs/stylex"
+import { mergeClassname } from "~/utils"
 import __scrollbarStyle from'~/styles/scrollbar.module.css'
-import { BsX } from "solid-icons/bs"
+// ...
 
 const style = stylex.create({
   portal: {
@@ -82,18 +82,18 @@ const style = stylex.create({
   },
 })
 
-const Dialog = DialogPrimitive.Root
-const DialogTrigger = DialogPrimitive.Trigger
+const Dialog = Root
+const DialogTrigger = Trigger
 
-interface IDialogPortalProps extends DialogPrimitive.DialogPortalProps {
+interface IDialogPortal extends DialogPortalProps {
   closeOnClickOutside$?: boolean
 }
 
-const DialogPortal: Component<IDialogPortalProps> = (props) => {
+const DialogPortal: Component<IDialogPortal> = (props) => {
   const [, rest] = splitProps(props, ["children", "closeOnClickOutside$"])
 
   return (
-    <DialogPrimitive.Portal {...rest}>
+    <Portal {...rest}>
       <Show
         when={props.closeOnClickOutside$ === false}
         fallback={<DialogOverlay />}
@@ -103,45 +103,37 @@ const DialogPortal: Component<IDialogPortalProps> = (props) => {
       <div {...stylex.attrs(style.portal)}>
         {props.children}
       </div>
-    </DialogPrimitive.Portal>
+    </Portal>
   )
 }
 
-type DialogOverlayProps<T extends ValidComponent = "div"> =
-  & DialogPrimitive.DialogOverlayProps<T>
-  & {
-    class?: string | undefined
-  }
-// ...
+interface IDialogOverlayProps<T extends ValidComponent = "div"> extends DialogOverlayProps<T> {
+  class?: string | undefined
+}
 
 const DialogOverlay = <T extends ValidComponent = "div">(
-  props: PolymorphicProps<T, DialogOverlayProps<T>>,
+  props: PolymorphicProps<T, IDialogOverlayProps<T>>,
 ) => {
-  const [, rest] = splitProps(props as DialogOverlayProps, ["class"])
+  const [, rest] = splitProps(props as IDialogOverlayProps, ["class"])
   return (
-    <DialogPrimitive.Overlay
+    <Overlay
       class={mergeClassname(props, stylex.attrs(style.overlay))}
       {...rest}
     />
   )
 }
 
-// export type DialogContentOp
-
-type DialogContentProps<T extends ValidComponent = "div"> =
-  & DialogPrimitive.DialogContentProps<T>
-  & {
-    class?: string | undefined
-    children?: JSX.Element
-    closeOnClickOutside$?: boolean
-    showCloseButton$?: boolean
-  }
-// ...
+interface IDialogContentProps<T extends ValidComponent = "div"> extends DialogContentProps<T> {
+  class?: string | undefined
+  children?: JSX.Element
+  closeOnClickOutside$?: boolean
+  showCloseButton$?: boolean
+}
 
 const DialogContent = <T extends ValidComponent = "div">(
-  props: PolymorphicProps<T, DialogContentProps<T>>,
+  props: PolymorphicProps<T, IDialogContentProps<T>>,
 ) => {
-  const [, rest] = splitProps(props as DialogContentProps, [
+  const [, rest] = splitProps(props as IDialogContentProps, [
     "class",
     "children",
     "closeOnClickOutside$",
@@ -150,17 +142,17 @@ const DialogContent = <T extends ValidComponent = "div">(
 
   return (
     <DialogPortal closeOnClickOutside$={props.closeOnClickOutside$}>
-      <DialogPrimitive.Content
+      <Content
         class={mergeClassname(props, stylex.attrs(style.content))}
         {...rest}
       >
         {props.children}
         <Show when={props.showCloseButton$ ?? true}>
-          <DialogPrimitive.CloseButton {...stylex.attrs(style.closeButton)}>
+          <CloseButton {...stylex.attrs(style.closeButton)}>
             <BsX />
-          </DialogPrimitive.CloseButton>
+          </CloseButton>
         </Show>
-      </DialogPrimitive.Content>
+      </Content>
     </DialogPortal>
   )
 }
@@ -180,38 +172,32 @@ const DialogFooter: Component<ComponentProps<"div">> = (props) => {
   )
 }
 
-type DialogTitleProps<T extends ValidComponent = "h2"> =
-  & DialogPrimitive.DialogTitleProps<T>
-  & {
-    class?: string | undefined
-  }
-// ...
+interface IDialogTitleProps<T extends ValidComponent = "h2"> extends DialogTitleProps<T> {
+  class?: string | undefined
+}
 
 const DialogTitle = <T extends ValidComponent = "h2">(
-  props: PolymorphicProps<T, DialogTitleProps<T>>,
+  props: PolymorphicProps<T, IDialogTitleProps<T>>,
 ) => {
-  const [, rest] = splitProps(props as DialogTitleProps, ["class"])
+  const [, rest] = splitProps(props as IDialogTitleProps, ["class"])
   return (
-    <DialogPrimitive.Title
+    <Title
       class={mergeClassname(props, stylex.attrs(style.title))}
       {...rest}
     />
   )
 }
 
-type DialogDescriptionProps<T extends ValidComponent = "p"> =
-  & DialogPrimitive.DialogDescriptionProps<T>
-  & {
-    class?: string | undefined
-  }
-// ...
+interface IDialogDescriptionProps<T extends ValidComponent = "p"> extends DialogDescriptionProps<T> {
+  class?: string | undefined
+}
 
 const DialogDescription = <T extends ValidComponent = "p">(
-  props: PolymorphicProps<T, DialogDescriptionProps<T>>,
+  props: PolymorphicProps<T, IDialogDescriptionProps<T>>,
 ) => {
-  const [, rest] = splitProps(props as DialogDescriptionProps, ["class"])
+  const [, rest] = splitProps(props as IDialogDescriptionProps, ["class"])
   return (
-    <DialogPrimitive.Description
+    <Description
       class={mergeClassname(props, stylex.attrs(style.description))}
       {...rest}
     />

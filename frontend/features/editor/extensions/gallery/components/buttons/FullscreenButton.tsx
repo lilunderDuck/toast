@@ -13,14 +13,14 @@ export function FullscreenButton() {
     <>
       <Tooltip label$="Fullscreen mode">
         <Button
-          size$={ButtonSize.icon}
+          size$={ButtonSize.ICON}
           disabled={!context.data$()}
           onClick={GalleryFullscreenDialog.show$}
         >
           <BsFullscreen />
         </Button>
       </Tooltip>
-      <GalleryFullscreenDialog.Modal$ />
+      <GalleryFullscreenDialog.Dialog$ />
     </>
   )
 }

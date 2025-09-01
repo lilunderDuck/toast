@@ -58,8 +58,8 @@ const style = stylex.create({
 })
 
 const variantMapping: Record<ButtonVariant, StylexStylesAttribute> = {
-  [ButtonVariant.default]: stylex.attrs(style.variant_default),
-  [ButtonVariant.danger]: stylex.attrs(style.variant_danger)
+  [ButtonVariant.DEFAULT]: stylex.attrs(style.variant_default),
+  [ButtonVariant.DANGER]: stylex.attrs(style.variant_danger)
   // outline: "border border-input hover:bg-accent hover:text-accent-foreground",
   // secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
   // ghost: "hover:bg-accent hover:text-accent-foreground",
@@ -67,10 +67,10 @@ const variantMapping: Record<ButtonVariant, StylexStylesAttribute> = {
 }
 
 const sizeMapping: Record<ButtonSize, StylexStylesAttribute> = {
-  [ButtonSize.default]: stylex.attrs(style.size_default),
-  [ButtonSize.sm]: stylex.attrs(style.size_small),
-  [ButtonSize.lg]: stylex.attrs(style.size_large),
-  [ButtonSize.icon]: stylex.attrs(style.size_icon)
+  [ButtonSize.DEFAULT]: stylex.attrs(style.size_default),
+  [ButtonSize.SMALL]: stylex.attrs(style.size_small),
+  [ButtonSize.LARGE]: stylex.attrs(style.size_large),
+  [ButtonSize.ICON]: stylex.attrs(style.size_icon)
 }
  
 export type ButtonProps<T extends ValidComponent = "button"> = ButtonRootProps<T> &
@@ -93,8 +93,8 @@ export function Button<T extends ValidComponent = "button">(
         others,
         __style.button,
         stylex.attrs(style.base),
-        defaultValueOrElse(variantMapping, local.variant$, ButtonVariant.default),
-        defaultValueOrElse(sizeMapping, local.size$, ButtonSize.default),
+        defaultValueOrElse(variantMapping, local.variant$, ButtonVariant.DEFAULT),
+        defaultValueOrElse(sizeMapping, local.size$, ButtonSize.DEFAULT),
       )}
     />
   )

@@ -1,7 +1,7 @@
 import type { ValidComponent } from "solid-js"
 import { splitProps } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
-import * as RadioGroupPrimitive from "@kobalte/core/radio-group"
+import { Root, type RadioGroupRootProps } from "@kobalte/core/radio-group"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -13,17 +13,19 @@ const style = stylex.create({
     gap: '0.5rem'
   }
 })
- 
-type RadioGroupRootProps<T extends ValidComponent = "div"> =
-  RadioGroupPrimitive.RadioGroupRootProps<T> & { class?: string | undefined }
-// ...
+
+interface IRadioGroupRootProps<T extends ValidComponent = "div"> extends RadioGroupRootProps<T> {
+  class?: string
+}
 
 export function RadioGroup<T extends ValidComponent = "div">(
-  props: PolymorphicProps<T, RadioGroupRootProps<T>>
+  props: PolymorphicProps<T, IRadioGroupRootProps<T>>
 ) {
-  const [local, others] = splitProps(props as RadioGroupRootProps, ["class"])
-  return <RadioGroupPrimitive.Root class={mergeClassname(
-    stylex.attrs(style.group), 
-    local
-  )} {...others} />
+  const [local, others] = splitProps(props as IRadioGroupRootProps, ["class"])
+  return (
+    <Root class={mergeClassname(
+      stylex.attrs(style.group),
+      local
+    )} {...others} />
+  )
 }

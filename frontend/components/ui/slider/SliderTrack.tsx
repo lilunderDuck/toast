@@ -5,7 +5,12 @@ import { splitProps, type ValidComponent } from "solid-js"
 import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
-  track: {"position":"relative","borderRadius":"9999px","width":"100%","height":"0.5rem"}
+  track: {
+    position: "relative",
+    borderRadius: "50%",
+    width: "100%",
+    height: "0.5rem"
+  }
 })
 
 interface ISliderTrackProps<T extends ValidComponent = "div"> extends SliderTrackProps<T> {

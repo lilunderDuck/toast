@@ -56,7 +56,7 @@ function Tag__listTable() {
         <Input type="text" placeholder="Search tag" />
         <Spacer />
         <Button
-          size$={ButtonSize.sm}
+          size$={ButtonSize.SMALL}
           onClick={() => setIsShowingInput(true)}
           {...stylex.attrs(style.tag__createTagButton)}
         >

@@ -12,7 +12,15 @@ import stylex from "@stylexjs/stylex"
 import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
-  root: {"display":"flex","position":"relative","flexDirection":"column","alignItems":"center","width":"100%","touchAction":"none","userSelect":"none"}
+  root: {
+    display: "flex",
+    position: "relative",
+    flexDirection: "column",
+    alignItems: "center",
+    width: "100%",
+    touchAction: "none",
+    userSelect: "none"
+  }
 })
 
 export interface ISliderRootProps<T extends ValidComponent = "div"> extends SliderRootProps<T> {

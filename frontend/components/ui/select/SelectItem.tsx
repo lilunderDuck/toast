@@ -6,31 +6,31 @@ import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   item: {
-    "display": "flex",
-    "position": "relative",
-    "paddingTop": "0.375rem",
-    "paddingBottom": "0.375rem",
-    "paddingLeft": "0.5rem",
-    "paddingRight": "2rem",
-    "marginTop": "0",
-    "alignItems": "center",
-    "borderRadius": "0.125rem",
-    "outlineStyle": "none",
-    "width": "100%",
-    "fontSize": "0.875rem",
-    "lineHeight": "1.25rem",
-    "cursor": "default",
-    "userSelect": "none",
+    display: "flex",
+    position: "relative",
+    paddingTop: "0.375rem",
+    paddingBottom: "0.375rem",
+    paddingLeft: "0.5rem",
+    paddingRight: "2rem",
+    marginTop: 0,
+    alignItems: "center",
+    borderRadius: "0.125rem",
+    outlineStyle: "none",
+    width: "100%",
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+    cursor: "default",
+    userSelect: "none",
     ':hover': {
       backgroundColor: 'var(--gray3)'
     }
   },
   itemIndicator: {
-    "display": "flex",
-    "position": "absolute",
-    "right": "0.5rem",
-    "justifyContent": "center",
-    "alignItems": "center",
+    display: "flex",
+    position: "absolute",
+    right: "0.5rem",
+    justifyContent: "center",
+    alignItems: "center",
   }
 })
 

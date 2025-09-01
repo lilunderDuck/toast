@@ -1,0 +1,1 @@
+export const SUPPORTED_IMAGE_PATTERN = "*.png;*.jpg;*.svg;*.gif;*.bmp;*.webp"

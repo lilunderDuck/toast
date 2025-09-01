@@ -23,7 +23,7 @@ export type TextFieldProps = {
 }
 
 const style = stylex.create({
-  $input: {
+  input: {
     paddingInline: 10,
     paddingBlock: 6,
     borderRadius: 6,
@@ -32,7 +32,7 @@ const style = stylex.create({
     width: '100%',
     resize: 'none'
   },
-  $error: {
+  error: {
     color: 'var(--red10)',
     fontSize: 14
   }
@@ -57,12 +57,12 @@ export function FieldInput(props: TextFieldProps) {
       <Show
         when={props.multiline}
         fallback={
-          <Kobalte.Input {...inputProps} type={props.type} {...stylex.attrs(style.$input)} />
+          <Kobalte.Input {...inputProps} type={props.type} {...stylex.attrs(style.input)} />
         }
       >
-        <Kobalte.TextArea {...inputProps} autoResize {...stylex.attrs(style.$input)} />
+        <Kobalte.TextArea {...inputProps} autoResize {...stylex.attrs(style.input)} />
       </Show>
-      <Kobalte.ErrorMessage {...stylex.attrs(style.$error)}>
+      <Kobalte.ErrorMessage {...stylex.attrs(style.error)}>
         {props.error}
       </Kobalte.ErrorMessage>
     </Kobalte.Root>

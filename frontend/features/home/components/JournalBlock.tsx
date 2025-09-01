@@ -74,7 +74,7 @@ export function JournalBlock(props: IJournalBlockProps) {
       }}
     >
       <Button 
-        size$={ButtonSize.icon} 
+        size$={ButtonSize.ICON} 
         {...stylex.attrs(style.block__editButton)} 
         id={__style.editButton} 
         onClick={EditJournalDialog.show$}
@@ -91,8 +91,8 @@ export function JournalBlock(props: IJournalBlockProps) {
         </span>
       </div>
 
-      <JournalInfoDialog.Modal$ />
-      <EditJournalDialog.Modal$ />
+      <JournalInfoDialog.Dialog$ />
+      <EditJournalDialog.Dialog$ />
     </div>
   )
 }

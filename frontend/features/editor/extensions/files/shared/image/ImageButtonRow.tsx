@@ -42,11 +42,11 @@ interface IImageButtonRowProps {
 
 export default function ImageButtonRow(props: IImageButtonRowProps) {
   return (
-    <ButtonRow direction$="custom$" id={__style.buttonRow} {...stylex.attrs(style.input__editButton)}>
-      <Button size$={ButtonSize.icon} onClick={props.openFileDialog$}>
+    <ButtonRow direction$={ButtonRowDirection.CUSTOM} id={__style.buttonRow} {...stylex.attrs(style.input__editButton)}>
+      <Button size$={ButtonSize.ICON} onClick={props.openFileDialog$}>
         <BsPencilFill />
       </Button>
-      <Button size$={ButtonSize.icon} onClick={props.openImageFullview$}>
+      <Button size$={ButtonSize.ICON} onClick={props.openImageFullview$}>
         <BsFullscreen />
       </Button>
     </ButtonRow>

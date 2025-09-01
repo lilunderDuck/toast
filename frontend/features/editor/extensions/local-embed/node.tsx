@@ -1,4 +1,4 @@
-import { createFileUpload, FileUploadType } from "~/features/native"
+import { createFileUpload } from "~/features/native"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -50,7 +50,7 @@ export default function LocalEmbedNode() {
   const { isEmpty$, isFullscreen$, setRootRef$, upload$, getEmbedUrl$ } = useLocalEmbedContext()
 
   const { open$, isUploading$ } = createFileUpload({
-    type$: FileUploadType.file,
+    type$: FileUploadType.FILE,
     dialogOptions$: {
       Title: "Choose a html file to embed into your journal.",
       Filters: [

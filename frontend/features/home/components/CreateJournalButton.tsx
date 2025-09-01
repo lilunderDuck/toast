@@ -35,7 +35,7 @@ export function CreateJournalButton() {
           <BsPlus size={20} />
         </button>
       </Tooltip>
-      <CreateJournalDialog.Modal$ />
+      <CreateJournalDialog.Dialog$ />
     </>
   )
 }

@@ -7,10 +7,10 @@ import stylex from "@stylexjs/stylex"
 import { mergeClassname } from "../../utils"
  
 const style = stylex.create({
-  $resizable: {
+  resizable: {
     display: 'flex'
   },
-  $resizableHandle: {
+  resizableHandle: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -21,7 +21,7 @@ const style = stylex.create({
       backgroundColor: 'var(--blue10)',
     }
   },
-  $resiableIconHandle: {
+  resiableIconHandle: {
     display: "flex",
     zIndex: 10,
     justifyContent: "center",
@@ -42,7 +42,7 @@ const Resizable = <T extends ValidComponent = "div">(props: DynamicProps<T, Resi
       {...rest}
       class={mergeClassname(
         props,
-        stylex.attrs(style.$resizable)
+        stylex.attrs(style.resizable)
       )}
     />
   )
@@ -66,11 +66,11 @@ const ResizableHandle = <T extends ValidComponent = "button">(
       {...rest}
       class={mergeClassname(
         props,
-        stylex.attrs(style.$resizableHandle)
+        stylex.attrs(style.resizableHandle)
       )}
     >
       <Show when={props.withHandle}>
-        <div class={mergeClassname(stylex.attrs(style.$resiableIconHandle))}>
+        <div class={mergeClassname(stylex.attrs(style.resiableIconHandle))}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

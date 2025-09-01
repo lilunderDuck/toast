@@ -88,7 +88,7 @@ export function createSubmitForm<T extends FieldValues>(
         <ButtonRow>
           {options.buttonRow$}
           <Button 
-            size$={ButtonSize.sm} 
+            size$={ButtonSize.SMALL} 
             type="submit" 
             disabled={submitButtonDisabled()}
           >

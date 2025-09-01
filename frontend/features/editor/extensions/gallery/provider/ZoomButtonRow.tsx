@@ -1,7 +1,7 @@
 import { Match, Switch } from "solid-js"
 import { TbZoomReset, TbZoomIn, TbZoomOut } from 'solid-icons/tb'
 // ...
-import { Button, FlexCenterY, Tooltip } from "~/components"
+import { Button, Tooltip } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -12,7 +12,9 @@ const style = stylex.create({
     gap: 10,
     userSelect: "none",
     paddingInline: 10,
-    paddingBlock: 5
+    paddingBlock: 5,
+    display: "flex",
+    alignItems: 'center',
   },
   scaleText: {
     minWidth: '3rem'
@@ -32,25 +34,25 @@ export function ZoomButtonRow() {
   const { unzoom$, zoom$, reset$, internal$ } = useZoomAndPanContext()
 
   return (
-    <FlexCenterY 
+    <div 
       {...stylex.attrs(
         style.wholeThing, 
         internal$.zoomScale$() > 1 ? style.highlightZoomButtonRow : {}
       )}
     >
       <Tooltip label$="Reset to default zoom">
-        <Button size$={ButtonSize.icon} onClick={reset$} disabled={internal$.zoomScale$() === 1}>
+        <Button size$={ButtonSize.ICON} onClick={reset$} disabled={internal$.zoomScale$() === 1}>
           <TbZoomReset size={16} />
         </Button>
       </Tooltip>
       <div />
       <Tooltip label$="Zoom out">
-        <Button size$={ButtonSize.icon} onClick={unzoom$} disabled={internal$.zoomScale$() === 0}>
+        <Button size$={ButtonSize.ICON} onClick={unzoom$} disabled={internal$.zoomScale$() === 0}>
           <TbZoomOut size={16} />
         </Button>
       </Tooltip>
       <Tooltip label$="Zoom in">
-        <Button size$={ButtonSize.icon} onClick={zoom$}>
+        <Button size$={ButtonSize.ICON} onClick={zoom$}>
           <TbZoomIn size={16} />
         </Button>
       </Tooltip>
@@ -66,6 +68,6 @@ export function ZoomButtonRow() {
           </Match>
         </Switch>
       </span>
-    </FlexCenterY>
+    </div>
   )
 }

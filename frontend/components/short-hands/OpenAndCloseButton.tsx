@@ -9,7 +9,8 @@ import { type JSX, splitProps } from "solid-js"
 const style = stylex.create({
   theThing: {
     gap: 15,
-    marginTop: 15
+    marginTop: 15,
+    display: "flex"
   }
 })
 
@@ -33,23 +34,23 @@ export function OpenAndCloseButton(props: IOpenAndCloseButtonProps) {
   ])
 
   return (
-    <Flex {...divProps} {...stylex.attrs(style.theThing)}>
+    <div {...divProps} {...stylex.attrs(style.theThing)}>
       <Spacer />
       <Button 
-        size$={ButtonSize.sm} 
-        variant$={ButtonVariant.danger}
+        size$={ButtonSize.SMALL} 
+        variant$={ButtonVariant.DANGER}
         onClick={props.onClickingClose$}
         {...stuff.closeButtonProps$}
       >
         {props.closeText$}
       </Button>
       <Button 
-        size$={ButtonSize.sm} 
+        size$={ButtonSize.SMALL} 
         onClick={props.onClickingOpen$}
         {...stuff.openButtonProps$}
       >
         {props.openText$}
       </Button>
-    </Flex>
+    </div>
   )
 }

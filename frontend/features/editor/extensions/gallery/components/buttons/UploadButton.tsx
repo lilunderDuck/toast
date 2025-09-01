@@ -16,7 +16,7 @@ export function UploadButton(props: IUploadButtonProps) {
       <Tooltip label$="Upload media">
         <UploadDropdownMenu.DropdownMenu$>
           <Button
-            size$={ButtonSize.icon}
+            size$={ButtonSize.ICON}
             disabled={!data$()}
           >
             <BsUpload />

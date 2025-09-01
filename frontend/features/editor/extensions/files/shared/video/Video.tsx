@@ -7,7 +7,6 @@ import { mergeClassname, sleep } from "~/utils"
 import stylex from "@stylexjs/stylex"
 import __style from "./Video.module.css"
 // ...
-import type { VideoPlayerStatus } from "./data"
 import { getThisVideoSubtitlePath, reloadVideo } from "./utils"
 
 const style = stylex.create({
@@ -42,11 +41,11 @@ export interface IVideoProps {
 export function Video(props: ParentProps<IVideoProps>) {
   let videoRef!: Ref<"video">
 
-  const [videoStatus, setVideoStatus] = createSignal<VideoPlayerStatus>('video__startLoading$')
+  const [videoStatus, setVideoStatus] = createSignal<VideoLoadingStatus>(VideoLoadingStatus.START_LOADING)
   const [subtitlePath, setSubtitlePath] = createSignal<string>()
   const thisVideoIsLoaded: EventHandler<"video", "onLoadedData"> = async () => {
     await tryGettingThisVideoSubtitle()
-    setVideoStatus("video__finishLoading$")
+    setVideoStatus(VideoLoadingStatus.FINISH_LOADING)
   }
 
   const tryGettingThisVideoSubtitle = async () => {
@@ -61,10 +60,10 @@ export function Video(props: ParentProps<IVideoProps>) {
   }
   
   const resetVideo = () => {
-    if (videoStatus() === "video__error$") {
+    if (videoStatus() === VideoLoadingStatus.ERROR) {
       reloadVideo(videoRef)
     }
-    setVideoStatus("video__startLoading$")
+    setVideoStatus(VideoLoadingStatus.START_LOADING)
   }
 
   return (
@@ -83,7 +82,7 @@ export function Video(props: ParentProps<IVideoProps>) {
         onLoad={loadStart}
         onError={async() => {
           await sleep(500)
-          setVideoStatus("video__error$")
+          setVideoStatus(VideoLoadingStatus.ERROR)
         }}
         ref={videoRef}
         // Actually, it still work fine without this attribute, 
@@ -103,14 +102,14 @@ export function Video(props: ParentProps<IVideoProps>) {
           />
         </Show>
       </video>
-      <Show when={videoStatus() !== "video__finishLoading$"}>
+      <Show when={videoStatus() !== VideoLoadingStatus.FINISH_LOADING}>
         <div {...stylex.attrs(style.loadingVideoLayer)} id={__style.layer}>
           <Switch>
-            <Match when={videoStatus() === "video__startLoading$"}>
+            <Match when={videoStatus() === VideoLoadingStatus.START_LOADING}>
               <SpinningCube cubeSize$={30} />
             </Match>
 
-            <Match when={videoStatus() === "video__error$"}>
+            <Match when={videoStatus() === VideoLoadingStatus.ERROR}>
               <BsCameraVideoOffFill size={30} />
               Cannot load this video, please check the video file path. <a onClick={resetVideo}>Reload?</a>
             </Match>

@@ -1,6 +1,6 @@
 import { For, Match, Switch } from "solid-js"
 // ...
-import { DialogContent, type IDialog } from "~/components"
+import { DialogContent, type ILazyDialog } from "~/components"
 import { mergeClassname } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -37,7 +37,7 @@ const style = stylex.create({
   }
 })
 
-interface ISettingDialog extends ISettingProviderProps<any>, IDialog {}
+interface ISettingDialog extends ISettingProviderProps<any>, ILazyDialog {}
 
 export default function SettingDialog(props: ISettingDialog) {
   const Sidebar = () => {

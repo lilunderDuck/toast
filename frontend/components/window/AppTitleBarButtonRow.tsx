@@ -1,6 +1,7 @@
 import { Show } from "solid-js"
 import { BsDash, BsX } from "solid-icons/bs"
 import { FaRegularWindowMaximize, FaRegularWindowRestore } from "solid-icons/fa"
+import { Portal } from "solid-js/web"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./AppTitleBar.module.css"
@@ -8,7 +9,7 @@ import __style from "./AppTitleBar.module.css"
 import { WindowFullscreen, WindowMinimise, WindowUnfullscreen } from "~/wailsjs/runtime/runtime"
 import { WindowClose } from "~/wailsjs/go/backend/App"
 import { useToggle } from "~/hooks"
-import { Portal } from "solid-js/web"
+// ...
 
 const style = stylex.create({
   titleBar: {

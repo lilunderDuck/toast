@@ -3,7 +3,6 @@ import { createEffect } from 'solid-js'
 import stylex from '@stylexjs/stylex'
 // ...
 import { mergeClassname } from '~/utils'
-import { FlexCenterY } from '~/components'
 // ...
 import { 
   getToastYDirection,
@@ -32,6 +31,8 @@ const style = stylex.create({
     flex: '1 1 auto',
     margin: '4px 10px',
     whiteSpace: 'pre-line',
+    display: "flex",
+    alignItems: 'center',
   }
 })
 
@@ -55,9 +56,9 @@ export function ToastBar(props: ToastBarProps) {
     >
       <ToastIconContainer {...props.toast} theme={props.toast.iconTheme} />
 
-      <FlexCenterY {...stylex.attrs(style.messageContainer)} role="status" aria-live='polite'>
+      <div {...stylex.attrs(style.messageContainer)} role="status" aria-live='polite'>
         {resolveValue(props.toast.message, props.toast)}
-      </FlexCenterY>
+      </div>
     </div>
   )
 }

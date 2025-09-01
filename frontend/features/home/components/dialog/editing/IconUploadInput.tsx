@@ -1,10 +1,9 @@
 import { BsPlus } from "solid-icons/bs"
-import { type Accessor, Show } from "solid-js"
+import { type Accessor, type Component, Show } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
 import { SpinningCube, Tooltip } from "~/components"
-import { type FileUploadComponent } from "~/features/native"
 import { ASSETS_SERVER_URL } from "~/api"
 
 const style = stylex.create({
@@ -30,7 +29,7 @@ const style = stylex.create({
 })
 
 interface IIconUploadInputProps {
-  uploadComponent$: FileUploadComponent
+  uploadComponent$: Component<HTMLAttributes<"div">>
   isUploading$: Accessor<boolean>
   iconPath$: Accessor<string>
 }

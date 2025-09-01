@@ -14,7 +14,7 @@ const style = stylex.create({
 })
 
 interface IButtonRowProps extends HTMLAttributes<"div"> {
-  direction$?: "direction_left$" | "direction_right$" | "direction_middle$" | "custom$"
+  direction$?: ButtonRowDirection
 }
 
 export function ButtonRow(props: IButtonRowProps) {
@@ -28,19 +28,19 @@ export function ButtonRow(props: IButtonRowProps) {
           {props.children}
         </>
       }>
-        <Match when={props.direction$ === "custom$"}>
+        <Match when={props.direction$ === ButtonRowDirection.CUSTOM}>
           {props.children}
         </Match>
-        <Match when={props.direction$ === "direction_middle$"}>
+        <Match when={props.direction$ === ButtonRowDirection.MIDDLE}>
           <Spacer />
           {props.children}
           <Spacer />
         </Match>
-        <Match when={props.direction$ === "direction_left$"}>
+        <Match when={props.direction$ === ButtonRowDirection.LEFT}>
           {props.children}
           <Spacer />
         </Match>
-        <Match when={props.direction$ === "direction_right$"}>
+        <Match when={props.direction$ === ButtonRowDirection.RIGHT}>
           <Spacer />
           {props.children}
         </Match>

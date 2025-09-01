@@ -5,7 +5,15 @@ import { type ParentProps, splitProps, type ValidComponent } from "solid-js"
 import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
-  thumb: {"display":"block","borderRadius":"9999px","borderWidth":"2px","transitionProperty":"color, background-color, border-color, text-decoration-color, fill, stroke","transitionTimingFunction":"cubic-bezier(0.4, 0, 0.2, 1)","transitionDuration":"300ms","top":"-6px"}
+  thumb: {
+    display: "block",
+    borderRadius: "9999px",
+    borderWidth: "2px",
+    transitionProperty: "color, background-color, border-color, text-decoration-color, fill, stroke",
+    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+    transitionDuration: "300ms",
+    top: 6
+  }
 })
 
 interface ISliderThumbProps<

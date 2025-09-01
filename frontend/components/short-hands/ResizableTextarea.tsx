@@ -33,16 +33,16 @@ export function ResizableTextarea(props: HTMLAttributes<"textarea">) {
   const updateTextarea = (someTextarea: HTMLTextAreaElement) => {
     setHeight('auto')
     setHeight(`${someTextarea.scrollHeight}px`)
-    console.log('[ResizableTextarea] updated height')
+    console.log('updated height')
   }
 
   // update the textarea height right after it mounts.
   // 
   // this exist is because if we set some value to this textarea, its height doesn't update
   // right away. Only when you start typing something, it will update the height correctly
-  let textareaId = `_${getRandomNumber(100_000)}${isDevMode ? '-did-not-intentionally-add-this' : ''}`
+  let textareaId = `_${getRandomNumber(100)}` as const
   onMount(() => {
-    console.group('[ResizableTextarea] mounted')
+    console.group('mounted')
     let timeout = setTimeout(() => {
       const textareaRef = document.getElementById(textareaId) as HTMLTextAreaElement | null
       console.assert(textareaRef, `cannot select textarea id: ${textareaId}`)
@@ -51,9 +51,7 @@ export function ResizableTextarea(props: HTMLAttributes<"textarea">) {
       updateTextarea(textareaRef!)
 
       // explicit clean up everything
-      console.log('clean up')
       clearTimeout(timeout)
-      console.groupEnd()
     }, 0)
   })
 

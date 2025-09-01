@@ -1,7 +1,7 @@
 import { createForm, required } from "@modular-forms/solid"
 import { onMount } from "solid-js"
 // ...
-import { Button, ButtonRow, FieldInput, type IDialog } from "~/components"
+import { Button, ButtonRow, FieldInput, type ILazyDialog } from "~/components"
 import { type TagData } from "~/features/journal/provider"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -23,7 +23,7 @@ const style = stylex.create({
   }
 })
 
-interface ITagInputDialogProps extends IDialog { }
+interface ITagInputDialogProps extends ILazyDialog { }
 
 export default function TagInputDialog(props: ITagInputDialogProps) {
   const [, { Field, Form }] = createForm<TagData>()
@@ -73,15 +73,15 @@ export default function TagInputDialog(props: ITagInputDialogProps) {
 
       <ButtonRow>
         <Button
-          size$={ButtonSize.sm}
-          variant$={ButtonVariant.danger}
+          size$={ButtonSize.SMALL}
+          variant$={ButtonVariant.DANGER}
           onClick={props.close$}
         >
           Cancel
         </Button>
         <Button
           type="submit"
-          size$={ButtonSize.sm}
+          size$={ButtonSize.SMALL}
         >
           Create
         </Button>

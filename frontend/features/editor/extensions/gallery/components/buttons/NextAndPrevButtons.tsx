@@ -13,7 +13,7 @@ export function NextAndPrevButtons(props: INextAndPrevButtons) {
     <>
       <Tooltip label$="Go back">
         <Button
-          size$={ButtonSize.icon}
+          size$={ButtonSize.ICON}
           onClick={previous$}
         >
           <BsArrowLeft />
@@ -21,7 +21,7 @@ export function NextAndPrevButtons(props: INextAndPrevButtons) {
       </Tooltip>
       <Tooltip label$="Go next">
         <Button
-          size$={ButtonSize.icon}
+          size$={ButtonSize.ICON}
           onClick={next$}
         >
           <BsArrowRight />

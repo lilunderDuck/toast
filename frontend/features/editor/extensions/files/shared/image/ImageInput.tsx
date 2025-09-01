@@ -1,16 +1,17 @@
-import { createFileUpload, FileUploadType } from "~/features/native"
-import type { ImageAttribute } from "./data"
-import { Image } from "./Image"
-
-import stylex from "@stylexjs/stylex"
-import __style from "./ImageInput.module.css"
-import { lazy, Show } from "solid-js"
-import { BsFullscreen, BsImageFill, BsPencilFill } from "solid-icons/bs"
-import { Button, ButtonRow, createLazyLoadedDialog, SpinningCube } from "~/components"
+import { Show } from "solid-js"
+import { BsImageFill } from "solid-icons/bs"
+// ...
+import { createFileUpload, SUPPORTED_IMAGE_PATTERN } from "~/features/native"
 import { UploadFile } from "~/wailsjs/go/editor/EditorExport"
 import { useJournalContext } from "~/features/journal"
 import { ASSETS_SERVER_URL } from "~/api"
-import { ZoomAndPanProvider } from "../../../gallery"
+import { createLazyLoadedDialog, SpinningCube } from "~/components"
+// ...
+import stylex from "@stylexjs/stylex"
+import __style from "./ImageInput.module.css"
+// ...
+import type { ImageAttribute } from "./data"
+import { Image } from "./Image"
 import ImageButtonRow from "./ImageButtonRow"
 
 const style = stylex.create({
@@ -57,9 +58,12 @@ export function ImageInput(props: IImageInputProps) {
   const { sessionStorage$ } = useJournalContext()
   const groupId = () => sessionStorage$.get$('journal_data$').groupId$
   const { open$, isUploading$, error$ } = createFileUpload({
-    type$: FileUploadType.file,
+    type$: FileUploadType.FILE,
     dialogOptions$: {
-
+      Title: "Choose an image file for your journal group cover.",
+      Filters: [
+        { DisplayName: "Images file", Pattern: SUPPORTED_IMAGE_PATTERN }
+      ]
     },
     async onFinish$(filePath) {
       const fileName = await UploadFile(groupId(), filePath, "media")
@@ -85,9 +89,9 @@ export function ImageInput(props: IImageInputProps) {
       <div {...stylex.attrs(style.input)} id={__style.input}>
         <Show when={props.data$?.name == ""} fallback={
           <>
-            <ImageButtonRow 
-              openFileDialog$={openFileDialog} 
-              openImageFullview$={ImageFullviewDialog.show$} 
+            <ImageButtonRow
+              openFileDialog$={openFileDialog}
+              openImageFullview$={ImageFullviewDialog.show$}
             />
             <Image src$={getImageUrl()} {...stylex.attrs(style.input__theImageItself)} />
           </>
@@ -102,7 +106,7 @@ export function ImageInput(props: IImageInputProps) {
           </div>
         </Show>
       </div>
-      <ImageFullviewDialog.Modal$ />
+      <ImageFullviewDialog.Dialog$ />
     </>
   )
 }

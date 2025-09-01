@@ -53,20 +53,20 @@ export function defineAllEnum() {
   })
 
   defineEnum('ButtonVariant', {
-    default: null,
-    danger: null,
-    outline: null,
-    secondary: null,
-    ghost: null,
-    link: null,
+    DEFAULT: null,
+    DANGER: null,
+    OUTLINE: null,
+    SECONDARY: null,
+    GHOST: null,
+    LINK: null,
   })
 
   defineEnum('ButtonSize', {
-    default: null,
-    sm: null,
-    lg: null,
-    icon: null,
-    unset: null,
+    DEFAULT: null,
+    SMALL: null,
+    LARGE: null,
+    ICON: null,
+    UNSET: null,
   })
 
   defineEnum('FormSubmitState', {
@@ -78,6 +78,25 @@ export function defineAllEnum() {
     INPUT: null,
     RANGE: null,
     CHECKBOX: null,
+  })
+
+  defineEnum('VideoLoadingStatus', {
+    START_LOADING: null,
+    FINISH_LOADING: null,
+    ERROR: null
+  })
+
+  defineEnum('ButtonRowDirection', {
+    LEFT: null,
+    RIGHT: null,
+    MIDDLE: null,
+    CUSTOM: null,
+  })
+
+  defineEnum('FileUploadType', {
+    DIRECTORY: null,
+    FILE: null,
+    MULTI_FILE: null
   })
 
   // 1 to 1 mapping from ./backend/features/editor/utils.go

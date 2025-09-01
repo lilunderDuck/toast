@@ -1,5 +1,5 @@
 import { createLazyLoadedDialog, DropdownMenuContent, DropdownMenuItem, type IDropdownMenu } from "~/components"
-import { createFileUpload, FileUploadType } from "~/features/native"
+import { createFileUpload } from "~/features/native"
 import { useGalleryContext } from "../../provider"
 
 interface IUploadDropdownMenu extends IDropdownMenu {
@@ -13,7 +13,7 @@ export default function UploadDropdownMenu(props: IUploadDropdownMenu) {
   )
 
   const { open$ } = createFileUpload({
-    type$: FileUploadType.file,
+    type$: FileUploadType.FILE,
     dialogOptions$: {
       Title: "Please select your file."
     },
@@ -32,7 +32,7 @@ export default function UploadDropdownMenu(props: IUploadDropdownMenu) {
           <span>Upload multiple file in a directory.</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
-      <GalleryDirectoryUploadDialog.Modal$ />
+      <GalleryDirectoryUploadDialog.Dialog$ />
     </>
   )
 }

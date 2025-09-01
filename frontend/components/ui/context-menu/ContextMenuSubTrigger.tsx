@@ -3,7 +3,7 @@ import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
 import { type ParentProps, splitProps, type ValidComponent } from "solid-js"
 import { mergeClassname } from "~/utils"
-import { FlexCenterY, Spacer } from "../Flex"
+import { Spacer } from "../Flex"
 
 const style = stylex.create({
   menuSubContent: {
@@ -16,10 +16,14 @@ const style = stylex.create({
     fontSize: "0.875rem",
     userSelect: 'none'
   },
+  iconWrap: {
+    display: "flex",
+    alignItems: 'center',
+  },
   icon: {
     width: 15,
     height: 15
-  }
+  },
 })
 
 export interface IContextMenuSubTriggerProps<
@@ -41,7 +45,7 @@ export function ContextMenuSubTrigger<T extends ValidComponent = "div">(
       )}
       {...rest}
     >
-      <FlexCenterY>
+      <div {...stylex.attrs(style.iconWrap)}>
         {props.children}
         <Spacer />
         <svg
@@ -56,7 +60,7 @@ export function ContextMenuSubTrigger<T extends ValidComponent = "div">(
         >
           <path d="M9 6l6 6l-6 6" />
         </svg>
-      </FlexCenterY>
+      </div>
     </SubTrigger>
   )
 }

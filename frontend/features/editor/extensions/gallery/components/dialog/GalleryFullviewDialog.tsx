@@ -1,4 +1,4 @@
-import { ButtonRow, DialogContent, Spacer, type IDialog } from "~/components"
+import { ButtonRow, DialogContent, Spacer, type ILazyDialog } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -45,7 +45,7 @@ const style = stylex.create({
   }
 })
 
-interface IGalleryFullviewProps extends IDialog, IGalleryContext { }
+interface IGalleryFullviewProps extends ILazyDialog, IGalleryContext { }
 
 export default function GalleryFullview(props: IGalleryFullviewProps) {
   props._setIsFullscreen$(true)
@@ -57,7 +57,7 @@ export default function GalleryFullview(props: IGalleryFullviewProps) {
   return (
     <DialogContent {...stylex.attrs(style.dialog)} showCloseButton$={false}>
       <ZoomAndPanProvider>
-        <ButtonRow direction$="custom$" {...stylex.attrs(style.dialog__buttonRow)}>
+        <ButtonRow direction$={ButtonRowDirection.CUSTOM} {...stylex.attrs(style.dialog__buttonRow)}>
           <ZoomButtonRow />
           <NextAndPrevButtons context$={props} />
           <div {...stylex.attrs(style.dialog__fileName)}>

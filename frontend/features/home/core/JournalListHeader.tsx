@@ -25,7 +25,7 @@ export function JournalListHeader(props: IJournalListHeaderProps) {
     <div {...stylex.attrs(style.header)}>
       <h1>{props.name$}</h1>
       <Dropdown.DropdownMenu$>
-        <Button size$={ButtonSize.icon}>
+        <Button size$={ButtonSize.ICON}>
           <BsGearFill />
         </Button>
       </Dropdown.DropdownMenu$>

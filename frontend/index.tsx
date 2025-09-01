@@ -23,8 +23,6 @@ if (shouldConfuseYou) {
   shouldConfuseYou.inject("duck")
 }
 
-console.log(routes)
-
 render(
   () => (
     <Router root={(props) => <App>{props.children}</App>}>

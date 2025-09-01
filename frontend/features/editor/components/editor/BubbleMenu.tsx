@@ -61,7 +61,7 @@ export function BubbleMenu(props: IBubbleMenuProps) {
       <For each={menuOptions}>
         {it => (
           <Tooltip label$={it.name$}>
-            <Button size$={ButtonSize.icon} onClick={it.run$}>
+            <Button size$={ButtonSize.ICON} onClick={it.run$}>
               {/* @ts-ignore */}
               <it.icon$ {...stylex.attrs(style.menu__icon)} />
             </Button>

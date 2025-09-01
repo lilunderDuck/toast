@@ -4,9 +4,9 @@ import { createForm, required } from "@modular-forms/solid"
 import stylex from "@stylexjs/stylex"
 import __style from "./CreateOrEditJournalDialog.module.css"
 // ...
-import { Button, DialogContent, DialogHeader, FieldInput, type IDialog } from "~/components"
+import { Button, DialogContent, DialogHeader, FieldInput, type ILazyDialog } from "~/components"
 import { createSubmitForm } from "~/hooks"
-import { createFileUpload, FileUploadType } from "~/features/native"
+import { createFileUpload, SUPPORTED_IMAGE_PATTERN } from "~/features/native"
 import type { journal } from "~/wailsjs/go/models"
 // ...
 import IconUploadInput from "./IconUploadInput"
@@ -34,7 +34,7 @@ const style = stylex.create({
   }
 })
 
-interface ICreateJournalDialogProps extends IDialog {
+interface ICreateJournalDialogProps extends ILazyDialog {
   prevData$?: journal.JournalGroupData
   onSubmit$?: (data: journal.JournalGroupOptions) => any
   onUpdate$?: (data: journal.JournalGroupOptions & {
@@ -69,8 +69,8 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
     submitButtonText$: getText(),
     buttonRow$: (
       <Button
-        size$={ButtonSize.sm}
-        variant$={ButtonVariant.danger}
+        size$={ButtonSize.SMALL}
+        variant$={ButtonVariant.DANGER}
         onClick={props.close$}
       >
         Dismiss
@@ -79,11 +79,11 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
   })
 
   const { open$, isUploading$ } = createFileUpload({
-    type$: FileUploadType.file,
+    type$: FileUploadType.FILE,
     dialogOptions$: {
       Title: "Choose an image file for your journal group cover.",
       Filters: [
-        { DisplayName: "Images file", Pattern: "*.png;*.jpg;*.svg;*.gif;*.bmp;*.webp", }
+        { DisplayName: "Images file", Pattern: SUPPORTED_IMAGE_PATTERN }
       ]
     },
     onFinish$(filePath) {

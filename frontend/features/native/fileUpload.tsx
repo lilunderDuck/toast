@@ -7,7 +7,6 @@ import type { frontend } from "~/wailsjs/go/models"
 import { 
   type CreateFileUploadOptions,
   type UploadDialog,
-  FileUploadType, 
 } from "./types"
 
 /**Creates a file upload component based on the provided options.
@@ -20,13 +19,13 @@ import {
 */
 // @ts-ignore - should work perfectly
 export function createFileUpload(
-  options: CreateFileUploadOptions<FileUploadType.file, (file: string) => any>
+  options: CreateFileUploadOptions<FileUploadType.FILE, (file: string) => any>
 ): UploadDialog
 export function createFileUpload(
-  options: CreateFileUploadOptions<FileUploadType.directory, (file: string) => any>
+  options: CreateFileUploadOptions<FileUploadType.DIRECTORY, (file: string) => any>
 ): UploadDialog
 export function createFileUpload(
-  options: CreateFileUploadOptions<FileUploadType.multiFile, (manyFiles: string[]) => any>
+  options: CreateFileUploadOptions<FileUploadType.MULTI_FILE, (manyFiles: string[]) => any>
 ): UploadDialog
 
 export function createFileUpload(
@@ -38,9 +37,9 @@ export function createFileUpload(
 
   const getFileDialogFn = () => {
     switch (type$) {
-      case FileUploadType.file: return OpenFileDialog
-      case FileUploadType.directory: return OpenDirectoryDialog
-      case FileUploadType.multiFile: return OpenMultipleFilesDialog
+      case FileUploadType.FILE: return OpenFileDialog
+      case FileUploadType.DIRECTORY: return OpenDirectoryDialog
+      case FileUploadType.MULTI_FILE: return OpenMultipleFilesDialog
     }
   }
 
