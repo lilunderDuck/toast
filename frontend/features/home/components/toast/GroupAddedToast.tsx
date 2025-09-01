@@ -1,10 +1,8 @@
+import { BsCheck2Square } from "solid-icons/bs"
+// ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { BsCheck2Square } from "solid-icons/bs"
-import animations from "~/styles/animation.module.css"
-// ...
 import type { Toast } from "~/libs/solid-toast/util"
-import { mergeClassname } from "~/utils"
 
 const style = stylex.create({
   toast: {
@@ -32,10 +30,7 @@ interface IGroupAddedToastProps extends Toast {
 
 export function GroupAddedToast(props: IGroupAddedToastProps) {
   return (
-    <div class={mergeClassname(
-      stylex.attrs(style.toast),
-      props.visible ? animations.fadeAndZoomIn : animations.fadeAndZoomOut
-    )}>
+    <div {...stylex.attrs(style.toast)}>
       <div {...stylex.attrs(style.toast__title)}>
         <BsCheck2Square />
         <h4>Journal group added</h4>

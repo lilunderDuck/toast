@@ -28,7 +28,8 @@ export function DropdownMenuContent<T extends ValidComponent = "div">(
       <Content
         class={mergeClassname(
           props,
-          stylex.attrs(style.menuContent)
+          stylex.attrs(style.menuContent),
+          "data-component-dropdown-menu"
         )}
         {...rest}
       />

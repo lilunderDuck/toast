@@ -12,6 +12,7 @@ const style = stylex.create({
     width: "100%",
     height: "19rem",
     backgroundColor: "var(--gray3)",
+    marginBottom: 20
   },
   gallery__content: {
     width: "100%",

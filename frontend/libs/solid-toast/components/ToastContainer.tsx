@@ -41,7 +41,7 @@ export const ToastContainer: Component<ToastContainerProps> = (props) => {
         '--offset': positionStyle().offset
       }}
       class={mergeClassname(
-        props.toast.visible ? __style['sldt-active'] : '',
+        props.toast.visible ? `${__style['sldt-active']} data-component-toast-visible` : 'data-component-toast-hidden',
         positionStyle()
       )}
       onMouseEnter={() =>

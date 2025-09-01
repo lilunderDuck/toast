@@ -52,7 +52,7 @@ export function Tooltip(
       <Portal>
         <Content
           {...others}
-          class={mergeClassname(stylex.attrs(style.tooltip), others)}
+          class={mergeClassname(stylex.attrs(style.tooltip), others, "data-component-tooltip")}
         >
           {local.label$}
         </Content>

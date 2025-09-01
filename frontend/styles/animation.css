@@ -1,0 +1,67 @@
+@keyframes animation_fadeAndZoomOut {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(.9);
+    opacity: 0;
+  }
+}
+
+@keyframes animation_fadeAndZoomIn {
+  0% {
+    transform: scale(.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes animation_fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes animation_fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.data-component-dialog-overlay[data-expanded],
+.data-component-context-menu[data-expanded] {
+  animation: animation_fadeIn .15s ease-in forwards;
+}
+
+.data-component-dialog-overlay[data-closed],
+.data-component-context-menu[data-closed] {
+  animation: animation_fadeOut .2s ease-out forwards;
+}
+
+.data-component-toast-visible > *,
+.data-component-dialog-content[data-expanded],
+.data-component-dropdown-menu[data-expanded],
+.data-component-hover-card[data-expanded] {
+  animation: animation_fadeAndZoomIn .1s ease-in forwards;
+}
+
+.data-component-toast-hidden > *,
+.data-component-dialog-content[data-closed],
+.data-component-dropdown-menu[data-closed],
+.data-component-hover-card[data-closed] {
+  animation: animation_fadeAndZoomOut .1s ease-out forwards;
+}
+
+.data-component-tooltip[data-expanded] {
+  animation: animation_fadeAndZoomIn .08s ease-in forwards;
+}
+
+.data-component-tooltip[data-closed] {
+  animation: animation_fadeAndZoomOut .08s ease-out forwards;
+}
+
+*:focus, *:focus-visible {
+  outline: 3px solid var(--blue9);
+}

@@ -34,6 +34,8 @@ export function JournalHomeProvider(props: ParentProps) {
     position: "bottom-right"
   }
 
+  window.toastTest = () => toast.custom((toast) => <GroupAddedToast {...toast} name$={"Test"} />, toastOptions)
+
   return (
     <Context.Provider value={{
       groups$: groups,

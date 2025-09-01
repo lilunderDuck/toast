@@ -117,7 +117,7 @@ const DialogOverlay = <T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IDialogOverlayProps, ["class"])
   return (
     <Overlay
-      class={mergeClassname(props, stylex.attrs(style.overlay))}
+      class={mergeClassname(props, stylex.attrs(style.overlay), "data-component-dialog-overlay")}
       {...rest}
     />
   )
@@ -143,7 +143,7 @@ const DialogContent = <T extends ValidComponent = "div">(
   return (
     <DialogPortal closeOnClickOutside$={props.closeOnClickOutside$}>
       <Content
-        class={mergeClassname(props, stylex.attrs(style.content))}
+        class={mergeClassname(props, stylex.attrs(style.content), "data-component-dialog-content")}
         {...rest}
       >
         {props.children}

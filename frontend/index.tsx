@@ -1,5 +1,6 @@
 /* @refresh reload */
 import "~/styles/index.css"
+import "~/styles/animation.css"
 // ...
 import { render } from 'solid-js/web'
 import { Router } from '@solidjs/router'

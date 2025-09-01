@@ -73,7 +73,7 @@ export default function SettingDialog(props: ISettingDialog) {
   }
 
   return (
-    <DialogContent {...stylex.attrs(style.dialog)}>
+    <DialogContent {...stylex.attrs(style.dialog)} showCloseButton$={false}>
       <SettingProvider {...props}>
         <div {...stylex.attrs(style.dialog__content)}>
           <Sidebar />

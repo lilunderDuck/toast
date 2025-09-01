@@ -39,7 +39,7 @@ export function HoverCardContent<T extends ValidComponent = "div">(
     <Portal>
       <Content
         {...others}
-        class={mergeClassname(local, stylex.attrs(style.hoverCard))}
+        class={mergeClassname(local, stylex.attrs(style.hoverCard), "data-component-hover-card")}
       />
     </Portal>
   )
