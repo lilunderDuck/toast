@@ -1,9 +1,9 @@
 import { onCleanup, type ParentProps, Show } from "solid-js"
 import { Root, Panel, Handle } from '@corvu/resizable'
-import { useParams } from "@solidjs/router"
+import { redirect, useParams } from "@solidjs/router"
 // ...
 import stylex from "@stylexjs/stylex"
-import __style from "~/features/journal/styles/index.module.css"
+import __style from "./[groupId].module.css"
 // ...
 import {
   CurrentlyOpened,
@@ -15,11 +15,13 @@ import {
   useJournalContext,
   FileExplorerRenderer,
   type IFileExplorerProviderOptions,
-  JournalLoadingScreen
+  JournalLoadingScreen,
+  type ICurrentlyOpenedProps
 } from "~/features/journal"
 import { EditorProvider } from "~/features/editor"
 import { AppTitleBarDraggable } from "~/components"
 import { SetExplorerTree } from "~/wailsjs/go/journal/GroupExport"
+import { useToggle } from "~/hooks"
 // ...
 import journalGroupData from "./[groupId].data"
 
@@ -35,9 +37,14 @@ const style = stylex.create({
     backgroundColor: "var(--content-panel-bg)",
     position: "relative"
   },
+  home__contentPanelFullView: {
+    flexBasis: "100% !important",
+    paddingInline: "15rem"
+  },
   home__resizePanelHandle: {
     backgroundColor: "transparent",
     padding: 2,
+    outline: "none",
     ":hover": {
       backgroundColor: "var(--blue8) !important",
     }
@@ -63,33 +70,72 @@ export default function JournalHome(props: ParentProps) {
   const param = useParams()
   const currentGroupId = () => parseInt(param.groupId)
 
-  document.body.classList.add(__style.journal)
-  onCleanup(() => document.body.classList.remove(__style.journal))
+  const bodyClassList = document.body.classList
+  bodyClassList.add(__style.journal)
+  onCleanup(() => {
+    bodyClassList.remove(__style.journal, __style.journalFullview)
+  })
+
+  const [isSidebarHidden, toggleHideSidebar] = useToggle()
+
+  const topHeaderButtons: ICurrentlyOpenedProps["onClick$"] = (whichOne) => {
+    switch (whichOne) {
+      case "go_back_to_home$": return redirect(`/journal/${currentGroupId()}`)
+      case "toggle_sidebar$":
+        toggleHideSidebar()
+        isSidebarHidden() ? bodyClassList.add(__style.journalFullview) : bodyClassList.remove(__style.journalFullview)
+        return
+    }
+  }
+
+  const Header = () => {
+    const { currentlyOpenedJournal$ } = useJournalContext()
+    return (
+      <AppTitleBarDraggable {...stylex.attrs(style.home__titleBar)}>
+        <CurrentlyOpened
+          onClick$={topHeaderButtons}
+          isSidebarHidden$={isSidebarHidden()}
+          currentlyOpenedName$={currentlyOpenedJournal$()}
+          groupId$={currentGroupId()}
+        />
+      </AppTitleBarDraggable>
+    )
+  }
 
   return (
-    <Providers groupId$={currentGroupId()}>
-      <Root {...stylex.attrs(style.home)} id={__style.journal}>
-        <Panel {...stylex.attrs(style.home__sidebarPanel)} initialSize={0.3}>
+    <JournalHomeProviders groupId$={currentGroupId()}>
+      <Root {...stylex.attrs(style.home)}>
+        <Panel
+          {...stylex.attrs(style.home__sidebarPanel)}
+          initialSize={0.3}
+          data-journal-side-bar-panel=""
+        >
           <TopHeaderButtonRow {...stylex.attrs(style.home__header)} />
           <QuickActionBar>
             <FileExplorerRenderer />
           </QuickActionBar>
         </Panel>
         <Handle {...stylex.attrs(style.home__resizePanelHandle)} />
-        <Panel {...stylex.attrs(style.home__contentPanel)} initialSize={0.7}>
-          <AppTitleBarDraggable {...stylex.attrs(style.home__titleBar)}>
-            <CurrentlyOpened groupId$={currentGroupId()} />
-          </AppTitleBarDraggable>
+        <Panel
+          {...stylex.attrs(style.home__contentPanel)}
+          initialSize={0.7}
+          data-journal-main-content-panel=""
+        >
+          <Header />
           <main {...stylex.attrs(style.home__mainContent)}>
             {props.children}
           </main>
         </Panel>
       </Root>
-    </Providers>
+    </JournalHomeProviders>
   )
 }
 
-function Providers(props: ParentProps<{ groupId$: number }>) {
+interface IJournalHomeProvidersProps {
+  groupId$: number
+}
+
+function JournalHomeProviders(props: ParentProps<IJournalHomeProvidersProps>) {
   const journalData = journalGroupData(props.groupId$)
 
   const fileExplorerOption: IFileExplorerProviderOptions = {

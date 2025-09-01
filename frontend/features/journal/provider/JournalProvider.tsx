@@ -1,4 +1,4 @@
-import { createContext, type ParentProps, useContext } from "solid-js"
+import { type Accessor, createContext, createSignal, type ParentProps, type Setter, useContext } from "solid-js"
 // ...
 import { createStorage, type IStorage } from "~/utils"
 import { CreateJournal, GetJournal, UpdateJournal } from "~/wailsjs/go/journal/GroupExport"
@@ -11,12 +11,16 @@ export interface IJournalContext {
     journal_data$: {
       groupId$: number
     }
+    sidebar_hidden$: boolean
     [key: `explorer.${number}`]: boolean
   }>
   createJournal$(type: number, data: journal.JournalOptions): Promise<journal.JournalData>
   getJournal$(journalId: number): Promise<journal.JournalData>
   updateJournal$(journalId: number, newData: journal.JournalOptions): Promise<journal.JournalData>
   explorerTree$: IFileExplorerContext
+  // ...
+  currentlyOpenedJournal$: Accessor<string | undefined>
+  setCurrentlyOpenedJournal$: Setter<string | undefined>
 }
 
 export interface IJournalProviderProps {
@@ -26,12 +30,17 @@ export interface IJournalProviderProps {
 const Context = createContext<IJournalContext>()
 
 export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
-  const wrappedSessionStorage: IJournalContext["sessionStorage$"] = createStorage(sessionStorage)
+  const wrappedSessionStorage: IJournalContext["sessionStorage$"] = createStorage(sessionStorage, "journal$")
   const groupId = () => wrappedSessionStorage.get$('journal_data$').groupId$
+
   const explorerTree = createFileExplorerContext(props.explorerOptions$)
+  const [currentlyOpenedJournal, setCurrentlyOpenedJournal] = createSignal<string>()
 
   return (
     <Context.Provider value={{
+      currentlyOpenedJournal$: currentlyOpenedJournal, 
+      setCurrentlyOpenedJournal$: setCurrentlyOpenedJournal,
+      // ...
       explorerTree$: explorerTree,
       sessionStorage$: wrappedSessionStorage,
       async createJournal$(type, data) {
