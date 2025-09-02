@@ -2,10 +2,9 @@ import { defineConfig } from 'vite'
 import solidPlugin from 'vite-plugin-solid'
 import pagesPlugin from 'vite-plugin-pages'
 import { stylex as stylexPlugin } from "vite-plugin-stylex-dev"
-import { optimizeCssModules } from "vite-plugin-optimize-css-modules"
 // ... 
 import tsconfig from './tsconfig.json'
-import { defineAllEnum, getAliasPath, ESBUILD_OPTIONS, OUTPUT_FILENAME } from "./build/config"
+import { defineAllEnum, getAliasPath, ESBUILD_OPTIONS, OUTPUT_FILENAME, macroPlugin } from "./build/config"
 
 export default defineConfig(({ command }) => {
   const isDevMode = command !== "build"
@@ -21,7 +20,7 @@ export default defineConfig(({ command }) => {
       }),
       solidPlugin(),
       stylexPlugin(),
-      optimizeCssModules()
+      macroPlugin
     ],
     server: {
       port: 3000,

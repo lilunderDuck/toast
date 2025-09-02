@@ -3,7 +3,7 @@ import { A } from "@solidjs/router"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 import { AppTitleBarDraggable, Spacer, Tooltip } from "~/components"
 
 const style = stylex.create({
@@ -38,7 +38,7 @@ export function TopHeaderButtonRow(props: HTMLAttributes<"header">) {
     <AppTitleBarDraggable {...stylex.attrs(style.header__titleBar)}>
       <header
         {...props}
-        class={mergeClassname(
+        class={macro_mergeClassnames(
           props,
           stylex.attrs(style.header)
         )}

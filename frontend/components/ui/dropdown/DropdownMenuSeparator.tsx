@@ -2,7 +2,7 @@ import { type DropdownMenuSeparatorProps, Separator } from "@kobalte/core/dropdo
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
 import { splitProps, type ValidComponent } from "solid-js"
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 
 const style = stylex.create({
   menuSepartor: {
@@ -24,7 +24,7 @@ export function DropdownMenuSeparator<T extends ValidComponent = "hr">(
   const [, rest] = splitProps(props as IDropdownMenuSeparatorProps, ["class"])
   return (
     <Separator
-      class={mergeClassname(
+      class={macro_mergeClassnames(
         props,
         stylex.attrs(style.menuSepartor)
       )}

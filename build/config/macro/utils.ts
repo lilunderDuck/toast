@@ -1,4 +1,4 @@
-import type { TemplateLiteral } from "@babel/types";
+import type { Expression, TemplateLiteral } from "@babel/types";
 
 export const escapeIdentifier = (name: string) => "${" + name + "}"
 
@@ -25,4 +25,20 @@ export function painfullyRebuildTemplateLiteral(node: TemplateLiteral) {
   }
 
   return result
+}
+
+export function getString(node: /*any*/Expression, ignoreUndefined: boolean) {
+  switch (node.type) {
+    case "TemplateLiteral": return painfullyRebuildTemplateLiteral(node)
+    case "Identifier": {
+      if (ignoreUndefined && node.name === "undefined") {
+        return '' // nothing
+      }
+      return escapeIdentifier(node.name)
+    }
+    case "StringLiteral": return node.value
+
+    default:
+      throw new Error(`macro_urlBuilder() arg[1]: Case ${node.type} has not been handled yet.`)
+  }
 }

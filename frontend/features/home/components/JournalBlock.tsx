@@ -8,6 +8,7 @@ import { journal } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 // ...
 import { useJournalHomeContext } from "../provider"
+import { macro_mergeClassnames } from "macro-def"
 
 const style = stylex.create({
   block: {
@@ -63,10 +64,10 @@ export function JournalBlock(props: IJournalBlockProps) {
 
   return (
     <div 
-      {...stylex.attrs(
-        style.block, 
-        props.icon ? style.block__withImage : style.block__defaultBg
-      )} 
+      class={macro_mergeClassnames(
+        stylex.attrs(style.block),
+        (props.icon ? stylex.attrs(style.block__withImage) : stylex.attrs(style.block__defaultBg)).class
+      )}
       id={__style.block}
       data-block
       style={{
@@ -74,8 +75,8 @@ export function JournalBlock(props: IJournalBlockProps) {
       }}
     >
       <Button 
-        size$={ButtonSize.ICON} 
         {...stylex.attrs(style.block__editButton)} 
+        size$={ButtonSize.ICON} 
         id={__style.editButton} 
         onClick={EditJournalDialog.show$}
       >

@@ -1,7 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import type { JSX } from "solid-js"
 import __style from "./SpinningCube.module.css"
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 
 const spinningAnimation = stylex.keyframes({
   '0%': {
@@ -70,10 +70,7 @@ export function SpinningCube(props: ISpinningCubeProps) {
   return (
     <div 
       style={{ '--cube-size': `${getCubeSize()}px` }} 
-      class={mergeClassname(
-        stylex.attrs(style.cubeBound),
-        __style['this-cube']
-      )}
+      class={macro_mergeClassnames(stylex.attrs(style.cubeBound), __style.thisCube)}
     >
       <div {...stylex.attrs(style.cube, style.cubeBound)}>
         <CubeFace {...stylex.attrs(style.top)} />
@@ -89,6 +86,6 @@ export function SpinningCube(props: ISpinningCubeProps) {
 
 function CubeFace(props: JSX.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div class={mergeClassname(props, stylex.attrs(style.cubeFace, style.cubeBound))} />
+    <div class={macro_mergeClassnames(props.class, stylex.attrs(style.cubeFace, style.cubeBound))} />
   )
 }

@@ -1,4 +1,4 @@
-.this-cube {
+.thisCube {
   --half-of-the-cube-size: calc(var(--cube-size) / 2);
   --reverse-half-of-the-cube-size: calc(-1 * var(--cube-size) / 2);
   --top-face-color: #ffc75e;

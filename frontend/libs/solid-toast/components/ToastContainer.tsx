@@ -1,7 +1,5 @@
 import { createMemo, onMount, type Component } from 'solid-js'
 // ...
-import { mergeClassname } from '~/utils'
-// ...
 import { defaultToastOptions, dispatch } from '../util'
 import { 
   getToastWrapperStyles, 
@@ -12,6 +10,7 @@ import {
 } from '../util'
 import { ToastBar } from './ToastBar'
 import __style from './Toaster.module.css'
+import { macro_mergeClassnames } from 'macro-def'
 
 export const ToastContainer: Component<ToastContainerProps> = (props) => {
   const calculatePosition = () => {
@@ -40,7 +39,7 @@ export const ToastContainer: Component<ToastContainerProps> = (props) => {
       style={{
         '--offset': positionStyle().offset
       }}
-      class={mergeClassname(
+      class={macro_mergeClassnames(
         props.toast.visible ? `${__style['sldt-active']} data-component-toast-visible` : 'data-component-toast-hidden',
         positionStyle()
       )}

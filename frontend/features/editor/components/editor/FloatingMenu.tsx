@@ -4,7 +4,7 @@ import { For } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from "~/styles/scrollbar.module.css"
 // ...
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 // ...
 import { useEditorContext } from "../../provider"
 
@@ -88,7 +88,7 @@ export function FloatingMenu(props: IFloatingMenuProps) {
 
   return (
     <div 
-      class={mergeClassname(
+      class={macro_mergeClassnames(
         stylex.attrs(style.menu),
         __scrollbarStyle.scrollbarVertical,
         __scrollbarStyle.invsScrollbar,

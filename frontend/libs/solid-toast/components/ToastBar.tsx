@@ -1,8 +1,7 @@
 import { createEffect } from 'solid-js'
+import { macro_mergeClassnames } from 'macro-def'
 // ...
 import stylex from '@stylexjs/stylex'
-// ...
-import { mergeClassname } from '~/utils'
 // ...
 import { 
   getToastYDirection,
@@ -52,7 +51,7 @@ export function ToastBar(props: ToastBarProps) {
   return (
     <div
       ref={el}
-      class={mergeClassname(props.toast, stylex.attrs(style.toastBar))}
+      class={macro_mergeClassnames(props.toast.class, stylex.attrs(style.toastBar))}
     >
       <ToastIconContainer {...props.toast} theme={props.toast.iconTheme} />
 

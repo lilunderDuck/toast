@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex";
-import { mergeClassname } from "~/utils";
+import { macro_mergeClassnames } from "macro-def";
 
 const style = stylex.create({
   tag: {
@@ -33,7 +33,7 @@ export function Tag(props: HTMLAttributes<"span">) {
   return (
     <span
       {...props}
-      class={mergeClassname(props, stylex.attrs(style.tag))}
+      class={macro_mergeClassnames(props.class, stylex.attrs(style.tag))}
       style={{ "--color": props.color ?? "var(--gray11)" }}
     >
       <span {...stylex.attrs(style.tag__content)}>

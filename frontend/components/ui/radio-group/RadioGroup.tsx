@@ -5,7 +5,7 @@ import { Root, type RadioGroupRootProps } from "@kobalte/core/radio-group"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 
 const style = stylex.create({
   group: {
@@ -23,7 +23,7 @@ export function RadioGroup<T extends ValidComponent = "div">(
 ) {
   const [local, others] = splitProps(props as IRadioGroupRootProps, ["class"])
   return (
-    <Root class={mergeClassname(
+    <Root class={macro_mergeClassnames(
       stylex.attrs(style.group),
       local
     )} {...others} />

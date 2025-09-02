@@ -3,31 +3,6 @@ import type stylex from "@stylexjs/stylex"
 /**Just the return type of `stylex.attrs` */
 export type StylexStylesAttribute = ReturnType<typeof stylex.attrs>
 
-type HasClassInIt = { class?: string }
-export type ValidClassnames = HasClassInIt | string | undefined
-
-/**Merges multiple class names into a single giant class.
- * @param something An array of class name elements to be merged.
- * @returns The merged class names as a single string.
- */
-export function mergeClassname<T extends ValidClassnames[]>(...something: T) {
-  let newClassname = ''
-  for (const name of something) {
-    if (!name) continue
-
-    if (typeof name === "object") {
-      newClassname += name.class ?? ''
-    }
-    else {
-      newClassname += name
-    }
-
-    newClassname += ' '
-  }
-
-  return newClassname.trim()
-}
-
 /**Gets a property from `someObject` by `input` key, if `input` is `undefined` then
  * use `defaultKey` instead
  * @param someObject   The object to retrieve the property from.

@@ -9,7 +9,7 @@ import {
  
 
 import stylex from "@stylexjs/stylex"
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 
 const style = stylex.create({
   root: {
@@ -33,7 +33,7 @@ export function Slider<T extends ValidComponent = "div">(
   const [local, others] = splitProps(props as ISliderRootProps, ["class"])
   return (
     <Root
-      class={mergeClassname(stylex.attrs(style.root), local)}
+      class={macro_mergeClassnames(stylex.attrs(style.root), local)}
       {...others}
     />
   )

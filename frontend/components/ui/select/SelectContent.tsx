@@ -5,7 +5,7 @@ import { Content, Listbox, Portal, type SelectContentProps } from "@kobalte/core
 import stylex from "@stylexjs/stylex"
 import __style from "./SelectContent.module.css"
 // ...
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 
 const style = stylex.create({
   content: {
@@ -32,7 +32,7 @@ export function SelectContent<T extends ValidComponent = "div">(
   return (
     <Portal>
       <Content
-        class={mergeClassname(local, stylex.attrs(style.content))}
+        class={macro_mergeClassnames(local, stylex.attrs(style.content))}
         id={__style.content}
         {...others}
       >

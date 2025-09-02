@@ -1,5 +1,5 @@
 import { splitProps } from "solid-js"
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({
@@ -20,7 +20,7 @@ export function DropdownMenuLabel(props: IDropdownMenuLabel) {
   const [, rest] = splitProps(props, ["class", "inset"])
   return (
     <div
-      class={mergeClassname(
+      class={macro_mergeClassnames(
         props,
         stylex.attrs(style.menuLabel)
       )}

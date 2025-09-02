@@ -4,7 +4,7 @@ import { ItemLabel, type RadioGroupLabelProps } from "@kobalte/core/radio-group"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 
 interface IRadioGroupLabelProps<T extends ValidComponent = "label"> extends RadioGroupLabelProps<T> {
   class?: string | undefined
@@ -24,7 +24,7 @@ export function RadioGroupItemLabel<T extends ValidComponent = "label">(
   const [local, others] = splitProps(props as IRadioGroupLabelProps, ["class"])
   return (
     <ItemLabel
-      class={mergeClassname(stylex.attrs(style.itemLabel), local)}
+      class={macro_mergeClassnames(stylex.attrs(style.itemLabel), local)}
       {...others}
     />
   )

@@ -15,12 +15,12 @@ import Placeholder from '@tiptap/extension-placeholder'
 import { DetailsSummary, DetailsContent, Details } from '@tiptap/extension-details'
 import { Color } from '@tiptap/extension-color'
 import { common, createLowlight } from 'lowlight'
+import { macro_mergeClassnames } from 'macro-def'
 // ...
 import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension, ImageSplitViewExtension } from "../extensions"
+// ...
 import __style from "./extensions.module.css"
-
 import stylex from "@stylexjs/stylex"
-import { mergeClassname } from '~/utils'
 
 const style = stylex.create({
   ext__taskList: {
@@ -75,7 +75,7 @@ export function getExtensions() {
     }),
     TaskItem.configure({
       HTMLAttributes: {
-        class: mergeClassname(stylex.attrs(style.ext__taskItem), __style.taskItem)
+        class: macro_mergeClassnames(stylex.attrs(style.ext__taskItem), __style.taskItem)
       }
     }),
     Color,

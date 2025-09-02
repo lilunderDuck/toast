@@ -5,7 +5,7 @@ import { For } from "solid-js"
 import stylex from "@stylexjs/stylex"
 // ...
 import { Button, Tooltip } from "~/components"
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 // ...
 import { useEditorContext } from "../../provider"
 
@@ -57,7 +57,7 @@ export function BubbleMenu(props: IBubbleMenuProps) {
   ]
 
   return (
-    <div class={mergeClassname(stylex.attrs(style.menu), props)} ref={props.ref}>
+    <div class={macro_mergeClassnames(stylex.attrs(style.menu), props)} ref={props.ref}>
       <For each={menuOptions}>
         {it => (
           <Tooltip label$={it.name$}>

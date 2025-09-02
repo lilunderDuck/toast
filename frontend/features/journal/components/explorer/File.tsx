@@ -1,6 +1,6 @@
 import { A } from "@solidjs/router"
 // ...
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./File.module.css"
@@ -40,7 +40,7 @@ export function File(props: IFileProps) {
     <div>
       <A
         href={`/journal/${props.groupId$}/${props.journalId$}`}
-        class={mergeClassname(stylex.attrs(style.file, style.file__name), __style.file)}
+        class={macro_mergeClassnames(stylex.attrs(style.file, style.file__name), __style.file)}
         data-link-no-color
         data-no-focus-highlight
       >

@@ -1,7 +1,6 @@
-import { defineMacroProvider, vitePluginMacro } from "vite-plugin-macro"
-import { join } from 'node:path'
-// ...
-import { urlBuilder } from "./urlBuilder"
+import { defineMacroProvider, vitePluginMacro } from "vite-plugin-macro";
+import { join } from "node:path"
+import { mergeClassnames } from "./mergeClassnames";
 
 export const macroPlugin = vitePluginMacro({
   typesPath: join(__dirname, "./types.d.ts"),
@@ -9,8 +8,8 @@ export const macroPlugin = vitePluginMacro({
   .use(defineMacroProvider({
     id: 'idk man',
     exports: {
-      'macro_def': {
-        macros: [urlBuilder]
+      'macro-def': {
+        macros: [mergeClassnames],
       }
     },
   }))

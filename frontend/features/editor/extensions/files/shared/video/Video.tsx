@@ -1,8 +1,9 @@
 import { createSignal, Match, type ParentProps, Show, Switch } from "solid-js"
 import { BsCameraVideoOffFill } from "solid-icons/bs"
+import { macro_mergeClassnames } from "macro-def"
 // ...
 import { SpinningCube } from "~/components"
-import { mergeClassname, sleep } from "~/utils"
+import { sleep } from "~/utils"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./Video.module.css"
@@ -69,7 +70,7 @@ export function Video(props: ParentProps<IVideoProps>) {
 
   return (
     <div
-      class={mergeClassname(
+      class={macro_mergeClassnames(
         stylex.attrs(style.everything),
         __style.video,
       )}

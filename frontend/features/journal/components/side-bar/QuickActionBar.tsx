@@ -1,7 +1,7 @@
 import { type ParentProps } from "solid-js"
 import { BsGearFill, BsPlusSquareFill } from "solid-icons/bs"
 // ...
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 import { createLazyLoadedDialog, Spacer, Tooltip, type ITooltipOptions } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -80,7 +80,7 @@ export function QuickActionBar(props: ParentProps) {
         </Tooltip>
       </div>
       <div
-        class={mergeClassname(
+        class={macro_mergeClassnames(
           stylex.attrs(style.bar__content, style.bar__explorer),
           __scrollbarStyle.scrollbar,
           __scrollbarStyle.scrollbarVertical,

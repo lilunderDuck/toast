@@ -6,7 +6,8 @@ import { type ButtonRootProps, Root } from "@kobalte/core/button"
 import stylex from "@stylexjs/stylex"
 import __style from "./Button.module.css"
 // ...
-import { defaultValueOrElse, mergeClassname, type StylexStylesAttribute } from "../../utils"
+import { defaultValueOrElse, type StylexStylesAttribute } from "../../utils"
+import { macro_mergeClassnames } from "macro-def"
 
 const style = stylex.create({
   base: {
@@ -89,8 +90,8 @@ export function Button<T extends ValidComponent = "button">(
   return (
     <Root
       {...others}
-      class={mergeClassname(
-        others,
+      class={macro_mergeClassnames(
+        others.class,
         __style.button,
         stylex.attrs(style.base),
         defaultValueOrElse(variantMapping, local.variant$, ButtonVariant.DEFAULT),

@@ -2,7 +2,7 @@ import { type DropdownMenuSubTriggerProps, SubTrigger } from "@kobalte/core/drop
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
 import { type ParentProps, splitProps, type ValidComponent } from "solid-js"
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 import { Spacer } from "../Flex"
 
 const style = stylex.create({
@@ -39,7 +39,7 @@ export function DropdownMenuSubTrigger<T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IDropdownMenuSubTriggerProps, ["class", "children"])
   return (
     <SubTrigger
-      class={mergeClassname(
+      class={macro_mergeClassnames(
         props,
         stylex.attrs(style.menuSubContent)
       )}

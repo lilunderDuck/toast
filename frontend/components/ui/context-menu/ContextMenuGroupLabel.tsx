@@ -1,7 +1,7 @@
 import { splitProps, type ValidComponent } from "solid-js"
 import { type ContextMenuGroupLabelProps, GroupLabel } from "@kobalte/core/context-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({
@@ -24,7 +24,7 @@ export function ContextMenuGroupLabel<T extends ValidComponent = "span">(
   const [, rest] = splitProps(props as IContextMenuGroupLabelProps, ["class"])
   return (
     <GroupLabel
-      class={mergeClassname(
+      class={macro_mergeClassnames(
         props,
         stylex.attrs(style.menuGroupLabel)
       )}

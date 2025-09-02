@@ -6,7 +6,7 @@ import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from "~/styles/scrollbar.module.css"
 import "./Editor.css"
 // ...
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 import { SolidEditorContent } from "~/libs/solid-tiptap-renderer"
 // ...
 import { AttributeEditor, BubbleMenu, FloatingMenu } from "../components"
@@ -56,7 +56,7 @@ export function Editor() {
       <AttributeEditor />
       <SolidEditorContent 
         editor={editor$()} 
-        class={mergeClassname(
+        class={macro_mergeClassnames(
           stylex.attrs(style.editor),
           __scrollbarStyle.scrollbar,
           __scrollbarStyle.scrollbarVertical

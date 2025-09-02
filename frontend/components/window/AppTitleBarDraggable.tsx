@@ -1,4 +1,4 @@
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 import __style from "./AppTitleBar.module.css"
 
 import stylex from "@stylexjs/stylex"
@@ -16,6 +16,6 @@ const style = stylex.create({
 
 export function AppTitleBarDraggable(props: HTMLAttributes<"div">) {
   return (
-    <div {...props} class={mergeClassname(props, stylex.attrs(style.titleBar))} style="--wails-draggable: drag" id={__style.buttonRow} />
+    <div {...props} class={macro_mergeClassnames(props.class, stylex.attrs(style.titleBar))} style="--wails-draggable: drag" id={__style.buttonRow} />
   )
 }

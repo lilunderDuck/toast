@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex"
-import { mergeClassname } from "~/utils"
+import { macro_mergeClassnames } from "macro-def"
 
 const style = stylex.create({
   subSetting: {
@@ -18,7 +18,7 @@ export function SubSetting(props: HTMLAttributes<"div">) {
   return (
     <div 
       {...props}
-      class={mergeClassname(
+      class={macro_mergeClassnames(
         props,
         stylex.attrs(style.subSetting)
       )}
