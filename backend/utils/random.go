@@ -7,12 +7,16 @@ import (
 	gonanoid "github.com/matoous/go-nanoid/v2"
 )
 
+func GetRandomIntWithinLength(length int) int {
+	result, _ := strconv.Atoi(gonanoid.MustGenerate("123456789abcdef", length))
+	return result
+}
+
 // Generates a random 8-character string containing only digits (1-9).
 //
 // Returns the generated string and an error if (for some reason) there's a problem generating it.
 func GetRandomInt() int {
-	result, _ := strconv.Atoi(gonanoid.MustGenerate("123456789", 8))
-	return result
+	return GetRandomIntWithinLength(8)
 }
 
 // Selects a random element from the given array.

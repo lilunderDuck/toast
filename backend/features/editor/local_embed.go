@@ -10,7 +10,7 @@ import (
 
 func (*EditorExport) SaveLocalEmbed(pathToHtmlFile string) (string, error) {
 	htmlFileName := filepath.Base(pathToHtmlFile)
-	folderName := fmt.Sprintf("%d-%d", utils.GetRandomInt(), utils.GetRandomInt())
+	folderName := utils.ToString(utils.GetRandomIntWithinLength(16))
 	newLocation := filepath.Join(internals.EMBED_SAVED_PATH, folderName)
 
 	// if you select a file inside ~/embed/* path, don't do file copy

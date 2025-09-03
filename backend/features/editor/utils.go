@@ -3,6 +3,7 @@ package editor
 import (
 	"fmt"
 	"strings"
+	"toast/backend/internals"
 
 	"github.com/wailsapp/mimetype"
 )
@@ -60,4 +61,15 @@ func determineFileType(filePath string) (uint8, error) {
 	}
 
 	return fileType, nil
+}
+
+func determineModifiableFolderLocation(folderName string) string {
+	switch folderName {
+	case "embed":
+		return internals.EMBED_SAVED_PATH
+	case "gallery":
+		return internals.GALLERY_FOLDER_PATH
+	default:
+		panic(fmt.Errorf("not allowed: %s", folderName))
+	}
 }

@@ -1,18 +1,11 @@
 package editor
 
 import (
+	"errors"
 	"path/filepath"
 	"toast/backend/internals"
 	"toast/backend/utils"
 )
-
-func getGallerySavedPath(groupId int, galleryId int) string {
-	return filepath.Join(internals.GroupSavedPath(groupId), "gallery", utils.ToString(galleryId))
-}
-
-func getGalleryDataSavedPath(groupId int, galleryId int) string {
-	return filepath.Join(getGallerySavedPath(groupId, galleryId), "meta.dat")
-}
 
 func mergeGalleryData(oldData *GalleryData, newData *GalleryUpdatedData) {
 	if newData.Description != "" {
@@ -31,8 +24,8 @@ func mergeGalleryData(oldData *GalleryData, newData *GalleryUpdatedData) {
 }
 
 func (*EditorExport) CreateGalleryData(groupId int) *GalleryData {
-	galleryId := utils.GetRandomInt()
-	basePath := getGallerySavedPath(groupId, galleryId)
+	galleryId := utils.GetRandomIntWithinLength(16)
+	basePath := internals.GalleryPath(groupId, galleryId)
 	newData := GalleryData{
 		Id:      galleryId,
 		Items:   []GalleryItem{},
@@ -40,21 +33,22 @@ func (*EditorExport) CreateGalleryData(groupId int) *GalleryData {
 	}
 
 	utils.CreateDirectory(basePath)
-	utils.BSON_WriteFile(getGalleryDataSavedPath(groupId, galleryId), newData)
+	utils.BSON_WriteFile(internals.GalleryDataFilePath(groupId, galleryId), newData)
 	return &newData
 }
 
 func (*EditorExport) UpdateGalleryData(groupId, galleryId int, updatedData GalleryUpdatedData) {
-	metaFilePath := getGalleryDataSavedPath(groupId, galleryId)
-	var oldData GalleryData
-	utils.BSON_ReadFile(metaFilePath, &oldData)
-	mergeGalleryData(&oldData, &updatedData)
-	utils.BSON_WriteFile(metaFilePath, oldData)
+	metaFilePath := internals.GalleryDataFilePath(groupId, galleryId)
+	var data GalleryData
+	utils.BSON_ReadFile(metaFilePath, &data)
+	mergeGalleryData(&data, &updatedData)
+	utils.BSON_WriteFile(metaFilePath, data)
 }
 
 func (*EditorExport) UploadOneFile(groupId, galleryId int, pathToFile string) (newData *GalleryItem, _ error) {
-	basePath := getGallerySavedPath(groupId, galleryId)
+	basePath := internals.GalleryPath(groupId, galleryId)
 	fileName := filepath.Base(pathToFile)
+
 	err := utils.CopyFile(pathToFile, filepath.Join(basePath, fileName))
 	if err != nil {
 		return nil, err
@@ -68,16 +62,29 @@ func (*EditorExport) UploadOneFile(groupId, galleryId int, pathToFile string) (n
 	return &GalleryItem{
 		Type:      fileType,
 		Name:      filepath.Base(pathToFile),
-		AddedDate: 0, // not impl
+		AddedDate: utils.GetCurrentDateNow(),
 	}, nil
 }
 
 func (*EditorExport) GetGalleryData(groupId, galleryId int) (*GalleryData, error) {
-	var oldData GalleryData
-	err := utils.BSON_ReadFile(getGalleryDataSavedPath(groupId, galleryId), &oldData)
+	var data GalleryData
+	err := utils.BSON_ReadFile(internals.GalleryDataFilePath(groupId, galleryId), &data)
 	if err != nil {
 		return nil, err
 	}
 
-	return &oldData, nil
+	return &data, nil
+}
+
+func (editor *EditorExport) DeleteGallery(groupId, galleryId int) error {
+	data, err := editor.GetGalleryData(groupId, galleryId)
+	if err != nil {
+		return err
+	}
+
+	if len(data.Items) != 0 {
+		return errors.New("refused to delete, because who knows if you accidentally delete your precious gallery collection?")
+	}
+
+	return utils.RemoveFileOrDirectory(internals.GalleryPath(groupId, galleryId))
 }

@@ -18,7 +18,6 @@ require (
 	github.com/fxamacker/cbor/v2 v2.8.0
 	github.com/lotusdblabs/lotusdb/v2 v2.1.0
 	github.com/wailsapp/mimetype v1.4.1
-	github.com/yuin/gopher-lua v1.1.1
 )
 
 require (

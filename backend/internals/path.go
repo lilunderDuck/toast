@@ -16,10 +16,6 @@ var (
 	CACHE_FOLDER_PATH = filepath.Join(CURRENT_EXECUTABLE_PATH, "cache")
 	// [preserved for future use?]
 	GLOBAL_ASSETS_FOLDER_PATH = filepath.Join(CURRENT_EXECUTABLE_PATH, "global")
-	// The path where all of your local embed are stored, which is "~/embed".
-	//
-	// Yes, you can embed your own web page, that's why it's called "local embed".
-	EMBED_SAVED_PATH = filepath.Join(CURRENT_EXECUTABLE_PATH, "embed")
 	// The path where all of the app resource files are stored, which is "~/resource"
 	RESOURCE_FOLDER_PATH = filepath.Join(CURRENT_EXECUTABLE_PATH, "resource")
 )
