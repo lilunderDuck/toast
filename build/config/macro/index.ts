@@ -3,7 +3,7 @@ import { join } from "node:path"
 import { mergeClassnames } from "./mergeClassnames";
 
 export const macroPlugin = vitePluginMacro({
-  typesPath: join(__dirname, "./types.d.ts"),
+  typesPath: join(__dirname, "./macro_def.d.ts"),
 })
   .use(defineMacroProvider({
     id: 'idk man',

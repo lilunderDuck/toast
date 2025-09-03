@@ -86,6 +86,6 @@ export function SpinningCube(props: ISpinningCubeProps) {
 
 function CubeFace(props: JSX.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div class={macro_mergeClassnames(props.class, stylex.attrs(style.cubeFace, style.cubeBound))} />
+    <div class={macro_mergeClassnames(props, stylex.attrs(style.cubeFace, style.cubeBound))} />
   )
 }

@@ -16,6 +16,6 @@ const style = stylex.create({
 
 export function AppTitleBarDraggable(props: HTMLAttributes<"div">) {
   return (
-    <div {...props} class={macro_mergeClassnames(props.class, stylex.attrs(style.titleBar))} style="--wails-draggable: drag" id={__style.buttonRow} />
+    <div {...props} class={macro_mergeClassnames(props, stylex.attrs(style.titleBar))} style="--wails-draggable: drag" id={__style.buttonRow} />
   )
 }

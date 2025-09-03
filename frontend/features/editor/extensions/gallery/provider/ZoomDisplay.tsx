@@ -1,7 +1,6 @@
 import stylex from "@stylexjs/stylex"
 import __style from "./ZoomDisplay.module.css"
 import { useZoomAndPanContext } from "./ZoomAndPanProvider"
-import { macro_mergeClassnames } from "macro-def"
 import type { ParentProps } from "solid-js"
 
 const style = stylex.create({
@@ -39,9 +38,6 @@ const style = stylex.create({
     width: '100%',
     height: '100%',
     overflow: 'scroll'
-  },
-  grabCursor: {
-    cursor: 'grab'
   }
 })
 
@@ -132,10 +128,7 @@ export function ZoomDisplay(props: ParentProps) {
       ref={targetElement}
     >
       <div
-        class={macro_mergeClassnames(
-          stylex.attrs(style.imageWrap),
-          internal$.zoomScale$() > 1 ? stylex.attrs(style.grabCursor) : ''
-        )}
+        {...stylex.attrs(style.imageWrap)}
         style={{
           '--image-scale': internal$.zoomScale$(),
           'transform': `translate(${imagePosition().x}px, ${imagePosition().y}px)`,

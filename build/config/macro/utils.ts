@@ -1,4 +1,5 @@
-import type { Expression, TemplateLiteral } from "@babel/types";
+import type { Expression, TemplateLiteral } from "@babel/types"
+import * as astring from "astring"
 
 export const escapeIdentifier = (name: string) => "${" + name + "}"
 
@@ -39,6 +40,10 @@ export function getString(node: /*any*/Expression, ignoreUndefined: boolean) {
     case "StringLiteral": return node.value
 
     default:
-      throw new Error(`macro_urlBuilder() arg[1]: Case ${node.type} has not been handled yet.`)
+      throw new Error(`Expected only TemplateLiteral, Indentifier, StringLiteral. Recived ${node.type}.`)
   }
+}
+
+export function generateCodeFromAst(node: Expression) {
+  return astring.generate(node)
 }

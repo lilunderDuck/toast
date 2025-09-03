@@ -12,5 +12,5 @@ const style = stylex.create({
 
 export function DropdownMenuShortcut(props: HTMLAttributes<"span">) {
   const [, rest] = splitProps(props, ["class"])
-  return <span class={macro_mergeClassnames(props.class, stylex.attrs(style.menuShortcut))} {...rest} />
+  return <span class={macro_mergeClassnames(props, stylex.attrs(style.menuShortcut))} {...rest} />
 }

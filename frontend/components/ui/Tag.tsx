@@ -33,7 +33,7 @@ export function Tag(props: HTMLAttributes<"span">) {
   return (
     <span
       {...props}
-      class={macro_mergeClassnames(props.class, stylex.attrs(style.tag))}
+      class={macro_mergeClassnames(props, stylex.attrs(style.tag))}
       style={{ "--color": props.color ?? "var(--gray11)" }}
     >
       <span {...stylex.attrs(style.tag__content)}>

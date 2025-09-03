@@ -60,7 +60,7 @@ export function ResizableTextarea(props: HTMLAttributes<"textarea">) {
     <textarea
       {...props}
       id={textareaId}
-      class={macro_mergeClassnames(props.class, stylex.attrs(style.input))}
+      class={macro_mergeClassnames(props, stylex.attrs(style.input))}
       style={`height: ${height()}`}
       onInput={onSlappingYourKeyboard}
     />

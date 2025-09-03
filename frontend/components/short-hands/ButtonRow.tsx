@@ -22,7 +22,7 @@ export function ButtonRow(props: IButtonRowProps) {
   const [, itsProps] = splitProps(props, ["direction$"])
 
   return (
-    <div {...itsProps} class={macro_mergeClassnames(props.class, stylex.attrs(style.buttonRow))}>
+    <div {...itsProps} class={macro_mergeClassnames(props, stylex.attrs(style.buttonRow))}>
       <Switch fallback={
         <>
           <Spacer />

@@ -29,7 +29,7 @@ export function Skeleton<T extends ValidComponent = "div">(
   const [local, others] = splitProps(props as ISkeletonRootProps, ["class"])
   return (
     <Root
-      class={macro_mergeClassnames(stylex.attrs(style.spookySkeleton), local.class)}
+      class={macro_mergeClassnames(stylex.attrs(style.spookySkeleton), local)}
       {...others}
     />
   )

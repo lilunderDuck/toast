@@ -49,7 +49,7 @@ export function DropdownMenuRadioItem<T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IDropdownMenuRadioItemProps, ["class", "children"])
   return (
     <RadioItem
-      class={macro_mergeClassnames(props.class, stylex.attrs(style.menuRadioItem))}
+      class={macro_mergeClassnames(props, stylex.attrs(style.menuRadioItem))}
       {...rest}
     >
       <span {...stylex.attrs(style.menuItemIndicator)}>

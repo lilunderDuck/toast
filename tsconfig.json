@@ -10,7 +10,7 @@
       "vite/client", 
       "vite-plugin-pages/client-solid",
       "./frontend/@types/global.d.ts",
-      "./build/config/macro/types.d.ts",
+      "./build/config/macro/macro_def.d.ts",
       "@types/node"
     ],
     "paths": {
