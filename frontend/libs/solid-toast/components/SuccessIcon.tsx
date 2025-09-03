@@ -1,6 +1,5 @@
 import stylex from '@stylexjs/stylex'
 import { 
-  genSVGCubicBezier, 
   type IconProps 
 } from '../util'
 import { MainCircle, SecondaryCircle } from './IconCircle'
@@ -33,7 +32,9 @@ export function Success(props: IconProps) {
           dur="0.25s"
           begin="250ms"
           fill="freeze"
-          {...genSVGCubicBezier('0.0, 0.0, 0.58, 1.0')}
+          calcMode='spline'
+          keyTimes='0; 1'
+          keySplines='0.0, 0.0, 0.58, 1.0'
         />
       </path>
     </svg>

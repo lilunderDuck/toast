@@ -55,7 +55,7 @@ export function ToastBar(props: ToastBarProps) {
     >
       <ToastIconContainer {...props.toast} theme={props.toast.iconTheme} />
 
-      <div {...stylex.attrs(style.messageContainer)} role="status" aria-live='polite'>
+      <div {...stylex.attrs(style.messageContainer)}>
         {resolveValue(props.toast.message, props.toast)}
       </div>
     </div>

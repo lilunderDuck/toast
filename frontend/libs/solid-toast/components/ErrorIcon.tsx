@@ -1,6 +1,5 @@
 import stylex from '@stylexjs/stylex'
 import { 
-  genSVGCubicBezier, 
   type IconProps 
 } from '../util'
 import { MainCircle, SecondaryCircle } from './IconCircle'
@@ -19,7 +18,7 @@ export function Error(props: IconProps) {
       <SecondaryCircle fill={fill} />
       <path
         fill="none"
-        stroke={props.secondary || '#FFFFFF'}
+        stroke='#FFFFFF'
         stroke-width="4"
         stroke-dasharray="9"
         stroke-dashoffset="9"
@@ -32,17 +31,21 @@ export function Error(props: IconProps) {
           dur="0.2s"
           begin="250ms"
           fill="freeze"
-          {...genSVGCubicBezier('0.0, 0.0, 0.58, 1.0')}
+          calcMode='spline'
+          keyTimes='0; 1'
+          keySplines='0.0, 0.0, 0.58, 1.0'
         />
       </path>
-      <circle fill={props.secondary || '#FFFFFF'} cx="16" cy="23" r="2.5" opacity="0">
+      <circle fill='#FFFFFF' cx="16" cy="23" r="2.5" opacity="0">
         <animate
           attributeName="opacity"
           values="0;1"
           dur="0.25s"
           begin="350ms"
           fill="freeze"
-          {...genSVGCubicBezier('0.0, 0.0, 0.58, 1.0')}
+          calcMode='spline'
+          keyTimes='0; 1'
+          keySplines='0.0, 0.0, 0.58, 1.0'
         />
       </circle>
     </svg>

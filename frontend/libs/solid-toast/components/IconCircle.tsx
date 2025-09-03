@@ -1,5 +1,4 @@
 import type { JSX } from 'solid-js'
-import { genSVGCubicBezier } from '../util'
 
 export function MainCircle(props: { fill: string }) {
   const publicProps: JSX.AnimateSVGAttributes<SVGAnimateElement> = {
@@ -24,7 +23,9 @@ export function SecondaryCircle(props: { fill: string; begin?: string }) {
     dur: '1s',
     begin: props.begin || '320ms',
     fill: 'freeze',
-    ...genSVGCubicBezier('0.0 0.0 0.2 1'),
+    calcMode: 'spline',
+    keyTimes: '0; 1',
+    keySplines: '0.0 0.0 0.2 1',
   }
   
   return (
