@@ -2,7 +2,7 @@ import { Show } from "solid-js"
 import { BsImageFill } from "solid-icons/bs"
 // ...
 import { createFileUpload, SUPPORTED_IMAGE_PATTERN } from "~/features/native"
-import { UploadFile } from "~/wailsjs/go/editor/EditorExport"
+import { UploadMedia } from "~/wailsjs/go/editor/EditorExport"
 import { useJournalContext } from "~/features/journal"
 import { ASSETS_SERVER_URL } from "~/api"
 import { createLazyLoadedDialog, SpinningCube } from "~/components"
@@ -66,7 +66,7 @@ export function ImageInput(props: IImageInputProps) {
       ]
     },
     async onFinish$(filePath) {
-      const fileName = await UploadFile(groupId(), filePath, "media")
+      const fileName = await UploadMedia(groupId(), filePath)
       await props.onChange$(fileName)
     },
   })
@@ -82,7 +82,7 @@ export function ImageInput(props: IImageInputProps) {
     open$()
   }
 
-  const getImageUrl = () => `${ASSETS_SERVER_URL}/local-assets/${groupId()}/media/${props.data$!.name}` as const
+  const getImageUrl = () => `${ASSETS_SERVER_URL}/local-assets/media/${groupId()}/${props.data$!.name}` as const
 
   return (
     <>

@@ -10,6 +10,7 @@ const style = stylex.create({
   node: {
     width: "100%",
     minHeight: "17rem",
+    height: "17rem",
     display: "flex",
     justifyContent: "center",
     alignItems: "center"

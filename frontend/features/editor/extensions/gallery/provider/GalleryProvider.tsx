@@ -1,4 +1,4 @@
-import { createContext, type ParentProps, type Accessor, useContext, createSignal, onMount, type Setter } from "solid-js"
+import { createContext, type ParentProps, type Accessor, useContext, createSignal, onMount, type Setter, onCleanup } from "solid-js"
 import { createStore } from "solid-js/store"
 // ...
 import { useNodeState } from "~/features/editor/utils"
@@ -6,7 +6,7 @@ import { createStorage } from "~/utils"
 import { ASSETS_SERVER_URL } from "~/api"
 import { useJournalContext } from "~/features/journal"
 import type { editor } from "~/wailsjs/go/models"
-import { CreateGalleryData, GetGalleryData, UploadOneFile, UpdateGalleryData } from "~/wailsjs/go/editor/EditorExport"
+import { CreateGalleryData, GetGalleryData, UploadOneFile, UpdateGalleryData, DeleteGallery } from "~/wailsjs/go/editor/EditorExport"
 // ...
 import type { GallerySessionStorage } from "./data"
 import { DEFAULT_GALLERY_ID, type GalleryAttribute } from "../extension"
@@ -34,7 +34,7 @@ export interface IGalleryContext {
    * @returns 
    * - If gallery data contains `basePath` prop (because it supports saving gallery content
    * somewhere else), this function returns `http://localhost:8000/preview?path=[fileName]`
-   * - Otherwise, always `http://localhost:8000/local-assets/[groupId]/gallery/[galleryId]/[fileName]`
+   * - Otherwise, always `http://localhost:8000/local-assets/gallery/[galleryId]/[fileName]`
    */
   getDisplayUrl$(fileName: string): string
   /**Upload a single file into this gallery.
@@ -79,12 +79,22 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   let currentIndex = 0
   const [currentItem, setCurrentItem] = createSignal<editor.GalleryItem>()
 
+  onCleanup(() => {
+    // on the backend side, this function will make sure it won't delete everything
+    // unless there is no gallery item
+    try {
+      DeleteGallery(getCurrentGalleryId())
+    } catch(error) {
+      console.warn("[anti-crash]", error)
+    }
+  })
+
   const loadGallery = async () => {
     if (getCurrentGalleryId() === DEFAULT_GALLERY_ID) {
       return // don't load
     }
 
-    const existingData = await GetGalleryData(getCurrentGroupId(), getCurrentGalleryId())
+    const existingData = await GetGalleryData(getCurrentGalleryId())
 
     const lastCurrentIndex = wrappedSessionStorage.get$(CURRENT_INDEX_STORAGE_KEY)
     if (lastCurrentIndex) {
@@ -96,7 +106,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   }
 
   const createGallery = async() => {
-    const newData = await CreateGalleryData(getCurrentGroupId())
+    const newData = await CreateGalleryData()
     updateAttribute$("id", newData.id)
     setGalleryData(newData)
   }
@@ -138,7 +148,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
       return `${ASSETS_SERVER_URL}/preview?path=${escapedFileName}` as const
     }
 
-    return `${ASSETS_SERVER_URL}/local-assets/${getCurrentGroupId()}/gallery/${galleryData.id}/${encodeURIComponent(fileName)}` as const
+    return `${ASSETS_SERVER_URL}/local-assets/gallery/${galleryData.id}/${encodeURIComponent(fileName)}` as const
   }
 
   return (

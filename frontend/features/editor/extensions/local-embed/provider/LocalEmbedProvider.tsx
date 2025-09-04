@@ -25,7 +25,7 @@ export function LocalEmbedProvider(props: ParentProps) {
   const { isFullscreen$, toggle$ } = useFullscreen(rootRef)
 
   const isEmpty = () => data$().name == ""
-  const getEmbedUrl = () => `${ASSETS_SERVER_URL}/embed/${data$().name}` as const
+  const getEmbedUrl = () => `${ASSETS_SERVER_URL}/local-assets/embed/${data$().name}` as const
 
   let iframeRef!: Ref<"iframe">
   onCleanup(() => {

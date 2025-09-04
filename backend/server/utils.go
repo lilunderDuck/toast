@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"path/filepath"
@@ -15,6 +16,24 @@ func serveStatic(serverInstance *http.ServeMux, path string, whatPath string) {
 	//    ...
 	serverInstance.HandleFunc(path+"/{anything...}", func(res http.ResponseWriter, req *http.Request) {
 		serveFile(res, req, filepath.Join(whatPath, req.PathValue("anything")))
+	})
+}
+
+func serveStaticWithFilter(
+	serverInstance *http.ServeMux,
+	path string,
+	whatPath string,
+	filter func(path string) int,
+) {
+	serverInstance.HandleFunc(path+"/{anything...}", func(res http.ResponseWriter, req *http.Request) {
+		path := req.PathValue("anything")
+		status := filter(path)
+		if status == http.StatusForbidden {
+			responseWithError(res, status, "[static]", errors.New("not allowed"))
+			return
+		}
+
+		serveFile(res, req, filepath.Join(whatPath, path))
 	})
 }
 
