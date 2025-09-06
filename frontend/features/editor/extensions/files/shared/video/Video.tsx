@@ -1,4 +1,4 @@
-import { createSignal, Match, type ParentProps, Show, Switch } from "solid-js"
+import { createSignal, For, Match, type ParentProps, Show, Switch } from "solid-js"
 import { BsCameraVideoOffFill } from "solid-icons/bs"
 import { macro_mergeClassnames } from "macro-def"
 // ...
@@ -44,17 +44,13 @@ export function Video(props: ParentProps<IVideoProps>) {
   let videoRef!: Ref<"video">
 
   const [videoStatus, setVideoStatus] = createSignal<VideoLoadingStatus>(VideoLoadingStatus.START_LOADING)
-  const [subtitlePath, setSubtitlePath] = createSignal<string>()
+  const [subtitlePaths, setSubtitlePaths] = createSignal<{ name$: string, lang$: string }[]>()
   const thisVideoIsLoaded: EventHandler<"video", "onLoadedData"> = async () => {
-    await tryGettingThisVideoSubtitle()
-    setVideoStatus(VideoLoadingStatus.FINISH_LOADING)
-  }
-
-  const tryGettingThisVideoSubtitle = async () => {
-    const subtitlePath = await getThisVideoSubtitlePath(props.src$)
-    if (subtitlePath) {
-      setSubtitlePath(subtitlePath)
+    const subtitlePaths = await getThisVideoSubtitlePath(props.src$)
+    if (subtitlePaths) {
+      setSubtitlePaths(subtitlePaths)
     }
+    setVideoStatus(VideoLoadingStatus.FINISH_LOADING)
   }
 
   const loadStart = () => {
@@ -95,13 +91,17 @@ export function Video(props: ParentProps<IVideoProps>) {
         // Extremely fast video loading pushed to maximum
         preload="metadata"
       >
-        <Show when={subtitlePath()}>
-          <track
-            default
-            kind="captions"
-            srclang="en"
-            src={subtitlePath()}
-          />
+        <Show when={subtitlePaths()}>
+          <For each={subtitlePaths()}>
+            {it => (
+              <track
+                default
+                kind="captions"
+                srclang={it.lang$}
+                src={it.name$}
+              />
+            )}
+          </For>
         </Show>
       </video>
       <Show when={videoStatus() !== VideoLoadingStatus.FINISH_LOADING}>
