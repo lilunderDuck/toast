@@ -12,7 +12,7 @@ import __style from "./ImageInput.module.css"
 // ...
 import type { ImageAttribute } from "./data"
 import { Image } from "./Image"
-import ImageButtonRow from "./ImageButtonRow"
+import { ImageButtonRow } from "./components"
 
 const style = stylex.create({
   input: {
@@ -72,15 +72,11 @@ export function ImageInput(props: IImageInputProps) {
   })
 
   const ImageFullviewDialog = createLazyLoadedDialog(
-    () => import("./ImageFullviewDialog"),
+    () => import("./components/ImageFullviewDialog"),
     () => ({
       src$: getImageUrl()
     })
   )
-
-  const openFileDialog = () => {
-    open$()
-  }
 
   const getImageUrl = () => `${ASSETS_SERVER_URL}/local-assets/media/${groupId()}/${props.data$!.name}` as const
 
@@ -90,13 +86,13 @@ export function ImageInput(props: IImageInputProps) {
         <Show when={props.data$?.name == ""} fallback={
           <>
             <ImageButtonRow
-              openFileDialog$={openFileDialog}
+              openFileDialog$={open$}
               openImageFullview$={ImageFullviewDialog.show$}
             />
             <Image src$={getImageUrl()} {...stylex.attrs(style.input__theImageItself)} />
           </>
         }>
-          <div {...stylex.attrs(style.input__layer, style.input__uploadZone)} onClick={openFileDialog}>
+          <div {...stylex.attrs(style.input__layer, style.input__uploadZone)} onClick={open$}>
             <Show when={isUploading$() && !error$()} fallback={
               <BsImageFill size={30} />
             }>

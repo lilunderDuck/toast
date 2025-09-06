@@ -40,7 +40,7 @@ interface IImageButtonRowProps {
   openImageFullview$: () => void
 }
 
-export default function ImageButtonRow(props: IImageButtonRowProps) {
+export function ImageButtonRow(props: IImageButtonRowProps) {
   return (
     <ButtonRow direction$={ButtonRowDirection.CUSTOM} id={__style.buttonRow} {...stylex.attrs(style.input__editButton)}>
       <Button size$={ButtonSize.ICON} onClick={props.openFileDialog$}>
