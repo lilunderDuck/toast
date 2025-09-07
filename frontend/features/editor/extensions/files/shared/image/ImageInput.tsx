@@ -21,7 +21,6 @@ const style = stylex.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "var(--gray3)",
     borderRadius: 6,
     position: "relative"
   },
@@ -81,28 +80,26 @@ export function ImageInput(props: IImageInputProps) {
   const getImageUrl = () => `${ASSETS_SERVER_URL}/local-assets/media/${groupId()}/${props.data$!.name}` as const
 
   return (
-    <>
-      <div {...stylex.attrs(style.input)} id={__style.input}>
-        <Show when={props.data$?.name == ""} fallback={
-          <>
-            <ImageButtonRow
-              openFileDialog$={open$}
-              openImageFullview$={ImageFullviewDialog.show$}
-            />
-            <Image src$={getImageUrl()} {...stylex.attrs(style.input__theImageItself)} />
-          </>
-        }>
-          <div {...stylex.attrs(style.input__layer, style.input__uploadZone)} onClick={open$}>
-            <Show when={isUploading$() && !error$()} fallback={
-              <BsImageFill size={30} />
-            }>
-              <SpinningCube cubeSize$={20} />
-            </Show>
-            Click to select a image.
-          </div>
-        </Show>
-      </div>
+    <div {...stylex.attrs(style.input)} id={__style.input}>
+      <Show when={props.data$?.name == ""} fallback={
+        <>
+          <ImageButtonRow
+            openFileDialog$={open$}
+            openImageFullview$={ImageFullviewDialog.show$}
+          />
+          <Image src$={getImageUrl()} {...stylex.attrs(style.input__theImageItself)} />
+        </>
+      }>
+        <div {...stylex.attrs(style.input__layer, style.input__uploadZone)} onClick={open$}>
+          <Show when={isUploading$() && !error$()} fallback={
+            <BsImageFill size={30} />
+          }>
+            <SpinningCube cubeSize$={20} />
+          </Show>
+          Click to select a image.
+        </div>
+      </Show>
       <ImageFullviewDialog.Dialog$ />
-    </>
+    </div>
   )
 }

@@ -25,9 +25,6 @@ func createAssetsRoute(server *http.ServeMux) {
 		}
 		return http.StatusAccepted
 	})
-	serveStatic(server, "/global", internals.GLOBAL_ASSETS_FOLDER_PATH)
-	serveStatic(server, "/embed", internals.EMBED_SAVED_PATH)
-	serveStatic(server, "/media", internals.MEDIA_FOLDER_PATH)
 
 	server.HandleFunc("/preview", func(res http.ResponseWriter, req *http.Request) {
 		requestedFile := req.URL.Query().Get("path")

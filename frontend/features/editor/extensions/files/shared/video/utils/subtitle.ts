@@ -52,10 +52,14 @@ async function getSubtitleConfig(basePath: string, fileName: string): Promise<vo
     return console.log("a video config could not be found next to", fileName, ". If you want to add multiple subtitle to this video, pleace a config file next to", subtitleVideoSubtitleConfig, `with the name ${fileName}.json and try again`)
   }
 
-  const data = await response.json()
-  if (Array.isArray(data)) {
-    return console.error("Invalid format")
-  }
+  try {
+    const data = await response.json()
+    if (Array.isArray(data)) {
+      return console.warn("Invalid format")
+    }
 
-  return data
+    return data
+  } catch (error) {
+    return console.warn("Invalid format", error)
+  }
 }

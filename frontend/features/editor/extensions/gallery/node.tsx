@@ -1,29 +1,32 @@
+import { Show } from "solid-js"
+import { BsDisplayFill } from "solid-icons/bs"
+import { macro_mergeClassnames } from "macro-def"
+// ...
 import stylex from "@stylexjs/stylex"
+import __style from "./node.module.css"
 // ...
 import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
 // ...
-import { GalleryButtonRow, GalleryContent } from "./components"
+import { GalleryButtonRow, GalleryContent, LeftButtonSide, RightButtonSide } from "./components"
 import { GalleryProvider, useGalleryContext } from "./provider"
-import { Show } from "solid-js"
-import { BsDisplayFill } from "solid-icons/bs"
 
 const style = stylex.create({
   gallery: {
     position: "relative",
     width: "100%",
-    height: "19rem",
+    height: "var(--gallery-height)",
     backgroundColor: "var(--gray3)",
     marginBottom: 20
   },
   gallery__content: {
     width: "100%",
-    height: "19rem",
+    height: "var(--gallery-height)",
     position: "absolute",
     zIndex: 1,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    overflow: "hidden"
+    overflow: "hidden",
   }
 })
 
@@ -33,7 +36,7 @@ export default function GalleryNodeView() {
 
     return (
       // Avoid file from being loaded 2 times when gallery on fullscreen.
-      <div {...stylex.attrs(style.gallery__content)}>
+      <div {...stylex.attrs(style.gallery__content)} id={__style.galleryContent}>
         <Show when={!isFullscreen$()} fallback={
           <BsDisplayFill size={30} />
         }>
@@ -44,9 +47,11 @@ export default function GalleryNodeView() {
   }
 
   return (
-    <NodeViewWrapper {...stylex.attrs(style.gallery)}>
+    <NodeViewWrapper class={macro_mergeClassnames(stylex.attrs(style.gallery), __style.gallery)}>
       <GalleryProvider>
+        <LeftButtonSide />
         <GalleryButtonRow />
+        <RightButtonSide />
         <Content />
       </GalleryProvider>
     </NodeViewWrapper>

@@ -12,6 +12,7 @@ const style = stylex.create({
     height: "100%",
     opacity: 0.3,
     transition: "0.15s ease-out",
+    zIndex: 10,
     ":hover": {
       opacity: 1
     }
@@ -25,19 +26,19 @@ const style = stylex.create({
     paddingRight: 10
   },
   gallery__button: {
-    zIndex: 10,
+    // zIndex: 10,
     position: "relative"
   }
 })
 
 export function LeftButtonSide() {
-  const { previous$, data$, currentIndex$ } = useGalleryContext()
+  const { previous$, currentIndex$ } = useGalleryContext()
   return (
     <div {...stylex.attrs(style.gallery__buttonOnTheSide, style.gallery__backButtonWrap)}>
       <Button
         size$={ButtonSize.ICON}
         onClick={previous$}
-        disabled={currentIndex$() === 0 || !data$()}
+        disabled={currentIndex$() === 0}
         {...stylex.attrs(style.gallery__button)}
       >
         <BsArrowLeft />
@@ -54,7 +55,7 @@ export function RightButtonSide() {
       <Button
         size$={ButtonSize.ICON}
         onClick={next$}
-        disabled={currentIndex$() === data$()?.items?.length || !data$()}
+        disabled={currentIndex$() === data$()?.items?.length - 1}
         {...stylex.attrs(style.gallery__button)}
       >
         <BsArrowRight />

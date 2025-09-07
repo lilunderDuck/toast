@@ -9,8 +9,8 @@ import stylex from "@stylexjs/stylex"
 const style = stylex.create({
   node: {
     width: "100%",
-    minHeight: "17rem",
-    height: "17rem",
+    height: "100%",
+    maxHeight: "30rem",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",

@@ -54,6 +54,8 @@ export interface IGalleryContext {
   isFullscreen$: Accessor<boolean>
   /**Change if the gallery should go to fullscreen or not. */
   setIsFullscreen$: Setter<boolean>
+  isNextButtonDisabled$: Accessor<boolean>
+  isPrevButtonDisabled$: Accessor<boolean>
 }
 
 const Context = createContext<IGalleryContext>()
@@ -66,6 +68,9 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   const { data$, updateAttribute$ } = useNodeState<GalleryAttribute>()
   const { sessionStorage$ } = useJournalContext()
   const [galleryData, setGalleryData] = createStore<editor.GalleryData>({} as editor.GalleryData)
+
+  const [isNextButtonDisabled, setIsNextButtonDisabled] = createSignal(false)
+  const [isPrevButtonDisabled, setIsPrevButtonDisabled] = createSignal(false)
   const [isFullscreen, setIsFullscreen] = createSignal(false)
 
   const wrappedSessionStorage: GallerySessionStorage = createStorage(sessionStorage, 'gallery$')
@@ -76,8 +81,31 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   const CURRENT_INDEX_STORAGE_KEY = `${getCurrentGroupId()}.${getCurrentGalleryId()}.currIndex` as const
 
   // Tracks current item displayed in both default view and fullscreen view
-  let currentIndex = 0
+  const [currentIndex, setCurrentIndex] = createSignal(
+    wrappedSessionStorage.get$(CURRENT_INDEX_STORAGE_KEY) ?? 0
+  )
   const [currentItem, setCurrentItem] = createSignal<editor.GalleryItem>()
+
+  onMount(async() => {
+    if (isNotCreated()) {
+      const newData = await CreateGalleryData()
+      updateAttribute$("id", newData.id)
+      setGalleryData(newData)
+      return
+    }
+
+    if (getCurrentGalleryId() === DEFAULT_GALLERY_ID) {
+      return // don't load
+    }
+
+    const existingData = await GetGalleryData(getCurrentGalleryId())
+
+    // setIsPrevButtonDisabled(lastCurrentIndex === 0)
+    // setIsNextButtonDisabled(lastCurrentIndex === existingData.items.length - 1)
+    setGalleryData(existingData)
+
+    updateCurrentItem()
+  })
 
   onCleanup(() => {
     // on the backend side, this function will make sure it won't delete everything
@@ -89,48 +117,29 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
     }
   })
 
-  const loadGallery = async () => {
-    if (getCurrentGalleryId() === DEFAULT_GALLERY_ID) {
-      return // don't load
-    }
-
-    const existingData = await GetGalleryData(getCurrentGalleryId())
-
-    const lastCurrentIndex = wrappedSessionStorage.get$(CURRENT_INDEX_STORAGE_KEY)
-    if (lastCurrentIndex) {
-      currentIndex = lastCurrentIndex
-    }
-    
-    setGalleryData(existingData)
-    updateCurrentItem()
-  }
-
-  const createGallery = async() => {
-    const newData = await CreateGalleryData()
-    updateAttribute$("id", newData.id)
-    setGalleryData(newData)
-  }
-
-  onMount(() => {
-    isNotCreated() ? createGallery() : loadGallery()
-  })
-
   const next = () => {
     // keep incrementing until it reaches the last gallery item
-    if (currentIndex !== galleryData.items.length) {
-      currentIndex += 1
+    if (currentIndex() !== galleryData.items.length) {
+      setCurrentIndex(prev => prev + 1)
+      // currentIndex += 1
+      updateCurrentItem()
+      // setIsNextButtonDisabled(false)
+      return
     }
 
-    updateCurrentItem()
+    // setIsNextButtonDisabled(true)
   }
   
   const previous = () => {
     // keep decrementing until it reaches the first gallery item
-    if (currentIndex !== 0) {
-      currentIndex -= 1
+    if (currentIndex() !== 0) {
+      setCurrentIndex(prev => prev - 1)
+      updateCurrentItem()
+      // setIsPrevButtonDisabled(false)
+      return
     }
 
-    updateCurrentItem()
+    // setIsPrevButtonDisabled(true)
   }
   
   const updateCurrentItem = () => {
@@ -138,8 +147,8 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
     setCurrentItem(null)
     // setting current item here is not enough to trigger an update,
     // so we need the line above.
-    setCurrentItem(galleryData.items[currentIndex])
-    wrappedSessionStorage.set$(CURRENT_INDEX_STORAGE_KEY, currentIndex)
+    setCurrentItem(galleryData.items[currentIndex()])
+    wrappedSessionStorage.set$(CURRENT_INDEX_STORAGE_KEY, currentIndex())
   }
 
   const getDisplayUrl = (fileName: string) => {
@@ -154,25 +163,27 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   return (
     <Context.Provider value={{
       data$: () => galleryData,
-      currentIndex$: () => currentIndex,
+      currentIndex$: currentIndex,
       next$: next,
       isFullscreen$: isFullscreen,
       setIsFullscreen$: setIsFullscreen,
       previous$: previous,
       currentItem$: currentItem,
       getDisplayUrl$: getDisplayUrl,
+      isNextButtonDisabled$: isNextButtonDisabled,
+      isPrevButtonDisabled$: isPrevButtonDisabled,
       async uploadMultipleFile$() {
         // const 
         // todo
       },
       async uploadOneFile$(filePath) {
-        const galleryItem = await UploadOneFile(getCurrentGroupId(), getCurrentGalleryId(), filePath)
+        const galleryItem = await UploadOneFile(getCurrentGalleryId(), filePath)
         if (galleryData.items.length === 0) {
           setCurrentItem(galleryItem)
         }
 
         setGalleryData("items", galleryData.items.length, galleryItem)
-        await UpdateGalleryData(getCurrentGroupId(), getCurrentGalleryId(), galleryData)
+        await UpdateGalleryData(getCurrentGalleryId(), galleryData)
       },
     }}>
       {props.children}

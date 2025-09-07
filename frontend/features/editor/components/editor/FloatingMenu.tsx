@@ -1,4 +1,4 @@
-import { BsArchiveFill, BsBlockquoteLeft, BsCheck2Square, BsImageFill, BsImages, BsTable, BsWindowSplit } from "solid-icons/bs"
+import { BsArchiveFill, BsBlockquoteLeft, BsCheck2Square, BsImageFill, BsImages, BsInfoCircleFill, BsTable, BsWindowSplit } from "solid-icons/bs"
 import { For } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -19,7 +19,7 @@ const style = stylex.create({
     paddingInline: 5,
     paddingBlock: 10,
     borderRadius: 6,
-    width: "10rem",
+    width: "14rem",
     height: "10rem",
     userSelect: "none",
     display: "flex",
@@ -36,6 +36,9 @@ const style = stylex.create({
       backgroundColor: "var(--gray7)",
       color: "var(--gray12)",
     }
+  },
+  menu__name: {
+    fontSize: 15
   }
 })
 
@@ -70,7 +73,7 @@ export function FloatingMenu(props: IFloatingMenuProps) {
     },
     {
       name$: "details", 
-      icon$: BsTable, 
+      icon$: BsInfoCircleFill, 
       // @ts-ignore
       run$: () => chainCommand().setDetails().run() 
     },
@@ -100,7 +103,7 @@ export function FloatingMenu(props: IFloatingMenuProps) {
         {it => (
           <button onClick={it.run$} {...stylex.attrs(style.menu__option)} tabindex={1}>
             <it.icon$ />
-            <span>
+            <span {...stylex.attrs(style.menu__name)}>
               {it.name$}
             </span>
           </button>

@@ -1,0 +1,16 @@
+.gallery {
+  --gallery-height: 20rem
+}
+
+.gallery #galleryButtonRow {
+  opacity: 0;
+  transition: 0.15s cubic-bezier(0,.96,.13,.95);
+}
+
+.gallery:hover #galleryButtonRow {
+  opacity: 1;
+}
+
+#galleryContent > * {
+  height: var(--gallery-height);
+}
