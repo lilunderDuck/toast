@@ -13,7 +13,8 @@ const style = stylex.create({
     height: "17rem",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    marginBottom: 20
   }
 })
 

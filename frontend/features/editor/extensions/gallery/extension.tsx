@@ -1,6 +1,7 @@
 import { type Attribute, Node } from '@tiptap/core'
 // ...
 import { SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
+// ...
 import { insertNodeAtCurrentPosition } from '../../utils'
 import GalleryNodeView from './node'
 

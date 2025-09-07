@@ -1,6 +1,6 @@
 import { BsFullscreen, BsPencilFill } from "solid-icons/bs";
 import { Button, ButtonRow } from "~/components";
-import __style from "./ImageInput.module.css"
+import __style from "../ImageInput.module.css"
 import stylex from "@stylexjs/stylex";
 
 const style = stylex.create({
