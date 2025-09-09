@@ -6,7 +6,7 @@ import { createStorage } from "~/utils"
 import { ASSETS_SERVER_URL } from "~/api"
 import { useJournalContext } from "~/features/journal"
 import type { editor } from "~/wailsjs/go/models"
-import { CreateGalleryData, GetGalleryData, UploadOneFile, UpdateGalleryData, DeleteGallery } from "~/wailsjs/go/editor/EditorExport"
+import { CreateGalleryData, GetGalleryData, UploadFileToGallery, UpdateGalleryData, DeleteGallery } from "~/wailsjs/go/editor/EditorExport"
 // ...
 import type { GallerySessionStorage } from "./data"
 import { DEFAULT_GALLERY_ID, type GalleryAttribute } from "../extension"
@@ -41,7 +41,7 @@ export interface IGalleryContext {
    * @param filePath The local file path of the single file to upload.
    * @returns A promise that resolves when the file upload is complete.
    */
-  uploadOneFile$(filePath: string): Promise<void>
+  uploadFileToGallery$(filePath: string): Promise<void>
   /**
    * @todo
    * @param dirPath The local directory path containing multiple files to upload.
@@ -176,8 +176,8 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
         // const 
         // todo
       },
-      async uploadOneFile$(filePath) {
-        const galleryItem = await UploadOneFile(getCurrentGalleryId(), filePath)
+      async uploadFileToGallery$(filePath) {
+        const galleryItem = await UploadFileToGallery(getCurrentGalleryId(), filePath)
         if (galleryData.items.length === 0) {
           setCurrentItem(galleryItem)
         }

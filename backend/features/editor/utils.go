@@ -2,9 +2,11 @@ package editor
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
-	"toast/backend/internals"
+	"toast/backend/utils"
 
+	lzstring "github.com/daku10/go-lz-string"
 	"github.com/wailsapp/mimetype"
 )
 
@@ -63,13 +65,45 @@ func determineFileType(filePath string) (uint8, error) {
 	return fileType, nil
 }
 
-func determineModifiableFolderLocation(folderName string) string {
-	switch folderName {
-	case "embed":
-		return internals.EMBED_SAVED_PATH
-	case "gallery":
-		return internals.GALLERY_FOLDER_PATH
-	default:
-		panic(fmt.Errorf("not allowed: %s", folderName))
+func uploadFile(location, filePath string) error {
+	fileName := filepath.Base(filePath)
+	newSavedLocation := filepath.Join(location, fileName)
+
+	// Adds some random string after the file name if the location the file will be saved
+	// have the same file name.
+	if utils.IsFileExist(newSavedLocation) {
+		newSavedLocation = utils.RenameFileInPath(newSavedLocation, func(oldFilename string) string {
+			return fmt.Sprintf("%s_%s", oldFilename, utils.GetRandomStringWithinLength(4))
+		})
 	}
+
+	return utils.CopyFile(filePath, newSavedLocation)
+}
+
+const NULL_CHAR = "\000"
+
+func MustCompressString(inputString string) []uint16 {
+	compressed, err := lzstring.Compress(inputString)
+	if err != nil {
+		panic(err)
+	}
+
+	return compressed
+}
+
+func MustDecompressString(compressedString []uint16) string {
+	decompressed, err := lzstring.Decompress(compressedString)
+	if err != nil {
+		panic(err)
+	}
+
+	return decompressed
+}
+
+func CompressStrings(inputStrings ...string) []uint16 {
+	return MustCompressString(strings.Join(inputStrings, NULL_CHAR))
+}
+
+func DecompressStrings(compressedString []uint16) []string {
+	return strings.Split(MustDecompressString(compressedString), NULL_CHAR)
 }

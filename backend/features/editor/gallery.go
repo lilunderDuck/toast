@@ -7,50 +7,42 @@ import (
 	"toast/backend/utils"
 )
 
-func mergeGalleryData(oldData *GalleryData, newData *GalleryUpdatedData) {
-	if newData.Description != "" {
-		oldData.Description = newData.Description
-	}
-
-	if len(newData.Items) != 0 {
-		oldData.Items = newData.Items
-	}
-
-	if newData.Name != "" {
-		oldData.Name = newData.Name
-	}
-
-	oldData.Modified = utils.GetCurrentDateNow()
-}
-
 func (*EditorExport) CreateGalleryData() *GalleryData {
 	galleryId := utils.GetRandomIntWithinLength(16)
 	basePath := internals.GalleryPath(galleryId)
-	newData := GalleryData{
+	updatedData := GalleryData{
 		Id:      galleryId,
 		Items:   []GalleryItem{},
 		Created: utils.GetCurrentDateNow(),
 	}
 
 	utils.CreateDirectory(basePath)
-	utils.BSON_WriteFile(internals.GalleryDataFilePath(galleryId), newData)
-	return &newData
+	utils.BSON_WriteFile(internals.GalleryDataMetadataPath(galleryId), updatedData)
+	return &updatedData
 }
 
 func (*EditorExport) UpdateGalleryData(galleryId int, updatedData GalleryUpdatedData) {
-	metaFilePath := internals.GalleryDataFilePath(galleryId)
+	metaFilePath := internals.GalleryDataMetadataPath(galleryId)
 	var data GalleryData
 	utils.BSON_ReadFile(metaFilePath, &data)
-	mergeGalleryData(&data, &updatedData)
+	if updatedData.Description != "" {
+		data.Description = updatedData.Description
+	}
+
+	if len(updatedData.Items) != 0 {
+		data.Items = updatedData.Items
+	}
+
+	if updatedData.Name != "" {
+		data.Name = updatedData.Name
+	}
+
+	data.Modified = utils.GetCurrentDateNow()
 	utils.BSON_WriteFile(metaFilePath, data)
 }
 
-func (*EditorExport) UploadOneFile(galleryId int, pathToFile string) (newData *GalleryItem, _ error) {
-	basePath := internals.GalleryPath(galleryId)
-	fileName := filepath.Base(pathToFile)
-
-	err := utils.CopyFile(pathToFile, filepath.Join(basePath, fileName))
-	if err != nil {
+func (*EditorExport) UploadFileToGallery(galleryId int, pathToFile string) (*GalleryItem, error) {
+	if err := uploadFile(internals.GalleryPath(galleryId), pathToFile); err != nil {
 		return nil, err
 	}
 
@@ -68,7 +60,7 @@ func (*EditorExport) UploadOneFile(galleryId int, pathToFile string) (newData *G
 
 func (*EditorExport) GetGalleryData(galleryId int) (*GalleryData, error) {
 	var data GalleryData
-	err := utils.BSON_ReadFile(internals.GalleryDataFilePath(galleryId), &data)
+	err := utils.BSON_ReadFile(internals.GalleryDataMetadataPath(galleryId), &data)
 	if err != nil {
 		return nil, err
 	}

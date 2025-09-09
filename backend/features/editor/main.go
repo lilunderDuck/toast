@@ -1,8 +1,6 @@
 package editor
 
 import (
-	"fmt"
-	"os"
 	"path/filepath"
 	"toast/backend/internals"
 	"toast/backend/utils"
@@ -15,27 +13,6 @@ import (
 type EditorExport struct{}
 
 // General purpose function to be used across all of editor blocks.
-
-func (*EditorExport) RenameFolderName(folderName, oldFolderName, newFolderName string) (string, error) {
-	basePath := determineModifiableFolderLocation(folderName)
-
-	oldFolderPath := filepath.Join(basePath, oldFolderName)
-	newFolderPath := filepath.Join(basePath, newFolderName)
-
-	if utils.IsDirectoryExist(newFolderPath) {
-		newFolderPath = filepath.Join(
-			internals.EMBED_SAVED_PATH,
-			fmt.Sprintf("%s_%d", newFolderName, utils.GetRandomInt()),
-		)
-	}
-
-	err := os.Rename(oldFolderPath, newFolderPath)
-	if err != nil {
-		return "", err
-	}
-
-	return newFolderPath, err
-}
 
 func (*EditorExport) UploadMedia(groupId int, filePath string) (newFileName string, err error) {
 	fileName := filepath.Base(filePath)

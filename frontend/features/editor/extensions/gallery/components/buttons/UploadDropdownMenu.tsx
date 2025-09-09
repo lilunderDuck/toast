@@ -7,7 +7,7 @@ interface IUploadDropdownMenu extends IDropdownMenu {
 }
 
 export default function UploadDropdownMenu(props: IUploadDropdownMenu) {
-  const { uploadOneFile$ } = useGalleryContext()
+  const { uploadFileToGallery$ } = useGalleryContext()
   const GalleryDirectoryUploadDialog = createLazyLoadedDialog(
     () => import("../dialog/GalleryDirectoryUploadDialog")
   )
@@ -18,7 +18,7 @@ export default function UploadDropdownMenu(props: IUploadDropdownMenu) {
       Title: "Please select your file."
     },
     async onFinish$(filePath) {
-      await uploadOneFile$(filePath)
+      await uploadFileToGallery$(filePath)
     },
   })
   

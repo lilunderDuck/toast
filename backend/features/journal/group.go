@@ -16,12 +16,12 @@ import (
 //   - @param groupId - the journal group id you want to update.
 //   - @param data - the journal group data
 func batchUpdate(groupId int, data *JournalGroupData) {
-	db.GetInstance(internals.GROUPS_DATA_DB_PATH).SetObject(groupId, data)
+	db.GetInstance(internals.GROUPS_DATA_PATH).SetObject(groupId, data)
 	utils.BSON_WriteFile(internals.JournalGroupMetaSavedPath(groupId), data)
 }
 
 func InitGroup() {
-	db.Open(internals.GROUPS_DATA_DB_PATH)
+	db.Open(internals.GROUPS_DATA_PATH)
 }
 
 func (group *GroupExport) CreateGroup(options JournalGroupOptions) (*JournalGroupData, error) {
@@ -50,7 +50,7 @@ func (group *GroupExport) CreateGroup(options JournalGroupOptions) (*JournalGrou
 
 func (*GroupExport) GetAllGroups() []JournalGroupData {
 	var content []JournalGroupData
-	db.GetInstance(internals.GROUPS_DATA_DB_PATH).Iterate(func(data []byte) {
+	db.GetInstance(internals.GROUPS_DATA_PATH).Iterate(func(data []byte) {
 		var out JournalGroupData
 		err := cbor.Unmarshal(data, &out)
 		if err != nil {
@@ -65,7 +65,7 @@ func (*GroupExport) GetAllGroups() []JournalGroupData {
 
 func (*GroupExport) GetGroup(groupId int) JournalGroupData {
 	var data JournalGroupData
-	dbInstance := db.GetInstance(internals.GROUPS_DATA_DB_PATH)
+	dbInstance := db.GetInstance(internals.GROUPS_DATA_PATH)
 	err := dbInstance.GetObject(groupId, &data)
 	if err != nil {
 		utils.BSON_ReadFile(internals.GroupSavedPath(groupId), &data)
@@ -100,6 +100,6 @@ func (group *GroupExport) UpdateGroup(groupId int, newData *JournalGroupOptions)
 }
 
 func (*GroupExport) DeleteGroup(groupId int) {
-	db.GetInstance(internals.GROUPS_DATA_DB_PATH).DeleteObject(groupId)
+	db.GetInstance(internals.GROUPS_DATA_PATH).DeleteObject(groupId)
 	utils.RemoveFileOrDirectory(internals.GroupSavedPath(groupId))
 }

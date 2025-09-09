@@ -5,14 +5,12 @@ import (
 	"toast/backend/utils"
 )
 
-// The path where all of journal groups data are stored, which is "~/groups".
-var GROUP_FOLDER_PATH string = filepath.Join(CURRENT_EXECUTABLE_PATH, "groups")
-
-var GROUPS_DATA_DB_PATH string = filepath.Join(CACHE_FOLDER_PATH, "groups")
+// The path where all of journal groups data are stored, which is "~/data/groups".
+var GROUPS_DATA_PATH string = filepath.Join(DATA_FOLDER_PATH, "groups")
 
 // Gets the journal group's saved path, which is "~/groups/(group id)"
 func GroupSavedPath(groupId int) string {
-	return filepath.Join(GROUP_FOLDER_PATH, utils.ToString(groupId))
+	return filepath.Join(GROUPS_DATA_PATH, utils.ToString(groupId))
 }
 
 func GroupIconSavedPath(groupId int, fileName string) string {
@@ -43,7 +41,7 @@ func SettingFileSavedPath(groupId int) string {
 // gets the *file* path, this one gets the *folder* path.
 func JournalContentSavedPath(groupId int) string {
 	return filepath.Join(
-		GROUP_FOLDER_PATH,
+		GROUPS_DATA_PATH,
 		utils.ToString(groupId),
 		"journals",
 	)
