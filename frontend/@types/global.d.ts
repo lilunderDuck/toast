@@ -1,4 +1,5 @@
 import type { JSX } from "solid-js"
+import type { createStore, SetStoreFunction } from "solid-js/store"
 
 export {}
 
@@ -46,4 +47,6 @@ declare global {
   type AnyObject = Record<string, any>
 
   type AnyClass = abstract new (...args: any) => any
+
+  type SolidStore<T> = [T, SetStoreFunction<T>]
 }
