@@ -1,9 +1,22 @@
 package editor
 
+import "time"
+
 type PlaylistOptions struct {
 	Title       string             `json:"title,omitempty"`
 	Description string             `json:"description,omitempty"`
 	Items       []PlaylistItemData `json:"items,omitempty"`
+	Icon        string             `json:"icon,omitempty"`
+}
+
+type PlaylistMetadata struct {
+	Title       string             `json:"title"`
+	Description string             `json:"description,omitempty"`
+	Items       []PlaylistItemData `json:"items"`
+	Id          int                `json:"id"`
+	Created     time.Duration      `json:"created"`
+	Modified    time.Duration      `json:"modified,omitempty"`
+	Icon        string             `json:"icon,omitempty"`
 }
 
 type PlaylistItemOptions struct {
@@ -32,11 +45,4 @@ type PlaylistItemData struct {
 	Description string `json:"description,omitempty"`
 	// Unique identifier of this playlist item
 	Id int `json:"id"`
-}
-
-type PlaylistMetadata struct {
-	Title       string             `json:"title"`
-	Description string             `json:"description,omitempty"`
-	Items       []PlaylistItemData `json:"items,omitempty"`
-	Id          int                `json:"id,omitempty"`
 }

@@ -1,5 +1,6 @@
 import type { Expression, TemplateLiteral } from "@babel/types"
 import * as astring from "astring"
+import * as escodegen from "escodegen"
 
 export const escapeIdentifier = (name: string) => "${" + name + "}"
 
@@ -45,5 +46,17 @@ export function getString(node: /*any*/Expression, ignoreUndefined: boolean) {
 }
 
 export function generateCodeFromAst(node: Expression) {
-  return astring.generate(node)
+  try {
+    return astring.generate(node)
+  } catch(error) {
+    console.log("[anti-crash] ignoring error", error)
+  }
+
+  try {
+    return escodegen.generate(node)
+  } catch(error) {
+    console.log("[anti-crash] ignoring error", error)
+  }
+
+  throw new Error("Cannot generate code from ast, all tried options failed.")
 }

@@ -1,19 +1,25 @@
 package editor
 
-import "github.com/fxamacker/cbor/v2"
+import (
+	"time"
+
+	"github.com/fxamacker/cbor/v2"
+)
 
 type bin_PlaylistItemData struct {
 	Data []uint16 `cbor:"0,keyasint"`
 }
 
 type bin_PlaylistMetadata struct {
-	Data  []uint16           `cbor:"0,keyasint"`
-	Items []PlaylistItemData `cbor:"1,keyasint,omitempty"`
-	Id    int                `cbor:"2,keyasint"`
+	Data     []uint16           `cbor:"0,keyasint"`
+	Items    []PlaylistItemData `cbor:"1,keyasint,omitempty"`
+	Id       int                `cbor:"2,keyasint"`
+	Created  time.Duration      `cbor:"3,keyasint,omitempty"`
+	Modified time.Duration      `cbor:"4,keyasint,omitempty"`
 }
 
 func (audio *PlaylistMetadata) MarshalCBOR() ([]byte, error) {
-	stringData := CompressStrings(audio.Title, audio.Description)
+	stringData := CompressStrings(audio.Title, audio.Description, audio.Icon)
 	return cbor.Marshal(bin_PlaylistMetadata{
 		Data:  stringData,
 		Items: audio.Items,
@@ -44,6 +50,7 @@ func (audio *PlaylistMetadata) UnmarshalCBOR(input []byte) error {
 
 	audio.Title = stringData[0]
 	audio.Description = stringData[1]
+	audio.Icon = stringData[2]
 	audio.Items = out.Items
 	audio.Id = out.Id
 	return nil

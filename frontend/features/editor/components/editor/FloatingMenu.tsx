@@ -7,6 +7,7 @@ import __scrollbarStyle from "~/styles/scrollbar.module.css"
 import { macro_mergeClassnames } from "macro-def"
 // ...
 import { useEditorContext } from "../../provider"
+import { TbPlaylist } from "solid-icons/tb"
 
 interface IFloatingMenuProps {
   toggleHeading$: (level: 1 | 2 | 3 | 4 | 5 | 6) => boolean
@@ -87,6 +88,11 @@ export function FloatingMenu(props: IFloatingMenuProps) {
       icon$: BsBlockquoteLeft, 
       run$: () => chainCommand().toggleBlockquote().run() 
     },
+    {
+      name$: "playlist",
+      icon$: TbPlaylist,
+      run$: () => chainCommand().insertPlaylist$().run()
+    }
   ]
 
   return (

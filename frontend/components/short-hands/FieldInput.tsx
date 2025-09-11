@@ -35,6 +35,10 @@ const style = stylex.create({
   error: {
     color: 'var(--red10)',
     fontSize: 14
+  },
+  label: {
+    fontSize: 13.5, // sub-pixel perfect 👍
+    fontWeight: "bold"
   }
 })
 
@@ -52,7 +56,7 @@ export function FieldInput(props: TextFieldProps) {
       id={__style.fieldInput}
     >
       <Show when={props.label}>
-        <Kobalte.Label>{props.label}</Kobalte.Label>
+        <label {...stylex.attrs(style.label)}>{props.label}</label>
       </Show>
       <Show
         when={props.multiline}

@@ -29,6 +29,7 @@ var editorContentTypeMap = map[string]uint8{
 	"tag":            9,
 	"image":          10,
 	"imageSplitView": 11,
+	"playlist":       12,
 	"":               255,
 }
 
@@ -45,6 +46,7 @@ var editorContentTypeRemap = map[uint8]string{
 	9:   "tag",
 	10:  "image",
 	11:  "imageSplitView",
+	12:  "playlist",
 	255: "",
 }
 

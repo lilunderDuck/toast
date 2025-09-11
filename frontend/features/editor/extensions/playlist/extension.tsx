@@ -4,6 +4,7 @@ import { SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
 // ...
 import { insertNodeAtCurrentPosition } from '../../utils'
 import PlaylistNode from './node'
+import { PlaylistProvider } from './provider'
 // import { LocalEmbedProvider } from './provider'
 
 declare module '@tiptap/core' {
@@ -32,12 +33,16 @@ export const PlaylistExtension = Node.create({
   },
   addCommands() {
     return {
-      insertLocalEmbed$: () => ({ tr }) => {
+      insertPlaylist$: () => ({ tr }) => {
         return insertNodeAtCurrentPosition<PlaylistAttribute>(this, tr, { id: -1 })
       },
     }
   },
   addNodeView() {
-    return SolidNodeViewRenderer(PlaylistNode)
+    return SolidNodeViewRenderer(() => (
+      <PlaylistProvider>
+        <PlaylistNode />
+      </PlaylistProvider>
+    ))
   },
 })

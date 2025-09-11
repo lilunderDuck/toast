@@ -1,1 +1,5 @@
 export const SUPPORTED_IMAGE_PATTERN = "*.png;*.jpg;*.svg;*.gif;*.bmp;*.webp"
+export const SUPPORTED_IMAGE_FILTER = { 
+  DisplayName: "Images file", 
+  Pattern: SUPPORTED_IMAGE_PATTERN 
+}

@@ -21,6 +21,7 @@ import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension, Im
 // ...
 import __style from "./extensions.module.css"
 import stylex from "@stylexjs/stylex"
+import { PlaylistExtension } from '../extensions/playlist'
 
 const style = stylex.create({
   ext__taskList: {
@@ -97,6 +98,7 @@ export function getExtensions() {
     LocalEmbedExtension,
     GalleryExtension,
     ImageExtension,
-    ImageSplitViewExtension
+    ImageSplitViewExtension,
+    PlaylistExtension
   ]
 }

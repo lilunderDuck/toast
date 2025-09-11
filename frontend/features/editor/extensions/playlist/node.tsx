@@ -1,7 +1,9 @@
+import { Show } from "solid-js"
+// ...
 import stylex from "@stylexjs/stylex"
 import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
 import { usePlaylistContext } from "./provider"
-import { Show } from "solid-js"
+import { PlaylistHeader } from "./components"
 
 const style = stylex.create({
   node: {
@@ -11,12 +13,12 @@ const style = stylex.create({
 })
 
 export default function PlaylistNode() {
-  const { isEmpty$ } = usePlaylistContext()
+  const { data$ } = usePlaylistContext()
 
   return (
     <NodeViewWrapper {...stylex.attrs(style.node)}>
-      <Show when={isEmpty$()}>
-        <div></div>
+      <Show when={data$()}>
+        <PlaylistHeader />
       </Show>
     </NodeViewWrapper>
   )

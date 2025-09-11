@@ -1,6 +1,7 @@
 package internals
 
 import (
+	"fmt"
 	"path/filepath"
 	"toast/backend/utils"
 )
@@ -30,7 +31,7 @@ func AudioPlaylistPath(playlistId int) string {
 }
 
 func AudioPlaylistMetadataPath(playlistId int) string {
-	return filepath.Join(CURRENT_EXECUTABLE_PATH, "playlist", utils.ToString(playlistId))
+	return filepath.Join(DATA_FOLDER_PATH, fmt.Sprintf("playlist-%d.dat", playlistId))
 }
 
 func MediaPath(groupId int) string {
