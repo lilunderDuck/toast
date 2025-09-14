@@ -79,8 +79,8 @@ func (*EditorExport) DeletePlaylist(playlistId int) error {
 	return nil
 }
 
-func (*EditorExport) CreatePlaylistItem(playlistId int, options PlaylistItemOptions) (*PlaylistItemData, error) {
-	err := uploadFile(internals.AudioPlaylistPath(playlistId), options.FileName)
+func (*EditorExport) CreatePlaylistItem(playlistId int, options CreatePlaylistItemOptions) (*PlaylistItemData, error) {
+	err := uploadFile(internals.AudioPlaylistPath(playlistId), options.AudioFilePath)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func (*EditorExport) CreatePlaylistItem(playlistId int, options PlaylistItemOpti
 	// todo: read title, author, ... from the audio file metadata
 	return &PlaylistItemData{
 		Name:        "",
-		FileName:    filepath.Base(options.FileName),
+		FileName:    filepath.Base(options.AudioFilePath),
 		Author:      options.Author,
 		Description: options.Description,
 		Icon:        filepath.Base(options.IconPath),
@@ -96,7 +96,7 @@ func (*EditorExport) CreatePlaylistItem(playlistId int, options PlaylistItemOpti
 	}, nil
 }
 
-func (*EditorExport) UpdatePlaylistItem(playlistId int, options PlaylistItemOptions) (*PlaylistItemData, error) {
+func (*EditorExport) UpdatePlaylistItem(playlistId int, options EditPlaylistItemOptions) (*PlaylistItemData, error) {
 	var oldData PlaylistItemData
 	err := utils.BSON_ReadFile(internals.AudioPlaylistPath(playlistId), &oldData)
 	if err != nil {
@@ -109,10 +109,6 @@ func (*EditorExport) UpdatePlaylistItem(playlistId int, options PlaylistItemOpti
 
 	if options.Author != "" {
 		oldData.Author = options.Author
-	}
-
-	if options.FileName != "" {
-		oldData.FileName = filepath.Base(options.FileName)
 	}
 
 	if options.IconPath != "" {

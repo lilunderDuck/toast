@@ -1,0 +1,63 @@
+.item:hover, .item[data-playlist-item-focused=true] {
+  background-color: var(--gray4);
+}
+
+.item .item__textPrimary {
+  color: var(--gray11);
+}
+
+.item .item__textSecondary {
+  color: var(--gray10);
+}
+
+.item:hover .item__textPrimary,
+.item[data-playlist-item-focused=true] .item__textPrimary {
+  color: var(--gray12);
+}
+
+.item:hover .item__textSecondary,
+.item[data-playlist-item-focused=true] .item__textSecondary {
+  color: var(--gray11);
+}
+
+.item #item__noIcon {
+  background-color: var(--gray5);
+  color: var(--gray11);
+}
+
+.item:hover #item__noIcon,
+.item[data-playlist-item-focused=true] #item__noIcon {
+  background-color: var(--gray6);
+  color: var(--gray12);
+}
+
+/* This css code replaces the index number with a play icon when hover */
+.item #item__index > svg {
+  display: none;
+  /* display: block; */
+}
+
+.item:hover #item__index > span,
+.item[data-playlist-item-focused=true] #item__index > span {
+  display: none;
+}
+
+.item:hover #item__index > svg,
+.item[data-playlist-item-focused=true] #item__index > svg {
+  display: block;
+}
+
+.item .item__buttonRow {
+  visibility: hidden;
+  margin: 0 !important;
+}
+
+.item:hover .item__buttonRow {
+  visibility: visible;
+}
+
+.itemHeader {
+  display: grid;
+  grid-template-columns: 0.2fr 0.4fr 1fr 0.5fr 0.5fr;
+  align-items: center;
+}

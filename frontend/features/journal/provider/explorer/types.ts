@@ -1,4 +1,8 @@
-import type { Accessor, JSX } from "solid-js";
+import type { Accessor, JSX } from "solid-js"
+
+type DragData = Record<string | number, any>
+type DragDataAccessor = Accessor<DragData[]>
+type DefaultDragData = { id: any }[]
 
 /**Options for creating `solid-dnd-directive`'s drag and drop. Briefly copied their 
  * documentation to here, because the package has no documentation.
@@ -39,7 +43,7 @@ import type { Accessor, JSX } from "solid-js";
  * ```
  * @see https://github.com/isaacHagoel/solid-dnd-directive?tab=readme-ov-file#input 
  */
-export interface IDndOptions {
+export interface IDndOptions<T extends DragDataAccessor = Accessor<DefaultDragData>> {
   /**The data array that is used to produce the list with the draggable 
    * items (the same thing you run your `<For /> block on). 
    * 
@@ -48,7 +52,7 @@ export interface IDndOptions {
    * The key name can be overridden globally via [`overrideItemIdKeyNameBeforeInitialisingDndZones()`](https://github.com/isaacHagoel/solid-dnd-directive?tab=readme-ov-file#overriding-the-item-id-key-name) method with a unique value 
    * (within all dnd-zones of the same type)
    */
-  items: Accessor<Record<string | number, any>>
+  items: T
   /**The duration of the items animations. Set to zero if you don't want animations
    * @default 150 // milliseconds
    */
@@ -105,13 +109,13 @@ export interface IDndOptions {
   dropTargetClasses?: string[]
 }
 
-export type DndEvent = CustomEvent<{
+export type DndEvent<T extends DragData> = CustomEvent<{
   info: {
     id: number
     source: "pointer"
     trigger: "dragEntered"
   }
-  items: ReturnType<IDndOptions["items"]>[]
+  items: T[]
 }>
 
 /**Dispatched whenever the dragged element needs to make room for itself in a new 
@@ -120,7 +124,7 @@ export type DndEvent = CustomEvent<{
  * The host (your component) is expected to update the items list 
  * (you can keep a copy of the original list if you need to) 
  */
-export interface IDndConsiderEvent extends DndEvent {
+export interface IDndConsiderEvent<T extends DragData = DefaultDragData> extends DndEvent<T> {
   type: "consider"
 }
 
@@ -128,7 +132,7 @@ export interface IDndConsiderEvent extends DndEvent {
  * 
  * This is the event you want to use to save the items to the server for example. 
  */
-export interface IDndFinalizeEvent extends DndEvent {
+export interface IDndFinalizeEvent<T extends DragData = DefaultDragData> extends DndEvent<T> {
   type: "finalize"
 }
 

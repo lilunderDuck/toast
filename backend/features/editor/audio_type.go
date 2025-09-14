@@ -19,12 +19,22 @@ type PlaylistMetadata struct {
 	Icon        string             `json:"icon,omitempty"`
 }
 
-type PlaylistItemOptions struct {
+type CreatePlaylistItemOptions struct {
 	// The audio file path the user wish to upload
-	FileName string `json:"fileName,omitempty"`
+	AudioFilePath string `json:"audioFilePath,omitempty"`
 	// The audio icon path the user wish to upload.
 	// If the audio file doesn't have cover icon, the user can upload their custom cover icon instead.
 	IconPath string `json:"iconPath,omitempty"`
+	Name     string `json:"name,omitempty"`
+	// The audio's author
+	Author string `json:"author,omitempty"`
+	// Description of the audio file
+	Description string `json:"description,omitempty"`
+}
+
+type EditPlaylistItemOptions struct {
+	IconPath string `json:"iconPath,omitempty"`
+	Name     string `json:"name,omitempty"`
 	// The audio's author
 	Author string `json:"author,omitempty"`
 	// Description of the audio file
@@ -38,7 +48,7 @@ type PlaylistItemData struct {
 	// name as the audio file as well
 	Icon string `json:"icon,omitempty"`
 	// The track name
-	Name string `json:"name,omitempty"`
+	Name string `json:"name"`
 	// The author of this track
 	Author string `json:"author,omitempty"`
 	// Description of the track
