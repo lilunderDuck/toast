@@ -37,6 +37,7 @@ const style = stylex.create({
 type PlaylistTrackSchema = {
   name: string
   author?: string
+  description?: string
 }
 
 interface IPlaylistEditTrackItemDialogProps extends ILazyDialog {
@@ -45,11 +46,11 @@ interface IPlaylistEditTrackItemDialogProps extends ILazyDialog {
   currentTrackIndex$: number
 }
 
-export default function PlaylistEditTrackItemDialog(props: IPlaylistEditTrackItemDialogProps) {
+export default function PlaylistCreateEditTrackDialog(props: IPlaylistEditTrackItemDialogProps) {
   const [, { Form, Field }] = createForm<PlaylistTrackSchema>()
-  const { updateTrack$, playlistId$ } = props.context$
+  const { trackItems$ } = props.context$
 
-  const [iconName, setIconName] = createSignal<string | undefined>(props.prevData$.icon)
+  const [iconName, setIconName] = createSignal<string | undefined>(props.prevData$?.icon ?? "")
   const [iconPath, setIconPath] = createSignal<string>()
 
   const { isUploading$, open$ } = createFileUpload({
@@ -77,7 +78,7 @@ export default function PlaylistEditTrackItemDialog(props: IPlaylistEditTrackIte
       </Button>
     ),
     async onSubmit$(data) {
-      updateTrack$(props.currentTrackIndex$, data as editor.CreatePlaylistItemOptions)
+      trackItems$.update$(props.currentTrackIndex$, data as editor.CreatePlaylistItemOptions)
       props.close$()
     }
   })
@@ -90,34 +91,43 @@ export default function PlaylistEditTrackItemDialog(props: IPlaylistEditTrackIte
       <div {...stylex.attrs(style.dialog__inputContent)}>
         <div {...stylex.attrs(style.dialog__iconInput)} onClick={open$}>
           <Show when={!iconName()}>
-            {isUploading$() ? <SpinningCube /> : <BsPlus />}
+            {isUploading$() ? <SpinningCube cubeSize$={20} /> : <BsPlus />}
           </Show>
         </div>
-        <div>
-          <Form$>
-            <Field name="name" validate={[required("This field is required.")]}>
-              {(field, inputProps) => (
-                <FieldInput
-                  {...inputProps}
-                  label="Track name"
-                  error={field.error}
-                  value={field.value || props.prevData$?.name}
-                />
-              )}
-            </Field>
+        <Form$>
+          <Field name="name" validate={[required("This field is required.")]}>
+            {(field, inputProps) => (
+              <FieldInput
+                {...inputProps}
+                label="Track name"
+                error={field.error}
+                value={field.value || props.prevData$?.name}
+              />
+            )}
+          </Field>
 
-            <Field name="author">
-              {(field, inputProps) => (
-                <FieldInput
-                  {...inputProps}
-                  label="Author"
-                  error={field.error}
-                  value={field.value || props.prevData$?.description}
-                />
-              )}
-            </Field>
-          </Form$>
-        </div>
+          <Field name="author">
+            {(field, inputProps) => (
+              <FieldInput
+                {...inputProps}
+                label="Author"
+                error={field.error}
+                value={field.value || props.prevData$?.author}
+              />
+            )}
+          </Field>
+
+          <Field name="description">
+            {(field, inputProps) => (
+              <FieldInput
+                {...inputProps}
+                label="Description"
+                error={field.error}
+                value={field.value || props.prevData$?.description}
+              />
+            )}
+          </Field>
+        </Form$>
       </div>
     </DialogContent>
   )

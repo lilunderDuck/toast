@@ -2,6 +2,7 @@ import { TextField as Kobalte } from '@kobalte/core'
 import stylex from '@stylexjs/stylex'
 import { type JSX, Show, splitProps } from 'solid-js'
 import __style from './FieldInput.module.css'
+import { FieldInputLabel } from './FieldInputLabel'
 
 export type TextFieldInputRef = HTMLInputElement | HTMLTextAreaElement
 
@@ -35,10 +36,6 @@ const style = stylex.create({
   error: {
     color: 'var(--red10)',
     fontSize: 14
-  },
-  label: {
-    fontSize: 13.5, // sub-pixel perfect 👍
-    fontWeight: "bold"
   }
 })
 
@@ -56,7 +53,7 @@ export function FieldInput(props: TextFieldProps) {
       id={__style.fieldInput}
     >
       <Show when={props.label}>
-        <label {...stylex.attrs(style.label)}>{props.label}</label>
+        <FieldInputLabel>{props.label}</FieldInputLabel>
       </Show>
       <Show
         when={props.multiline}

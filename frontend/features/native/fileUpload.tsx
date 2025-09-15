@@ -18,22 +18,25 @@ import {
  * @see {@link FileUploadType}
 */
 // @ts-ignore - should work perfectly
-export function createFileUpload(
-  options: CreateFileUploadOptions<FileUploadType.FILE, (file: string) => any>
-): UploadDialog
-export function createFileUpload(
-  options: CreateFileUploadOptions<FileUploadType.DIRECTORY, (file: string) => any>
-): UploadDialog
-export function createFileUpload(
-  options: CreateFileUploadOptions<FileUploadType.MULTI_FILE, (manyFiles: string[]) => any>
-): UploadDialog
+export function createFileUpload<T extends FileUploadType.FILE>(
+  options: CreateFileUploadOptions<T, (file: string) => any>
+): UploadDialog<T>
+export function createFileUpload<T extends FileUploadType.DIRECTORY>(
+  options: CreateFileUploadOptions<T, (file: string) => any>
+): UploadDialog<T>
+export function createFileUpload<T extends FileUploadType.MULTI_FILE>(
+  options: CreateFileUploadOptions<T, (manyFiles: string[]) => any>
+): UploadDialog<T>
 
-export function createFileUpload(
+export function createFileUpload<T extends FileUploadType.FILE>(
   options: CreateFileUploadOptions<FileUploadType, (file: string | string[]) => any>
-): UploadDialog {
+  //                               ^^^^^^^^^^^^^^
+  // Change to T will make typescript angry
+): UploadDialog<T> {
   const { onFinish$, type$, dialogOptions$ } = options
   const [isLoading, setIsLoading] = createSignal(false)
   const [error, setError] = createSignal()
+  const [file, setFile] = createSignal()
 
   const getFileDialogFn = () => {
     switch (type$) {
@@ -56,7 +59,9 @@ export function createFileUpload(
         return
       }
 
-      await onFinish$(result)
+      // @ts-ignore
+      setFile(result)
+      await onFinish$?.(result)
     } catch (error) {
       console.error(error)
       setError(error)
@@ -69,6 +74,8 @@ export function createFileUpload(
   return {
     open$: onClickThis,
     isUploading$: isLoading,
-    error$: error
+    error$: error,
+    // @ts-ignore
+    file$: file
   }
 }

@@ -69,6 +69,8 @@ func uploadFile(location, filePath string) error {
 	fileName := filepath.Base(filePath)
 	newSavedLocation := filepath.Join(location, fileName)
 
+	utils.CreateDirectory(filepath.Dir(filePath))
+
 	// Adds some random string after the file name if the location the file will be saved
 	// have the same file name.
 	if utils.IsFileExist(newSavedLocation) {

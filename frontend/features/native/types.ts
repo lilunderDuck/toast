@@ -2,10 +2,11 @@ import type { Accessor } from "solid-js"
 // ...
 import type { frontend } from "~/wailsjs/go/models"
 
-export type UploadDialog = {
+export type UploadDialog<T extends FileUploadType> = {
   isUploading$: Accessor<boolean>
   error$: Accessor<any> // missing type
   open$(): Promise<void>
+  file$: Accessor<FileOutputMapping[T] | undefined>
 }
 
 /**Options for creating a file upload component.
@@ -26,6 +27,12 @@ export type CreateFileUploadOptions<T extends FileUploadType, FinishFn extends A
    * - the selected directory if you set the type to `FileUploadType.DIRECTORY`
    * - a list of selected file if you set the type to `FileUploadType.MULTI_FILE`
    */
-  onFinish$: FinishFn
+  onFinish$?: FinishFn
   disable$?: boolean
+}
+
+type FileOutputMapping = {
+  [FileUploadType.DIRECTORY]: string
+  [FileUploadType.FILE]: string
+  [FileUploadType.MULTI_FILE]: string[]
 }

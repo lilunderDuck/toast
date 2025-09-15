@@ -1,14 +1,16 @@
 import type { FieldValues, createForm, SubmitHandler } from "@modular-forms/solid"
-import { createSignal, type JSX, type ParentProps } from "solid-js"
+import { createSignal, type JSX } from "solid-js"
 // ...
 import { Button, ButtonRow } from "~/components"
 
 // intentionally hacking the types, totally worth it
 export type CreateForm<T extends {}> = ReturnType<typeof createForm<T>>
 export type FormStore<T extends {}> = CreateForm<T>[0]
-export type FormComponent<T extends {}> = CreateForm<T>[1]
-export type FieldComponent<T extends {}> = FormComponent<T>["Field"]
-// export type FieldComponent<T extends {}> = FormComponent<T>["Field"]
+export type FormComponentObject<T extends {}> = CreateForm<T>[1]
+
+export type FieldComponent<T extends {}> = FormComponentObject<T>["Field"]
+export type FormComponent<T extends {}> = FormComponentObject<T>["Form"]
+// export type FieldComponent<T extends {}> = FormComponentObject<T>["Field"]
 
 /**Options for creating a submit form component.
  *
@@ -59,7 +61,7 @@ export interface ISubmitFormOptions<T extends FieldValues> {
  * @see {@link ISubmitFormOptions} for form creation options.
  */
 export function createSubmitForm<T extends FieldValues>(
-  FormComponent: FormComponent<T>["Form"],
+  FormComponent: FormComponent<T>,
   options: ISubmitFormOptions<T>
 ) {
   const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
@@ -81,9 +83,8 @@ export function createSubmitForm<T extends FieldValues>(
      * @param props.
      * @returns `JSX.Element`
      */
-    Form$: (props: ParentProps) => (
-      // @ts-ignore
-      <FormComponent onSubmit={submitThis}>
+    Form$: (props: Parameters<FormComponent<T>>[0]) => (
+      <FormComponent {...props} onSubmit={submitThis}>
         {props.children}
         <ButtonRow>
           {options.buttonRow$}

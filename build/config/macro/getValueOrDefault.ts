@@ -28,7 +28,7 @@ export const getValueOrDefault = defineMacro('macro_getValueOrDefault')
         return `"${(thisNode as StringLiteral).value}"`
       }
 
-      return generateCodeFromAst(it)
+      return generateCodeFromAst(thisNode)
     })
 
     console.log("evaled code:", `${input}===${checkValue}?${defaultValue}:${input}`)

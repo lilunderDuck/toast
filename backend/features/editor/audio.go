@@ -16,6 +16,7 @@ func (*EditorExport) CreatePlaylist(options PlaylistOptions) (*PlaylistMetadata,
 		Created:     utils.GetCurrentDateNow(),
 	}
 
+	utils.CreateDirectory(filepath.Dir(internals.AudioPlaylistMetadataPath(playlistId)))
 	err := utils.BSON_WriteFile(
 		internals.AudioPlaylistMetadataPath(playlistId),
 		data,
@@ -79,48 +80,30 @@ func (*EditorExport) DeletePlaylist(playlistId int) error {
 	return nil
 }
 
-func (*EditorExport) CreatePlaylistItem(playlistId int, options CreatePlaylistItemOptions) (*PlaylistItemData, error) {
+func (*EditorExport) CreatePlaylistItem(
+	playlistId int,
+	options CreatePlaylistItemOptions,
+) (*PlaylistItemData, error) {
 	err := uploadFile(internals.AudioPlaylistPath(playlistId), options.AudioFilePath)
 	if err != nil {
 		return nil, err
 	}
 
-	// todo: read title, author, ... from the audio file metadata
-	return &PlaylistItemData{
-		Name:        "",
+	data := PlaylistItemData{
+		Name:        options.Name,
 		FileName:    filepath.Base(options.AudioFilePath),
 		Author:      options.Author,
 		Description: options.Description,
 		Icon:        filepath.Base(options.IconPath),
 		Id:          utils.GetRandomIntWithinLength(8),
-	}, nil
-}
-
-func (*EditorExport) UpdatePlaylistItem(playlistId int, options EditPlaylistItemOptions) (*PlaylistItemData, error) {
-	var oldData PlaylistItemData
-	err := utils.BSON_ReadFile(internals.AudioPlaylistPath(playlistId), &oldData)
-	if err != nil {
-		return nil, err
-	}
-
-	if options.Description != "" {
-		oldData.Description = options.Description
-	}
-
-	if options.Author != "" {
-		oldData.Author = options.Author
 	}
 
 	if options.IconPath != "" {
-		oldData.Icon = filepath.Base(options.IconPath)
+		data.Icon = filepath.Base(options.IconPath)
 	}
 
-	err = utils.BSON_WriteFile(internals.AudioPlaylistPath(playlistId), oldData)
-	if err != nil {
-		return nil, err
-	}
-
-	return &oldData, nil
+	// todo: read title, author, ... from the audio file metadata
+	return &data, nil
 }
 
 func (*EditorExport) DeletePlaylistTrackFile(playlistId int, fileName string) error {

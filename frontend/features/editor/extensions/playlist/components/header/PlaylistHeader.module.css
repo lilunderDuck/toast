@@ -1,0 +1,7 @@
+.header #header__buttonRow {
+  visibility: hidden;
+}
+
+.header:hover #header__buttonRow {
+  visibility: visible;
+}

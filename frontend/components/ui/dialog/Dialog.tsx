@@ -32,7 +32,8 @@ const style = stylex.create({
     paddingInline: 15,
     paddingBlock: 10,
     backgroundColor: "var(--gray2)",
-    position: "relative"
+    position: "relative",
+    outline: "none"
   },
   closeButton: {
     position: "absolute",
@@ -57,6 +58,7 @@ const style = stylex.create({
     marginTop: "0.375rem",
     flexDirection: "column",
     textAlign: "center",
+    userSelect: "none",
     "@media (min-width: 640px)": {
       textAlign: "left",
     },

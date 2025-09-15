@@ -8,6 +8,7 @@ import (
 
 type bin_PlaylistItemData struct {
 	Data []uint16 `cbor:"0,keyasint"`
+	Id   int      `cbor:"1,keyasint"`
 }
 
 type bin_PlaylistMetadata struct {
@@ -68,5 +69,6 @@ func (audioItem *PlaylistItemData) UnmarshalCBOR(input []byte) error {
 	audioItem.Author = stringData[1]
 	audioItem.Description = stringData[2]
 	audioItem.Icon = stringData[3]
+	audioItem.Id = out.Id
 	return nil
 }

@@ -1,7 +1,6 @@
 package internals
 
 import (
-	"fmt"
 	"path/filepath"
 	"toast/backend/utils"
 )
@@ -12,10 +11,12 @@ var (
 	// Yes, you can embed your own web page, that's why it's called "local embed".
 	EMBED_SAVED_PATH    = filepath.Join(CURRENT_EXECUTABLE_PATH, "embed")
 	GALLERY_FOLDER_PATH = filepath.Join(CURRENT_EXECUTABLE_PATH, "gallery")
+
+	MEDIA_FOLDER_PATH = filepath.Join(DATA_FOLDER_PATH, "media")
 )
 
 func GalleryPath(galleryId int) string {
-	return filepath.Join(CURRENT_EXECUTABLE_PATH, "gallery", utils.ToString(galleryId))
+	return filepath.Join(DATA_FOLDER_PATH, "gallery", utils.ToString(galleryId))
 }
 
 func GalleryDataMetadataPath(galleryId int) string {
@@ -23,17 +24,17 @@ func GalleryDataMetadataPath(galleryId int) string {
 }
 
 func AudioPath(groupId int) string {
-	return filepath.Join(CURRENT_EXECUTABLE_PATH, "audio", utils.ToString(groupId))
+	return filepath.Join(DATA_FOLDER_PATH, "audio", utils.ToString(groupId))
 }
 
 func AudioPlaylistPath(playlistId int) string {
-	return filepath.Join(CURRENT_EXECUTABLE_PATH, "playlist", utils.ToString(playlistId))
+	return filepath.Join(DATA_FOLDER_PATH, "playlist", utils.ToString(playlistId))
 }
 
 func AudioPlaylistMetadataPath(playlistId int) string {
-	return filepath.Join(DATA_FOLDER_PATH, fmt.Sprintf("playlist-%d.dat", playlistId))
+	return filepath.Join(AudioPlaylistPath(playlistId), "meta.dat")
 }
 
 func MediaPath(groupId int) string {
-	return filepath.Join(CURRENT_EXECUTABLE_PATH, "media", utils.ToString(groupId))
+	return filepath.Join(DATA_FOLDER_PATH, utils.ToString(groupId))
 }

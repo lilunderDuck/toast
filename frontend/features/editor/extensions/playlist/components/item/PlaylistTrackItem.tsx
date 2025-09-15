@@ -12,9 +12,8 @@ import PlaylistTrackIcon from "./PlaylistTrackIcon"
 
 const style = stylex.create({
   item: {
-    paddingInline: 10,
+    paddingInline: 15,
     paddingBlock: 10,
-    marginInline: 5,
     borderRadius: 6,
     width: "100%",
     alignItems: "center",
@@ -45,10 +44,10 @@ interface IPlaylistTrackItemProps extends editor.PlaylistItemData {
 }
 
 export default function PlaylistTrackItem(props: IPlaylistTrackItemProps) {
-  const { focusedTrack$, togglePlayTrack$ } = usePlaylistContext()
+  const { trackItems$ } = usePlaylistContext()
 
-  const PlaylistEditTrackItemDialog = createLazyLoadedDialog(
-    () => import("../dialog/PlaylistEditTrackItemDialog"),
+  const PlaylistEditTrackDialog = createLazyLoadedDialog(
+    () => import("../dialog/PlaylistEditTrackDialog"),
     () => ({
       prevData$: props,
       context$: usePlaylistContext(),
@@ -56,10 +55,10 @@ export default function PlaylistTrackItem(props: IPlaylistTrackItemProps) {
     })
   )
 
-  const isCurrentlyFocused = () => focusedTrack$()?.trackId$ === props.id
+  const isCurrentlyFocused = () => trackItems$.focusedTrack$()?.trackId$ === props.id
 
   const shouldShowPlayPauseIcon = () => (
-    focusedTrack$()?.isPlaying$ &&
+    trackItems$.focusedTrack$()?.isPlaying$ &&
     isCurrentlyFocused()
   )
 
@@ -72,7 +71,7 @@ export default function PlaylistTrackItem(props: IPlaylistTrackItemProps) {
       <div 
         {...stylex.attrs(style.item__index)} 
         id={__style.item__index}
-        onClick={() => togglePlayTrack$(props)}
+        onClick={() => trackItems$.togglePlayTrack$(props)}
       >
         <span>{props.index$ + 1}</span>
         {shouldShowPlayPauseIcon() ? <BsPauseFill size={50} /> : <BsPlayFill size={50} />}
@@ -98,7 +97,7 @@ export default function PlaylistTrackItem(props: IPlaylistTrackItemProps) {
       <ButtonRow class={__style.item__buttonRow}>
         <Button 
           size$={ButtonSize.ICON}
-          onClick={PlaylistEditTrackItemDialog.show$}
+          onClick={PlaylistEditTrackDialog.show$}
         >
           <BsPencilFill />
         </Button>
@@ -111,7 +110,7 @@ export default function PlaylistTrackItem(props: IPlaylistTrackItemProps) {
         </Button>
       </ButtonRow>
 
-      <PlaylistEditTrackItemDialog.Dialog$ />
+      <PlaylistEditTrackDialog.Dialog$ />
     </li>
   )
 }

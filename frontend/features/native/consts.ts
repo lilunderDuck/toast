@@ -3,3 +3,8 @@ export const SUPPORTED_IMAGE_FILTER = {
   DisplayName: "Images file", 
   Pattern: SUPPORTED_IMAGE_PATTERN 
 }
+
+export const SUPPORTED_AUDIO_FILTER = {
+  DisplayName: "Audio file",
+  Pattern: "*.mp3"
+}
