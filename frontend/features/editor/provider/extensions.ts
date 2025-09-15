@@ -14,6 +14,7 @@ import TaskList from '@tiptap/extension-task-list'
 import Placeholder from '@tiptap/extension-placeholder'
 import { DetailsSummary, DetailsContent, Details } from '@tiptap/extension-details'
 import { Color } from '@tiptap/extension-color'
+import { CharacterCount } from '@tiptap/extensions'
 import { common, createLowlight } from 'lowlight'
 import { macro_mergeClassnames } from 'macro-def'
 // ...
@@ -93,6 +94,8 @@ export function getExtensions() {
       },
       openClassName: __style.detailsOpened
     }),
+    // ------- misc functionality extension ------
+    CharacterCount,
     // ------- custom extension zone -------
     TagExtension,
     LocalEmbedExtension,

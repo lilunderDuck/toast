@@ -29,6 +29,10 @@ function defineEnum(
       value = i
     }
 
+    if (typeof value === "string") {
+      value = `"${value}"`
+    }
+
     enumPropContent += `${name} = ${value},`
     defineMapping.set(`${enumName}.${name}`, `${value}`)
     console.log(`define: ${enumName}.${name} = `, value)
@@ -107,6 +111,12 @@ export function defineAllEnum() {
     VIDEO: 2,
     TEXT: 3,
     AUDIO: 4
+  })
+
+  defineEnum('BongoCatAnimationFrame', {
+    IDLE: "bc",
+    RIGHT_HAND_TAPPED: "ba",
+    LEFT_HAND_TAPPED: "dc"
   })
 
   return {

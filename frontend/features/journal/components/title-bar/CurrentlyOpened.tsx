@@ -60,7 +60,7 @@ export function CurrentlyOpened(props: ParentProps<ICurrentlyOpenedProps>) {
         <Show when={props.currentlyOpenedName$}>
           <BsCaretRightFill size={10} />
           <span {...stylex.attrs(style.currentlyOpened__name)}>
-            <i>{props.currentlyOpenedName$}</i>
+            {props.currentlyOpenedName$}
           </span>
         </Show>
       </div>

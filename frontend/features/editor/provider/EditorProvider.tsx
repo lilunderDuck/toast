@@ -1,8 +1,8 @@
 import type { JSONContent } from '@tiptap/core'
-import { 
-  createContext, 
-  createSignal, 
-  type ParentProps, 
+import {
+  createContext,
+  createSignal,
+  type ParentProps,
   useContext,
   type Accessor,
   onMount
@@ -34,6 +34,7 @@ export type EditorEvent = IEvent<{
    * @param data The updated editor data.
    */
   editor__onUpdate$: (data: EditorData) => any
+  editor__updateBongoCatAnimation$: () => any
 }>
 
 export interface IEditorContext {
@@ -51,12 +52,16 @@ export interface IEditorContext {
   open$(data: EditorData): void
   /**Basically every editor event related stuff is in here. */
   event$: EditorEvent
+  wordCount$: Accessor<number>
+  charCount$: Accessor<number>
 }
 
 const Context = createContext<IEditorContext>()
 
 export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
   const [readonly, setIsReadonly] = createSignal(false)
+  const [wordCount, setWordCount] = createSignal(0)
+  const [charCount, setCharCount] = createSignal(0)
 
   const localStorageWrapper = createStorage(localStorage, `editor_${props.id$}`)
   const event: EditorEvent = createEvent()
@@ -64,7 +69,10 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
     // @ts-ignore
     extensions: getExtensions(),
     onUpdate() {
+      setWordCount(editor().storage.characterCount.words())
+      setCharCount(editor().storage.characterCount.characters())
       delayUpdate()
+      event.emit$('editor__updateBongoCatAnimation$')
     },
   }))
 
@@ -81,7 +89,23 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
   onMount(() => {
     setIsReadonly(localStorageWrapper.get$('delete') ?? false)
   })
-  
+
+  const openDocument: IEditorContext["open$"] = (data) => {
+    if (currentlyOpenedId === data.id) {
+      return console.log("already opened")
+    }
+
+    if (currentlyOpenedId !== -1) {
+      event.emit$('editor__onSwitching$', getCurrentData())
+    }
+
+    console.log("incoming json data", data)
+    currentlyOpenedId = data.id
+    editor().commands.setContent(data.content, true, undefined, {
+      errorOnInvalidContent: true
+    })
+  }
+
   return (
     <Context.Provider value={{
       editor$: editor,
@@ -91,22 +115,10 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
         editor().setEditable(!state)
       },
       isReadonly$: readonly,
-      open$(data) {
-        if (currentlyOpenedId === data.id) {
-          return console.log("already opened")
-        }
-        
-        if (currentlyOpenedId !== -1) {
-          event.emit$('editor__onSwitching$', getCurrentData())
-        }
-
-        console.log("incoming json data", data)
-        currentlyOpenedId = data.id
-        editor().commands.setContent(data.content, true, undefined, {
-          errorOnInvalidContent: true
-        })
-      },
-      event$: event
+      open$: openDocument,
+      event$: event,
+      wordCount$: wordCount,
+      charCount$: charCount,
     }}>
       {props.children}
     </Context.Provider>

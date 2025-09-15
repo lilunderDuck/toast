@@ -3,7 +3,7 @@
   --sb-thumb-color: var(--gray4);
   --sb-border-radius: 3px;
   --sb-thumb-pad: 1px;
-  --sb-size: 7px;
+  --sb-size: 12px;
   will-change: transform;
 }
 

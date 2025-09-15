@@ -9,7 +9,7 @@ import "./Editor.css"
 import { macro_mergeClassnames } from "macro-def"
 import { SolidEditorContent } from "~/libs/solid-tiptap-renderer"
 // ...
-import { AttributeEditor, BubbleMenu, FloatingMenu } from "../components"
+import { AttributeEditor, BubbleMenu, CharacterCount, FloatingMenu } from "../components"
 import { useEditorContext } from "../provider"
 
 const style = stylex.create({
@@ -56,6 +56,7 @@ export function Editor() {
       <AttributeEditor />
       <SolidEditorContent 
         editor={editor$()} 
+        style={`--sb-track-color: var(--gray2)`}
         class={macro_mergeClassnames(
           stylex.attrs(style.editor),
           __scrollbarStyle.scrollbar,
@@ -70,6 +71,7 @@ export function Editor() {
         ref={floatingMenuRef} 
         toggleHeading$={toggleHeading}
       />
+      <CharacterCount />
     </>
   )
 }
