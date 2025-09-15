@@ -1,16 +1,14 @@
 import { Show } from "solid-js"
-import { BsPlus } from "solid-icons/bs"
 import { createForm, required } from "@modular-forms/solid"
 // ...
-import { Button, DialogContent, DialogHeader, FieldInput, FieldInputLabel, SpinningCube, Tooltip, type ILazyDialog } from "~/components"
-import { createFileUpload, SUPPORTED_AUDIO_FILTER, SUPPORTED_IMAGE_FILTER } from "~/features/native"
+import { Button, createIconInput, DialogContent, DialogHeader, FieldInput, FieldInputLabel, Tooltip, type ILazyDialog } from "~/components"
+import { createFileUpload, SUPPORTED_AUDIO_FILTER } from "~/features/native"
 import { createSubmitForm } from "~/hooks"
-import { ASSETS_SERVER_URL, escapeCssUrl, PREVIEW_FILE_URL } from "~/api"
+import { previewUrl } from "~/api"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
 import { type IPlaylistContext } from "../../provider"
-import type { editor } from "~/wailsjs/go/models"
 
 const style = stylex.create({
   dialog__inputContent: {
@@ -58,12 +56,11 @@ export default function PlaylistCreateTrackDialog(props: IPlaylistEditTrackItemD
   const [, { Form, Field }] = createForm<PlaylistTrackSchema>()
   const { trackItems$ } = props.context$
 
-  const IconFileUpload = createFileUpload({
-    type$: FileUploadType.FILE,
+  const IconFileUpload = createIconInput({
     dialogOptions$: {
       Title: "Choose an image file to be used as track icon.",
-      Filters: [SUPPORTED_IMAGE_FILTER]
-    }
+    },
+    inputSize$: "9rem",
   })
 
   const AudioFileUpload = createFileUpload({
@@ -96,9 +93,7 @@ export default function PlaylistCreateTrackDialog(props: IPlaylistEditTrackItemD
   })
 
   return (
-    <DialogContent showCloseButton$={false} style={{
-      "--icon-url": escapeCssUrl(`${PREVIEW_FILE_URL}${IconFileUpload.file$()}`)
-    }}>
+    <DialogContent showCloseButton$={false}>
       <DialogHeader>Add new track.</DialogHeader>
       <FieldInputLabel>
         Audio file
@@ -107,7 +102,7 @@ export default function PlaylistCreateTrackDialog(props: IPlaylistEditTrackItemD
         <div {...stylex.attrs(style.dialog__audioFileUpload)} onClick={AudioFileUpload.open$}>
           <Show when={AudioFileUpload.file$()} fallback={"*No file choosen*"}>
             <audio 
-              src={`${ASSETS_SERVER_URL}/preview?path=${encodeURIComponent(AudioFileUpload.file$()!)}`}
+              src={previewUrl(AudioFileUpload.file$()!)}
               controls
             />
           </Show>
@@ -118,11 +113,12 @@ export default function PlaylistCreateTrackDialog(props: IPlaylistEditTrackItemD
           <FieldInputLabel>
             Cover icon
           </FieldInputLabel>
-          <div {...stylex.attrs(style.dialog__iconInput)} onClick={IconFileUpload.open$}>
+          <IconFileUpload.Input$ />
+          {/* <div {...stylex.attrs(style.dialog__iconInput)} onClick={IconFileUpload.open$}>
             <Show when={!IconFileUpload.file$()}>
               {IconFileUpload.isUploading$() ? <SpinningCube cubeSize$={20} /> : <BsPlus />}
             </Show>
-          </div>
+          </div> */}
         </div>
         <Form$>
           <Field name="name" validate={[required("This field is required.")]}>

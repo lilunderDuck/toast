@@ -1,13 +1,9 @@
-import { createSignal, Show } from "solid-js"
-import { BsPlus } from "solid-icons/bs"
 import { createForm, required } from "@modular-forms/solid"
 // ...
-import { Button, DialogContent, DialogHeader, FieldInput, SpinningCube, type ILazyDialog } from "~/components"
-import { createFileUpload, SUPPORTED_IMAGE_FILTER } from "~/features/native"
-import { getFilenameFromUrl } from "~/utils"
+import { Button, createIconInput, DialogContent, DialogHeader, FieldInput, type ILazyDialog } from "~/components"
 import { createSubmitForm } from "~/hooks"
 import type { editor } from "~/wailsjs/go/models"
-import { escapeCssUrl, PREVIEW_FILE_URL } from "~/api"
+import { playlistTrackUrl } from "~/api"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -48,22 +44,14 @@ interface IPlaylistEditTrackItemDialogProps extends ILazyDialog {
 
 export default function PlaylistCreateEditTrackDialog(props: IPlaylistEditTrackItemDialogProps) {
   const [, { Form, Field }] = createForm<PlaylistTrackSchema>()
-  const { trackItems$ } = props.context$
+  const { trackItems$, playlistId$ } = props.context$
 
-  const [iconName, setIconName] = createSignal<string | undefined>(props.prevData$?.icon ?? "")
-  const [iconPath, setIconPath] = createSignal<string>()
-
-  const { isUploading$, open$ } = createFileUpload({
-    type$: FileUploadType.FILE,
+  const IconInput = createIconInput({
     dialogOptions$: {
       Title: "Choose an image file to be used as track icon.",
-      Filters: [SUPPORTED_IMAGE_FILTER]
     },
-    onFinish$(file) {
-      const fileName = getFilenameFromUrl(file)
-      setIconName(fileName)
-      setIconPath(file)
-    },
+    inputSize$: "9rem",
+    initialIconUrl$: () => playlistTrackUrl(playlistId$(), props.prevData$.fileName),
   })
 
   const { Form$ } = createSubmitForm(Form, {
@@ -78,22 +66,19 @@ export default function PlaylistCreateEditTrackDialog(props: IPlaylistEditTrackI
       </Button>
     ),
     async onSubmit$(data) {
-      trackItems$.update$(props.currentTrackIndex$, data as editor.CreatePlaylistItemOptions)
+      trackItems$.update$(props.currentTrackIndex$, {
+        ...data,
+        iconPath: IconInput.file$()
+      } as editor.CreatePlaylistItemOptions)
       props.close$()
     }
   })
 
   return (
-    <DialogContent style={{
-      "--icon-url": escapeCssUrl(`${PREVIEW_FILE_URL}${iconPath()}`)
-    }}>
+    <DialogContent>
       <DialogHeader>Edit track details.</DialogHeader>
       <div {...stylex.attrs(style.dialog__inputContent)}>
-        <div {...stylex.attrs(style.dialog__iconInput)} onClick={open$}>
-          <Show when={!iconName()}>
-            {isUploading$() ? <SpinningCube cubeSize$={20} /> : <BsPlus />}
-          </Show>
-        </div>
+        <IconInput.Input$ />
         <Form$>
           <Field name="name" validate={[required("This field is required.")]}>
             {(field, inputProps) => (

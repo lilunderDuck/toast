@@ -1,13 +1,14 @@
 import { createSignal, Show } from "solid-js"
 import { BsPlus } from "solid-icons/bs"
 import { createForm, required } from "@modular-forms/solid"
+import { macro_escapeCssUrl } from "macro-def"
 // ...
 import { Button, DialogContent, DialogHeader, FieldInput, SpinningCube, type ILazyDialog } from "~/components"
 import { createFileUpload, SUPPORTED_IMAGE_FILTER } from "~/features/native"
 import { getFilenameFromUrl } from "~/utils"
 import { createSubmitForm } from "~/hooks"
 import type { editor } from "~/wailsjs/go/models"
-import { escapeCssUrl, PREVIEW_FILE_URL } from "~/api"
+import { PREVIEW_FILE_URL } from "~/api"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -82,7 +83,7 @@ export default function PlaylistEditMetadataDialog(props: IPlaylistEditMetadataD
 
   return (
     <DialogContent style={{
-      "--icon-url": escapeCssUrl(`${PREVIEW_FILE_URL}${iconPath()}`)
+      "--icon-url": macro_escapeCssUrl(`${PREVIEW_FILE_URL}${iconPath()}`)
     }}>
       <DialogHeader>Edit playlist details.</DialogHeader>
       <div {...stylex.attrs(style.dialog__inputContent)}>

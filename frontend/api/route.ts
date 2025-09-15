@@ -8,3 +8,7 @@ export function escapeCssUrl<const T extends string>(anyUrl: T) {
 export function playlistTrackUrl(playlistId: number, filename: string) {
   return `${ASSETS_SERVER_URL}/local-assets/playlist/${playlistId}/audio/${filename}` as const
 }
+
+export function previewUrl(filePath: string) {
+  return `${ASSETS_SERVER_URL}/preview?path=${encodeURIComponent(filePath)}` as const
+}

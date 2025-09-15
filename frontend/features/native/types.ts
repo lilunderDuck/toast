@@ -9,6 +9,8 @@ export type UploadDialog<T extends FileUploadType> = {
   file$: Accessor<FileOutputMapping[T] | undefined>
 }
 
+export type FileOpenDialogOptions = Partial<frontend.OpenDialogOptions>
+
 /**Options for creating a file upload component.
  *
  * @template T The type of file upload, see {@link FileUploadType}
@@ -19,7 +21,7 @@ export type CreateFileUploadOptions<T extends FileUploadType, FinishFn extends A
    * @see {@link FileUploadType} for a full list of options.
    */
   type$: T
-  dialogOptions$?: Partial<frontend.OpenDialogOptions>
+  dialogOptions$?: FileOpenDialogOptions
   /**Fired when the file upload is complete.
    * 
    * It receives 
