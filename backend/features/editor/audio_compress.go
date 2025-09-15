@@ -28,19 +28,6 @@ func (audio *PlaylistMetadata) MarshalCBOR() ([]byte, error) {
 	})
 }
 
-func (audioItem *PlaylistItemData) MarshalCBOR() ([]byte, error) {
-	stringData := CompressStrings(
-		audioItem.Name,
-		audioItem.Author,
-		audioItem.Description,
-		audioItem.Icon,
-	)
-
-	return cbor.Marshal(bin_PlaylistItemData{
-		Data: stringData,
-	})
-}
-
 func (audio *PlaylistMetadata) UnmarshalCBOR(input []byte) error {
 	var out bin_PlaylistMetadata
 	if err := cbor.Unmarshal(input, &out); err != nil {
@@ -55,6 +42,20 @@ func (audio *PlaylistMetadata) UnmarshalCBOR(input []byte) error {
 	audio.Items = out.Items
 	audio.Id = out.Id
 	return nil
+}
+
+func (audioItem *PlaylistItemData) MarshalCBOR() ([]byte, error) {
+	stringData := CompressStrings(
+		audioItem.Name,
+		audioItem.Author,
+		audioItem.Description,
+		audioItem.Icon,
+	)
+
+	return cbor.Marshal(bin_PlaylistItemData{
+		Data: stringData,
+		Id:   audioItem.Id,
+	})
 }
 
 func (audioItem *PlaylistItemData) UnmarshalCBOR(input []byte) error {

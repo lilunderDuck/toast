@@ -1,8 +1,8 @@
-import { type Accessor, createContext, createSignal, onMount, type ParentProps, type Setter, Show, useContext } from "solid-js"
+import { type Accessor, createContext, createEffect, createSignal, onMount, type ParentProps, type Setter, Show, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 // ...
 import { useNodeState } from "~/features/editor/utils"
-import { CreatePlaylist, UpdatePlaylistData, CreatePlaylistItem, GetPlaylist } from "~/wailsjs/go/editor/EditorExport"
+import { CreatePlaylist, UpdatePlaylist, CreatePlaylistItem, GetPlaylist } from "~/wailsjs/go/editor/EditorExport"
 import type { editor } from "~/wailsjs/go/models"
 import { playlistTrackUrl } from "~/api"
 import { arrayObjects } from "~/utils"
@@ -69,7 +69,7 @@ export function PlaylistProvider(props: ParentProps) {
   const playlistId = () => data$().id
 
   const editPlaylist: IPlaylistContext["editPlaylist$"] = async (options) => {
-    const updatedData = await UpdatePlaylistData(playlistId(), options)
+    const updatedData = await UpdatePlaylist(playlistId(), options)
     setData(updatedData as unknown as editor.PlaylistMetadata)
   }
 
@@ -78,6 +78,8 @@ export function PlaylistProvider(props: ParentProps) {
   // 
   // And solid's createStore() is hell-ta confusing.
   const [trackItems, setTrackItems] = createSignal<editor.PlaylistItemData[]>([])
+
+  createEffect(() => console.log(trackItems()))
 
   // Initializes the playlist data on component mount, creating a new one if necessary.
   onMount(async () => {
@@ -97,7 +99,7 @@ export function PlaylistProvider(props: ParentProps) {
   })
 
   const saveTrackItem = () => {
-    return UpdatePlaylistData(playlistId(), { items: trackItems() } as editor.PlaylistOptions)
+    return UpdatePlaylist(playlistId(), { items: trackItems() } as editor.PlaylistOptions)
   }
 
   const addTrack: IPlaylistTrackItem["add$"] = async (options) => {

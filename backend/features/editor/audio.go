@@ -38,7 +38,7 @@ func (*EditorExport) GetPlaylist(playlistId int) (*PlaylistMetadata, error) {
 	return &out, nil
 }
 
-func (*EditorExport) UpdatePlaylistData(playlistId int, options PlaylistOptions) error {
+func (*EditorExport) UpdatePlaylist(playlistId int, options PlaylistOptions) error {
 	var oldData PlaylistMetadata
 	if err := utils.BSON_ReadFile(
 		internals.AudioPlaylistMetadataPath(playlistId),
