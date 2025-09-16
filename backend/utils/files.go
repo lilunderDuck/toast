@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"io/fs"
 	"os"
@@ -20,7 +21,7 @@ import (
 func RenameFileInPath(path string, newName func(oldFilename string) string) string {
 	baseDir := filepath.Dir(path)
 	fileExt := filepath.Ext(path)
-	fileName := strings.TrimSuffix(fileExt, fileExt)
+	fileName := strings.Replace(filepath.Base(path), fileExt, "", 1)
 
 	newFileName := newName(fileName)
 	return filepath.Join(baseDir, newFileName+fileExt)
@@ -125,6 +126,14 @@ func CopyFile(source, destination string) error {
 		return err
 	}
 	defer sourceFile.Close()
+
+	// Ensure no file being overriten if the destination file path
+	// has the same file name.
+	if IsFileExist(destination) {
+		destination = RenameFileInPath(destination, func(oldFilename string) string {
+			return fmt.Sprintf("%s_%s", oldFilename, GetRandomStringWithinLength(8))
+		})
+	}
 
 	// Ensure the destination directory exists.
 	destinationDir := filepath.Dir(destination)

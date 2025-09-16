@@ -23,8 +23,11 @@ func (*EditorExport) CreateGalleryData() *GalleryData {
 
 func (*EditorExport) UpdateGalleryData(galleryId int, updatedData GalleryUpdatedData) {
 	metaFilePath := internals.GalleryDataMetadataPath(galleryId)
-	var data GalleryData
-	utils.BSON_ReadFile(metaFilePath, &data)
+	data, err := utils.BSON_ReadFile[GalleryData](metaFilePath)
+	if err != nil {
+		return
+	}
+
 	if updatedData.Description != "" {
 		data.Description = updatedData.Description
 	}
@@ -59,13 +62,7 @@ func (*EditorExport) UploadFileToGallery(galleryId int, pathToFile string) (*Gal
 }
 
 func (*EditorExport) GetGalleryData(galleryId int) (*GalleryData, error) {
-	var data GalleryData
-	err := utils.BSON_ReadFile(internals.GalleryDataMetadataPath(galleryId), &data)
-	if err != nil {
-		return nil, err
-	}
-
-	return &data, nil
+	return utils.BSON_ReadFile[GalleryData](internals.GalleryDataMetadataPath(galleryId))
 }
 
 func (editor *EditorExport) DeleteGallery(galleryId int) error {

@@ -30,20 +30,12 @@ func (*EditorExport) CreatePlaylist(options PlaylistOptions) (*PlaylistMetadata,
 }
 
 func (*EditorExport) GetPlaylist(playlistId int) (*PlaylistMetadata, error) {
-	var out PlaylistMetadata
-	if err := utils.BSON_ReadFile(internals.AudioPlaylistMetadataPath(playlistId), &out); err != nil {
-		return nil, err
-	}
-
-	return &out, nil
+	return utils.BSON_ReadFile[PlaylistMetadata](internals.AudioPlaylistMetadataPath(playlistId))
 }
 
 func (*EditorExport) UpdatePlaylist(playlistId int, options PlaylistOptions) error {
-	var oldData PlaylistMetadata
-	if err := utils.BSON_ReadFile(
-		internals.AudioPlaylistMetadataPath(playlistId),
-		&oldData,
-	); err != nil {
+	oldData, err := utils.BSON_ReadFile[PlaylistMetadata](internals.AudioPlaylistMetadataPath(playlistId))
+	if err != nil {
 		return err
 	}
 
@@ -68,8 +60,8 @@ func (*EditorExport) UpdatePlaylist(playlistId int, options PlaylistOptions) err
 }
 
 func (*EditorExport) DeletePlaylist(playlistId int) error {
-	var data PlaylistMetadata
-	if err := utils.BSON_ReadFile(internals.AudioPlaylistPath(playlistId), &data); err != nil {
+	data, err := utils.BSON_ReadFile[PlaylistMetadata](internals.AudioPlaylistPath(playlistId))
+	if err != nil {
 		return err
 	}
 

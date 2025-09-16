@@ -43,9 +43,7 @@ func (*GroupExport) CreateJournal(groupId int, journalType uint8, options Journa
 }
 
 func (*GroupExport) GetJournal(groupId, journalId int) (*JournalData, error) {
-	var data JournalData
-	err := utils.BSON_ReadFile(internals.JournalContentSavedFilePath(groupId, journalId), &data)
-	return &data, err
+	return utils.BSON_ReadFile[JournalData](internals.JournalContentSavedFilePath(groupId, journalId))
 }
 
 func (group *GroupExport) UpdateJournal(groupId, journalId int, newData *JournalOptions) (*JournalData, error) {

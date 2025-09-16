@@ -40,7 +40,7 @@ func BSON_WriteFile(path string, anyObject any) (someError error) {
 //
 // Returns:
 //   - An error if something went wrong while reading, or nil if it read correctly.
-func BSON_ReadFile(path string, out any) (someError error) {
+func base_BSON_ReadFile(path string, out any) (someError error) {
 	dataFromDisk, err := ReadFile(path)
 	if err != nil {
 		return err
@@ -52,4 +52,10 @@ func BSON_ReadFile(path string, out any) (someError error) {
 	}
 
 	return nil
+}
+
+func BSON_ReadFile[T any](path string) (*T, error) {
+	var out T
+	err := base_BSON_ReadFile(path, &out)
+	return &out, err
 }

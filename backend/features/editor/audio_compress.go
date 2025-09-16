@@ -2,6 +2,7 @@ package editor
 
 import (
 	"time"
+	"toast/backend/utils"
 
 	"github.com/fxamacker/cbor/v2"
 )
@@ -20,7 +21,7 @@ type bin_PlaylistMetadata struct {
 }
 
 func (audio *PlaylistMetadata) MarshalCBOR() ([]byte, error) {
-	stringData := CompressStrings(audio.Title, audio.Description, audio.Icon)
+	stringData := utils.CompressStrings(audio.Title, audio.Description, audio.Icon)
 	return cbor.Marshal(bin_PlaylistMetadata{
 		Data:  stringData,
 		Items: audio.Items,
@@ -34,7 +35,7 @@ func (audio *PlaylistMetadata) UnmarshalCBOR(input []byte) error {
 		return err
 	}
 
-	stringData := DecompressStrings(out.Data)
+	stringData := utils.DecompressStrings(out.Data)
 
 	audio.Title = stringData[0]
 	audio.Description = stringData[1]
@@ -45,7 +46,7 @@ func (audio *PlaylistMetadata) UnmarshalCBOR(input []byte) error {
 }
 
 func (audioItem *PlaylistItemData) MarshalCBOR() ([]byte, error) {
-	stringData := CompressStrings(
+	stringData := utils.CompressStrings(
 		audioItem.Name,
 		audioItem.Author,
 		audioItem.Description,
@@ -64,7 +65,7 @@ func (audioItem *PlaylistItemData) UnmarshalCBOR(input []byte) error {
 		return err
 	}
 
-	stringData := DecompressStrings(out.Data)
+	stringData := utils.DecompressStrings(out.Data)
 
 	audioItem.Name = stringData[0]
 	audioItem.Author = stringData[1]

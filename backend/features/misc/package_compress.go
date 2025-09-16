@@ -2,6 +2,7 @@ package misc
 
 import (
 	"strings"
+	"toast/backend/utils"
 
 	lzstring "github.com/daku10/go-lz-string"
 	"github.com/fxamacker/cbor/v2"
@@ -60,19 +61,15 @@ func (data *PackageMetadata) UnmarshalCBOR(input []byte) error {
 }
 
 func (data *PackageContentData) MarshalCBOR() ([]byte, error) {
-	stringData := strings.Join([]string{
-		data.Name,
-		data.Description,
-		data.Author.Url,
-		data.Author.Name,
-		data.Homepage,
-	}, NULL_CHAR)
-
-	compressedStringData, _ := lzstring.Compress(stringData)
-
 	return cbor.Marshal(compress_PackageContentData{
-		Data: compressedStringData,
-		Id:   data.Id,
+		Data: utils.CompressStrings(
+			data.Name,
+			data.Description,
+			data.Author.Url,
+			data.Author.Name,
+			data.Homepage,
+		),
+		Id: data.Id,
 	})
 }
 

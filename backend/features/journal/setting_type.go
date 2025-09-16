@@ -20,11 +20,9 @@ func createSettingFile(groupId int) {
 }
 
 func (*GroupExport) GetSetting(groupId int) (*Setting, error) {
-	var out Setting
-	err := utils.BSON_ReadFile(internals.SettingFileSavedPath(groupId), &out)
-	return &out, err
+	return utils.BSON_ReadFile[Setting](internals.SettingFileSavedPath(groupId))
 }
 
 func (*GroupExport) SetSetting(groupId int, data *Setting) error {
-	return utils.BSON_ReadFile(internals.SettingFileSavedPath(groupId), data)
+	return utils.BSON_WriteFile(internals.SettingFileSavedPath(groupId), data)
 }

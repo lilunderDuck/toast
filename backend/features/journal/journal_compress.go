@@ -1,12 +1,12 @@
 package journal
 
 import (
-	"fmt"
+	"toast/backend/utils"
 
 	"github.com/fxamacker/cbor/v2"
 )
 
-type compressed_JournalContentData struct {
+type bin_JournalContentData struct {
 	// Originally, this field is a string type, but it's converted to a uint8
 	// just to save spaces, ofc.
 	Type    uint8                `json:"type"             cbor:"0,keyasint"`
@@ -51,14 +51,8 @@ var editorContentTypeRemap = map[uint8]string{
 }
 
 func (data *JournalContentData) MarshalCBOR() ([]byte, error) {
-	editorContentTypeMapping, ok := editorContentTypeMap[data.Type]
-	if !ok {
-		fmt.Printf("Missing case \"%s\" in the mapping\n", data.Type)
-		editorContentTypeMapping = 255
-	}
-
-	return cbor.Marshal(compressed_JournalContentData{
-		Type:    editorContentTypeMapping,
+	return cbor.Marshal(bin_JournalContentData{
+		Type:    utils.GetValueOrDefault(editorContentTypeMap, data.Type, 255),
 		Attrs:   data.Attrs,
 		Marks:   data.Marks,
 		Content: data.Content,
@@ -67,18 +61,12 @@ func (data *JournalContentData) MarshalCBOR() ([]byte, error) {
 }
 
 func (data *JournalContentData) UnmarshalCBOR(input []byte) error {
-	var out compressed_JournalContentData
+	var out bin_JournalContentData
 	if err := cbor.Unmarshal(input, &out); err != nil {
 		return err
 	}
 
-	editorContentTypeMapping, ok := editorContentTypeRemap[out.Type]
-	if !ok {
-		fmt.Printf("Missing case \"%s\" in the remapping\n", data.Type)
-		editorContentTypeMapping = "unsupported"
-	}
-
-	data.Type = editorContentTypeMapping
+	data.Type = utils.GetValueOrDefault(editorContentTypeRemap, out.Type, "unsupported")
 	// Ugh-, I forgot to assign
 	data.Attrs = out.Attrs
 	data.Content = out.Content
@@ -87,7 +75,7 @@ func (data *JournalContentData) UnmarshalCBOR(input []byte) error {
 	return nil
 }
 
-type compressed_EditorMarks struct {
+type bin_EditorMarks struct {
 	// Originally, this field is a string type, but it's converted to a uint8
 	// just to save spaces, ofc.
 	Type uint8  `json:"type"             cbor:"0,keyasint"`
@@ -103,31 +91,19 @@ var editorMarkTypeRemap = map[uint8]string{
 }
 
 func (data *EditorMarks) MarshalCBOR() ([]byte, error) {
-	editorMarkType, ok := editorMarkTypeMap[data.Type]
-	if !ok {
-		fmt.Printf("Missing case \"%s\" in the mapping", data.Type)
-		editorMarkType = 255
-	}
-
-	return cbor.Marshal(compressed_EditorMarks{
-		Type: editorMarkType,
+	return cbor.Marshal(bin_EditorMarks{
+		Type: utils.GetValueOrDefault(editorMarkTypeMap, data.Type, 255),
 		Text: data.Text,
 	})
 }
 
 func (data *EditorMarks) UnmarshalCBOR(input []byte) error {
-	var out compressed_EditorMarks
+	var out bin_EditorMarks
 	if err := cbor.Unmarshal(input, &out); err != nil {
 		return err
 	}
 
-	editorMarkType, ok := editorMarkTypeRemap[out.Type]
-	if !ok {
-		fmt.Printf("Missing case \"%s\" in the mapping", data.Type)
-		editorMarkType = "unsupported"
-	}
-
-	data.Type = editorMarkType
+	data.Type = utils.GetValueOrDefault(editorContentTypeRemap, out.Type, "unsupported")
 	data.Text = out.Text
 
 	return nil

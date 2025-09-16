@@ -68,8 +68,8 @@ func (*GroupExport) GetGroup(groupId int) JournalGroupData {
 	dbInstance := db.GetInstance(internals.GROUPS_DATA_PATH)
 	err := dbInstance.GetObject(groupId, &data)
 	if err != nil {
-		utils.BSON_ReadFile(internals.GroupSavedPath(groupId), &data)
-		dbInstance.SetObject(groupId, data)
+		groupData, _ := utils.BSON_ReadFile[JournalGroupData](internals.GroupSavedPath(groupId))
+		dbInstance.SetObject(groupId, groupData)
 	}
 
 	return data
