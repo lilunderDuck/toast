@@ -28,7 +28,7 @@ const style = stylex.create({
 })
 
 export function PlaylistHeader() {
-  const { data$ } = usePlaylistContext()
+  const { data$, trackItems$ } = usePlaylistContext()
   const PlaylistEditMetadataDialog = createLazyLoadedDialog(
     () => import("../dialog/PlaylistEditMetadataDialog"),
     () => ({
@@ -63,7 +63,7 @@ export function PlaylistHeader() {
         </Show>
         <div {...stylex.attrs(style.header__info)}>
           <span>
-            {data$()?.items?.length ?? 0} track
+            {trackItems$.items$().length} track
           </span>
           <Spacer />
           <PlaylistHeaderButtonRow onClick$={buttonRowClicked} />

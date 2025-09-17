@@ -1,6 +1,7 @@
 package editor
 
 import (
+	"fmt"
 	"path/filepath"
 	"toast/backend/internals"
 	"toast/backend/utils"
@@ -30,11 +31,13 @@ func (*EditorExport) CreatePlaylist(options PlaylistOptions) (*PlaylistMetadata,
 }
 
 func (*EditorExport) GetPlaylist(playlistId int) (*PlaylistMetadata, error) {
+	data, _ := utils.BSON_ReadFile[PlaylistMetadata](internals.AudioPlaylistMetadataPath(playlistId))
+	fmt.Printf("%#v\n", data)
 	return utils.BSON_ReadFile[PlaylistMetadata](internals.AudioPlaylistMetadataPath(playlistId))
 }
 
-func (*EditorExport) UpdatePlaylist(playlistId int, options PlaylistOptions) error {
-	oldData, err := utils.BSON_ReadFile[PlaylistMetadata](internals.AudioPlaylistMetadataPath(playlistId))
+func (editor *EditorExport) UpdatePlaylist(playlistId int, options PlaylistOptions) error {
+	oldData, err := editor.GetPlaylist(playlistId)
 	if err != nil {
 		return err
 	}
@@ -93,6 +96,8 @@ func (*EditorExport) CreatePlaylistItem(
 	if options.IconPath != "" {
 		data.Icon = filepath.Base(options.IconPath)
 	}
+
+	fmt.Printf("%#v", data)
 
 	// todo: read title, author, ... from the audio file metadata
 	return &data, nil

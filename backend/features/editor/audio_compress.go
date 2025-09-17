@@ -51,6 +51,7 @@ func (audioItem *PlaylistItemData) MarshalCBOR() ([]byte, error) {
 		audioItem.Author,
 		audioItem.Description,
 		audioItem.Icon,
+		audioItem.FileName,
 	)
 
 	return cbor.Marshal(bin_PlaylistItemData{
@@ -71,6 +72,7 @@ func (audioItem *PlaylistItemData) UnmarshalCBOR(input []byte) error {
 	audioItem.Author = stringData[1]
 	audioItem.Description = stringData[2]
 	audioItem.Icon = stringData[3]
+	audioItem.FileName = stringData[4]
 	audioItem.Id = out.Id
 	return nil
 }

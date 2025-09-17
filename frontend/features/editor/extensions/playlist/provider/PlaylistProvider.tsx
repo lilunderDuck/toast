@@ -146,12 +146,17 @@ export function PlaylistProvider(props: ParentProps) {
   }
 
   const audioFinishedPlaying: EventHandler<"audio", "onEnded"> = () => {
-    const [, index] = arrayObjects(trackItems()).find$(it => it.id === focusedTrack()?.trackId$)
+    const [prevTrackData, index] = arrayObjects(trackItems()).find$(it => it?.id === focusedTrack()?.trackId$)
     if (index === -1) {
       return // stop autoplay
     }
 
     const nextTrackData = trackItems()[index + 1]
+    if (!nextTrackData) {
+      togglePlayTrack(prevTrackData)
+      setFocusedTrack(null)
+      return
+    }
     togglePlayTrack(nextTrackData)
   }
 

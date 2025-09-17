@@ -1,14 +1,9 @@
-import { createSignal, Show } from "solid-js"
-import { BsPlus } from "solid-icons/bs"
 import { createForm, required } from "@modular-forms/solid"
-import { macro_escapeCssUrl } from "macro-def"
 // ...
-import { Button, DialogContent, DialogHeader, FieldInput, SpinningCube, type ILazyDialog } from "~/components"
-import { createFileUpload, SUPPORTED_IMAGE_FILTER } from "~/features/native"
-import { getFilenameFromUrl } from "~/utils"
+import { Button, createIconInput, DialogContent, DialogHeader, FieldInput, type ILazyDialog } from "~/components"
 import { createSubmitForm } from "~/hooks"
 import type { editor } from "~/wailsjs/go/models"
-import { PREVIEW_FILE_URL } from "~/api"
+import { ASSETS_SERVER_URL } from "~/api"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -47,22 +42,14 @@ interface IPlaylistEditMetadataDialogProps extends ILazyDialog {
 
 export default function PlaylistEditMetadataDialog(props: IPlaylistEditMetadataDialogProps) {
   const [, { Form, Field }] = createForm<PlaylistMetadataSchema>()
-  const { editPlaylist$ } = props.context$
+  const { editPlaylist$, playlistId$ } = props.context$
 
-  const [iconName, setIconName] = createSignal<string | undefined>(props.prevData$.icon)
-  const [iconPath, setIconPath] = createSignal<string>()
-
-  const { isUploading$, open$ } = createFileUpload({
-    type$: FileUploadType.FILE,
+  const IconInput = createIconInput({
     dialogOptions$: {
-      Title: "Choose an image file to be used as playlist icon.",
-      Filters: [SUPPORTED_IMAGE_FILTER]
+      Title: "Choose an image file to be used as playlist icon."
     },
-    onFinish$(file) {
-      const fileName = getFilenameFromUrl(file)
-      setIconName(fileName)
-      setIconPath(file)
-    },
+    inputSize$: '9rem',
+    initialIconUrl$: () => `${ASSETS_SERVER_URL}/playlist/${playlistId$()}/icon/${props.prevData$.icon}`
   })
 
   const { Form$ } = createSubmitForm(Form, {
@@ -77,21 +64,18 @@ export default function PlaylistEditMetadataDialog(props: IPlaylistEditMetadataD
       </Button>
     ),
     async onSubmit$(data) {
-      editPlaylist$(data as editor.PlaylistOptions)
+      editPlaylist$({
+        ...data,
+        icon: IconInput.file$()
+      } as editor.PlaylistOptions)
     }
   })
 
   return (
-    <DialogContent style={{
-      "--icon-url": macro_escapeCssUrl(`${PREVIEW_FILE_URL}${iconPath()}`)
-    }}>
+    <DialogContent>
       <DialogHeader>Edit playlist details.</DialogHeader>
       <div {...stylex.attrs(style.dialog__inputContent)}>
-        <div {...stylex.attrs(style.dialog__iconInput)} onClick={open$}>
-          <Show when={!iconName()}>
-            {isUploading$() ? <SpinningCube /> : <BsPlus />}
-          </Show>
-        </div>
+        <IconInput.Input$ />
         <div>
           <Form$>
             <Field name="title" validate={[required("This field is required.")]}>
