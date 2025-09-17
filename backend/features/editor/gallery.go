@@ -2,6 +2,7 @@ package editor
 
 import (
 	"errors"
+	"os"
 	"path/filepath"
 	"toast/backend/internals"
 	"toast/backend/utils"
@@ -75,5 +76,5 @@ func (editor *EditorExport) DeleteGallery(galleryId int) error {
 		return errors.New("refused to delete, because who knows if you accidentally delete your precious gallery collection?")
 	}
 
-	return utils.RemoveFileOrDirectory(internals.GalleryPath(galleryId))
+	return os.Remove(internals.GalleryPath(galleryId))
 }

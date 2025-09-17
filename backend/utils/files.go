@@ -10,14 +10,14 @@ import (
 	"strings"
 )
 
-// Takes a file path and rename the file in a path.
-//
-// Note: this does not do anything to rename the file name in the file system.
+// Takes a file path and rename the file's basename.
 //
 //	RenameFileInPath("path/to/old_file.txt", func(oldFilename string) string {
 //	  return "new_file"
 //	})
 //	// returns "path/to/new_file.txt"
+//
+// Note: It only returns the new, full file path without modifying the file on the filesystem.
 func RenameFileInPath(path string, newName func(oldFilename string) string) string {
 	baseDir := filepath.Dir(path)
 	fileExt := filepath.Ext(path)
@@ -27,9 +27,8 @@ func RenameFileInPath(path string, newName func(oldFilename string) string) stri
 	return filepath.Join(baseDir, newFileName+fileExt)
 }
 
-// Returns the path of the folder where the program is running.
-//
-// If it can't find the folder, it will stop the program and show an error.
+// Returns the current executable path.
+// The function will `panic` if it cannot determine the executable's path.
 func GetCurrentDir() (currentPath string) {
 	folderPath, err := os.Executable()
 	if err != nil {
@@ -39,15 +38,10 @@ func GetCurrentDir() (currentPath string) {
 	return filepath.Dir(folderPath)
 }
 
-// Makes a new folder at the given path.
-// It will create all the folders in the path if they don't exist.
+// Makes a new folder at the given path. It will create all
+// intermediate directories in the path if they do not already exist.
 func CreateDirectory(path string) (makeDirError error) {
 	return os.MkdirAll(path, 0666)
-}
-
-// Deletes a file or a folder at the given path.
-func RemoveFileOrDirectory(path string) (removeError error) {
-	return os.Remove(path)
 }
 
 // Checks if a file exists at the given path.
@@ -64,6 +58,7 @@ func IsFileExist(pathToFile string) (existOrNot bool) {
 	return false
 }
 
+// Checks if a directory exists at the given path.
 func IsDirectoryExist(path string) (existOrNot bool) {
 	info, err := os.Stat(path)
 	if err == nil {
@@ -75,20 +70,15 @@ func IsDirectoryExist(path string) (existOrNot bool) {
 	return false
 }
 
-// Writes the given data (stuff) to a file at the given path.
+// Writes the given data to a file at the specified path.
+// It creates the file if it does not exist and overwrite it if it does.
 func WriteFile(pathToFile string, stuff []byte) (writeError error) {
 	return os.WriteFile(pathToFile, stuff, os.ModePerm)
 }
 
-// Reads the data from a file at the given path.
-func ReadFile(pathToFile string) (fileContent []byte, readError error) {
-	return os.ReadFile(pathToFile)
-}
-
-func OpenFile(pathToFile string) (*os.File, error) {
-	return os.Open(pathToFile)
-}
-
+// Moves a file from a source path to a destination path.
+// It first attempts a simple `os.Rename`, and if that fails (e.g., due to a cross-device move),
+// it falls back to a copy-and-delete operation.
 func MoveFile(sourcePath string, destPath string) error {
 	// Attempt to rename (move) the file.
 	err := os.Rename(sourcePath, destPath)
@@ -120,6 +110,9 @@ func MoveFile(sourcePath string, destPath string) error {
 	return err
 }
 
+// Copies a file from a source to a destination.
+// It handles cases where the destination directory does not exist and ensures
+// a destination file with the same name is not overwritten by creating a new, unique name.
 func CopyFile(source, destination string) error {
 	sourceFile, err := os.Open(source)
 	if err != nil {
@@ -130,6 +123,7 @@ func CopyFile(source, destination string) error {
 	// Ensure no file being overriten if the destination file path
 	// has the same file name.
 	if IsFileExist(destination) {
+		// GetRandomStringWithinLength is an undefined function.
 		destination = RenameFileInPath(destination, func(oldFilename string) string {
 			return fmt.Sprintf("%s_%s", oldFilename, GetRandomStringWithinLength(8))
 		})

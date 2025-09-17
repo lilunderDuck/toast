@@ -7,10 +7,12 @@ import (
 	gonanoid "github.com/matoous/go-nanoid/v2"
 )
 
+// Generates a random string within the specified length.
 func GetRandomStringWithinLength(length int) string {
 	return gonanoid.MustGenerate("0123456789qwertyuiopasdfghjklzxcvbnm", length)
 }
 
+// Generates a random int within the specified length.
 func GetRandomIntWithinLength(length int) int {
 	result, err := strconv.Atoi(gonanoid.MustGenerate("123456789", length))
 	if err != nil {

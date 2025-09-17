@@ -2,7 +2,7 @@ package utils
 
 import "time"
 
-// Gets the UNIX timestamp in seconds.
+// Gets the current UNIX timestamp in seconds.
 //
 // To convert to javascript's Date, you may need to use
 //   new Date(currentTime * 1000)

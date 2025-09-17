@@ -1,3 +1,5 @@
+// Provides a set of utility functions for handling HTTP requests,
+// serving assets files, and managing JSON responses and errors.
 package server
 
 import (

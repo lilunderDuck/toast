@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"toast/backend/internals"
 	"toast/backend/utils"
 )
@@ -14,7 +15,7 @@ func (*EditorExport) SaveLocalEmbed(pathToHtmlFile string) (string, error) {
 	newLocation := filepath.Join(internals.EMBED_SAVED_PATH, folderName)
 
 	// if you select a file inside ~/embed/* path, don't do file copy
-	if utils.StringContains(pathToHtmlFile, internals.EMBED_SAVED_PATH) {
+	if strings.HasPrefix(pathToHtmlFile, internals.EMBED_SAVED_PATH) {
 		return folderName + "/" + htmlFileName, nil
 	}
 

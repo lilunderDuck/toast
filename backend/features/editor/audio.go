@@ -2,6 +2,7 @@ package editor
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"toast/backend/internals"
 	"toast/backend/utils"
@@ -69,7 +70,7 @@ func (*EditorExport) DeletePlaylist(playlistId int) error {
 	}
 
 	if len(data.Items) != 0 {
-		utils.RemoveFileOrDirectory(internals.AudioPlaylistPath(playlistId))
+		os.Remove(internals.AudioPlaylistPath(playlistId))
 	}
 
 	return nil
@@ -104,13 +105,13 @@ func (*EditorExport) CreatePlaylistItem(
 }
 
 func (*EditorExport) DeletePlaylistTrackFile(playlistId int, fileName string) error {
-	return utils.RemoveFileOrDirectory(
+	return os.Remove(
 		filepath.Join(internals.AudioPlaylistPath(playlistId), fileName),
 	)
 }
 
 func (*EditorExport) DeleteAudioFromPlaylist(playlistId int, name string) {
-	utils.RemoveFileOrDirectory(
+	os.Remove(
 		filepath.Join(internals.AudioPlaylistPath(playlistId), name),
 	)
 }

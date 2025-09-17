@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/fxamacker/cbor/v2"
 	// "github.com/klauspost/compress/zstd"
@@ -23,12 +24,7 @@ func BSON_WriteFile(path string, anyObject any) (someError error) {
 		return err
 	}
 
-	err = WriteFile(path, binaryData)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return WriteFile(path, binaryData)
 }
 
 // Reads data from a file that was saved using BSON_WriteFile.
@@ -41,17 +37,12 @@ func BSON_WriteFile(path string, anyObject any) (someError error) {
 // Returns:
 //   - An error if something went wrong while reading, or nil if it read correctly.
 func base_BSON_ReadFile(path string, out any) (someError error) {
-	dataFromDisk, err := ReadFile(path)
+	dataFromDisk, err := os.ReadFile(path)
 	if err != nil {
 		return err
 	}
 
-	err = cbor.Unmarshal(dataFromDisk, out)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return cbor.Unmarshal(dataFromDisk, out)
 }
 
 func BSON_ReadFile[T any](path string) (*T, error) {

@@ -1,6 +1,7 @@
 package journal
 
 import (
+	"os"
 	"toast/backend/db"
 	"toast/backend/internals"
 	"toast/backend/utils"
@@ -101,5 +102,5 @@ func (group *GroupExport) UpdateGroup(groupId int, newData *JournalGroupOptions)
 
 func (*GroupExport) DeleteGroup(groupId int) {
 	db.GetInstance(internals.GROUPS_DATA_PATH).DeleteObject(groupId)
-	utils.RemoveFileOrDirectory(internals.GroupSavedPath(groupId))
+	os.Remove(internals.GroupSavedPath(groupId))
 }

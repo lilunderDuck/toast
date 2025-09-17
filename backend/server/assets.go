@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 	"toast/backend/internals"
@@ -15,10 +14,8 @@ func createAssetsRoute(server *http.ServeMux) {
 	serveStaticWithFilter(server, "/local-assets", internals.CURRENT_EXECUTABLE_PATH, func(path string) int {
 		firstFolderName := strings.SplitAfterN(path, "/", 2)[0]
 		firstFolderName = strings.Replace(firstFolderName, "/", "", 1)
-		fmt.Printf("%s\n", firstFolderName)
 		_, ok := allowedToServeMap[firstFolderName]
 		if !ok {
-			println("not allowed to serve", firstFolderName)
 			return http.StatusForbidden
 		}
 		return http.StatusAccepted
