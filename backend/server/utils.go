@@ -29,7 +29,7 @@ func serveStaticWithFilter(
 		path := req.PathValue("anything")
 		status := filter(path)
 		if status == http.StatusForbidden {
-			responseWithError(res, status, "[static]", errors.New("not allowed"))
+			responseWithError(res, status, "static", errors.New("not allowed"))
 			return
 		}
 

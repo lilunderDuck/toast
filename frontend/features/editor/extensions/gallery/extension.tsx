@@ -17,6 +17,7 @@ export const DEFAULT_GALLERY_ID = 0
 
 export type GalleryAttribute = {
   id: number
+  viewMode?: number
 }
 
 export const GalleryExtension = Node.create({
@@ -28,13 +29,16 @@ export const GalleryExtension = Node.create({
     return {
       id: {
         default: DEFAULT_GALLERY_ID
+      },
+      viewMode: {
+        default: null
       }
     }
   },
   addCommands() {
     return {
       insertGallery$: () => ({ tr }) => {
-        return insertNodeAtCurrentPosition<GalleryAttribute>(this, tr, { id: 0 })
+        return insertNodeAtCurrentPosition<GalleryAttribute>(this, tr, { id: 0, viewMode: 1 })
       },
     }
   },

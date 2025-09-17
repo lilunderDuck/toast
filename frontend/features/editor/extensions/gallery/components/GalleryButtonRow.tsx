@@ -6,7 +6,7 @@ import __style from "../node.module.css"
 import { ButtonRow, Spacer } from "~/components"
 // ...
 import { useGalleryContext } from "../provider"
-import { FullscreenButton, UploadButton } from "./buttons"
+import { ChangeViewButton, FullscreenButton, UploadButton } from "./buttons"
 
 const style = stylex.create({
   buttonRow: {
@@ -25,21 +25,26 @@ const style = stylex.create({
   }
 })
 
-export function GalleryButtonRow() {
+interface IGalleryButtonRowProps {
+  showFilename$?: boolean
+}
+
+export function GalleryButtonRow(props: IGalleryButtonRowProps) {
   const { currentItem$ } = useGalleryContext()
 
   return (
     <ButtonRow 
       {...stylex.attrs(style.buttonRow)} 
       direction$={ButtonRowDirection.CUSTOM}
-      id={__style.galleryButtonRow}
+      id={__style.gallery__buttonRow}
     >
-      <Show when={currentItem$()}>
+      <Show when={currentItem$() && props.showFilename$ !== false}>
         <div {...stylex.attrs(style.buttonRow__name)}>
           {currentItem$()?.name}
         </div>
       </Show>
       <Spacer />
+      <ChangeViewButton />
       <UploadButton />
       <FullscreenButton />
     </ButtonRow>

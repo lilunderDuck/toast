@@ -1,5 +1,4 @@
-import { Show } from "solid-js"
-import { BsDisplayFill } from "solid-icons/bs"
+import { lazy, Match, Switch } from "solid-js"
 import { macro_mergeClassnames } from "macro-def"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -7,8 +6,9 @@ import __style from "./node.module.css"
 // ...
 import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
 // ...
-import { GalleryButtonRow, GalleryContent, LeftButtonSide, RightButtonSide } from "./components"
-import { GalleryProvider, useGalleryContext } from "./provider"
+import { GalleryProvider } from "./provider"
+import { useNodeState } from "../../utils"
+import type { GalleryAttribute } from "./extension"
 
 const style = stylex.create({
   gallery: {
@@ -16,7 +16,7 @@ const style = stylex.create({
     width: "100%",
     height: "var(--gallery-height)",
     backgroundColor: "var(--gray3)",
-    marginBottom: 20
+    marginBlock: 20
   },
   gallery__content: {
     width: "100%",
@@ -30,30 +30,26 @@ const style = stylex.create({
   }
 })
 
-export default function GalleryNodeView() {
-  const Content = () => {
-    const { isFullscreen$ } = useGalleryContext()
 
-    return (
-      // Avoid file from being loaded 2 times when gallery on fullscreen.
-      <div {...stylex.attrs(style.gallery__content)} id={__style.galleryContent}>
-        <Show when={!isFullscreen$()} fallback={
-          <BsDisplayFill size={30} />
-        }>
-          <GalleryContent />
-        </Show>
-      </div>
-    )
-  }
+export default function GalleryNodeView() {
+  const { data$ } = useNodeState<GalleryAttribute>()
+
+  const SplitViewGalleryView = lazy(() => import("./view/SplitViewGalleryView"))
+  const SingleItemGalleryView = lazy(() => import("./view/SingleItemGalleryView"))
 
   return (
-    <NodeViewWrapper class={macro_mergeClassnames(stylex.attrs(style.gallery), __style.gallery)}>
-      <GalleryProvider>
-        <LeftButtonSide />
-        <GalleryButtonRow />
-        <RightButtonSide />
-        <Content />
-      </GalleryProvider>
-    </NodeViewWrapper>
+    <GalleryProvider>
+      <NodeViewWrapper class={macro_mergeClassnames(stylex.attrs(style.gallery), __style.gallery)}>
+        <Switch fallback={<SingleItemGalleryView />}>
+          <Match when={data$().viewMode === GalleryViewMode.SINGLE_ITEM}>
+            <SingleItemGalleryView />
+          </Match>
+          
+          <Match when={data$().viewMode === GalleryViewMode.SPLIT_VIEW}>
+            <SplitViewGalleryView />
+          </Match>
+        </Switch>
+      </NodeViewWrapper>
+    </GalleryProvider>
   )
 }

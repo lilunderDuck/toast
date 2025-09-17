@@ -18,7 +18,7 @@ import { CharacterCount } from '@tiptap/extensions'
 import { common, createLowlight } from 'lowlight'
 import { macro_mergeClassnames } from 'macro-def'
 // ...
-import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension, ImageSplitViewExtension } from "../extensions"
+import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension } from "../extensions"
 // ...
 import __style from "./extensions.module.css"
 import stylex from "@stylexjs/stylex"
@@ -101,7 +101,6 @@ export function getExtensions() {
     LocalEmbedExtension,
     GalleryExtension,
     ImageExtension,
-    ImageSplitViewExtension,
     PlaylistExtension
   ]
 }

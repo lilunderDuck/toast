@@ -119,6 +119,11 @@ export function defineAllEnum() {
     LEFT_HAND_TAPPED: "dc"
   })
 
+  defineEnum('GalleryViewMode', {
+    SINGLE_ITEM: null,
+    SPLIT_VIEW: null,
+  })
+
   return {
     generateType() {
       let content = "// this file is auto-generate when on dev/build mode\nexport {};"

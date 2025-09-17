@@ -2,15 +2,25 @@
   --gallery-height: 20rem
 }
 
-.gallery #galleryButtonRow {
+.gallery [data-gallery-view],
+.gallery [data-gallery-view-content] {
+  width: 100%;
+  height: var(--gallery-height);
+}
+
+.gallery [data-gallery-view] {
+  position: relative;
+}
+
+.gallery [data-gallery-view-content] > * {
+  height: var(--gallery-height);
+}
+
+.gallery #gallery__buttonRow {
   opacity: 0;
   transition: 0.15s cubic-bezier(0,.96,.13,.95);
 }
 
-.gallery:hover #galleryButtonRow {
+.gallery:hover #gallery__buttonRow {
   opacity: 1;
-}
-
-#galleryContent > * {
-  height: var(--gallery-height);
 }

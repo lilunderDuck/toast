@@ -100,18 +100,16 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
 
     const existingData = await GetGalleryData(getCurrentGalleryId())
 
-    // setIsPrevButtonDisabled(lastCurrentIndex === 0)
-    // setIsNextButtonDisabled(lastCurrentIndex === existingData.items.length - 1)
     setGalleryData(existingData)
 
     updateCurrentItem()
   })
 
-  onCleanup(() => {
+  onCleanup(async() => {
     // on the backend side, this function will make sure it won't delete everything
     // unless there is no gallery item
     try {
-      DeleteGallery(getCurrentGalleryId())
+      await DeleteGallery(getCurrentGalleryId())
     } catch(error) {
       console.warn("[anti-crash]", error)
     }
@@ -121,13 +119,12 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
     // keep incrementing until it reaches the last gallery item
     if (currentIndex() !== galleryData.items.length) {
       setCurrentIndex(prev => prev + 1)
-      // currentIndex += 1
       updateCurrentItem()
-      // setIsNextButtonDisabled(false)
+      setIsNextButtonDisabled(false)
       return
     }
 
-    // setIsNextButtonDisabled(true)
+    setIsNextButtonDisabled(true)
   }
   
   const previous = () => {
@@ -135,11 +132,11 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
     if (currentIndex() !== 0) {
       setCurrentIndex(prev => prev - 1)
       updateCurrentItem()
-      // setIsPrevButtonDisabled(false)
+      setIsPrevButtonDisabled(false)
       return
     }
 
-    // setIsPrevButtonDisabled(true)
+    setIsPrevButtonDisabled(true)
   }
   
   const updateCurrentItem = () => {
@@ -157,7 +154,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
       return `${ASSETS_SERVER_URL}/preview?path=${escapedFileName}` as const
     }
 
-    return `${ASSETS_SERVER_URL}/local-assets/gallery/${galleryData.id}/${encodeURIComponent(fileName)}` as const
+    return `${ASSETS_SERVER_URL}/local-assets/data/gallery/${galleryData.id}/${encodeURIComponent(fileName)}` as const
   }
 
   return (
