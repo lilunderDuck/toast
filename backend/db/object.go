@@ -36,3 +36,20 @@ func (db *DbInstance) Iterate(fn func(data []byte)) {
 	}
 	iter.Close()
 }
+
+func GetAll[T any](dbName string) []T {
+	dbInstance := GetInstance(dbName)
+
+	var content []T
+	dbInstance.Iterate(func(data []byte) {
+		var out T
+		err := cbor.Unmarshal(data, &out)
+		if err != nil {
+			return
+		}
+
+		content = append(content, out)
+	})
+
+	return content
+}

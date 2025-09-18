@@ -80,7 +80,7 @@ async function fetchNpmRegistry(
     const response = await fetch(`https://registry.npmjs.org/${encodeUrl(packageName)}`)
     const metadata: NpmRegistryResponse = await response.json()
 
-    DATA_OUT.push({
+    const data = {
       name: packageName,
       author: metadata.author,
       version: packageVersion.replace("^", "").split('.').map(it => parseInt(it)),
@@ -88,7 +88,16 @@ async function fetchNpmRegistry(
       homepage: metadata.homepage,
       type,
       id: currentId
-    })
+    }
+
+    console.log(typeof metadata.author)
+    if (typeof metadata.author === "string") {
+      data.author = {
+        name: metadata.author
+      }
+    }
+
+    DATA_OUT.push(data)
 
     currentId += 1
   } catch(it) {

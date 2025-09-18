@@ -17,7 +17,9 @@ type EditorExport struct{}
 func (*EditorExport) UploadMedia(groupId int, filePath string) (newFileName string, err error) {
 	fileName := filepath.Base(filePath)
 	savedLocation := filepath.Join(
-		internals.MediaPath(groupId),
+		internals.DATA_FOLDER_PATH,
+		"media",
+		utils.ToString(groupId),
 		fileName,
 	)
 

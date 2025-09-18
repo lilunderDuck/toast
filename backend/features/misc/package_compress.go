@@ -1,14 +1,12 @@
 package misc
 
 import (
-	"strings"
 	"toast/backend/utils"
 
-	lzstring "github.com/daku10/go-lz-string"
 	"github.com/fxamacker/cbor/v2"
 )
 
-type compress_PackageContentData struct {
+type bin_PackageContentData struct {
 	// - [0]: name
 	// - [1]: description
 	// - [2]: author url
@@ -21,7 +19,7 @@ type compress_PackageContentData struct {
 	Version     [3]int   `cbor:"4,keyasint,omitempty"`
 }
 
-type compress_PackageMetadata struct {
+type bin_PackageMetadata struct {
 	// - [0]: name
 	// - [1]: description
 	// - [2]: homepage url
@@ -32,27 +30,19 @@ type compress_PackageMetadata struct {
 const NULL_CHAR = "\000"
 
 func (data *PackageMetadata) MarshalCBOR() ([]byte, error) {
-	stringData := strings.Join([]string{
-		data.Name,
-		data.Homepage,
-	}, NULL_CHAR)
-
-	compressedStringData, _ := lzstring.Compress(stringData)
-
-	return cbor.Marshal(compress_PackageMetadata{
-		Data: compressedStringData,
+	return cbor.Marshal(bin_PackageMetadata{
+		Data: utils.CompressStrings(data.Name, data.Homepage),
 		Id:   data.Id,
 	})
 }
 
 func (data *PackageMetadata) UnmarshalCBOR(input []byte) error {
-	var out compress_PackageMetadata
+	var out bin_PackageMetadata
 	if err := cbor.Unmarshal(input, &out); err != nil {
 		return err
 	}
 
-	uncompressedStringData, _ := lzstring.Decompress(out.Data)
-	stringData := strings.Split(uncompressedStringData, NULL_CHAR)
+	stringData := utils.DecompressStrings(out.Data)
 
 	data.Name = stringData[0]
 	data.Homepage = stringData[1]
@@ -61,7 +51,7 @@ func (data *PackageMetadata) UnmarshalCBOR(input []byte) error {
 }
 
 func (data *PackageContentData) MarshalCBOR() ([]byte, error) {
-	return cbor.Marshal(compress_PackageContentData{
+	return cbor.Marshal(bin_PackageContentData{
 		Data: utils.CompressStrings(
 			data.Name,
 			data.Description,
@@ -74,13 +64,12 @@ func (data *PackageContentData) MarshalCBOR() ([]byte, error) {
 }
 
 func (data *PackageContentData) UnmarshalCBOR(input []byte) error {
-	var out compress_PackageContentData
+	var out bin_PackageContentData
 	if err := cbor.Unmarshal(input, &out); err != nil {
 		return err
 	}
 
-	uncompressedStringData, _ := lzstring.Decompress(out.Data)
-	stringData := strings.Split(uncompressedStringData, NULL_CHAR)
+	stringData := utils.DecompressStrings(out.Data)
 
 	data.Name = stringData[0]
 	data.Description = stringData[1]

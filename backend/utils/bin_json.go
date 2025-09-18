@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/fxamacker/cbor/v2"
 	// "github.com/klauspost/compress/zstd"
@@ -18,6 +19,11 @@ import (
 // Returns:
 //   - An error if something went wrong while saving, or nil if it saved correctly.
 func BSON_WriteFile(path string, anyObject any) (someError error) {
+	dirToTheFile := filepath.Dir(path)
+	if !IsDirectoryExist(dirToTheFile) {
+		CreateDirectory(dirToTheFile)
+	}
+
 	binaryData, err := cbor.Marshal(anyObject)
 	fmt.Println("BSON write:", path)
 	if err != nil {
@@ -49,4 +55,20 @@ func BSON_ReadFile[T any](path string) (*T, error) {
 	var out T
 	err := base_BSON_ReadFile(path, &out)
 	return &out, err
+}
+
+func NewBSONFileHandler[T any](basePath string) (func(data T) error, func() (*T, error), func() error) {
+	writeFn := func(data T) error {
+		return BSON_WriteFile(basePath, data)
+	}
+
+	readFn := func() (*T, error) {
+		return BSON_ReadFile[T](basePath)
+	}
+
+	deleteFn := func() error {
+		return os.Remove(basePath)
+	}
+
+	return writeFn, readFn, deleteFn
 }

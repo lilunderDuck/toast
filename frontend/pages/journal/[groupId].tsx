@@ -20,10 +20,11 @@ import {
 } from "~/features/journal"
 import { EditorProvider } from "~/features/editor"
 import { AppTitleBarDraggable } from "~/components"
-import { SetExplorerTree } from "~/wailsjs/go/journal/GroupExport"
+import { UpdateGroup } from "~/wailsjs/go/journal/GroupExport"
 import { useToggle } from "~/hooks"
 // ...
 import journalGroupData from "./[groupId].data"
+import type { journal } from "~/wailsjs/go/models"
 
 const style = stylex.create({
   home: {
@@ -165,7 +166,7 @@ function JournalHomeProviders(props: ParentProps<IJournalHomeProvidersProps>) {
     },
     onTreeUpdate$(newTree) {
       console.log("new tree:", newTree)
-      SetExplorerTree(props.groupId$, newTree)
+      UpdateGroup(props.groupId$, { tree: newTree } as journal.JournalGroupOptions)
     }
   }
 

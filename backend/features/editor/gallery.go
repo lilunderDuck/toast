@@ -1,30 +1,36 @@
 package editor
 
 import (
-	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"toast/backend/internals"
 	"toast/backend/utils"
 )
 
+func galleryMetaPath(galleryId int) string {
+	return fmt.Sprintf(`%s/gallery/%d/meta.dat`, internals.DATA_FOLDER_PATH, galleryId)
+}
+
+func galleryPath(galleryId int) string {
+	return fmt.Sprintf(`%s/gallery/%d`, internals.DATA_FOLDER_PATH, galleryId)
+}
+
 func (*EditorExport) CreateGalleryData() *GalleryData {
 	galleryId := utils.GetRandomIntWithinLength(16)
-	basePath := internals.GalleryPath(galleryId)
 	updatedData := GalleryData{
 		Id:      galleryId,
 		Items:   []GalleryItem{},
 		Created: utils.GetCurrentDateNow(),
 	}
 
-	utils.CreateDirectory(basePath)
-	utils.BSON_WriteFile(internals.GalleryDataMetadataPath(galleryId), updatedData)
+	utils.BSON_WriteFile(galleryMetaPath(galleryId), updatedData)
 	return &updatedData
 }
 
-func (*EditorExport) UpdateGalleryData(galleryId int, updatedData GalleryUpdatedData) {
-	metaFilePath := internals.GalleryDataMetadataPath(galleryId)
-	data, err := utils.BSON_ReadFile[GalleryData](metaFilePath)
+func (editor *EditorExport) UpdateGalleryData(galleryId int, updatedData GalleryUpdatedData) {
+	metaFilePath := galleryMetaPath(galleryId)
+	data, err := editor.GetGalleryData(galleryId)
 	if err != nil {
 		return
 	}
@@ -46,7 +52,7 @@ func (*EditorExport) UpdateGalleryData(galleryId int, updatedData GalleryUpdated
 }
 
 func (*EditorExport) UploadFileToGallery(galleryId int, pathToFile string) (*GalleryItem, error) {
-	if err := uploadFile(internals.GalleryPath(galleryId), pathToFile); err != nil {
+	if err := uploadFile(galleryPath(galleryId), pathToFile); err != nil {
 		return nil, err
 	}
 
@@ -63,18 +69,9 @@ func (*EditorExport) UploadFileToGallery(galleryId int, pathToFile string) (*Gal
 }
 
 func (*EditorExport) GetGalleryData(galleryId int) (*GalleryData, error) {
-	return utils.BSON_ReadFile[GalleryData](internals.GalleryDataMetadataPath(galleryId))
+	return utils.BSON_ReadFile[GalleryData](galleryMetaPath(galleryId))
 }
 
 func (editor *EditorExport) DeleteGallery(galleryId int) error {
-	data, err := editor.GetGalleryData(galleryId)
-	if err != nil {
-		return err
-	}
-
-	if len(data.Items) != 0 {
-		return errors.New("refused to delete, because who knows if you accidentally delete your precious gallery collection?")
-	}
-
-	return os.Remove(internals.GalleryPath(galleryId))
+	return os.Remove(galleryPath(galleryId))
 }

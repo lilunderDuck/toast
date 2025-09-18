@@ -8,6 +8,26 @@ import (
 	"toast/backend/utils"
 )
 
+func playlistPath(playlistId int) string {
+	return internals.DATA_FOLDER_PATH + `/playlist/%d`
+}
+
+func playlistMetaPath(playlistId int) string {
+	return internals.DATA_FOLDER_PATH + `/playlist/%d/meta.dat`
+}
+
+func readPlaylistData(playlistId int) (*PlaylistMetadata, error) {
+	return utils.BSON_ReadFile[PlaylistMetadata](playlistPath(playlistId))
+}
+
+func writePlaylistData(playlistId int, data *PlaylistMetadata) error {
+	return utils.BSON_WriteFile(playlistPath(playlistId), data)
+}
+
+func deletePlaylistData(playlistId int) error {
+	return os.Remove(playlistPath(playlistId))
+}
+
 func (*EditorExport) CreatePlaylist(options PlaylistOptions) (*PlaylistMetadata, error) {
 	playlistId := utils.GetRandomIntWithinLength(16)
 	data := &PlaylistMetadata{
@@ -18,13 +38,9 @@ func (*EditorExport) CreatePlaylist(options PlaylistOptions) (*PlaylistMetadata,
 		Created:     utils.GetCurrentDateNow(),
 	}
 
-	utils.CreateDirectory(filepath.Dir(internals.AudioPlaylistMetadataPath(playlistId)))
-	err := utils.BSON_WriteFile(
-		internals.AudioPlaylistMetadataPath(playlistId),
-		data,
-	)
+	utils.CreateDirectory(filepath.Dir(playlistPath(playlistId)))
 
-	if err != nil {
+	if err := writePlaylistData(playlistId, data); err != nil {
 		return nil, err
 	}
 
@@ -32,9 +48,7 @@ func (*EditorExport) CreatePlaylist(options PlaylistOptions) (*PlaylistMetadata,
 }
 
 func (*EditorExport) GetPlaylist(playlistId int) (*PlaylistMetadata, error) {
-	data, _ := utils.BSON_ReadFile[PlaylistMetadata](internals.AudioPlaylistMetadataPath(playlistId))
-	fmt.Printf("%#v\n", data)
-	return utils.BSON_ReadFile[PlaylistMetadata](internals.AudioPlaylistMetadataPath(playlistId))
+	return readPlaylistData(playlistId)
 }
 
 func (editor *EditorExport) UpdatePlaylist(playlistId int, options PlaylistOptions) error {
@@ -57,30 +71,18 @@ func (editor *EditorExport) UpdatePlaylist(playlistId int, options PlaylistOptio
 
 	oldData.Modified = utils.GetCurrentDateNow()
 
-	return utils.BSON_WriteFile(
-		internals.AudioPlaylistMetadataPath(playlistId),
-		&oldData,
-	)
+	return writePlaylistData(playlistId, oldData)
 }
 
-func (*EditorExport) DeletePlaylist(playlistId int) error {
-	data, err := utils.BSON_ReadFile[PlaylistMetadata](internals.AudioPlaylistPath(playlistId))
-	if err != nil {
-		return err
-	}
-
-	if len(data.Items) != 0 {
-		os.Remove(internals.AudioPlaylistPath(playlistId))
-	}
-
-	return nil
+func (group *EditorExport) DeletePlaylist(playlistId int) error {
+	return deletePlaylistData(playlistId)
 }
 
 func (*EditorExport) CreatePlaylistItem(
 	playlistId int,
 	options CreatePlaylistItemOptions,
 ) (*PlaylistItemData, error) {
-	err := uploadFile(internals.AudioPlaylistPath(playlistId), options.AudioFilePath)
+	err := uploadFile(playlistMetaPath(playlistId), options.AudioFilePath)
 	if err != nil {
 		return nil, err
 	}
@@ -106,19 +108,12 @@ func (*EditorExport) CreatePlaylistItem(
 
 func (*EditorExport) DeletePlaylistTrackFile(playlistId int, fileName string) error {
 	return os.Remove(
-		filepath.Join(internals.AudioPlaylistPath(playlistId), fileName),
+		filepath.Join(playlistMetaPath(playlistId), fileName),
 	)
 }
 
 func (*EditorExport) DeleteAudioFromPlaylist(playlistId int, name string) {
 	os.Remove(
-		filepath.Join(internals.AudioPlaylistPath(playlistId), name),
+		filepath.Join(playlistMetaPath(playlistId), name),
 	)
 }
-
-func (*EditorExport) UploadAudio(groupId int, filePath string) error {
-	fileName := filepath.Base(filePath)
-	return utils.CopyFile(filePath, filepath.Join(internals.AudioPath(groupId), fileName))
-}
-
-func (*EditorExport) DeleteAudio(groupId int, name string) {}

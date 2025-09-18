@@ -5,7 +5,7 @@ type PackageContentData struct {
 	Name        string            `json:"name"`
 	Description string            `json:"description,omitempty"`
 	Maintainers int               `json:"maintainers,omitempty"`
-	Author      PackageAuthorData `json:"author,omitempty"`
+	Author      PackageAuthorData `json:"author"`
 	License     string            `json:"license,omitempty"`
 	Homepage    string            `json:"homepage,omitempty"`
 	Version     []int             `json:"version,omitempty"`

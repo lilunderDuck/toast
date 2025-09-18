@@ -1,20 +1,18 @@
 import { createAsync } from "@solidjs/router"
 // ...
-import { GetExplorerTree } from "~/wailsjs/go/journal/GroupExport"
+import { GetGroup } from "~/wailsjs/go/journal/GroupExport"
 import type { journal } from "~/wailsjs/go/models"
 
 export default function journalGroupData(groupId: number) {
   return createAsync(async() => {
-    const [explorerTreeData] = await Promise.all([
-      GetExplorerTree(groupId),
-      // Example: infinite loading screen (this is because the app doesn't finish in time)
-      // await InitJournal(groupId)
+    const [journalGroupData] = await Promise.all([
+      GetGroup(groupId),
     ])
 
-    console.log("data", explorerTreeData)
+    console.log("data", journalGroupData)
 
     return {
-      explorerTreeData$: explorerTreeData as journal.ExplorerData
+      explorerTreeData$: journalGroupData.explorer as journal.ExplorerData
     }
   })
 }

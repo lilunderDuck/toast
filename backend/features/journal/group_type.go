@@ -18,4 +18,20 @@ type JournalGroupData struct {
 	Name        string        `json:"name"                  cbor:"3,keyasint"`
 	Description string        `json:"description,omitempty" cbor:"4,keyasint,omitempty"`
 	Icon        string        `json:"icon"                  cbor:"5,keyasint"`
+	Explorer    ExplorerData  `json:"explorer"              cbor:"6,keyasint"`
+}
+
+// Represents a node in a virtual tree structure.
+// It has an ID and a list of child nodes.
+type ExplorerNode struct {
+	Id    int            `form:"id"    json:"id"               cbor:"0,keyasint"`
+	Child []ExplorerNode `form:"child" json:"child,omitempty"  cbor:"1,keyasint,omitempty"`
+}
+
+// Representing a list of virtual trees.
+type ExplorerTree []ExplorerNode
+
+type ExplorerData struct {
+	Mapping map[int]string `json:"mapping"  cbor:"0,keyasint"`
+	Tree    ExplorerTree   `json:"tree"  cbor:"1,keyasint"`
 }

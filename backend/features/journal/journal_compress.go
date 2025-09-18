@@ -9,11 +9,11 @@ import (
 type bin_JournalContentData struct {
 	// Originally, this field is a string type, but it's converted to a uint8
 	// just to save spaces, ofc.
-	Type    uint8                `json:"type"             cbor:"0,keyasint"`
-	Attrs   EditorAttributes     `json:"attrs,omitempty"  cbor:"1,keyasint,omitempty"`
-	Marks   []EditorMarks        `json:"marks,omitempty"  cbor:"2,keyasint,omitempty"`
-	Content []JournalContentData `json:"content"          cbor:"3,keyasint"`
-	Text    string               `json:"text,omitempty"   cbor:"4,keyasint,omitempty"`
+	Type    uint8                `cbor:"0,keyasint"`
+	Attrs   EditorAttributes     `cbor:"1,keyasint,omitempty"`
+	Marks   []EditorMarks        `cbor:"2,keyasint,omitempty"`
+	Content []JournalContentData `cbor:"3,keyasint"`
+	Text    string               `cbor:"4,keyasint,omitempty"`
 }
 
 var editorContentTypeMap = map[string]uint8{
@@ -78,8 +78,8 @@ func (data *JournalContentData) UnmarshalCBOR(input []byte) error {
 type bin_EditorMarks struct {
 	// Originally, this field is a string type, but it's converted to a uint8
 	// just to save spaces, ofc.
-	Type uint8  `json:"type"             cbor:"0,keyasint"`
-	Text string `json:"text,omitempty"   cbor:"1,keyasint,omitempty"`
+	Type uint8  `cbor:"0,keyasint"`
+	Text string `cbor:"1,keyasint,omitempty"`
 }
 
 var editorMarkTypeMap = map[string]uint8{
