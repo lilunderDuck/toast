@@ -113,32 +113,31 @@ func MoveFile(sourcePath string, destPath string) error {
 // Copies a file from a source to a destination.
 // It handles cases where the destination directory does not exist and ensures
 // a destination file with the same name is not overwritten by creating a new, unique name.
-func CopyFile(source, destination string) error {
+func CopyFile(source, destinationPath string) error {
 	sourceFile, err := os.Open(source)
 	if err != nil {
 		return err
 	}
 	defer sourceFile.Close()
 
+	sourceFileName := filepath.Base(source)
+	destinationFilePath := filepath.Join(destinationPath, sourceFileName)
+
 	// Ensure no file being overriten if the destination file path
 	// has the same file name.
-	if IsFileExist(destination) {
+	if IsFileExist(destinationFilePath) {
 		// GetRandomStringWithinLength is an undefined function.
-		destination = RenameFileInPath(destination, func(oldFilename string) string {
+		destinationFilePath = RenameFileInPath(destinationFilePath, func(oldFilename string) string {
 			return fmt.Sprintf("%s_%s", oldFilename, GetRandomStringWithinLength(8))
 		})
 	}
 
 	// Ensure the destination directory exists.
-	destinationDir := filepath.Dir(destination)
-	if _, err := os.Stat(destinationDir); os.IsNotExist(err) {
-		err = os.MkdirAll(destinationDir, 0755)
-		if err != nil {
-			return err
-		}
+	if !IsDirectoryExist(destinationPath) {
+		CreateDirectory(destinationPath)
 	}
 
-	destinationFile, err := os.Create(destination)
+	destinationFile, err := os.Create(destinationFilePath)
 	if err != nil {
 		return err
 	}

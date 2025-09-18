@@ -52,7 +52,7 @@ func (editor *EditorExport) UpdateGalleryData(galleryId int, updatedData Gallery
 }
 
 func (*EditorExport) UploadFileToGallery(galleryId int, pathToFile string) (*GalleryItem, error) {
-	if err := uploadFile(galleryPath(galleryId), pathToFile); err != nil {
+	if err := utils.CopyFile(pathToFile, galleryPath(galleryId)); err != nil {
 		return nil, err
 	}
 

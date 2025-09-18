@@ -21,8 +21,8 @@ func groupFolderPathOf(groupId int) string {
 	return filepath.Dir(groupMetaFilePath(groupId))
 }
 
-func groupIconSavedPath(groupId int, fileName string) string {
-	return fmt.Sprintf("%s/icons/%s", groupFolderPathOf(groupId), fileName)
+func groupIconSavedPath(groupId int) string {
+	return fmt.Sprintf("%s/icons", groupFolderPathOf(groupId))
 }
 
 func writeGroupData(groupId int, data *JournalGroupData) error {
@@ -44,10 +44,9 @@ func deleteGroup(groupId int) error {
 }
 
 func saveAndUpdateGroupIcon(data *JournalGroupData, iconPath string) error {
-	fileName := filepath.Base(iconPath)
-	if err := utils.MoveFile(iconPath, groupIconSavedPath(data.Id, fileName)); err != nil {
+	if err := utils.CopyFile(iconPath, groupIconSavedPath(data.Id)); err != nil {
 		return err
 	}
-	data.Icon = fileName
+	data.Icon = filepath.Base(iconPath)
 	return nil
 }

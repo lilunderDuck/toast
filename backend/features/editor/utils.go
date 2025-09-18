@@ -2,9 +2,7 @@ package editor
 
 import (
 	"fmt"
-	"path/filepath"
 	"strings"
-	"toast/backend/utils"
 
 	"github.com/wailsapp/mimetype"
 )
@@ -62,21 +60,4 @@ func determineFileType(filePath string) (uint8, error) {
 	}
 
 	return fileType, nil
-}
-
-func uploadFile(location, filePath string) error {
-	fileName := filepath.Base(filePath)
-	newSavedLocation := filepath.Join(location, fileName)
-
-	utils.CreateDirectory(filepath.Dir(filePath))
-
-	// Adds some random string after the file name if the location the file will be saved
-	// have the same file name.
-	if utils.IsFileExist(newSavedLocation) {
-		newSavedLocation = utils.RenameFileInPath(newSavedLocation, func(oldFilename string) string {
-			return fmt.Sprintf("%s_%s", oldFilename, utils.GetRandomStringWithinLength(4))
-		})
-	}
-
-	return utils.CopyFile(filePath, newSavedLocation)
 }

@@ -1,7 +1,6 @@
 package journal
 
 import (
-	"path/filepath"
 	"toast/backend/db"
 	"toast/backend/internals"
 	"toast/backend/utils"
@@ -44,12 +43,7 @@ func (*GroupExport) GetGroup(groupId int) *JournalGroupData {
 func (group *GroupExport) UpdateGroup(groupId int, newData *JournalGroupOptions) (*JournalGroupData, error) {
 	oldData := group.GetGroup(groupId)
 	if newData.Icon != "" {
-		fileName := filepath.Base(newData.Icon)
-		err := utils.MoveFile(newData.Icon, groupIconSavedPath(groupId, fileName))
-		if err != nil {
-			return nil, err
-		}
-		oldData.Icon = fileName
+		saveAndUpdateGroupIcon(oldData, newData.Icon)
 	}
 
 	if newData.Name != "" {

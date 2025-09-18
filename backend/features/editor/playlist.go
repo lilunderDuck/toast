@@ -9,11 +9,11 @@ import (
 )
 
 func playlistPath(playlistId int) string {
-	return internals.DATA_FOLDER_PATH + `/playlist/%d`
+	return fmt.Sprintf(`%s/playlist/%d`, internals.DATA_FOLDER_PATH, playlistId)
 }
 
 func playlistMetaPath(playlistId int) string {
-	return internals.DATA_FOLDER_PATH + `/playlist/%d/meta.dat`
+	return fmt.Sprintf(`%s/playlist/%d/meta.dat`, internals.DATA_FOLDER_PATH, playlistId)
 }
 
 func readPlaylistData(playlistId int) (*PlaylistMetadata, error) {
@@ -82,7 +82,7 @@ func (*EditorExport) CreatePlaylistItem(
 	playlistId int,
 	options CreatePlaylistItemOptions,
 ) (*PlaylistItemData, error) {
-	err := uploadFile(playlistMetaPath(playlistId), options.AudioFilePath)
+	err := utils.CopyFile(options.AudioFilePath, playlistMetaPath(playlistId))
 	if err != nil {
 		return nil, err
 	}
