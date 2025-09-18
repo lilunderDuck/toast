@@ -2,7 +2,7 @@ import type { Expression, TemplateLiteral } from "@babel/types"
 import * as astring from "astring"
 import * as escodegen from "escodegen"
 
-export const escapeIdentifier = (name: string) => "${" + name + "}"
+export const escapeIdentifier = (name: string) => `\${${name}}` as const
 
 /**Rebuild string template literal based on ast/node, idk.
  * 

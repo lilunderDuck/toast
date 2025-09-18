@@ -1,4 +1,4 @@
-import type { Rollup, ESBuildOptions } from "vite"
+import type { Rollup, ESBuildOptions, UserConfig } from "vite"
 
 export const BASE_OUTPUT_DIRECTORY = './build'
 export const OUTPUT_DIRECTORY = `${BASE_OUTPUT_DIRECTORY}/out`
@@ -32,4 +32,28 @@ export const ESBUILD_OPTIONS: ESBuildOptions = {
   minifyWhitespace: true,
   treeShaking: true,
   drop: ['console', 'debugger']
+}
+
+export const DEV_OPTIMIZE_OPTIONS: UserConfig["optimizeDeps"] = {
+  include: [
+    "@tiptap/core",
+    "@tiptap/extension-bubble-menu",
+    "@tiptap/extension-code-block-lowlight",
+    "@tiptap/extension-color",
+    "@tiptap/extension-floating-menu",
+    "@tiptap/extension-highlight",
+    "@tiptap/extension-link",
+    "@tiptap/extension-placeholder",
+    "@tiptap/extension-subscript",
+    "@tiptap/extension-superscript",
+    "@tiptap/extension-table",
+    "@tiptap/extension-table-cell",
+    "@tiptap/extension-table-header",
+    "@tiptap/extension-table-row",
+    "@tiptap/extension-task-item",
+    "@tiptap/extension-task-list",
+    "@tiptap/extension-text-style",
+    "@tiptap/extension-underline",
+    "@tiptap/starter-kit",
+  ]
 }

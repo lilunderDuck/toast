@@ -2,9 +2,10 @@ import { defineConfig } from 'vite'
 import solidPlugin from 'vite-plugin-solid'
 import pagesPlugin from 'vite-plugin-pages'
 import { stylex as stylexPlugin } from "vite-plugin-stylex-dev"
+import { optimizeCssModules } from "vite-plugin-optimize-css-modules"
 // ... 
 import tsconfig from './tsconfig.json'
-import { defineAllEnum, getAliasPath, ESBUILD_OPTIONS, OUTPUT_FILENAME, macroPlugin } from "./build/config"
+import { defineAllEnum, getAliasPath, ESBUILD_OPTIONS, OUTPUT_FILENAME, macroPlugin, DEV_OPTIMIZE_OPTIONS } from "./build/config"
 
 export default defineConfig(({ command }) => {
   const isDevMode = command !== "build"
@@ -20,6 +21,7 @@ export default defineConfig(({ command }) => {
       }),
       solidPlugin(),
       stylexPlugin(),
+      optimizeCssModules(),
       macroPlugin
     ],
     server: {
@@ -32,30 +34,7 @@ export default defineConfig(({ command }) => {
     },
     define: getDefineList(),
     publicDir: "./frontend/public/",
-    optimizeDeps: {
-      // for some reason adding all of these packages, the error gone
-      include: [
-        "@tiptap/core",
-        "@tiptap/extension-bubble-menu",
-        "@tiptap/extension-code-block-lowlight",
-        "@tiptap/extension-color",
-        "@tiptap/extension-floating-menu",
-        "@tiptap/extension-highlight",
-        "@tiptap/extension-link",
-        "@tiptap/extension-placeholder",
-        "@tiptap/extension-subscript",
-        "@tiptap/extension-superscript",
-        "@tiptap/extension-table",
-        "@tiptap/extension-table-cell",
-        "@tiptap/extension-table-header",
-        "@tiptap/extension-table-row",
-        "@tiptap/extension-task-item",
-        "@tiptap/extension-task-list",
-        "@tiptap/extension-text-style",
-        "@tiptap/extension-underline",
-        "@tiptap/starter-kit",
-      ]
-    },
+    optimizeDeps: DEV_OPTIMIZE_OPTIONS,
     build: {
       target: 'esnext',
       outDir: BUILD_SAVED_PATH,

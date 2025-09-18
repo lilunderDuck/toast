@@ -3,6 +3,7 @@ import { Match, type ParentProps, Show, Switch } from "solid-js"
 import { Checkbox, Input, Spacer } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
+import { macro_mergeClassnames } from "macro-def"
 
 const style = stylex.create({
   section: {
@@ -66,15 +67,22 @@ interface ISettingSectionProps<T extends SettingType> {
 }
 
 export function SettingSection<T extends SettingType>(props: ParentProps<ISettingSectionProps<T>>) {
+  const getInputStyle = () => macro_mergeClassnames(
+    props.type$ === SettingType.RANGE ? 
+      stylex.attrs(style.seciton__inputRange) :
+      stylex.attrs(style.seciton__inputEverythingElse)
+    // 
+  )
+
+  const getNameStyle = () => macro_mergeClassnames(
+    props.disabled$ ? stylex.attrs(style.section__disabledName) : ''
+  )
+
   return (
     <section {...stylex.attrs(style.section)}>
       <div {...stylex.attrs(style.section__content)}>
-        <div {...stylex.attrs(
-          props.type$ === SettingType.RANGE ? style.seciton__inputRange : style.seciton__inputEverythingElse
-        )}>
-          <h4 {...stylex.attrs(
-            props.disabled$ ? style.section__disabledName : {},
-          )}>
+        <div class={getInputStyle()}>
+          <h4 class={getNameStyle()}>
             {props.name$}
           </h4>
           <Spacer />
@@ -99,7 +107,10 @@ export function SettingSection<T extends SettingType>(props: ParentProps<ISettin
           </Switch>
         </div>
         <Show when={props.description$}>
-          <p {...stylex.attrs(style.description, props.disabled$ ? style.section__disabledDescription : {})}>
+          <p class={macro_mergeClassnames(
+            stylex.attrs(style.description),
+            props.disabled$ ? stylex.attrs(style.section__disabledDescription) : ""
+          )}>
             {props.description$}
           </p>
         </Show>

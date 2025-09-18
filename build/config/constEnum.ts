@@ -126,7 +126,7 @@ export function defineAllEnum() {
 
   return {
     generateType() {
-      let content = "// this file is auto-generate when on dev/build mode\nexport {};"
+      let content = "// this file is auto-generated when on dev/build mode\nexport {};"
       for (const [moduleName, moduleContent] of Object.entries(typeContent)) {
         if (moduleName === "global") {
           content += `declare global { ${moduleContent.join('')} }`
@@ -136,7 +136,7 @@ export function defineAllEnum() {
         content += `declare module ${moduleName} { ${moduleContent.join('')} }`
       }
 
-      writeFileSync("./frontend/@types/enum_generated.d.ts", content)
+      writeFileSync("./build/dist/enum_generated.d.ts", content)
     },
     getDefineList() {
       return Object.fromEntries(defineMapping.entries())

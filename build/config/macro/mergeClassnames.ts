@@ -17,7 +17,7 @@ export const mergeClassnames = defineMacro('macro_mergeClassnames')
       // @ts-ignore
       const node = prop.node as Expression
       // log the heck out in case weird shit happens
-      console.log("hit case ->", prop.type)
+      // console.log("hit case ->", prop.type)
 
       switch (prop.type) {
         // Handle conditional statement like this
@@ -44,7 +44,7 @@ export const mergeClassnames = defineMacro('macro_mergeClassnames')
 
 const FALL_THROUGH = 1
 const SKIP = null
-function handleCommonCase(node: Expression): string | null | number {
+function handleCommonCase(node: Expression, dontEscapeIdentifier = false): string | null | number {
   switch (node.type) {
     // ignore "null" if one of the argument contains null
     case "NullLiteral": return SKIP
@@ -64,10 +64,10 @@ function handleCommonCase(node: Expression): string | null | number {
     case "StringLiteral":
     case "TemplateLiteral":
       return node.type === "Identifier" ?
-        escapeIdentifier(`${node.name}.class`) :
+        (dontEscapeIdentifier ? `${node.name}.class` : escapeIdentifier(`${node.name}.class`)) :
         // Otherwise handle other kind of strings.
         // Well, if you pass in the wrong node type, it makes sure to yell out loud, ofc.
-        getString(node, true)
+        (dontEscapeIdentifier ? `"${getString(node, true)}"` : getString(node, true))
 
     // Handle case when you paste in a object contains a "class" prop, like this:
     //    macro_mergeClassnames({ class: "some class names in here" })
@@ -82,13 +82,13 @@ function handleCommonCase(node: Expression): string | null | number {
     // -> `x78zum5 x6s0dn4 x883omv`                     (prod mode)
     case "CallExpression":
       // regenerate the code and let stylex do its job
-      return escapeIdentifier(`${generateCodeFromAst(node)}.class`)
+      return dontEscapeIdentifier ? `${generateCodeFromAst(node)}.class` : escapeIdentifier(`${generateCodeFromAst(node)}.class`)
 
     case "MemberExpression":
       const code = generateCodeFromAst(node)
       // if one of the argument is "undefined", just ignore it
       if (code === "undefined") return FALL_THROUGH
-      return escapeIdentifier(code)
+      return dontEscapeIdentifier ? code : escapeIdentifier(code)
     
     default:
       // console.log("case", node.type, "not handled")
@@ -130,8 +130,8 @@ function handleConditional(node: ConditionalExpression): string {
     //   macro_mergeClassnames(some.conditionInAMethod() ? "this-class" : "that-class")
     // I'll fix that later
   }
-  const trufyValue = handleCommonCase(node.consequent)!
-  const falsyValue = handleCommonCase(node.alternate)!
+  const trufyValue = handleCommonCase(node.consequent, true)!
+  const falsyValue = handleCommonCase(node.alternate, true)!
 
-  return `${testCondidionString}?${trufyValue}:${falsyValue}`
+  return `\${${testCondidionString}?${trufyValue}:${falsyValue}}`
 }

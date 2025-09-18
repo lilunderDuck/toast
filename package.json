@@ -7,7 +7,8 @@
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "test": "deno test --unstable-sloppy-imports -A ./build/test/index.ts"
   },
   "license": "MIT",
   "devDependencies": {

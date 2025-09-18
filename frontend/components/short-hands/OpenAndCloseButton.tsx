@@ -1,7 +1,6 @@
 import stylex from "@stylexjs/stylex"
 import { 
   Button, 
-  Flex, 
   Spacer 
 } from "../ui"
 import { type JSX, splitProps } from "solid-js"

@@ -24,7 +24,7 @@ export default function SingleItemGalleryView() {
   const { isFullscreen$ } = useGalleryContext()
 
   return (
-    <div data-gallery-view>
+    <div data-gallery-view="">
       <LeftButtonSide />
       <GalleryButtonRow />
       <RightButtonSide />

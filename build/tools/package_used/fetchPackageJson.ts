@@ -1,4 +1,4 @@
-import packageJson from "../../package.json" with { type: "json" }
+import packageJson from "../../../package.json" with { type: "json" }
 // ...
 // @ts-ignore
 import { encodeUrl } from "https://deno.land/x/encodeurl@1.0.0/mod.ts"

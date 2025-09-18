@@ -4,16 +4,18 @@ import { mergeClassnames } from "./mergeClassnames"
 import { getValueOrDefault } from "./getValueOrDefault"
 import { escapeCssUrl } from "./escapeCssUrl"
 
+export const MACRO_EXPORTS = {
+  'macro-def': {
+    macros: [mergeClassnames, getValueOrDefault, escapeCssUrl],
+  }
+}
+
 export const macroPlugin = vitePluginMacro({
-  typesPath: join(__dirname, "./macro_def.d.ts"),
+  typesPath: join(import.meta.dirname, "../../dist/macro_def.d.ts"),
 })
   .use(defineMacroProvider({
     id: 'idk man',
-    exports: {
-      'macro-def': {
-        macros: [mergeClassnames, getValueOrDefault, escapeCssUrl],
-      }
-    },
+    exports: MACRO_EXPORTS,
   }))
   .toPlugin()
 // ...

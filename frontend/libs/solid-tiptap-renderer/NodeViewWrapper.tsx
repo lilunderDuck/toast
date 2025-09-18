@@ -16,15 +16,12 @@ export function NodeViewWrapper<T extends HTMLTags>(props: HTMLAttributes<T> & {
   const [local, otherProps] = splitProps(props, ["as"])
 
   return (
+    // @ts-ignore
     <Dynamic
       component={local.as || "div"}
       {...otherProps}
       onDragStart={state().onDragStart}
-      data-node-view-wrapper
-      // style={{
-      //   ...props.style,
-      //   whiteSpace: "normal"
-      // }}
+      data-node-view-wrapper=""
     />
   )
 }

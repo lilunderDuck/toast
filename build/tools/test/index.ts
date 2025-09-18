@@ -1,0 +1,3 @@
+import "./macro"
+
+export {}
