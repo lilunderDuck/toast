@@ -31,7 +31,7 @@ export function JournalHomeProvider(props: ParentProps) {
 
   const toastOptions: ToastOptions = {
     duration: 5_000,
-    position: "bottom-right"
+    position: ToastPosition.TOP_RIGHT
   }
 
   return (

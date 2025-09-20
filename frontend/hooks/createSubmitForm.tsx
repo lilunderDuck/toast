@@ -1,4 +1,4 @@
-import type { FieldValues, createForm, SubmitHandler } from "@modular-forms/solid"
+import { type FieldValues, createForm, type SubmitHandler, reset } from "@modular-forms/solid"
 import { createSignal, type JSX } from "solid-js"
 // ...
 import { Button, ButtonRow } from "~/components"
@@ -37,8 +37,7 @@ export interface ISubmitFormOptions<T extends FieldValues> {
  * }
  * 
  * // create your submit form
- * const [, { Field, Form }] = createForm<Schema>()
- * const { Form$ } = createSubmitForm<Schema>(Form, {
+ * const { Form$ } = createSubmitForm<Schema>({
  *   submitButtonText$: "Submit data",
  *   async onSubmit$(data) {
  *     // ... do something with the submit data here ...
@@ -60,10 +59,8 @@ export interface ISubmitFormOptions<T extends FieldValues> {
  * 
  * @see {@link ISubmitFormOptions} for form creation options.
  */
-export function createSubmitForm<T extends FieldValues>(
-  FormComponent: FormComponent<T>,
-  options: ISubmitFormOptions<T>
-) {
+export function createSubmitForm<T extends FieldValues>(options: ISubmitFormOptions<T>) {
+  const [formStore, { Form, Field }] = createForm<T>()
   const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
 
   const submitThis: SubmitHandler<T> = async(data, submitEvent) => {
@@ -79,12 +76,18 @@ export function createSubmitForm<T extends FieldValues>(
   }
 
   return {
+    setFieldData$(data: T) {
+      reset(formStore, Object.keys(data), {
+        initialValues: Object.values(data)
+      })
+    },
+    Field$: Field,
     /**Renders the form component with the submit button and handles the submit event.
      * @param props.
      * @returns `JSX.Element`
      */
     Form$: (props: Parameters<FormComponent<T>>[0]) => (
-      <FormComponent {...props} onSubmit={submitThis}>
+      <Form {...props} onSubmit={submitThis}>
         {props.children}
         <ButtonRow>
           {options.buttonRow$}
@@ -96,7 +99,7 @@ export function createSubmitForm<T extends FieldValues>(
             {options.submitButtonText$}
           </Button>
         </ButtonRow>
-      </FormComponent>
+      </Form>
     )
   }
 }

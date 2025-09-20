@@ -2,7 +2,7 @@ import { Match, Switch } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import type { IconTheme, Renderable, ToastType } from "../util"
+import type { IconTheme, Renderable } from "../util"
 import { Error, Loader, Success } from '.'
 
 const style = stylex.create({
@@ -30,13 +30,13 @@ export function ToastIconContainer(props: IIconContainerProps) {
         <Match when={props.icon}>
           {props.icon}
         </Match>
-        <Match when={props.type === 'loading'}>
+        <Match when={props.type === ToastType.LOADING}>
           <Loader {...props.theme} />
         </Match>
-        <Match when={props.type === 'success'}>
+        <Match when={props.type === ToastType.SUCCESS}>
           <Success {...props.theme} />
         </Match>
-        <Match when={props.type === 'error'}>
+        <Match when={props.type === ToastType.ERROR}>
           <Error {...props.theme} />
         </Match>
       </Switch>

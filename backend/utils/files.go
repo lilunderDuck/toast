@@ -126,7 +126,6 @@ func CopyFile(source, destinationPath string) error {
 	// Ensure no file being overriten if the destination file path
 	// has the same file name.
 	if IsFileExist(destinationFilePath) {
-		// GetRandomStringWithinLength is an undefined function.
 		destinationFilePath = RenameFileInPath(destinationFilePath, func(oldFilename string) string {
 			return fmt.Sprintf("%s_%s", oldFilename, GetRandomStringWithinLength(8))
 		})

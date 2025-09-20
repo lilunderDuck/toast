@@ -1,4 +1,4 @@
-import { createForm, required } from "@modular-forms/solid"
+import { required } from "@modular-forms/solid"
 // ...
 import { Button, createIconInput, DialogContent, DialogHeader, FieldInput, type ILazyDialog } from "~/components"
 import { createSubmitForm } from "~/hooks"
@@ -41,7 +41,6 @@ interface IPlaylistEditMetadataDialogProps extends ILazyDialog {
 }
 
 export default function PlaylistEditMetadataDialog(props: IPlaylistEditMetadataDialogProps) {
-  const [, { Form, Field }] = createForm<PlaylistMetadataSchema>()
   const { editPlaylist$, playlistId$ } = props.context$
 
   const IconInput = createIconInput({
@@ -52,7 +51,7 @@ export default function PlaylistEditMetadataDialog(props: IPlaylistEditMetadataD
     initialIconUrl$: () => `${ASSETS_SERVER_URL}/playlist/${playlistId$()}/icon/${props.prevData$.icon}`
   })
 
-  const { Form$ } = createSubmitForm(Form, {
+  const { Form$, Field$ } = createSubmitForm<PlaylistMetadataSchema>({
     submitButtonText$: "Edit",
     buttonRow$: (
       <Button
@@ -78,7 +77,7 @@ export default function PlaylistEditMetadataDialog(props: IPlaylistEditMetadataD
         <IconInput.Input$ />
         <div>
           <Form$>
-            <Field name="title" validate={[required("This field is required.")]}>
+            <Field$ name="title" validate={[required("This field is required.")]}>
               {(field, inputProps) => (
                 <FieldInput
                   {...inputProps}
@@ -88,9 +87,9 @@ export default function PlaylistEditMetadataDialog(props: IPlaylistEditMetadataD
                   value={field.value || props.prevData$?.title}
                 />
               )}
-            </Field>
+            </Field$>
 
-            <Field name="description">
+            <Field$ name="description">
               {(field, inputProps) => (
                 <FieldInput
                   {...inputProps}
@@ -100,7 +99,7 @@ export default function PlaylistEditMetadataDialog(props: IPlaylistEditMetadataD
                   value={field.value || props.prevData$?.description}
                 />
               )}
-            </Field>
+            </Field$>
           </Form$>
         </div>
       </div>

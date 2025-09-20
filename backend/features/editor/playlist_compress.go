@@ -8,8 +8,9 @@ import (
 )
 
 type bin_PlaylistItemData struct {
-	Data []uint16 `cbor:"0,keyasint"`
-	Id   int      `cbor:"1,keyasint"`
+	Data     []uint16 `cbor:"0,keyasint"`
+	Id       int      `cbor:"1,keyasint"`
+	Duration int      `cbor:"2,keyasint"`
 }
 
 type bin_PlaylistMetadata struct {
@@ -55,8 +56,9 @@ func (audioItem *PlaylistItemData) MarshalCBOR() ([]byte, error) {
 	)
 
 	return cbor.Marshal(bin_PlaylistItemData{
-		Data: stringData,
-		Id:   audioItem.Id,
+		Data:     stringData,
+		Id:       audioItem.Id,
+		Duration: audioItem.Duration,
 	})
 }
 
@@ -74,5 +76,6 @@ func (audioItem *PlaylistItemData) UnmarshalCBOR(input []byte) error {
 	audioItem.Icon = stringData[3]
 	audioItem.FileName = stringData[4]
 	audioItem.Id = out.Id
+	audioItem.Duration = out.Duration
 	return nil
 }

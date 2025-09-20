@@ -1,13 +1,12 @@
 import { createRoot, createSignal } from 'solid-js'
-import type { 
-  IToasterProps,
-  Message, 
-  ToastType, 
-  Toast, 
-  ToastHandler,
-  Renderable,
-  ValueOrFunction,
-  ToastOptions, 
+import { 
+  type IToasterProps,
+  type Message, 
+  type Toast, 
+  type ToastHandler,
+  type Renderable,
+  type ValueOrFunction,
+  type ToastOptions, 
 } from '../util/toast'
 import { 
   defaultToasterOptions, 
@@ -22,7 +21,7 @@ import { dispatch, store } from './store'
 
 export const [defaultOpts, setDefaultOpts] = createSignal<IToasterProps>(defaultToasterOptions)
 
-export const createToast = (message: Message, type: ToastType = 'blank', options: ToastOptions): Toast => {
+export const createToast = (message: Message, type: ToastType = ToastType.BLANK, options: ToastOptions): Toast => {
   const toastPosition = 
     options.position || 
     defaultOpts().toastOptions?.position || 
@@ -43,6 +42,9 @@ export const createToast = (message: Message, type: ToastType = 'blank', options
   }
 
   return {
+    ...defaultToastOptions,
+    ...defaultOpts().toastOptions,
+    ...options,
     type,
     message,
     pauseDuration: 0,
@@ -53,9 +55,6 @@ export const createToast = (message: Message, type: ToastType = 'blank', options
     style: toastStyle,
     duration: toastDuration,
     position: toastPosition,
-    ...defaultToastOptions,
-    ...defaultOpts().toastOptions,
-    ...options,
   }
 }
 
@@ -70,12 +69,12 @@ function createToastCreator(type?: ToastType): ToastHandler {
   )
 }
 
-export const toast = (message: Message, opts?: ToastOptions) => createToastCreator('blank')(message, opts)
+export const toast = (message: Message, opts?: ToastOptions) => createToastCreator(ToastType.BLANK)(message, opts)
 
-toast.error = createToastCreator('error')
-toast.success = createToastCreator('success')
-toast.loading = createToastCreator('loading')
-toast.custom = createToastCreator('custom')
+toast.error = createToastCreator(ToastType.ERROR)
+toast.success = createToastCreator(ToastType.SUCCESS)
+toast.loading = createToastCreator(ToastType.LOADING)
+toast.custom = createToastCreator(ToastType.CUSTOM)
 
 toast.dismiss = (toastId?: string) => {
   dispatch({
@@ -93,22 +92,19 @@ toast.promise = <T>(
   },
   opts?: ToastOptions
 ) => {
-  const id = toast.loading(msgs.loading, { ...opts })
+  const id = toast.loading(msgs.loading, { ...opts, duration: 2000, })
+
+  const options: ToastOptions = { id, ...opts }
 
   promise
     .then((p) => {
-      toast.success(resolveValue(msgs.success, p), {
-        id,
-        ...opts,
-      })
+      toast.success(resolveValue(msgs.success, p), options)
       return p
     })
     .catch((e) => {
-      toast.error(resolveValue(msgs.error, e), {
-        id,
-        ...opts,
-      })
+      toast.error(resolveValue(msgs.error, e), options)
     })
+  // 
 
   return promise
 }

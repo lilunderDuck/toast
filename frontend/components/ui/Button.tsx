@@ -1,13 +1,14 @@
 import type { JSX, ValidComponent } from "solid-js"
-import { splitProps } from "solid-js"
+import { createSignal, Show, splitProps } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { type ButtonRootProps, Root } from "@kobalte/core/button"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./Button.module.css"
 // ...
-import { defaultValueOrElse, type StylexStylesAttribute } from "../../utils"
+import { defaultValueOrElse, sleep, type StylexStylesAttribute } from "../../utils"
 import { macro_mergeClassnames } from "macro-def"
+import { SpinningCube } from "../loader"
 
 const style = stylex.create({
   base: {
@@ -20,7 +21,8 @@ const style = stylex.create({
     fontWeight: 500,
     transitionProperty: "color, background-color, border-color, text-decoration-color, fill, stroke",
     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-    transitionDuration: "300ms"
+    transitionDuration: "300ms",
+    outline: "none"
   },
   size_default: {
     paddingTop: "0.5rem",
@@ -73,23 +75,37 @@ const sizeMapping: Record<ButtonSize, StylexStylesAttribute> = {
   [ButtonSize.LARGE]: stylex.attrs(style.size_large),
   [ButtonSize.ICON]: stylex.attrs(style.size_icon)
 }
- 
-export type ButtonProps<T extends ValidComponent = "button"> = ButtonRootProps<T> &
-  { 
-    class?: string | undefined
-    children?: JSX.Element 
-    variant$?: ButtonVariant
-    size$?: ButtonSize
-  }
-// ...
 
-export function Button<T extends ValidComponent = "button">(
-  props: PolymorphicProps<T, ButtonProps<T>>
-) {
-  const [local, others] = splitProps(props as ButtonProps, ["variant$", "size$"])
+export interface IButtonProps extends HTMLAttributes<"button"> {
+  variant$?: ButtonVariant
+  size$?: ButtonSize
+}
+
+export function Button(props: IButtonProps) {
+  const [local, others] = splitProps(props, ["variant$", "size$"])
+  const [isLoading, setIsLoading] = createSignal(false)
+
+  const clickHandler: EventHandler<"button", "onClick"> = async(mouseEvent) => {
+    if (isLoading()) return
+    
+    const thisOnClickCallback = props.onClick
+    if (!thisOnClickCallback) return
+
+    if (thisOnClickCallback instanceof Promise) {
+      setIsLoading(true)
+      await thisOnClickCallback(mouseEvent)
+      setIsLoading(false)
+    } else {
+      thisOnClickCallback(mouseEvent)
+    }
+  }
+
   return (
-    <Root
+    <button
+      type="button"
+      disabled={isLoading()}
       {...others}
+      onClick={clickHandler}
       class={macro_mergeClassnames(
         others.class,
         __style.button,
@@ -97,6 +113,10 @@ export function Button<T extends ValidComponent = "button">(
         defaultValueOrElse(variantMapping, local.variant$, ButtonVariant.DEFAULT),
         defaultValueOrElse(sizeMapping, local.size$, ButtonSize.DEFAULT),
       )}
-    />
+    >
+      <Show when={isLoading()} fallback={props.children}>
+        <SpinningCube cubeSize$={30} />
+      </Show>
+    </button>
   )
 }

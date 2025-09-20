@@ -1,4 +1,4 @@
-import type { Accessor } from "solid-js"
+import type { Accessor, Setter } from "solid-js"
 // ...
 import type { frontend } from "~/wailsjs/go/models"
 
@@ -7,6 +7,7 @@ export type UploadDialog<T extends FileUploadType> = {
   error$: Accessor<any> // missing type
   open$(): Promise<void>
   file$: Accessor<FileOutputMapping[T] | undefined>
+  setFilePath$: Setter<FileOutputMapping[T] | undefined>
 }
 
 export type FileOpenDialogOptions = Partial<frontend.OpenDialogOptions>

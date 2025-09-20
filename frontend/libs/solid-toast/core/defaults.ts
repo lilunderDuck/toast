@@ -1,11 +1,11 @@
 import type { IToasterProps, ToastOptions, ToastTimeouts } from '../util/toast'
 
 export const defaultTimeouts: ToastTimeouts = {
-  blank: 4000,
-  error: 4000,
-  success: 2000,
-  loading: Infinity,
-  custom: 4000,
+  [ToastType.BLANK]: 4000,
+  [ToastType.ERROR]: 4000,
+  [ToastType.SUCCESS]: 2000,
+  [ToastType.LOADING]: Infinity,
+  [ToastType.CUSTOM]: 4000,
 };
 
 export const defaultToastOptions: Required<ToastOptions> = {
@@ -15,12 +15,12 @@ export const defaultToastOptions: Required<ToastOptions> = {
   duration: 3000,
   class: '',
   style: {},
-  position: 'top-right',
+  position: ToastPosition.TOP_RIGHT,
   iconTheme: {},
 };
 
 export const defaultToasterOptions: IToasterProps = {
-  position: 'top-right',
+  position: ToastPosition.TOP_RIGHT,
   toastOptions: defaultToastOptions,
   gutter: 8,
   containerStyle: {},

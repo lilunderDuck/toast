@@ -1,4 +1,4 @@
-import { createForm, required } from "@modular-forms/solid"
+import { required } from "@modular-forms/solid"
 // ...
 import { Button, createIconInput, DialogContent, DialogHeader, FieldInput, type ILazyDialog } from "~/components"
 import { createSubmitForm } from "~/hooks"
@@ -43,7 +43,6 @@ interface IPlaylistEditTrackItemDialogProps extends ILazyDialog {
 }
 
 export default function PlaylistCreateEditTrackDialog(props: IPlaylistEditTrackItemDialogProps) {
-  const [, { Form, Field }] = createForm<PlaylistTrackSchema>()
   const { trackItems$, playlistId$ } = props.context$
 
   const IconInput = createIconInput({
@@ -54,7 +53,7 @@ export default function PlaylistCreateEditTrackDialog(props: IPlaylistEditTrackI
     initialIconUrl$: () => playlistTrackUrl(playlistId$(), props.prevData$.fileName),
   })
 
-  const { Form$ } = createSubmitForm(Form, {
+  const { Form$, Field$ } = createSubmitForm<PlaylistTrackSchema>({
     submitButtonText$: "Edit",
     buttonRow$: (
       <Button
@@ -80,7 +79,7 @@ export default function PlaylistCreateEditTrackDialog(props: IPlaylistEditTrackI
       <div {...stylex.attrs(style.dialog__inputContent)}>
         <IconInput.Input$ />
         <Form$>
-          <Field name="name" validate={[required("This field is required.")]}>
+          <Field$ name="name" validate={[required("This field is required.")]}>
             {(field, inputProps) => (
               <FieldInput
                 {...inputProps}
@@ -89,9 +88,9 @@ export default function PlaylistCreateEditTrackDialog(props: IPlaylistEditTrackI
                 value={field.value || props.prevData$?.name}
               />
             )}
-          </Field>
+          </Field$>
 
-          <Field name="author">
+          <Field$ name="author">
             {(field, inputProps) => (
               <FieldInput
                 {...inputProps}
@@ -100,9 +99,9 @@ export default function PlaylistCreateEditTrackDialog(props: IPlaylistEditTrackI
                 value={field.value || props.prevData$?.author}
               />
             )}
-          </Field>
+          </Field$>
 
-          <Field name="description">
+          <Field$ name="description">
             {(field, inputProps) => (
               <FieldInput
                 {...inputProps}
@@ -111,7 +110,7 @@ export default function PlaylistCreateEditTrackDialog(props: IPlaylistEditTrackI
                 value={field.value || props.prevData$?.description}
               />
             )}
-          </Field>
+          </Field$>
         </Form$>
       </div>
     </DialogContent>

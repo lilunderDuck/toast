@@ -1,4 +1,4 @@
-import { createForm, required } from "@modular-forms/solid"
+import { required } from "@modular-forms/solid"
 import stylex from "@stylexjs/stylex"
 import __style from "./CreateJournalDialog.module.css"
 import { DialogContent, DialogHeader, FieldInput, type ILazyDialog, RadioGroup, RadioGroupItem, RadioGroupItemLabel } from "~/components"
@@ -33,8 +33,7 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
     type_folder$: 1,
   } as const
 
-  const [, { Form, Field }] = createForm<JournalOptionsSchema>()
-  const { Form$ } = createSubmitForm(Form, {
+  const { Form$, Field$ } = createSubmitForm<JournalOptionsSchema>({
     async onSubmit$(data) {
       await createJournal$(TYPE_MAPPING[journalType()], data as unknown as journal.JournalOptions)
       props.close$()
@@ -46,7 +45,7 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
     <DialogContent {...stylex.attrs(style.dialog)}>
       <DialogHeader>Create new journal</DialogHeader>
       <Form$>
-        <Field name="name" validate={[required("Please insert a name")]}>
+        <Field$ name="name" validate={[required("Please insert a name")]}>
           {(field, inputProps) => (
             <FieldInput 
               {...inputProps}
@@ -56,7 +55,7 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
               value={field.value} 
             />
           )}
-        </Field>
+        </Field$>
 
         <RadioGroup defaultValue="type_journal$" onChange={setJournalType} class={__style.radioGroup}>
           <RadioGroupItem value="type_journal$">

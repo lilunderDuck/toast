@@ -7,7 +7,9 @@ const style = stylex.create({
   header: {
     paddingInline: 15,
     gap: 15,
-    userSelect: "none"
+    userSelect: "none",
+    fontSize: 13,
+    fontWeight: "bold"
   },
   header__index: {
     marginLeft: "0.5rem"
@@ -23,7 +25,7 @@ export function PlaylistTrackHeader() {
       <span {...stylex.attrs(style.header__index)}>#</span>
       <div />
       <span {...stylex.attrs(style.header__trackText)}>Track</span>
-      <span>Runtime</span>
+      <span>Duration</span>
     </div>
   )
 }

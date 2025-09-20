@@ -56,6 +56,23 @@ export function defineAllEnum() {
     END_PAUSE: null,
   })
 
+  defineEnum('ToastType', {
+    SUCCESS: null,
+    ERROR: null,
+    LOADING: null,
+    BLANK: null,
+    CUSTOM: null
+  })
+
+  defineEnum('ToastPosition', {
+    TOP_LEFT: null,
+    TOP_CENTER: null,
+    TOP_RIGHT: null,
+    BOTTOM_LEFT: null,
+    BOTTOM_CENTER: null,
+    BOTTOM_RIGHT: null
+  })
+
   defineEnum('ButtonVariant', {
     DEFAULT: null,
     DANGER: null,

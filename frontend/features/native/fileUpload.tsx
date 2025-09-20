@@ -72,6 +72,8 @@ export function createFileUpload<T extends FileUploadType.FILE>(
   }
 
   return {
+    // @ts-ignore
+    setFilePath$: setFile,
     open$: onClickThis,
     isUploading$: isLoading,
     error$: error,

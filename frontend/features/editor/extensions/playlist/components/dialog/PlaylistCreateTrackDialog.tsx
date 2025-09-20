@@ -1,10 +1,11 @@
 import { Show } from "solid-js"
-import { createForm, required } from "@modular-forms/solid"
 // ...
 import { Button, createIconInput, DialogContent, DialogHeader, FieldInput, FieldInputLabel, Tooltip, type ILazyDialog } from "~/components"
 import { createFileUpload, SUPPORTED_AUDIO_FILTER } from "~/features/native"
 import { createSubmitForm } from "~/hooks"
+import { GetAudioDataFrom } from "~/wailsjs/go/editor/EditorExport"
 import { previewUrl } from "~/api"
+import { toast } from "~/libs/solid-toast"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -53,7 +54,6 @@ interface IPlaylistEditTrackItemDialogProps extends ILazyDialog {
 }
 
 export default function PlaylistCreateTrackDialog(props: IPlaylistEditTrackItemDialogProps) {
-  const [, { Form, Field }] = createForm<PlaylistTrackSchema>()
   const { trackItems$ } = props.context$
 
   const IconFileUpload = createIconInput({
@@ -71,16 +71,43 @@ export default function PlaylistCreateTrackDialog(props: IPlaylistEditTrackItemD
     }
   })
 
-  const { Form$ } = createSubmitForm(Form, {
+  const fetchSelectedAudio = async() => {
+    console.log(AudioFileUpload.file$())
+    const data = await toast.promise(GetAudioDataFrom(AudioFileUpload.file$()!), {
+      loading: "Fetching audio data...",
+      error: "Failed to fetch audio data.",
+      success: "Successfully fetched audio data."
+    })
+
+    setFieldData$({
+      name: data.title,
+      author: data.artist,
+    })
+
+    if (data.iconPath) {
+      AudioFileUpload.setFilePath$(data.iconPath)
+    }
+  }
+
+  const { Form$, Field$, setFieldData$ } = createSubmitForm<PlaylistTrackSchema>({
     submitButtonText$: "Create",
     buttonRow$: (
-      <Button
-        size$={ButtonSize.SMALL}
-        variant$={ButtonVariant.DANGER}
-        onClick={props.close$}
-      >
-        Dismiss
-      </Button>
+      <>
+        <Button
+          size$={ButtonSize.SMALL}
+          variant$={ButtonVariant.DANGER}
+          onClick={props.close$}
+        >
+          Dismiss
+        </Button>
+        <Button
+          size$={ButtonSize.SMALL}
+          onClick={fetchSelectedAudio}
+          disabled={!AudioFileUpload.file$()}
+        >
+          Fetch selected audio
+        </Button>
+      </>
     ),
     async onSubmit$(data) {
       await trackItems$.add$({
@@ -114,45 +141,43 @@ export default function PlaylistCreateTrackDialog(props: IPlaylistEditTrackItemD
             Cover icon
           </FieldInputLabel>
           <IconFileUpload.Input$ />
-          {/* <div {...stylex.attrs(style.dialog__iconInput)} onClick={IconFileUpload.open$}>
-            <Show when={!IconFileUpload.file$()}>
-              {IconFileUpload.isUploading$() ? <SpinningCube cubeSize$={20} /> : <BsPlus />}
-            </Show>
-          </div> */}
         </div>
         <Form$>
-          <Field name="name" validate={[required("This field is required.")]}>
+          <Field$ name="name">
             {(field, inputProps) => (
               <FieldInput
                 {...inputProps}
                 label="Track name"
+                placeholder="Awesome track"
                 error={field.error}
                 value={field.value}
               />
             )}
-          </Field>
+          </Field$>
 
-          <Field name="author">
+          <Field$ name="author">
             {(field, inputProps) => (
               <FieldInput
                 {...inputProps}
                 label="Author"
+                placeholder="Someone"
                 error={field.error}
                 value={field.value}
               />
             )}
-          </Field>
+          </Field$>
 
-          <Field name="description">
+          <Field$ name="description">
             {(field, inputProps) => (
               <FieldInput
                 {...inputProps}
                 label="Description"
+                placeholder="What is this track is about, for example."
                 error={field.error}
                 value={field.value}
               />
             )}
-          </Field>
+          </Field$>
         </Form$>
       </div>
     </DialogContent>

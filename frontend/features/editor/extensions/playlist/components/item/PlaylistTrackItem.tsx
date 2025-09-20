@@ -9,6 +9,8 @@ import { Button, ButtonRow, createLazyLoadedDialog } from "~/components"
 // ...
 import { usePlaylistContext } from "../../provider"
 import PlaylistTrackIcon from "./PlaylistTrackIcon"
+import PlaylistTrackName from "./PlaylistTrackName"
+import { formatSecondsToMMSS } from "~/utils"
 
 const style = stylex.create({
   item: {
@@ -26,15 +28,8 @@ const style = stylex.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  item__nameWrap: {
-    marginLeft: "1rem",
-    fontSize: 12,
-  },
-  item__authorName: {
-    fontSize: 14,
-  },
-  item__runtime: {
-    fontSize: 14
+  item__duration: {
+    fontSize: 13
   }
 })
 
@@ -77,22 +72,9 @@ export default function PlaylistTrackItem(props: IPlaylistTrackItemProps) {
         {shouldShowPlayPauseIcon() ? <BsPauseFill size={50} /> : <BsPlayFill size={50} />}
       </div>
       <PlaylistTrackIcon icon$={props.icon} />
-      <div {...stylex.attrs(style.item__nameWrap)}>
-        <h3 class={__style.item__textPrimary}>
-          {props.name}
-        </h3>
-        <span class={macro_mergeClassnames(
-          stylex.attrs(style.item__authorName),
-          __style.item__textSecondary
-        )}>
-          {props.author}
-        </span>
-      </div>
-      <span class={macro_mergeClassnames(
-        stylex.attrs(style.item__runtime),
-        __style.item__textPrimary
-      )}>
-        00:05
+      <PlaylistTrackName name$={props.name} author$={props.author} />
+      <span class={macro_mergeClassnames(stylex.attrs(style.item__duration), __style.item__textPrimary)}>
+        {formatSecondsToMMSS(props.duration)}
       </span>
       <ButtonRow class={__style.item__buttonRow}>
         <Button 

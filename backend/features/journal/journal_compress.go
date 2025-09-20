@@ -52,7 +52,7 @@ var editorContentTypeRemap = map[uint8]string{
 
 func (data *JournalContentData) MarshalCBOR() ([]byte, error) {
 	return cbor.Marshal(bin_JournalContentData{
-		Type:    utils.GetValueOrDefault(editorContentTypeMap, data.Type, 255),
+		Type:    utils.GetValueOrDefaultInMap(editorContentTypeMap, data.Type, 255),
 		Attrs:   data.Attrs,
 		Marks:   data.Marks,
 		Content: data.Content,
@@ -66,7 +66,7 @@ func (data *JournalContentData) UnmarshalCBOR(input []byte) error {
 		return err
 	}
 
-	data.Type = utils.GetValueOrDefault(editorContentTypeRemap, out.Type, "unsupported")
+	data.Type = utils.GetValueOrDefaultInMap(editorContentTypeRemap, out.Type, "unsupported")
 	// Ugh-, I forgot to assign
 	data.Attrs = out.Attrs
 	data.Content = out.Content
@@ -92,7 +92,7 @@ var editorMarkTypeRemap = map[uint8]string{
 
 func (data *EditorMarks) MarshalCBOR() ([]byte, error) {
 	return cbor.Marshal(bin_EditorMarks{
-		Type: utils.GetValueOrDefault(editorMarkTypeMap, data.Type, 255),
+		Type: utils.GetValueOrDefaultInMap(editorMarkTypeMap, data.Type, 255),
 		Text: data.Text,
 	})
 }
@@ -103,7 +103,7 @@ func (data *EditorMarks) UnmarshalCBOR(input []byte) error {
 		return err
 	}
 
-	data.Type = utils.GetValueOrDefault(editorMarkTypeRemap, out.Type, "unsupported")
+	data.Type = utils.GetValueOrDefaultInMap(editorMarkTypeRemap, out.Type, "unsupported")
 	data.Text = out.Text
 
 	return nil

@@ -2,7 +2,6 @@ import { setDefaultOpts, defaultOpts, store, dispatch, defaultToasterOptions } f
 import type { 
   IToasterProps, 
   Toast, 
-  ToastPosition 
 } from './toast'
 import stylex from '@stylexjs/stylex'
 import { NO_STYLE, type StylexStylesAttribute } from '~/utils'
@@ -48,10 +47,14 @@ const style = stylex.create({
   }
 })
 
+function isThisPositionOnTop(position: ToastPosition) {
+  return [ToastPosition.TOP_CENTER, ToastPosition.TOP_LEFT, ToastPosition.TOP_RIGHT].includes(position)
+}
+
 export function getToastWrapperStyles(position: ToastPosition): StylexStylesAttribute {
-  const isOnTop = position.includes('top')
-  const isCentered = position.includes('center')
-  const isRighted = position.includes('right')
+  const isOnTop = isThisPositionOnTop(position)
+  const isCentered = [ToastPosition.TOP_CENTER, ToastPosition.BOTTOM_CENTER].includes(position)
+  const isRighted = [ToastPosition.BOTTOM_RIGHT, ToastPosition.TOP_RIGHT].includes(position)
   
   const computedStyle = stylex.attrs(
     style.baseToastStyle,
@@ -86,6 +89,6 @@ export const getWrapperYAxisOffset = (toast: Toast, position: ToastPosition): nu
 
 export const getToastYDirection = (toast: Toast, defaultPos: ToastPosition) => {
   const position = toast.position || defaultPos
-  const top = position.includes('top')
+  const top = isThisPositionOnTop(position)
   return top ? 1 : -1
 }

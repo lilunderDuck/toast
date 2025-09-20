@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js"
-import { createForm, required } from "@modular-forms/solid"
+import { required } from "@modular-forms/solid"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./CreateOrEditJournalDialog.module.css"
@@ -49,12 +49,11 @@ type JournalGroupOptionSchema = {
 }
 
 export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
-  const [, { Field, Form }] = createForm<JournalGroupOptionSchema>()
   const [iconPath, setIconPath] = createSignal(props.prevData$?.icon ?? "")
 
   const getText = () => props.prevData$ ? "Edit" : "Create"
 
-  const { Form$ } = createSubmitForm<JournalGroupOptionSchema>(Form, {
+  const { Form$, Field$ } = createSubmitForm<JournalGroupOptionSchema>({
     async onSubmit$(data) {
       if (props.prevData$) {
         const newData = { ...props.prevData$, ...data as journal.JournalGroupOptions }
@@ -106,7 +105,7 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
             />
           </div>
           <div>
-            <Field name="name" validate={[required("This field is required.")]}>
+            <Field$ name="name" validate={[required("This field is required.")]}>
               {(field, inputProps) => <FieldInput
                 {...inputProps}
                 placeholder="The quick brown fox"
@@ -114,9 +113,9 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
                 error={field.error}
                 value={field.value || props.prevData$?.name}
               />}
-            </Field>
+            </Field$>
 
-            <Field name="description">
+            <Field$ name="description">
               {(field, inputProps) => <FieldInput
                 {...inputProps}
                 placeholder="Insert wonderful description here"
@@ -125,7 +124,7 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
                 error={field.error}
                 value={field.value || props.prevData$?.description}
               />}
-            </Field>
+            </Field$>
           </div>
         </div>
       </Form$>

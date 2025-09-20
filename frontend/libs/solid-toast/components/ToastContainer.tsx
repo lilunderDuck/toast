@@ -56,7 +56,7 @@ export const ToastContainer: Component<ToastContainerProps> = (props) => {
         })
       }
     >
-      {props.toast.type === 'custom' ? (
+      {props.toast.type === ToastType.CUSTOM ? (
         resolveValue(props.toast.message, props.toast)
       ) : (
         <ToastBar toast={props.toast} position={props.toast.position || defaultToastOptions.position} />

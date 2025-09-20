@@ -54,5 +54,6 @@ type PlaylistItemData struct {
 	// Description of the track
 	Description string `json:"description,omitempty"`
 	// Unique identifier of this playlist item
-	Id int `json:"id"`
+	Id       int `json:"id"`
+	Duration int `json:"duration"`
 }
