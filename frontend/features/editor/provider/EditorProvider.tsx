@@ -5,7 +5,8 @@ import {
   type ParentProps,
   useContext,
   type Accessor,
-  onMount
+  onMount,
+  type Setter
 } from "solid-js"
 // ...
 import { createEvent, createStorage, debounce, type IEvent } from "~/utils"
@@ -29,23 +30,23 @@ export type EditorEvent = IEvent<{
   /**Fired when the editor is switching to a new document. 
    * @param oldData The data of the document before being replaced.
    */
-  editor__onSwitching$: (oldData: EditorData) => any
+  [EditorEvent.ON_SWITCHING]: (oldData: EditorData) => any
   /**Fired when the editor's content is updated. 
    * @param data The updated editor data.
    */
-  editor__onUpdate$: (data: EditorData) => any
-  editor__updateBongoCatAnimation$: () => any
+  [EditorEvent.ON_UPDATE]: (data: EditorData) => any
+  [EditorEvent.UPDATE_BONGO_CAT_ANIMATION]: () => any
 }>
 
 export interface IEditorContext {
   /**The editor instance */
   editor$: Accessor<SolidEditor>
   /**Sets the read-only state of the editor */
-  setIsReadonly$(state: boolean): void
+  setIsReadonly$: Setter<boolean>
   /**Gets the current read-only state of the editor. */
   isReadonly$: Accessor<boolean>
   /**Opens a new document in the editor with the provided data. When called, 
-   * `editor__onSwitching$` event will be fired.
+   * `EditorEvent.ON_SWITCHING` event will be fired.
    * @param data The data of the document to open.
    * @returns *nothing*
    */
@@ -54,12 +55,14 @@ export interface IEditorContext {
   event$: EditorEvent
   wordCount$: Accessor<number>
   charCount$: Accessor<number>
+  isAutoSaving$: Accessor<boolean>
 }
 
 const Context = createContext<IEditorContext>()
 
 export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
   const [readonly, setIsReadonly] = createSignal(false)
+  const [isAutoSaving, setIsAutoSaving] = createSignal(false)
   const [wordCount, setWordCount] = createSignal(0)
   const [charCount, setCharCount] = createSignal(0)
 
@@ -69,10 +72,11 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
     // @ts-ignore
     extensions: getExtensions(),
     onUpdate() {
+      setIsAutoSaving(true)
       setWordCount(editor().storage.characterCount.words())
       setCharCount(editor().storage.characterCount.characters())
       delayUpdate()
-      event.emit$('editor__updateBongoCatAnimation$')
+      event.emit$(EditorEvent.UPDATE_BONGO_CAT_ANIMATION)
     },
   }))
 
@@ -83,7 +87,8 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
   })
 
   const delayUpdate = debounce(() => {
-    event.emit$('editor__onUpdate$', getCurrentData())
+    event.emit$(EditorEvent.ON_UPDATE, getCurrentData())
+    setIsAutoSaving(false)
   }, 1000)
 
   onMount(() => {
@@ -96,7 +101,7 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
     }
 
     if (currentlyOpenedId !== -1) {
-      event.emit$('editor__onSwitching$', getCurrentData())
+      event.emit$(EditorEvent.ON_SWITCHING, getCurrentData())
     }
 
     console.log("incoming json data", data)
@@ -111,14 +116,15 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
       editor$: editor,
       setIsReadonly$(state) {
         setIsReadonly(state)
-        localStorageWrapper.set$('readonly', state)
-        editor().setEditable(!state)
+        localStorageWrapper.set$('readonly', readonly())
+        editor().setEditable(readonly())
       },
       isReadonly$: readonly,
       open$: openDocument,
       event$: event,
       wordCount$: wordCount,
       charCount$: charCount,
+      isAutoSaving$: isAutoSaving
     }}>
       {props.children}
     </Context.Provider>

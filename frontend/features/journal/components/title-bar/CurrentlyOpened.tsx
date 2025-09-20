@@ -1,5 +1,5 @@
 import { A } from "@solidjs/router"
-import { BsArchiveFill, BsCaretRightFill, BsHouseFill, BsLayoutSidebarInset, BsWindowFullscreen } from "solid-icons/bs"
+import { BsCalendar2RangeFill, BsHouseFill, BsLayoutSidebarInset, BsWindowFullscreen } from "solid-icons/bs"
 import { Show, type ParentProps } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -19,7 +19,8 @@ const style = stylex.create({
     width: "10rem",
     overflowX: "hidden",
     whiteSpace: "nowrap",
-    textOverflow: "ellipsis"
+    textOverflow: "ellipsis",
+    color: "var(--gray11)"
   }
 })
 
@@ -27,14 +28,14 @@ export interface ICurrentlyOpenedProps {
   currentlyOpenedName$?: string
   isSidebarHidden$: boolean
   groupId$: number
-  onClick$(whichOne: "toggle_sidebar$" | "go_back_to_home$"): void
+  onClick$(whichOne: CurrentlyOpenedHeaderAction): void
 }
 
 export function CurrentlyOpened(props: ParentProps<ICurrentlyOpenedProps>) {
   return (
     <>
       <Tooltip label$={`${props.isSidebarHidden$ ? "Show" : "Hide"} sidebar`}>
-        <button onClick={() => props.onClick$("toggle_sidebar$")}>
+        <button onClick={() => props.onClick$(CurrentlyOpenedHeaderAction.TOGGLE_SIDEBAR)}>
           <Show when={props.isSidebarHidden$} fallback={
             <BsLayoutSidebarInset />
           }>
@@ -52,13 +53,12 @@ export function CurrentlyOpened(props: ParentProps<ICurrentlyOpenedProps>) {
           <Tooltip label$="Go to this journal home page">
             <A href={`/journal/${props.groupId$}`} data-link-no-color="">
               <button>
-                <BsArchiveFill />
+                <BsCalendar2RangeFill />
               </button>
             </A>
           </Tooltip>
         </Show>
         <Show when={props.currentlyOpenedName$}>
-          <BsCaretRightFill size={10} />
           <span {...stylex.attrs(style.currentlyOpened__name)}>
             {props.currentlyOpenedName$}
           </span>

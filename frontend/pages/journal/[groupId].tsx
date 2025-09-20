@@ -18,13 +18,13 @@ import {
   JournalLoadingScreen,
   type ICurrentlyOpenedProps
 } from "~/features/journal"
-import { EditorProvider } from "~/features/editor"
+import { CharacterCount, EditorProvider } from "~/features/editor"
 import { AppTitleBarDraggable } from "~/components"
 import { UpdateGroup } from "~/wailsjs/go/journal/GroupExport"
 import { useToggle } from "~/hooks"
+import type { journal } from "~/wailsjs/go/models"
 // ...
 import journalGroupData from "./[groupId].data"
-import type { journal } from "~/wailsjs/go/models"
 
 const style = stylex.create({
   home: {
@@ -81,25 +81,33 @@ export default function JournalHome(props: ParentProps) {
 
   const topHeaderButtons: ICurrentlyOpenedProps["onClick$"] = (whichOne) => {
     switch (whichOne) {
-      case "go_back_to_home$": return redirect(`/journal/${currentGroupId()}`)
-      case "toggle_sidebar$":
+      case CurrentlyOpenedHeaderAction.GO_BACK_TO_HOME: return redirect(`/journal/${currentGroupId()}`)
+      case CurrentlyOpenedHeaderAction.TOGGLE_SIDEBAR:
         toggleHideSidebar()
         isSidebarHidden() ? bodyClassList.add(__style.journalFullview) : bodyClassList.remove(__style.journalFullview)
         return
     }
   }
 
-  const Header = () => {
+  const JournalMainContent = () => {
     const { currentlyOpenedJournal$ } = useJournalContext()
     return (
-      <AppTitleBarDraggable {...stylex.attrs(style.home__titleBar)}>
-        <CurrentlyOpened
-          onClick$={topHeaderButtons}
-          isSidebarHidden$={isSidebarHidden()}
-          currentlyOpenedName$={currentlyOpenedJournal$()}
-          groupId$={currentGroupId()}
-        />
-      </AppTitleBarDraggable>
+      <>
+        <AppTitleBarDraggable {...stylex.attrs(style.home__titleBar)}>
+          <CurrentlyOpened
+            onClick$={topHeaderButtons}
+            isSidebarHidden$={isSidebarHidden()}
+            currentlyOpenedName$={currentlyOpenedJournal$()}
+            groupId$={currentGroupId()}
+          />
+        </AppTitleBarDraggable>
+        <CharacterCount>
+          {!currentlyOpenedJournal$() ? (<span>*Nothing*</span>) : undefined}
+        </CharacterCount>
+        <main {...stylex.attrs(style.home__mainContent)}>
+          {props.children}
+        </main>
+      </>
     )
   }
 
@@ -122,10 +130,7 @@ export default function JournalHome(props: ParentProps) {
           initialSize={0.7}
           data-journal-main-content-panel=""
         >
-          <Header />
-          <main {...stylex.attrs(style.home__mainContent)}>
-            {props.children}
-          </main>
+          <JournalMainContent />
         </Panel>
       </Root>
     </JournalHomeProviders>

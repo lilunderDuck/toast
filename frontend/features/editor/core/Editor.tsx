@@ -1,4 +1,5 @@
 import { onMount } from "solid-js"
+import { macro_mergeClassnames } from "macro-def"
 import { FloatingMenuPlugin, type FloatingMenuPluginProps } from "@tiptap/extension-floating-menu"
 import { BubbleMenuPlugin, type BubbleMenuPluginProps } from "@tiptap/extension-bubble-menu"
 // ...
@@ -6,10 +7,9 @@ import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from "~/styles/scrollbar.module.css"
 import "./Editor.css"
 // ...
-import { macro_mergeClassnames } from "macro-def"
 import { SolidEditorContent } from "~/libs/solid-tiptap-renderer"
 // ...
-import { AttributeEditor, BubbleMenu, CharacterCount, FloatingMenu } from "../components"
+import { AttributeEditor, BubbleMenu, FloatingMenu } from "../components"
 import { useEditorContext } from "../provider"
 
 const style = stylex.create({
@@ -71,7 +71,6 @@ export function Editor() {
         ref={floatingMenuRef} 
         toggleHeading$={toggleHeading}
       />
-      <CharacterCount />
     </>
   )
 }

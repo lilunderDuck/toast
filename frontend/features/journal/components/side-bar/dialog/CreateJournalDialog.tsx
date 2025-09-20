@@ -1,11 +1,13 @@
+import { createSignal } from "solid-js"
 import { required } from "@modular-forms/solid"
-import stylex from "@stylexjs/stylex"
-import __style from "./CreateJournalDialog.module.css"
+// ...
 import { DialogContent, DialogHeader, FieldInput, type ILazyDialog, RadioGroup, RadioGroupItem, RadioGroupItemLabel } from "~/components"
 import { createSubmitForm } from "~/hooks"
 import { type IJournalContext } from "~/features/journal/provider"
-import { createSignal } from "solid-js"
 import { journal } from "~/wailsjs/go/models"
+// ...
+import stylex from "@stylexjs/stylex"
+import __style from "./CreateJournalDialog.module.css"
 
 const style = stylex.create({
   dialog: {

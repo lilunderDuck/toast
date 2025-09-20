@@ -1,10 +1,11 @@
-import { BsArrowLeft } from "solid-icons/bs"
+import { BsArrowLeft, BsBookHalf, BsPencilFill } from "solid-icons/bs"
 import { A } from "@solidjs/router"
+import { macro_mergeClassnames } from "macro-def"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { macro_mergeClassnames } from "macro-def"
 import { AppTitleBarDraggable, Spacer, Tooltip } from "~/components"
+import { useEditorContext } from "~/features/editor"
 
 const style = stylex.create({
   header: {
@@ -34,6 +35,8 @@ const style = stylex.create({
 })
 
 export function TopHeaderButtonRow(props: HTMLAttributes<"header">) {
+  const { setIsReadonly$, isReadonly$ } = useEditorContext()
+
   return (
     <AppTitleBarDraggable {...stylex.attrs(style.header__titleBar)}>
       <header
@@ -51,11 +54,14 @@ export function TopHeaderButtonRow(props: HTMLAttributes<"header">) {
           </A>
         </Tooltip>
         <Spacer />
-        {/* <Tooltip label$="Toggle edit mode." tooltipOptions$={{ placement: "right" }}>
-          <button {...stylex.attrs(style.button, shorthands.flex_center$)}>
-            <BsPencilFill />
+        <Tooltip label$="Toggle readonly." tooltipOptions$={{ placement: "right" }}>
+          <button 
+            {...stylex.attrs(style.button)} 
+            onClick={() => setIsReadonly$(prev => !prev)}
+          >
+            {isReadonly$() ? <BsBookHalf /> : <BsPencilFill />}
           </button>
-        </Tooltip> */}
+        </Tooltip>
       </header>
     </AppTitleBarDraggable>
   )

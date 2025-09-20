@@ -1,0 +1,42 @@
+#hint .hintItem {
+  border-radius: 0;
+}
+
+#hint .hintItem:first-child {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+#hint .hintItem:last-child {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+
+/* Another black magik css code to make everything gray out except for the item you hover into. */
+#hint .hintItem {
+  cursor: pointer;
+  background-color: var(--gray4);
+}
+
+.hintItem, .hintIcon {
+  transition: all 0.15s ease-out;
+}
+
+#hint .hintItem:not(:disabled):hover {
+  background-color: var(--gray5);
+  color: var(--gray12);
+}
+
+#hint .hintItem:not(:disabled):hover .hintIcon {
+  color: var(--hint-hover-color);
+}
+
+#hint:hover .hintItem:disabled {
+  background-color: var(--gray3);
+}
+
+#hint:hover .hintItem:not(:hover):not(:disabled) {
+  background-color: var(--gray3);
+  color: var(--gray10);
+}

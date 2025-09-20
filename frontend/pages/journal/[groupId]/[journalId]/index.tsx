@@ -10,14 +10,14 @@ export default function JournalContent() {
   const { event$, open$ } = useEditorContext()
   const { updateJournal$, setCurrentlyOpenedJournal$ } = useJournalContext()
 
-  event$.on$('editor__onSwitching$', (oldData) => {
+  event$.on$(EditorEvent.ON_SWITCHING, (oldData) => {
     updateJournal$(oldData.id, {
       // @ts-ignore
       data: [oldData.content]
     })
   })
 
-  event$.on$('editor__onUpdate$', (data) => {
+  event$.on$(EditorEvent.ON_UPDATE, (data) => {
     updateJournal$(data.id, {
       // @ts-ignore
       data: [data.content]

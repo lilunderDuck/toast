@@ -141,6 +141,17 @@ export function defineAllEnum() {
     SPLIT_VIEW: null,
   })
 
+  defineEnum('CurrentlyOpenedHeaderAction', {
+    TOGGLE_SIDEBAR: null,
+    GO_BACK_TO_HOME: null
+  })
+
+  defineEnum('EditorEvent', {
+    ON_SWITCHING: null,
+    ON_UPDATE: null,
+    UPDATE_BONGO_CAT_ANIMATION: null
+  })
+
   return {
     generateType() {
       let content = "// this file is auto-generated when on dev/build mode\nexport {};"
