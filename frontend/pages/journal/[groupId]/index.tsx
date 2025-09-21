@@ -8,6 +8,7 @@ import __style from "./index.module.css"
 // ...
 import { createLazyLoadedDialog, FieldInputLabel } from "~/components"
 import { useJournalContext } from "~/features/journal"
+import type { ArrayElement } from "~/utils"
 
 const style = stylex.create({
   welcomePage: {
@@ -57,6 +58,8 @@ const style = stylex.create({
 })
 
 export default function JournalWelcomePage() {
+  const { history$ } = useJournalContext()
+
   const CreateJournalDialog = createLazyLoadedDialog(
     () => import("~/features/journal/components/side-bar/dialog/CreateJournalDialog"),
     () => ({
@@ -65,60 +68,66 @@ export default function JournalWelcomePage() {
   )
 
   const items = [
-    { 
-      iconHoverColor$: "var(--green11)", 
-      icon$: BsPlusSquareDotted, 
-      name$: "Create new journal.", 
-      onClick$: CreateJournalDialog.show$ 
+    {
+      iconHoverColor$: "var(--green11)",
+      icon$: BsPlusSquareDotted,
+      name$: "Create new journal.",
+      onClick$: CreateJournalDialog.show$
     },
-    { 
-      iconHoverColor$: "var(--tomato9)", 
-      icon$: BsClockHistory, 
+    {
+      iconHoverColor$: "var(--tomato9)",
+      icon$: BsClockHistory,
       name$: "Open last closed journal.",
-      disabled$: true
+      disabled$: !history$.getLastOpened$(),
+      href$: history$.getLastOpened$() ? `/journal/${history$.getLastOpened$()!.id}` : undefined
     },
-    { 
-      iconHoverColor$: "var(--blue9)", 
-      icon$: BsHouseDoorFill, 
-      name$: "Go back to home.", href: "/" 
+    {
+      iconHoverColor$: "var(--blue9)",
+      icon$: BsHouseDoorFill,
+      name$: "Go back to home.", 
+      href$: "/"
     },
   ]
+
+  const HintItem = (props: ArrayElement<typeof items>) => {
+    const Wrapper = (wrapperProps: ParentProps) => props.href$ ?
+      <A href={props.href$} data-link-no-color>
+        {wrapperProps.children}
+      </A> :
+      wrapperProps.children
+    // 
+
+    return (
+      <Wrapper>
+        <button
+          onClick={props.onClick$}
+          disabled={props.disabled$}
+          class={macro_mergeClassnames(
+            stylex.attrs(style.welcomePage__itemWrap),
+            __style.hintItem
+          )}
+          style={`--hint-hover-color: ${props.iconHoverColor$}`}
+        >
+          <props.icon$ size={20} class={__style.hintIcon} />
+          <span {...stylex.attrs(style.welcomePage__itemName)}>
+            {props.name$}
+          </span>
+        </button>
+      </Wrapper>
+    )
+  }
 
   return (
     <div {...stylex.attrs(style.welcomePage)}>
       <div {...stylex.attrs(style.welcomePage__content)}>
-        <h1 {...stylex.attrs(style.welcomePage__heading)}>Welcome, home.</h1>
+        <h1 {...stylex.attrs(style.welcomePage__heading)}>
+          Welcome, home.
+        </h1>
         <section {...stylex.attrs(style.welcomePage__section)}>
           <FieldInputLabel>Not sure what to do next?</FieldInputLabel>
           <div id={__style.hint}>
             <For each={items}>
-              {it => {
-                const Wrapper = (props: ParentProps) => it.href ?
-                  <A href={it.href} data-link-no-color>
-                    {props.children}
-                  </A> :
-                  props.children
-                // 
-
-                return (
-                  <Wrapper>
-                    <button
-                      onClick={it.onClick$}
-                      disabled={it.disabled$}
-                      class={macro_mergeClassnames(
-                        stylex.attrs(style.welcomePage__itemWrap),
-                        __style.hintItem
-                      )}
-                      style={`--hint-hover-color: ${it.iconHoverColor$}`}
-                    >
-                      <it.icon$ size={20} class={__style.hintIcon} />
-                      <span {...stylex.attrs(style.welcomePage__itemName)}>
-                        {it.name$}
-                      </span>
-                    </button>
-                  </Wrapper>
-                )
-              }}
+              {it => <HintItem {...it} />}
             </For>
           </div>
         </section>

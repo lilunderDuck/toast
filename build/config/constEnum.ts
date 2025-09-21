@@ -152,6 +152,11 @@ export function defineAllEnum() {
     UPDATE_BONGO_CAT_ANIMATION: null
   })
 
+  defineEnum('JournalType', {
+    JOURNAL: null,
+    FOLDER: null
+  })
+
   return {
     generateType() {
       let content = "// this file is auto-generated when on dev/build mode\nexport {};"

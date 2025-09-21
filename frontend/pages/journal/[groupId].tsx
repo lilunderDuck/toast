@@ -146,16 +146,13 @@ function JournalHomeProviders(props: ParentProps<IJournalHomeProvidersProps>) {
 
   const fileExplorerOption: IFileExplorerProviderOptions = {
     components$: {
-      File$: (fileProps) => {
-        console.dir(JSON.parse(JSON.stringify(fileProps)))
-        return (
-          <File
-            groupId$={props.groupId$}
-            journalId$={fileProps.id}
-            name$={fileProps.name}
-          />
-        )
-      },
+      File$: (fileProps) => (
+        <File
+          groupId$={props.groupId$}
+          journalId$={fileProps.id}
+          name$={fileProps.name}
+        />
+      ),
       Folder$: (props) => (
         <Folder
           folderId$={props.id}
@@ -170,25 +167,20 @@ function JournalHomeProviders(props: ParentProps<IJournalHomeProvidersProps>) {
       return journalData()!.explorerTreeData$
     },
     onTreeUpdate$(newTree) {
-      console.log("new tree:", newTree)
       UpdateGroup(props.groupId$, { tree: newTree } as journal.JournalGroupOptions)
     }
   }
 
   const Loader = () => {
     const { sessionStorage$ } = useJournalContext()
-    sessionStorage$.set$('journal_data$', {
-      groupId$: props.groupId$
-    })
+    sessionStorage$.set$('journal_data$', { groupId$: props.groupId$ })
 
     return <></>
   }
 
   return (
     <EditorProvider id$={props.groupId$}>
-      <Show when={journalData()} fallback={
-        <JournalLoadingScreen />
-      }>
+      <Show when={journalData()} fallback={<JournalLoadingScreen />}>
         <JournalProvider explorerOptions$={fileExplorerOption}>
           <Loader />
           {props.children}

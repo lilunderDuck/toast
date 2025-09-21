@@ -9,8 +9,6 @@ export default function journalGroupData(groupId: number) {
       GetGroup(groupId),
     ])
 
-    console.log("data", journalGroupData)
-
     return {
       explorerTreeData$: journalGroupData.explorer as journal.ExplorerData
     }
