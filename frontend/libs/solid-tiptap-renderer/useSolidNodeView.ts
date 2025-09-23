@@ -6,8 +6,8 @@ import { Node as ProseMirrorNode } from "@tiptap/pm/model"
 export type Attrs = Record<string, any>
 
 export interface SolidNodeViewProps<A extends Attrs = Attrs> extends NodeViewProps {
-  node: ProseMirrorNode & { attrs: A }
-  editor: SolidEditor
+  node$: ProseMirrorNode & { attrs: A }
+  editor$: SolidEditor
 }
 
 export interface SolidNodeViewContextProps<A extends Attrs = Attrs> extends NodeViewRendererProps {

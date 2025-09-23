@@ -157,6 +157,10 @@ export function defineAllEnum() {
     FOLDER: null
   })
 
+  defineEnum('PluginEvent', {
+    RENDER_COMPONENT: null,
+  })
+
   return {
     generateType() {
       let content = "// this file is auto-generated when on dev/build mode\nexport {};"

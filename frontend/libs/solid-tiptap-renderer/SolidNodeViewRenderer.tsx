@@ -32,12 +32,6 @@ export interface SolidNodeViewRendererOptions extends NodeViewRendererOptions {
     | null
 }
 
-type SetSelectionListener = (
-  anchor: number,
-  head: number,
-  root: Document | ShadowRoot
-) => void
-
 class SolidNodeView extends NodeView<
   Component,
   SolidEditor,
@@ -47,22 +41,18 @@ class SolidNodeView extends NodeView<
     super(component, props, options)
   }
 
-  public setSelectionListeners: SetSelectionListener[] = []
-  public declare contentDOMElement: HTMLElement | null
-  public declare renderer: SolidRenderer
+  public declare contentDOMElement$: HTMLElement | null
+  public declare renderer$: SolidRenderer
   public get dom(): HTMLElement {
-    const portalContainer = this.renderer.element.firstElementChild
-
-    if (
-      portalContainer &&
-      !portalContainer.firstElementChild?.hasAttribute("data-node-view-wrapper")
-    ) {
-      throw new Error(
-        "Please use the NodeViewWrapper component for your node view."
+    console.assert((() => {
+      const portalContainer = this.renderer$.element$.firstElementChild
+      return (
+        portalContainer &&
+        !portalContainer.firstElementChild?.hasAttribute("data-node-view-wrapper")
       )
-    }
+    })(), "Please use the <NodeViewWrapper /> component for your node view.")
 
-    return this.renderer.element as HTMLElement
+    return this.renderer$.element$ as HTMLElement
   }
 
   public get contentDOM(): HTMLElement | null {
@@ -70,15 +60,15 @@ class SolidNodeView extends NodeView<
       return null
     }
 
-    this.maybeMoveContentDOM()
+    this.maybeMoveContentDOM$()
 
-    return this.contentDOMElement
+    return this.contentDOMElement$
   }
 
   public mount(): void {
     const state: SolidNodeViewProps = {
-      editor: this.editor,
-      node: this.node,
+      editor$: this.editor,
+      node$: this.node,
       decorations: this.decorations,
       selected: false,
       extension: this.extension,
@@ -109,31 +99,32 @@ class SolidNodeView extends NodeView<
     const elementToRender = this.node.isInline ? "span" : "div"
 
     if (this.node.isLeaf) {
-      this.contentDOMElement = null
+      this.contentDOMElement$ = null
     } else {
-      const element = document.createElement(elementToRender)
-      element.style.whiteSpace = "inherit"
-      this.contentDOMElement = element
+      // const element = document.createElement(elementToRender)
+      // element.style.whiteSpace = "inherit"
+      // this.contentDOMElement$ = element
+      this.contentDOMElement$ = document.createElement(elementToRender)
     }
 
-    this.renderer = new SolidRenderer(SolidNodeViewProvider, {
-      editor: this.editor,
-      state,
-      as: elementToRender,
+    this.renderer$ = new SolidRenderer(SolidNodeViewProvider, {
+      editor$: this.editor,
+      state$: state,
+      as$: elementToRender,
     })
 
-    this.renderer.element.setAttribute("data-node-type", this.node.isInline ? "node-inline" : "node-block")
+    this.renderer$.element$.setAttribute("data-node-type", this.node.isInline ? "node-inline" : "node-block")
   }
 
-  public maybeMoveContentDOM(): void {
+  public maybeMoveContentDOM$(): void {
     const contentElement = this.dom.querySelector("[data-node-view-content]")
 
     if (
-      this.contentDOMElement &&
+      this.contentDOMElement$ &&
       contentElement &&
-      !contentElement.contains(this.contentDOMElement)
+      !contentElement.contains(this.contentDOMElement$)
     ) {
-      contentElement.append(this.contentDOMElement)
+      contentElement.append(this.contentDOMElement$)
     }
   }
 
@@ -181,21 +172,21 @@ class SolidNodeView extends NodeView<
   }
 
   public selectNode(): void {
-    this.renderer.setState?.((state) => ({ ...state, selected: true }))
+    this.renderer$.setState$?.((state) => ({ ...state, selected: true }))
   }
 
   public deselectNode(): void {
-    this.renderer.setState?.((state) => ({ ...state, selected: false }))
+    this.renderer$.setState$?.((state) => ({ ...state, selected: false }))
   }
 
   public destroy(): void {
-    this.renderer.destroy()
-    this.contentDOMElement = null
+    this.renderer$.destroy()
+    this.contentDOMElement$ = null
   }
 
   private updateProps(props: Partial<SolidNodeViewProps>): void {
-    this.renderer.setState?.((state) => ({ ...state, ...props }))
-    this.maybeMoveContentDOM()
+    this.renderer$.setState$?.((state) => ({ ...state, ...props }))
+    this.maybeMoveContentDOM$()
   }
 }
 
@@ -204,9 +195,9 @@ export function SolidNodeViewRenderer(
   options?: Partial<SolidNodeViewRendererOptions>
 ): NodeViewRenderer {
   return (props: NodeViewRendererProps) => {
-    const { renderers, setRenderers } = props.editor as SolidEditor
+    const { renderers$, setRenderers$ } = props.editor as SolidEditor
 
-    if (!renderers || !setRenderers) {
+    if (!renderers$ || !setRenderers$) {
       return {}
     }
 
