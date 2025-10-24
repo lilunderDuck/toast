@@ -1,4 +1,5 @@
 import { createAsync } from "@solidjs/router"
+import { pluginEvent } from "~/plugins"
 // ...
 import { GetGroup } from "~/wailsjs/go/journal/GroupExport"
 import type { journal } from "~/wailsjs/go/models"
@@ -8,6 +9,8 @@ export default function journalGroupData(groupId: number) {
     const [journalGroupData] = await Promise.all([
       GetGroup(groupId),
     ])
+
+    pluginEvent.emit$(PluginEvent.JOURNAL_LOADED)
 
     return {
       explorerTreeData$: journalGroupData.explorer as journal.ExplorerData

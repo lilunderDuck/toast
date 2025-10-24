@@ -23,6 +23,9 @@ build_debug: app_resource
 dev: app_resource
 	wails dev
 
+generate_const_enums:
+	deno -A ./build/config/constEnum.ts
+
 # clean the mess I made
 clean:
 	del ./build/out/bin

@@ -45,7 +45,7 @@ export const VideoNode = Node.create({
     const { data$ } = useNodeState<VideoAttribute>()
 
     return (
-      <NodeViewWrapper>
+      <NodeViewWrapper {...stylex.attrs(style.nodeView)}>
         <Video src$={data$().name} />
       </NodeViewWrapper>
     )

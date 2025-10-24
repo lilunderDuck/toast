@@ -23,6 +23,7 @@ import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension } f
 import __style from "./extensions.module.css"
 import stylex from "@stylexjs/stylex"
 import { PlaylistExtension } from '../extensions/playlist'
+import { pluginEvent } from '~/plugins'
 
 const style = stylex.create({
   ext__taskList: {
@@ -45,7 +46,7 @@ const style = stylex.create({
 export function getExtensions() {
   const lowlight = createLowlight(common)
 
-  return [
+  const extensions = [
     StarterKit.configure({
       codeBlock: false,
       blockquote: {
@@ -103,4 +104,10 @@ export function getExtensions() {
     ImageExtension,
     PlaylistExtension
   ]
+
+  pluginEvent.on$(PluginEvent.REGISTER_EDITOR_NODE, (nodeExtension) => {
+    extensions.push(nodeExtension)
+  })
+
+  return extensions
 }

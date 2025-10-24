@@ -13,6 +13,7 @@ import { createEvent, createStorage, debounce, type IEvent } from "~/utils"
 import { type SolidEditor, useEditor } from '~/libs/solid-tiptap-renderer'
 // ...
 import { getExtensions } from './extensions'
+import { createEditorMenuManager } from './menus'
 
 export interface IEditorProviderProps {
   /**A unique id for this editor instance. */
@@ -56,6 +57,7 @@ export interface IEditorContext {
   wordCount$: Accessor<number>
   charCount$: Accessor<number>
   isAutoSaving$: Accessor<boolean>
+  menus$: ReturnType<typeof createEditorMenuManager>
 }
 
 const Context = createContext<IEditorContext>()
@@ -124,7 +126,8 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
       event$: event,
       wordCount$: wordCount,
       charCount$: charCount,
-      isAutoSaving$: isAutoSaving
+      isAutoSaving$: isAutoSaving,
+      menus$: createEditorMenuManager(editor)
     }}>
       {props.children}
     </Context.Provider>

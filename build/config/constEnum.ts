@@ -158,7 +158,10 @@ export function defineAllEnum() {
   })
 
   defineEnum('PluginEvent', {
-    RENDER_COMPONENT: null,
+    // internals
+    REGISTER_EDITOR_NODE: null,
+    // loading,
+    JOURNAL_LOADED: null
   })
 
   return {
@@ -179,4 +182,8 @@ export function defineAllEnum() {
       return Object.fromEntries(defineMapping.entries())
     }
   }
+}
+
+if (import.meta.main) {
+  defineAllEnum().generateType()
 }

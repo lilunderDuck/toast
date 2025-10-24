@@ -1,4 +1,3 @@
-import { BsArchiveFill, BsBlockquoteLeft, BsCheck2Square, BsImageFill, BsImages, BsInfoCircleFill, BsTable, BsWindowSplit } from "solid-icons/bs"
 import { For } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -7,7 +6,6 @@ import __scrollbarStyle from "~/styles/scrollbar.module.css"
 import { macro_mergeClassnames } from "macro-def"
 // ...
 import { useEditorContext } from "../../provider"
-import { TbPlaylist } from "solid-icons/tb"
 
 interface IFloatingMenuProps {
   toggleHeading$: (level: 1 | 2 | 3 | 4 | 5 | 6) => boolean
@@ -44,56 +42,7 @@ const style = stylex.create({
 })
 
 export function FloatingMenu(props: IFloatingMenuProps) {
-  const { editor$ } = useEditorContext()
-  const chainCommand = () => editor$().chain().focus()
-  const floatingMenuOptions = [
-    {
-      name$: "image", 
-      icon$: BsImageFill, 
-      run$: () => chainCommand().insertImage$().run() 
-    },
-    {
-      name$: "image split view", 
-      icon$: BsImages, 
-      run$: () => chainCommand().insertImageSplitView$().run() 
-    },
-    {
-      name$: "table", 
-      icon$: BsTable, 
-      run$: () => chainCommand().insertTable().run() 
-    },
-    {
-      name$: "gallery", 
-      icon$: BsArchiveFill, 
-      run$: () => chainCommand().insertGallery$().run() 
-    },
-    {
-      name$: "local embed", 
-      icon$: BsWindowSplit, 
-      run$: () => chainCommand().insertLocalEmbed$().run() 
-    },
-    {
-      name$: "details", 
-      icon$: BsInfoCircleFill, 
-      // @ts-ignore
-      run$: () => chainCommand().setDetails().run() 
-    },
-    {
-      name$: "todo", 
-      icon$: BsCheck2Square, 
-      run$: () => chainCommand().toggleTaskList().run() 
-    },
-    {
-      name$: "blockquote", 
-      icon$: BsBlockquoteLeft, 
-      run$: () => chainCommand().toggleBlockquote().run() 
-    },
-    {
-      name$: "playlist",
-      icon$: TbPlaylist,
-      run$: () => chainCommand().insertPlaylist$().run()
-    }
-  ]
+  const { menus$ } = useEditorContext()
 
   return (
     <div 
@@ -105,7 +54,7 @@ export function FloatingMenu(props: IFloatingMenuProps) {
       )} 
       ref={props.ref}
     >
-      <For each={floatingMenuOptions}>
+      <For each={menus$.floatingMenuOptions$()}>
         {it => (
           <button onClick={it.run$} {...stylex.attrs(style.menu__option)} tabindex={1}>
             <it.icon$ />
