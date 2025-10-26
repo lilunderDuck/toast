@@ -20,7 +20,7 @@ build: app_resource
 build_debug: app_resource
 	wails build -ldflags="-s -w" -skipembedcreate -trimpath -windowsconsole -race
 
-dev: app_resource
+dev:
 	wails dev
 
 generate_const_enums:

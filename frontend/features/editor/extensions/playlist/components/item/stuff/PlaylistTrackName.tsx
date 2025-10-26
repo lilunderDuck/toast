@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex"
-import __style from "./PlaylistTrackItem.module.css"
+import __style from "../PlaylistTrackItem.module.css"
 import { macro_mergeClassnames } from "macro-def"
 
 const style = stylex.create({
@@ -17,7 +17,7 @@ interface IPlaylistTrackNameProps {
   author$?: string
 }
 
-export default function PlaylistTrackName(props: IPlaylistTrackNameProps) {
+export function PlaylistTrackName(props: IPlaylistTrackNameProps) {
   return (
     <div {...stylex.attrs(style.item__nameWrap)}>
       <h3 class={__style.item__textPrimary}>

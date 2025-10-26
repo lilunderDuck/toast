@@ -5,3 +5,4 @@ export * from "./ColorInputs"
 export * from './IconInput'
 export * from './ResizableTextarea'
 export * from './ButtonRow'
+export * from './MediaProgressSlider'

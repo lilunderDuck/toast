@@ -13,8 +13,8 @@ function Portals(props: IPortalsProps) {
     <For each={props.renderers}>
       {(renderer) => {
         return (
-          <Portal mount={renderer.element}>
-            <Dynamic component={renderer.component} state={renderer.state()} />
+          <Portal mount={renderer.element$}>
+            <Dynamic component={renderer.component$} state={renderer.state$()} />
           </Portal>
         )
       }}
@@ -86,7 +86,7 @@ export function SolidEditorContent(props: ISolidEditorContentProps) {
   return (
     <>
       <div {...passedProps} ref={setEditorContentContainer} data-editor />
-      <Portals renderers={props.editor.renderers()} />
+      <Portals renderers={props.editor.renderers$()} />
     </>
   )
 }

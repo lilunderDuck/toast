@@ -17,7 +17,6 @@ export function NodeViewContent(props: NodeViewContentProps) {
       {...otherProps}
       component={props.as || "div"}
       ref={local.ref ? local.ref[1] : null}
-      data-node-view-content=""
       style={{
         ...props.style,
         whiteSpace: "pre-wrap"

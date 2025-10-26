@@ -31,22 +31,6 @@
   color: var(--gray12);
 }
 
-/* This css code replaces the index number with a play icon when hover */
-.item #item__index > svg {
-  display: none;
-  /* display: block; */
-}
-
-.item:hover #item__index > span,
-.item[data-playlist-item-focused=true] #item__index > span {
-  display: none;
-}
-
-.item:hover #item__index > svg,
-.item[data-playlist-item-focused=true] #item__index > svg {
-  display: block;
-}
-
 .item .item__buttonRow {
   visibility: hidden;
   margin: 0 !important;

@@ -8,13 +8,14 @@ import stylex from "@stylexjs/stylex"
 const style = stylex.create({
   fill: {
     position: "absolute",
-    borderRadius: "50%",
-    height: "100%"
+    height: "100%",
+    backgroundColor: "var(--fill-color)"
   }
 })
 
 export interface ISliderFillProps<T extends ValidComponent = "div"> extends SliderFillProps<T> {
   class?: string | undefined
+  color$?: string
 }
  
 export function SliderFill<T extends ValidComponent = "div">(

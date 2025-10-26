@@ -45,6 +45,10 @@ const style = stylex.create({
   size_icon: {
     paddingInline: '0.375rem',
     paddingBlock: '0.375rem',
+    color: 'var(--gray11)',
+    ':hover': {
+      color: 'var(--gray12)',
+    }
   },
   variant_default: {
     backgroundColor: 'var(--gray5)',

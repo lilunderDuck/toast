@@ -1,4 +1,4 @@
-import { type Accessor, type AccessorArray, createEffect, createMemo, createSignal, on, onCleanup, type OnOptions } from "solid-js"
+import { type Accessor, type AccessorArray, createEffect, createMemo, createSignal, on, onCleanup, onMount, type OnOptions } from "solid-js"
 import type { Arrayable, Fn, MaybeAccessor, MaybeElement } from "./types"
 import { isObject } from "~/utils"
 
@@ -189,6 +189,7 @@ export function useEventListener(...args: any[]) {
   }
 
   const register = (el: any, event: string, listener: any, options: any) => {
+    console.log("Register event: ", event, options)
     el.addEventListener(event, listener, options)
     return () => el.removeEventListener(event, listener, options)
   }
@@ -210,6 +211,7 @@ export function useEventListener(...args: any[]) {
   const stop = () => {
     stopWatch()
     cleanup()
+    console.log(`Remove event: ${events}`)
   }
 
   onCleanup(stop)

@@ -43,7 +43,7 @@ interface IPlaylistEditTrackItemDialogProps extends ILazyDialog {
 }
 
 export default function PlaylistCreateEditTrackDialog(props: IPlaylistEditTrackItemDialogProps) {
-  const { trackItems$, playlistId$ } = props.context$
+  const { items$, playlistId$ } = props.context$
 
   const IconInput = createIconInput({
     dialogOptions$: {
@@ -65,7 +65,7 @@ export default function PlaylistCreateEditTrackDialog(props: IPlaylistEditTrackI
       </Button>
     ),
     async onSubmit$(data) {
-      trackItems$.update$(props.currentTrackIndex$, {
+      items$.update$(props.currentTrackIndex$, {
         ...data,
         iconPath: IconInput.file$()
       } as editor.CreatePlaylistItemOptions)

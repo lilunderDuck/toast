@@ -54,7 +54,7 @@ interface IPlaylistEditTrackItemDialogProps extends ILazyDialog {
 }
 
 export default function PlaylistCreateTrackDialog(props: IPlaylistEditTrackItemDialogProps) {
-  const { trackItems$ } = props.context$
+  const { items$ } = props.context$
 
   const IconFileUpload = createIconInput({
     dialogOptions$: {
@@ -110,7 +110,7 @@ export default function PlaylistCreateTrackDialog(props: IPlaylistEditTrackItemD
       </>
     ),
     async onSubmit$(data) {
-      await trackItems$.add$({
+      await items$.add$({
         ...data,
         audioFilePath: AudioFileUpload.file$(),
         iconPath: IconFileUpload.file$()

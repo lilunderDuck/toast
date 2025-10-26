@@ -164,6 +164,25 @@ export function defineAllEnum() {
     JOURNAL_LOADED: null
   })
 
+  defineEnum('MediaState', {
+    LOADING: null,
+    FINISHED_LOADING: null,
+    PLAYING: null,
+    PAUSED: null,
+    ERROR: null,
+    COMPLETED: null
+  })
+
+  defineEnum('MediaEvent', {
+    STATE_UPDATE: null
+  })
+
+  defineEnum('PlaylistButtonRowAction', {
+    NEXT_TRACK: null,
+    PREVIOUS_TRACK: null,
+    TOGGLE_PLAY_TRACK: null
+  })
+
   return {
     generateType() {
       let content = "// this file is auto-generated when on dev/build mode\nexport {};"

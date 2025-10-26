@@ -1,4 +1,4 @@
-import { createContext, onMount, type ParentProps, Show, useContext } from "solid-js"
+import { createContext, createSignal, onMount, type ParentProps, type Signal, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 // ...
 import { useNodeState } from "~/features/editor/utils"
@@ -8,6 +8,8 @@ import { playlistTrackUrl } from "~/api"
 // ...
 import type { PlaylistAttribute } from "../extension"
 import { createTrackItemsManager, type IPlaylistTrackItem } from "./items"
+import { createTrackPlayerManager } from "./track"
+import { createMediaPlayer } from "~/hooks"
 
 export interface IPlaylistContext {
   /**The playlist's metadata. */
@@ -19,7 +21,8 @@ export interface IPlaylistContext {
   /**Gets the playlist's ID. */
   playlistId$(): number
   /**Managing tracks within the playlist. */
-  trackItems$: IPlaylistTrackItem
+  items$: IPlaylistTrackItem
+  track$: ReturnType<typeof createTrackPlayerManager>
 }
 
 const Context = createContext<IPlaylistContext>()
@@ -35,12 +38,11 @@ export function PlaylistProvider(props: ParentProps) {
     setData(updatedData as unknown as editor.PlaylistMetadata)
   }
 
-  let audioRef!: Ref<"audio">
-  const trackItemsManager = createTrackItemsManager(playlistId, () => audioRef)
+  const trackItems = createTrackItemsManager(playlistId)
+  let playlistData: editor.PlaylistMetadata
 
   // Initializes the playlist data on component mount, creating a new one if necessary.
   onMount(async () => {
-    let playlistData: editor.PlaylistMetadata
     if (playlistId() === -1) {
       playlistData = await CreatePlaylist({
         title: "Unnamed playlist",
@@ -52,24 +54,22 @@ export function PlaylistProvider(props: ParentProps) {
     }
 
     setData(playlistData)
-    trackItemsManager.setItems$(playlistData.items ?? [])
+    trackItems.setItems$(playlistData.items ?? [])
   })
+
+  const player = createMediaPlayer("audio")
+  const trackPlayer = createTrackPlayerManager(player, () => playlistData)
 
   return (
     <Context.Provider value={{
       editPlaylist$: editPlaylist,
       data$: () => data,
-      trackItems$: trackItemsManager,
+      items$: trackItems,
+      track$: trackPlayer,
       playlistId$: playlistId,
     }}>
       {props.children}
-      <Show when={trackItemsManager.focusedTrack$()}>
-        <audio
-          src={playlistTrackUrl(playlistId(), trackItemsManager.focusedTrack$()!.filename$)}
-          onEnded={trackItemsManager.audioFinishedPlaying$}
-          ref={audioRef}
-        />
-      </Show>
+      <player.Player$ />
     </Context.Provider>
   )
 }

@@ -1,4 +1,4 @@
-import { BsPauseFill, BsPencilFill, BsPlayFill, BsTrashFill } from "solid-icons/bs"
+import { BsPencilFill, BsTrashFill } from "solid-icons/bs"
 import { macro_mergeClassnames } from "macro-def"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -6,11 +6,10 @@ import __style from "./PlaylistTrackItem.module.css"
 // ...
 import type { editor } from "~/wailsjs/go/models"
 import { Button, ButtonRow, createLazyLoadedDialog } from "~/components"
+import { formatSecondsToMMSS } from "~/utils"
 // ...
 import { usePlaylistContext } from "../../provider"
-import PlaylistTrackIcon from "./PlaylistTrackIcon"
-import PlaylistTrackName from "./PlaylistTrackName"
-import { formatSecondsToMMSS } from "~/utils"
+import { PlaylistTrackIcon, PlaylistTrackName } from "./stuff"
 
 const style = stylex.create({
   item: {
@@ -27,6 +26,7 @@ const style = stylex.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    padding: 5
   },
   item__duration: {
     fontSize: 13
@@ -39,7 +39,7 @@ interface IPlaylistTrackItemProps extends editor.PlaylistItemData {
 }
 
 export default function PlaylistTrackItem(props: IPlaylistTrackItemProps) {
-  const { trackItems$ } = usePlaylistContext()
+  const { track$ } = usePlaylistContext()
 
   const PlaylistEditTrackDialog = createLazyLoadedDialog(
     () => import("../dialog/PlaylistEditTrackDialog"),
@@ -50,12 +50,11 @@ export default function PlaylistTrackItem(props: IPlaylistTrackItemProps) {
     })
   )
 
-  const isCurrentlyFocused = () => trackItems$.focusedTrack$()?.trackId$ === props.id
+  const isCurrentlyFocused = () => track$.focusedTrack$()?.trackId$ === props.id
 
-  const shouldShowPlayPauseIcon = () => (
-    trackItems$.focusedTrack$()?.isPlaying$ &&
-    isCurrentlyFocused()
-  )
+  const togglePlayTrack = () => {
+    track$.togglePlayTrack$(props.id)
+  }
 
   return (
     <li
@@ -63,16 +62,14 @@ export default function PlaylistTrackItem(props: IPlaylistTrackItemProps) {
       data-playlist-item-focused={isCurrentlyFocused()}
       data-playlist-item-id={props.id}
     >
-      <div 
-        {...stylex.attrs(style.item__index)} 
-        id={__style.item__index}
-        onClick={() => trackItems$.togglePlayTrack$(props)}
-      >
+      <div class={macro_mergeClassnames(stylex.attrs(style.item__index), __style.item__textPrimary)} onClick={togglePlayTrack}>
         <span>{props.index$ + 1}</span>
-        {shouldShowPlayPauseIcon() ? <BsPauseFill size={50} /> : <BsPlayFill size={50} />}
       </div>
       <PlaylistTrackIcon icon$={props.icon} />
-      <PlaylistTrackName name$={props.name} author$={props.author} />
+      <PlaylistTrackName 
+        name$={props.name} 
+        author$={props.author} 
+      />
       <span class={macro_mergeClassnames(stylex.attrs(style.item__duration), __style.item__textPrimary)}>
         {formatSecondsToMMSS(props.duration)}
       </span>

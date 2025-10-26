@@ -12,7 +12,8 @@ const style = stylex.create({
     transitionProperty: "color, background-color, border-color, text-decoration-color, fill, stroke",
     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
     transitionDuration: "300ms",
-    top: 6
+    top: 6,
+    backgroundColor: "var(--gray8)"
   }
 })
 

@@ -21,7 +21,7 @@ export class SolidRenderer<S = SolidNodeViewProps> {
     options: SolidRendererOptions<S>
   ) {
     const [state, setState] = createSignal<S>(options.state$)
-    const element = document.createElement(as)
+    const element = document.createElement(options.as$ ?? "div")
     element.setAttribute("data-solid-renderer", "")
     
     this.setState$ = setState

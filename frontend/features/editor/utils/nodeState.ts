@@ -60,7 +60,7 @@ export function useNodeState<Data extends Attrs>(): INodeState<Data> {
   }
 
   const data = (): Data => {
-    return state().node.attrs
+    return state().node$.attrs
   }
 
   const deleteCurrentNode = () => {

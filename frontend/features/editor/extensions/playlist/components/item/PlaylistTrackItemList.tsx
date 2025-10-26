@@ -25,29 +25,29 @@ const style = stylex.create({
 })
 
 export function PlaylistTrackItemList() {
-  const { editPlaylist$, trackItems$ } = usePlaylistContext()
+  const { editPlaylist$, items$ } = usePlaylistContext()
 
   // yes, long confusing type surely won't confuse me later
   const considerDragging: EventHandler<"ul", "on:consider"> = (dragEvent) => {
     const { items: newItems } = (dragEvent as unknown as IDndConsiderEvent<editor.PlaylistItemData>).detail
-    trackItems$.setItems$(newItems)
+    items$.setItems$(newItems)
   }
 
   const finalizeDragging: EventHandler<"ul", "on:finalize"> = (dragEvent) => {
     const { items: newItems } = (dragEvent as unknown as IDndFinalizeEvent<editor.PlaylistItemData>).detail
-    trackItems$.setItems$(newItems)
+    items$.setItems$(newItems)
     editPlaylist$({ items: newItems } as editor.PlaylistOptions)
   }
 
   const deleteTrack = (trackId: number) => {
-    trackItems$.delete$(trackId)
+    items$.delete$(trackId)
   }
 
   return (
     <ul
       {...stylex.attrs(style.node__trackItem)}
       use:dndzone={{
-        items: trackItems$.items$,
+        items: items$.items$,
         type: "internal_playlist_item$",
         dropTargetStyle: {
           outline: 'none'
@@ -56,7 +56,7 @@ export function PlaylistTrackItemList() {
       on:consider={considerDragging}
       on:finalize={finalizeDragging}
     >
-      <For each={trackItems$.items$()}>
+      <For each={items$.items$()}>
         {(it, index) => (
           <PlaylistTrackItem
             {...it}

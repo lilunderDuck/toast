@@ -1,9 +1,11 @@
 import { Show } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
+// ...
 import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
+// ...
 import { usePlaylistContext } from "./provider"
-import { PlaylistHeader, PlaylistTrackHeader, PlaylistTrackItemList } from "./components"
+import { PlaylistAudioPlayer, PlaylistHeader, PlaylistTrackHeader, PlaylistTrackItemList } from "./components"
 
 const style = stylex.create({
   node: {
@@ -11,7 +13,8 @@ const style = stylex.create({
     height: "30rem",
     backgroundColor: "var(--gray3)",
     borderRadius: 6,
-    overflowY: "auto"
+    overflowY: "auto",
+    position: "relative"
   },
   node__trackItem: {
     paddingLeft: 0,
@@ -28,6 +31,7 @@ export default function PlaylistNode() {
         <PlaylistHeader />
         <PlaylistTrackHeader />
         <PlaylistTrackItemList />
+        <PlaylistAudioPlayer />
       </Show>
     </NodeViewWrapper>
   )

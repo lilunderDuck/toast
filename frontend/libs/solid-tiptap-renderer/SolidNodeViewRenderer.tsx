@@ -44,14 +44,6 @@ class SolidNodeView extends NodeView<
   public declare contentDOMElement$: HTMLElement | null
   public declare renderer$: SolidRenderer
   public get dom(): HTMLElement {
-    console.assert((() => {
-      const portalContainer = this.renderer$.element$.firstElementChild
-      return (
-        portalContainer &&
-        !portalContainer.firstElementChild?.hasAttribute("data-node-view-wrapper")
-      )
-    })(), "Please use the <NodeViewWrapper /> component for your node view.")
-
     return this.renderer$.element$ as HTMLElement
   }
 
