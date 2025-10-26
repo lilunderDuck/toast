@@ -5,14 +5,13 @@ import { stylex as stylexPlugin } from "vite-plugin-stylex-dev"
 import { optimizeCssModules } from "vite-plugin-optimize-css-modules"
 // ... 
 import tsconfig from './tsconfig.json'
-import { defineAllEnum, getAliasPath, ESBUILD_OPTIONS, OUTPUT_FILENAME, macroPlugin, DEV_OPTIMIZE_OPTIONS } from "./build/config"
+import { defineAllConstants, getAliasPath, ESBUILD_OPTIONS, OUTPUT_FILENAME, macroPlugin, DEV_OPTIMIZE_OPTIONS, generateConstsTypeThenSave } from "./build/config"
 
 export default defineConfig(({ command }) => {
   const isDevMode = command !== "build"
   const BUILD_SAVED_PATH = "./build/out/bin/app"
-  const { generateType, getDefineList } = defineAllEnum()
-
-  generateType()
+  const mapping = defineAllConstants(isDevMode)
+  const definedMapping = generateConstsTypeThenSave(mapping)
 
   return {
     plugins: [
@@ -32,7 +31,7 @@ export default defineConfig(({ command }) => {
         ignored: ["**/*.syso", "**/out/*"]
       }
     },
-    define: getDefineList(),
+    define: definedMapping,
     publicDir: "./frontend/public/",
     optimizeDeps: DEV_OPTIMIZE_OPTIONS,
     build: {
