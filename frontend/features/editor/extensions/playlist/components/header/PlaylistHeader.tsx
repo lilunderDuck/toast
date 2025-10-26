@@ -4,7 +4,8 @@ import { macro_getValueOrDefault, macro_mergeClassnames } from "macro-def"
 import stylex from "@stylexjs/stylex"
 import __style from "./PlaylistHeader.module.css"
 // ...
-import { createLazyLoadedDialog, Spacer } from "~/components"
+import { Spacer } from "~/components"
+import { createLazyLoadedDialog } from "~/hooks"
 // ...
 import { usePlaylistContext } from "../../provider"
 import { PlaylistHeaderButtonRow, type IPlaylistHeaderButtonRowProps } from "./PlaylistHeaderButtonRow"

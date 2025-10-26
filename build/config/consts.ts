@@ -64,8 +64,7 @@ function makeConst() {
 export function generateConstsTypeThenSave(mapping: ConstsMapping) {
   const definedMapping = new Map<string, string | number>()
 
-  let content = "// this file is auto-generated when on dev/build mode\nexport {};"
-  let constEnumContent = ""
+  let content = "// this file is auto-generated when on dev/build mode\n"
   for (const definedConst of mapping) {
     if (definedConst.type === "constEnum") {
       const entries = Object.entries(definedConst.prop)
@@ -83,14 +82,13 @@ export function generateConstsTypeThenSave(mapping: ConstsMapping) {
 
       content += `enum ${definedConst.name} {${enumContent}}`
     } else {
-      constEnumContent += `declare const ${definedConst.name}: ${definedConst.valueType};`
+      content += `declare const ${definedConst.name}: ${definedConst.valueType};`
       definedMapping.set(definedConst.name, definedConst.value)
       console.log(`Define:\t\t${definedConst.name} = ${definedConst.value}`)
     }
   }
 
-  content += `declare global {${constEnumContent}}`
-  writeFileSync("./build/dist/consts.d.ts", content)
+  writeFileSync("./build/dist/consts.d.ts", `declare global {${content}}; export {}`)
 
   return Object.fromEntries(definedMapping.entries())
 }

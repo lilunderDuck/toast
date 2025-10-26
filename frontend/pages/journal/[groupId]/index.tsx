@@ -6,9 +6,10 @@ import { For, type ParentProps } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import __style from "./index.module.css"
 // ...
-import { createLazyLoadedDialog, FieldInputLabel } from "~/components"
+import { FieldInputLabel } from "~/components"
 import { useJournalContext } from "~/features/journal"
 import type { ArrayElement } from "~/utils"
+import { createLazyLoadedDialog } from "~/hooks"
 
 const style = stylex.create({
   welcomePage: {

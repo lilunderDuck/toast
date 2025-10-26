@@ -5,8 +5,9 @@ import stylex from "@stylexjs/stylex"
 import __style from "./PlaylistTrackItem.module.css"
 // ...
 import type { editor } from "~/wailsjs/go/models"
-import { Button, ButtonRow, createLazyLoadedDialog } from "~/components"
+import { Button, ButtonRow } from "~/components"
 import { formatSecondsToMMSS } from "~/utils"
+import { createLazyLoadedDialog } from "~/hooks"
 // ...
 import { usePlaylistContext } from "../../provider"
 import { PlaylistTrackIcon, PlaylistTrackName } from "./stuff"

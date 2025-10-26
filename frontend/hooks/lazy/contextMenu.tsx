@@ -1,7 +1,7 @@
 import { createSignal, Show, type Component } from "solid-js"
 // ...
 import type { LazyComponent } from "./types"
-import { ContextMenu, ContextMenuTrigger } from "../ui"
+import { ContextMenu, ContextMenuTrigger } from "../../components/ui"
 import { createLazyComponent } from "./utils"
 
 export interface IContextMenu {

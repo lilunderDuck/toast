@@ -4,7 +4,7 @@ import stylex from "@stylexjs/stylex"
 import __style from "./GalleryDirectoryUploadDialog.module.css"
 // ...
 import { Button, ButtonRow, DialogContent, DialogHeader, type ILazyDialog, RadioGroup, RadioGroupItem, RadioGroupItemLabel, Tooltip } from "~/components"
-import { createFileUpload } from "~/features/native"
+import { createFileUpload } from "~/hooks"
 
 const style = stylex.create({
   dialog: {

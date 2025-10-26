@@ -4,9 +4,8 @@ import { required } from "@modular-forms/solid"
 import stylex from "@stylexjs/stylex"
 import __style from "./CreateOrEditJournalDialog.module.css"
 // ...
-import { Button, DialogContent, DialogHeader, FieldInput, type ILazyDialog } from "~/components"
-import { createSubmitForm } from "~/hooks"
-import { createFileUpload, SUPPORTED_IMAGE_PATTERN } from "~/features/native"
+import { Button, DialogContent, DialogHeader, FieldInput } from "~/components"
+import { createSubmitForm, createFileUpload, SUPPORTED_IMAGE_PATTERN, type ILazyDialog } from "~/hooks"
 import type { journal } from "~/wailsjs/go/models"
 // ...
 import IconUploadInput from "./IconUploadInput"

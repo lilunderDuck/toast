@@ -1,6 +1,9 @@
-import { Button, createLazyLoadedDropdownMenu, Tooltip } from "~/components"
-import { useGalleryContext } from "../../provider"
 import { BsUpload } from "solid-icons/bs"
+// ...
+import { Button, Tooltip } from "~/components"
+import { createLazyLoadedDropdownMenu } from "~/hooks"
+// ...
+import { useGalleryContext } from "../../provider"
 
 export function UploadButton() {
   const { data$ } = useGalleryContext()

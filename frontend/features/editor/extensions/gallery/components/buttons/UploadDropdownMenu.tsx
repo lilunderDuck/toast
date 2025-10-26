@@ -1,5 +1,5 @@
-import { createLazyLoadedDialog, DropdownMenuContent, DropdownMenuItem, type IDropdownMenu } from "~/components"
-import { createFileUpload } from "~/features/native"
+import { DropdownMenuContent, DropdownMenuItem } from "~/components"
+import { createFileUpload, type IDropdownMenu, createLazyLoadedDialog } from "~/hooks"
 import { useGalleryContext } from "../../provider"
 
 interface IUploadDropdownMenu extends IDropdownMenu {

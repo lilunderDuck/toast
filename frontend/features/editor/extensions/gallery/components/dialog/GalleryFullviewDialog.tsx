@@ -1,13 +1,14 @@
-import { ButtonRow, DialogContent, type ILazyDialog } from "~/components"
+import { onCleanup, Show } from "solid-js"
+import { BsBox2HeartFill } from "solid-icons/bs"
+// ...
+import { ButtonRow, DialogContent } from "~/components"
+import { useEventListener, type ILazyDialog } from "~/hooks"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
 import { GalleryContent } from "../GalleryContent"
 import { type IGalleryContext, ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "../../provider"
 import { NextAndPrevButtons } from "../buttons/NextAndPrevButtons"
-import { onCleanup, Show } from "solid-js"
-import { BsBox2HeartFill } from "solid-icons/bs"
-import { useEventListener } from "~/hooks"
 
 const style = stylex.create({
   dialog: {

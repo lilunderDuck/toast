@@ -1,7 +1,8 @@
 import stylex from "@stylexjs/stylex"
 import { BsPlus } from "solid-icons/bs"
 // ...
-import { createLazyLoadedDialog, Tooltip } from "~/components"
+import { Tooltip } from "~/components"
+import { createLazyLoadedDialog } from "~/hooks"
 // ...
 import { useJournalHomeContext } from "../provider"
 

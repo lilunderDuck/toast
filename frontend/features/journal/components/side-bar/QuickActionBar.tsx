@@ -1,8 +1,9 @@
 import { type ParentProps } from "solid-js"
 import { BsGearFill, BsPlusSquareFill } from "solid-icons/bs"
-// ...
 import { macro_mergeClassnames } from "macro-def"
-import { createLazyLoadedDialog, Spacer, Tooltip, type ITooltipOptions } from "~/components"
+// ...
+import { Spacer, Tooltip, type ITooltipOptions } from "~/components"
+import { createLazyLoadedDialog } from "~/hooks"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./QuickActionBar.module.css"

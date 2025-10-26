@@ -1,8 +1,11 @@
-import { AppTitleBarDraggable, DialogContent, type ILazyDialog } from "~/components";
-import { ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "../../../../gallery";
-import { Image } from "../Image";
-
+import { AppTitleBarDraggable, DialogContent } from "~/components"
+import type { ILazyDialog } from "~/hooks"
+// ...
 import stylex from "@stylexjs/stylex"
+// ...
+import { ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "../../../../gallery"
+import { Image } from "../Image"
+
 
 const style = stylex.create({
   dialog: {

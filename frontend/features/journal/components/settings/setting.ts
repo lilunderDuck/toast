@@ -1,6 +1,7 @@
 import { BsCameraVideoFill, BsTagsFill } from "solid-icons/bs"
 import { lazy } from "solid-js"
-import { createLazyLoadedDialog } from "~/components"
+// ...
+import { createLazyLoadedDialog } from "~/hooks"
 
 export function createJournalSettingPage() {
   return createLazyLoadedDialog(

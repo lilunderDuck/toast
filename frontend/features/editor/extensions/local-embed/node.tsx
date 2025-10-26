@@ -1,11 +1,12 @@
-import { createFileUpload } from "~/features/native"
+import { Show } from "solid-js"
+// ...
+import { createFileUpload } from "~/hooks"
+import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
+import { SpinningCube } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
 import { useLocalEmbedContext } from "./provider"
-import { Show } from "solid-js"
-import { SpinningCube } from "~/components"
 
 const style = stylex.create({
   embed: {

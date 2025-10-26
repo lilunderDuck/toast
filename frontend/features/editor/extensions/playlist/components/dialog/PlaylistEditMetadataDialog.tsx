@@ -1,7 +1,7 @@
 import { required } from "@modular-forms/solid"
 // ...
-import { Button, createIconInput, DialogContent, DialogHeader, FieldInput, type ILazyDialog } from "~/components"
-import { createSubmitForm } from "~/hooks"
+import { Button, createIconInput, DialogContent, DialogHeader, FieldInput } from "~/components"
+import { createSubmitForm, type ILazyDialog } from "~/hooks"
 import type { editor } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 // ...

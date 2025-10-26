@@ -1,8 +1,8 @@
 import { createSignal } from "solid-js"
 import { required } from "@modular-forms/solid"
 // ...
-import { DialogContent, DialogHeader, FieldInput, type ILazyDialog, RadioGroup, RadioGroupItem, RadioGroupItemLabel } from "~/components"
-import { createSubmitForm } from "~/hooks"
+import { DialogContent, DialogHeader, FieldInput, RadioGroup, RadioGroupItem, RadioGroupItemLabel } from "~/components"
+import { createSubmitForm, type ILazyDialog } from "~/hooks"
 import { type IJournalContext } from "~/features/journal/provider"
 import { journal } from "~/wailsjs/go/models"
 // ...

@@ -1,6 +1,9 @@
-import { BsFullscreen } from "solid-icons/bs";
-import { Button, createLazyLoadedDialog, Tooltip } from "~/components";
-import { useGalleryContext } from "../../provider";
+import { BsFullscreen } from "solid-icons/bs"
+// ...
+import { Button, Tooltip } from "~/components"
+import { createLazyLoadedDialog } from "~/hooks"
+// ...
+import { useGalleryContext } from "../../provider"
 
 export function FullscreenButton() {
   const context = useGalleryContext()

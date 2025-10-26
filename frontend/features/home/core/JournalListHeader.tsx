@@ -1,6 +1,9 @@
-import stylex from "@stylexjs/stylex"
 import { BsGearFill } from "solid-icons/bs"
-import { Button, createLazyLoadedDropdownMenu } from "~/components"
+// ...
+import stylex from "@stylexjs/stylex"
+// ...
+import { Button } from "~/components"
+import { createLazyLoadedDropdownMenu } from "~/hooks"
 
 const style = stylex.create({
   header: {

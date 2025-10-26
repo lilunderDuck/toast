@@ -5,10 +5,11 @@ import { A } from "@solidjs/router"
 import __style from "./JournalInfoDialog.module.css"
 import stylex from "@stylexjs/stylex"
 // ...
-import { Button, ButtonRow, DialogContent, Spacer, type ILazyDialog } from "~/components"
+import { Button, ButtonRow, DialogContent, Spacer } from "~/components"
 import { journal } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 import { formatDate, goTimeToDate } from "~/utils"
+import type { ILazyDialog } from "~/hooks"
 
 const style = stylex.create({
   dialog: {

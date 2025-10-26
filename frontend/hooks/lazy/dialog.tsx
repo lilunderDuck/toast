@@ -1,7 +1,7 @@
 import { createSignal, Show } from "solid-js"
 // ...
 import type { LazyComponent, LazyComponentProps } from "./types"
-import { Dialog } from "../ui"
+import { Dialog } from "../../components/ui"
 import { createLazyComponent } from "./utils"
 
 type LazyDialogComponent<Props extends {}> = LazyComponentProps<LazyComponent<Props>>

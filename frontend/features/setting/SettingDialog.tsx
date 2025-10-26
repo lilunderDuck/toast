@@ -1,7 +1,8 @@
 import { For, Match, Switch } from "solid-js"
-// ...
-import { DialogContent, type ILazyDialog } from "~/components"
 import { macro_mergeClassnames } from "macro-def"
+// ...
+import { DialogContent } from "~/components"
+import type { ILazyDialog } from "~/hooks"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./SettingDialog.module.css"

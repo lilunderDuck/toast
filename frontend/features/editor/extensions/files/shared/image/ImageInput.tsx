@@ -1,11 +1,11 @@
 import { Show } from "solid-js"
 import { BsImageFill } from "solid-icons/bs"
 // ...
-import { createFileUpload, SUPPORTED_IMAGE_PATTERN } from "~/features/native"
+import { createFileUpload, createLazyLoadedDialog, SUPPORTED_IMAGE_PATTERN } from "~/hooks"
 import { UploadMedia } from "~/wailsjs/go/editor/EditorExport"
 import { useJournalContext } from "~/features/journal"
 import { ASSETS_SERVER_URL } from "~/api"
-import { createLazyLoadedDialog, SpinningCube } from "~/components"
+import { SpinningCube } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./ImageInput.module.css"

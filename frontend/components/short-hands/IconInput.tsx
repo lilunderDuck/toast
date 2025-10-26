@@ -1,7 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import { JSX, Show } from "solid-js"
 import { Tooltip } from "../ui"
-import { createFileUpload, SUPPORTED_IMAGE_FILTER, type FileOpenDialogOptions } from "~/features/native"
+import { createFileUpload, SUPPORTED_IMAGE_FILTER, type FileOpenDialogOptions } from "~/hooks"
 import { BsPlus } from "solid-icons/bs"
 import { SpinningCube } from "../loader"
 import { previewUrl } from "~/api"

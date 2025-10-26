@@ -1,7 +1,10 @@
-import { Button, createLazyLoadedDropdownMenu, Tooltip } from "~/components"
-import { useGalleryContext } from "../../provider"
 import { BsUiChecks } from "solid-icons/bs"
+// ...
+import { Button, Tooltip } from "~/components"
 import { useNodeState } from "~/features/editor/utils"
+import { createLazyLoadedDropdownMenu } from "~/hooks"
+// ...
+import { useGalleryContext } from "../../provider"
 import type { GalleryAttribute } from "../../extension"
 
 export function ChangeViewButton() {

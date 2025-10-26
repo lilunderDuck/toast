@@ -1,14 +1,15 @@
 import { BsPencilFill } from "solid-icons/bs"
+import { macro_mergeClassnames } from "macro-def"
 // ...
 import __style from './JournalBlock.module.css'
 import stylex from "@stylexjs/stylex"
 // ...
-import { Button, createLazyLoadedDialog, Spacer } from "~/components"
+import { Button, Spacer } from "~/components"
 import { journal } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
+import { createLazyLoadedDialog } from "~/hooks"
 // ...
 import { useJournalHomeContext } from "../provider"
-import { macro_mergeClassnames } from "macro-def"
 
 const style = stylex.create({
   block: {
