@@ -1,19 +1,9 @@
 html {
   --title-bar-thiccness: 32px;
+  --title-bar-button-padding: 7px;
 }
 
-#buttonRow button {
-  outline: none;
-  background-color: transparent;
-  width: var(--title-bar-thiccness);
-  height: var(--title-bar-thiccness);
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--gray11);
-}
-
-#buttonRow button:hover {
-  color: var(--gray12);
+#buttonRow img {
+  width: calc(var(--title-bar-thiccness) - 22px);
+  height: calc(var(--title-bar-thiccness) - 22px);
 }
