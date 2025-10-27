@@ -6,7 +6,7 @@ import __style from "./CreateOrEditJournalDialog.module.css"
 // ...
 import { Button, DialogContent, DialogHeader, FieldInput } from "~/components"
 import { createSubmitForm, createFileUpload, SUPPORTED_IMAGE_PATTERN, type ILazyDialog } from "~/hooks"
-import type { journal } from "~/wailsjs/go/models"
+import type { group } from "~/wailsjs/go/models"
 // ...
 import IconUploadInput from "./IconUploadInput"
 
@@ -34,9 +34,9 @@ const style = stylex.create({
 })
 
 interface ICreateJournalDialogProps extends ILazyDialog {
-  prevData$?: journal.JournalGroupData
-  onSubmit$?: (data: journal.JournalGroupOptions) => any
-  onUpdate$?: (data: journal.JournalGroupOptions & {
+  prevData$?: group.JournalGroupData
+  onSubmit$?: (data: group.JournalGroupOptions) => any
+  onUpdate$?: (data: group.JournalGroupOptions & {
     id: number
   }) => any
 }
@@ -54,12 +54,13 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
 
   const { Form$, Field$ } = createSubmitForm<JournalGroupOptionSchema>({
     async onSubmit$(data) {
+      debugger
       if (props.prevData$) {
-        const newData = { ...props.prevData$, ...data as journal.JournalGroupOptions }
+        const newData = { ...props.prevData$, ...data as group.JournalGroupOptions }
         props.onUpdate$?.(newData)
       } else {
         data.icon = iconPath()
-        props.onSubmit$?.(data as journal.JournalGroupOptions)
+        props.onSubmit$?.(data as group.JournalGroupOptions)
       }
 
       props.close$()

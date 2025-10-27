@@ -1,7 +1,8 @@
-package editor
+package gallery
 
 import (
 	"time"
+	"toast/backend/utils"
 )
 
 type GalleryData struct {
@@ -12,6 +13,14 @@ type GalleryData struct {
 	Name        string        `json:"name,omitempty"           cbor:"4,keyasint"`
 	Description string        `json:"description,omitempty"    cbor:"5,keyasint"`
 	BasePath    string        `json:"basePath,omitempty"       cbor:"6,keyasint"`
+}
+
+func newGalleryData() *GalleryData {
+	return &GalleryData{
+		Id:      utils.GetRandomIntWithinLength(16),
+		Items:   []GalleryItem{},
+		Created: utils.GetCurrentDateNow(),
+	}
 }
 
 type GalleryItem struct {

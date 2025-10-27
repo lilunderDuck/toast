@@ -7,9 +7,12 @@ import { optimizeCssModules } from "vite-plugin-optimize-css-modules"
 import tsconfig from './tsconfig.json'
 import { defineAllConstants, getAliasPath, ESBUILD_OPTIONS, OUTPUT_FILENAME, macroPlugin, DEV_OPTIMIZE_OPTIONS, generateConstsTypeThenSave } from "./build/config"
 
+// Make sure to update the code in ./backend/internals/path.go if you're planning
+// to change this variable and vice versa
+const BUILD_SAVED_PATH = "./build/out/bin/resource"
+
 export default defineConfig(({ command }) => {
   const isDevMode = command !== "build"
-  const BUILD_SAVED_PATH = "./build/out/bin/app"
   const mapping = defineAllConstants(isDevMode)
   const definedMapping = generateConstsTypeThenSave(mapping)
 

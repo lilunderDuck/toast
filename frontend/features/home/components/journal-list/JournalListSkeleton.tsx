@@ -4,8 +4,8 @@ import { Skeleton } from "~/components"
 
 const style = stylex.create({
   skeletonBlock: {
-    width: "10rem",
-    height: "10rem",
+    width: "10rem !important",
+    height: "10rem !important",
   }
 })
 

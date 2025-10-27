@@ -1,6 +1,11 @@
-package editor
+package playlist
 
-import "time"
+import (
+	"path/filepath"
+	"strings"
+	"time"
+	"toast/backend/utils"
+)
 
 type PlaylistOptions struct {
 	Title       string             `json:"title,omitempty"`
@@ -19,20 +24,20 @@ type PlaylistMetadata struct {
 	Icon        string             `json:"icon,omitempty"`
 }
 
-type CreatePlaylistItemOptions struct {
+func newPlaylistMetadata(options *PlaylistOptions) *PlaylistMetadata {
+	return &PlaylistMetadata{
+		Title:       options.Title,
+		Description: options.Description,
+		Id:          utils.GetRandomInt(),
+		Created:     utils.GetCurrentDateNow(),
+	}
+}
+
+type PlaylistItemOptions struct {
 	// The audio file path the user wish to upload
 	AudioFilePath string `json:"audioFilePath,omitempty"`
 	// The audio icon path the user wish to upload.
 	// If the audio file doesn't have cover icon, the user can upload their custom cover icon instead.
-	IconPath string `json:"iconPath,omitempty"`
-	Name     string `json:"name,omitempty"`
-	// The audio's author
-	Author string `json:"author,omitempty"`
-	// Description of the audio file
-	Description string `json:"description,omitempty"`
-}
-
-type EditPlaylistItemOptions struct {
 	IconPath string `json:"iconPath,omitempty"`
 	Name     string `json:"name,omitempty"`
 	// The audio's author
@@ -56,4 +61,29 @@ type PlaylistItemData struct {
 	// Unique identifier of this playlist item
 	Id       int `json:"id"`
 	Duration int `json:"duration"`
+}
+
+func NewPlaylistItemData(audioDuration int, options *PlaylistItemOptions) *PlaylistItemData {
+	audioFileName := filepath.Base(options.IconPath)
+
+	iconFileName := filepath.Base(options.IconPath)
+	if iconFileName == "." {
+		iconFileName = ""
+	}
+
+	if !utils.IsDefaultValue(options.IconPath) {
+		options.IconPath = utils.RenameFileInPath(options.IconPath, func(_ string) string {
+			return strings.Replace(audioFileName, filepath.Ext(audioFileName), "", 2)
+		})
+	}
+
+	return &PlaylistItemData{
+		Name:        options.Name,
+		Author:      options.Author,
+		Description: options.Description,
+		FileName:    audioFileName,
+		Icon:        iconFileName,
+		Id:          utils.GetRandomInt(),
+		Duration:    audioDuration,
+	}
 }

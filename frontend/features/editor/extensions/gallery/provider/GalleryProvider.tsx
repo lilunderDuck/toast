@@ -5,15 +5,15 @@ import { useNodeState } from "~/features/editor/utils"
 import { createStorage } from "~/utils"
 import { ASSETS_SERVER_URL } from "~/api"
 import { useJournalContext } from "~/features/journal"
-import type { editor } from "~/wailsjs/go/models"
-import { CreateGalleryData, GetGalleryData, UploadFileToGallery, UpdateGalleryData, DeleteGallery } from "~/wailsjs/go/editor/EditorExport"
+import type { gallery } from "~/wailsjs/go/models"
+import { CreateGallery, DeleteGallery, GetGallery, UpdateGallery, UploadToGallery } from "~/wailsjs/go/gallery/Exports"
 // ...
 import type { GallerySessionStorage } from "./data"
 import { DEFAULT_GALLERY_ID, type GalleryAttribute } from "../extension"
 
 export interface IGalleryContext {
   /**Gets the current gallery data. */
-  data$: () => editor.GalleryData
+  data$: () => gallery.GalleryData
   /**Navigates to the next item in the gallery and updates the current index and item state. */
   next$(): void
   /**Navigates to the previous item in the gallery and updates the current index and item state. */
@@ -28,7 +28,7 @@ export interface IGalleryContext {
    * or the last gallery item user accessed, but sometimes it returns `undefined` 
    * if the gallery is loading.
    */
-  currentItem$: Accessor<editor.GalleryItem | undefined>
+  currentItem$: Accessor<gallery.GalleryItem | undefined>
   /**Gets the display url of an item in the gallery.
    * @param fileName The file name of the gallery item to get the URL for.
    * @returns 
@@ -67,7 +67,7 @@ interface IGalleryProviderProps {
 export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   const { data$, updateAttribute$ } = useNodeState<GalleryAttribute>()
   const { sessionStorage$ } = useJournalContext()
-  const [galleryData, setGalleryData] = createStore<editor.GalleryData>({} as editor.GalleryData)
+  const [galleryData, setGalleryData] = createStore<gallery.GalleryData>({} as gallery.GalleryData)
 
   const [isNextButtonDisabled, setIsNextButtonDisabled] = createSignal(false)
   const [isPrevButtonDisabled, setIsPrevButtonDisabled] = createSignal(false)
@@ -84,11 +84,11 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   const [currentIndex, setCurrentIndex] = createSignal(
     wrappedSessionStorage.get$(CURRENT_INDEX_STORAGE_KEY) ?? 0
   )
-  const [currentItem, setCurrentItem] = createSignal<editor.GalleryItem>()
+  const [currentItem, setCurrentItem] = createSignal<gallery.GalleryItem>()
 
   onMount(async() => {
     if (isNotCreated()) {
-      const newData = await CreateGalleryData()
+      const newData = await CreateGallery()
       updateAttribute$("id", newData.id)
       setGalleryData(newData)
       return
@@ -98,7 +98,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
       return // don't load
     }
 
-    const existingData = await GetGalleryData(getCurrentGalleryId())
+    const existingData = await GetGallery(getCurrentGalleryId())
 
     setGalleryData(existingData)
 
@@ -174,13 +174,13 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
         // todo
       },
       async uploadFileToGallery$(filePath) {
-        const galleryItem = await UploadFileToGallery(getCurrentGalleryId(), filePath)
+        const galleryItem = await UploadToGallery(getCurrentGalleryId(), filePath)
         if (galleryData.items.length === 0) {
           setCurrentItem(galleryItem)
         }
 
         setGalleryData("items", galleryData.items.length, galleryItem)
-        await UpdateGalleryData(getCurrentGalleryId(), galleryData)
+        await UpdateGallery(getCurrentGalleryId(), galleryData)
       },
     }}>
       {props.children}

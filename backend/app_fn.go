@@ -3,7 +3,6 @@ package backend
 import (
 	"context"
 	"toast/backend/db"
-	"toast/backend/features/journal"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -20,7 +19,6 @@ func New() *App {
 
 // Called at application startup
 func (a *App) startup(ctx context.Context) {
-	journal.InitGroup()
 	a.ctx = ctx
 }
 

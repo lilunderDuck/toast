@@ -1,10 +1,10 @@
-import { type Accessor, createContext, createSignal, onCleanup, type ParentProps, type Setter, useContext } from "solid-js"
+import { type Accessor, createContext, createSignal, onCleanup, type ParentProps, type Setter, type Signal, useContext } from "solid-js"
 import { type LocalEmbedAttribute } from "../extension"
 import { useNodeState } from "~/features/editor/utils"
 import { useFullscreen } from "~/hooks"
 import { ASSETS_SERVER_URL } from "~/api"
 import { BrowserOpenURL } from "~/wailsjs/runtime/runtime"
-import { SaveLocalEmbed } from "~/wailsjs/go/editor/EditorExport"
+import { SaveLocalEmbed } from "~/wailsjs/go/editor/Exports"
 
 interface ILocalEmbedContext {
   setRootRef$: Setter<Ref<"div">>
@@ -21,7 +21,7 @@ const Context = createContext<ILocalEmbedContext>()
 
 export function LocalEmbedProvider(props: ParentProps) {
   const { data$, updateAttribute$ } = useNodeState<LocalEmbedAttribute>()
-  const [rootRef, setRootRef] = createSignal<Ref<"div">>()
+  const [rootRef, setRootRef] = createSignal() as Signal<Ref<"div">>
   const { isFullscreen$, toggle$ } = useFullscreen(rootRef)
 
   const isEmpty = () => data$().name == ""

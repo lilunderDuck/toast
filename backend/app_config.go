@@ -3,6 +3,11 @@ package backend
 import (
 	"os"
 	"toast/backend/features/editor"
+	"toast/backend/features/group"
+
+	"toast/backend/features/editor/gallery"
+	"toast/backend/features/editor/playlist"
+
 	"toast/backend/features/journal"
 	"toast/backend/features/misc"
 	"toast/backend/internals"
@@ -16,13 +21,25 @@ import (
 // Everything related to wails's config basically.
 func GetAppConfig(icon []byte, appInstance *App) *options.App {
 	const WINDOW_TITLE = "Toast making machine"
+
+	binding := []any{
+		appInstance,
+		&journal.Exports{},
+		&editor.Exports{},
+		&misc.Exports{},
+		&group.Exports{},
+		// ...
+		&playlist.Exports{},
+		&gallery.Exports{},
+	}
+
 	return &options.App{
 		Title:     WINDOW_TITLE,
 		Frameless: true,
 		Width:     1000,
 		Height:    768,
 		AssetServer: &assetserver.Options{
-			Assets: os.DirFS(internals.APP_FOLDER_PATH),
+			Assets: os.DirFS(internals.RESOURCE_FOLDER_PATH),
 			// Well, my intrusive thoughts *thought* that it'd be better to merge everything into
 			// one single server, instead of ones for the assets, and other for journal and stuff.
 			//
@@ -41,12 +58,7 @@ func GetAppConfig(icon []byte, appInstance *App) *options.App {
 		OnBeforeClose:    appInstance.beforeClose,
 		OnShutdown:       appInstance.shutdown,
 		WindowStartState: options.Normal,
-		Bind: []any{
-			appInstance,
-			&journal.GroupExport{},
-			&editor.EditorExport{},
-			&misc.MiscExport{},
-		},
+		Bind:             binding,
 		// Windows platform specific options
 		Windows: &windows.Options{
 			WebviewIsTransparent: false,

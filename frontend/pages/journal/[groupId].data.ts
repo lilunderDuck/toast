@@ -1,8 +1,8 @@
 import { createAsync } from "@solidjs/router"
 import { pluginEvent } from "~/plugins"
 // ...
-import { GetGroup } from "~/wailsjs/go/journal/GroupExport"
-import type { journal } from "~/wailsjs/go/models"
+import { GetGroup } from "~/wailsjs/go/group/Exports"
+import type { group } from "~/wailsjs/go/models"
 
 export default function journalGroupData(groupId: number) {
   return createAsync(async() => {
@@ -13,7 +13,7 @@ export default function journalGroupData(groupId: number) {
     pluginEvent.emit$(PluginEvent.JOURNAL_LOADED)
 
     return {
-      explorerTreeData$: journalGroupData.explorer as journal.ExplorerData
+      explorerTreeData$: journalGroupData.explorer as group.ExplorerData
     }
   })
 }

@@ -1,8 +1,9 @@
-import { createEffect, createSignal, type Accessor } from "solid-js"
+import { createEffect, createSignal } from "solid-js"
+// ...
 import { playlistTrackUrl } from "~/api"
-import { createMediaPlayer, type MediaPlayer } from "~/hooks"
+import { type MediaPlayer } from "~/hooks"
 import { arrayObjects } from "~/utils"
-import type { editor } from "~/wailsjs/go/models"
+import type { playlist } from "~/wailsjs/go/models"
 
 /**The state of the currently focused or playing track. */
 export type FocusedTrackData = {
@@ -14,7 +15,7 @@ export type FocusedTrackData = {
 
 export function createTrackPlayerManager(
   player: MediaPlayer,
-  data: () => editor.PlaylistMetadata
+  data: () => playlist.PlaylistMetadata
 ) {
   const [focusedTrack, setFocusedTrack] = createSignal<FocusedTrackData | null>(null)
 

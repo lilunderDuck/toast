@@ -2,6 +2,7 @@ package journal
 
 import (
 	"time"
+	"toast/backend/utils"
 )
 
 // Options for creating a new journal.
@@ -17,6 +18,16 @@ type JournalData struct {
 	Modified time.Duration      `json:"modified,omitempty" cbor:"3,keyasint,omitempty"`
 	Name     string             `json:"name"               cbor:"4,keyasint"`
 	Data     JournalContentData `json:"data"               cbor:"5,keyasint"`
+}
+
+func newJournal(journalType uint8, options *JournalOptions) *JournalData {
+	journalId := utils.GetRandomInt()
+	return &JournalData{
+		Id:      journalId,
+		Type:    journalType,
+		Created: utils.GetCurrentDateNow(),
+		Name:    options.Name,
+	}
 }
 
 // ----------- Editor data zone -------------

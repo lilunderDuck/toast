@@ -20,9 +20,9 @@ import {
 } from "~/features/journal"
 import { CharacterCount, EditorProvider } from "~/features/editor"
 import { AppTitleBarDraggable } from "~/components"
-import { UpdateGroup } from "~/wailsjs/go/journal/GroupExport"
+import { UpdateGroup } from "~/wailsjs/go/group/Exports"
 import { useToggle } from "~/hooks"
-import type { journal } from "~/wailsjs/go/models"
+import type { group, journal } from "~/wailsjs/go/models"
 // ...
 import journalGroupData from "./[groupId].data"
 
@@ -167,7 +167,7 @@ function JournalHomeProviders(props: ParentProps<IJournalHomeProvidersProps>) {
       return journalData()!.explorerTreeData$
     },
     onTreeUpdate$(newTree) {
-      UpdateGroup(props.groupId$, { tree: newTree } as journal.JournalGroupOptions)
+      UpdateGroup(props.groupId$, { tree: newTree } as group.JournalGroupOptions)
     }
   }
 

@@ -2,7 +2,7 @@ import { required } from "@modular-forms/solid"
 // ...
 import { Button, createIconInput, DialogContent, DialogHeader, FieldInput } from "~/components"
 import { createSubmitForm, type ILazyDialog } from "~/hooks"
-import type { editor } from "~/wailsjs/go/models"
+import type { playlist } from "~/wailsjs/go/models"
 import { playlistTrackUrl } from "~/api"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -37,7 +37,7 @@ type PlaylistTrackSchema = {
 }
 
 interface IPlaylistEditTrackItemDialogProps extends ILazyDialog {
-  prevData$: editor.PlaylistItemData
+  prevData$: playlist.PlaylistItemData
   context$: IPlaylistContext
   currentTrackIndex$: number
 }
@@ -68,7 +68,7 @@ export default function PlaylistCreateEditTrackDialog(props: IPlaylistEditTrackI
       items$.update$(props.currentTrackIndex$, {
         ...data,
         iconPath: IconInput.file$()
-      } as editor.CreatePlaylistItemOptions)
+      } as playlist.PlaylistItemOptions)
       props.close$()
     }
   })

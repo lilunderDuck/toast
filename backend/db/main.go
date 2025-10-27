@@ -102,6 +102,8 @@ func GetInstance(path string) *DbInstance {
 		newInstance, _ := Open(path)
 		instance = newInstance
 	}
+
+	fmt.Println("Existing instance found:", path)
 	return instance
 }
 

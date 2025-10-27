@@ -5,11 +5,11 @@ import __style from './JournalBlock.module.css'
 import stylex from "@stylexjs/stylex"
 // ...
 import { Button, Spacer } from "~/components"
-import { journal } from "~/wailsjs/go/models"
+import { type group } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 import { createLazyLoadedDialog } from "~/hooks"
 // ...
-import { useJournalHomeContext } from "../provider"
+import { useJournalHomeContext } from "../../provider"
 
 const style = stylex.create({
   block: {
@@ -43,19 +43,19 @@ const style = stylex.create({
   }
 })
 
-interface IJournalBlockProps extends journal.JournalGroupData {
+interface IJournalBlockProps extends group.JournalGroupData {
   // ...
 }
 
 export function JournalBlock(props: IJournalBlockProps) {
   const { addGroup$, editGroup$ } = useJournalHomeContext()
   const JournalInfoDialog = createLazyLoadedDialog(
-    () => import("./dialog/JournalInfoDialog"),
+    () => import("../dialog/JournalInfoDialog"),
     () => props
   )
 
   const EditJournalDialog = createLazyLoadedDialog(
-    () => import("./dialog/editing/CreateOrEditJournalDialog"),
+    () => import("../dialog/editing/CreateOrEditJournalDialog"),
     () => ({
       prevData$: props,
       onSubmit$: (data) => addGroup$(data),

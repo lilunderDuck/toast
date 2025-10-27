@@ -2,7 +2,10 @@ package editor
 
 import (
 	"fmt"
+	"os"
 	"strings"
+	"toast/backend/internals"
+	"toast/backend/utils"
 
 	"github.com/wailsapp/mimetype"
 )
@@ -28,7 +31,7 @@ var mimeTypeMapping = map[string]uint8{
 //
 // Usually it will work most of the time, however the error will be returned
 // if there is any issue in opening and reading from the input file.
-func determineFileType(filePath string) (uint8, error) {
+func DetermineFileType(filePath string) (uint8, error) {
 	mimeType, err := mimetype.DetectFile(filePath)
 	if err != nil {
 		return FILE_TYPE__ERROR, err
@@ -60,4 +63,35 @@ func determineFileType(filePath string) (uint8, error) {
 	}
 
 	return fileType, nil
+}
+
+// function type and stuff to make sure I don't waste time retyping
+// the whole thing
+
+type embed_writeMetaFn[T any] func(id int, data *T) error
+type embed_readMetaFn[T any] func(id int) (*T, error)
+type embed_uploadFn[T any] func(id int, from string) error
+type embed_deleteFn func(id int) error
+
+func CreateEmbedableMediaCollection[T any](
+	manager *internals.EmbedableMediaPath,
+) (embed_writeMetaFn[T], embed_readMetaFn[T], embed_uploadFn[T], embed_deleteFn) {
+	// what in the hell did I just write...
+	var writeFn embed_writeMetaFn[T] = func(id int, data *T) error {
+		return utils.BSON_WriteFile(manager.GetMetaFilePath(id), data)
+	}
+
+	var readFn embed_readMetaFn[T] = func(id int) (*T, error) {
+		return utils.BSON_ReadFile[T](manager.GetMetaFilePath(id))
+	}
+
+	var uploadFn embed_uploadFn[T] = func(id int, from string) error {
+		return utils.CopyFile(from, manager.GetFilePath(id))
+	}
+
+	var deleteFn embed_deleteFn = func(id int) error {
+		return os.Remove(manager.GetFilePath(id))
+	}
+
+	return writeFn, readFn, uploadFn, deleteFn
 }

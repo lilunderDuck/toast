@@ -2,7 +2,7 @@ import { required } from "@modular-forms/solid"
 // ...
 import { Button, createIconInput, DialogContent, DialogHeader, FieldInput } from "~/components"
 import { createSubmitForm, type ILazyDialog } from "~/hooks"
-import type { editor } from "~/wailsjs/go/models"
+import type { playlist } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -31,12 +31,12 @@ const style = stylex.create({
 })
 
 type PlaylistMetadataSchema = {
-  title: editor.PlaylistMetadata["title"]
-  description?: editor.PlaylistMetadata["description"]
+  title: playlist.PlaylistMetadata["title"]
+  description?: playlist.PlaylistMetadata["description"]
 }
 
 interface IPlaylistEditMetadataDialogProps extends ILazyDialog {
-  prevData$: editor.PlaylistMetadata
+  prevData$: playlist.PlaylistMetadata
   context$: IPlaylistContext
 }
 
@@ -66,7 +66,7 @@ export default function PlaylistEditMetadataDialog(props: IPlaylistEditMetadataD
       editPlaylist$({
         ...data,
         icon: IconInput.file$()
-      } as editor.PlaylistOptions)
+      } as playlist.PlaylistOptions)
     }
   })
 

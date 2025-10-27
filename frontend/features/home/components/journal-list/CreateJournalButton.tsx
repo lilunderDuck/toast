@@ -4,7 +4,7 @@ import { BsPlus } from "solid-icons/bs"
 import { Tooltip } from "~/components"
 import { createLazyLoadedDialog } from "~/hooks"
 // ...
-import { useJournalHomeContext } from "../provider"
+import { useJournalHomeContext } from "../../provider"
 
 const style = stylex.create({
   button: {
@@ -19,7 +19,7 @@ const style = stylex.create({
 export function CreateJournalButton() {
   const { addGroup$ } = useJournalHomeContext()
   const CreateJournalDialog = createLazyLoadedDialog(
-    () => import("./dialog/editing/CreateOrEditJournalDialog"),
+    () => import("../dialog/editing/CreateOrEditJournalDialog"),
     () => ({
       onSubmit$: addGroup$
     })

@@ -1,7 +1,11 @@
-import stylex from "@stylexjs/stylex"
-import { AppTitleBarDraggable } from "~/components"
+import { createResource, Show } from "solid-js"
 // ...
-import { JournalHomeProvider, JournalList, JournalListHeader } from "~/features/home"
+import stylex from "@stylexjs/stylex"
+// ...
+import { AppTitleBarDraggable } from "~/components"
+import { JournalHomeProvider, JournalListSection } from "~/features/home"
+// ...
+import { GetGroups } from "~/wailsjs/go/group/Exports"
 
 const style = stylex.create({
   home: {
@@ -18,13 +22,18 @@ const style = stylex.create({
 })
 
 export default function Home() {
+  const [resource] = createResource(async () => {
+    return await GetGroups()
+  })
+
   return (
-    <JournalHomeProvider>
+    <>
       <AppTitleBarDraggable {...stylex.attrs(style.home__titleBar)} />
-      <section {...stylex.attrs(style.home)}>
-        <JournalListHeader name$="Your journal" />
-        <JournalList />
-      </section>
-    </JournalHomeProvider>
+      <Show when={resource.loading}>
+        <JournalHomeProvider groups$={resource()!}>
+          <JournalListSection />
+        </JournalHomeProvider>
+      </Show>
+    </>
   )
 }

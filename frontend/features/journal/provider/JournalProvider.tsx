@@ -1,7 +1,7 @@
 import { type Accessor, createContext, createSignal, type ParentProps, type Setter, useContext } from "solid-js"
 // ...
 import { createStorage, type IStorage } from "~/utils"
-import { CreateJournal, GetJournal, UpdateJournal } from "~/wailsjs/go/journal/GroupExport"
+import { CreateJournal, GetJournal, UpdateJournal } from "~/wailsjs/go/journal/Exports"
 import type { journal } from "~/wailsjs/go/models"
 // ...
 import { createFileExplorerContext, createFileNode, createFolderNode, type IFileExplorerContext, type IFileExplorerProviderOptions, ROOT_FOLDER } from "./explorer"

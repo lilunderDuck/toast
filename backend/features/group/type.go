@@ -1,6 +1,9 @@
-package journal
+package group
 
-import "time"
+import (
+	"time"
+	"toast/backend/utils"
+)
 
 // Defines the structure for updating an existing journal group.
 type JournalGroupOptions struct {
@@ -21,6 +24,16 @@ type JournalGroupData struct {
 	Explorer    ExplorerData  `json:"explorer"              cbor:"6,keyasint"`
 }
 
+func newJournalGroup(options *JournalGroupOptions) *JournalGroupData {
+	return &JournalGroupData{
+		Id:          utils.GetRandomInt(),
+		Created:     utils.GetCurrentDateNow(),
+		Name:        options.Name,
+		Description: options.Description,
+		Explorer:    ExplorerData{},
+	}
+}
+
 // Represents a node in a virtual tree structure.
 // It has an ID and a list of child nodes.
 type ExplorerNode struct {
@@ -34,4 +47,14 @@ type ExplorerTree []ExplorerNode
 type ExplorerData struct {
 	Mapping map[int]string `json:"mapping"  cbor:"0,keyasint"`
 	Tree    ExplorerTree   `json:"tree"  cbor:"1,keyasint"`
+}
+
+type Setting struct {
+	Tags []TagData `json:"tags,omitempty"         cbor:"0,keyasint"`
+}
+
+type TagData struct {
+	Name        string `json:"name"                    cbor:"0,keyasint"`
+	Color       string `json:"color"                   cbor:"1,keyasint"`
+	Description string `json:"description,omitempty"   cbor:"2,keyasint"`
 }

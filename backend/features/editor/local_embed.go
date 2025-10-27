@@ -9,7 +9,7 @@ import (
 	"toast/backend/utils"
 )
 
-func (*EditorExport) SaveLocalEmbed(pathToHtmlFile string) (string, error) {
+func (*Exports) SaveLocalEmbed(pathToHtmlFile string) (string, error) {
 	htmlFileName := filepath.Base(pathToHtmlFile)
 	folderName := utils.ToString(utils.GetRandomIntWithinLength(16))
 	newLocation := filepath.Join(internals.EMBED_SAVED_PATH, folderName)
@@ -29,7 +29,7 @@ func (*EditorExport) SaveLocalEmbed(pathToHtmlFile string) (string, error) {
 	return folderName + "/" + htmlFileName, nil
 }
 
-func (*EditorExport) RenameLocalEmbedFolder(oldFolderName string, newFolderName string) (string, error) {
+func (*Exports) RenameLocalEmbedFolder(oldFolderName string, newFolderName string) (string, error) {
 	oldFolderPath := filepath.Join(internals.EMBED_SAVED_PATH, oldFolderName)
 	newFolderPath := filepath.Join(internals.EMBED_SAVED_PATH, newFolderName)
 

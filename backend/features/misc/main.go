@@ -1,3 +1,3 @@
 package misc
 
-type MiscExport struct{}
+type Exports struct{}

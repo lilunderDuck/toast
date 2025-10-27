@@ -1,4 +1,4 @@
-import { writeFileSync } from "node:fs"
+import { mkdirSync, writeFileSync } from "node:fs"
 
 type ValidEnum = Record<string, string | number>
 type ConstsMapping = { type: string, name: string, prop: ValidEnum }[]
@@ -88,6 +88,7 @@ export function generateConstsTypeThenSave(mapping: ConstsMapping) {
     }
   }
 
+  mkdirSync("./build/dist", { recursive: true })
   writeFileSync("./build/dist/consts.d.ts", `declare global {${content}}; export {}`)
 
   return Object.fromEntries(definedMapping.entries())

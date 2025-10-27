@@ -1,4 +1,4 @@
-package editor
+package playlist
 
 import (
 	"time"

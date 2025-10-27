@@ -2,7 +2,7 @@ import { Show } from "solid-js"
 // ...
 import { Button, createIconInput, DialogContent, DialogHeader, FieldInput, FieldInputLabel, Tooltip } from "~/components"
 import { createSubmitForm, createFileUpload, SUPPORTED_AUDIO_FILTER, type ILazyDialog } from "~/hooks"
-import { GetAudioDataFrom } from "~/wailsjs/go/editor/EditorExport"
+import { GetAudioData } from "~/wailsjs/go/playlist/Exports"
 import { previewUrl } from "~/api"
 import { toast } from "~/libs/solid-toast"
 // ...
@@ -72,7 +72,7 @@ export default function PlaylistCreateTrackDialog(props: IPlaylistEditTrackItemD
 
   const fetchSelectedAudio = async() => {
     console.log(AudioFileUpload.file$())
-    const data = await toast.promise(GetAudioDataFrom(AudioFileUpload.file$()!), {
+    const data = await toast.promise(GetAudioData(AudioFileUpload.file$()!), {
       loading: "Fetching audio data...",
       error: "Failed to fetch audio data.",
       success: "Successfully fetched audio data."

@@ -2,7 +2,7 @@ import { Show } from "solid-js"
 import { BsImageFill } from "solid-icons/bs"
 // ...
 import { createFileUpload, createLazyLoadedDialog, SUPPORTED_IMAGE_PATTERN } from "~/hooks"
-import { UploadMedia } from "~/wailsjs/go/editor/EditorExport"
+import { UploadMedia } from "~/wailsjs/go/editor/Exports"
 import { useJournalContext } from "~/features/journal"
 import { ASSETS_SERVER_URL } from "~/api"
 import { SpinningCube } from "~/components"

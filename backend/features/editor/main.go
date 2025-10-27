@@ -10,11 +10,11 @@ import (
 // (or more correctly: editor functionalities).
 //
 // Every method in this struct are the public API to provide functionality to the frontend side.
-type EditorExport struct{}
+type Exports struct{}
 
 // General purpose function to be used across all of editor blocks.
 
-func (*EditorExport) UploadMedia(groupId int, filePath string) (newFileName string, err error) {
+func (*Exports) UploadMedia(groupId int, filePath string) (newFileName string, err error) {
 	fileName := filepath.Base(filePath)
 	savedLocation := filepath.Join(
 		internals.DATA_FOLDER_PATH,
