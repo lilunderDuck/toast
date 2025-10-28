@@ -5,15 +5,15 @@ import (
 )
 
 type EmbedableMediaPath struct {
-	MediaFile string
-	Path      string
+	MetaFile string
+	Path     string
 }
 
 func (path *EmbedableMediaPath) GetMetaFilePath(id int) string {
-	return fmt.Sprintf(path.Path, DATA_FOLDER_PATH, id)
+	return fmt.Sprintf(path.MetaFile, DATA_FOLDER_PATH, id)
 }
 
-func (path *EmbedableMediaPath) GetFilePath(id int) string {
+func (path *EmbedableMediaPath) GetFolderPath(id int) string {
 	return fmt.Sprintf(path.Path, MEDIA_FOLDER_PATH, id)
 }
 
@@ -26,11 +26,11 @@ func (EmbedableMediaPathMapping) Get(what string) *EmbedableMediaPath {
 
 var Media = EmbedableMediaPathMapping{
 	"gallery": EmbedableMediaPath{
-		MediaFile: `%s/g-%d.dat`,
-		Path:      `%s/gallery/%d`,
+		MetaFile: `%s/g-%d.dat`,
+		Path:     `%s/gallery/%d`,
 	},
 	"playlist": EmbedableMediaPath{
-		MediaFile: `%s/p-%d.dat`,
-		Path:      `%s/playlist/%d`,
+		MetaFile: `%s/p-%d.dat`,
+		Path:     `%s/playlist/%d`,
 	},
 }

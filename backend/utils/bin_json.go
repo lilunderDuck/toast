@@ -52,6 +52,7 @@ func base_BSON_ReadFile(path string, out any) (someError error) {
 }
 
 func BSON_ReadFile[T any](path string) (*T, error) {
+	fmt.Println("BSON read:", path)
 	var out T
 	err := base_BSON_ReadFile(path, &out)
 	return &out, err

@@ -86,11 +86,11 @@ func CreateEmbedableMediaCollection[T any](
 	}
 
 	var uploadFn embed_uploadFn[T] = func(id int, from string) error {
-		return utils.CopyFile(from, manager.GetFilePath(id))
+		return utils.CopyFile(from, manager.GetFolderPath(id))
 	}
 
 	var deleteFn embed_deleteFn = func(id int) error {
-		return os.Remove(manager.GetFilePath(id))
+		return os.Remove(manager.GetFolderPath(id))
 	}
 
 	return writeFn, readFn, uploadFn, deleteFn
