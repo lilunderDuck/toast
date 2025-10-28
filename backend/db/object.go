@@ -5,8 +5,8 @@ import (
 	"github.com/lotusdblabs/lotusdb/v2"
 )
 
-func (db *DbInstance) GetObject(key int, out any) error {
-	data, err := db.internal.Get(getKey(key))
+func (db *DbInstance) GetObject(key string, out any) error {
+	data, err := db.internal.Get([]byte(key))
 	if err != nil {
 		return err
 	}
@@ -14,17 +14,17 @@ func (db *DbInstance) GetObject(key int, out any) error {
 	return cbor.Unmarshal(data, out)
 }
 
-func (db *DbInstance) SetObject(key int, value any) error {
+func (db *DbInstance) SetObject(key string, value any) error {
 	data, err := cbor.Marshal(value)
 	if err != nil {
 		return err
 	}
 
-	return db.internal.Put(getKey(key), data)
+	return db.internal.Put([]byte(key), data)
 }
 
-func (db *DbInstance) DeleteObject(key int) error {
-	return db.internal.Delete(getKey(key))
+func (db *DbInstance) DeleteObject(key string) error {
+	return db.internal.Delete([]byte(key))
 }
 
 func (db *DbInstance) Iterate(fn func(data []byte)) {

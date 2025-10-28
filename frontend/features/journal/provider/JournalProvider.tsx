@@ -9,7 +9,7 @@ import { createHistoryManager, type IHistoryManager } from "./history"
 
 export type JournalSessionStorage = IStorage<{
   journal_data$: {
-    groupId$: number
+    groupId$: string
   }
   sidebar_hidden$: boolean
   [key: `explorer.${number}`]: boolean
@@ -21,8 +21,8 @@ export type JournalLocalStorage = IStorage<{
 
 export interface IJournalContext {
   createJournal$(type: number, data: journal.JournalOptions): Promise<journal.JournalData>
-  getJournal$(journalId: number): Promise<journal.JournalData>
-  updateJournal$(journalId: number, newData: journal.JournalOptions): Promise<journal.JournalData>
+  getJournal$(journalId: string): Promise<journal.JournalData>
+  updateJournal$(journalId: string, newData: journal.JournalOptions): Promise<journal.JournalData>
   // ...
   sessionStorage$: JournalSessionStorage
   explorerTree$: IFileExplorerContext

@@ -16,14 +16,15 @@ func NewJournalsManager() *JournalsManager {
 	}
 }
 
-func (group *JournalsManager) Write(groupId int, data *JournalData) error {
+func (group *JournalsManager) Write(groupId string, data *JournalData) error {
 	return utils.BSON_WriteFile(group.Paths.JournalContent(groupId, data.Id), data)
 }
 
-func (group *JournalsManager) Read(groupId, journalId int) (*JournalData, error) {
+func (group *JournalsManager) Read(groupId, journalId string) (*JournalData, error) {
+	println(group.Paths.JournalContent(groupId, journalId))
 	return utils.BSON_ReadFile[JournalData](group.Paths.JournalContent(groupId, journalId))
 }
 
-func (group *JournalsManager) Delete(groupId, journalId int) {
+func (group *JournalsManager) Delete(groupId, journalId string) {
 	os.Remove(group.Paths.JournalContent(groupId, journalId))
 }

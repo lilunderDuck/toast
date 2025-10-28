@@ -9,14 +9,14 @@ import (
 
 type bin_PlaylistItemData struct {
 	Data     []uint16 `cbor:"0,keyasint"`
-	Id       int      `cbor:"1,keyasint"`
+	Id       string   `cbor:"1,keyasint"`
 	Duration int      `cbor:"2,keyasint"`
 }
 
 type bin_PlaylistMetadata struct {
 	Data     []uint16           `cbor:"0,keyasint"`
 	Items    []PlaylistItemData `cbor:"1,keyasint,omitempty"`
-	Id       int                `cbor:"2,keyasint"`
+	Id       string             `cbor:"2,keyasint"`
 	Created  time.Duration      `cbor:"3,keyasint,omitempty"`
 	Modified time.Duration      `cbor:"4,keyasint,omitempty"`
 }

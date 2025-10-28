@@ -26,11 +26,11 @@ func (*Exports) CreatePlaylist(options PlaylistOptions) (*PlaylistMetadata, erro
 	return data, nil
 }
 
-func (*Exports) GetPlaylist(playlistId int) (*PlaylistMetadata, error) {
+func (*Exports) GetPlaylist(playlistId string) (*PlaylistMetadata, error) {
 	return readPlaylist(playlistId)
 }
 
-func (editor *Exports) UpdatePlaylist(playlistId int, options PlaylistOptions) error {
+func (editor *Exports) UpdatePlaylist(playlistId string, options PlaylistOptions) error {
 	oldData, err := readPlaylist(playlistId)
 	if err != nil {
 		return err
@@ -53,12 +53,12 @@ func (editor *Exports) UpdatePlaylist(playlistId int, options PlaylistOptions) e
 	return writePlaylist(playlistId, oldData)
 }
 
-func (group *Exports) DeletePlaylist(playlistId int) error {
+func (group *Exports) DeletePlaylist(playlistId string) error {
 	return deletePlaylist(playlistId)
 }
 
 func (*Exports) CreatePlaylistItem(
-	playlistId int,
+	playlistId string,
 	options PlaylistItemOptions,
 ) (*PlaylistItemData, error) {
 	if err := uploadToPlaylist(playlistId, options.AudioFilePath); err != nil {

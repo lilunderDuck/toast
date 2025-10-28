@@ -17,12 +17,12 @@ import { createEditorMenuManager } from './menus'
 
 export interface IEditorProviderProps {
   /**A unique id for this editor instance. */
-  id$: number
+  id$: string
 }
 
 export type EditorData = {
   /**The unique identifier for the current editor's content. */
-  id: number
+  id: string
   /**The content of the editor. */
   content: JSONContent
 }
@@ -82,7 +82,7 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
     },
   }))
 
-  let currentlyOpenedId = -1
+  let currentlyOpenedId = ''
   const getCurrentData = () => ({
     content: editor().getJSON(),
     id: currentlyOpenedId
@@ -102,7 +102,7 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
       return console.log("already opened")
     }
 
-    if (currentlyOpenedId !== -1) {
+    if (currentlyOpenedId !== '') {
       event.emit$(EditorEvent.ON_SWITCHING, getCurrentData())
     }
 

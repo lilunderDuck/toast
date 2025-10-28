@@ -22,7 +22,7 @@ import { CharacterCount, EditorProvider } from "~/features/editor"
 import { AppTitleBarDraggable } from "~/components"
 import { UpdateGroup } from "~/wailsjs/go/group/Exports"
 import { useToggle } from "~/hooks"
-import type { group, journal } from "~/wailsjs/go/models"
+import type { group } from "~/wailsjs/go/models"
 // ...
 import journalGroupData from "./[groupId].data"
 
@@ -69,7 +69,7 @@ const style = stylex.create({
 
 export default function JournalHome(props: ParentProps) {
   const param = useParams()
-  const currentGroupId = () => parseInt(param.groupId)
+  const currentGroupId = () => param.groupId
 
   const bodyClassList = document.body.classList
   bodyClassList.add(__style.journal)
@@ -138,7 +138,7 @@ export default function JournalHome(props: ParentProps) {
 }
 
 interface IJournalHomeProvidersProps {
-  groupId$: number
+  groupId$: string
 }
 
 function JournalHomeProviders(props: ParentProps<IJournalHomeProvidersProps>) {

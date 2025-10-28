@@ -6,7 +6,7 @@ import (
 )
 
 type GalleryData struct {
-	Id          int           `json:"id"                       cbor:"0,keyasint"`
+	Id          string        `json:"id"                       cbor:"0,keyasint"`
 	Created     time.Duration `json:"created,omitempty"        cbor:"1,keyasint"`
 	Modified    time.Duration `json:"modified,omitempty"       cbor:"2,keyasint"`
 	Items       []GalleryItem `json:"items"                    cbor:"3,keyasint"`
@@ -17,7 +17,7 @@ type GalleryData struct {
 
 func newGalleryData() *GalleryData {
 	return &GalleryData{
-		Id:      utils.GetRandomIntWithinLength(16),
+		Id:      utils.GetRandomStringWithinLength(16),
 		Items:   []GalleryItem{},
 		Created: utils.GetCurrentDateNow(),
 	}

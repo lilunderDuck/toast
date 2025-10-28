@@ -22,7 +22,7 @@ func (*Exports) CreateGallery() *GalleryData {
 	return data
 }
 
-func (editor *Exports) UpdateGallery(galleryId int, updatedData GalleryUpdatedData) {
+func (editor *Exports) UpdateGallery(galleryId string, updatedData GalleryUpdatedData) {
 	data, err := readGallery(galleryId)
 	if err != nil {
 		return
@@ -44,7 +44,7 @@ func (editor *Exports) UpdateGallery(galleryId int, updatedData GalleryUpdatedDa
 	writeGallery(galleryId, data)
 }
 
-func (*Exports) UploadToGallery(galleryId int, pathToFile string) (*GalleryItem, error) {
+func (*Exports) UploadToGallery(galleryId string, pathToFile string) (*GalleryItem, error) {
 	if err := uploadToGallery(galleryId, pathToFile); err != nil {
 		return nil, err
 	}
@@ -61,10 +61,10 @@ func (*Exports) UploadToGallery(galleryId int, pathToFile string) (*GalleryItem,
 	}, nil
 }
 
-func (*Exports) GetGallery(galleryId int) (*GalleryData, error) {
+func (*Exports) GetGallery(galleryId string) (*GalleryData, error) {
 	return readGallery(galleryId)
 }
 
-func (*Exports) DeleteGallery(galleryId int) error {
+func (*Exports) DeleteGallery(galleryId string) error {
 	return deleteGallery(galleryId)
 }

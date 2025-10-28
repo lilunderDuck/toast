@@ -11,7 +11,7 @@ var journalsManager = NewJournalsManager()
 type Exports struct{}
 
 func (*Exports) CreateJournal(
-	groupId int,
+	groupId string,
 	journalType uint8,
 	options JournalOptions,
 ) (*JournalData, error) {
@@ -24,13 +24,13 @@ func (*Exports) CreateJournal(
 	return newData, nil
 }
 
-func (*Exports) GetJournal(groupId, journalId int) (*JournalData, error) {
+func (*Exports) GetJournal(groupId, journalId string) (*JournalData, error) {
 	return journalsManager.Read(groupId, journalId)
 }
 
 func (group *Exports) UpdateJournal(
 	groupId,
-	journalId int,
+	journalId string,
 	newData *JournalOptions,
 ) (*JournalData, error) {
 	data, err := group.GetJournal(groupId, journalId)
@@ -54,6 +54,6 @@ func (group *Exports) UpdateJournal(
 	return data, nil
 }
 
-func (*Exports) DeleteJournal(groupId, journalId int) {
+func (*Exports) DeleteJournal(groupId, journalId string) {
 	journalsManager.Delete(groupId, journalId)
 }

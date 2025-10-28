@@ -31,12 +31,12 @@ func (*Exports) GetGroups() []JournalGroupData {
 	return db.GetAll[JournalGroupData](internals.GROUPS_DATA_PATH)
 }
 
-func (*Exports) GetGroup(groupId int) *JournalGroupData {
+func (*Exports) GetGroup(groupId string) *JournalGroupData {
 	data, _ := groupsManager.ReadMetadata(groupId)
 	return data
 }
 
-func (group *Exports) UpdateGroup(groupId int, newData *JournalGroupOptions) (*JournalGroupData, error) {
+func (group *Exports) UpdateGroup(groupId string, newData *JournalGroupOptions) (*JournalGroupData, error) {
 	oldData := group.GetGroup(groupId)
 	if newData.Icon != "" {
 		groupsManager.SetIcon(oldData, newData.Icon)
@@ -61,14 +61,14 @@ func (group *Exports) UpdateGroup(groupId int, newData *JournalGroupOptions) (*J
 	return oldData, nil
 }
 
-func (*Exports) DeleteGroup(groupId int) {
+func (*Exports) DeleteGroup(groupId string) {
 	groupsManager.Delete(groupId)
 }
 
-func (*Exports) SaveMedia(groupId int, from string, to string) {
+func (*Exports) SaveMedia(groupId string, from string, to string) {
 	utils.CopyFile(from, groupsManager.Paths.Media(groupId, to))
 }
 
-func (*Exports) SetGroupSetting(groupId int, newSetting Setting) {
+func (*Exports) SetGroupSetting(groupId string, newSetting Setting) {
 	utils.BSON_WriteFile(groupsManager.Paths.Setting(groupId), newSetting)
 }

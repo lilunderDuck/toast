@@ -15,7 +15,7 @@ type JournalGroupOptions struct {
 
 // Represents the complete data for a journal group
 type JournalGroupData struct {
-	Id          int           `json:"id"                    cbor:"0,keyasint"`
+	Id          string        `json:"id"                    cbor:"0,keyasint"`
 	Created     time.Duration `json:"created"               cbor:"1,keyasint"`
 	Modified    time.Duration `json:"modified,omitempty"    cbor:"2,keyasint,omitempty"`
 	Name        string        `json:"name"                  cbor:"3,keyasint"`
@@ -26,7 +26,7 @@ type JournalGroupData struct {
 
 func newJournalGroup(options *JournalGroupOptions) *JournalGroupData {
 	return &JournalGroupData{
-		Id:          utils.GetRandomInt(),
+		Id:          utils.GetRandomStringWithinLength(8),
 		Created:     utils.GetCurrentDateNow(),
 		Name:        options.Name,
 		Description: options.Description,
@@ -37,7 +37,7 @@ func newJournalGroup(options *JournalGroupOptions) *JournalGroupData {
 // Represents a node in a virtual tree structure.
 // It has an ID and a list of child nodes.
 type ExplorerNode struct {
-	Id    int            `form:"id"    json:"id"               cbor:"0,keyasint"`
+	Id    string         `form:"id"    json:"id"               cbor:"0,keyasint"`
 	Child []ExplorerNode `form:"child" json:"child,omitempty"  cbor:"1,keyasint,omitempty"`
 }
 
@@ -45,8 +45,8 @@ type ExplorerNode struct {
 type ExplorerTree []ExplorerNode
 
 type ExplorerData struct {
-	Mapping map[int]string `json:"mapping"  cbor:"0,keyasint"`
-	Tree    ExplorerTree   `json:"tree"  cbor:"1,keyasint"`
+	Mapping map[string]string `json:"mapping"  cbor:"0,keyasint"`
+	Tree    ExplorerTree      `json:"tree"     cbor:"1,keyasint"`
 }
 
 type Setting struct {

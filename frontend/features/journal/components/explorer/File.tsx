@@ -29,8 +29,8 @@ const style = stylex.create({
 })
 
 interface IFileProps {
-  groupId$: number
-  journalId$: number
+  groupId$: string
+  journalId$: string
   name$: string
   onClick?: HTMLAttributes<"button">["onClick"]
 }

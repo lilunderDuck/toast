@@ -16,14 +16,14 @@ export interface IFileExplorerContext {
   components$: {
     File$: Component<{
       /**The unique identifier of this file node. */
-      id: number
+      id: string
       /**The display name of this file. */
       name: string
     }>
     Folder$: ParentComponent<{
       onClick: EventHandler<"div", "onClick">
       /**The unique identifier of this folder node. */
-      id: number
+      id: string
       /**The display name of this folder. */
       name: string
       /**A state to check if the folder is collapsed or expanded. */
@@ -54,13 +54,13 @@ interface IExplorerTree {
    * @see {@link createFileNode()}
    * @see {@link createFolderNode()}
    */
-  create$(nodeData: group.ExplorerNode, toFolder: number, data: any): void
+  create$(nodeData: group.ExplorerNode, toFolder: string, data: any): void
   /**Replaces an entire folder's contents with a new content.
    * @param folderId The id of the folder whose contents will be replaced.
    * @param newTree The new array of nodes to replace the folder's children.
    * @returns *nothing*
    */
-  replace$(folderId: number, newTree: group.ExplorerNode[]): void
+  replace$(folderId: string, newTree: group.ExplorerNode[]): void
 }
 
 export interface IFileExplorerProviderOptions {
@@ -95,7 +95,7 @@ export function createFileExplorerContext(options: IFileExplorerProviderOptions)
     })
   }
 
-  const add = (nodeData: group.ExplorerNode, toFolder: number, data: any) => {
+  const add = (nodeData: group.ExplorerNode, toFolder: string, data: any) => {
     console.log("Adding node", nodeData, "to", toFolder)
     if (toFolder === ROOT_FOLDER) {
       treeCache.push(nodeData)
@@ -121,7 +121,7 @@ export function createFileExplorerContext(options: IFileExplorerProviderOptions)
     return update()
   }
 
-  const find = (id: number, child: IExplorerTree["data$"] = treeCache) => {
+  const find = (id: string, child: IExplorerTree["data$"] = treeCache) => {
     for (const node of child) {
       if (node.id === id) {
         return node
@@ -139,7 +139,7 @@ export function createFileExplorerContext(options: IFileExplorerProviderOptions)
     return null
   }
 
-  const replaceTree = (whichFolderId: number, tree: IExplorerTree["data$"]) => {
+  const replaceTree = (whichFolderId: string, tree: IExplorerTree["data$"]) => {
     if (whichFolderId === ROOT_FOLDER) {
       treeCache = tree
       console.log('replace', whichFolderId, "with", tree)

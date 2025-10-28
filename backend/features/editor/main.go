@@ -14,12 +14,12 @@ type Exports struct{}
 
 // General purpose function to be used across all of editor blocks.
 
-func (*Exports) UploadMedia(groupId int, filePath string) (newFileName string, err error) {
+func (*Exports) UploadMedia(groupId string, filePath string) (newFileName string, err error) {
 	fileName := filepath.Base(filePath)
 	savedLocation := filepath.Join(
 		internals.DATA_FOLDER_PATH,
 		"media",
-		utils.ToString(groupId),
+		groupId,
 		fileName,
 	)
 

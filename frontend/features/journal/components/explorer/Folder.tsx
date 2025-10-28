@@ -26,7 +26,7 @@ const style = stylex.create({
 })
 
 interface IFolderProps {
-  folderId$: number
+  folderId$: string
   name$: string
   onClick?: HTMLAttributes<"div">["onClick"]
 }

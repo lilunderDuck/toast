@@ -12,7 +12,7 @@ type JournalOptions struct {
 }
 
 type JournalData struct {
-	Id       int                `json:"id"                 cbor:"0,keyasint"`
+	Id       string             `json:"id"                 cbor:"0,keyasint"`
 	Type     uint8              `json:"type"               cbor:"1,keyasint"`
 	Created  time.Duration      `json:"created"            cbor:"2,keyasint"`
 	Modified time.Duration      `json:"modified,omitempty" cbor:"3,keyasint,omitempty"`
@@ -21,9 +21,8 @@ type JournalData struct {
 }
 
 func newJournal(journalType uint8, options *JournalOptions) *JournalData {
-	journalId := utils.GetRandomInt()
 	return &JournalData{
-		Id:      journalId,
+		Id:      utils.GetRandomStringWithinLength(8),
 		Type:    journalType,
 		Created: utils.GetCurrentDateNow(),
 		Name:    options.Name,

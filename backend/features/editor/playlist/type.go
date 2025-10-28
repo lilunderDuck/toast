@@ -18,7 +18,7 @@ type PlaylistMetadata struct {
 	Title       string             `json:"title"`
 	Description string             `json:"description,omitempty"`
 	Items       []PlaylistItemData `json:"items"`
-	Id          int                `json:"id"`
+	Id          string             `json:"id"`
 	Created     time.Duration      `json:"created"`
 	Modified    time.Duration      `json:"modified,omitempty"`
 	Icon        string             `json:"icon,omitempty"`
@@ -28,7 +28,7 @@ func newPlaylistMetadata(options *PlaylistOptions) *PlaylistMetadata {
 	return &PlaylistMetadata{
 		Title:       options.Title,
 		Description: options.Description,
-		Id:          utils.GetRandomInt(),
+		Id:          utils.GetRandomStringWithinLength(8),
 		Created:     utils.GetCurrentDateNow(),
 	}
 }
@@ -59,8 +59,8 @@ type PlaylistItemData struct {
 	// Description of the track
 	Description string `json:"description,omitempty"`
 	// Unique identifier of this playlist item
-	Id       int `json:"id"`
-	Duration int `json:"duration"`
+	Id       string `json:"id"`
+	Duration int    `json:"duration"`
 }
 
 func NewPlaylistItemData(audioDuration int, options *PlaylistItemOptions) *PlaylistItemData {
@@ -83,7 +83,7 @@ func NewPlaylistItemData(audioDuration int, options *PlaylistItemOptions) *Playl
 		Description: options.Description,
 		FileName:    audioFileName,
 		Icon:        iconFileName,
-		Id:          utils.GetRandomInt(),
+		Id:          utils.GetRandomStringWithinLength(8),
 		Duration:    audioDuration,
 	}
 }

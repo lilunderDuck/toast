@@ -1,4 +1,4 @@
-import { type Accessor, createContext, createSignal, type ParentProps, type Signal, useContext } from "solid-js"
+import { type Accessor, createContext, createSignal, type ParentProps, useContext } from "solid-js"
 // ...
 import { toast } from "~/libs/solid-toast"
 import { arrayObjects } from "~/utils"
@@ -19,7 +19,7 @@ interface IJournalHomeContext {
    * @param targetGroupId The group id to edit.
    * @param options The new options for the journal group.
    */
-  editGroup$(targetGroupId: number, options: group.JournalGroupOptions): Promise<void>
+  editGroup$(targetGroupId: string, options: group.JournalGroupOptions): Promise<void>
 }
 
 const Context = createContext<IJournalHomeContext>()

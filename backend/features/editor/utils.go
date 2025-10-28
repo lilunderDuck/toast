@@ -68,28 +68,28 @@ func DetermineFileType(filePath string) (uint8, error) {
 // function type and stuff to make sure I don't waste time retyping
 // the whole thing
 
-type embed_writeMetaFn[T any] func(id int, data *T) error
-type embed_readMetaFn[T any] func(id int) (*T, error)
-type embed_uploadFn[T any] func(id int, from string) error
-type embed_deleteFn func(id int) error
+type embed_writeMetaFn[T any] func(id string, data *T) error
+type embed_readMetaFn[T any] func(id string) (*T, error)
+type embed_uploadFn[T any] func(id string, from string) error
+type embed_deleteFn func(id string) error
 
 func CreateEmbedableMediaCollection[T any](
 	manager *internals.EmbedableMediaPath,
 ) (embed_writeMetaFn[T], embed_readMetaFn[T], embed_uploadFn[T], embed_deleteFn) {
 	// what in the hell did I just write...
-	var writeFn embed_writeMetaFn[T] = func(id int, data *T) error {
+	var writeFn embed_writeMetaFn[T] = func(id string, data *T) error {
 		return utils.BSON_WriteFile(manager.GetMetaFilePath(id), data)
 	}
 
-	var readFn embed_readMetaFn[T] = func(id int) (*T, error) {
+	var readFn embed_readMetaFn[T] = func(id string) (*T, error) {
 		return utils.BSON_ReadFile[T](manager.GetMetaFilePath(id))
 	}
 
-	var uploadFn embed_uploadFn[T] = func(id int, from string) error {
+	var uploadFn embed_uploadFn[T] = func(id string, from string) error {
 		return utils.CopyFile(from, manager.GetFolderPath(id))
 	}
 
-	var deleteFn embed_deleteFn = func(id int) error {
+	var deleteFn embed_deleteFn = func(id string) error {
 		return os.Remove(manager.GetFolderPath(id))
 	}
 

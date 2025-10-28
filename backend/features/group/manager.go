@@ -24,16 +24,17 @@ func NewGroupsManager() *GroupsManager {
 	}
 }
 
-func (group *GroupsManager) WriteMetadata(groupId int, data *JournalGroupData) error {
+func (group *GroupsManager) WriteMetadata(groupId string, data *JournalGroupData) error {
 	groupDb().SetObject(groupId, data)
 	return utils.BSON_WriteFile(group.Paths.MetaFile(groupId), data)
 }
 
-func (group *GroupsManager) ReadMetadata(groupId int) (*JournalGroupData, error) {
+func (group *GroupsManager) ReadMetadata(groupId string) (*JournalGroupData, error) {
+	println(group.Paths.MetaFile(groupId))
 	return utils.BSON_ReadFile[JournalGroupData](group.Paths.MetaFile(groupId))
 }
 
-func (group *GroupsManager) Delete(groupId int) {
+func (group *GroupsManager) Delete(groupId string) {
 	os.Remove(group.Paths.Base(groupId))
 	groupDb().DeleteObject(groupId)
 }

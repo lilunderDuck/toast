@@ -27,7 +27,7 @@ const style = stylex.create({
 export interface ICurrentlyOpenedProps {
   currentlyOpenedName$?: string
   isSidebarHidden$: boolean
-  groupId$: number
+  groupId$: string
   onClick$(whichOne: CurrentlyOpenedHeaderAction): void
 }
 

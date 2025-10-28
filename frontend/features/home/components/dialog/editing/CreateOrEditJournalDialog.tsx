@@ -37,7 +37,7 @@ interface ICreateJournalDialogProps extends ILazyDialog {
   prevData$?: group.JournalGroupData
   onSubmit$?: (data: group.JournalGroupOptions) => any
   onUpdate$?: (data: group.JournalGroupOptions & {
-    id: number
+    id: string
   }) => any
 }
 
@@ -54,7 +54,6 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
 
   const { Form$, Field$ } = createSubmitForm<JournalGroupOptionSchema>({
     async onSubmit$(data) {
-      debugger
       if (props.prevData$) {
         const newData = { ...props.prevData$, ...data as group.JournalGroupOptions }
         props.onUpdate$?.(newData)
