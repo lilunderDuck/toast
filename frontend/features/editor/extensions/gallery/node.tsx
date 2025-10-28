@@ -30,12 +30,11 @@ const style = stylex.create({
   }
 })
 
+const SplitViewGalleryView = lazy(() => import("./view/SplitViewGalleryView"))
+const SingleItemGalleryView = lazy(() => import("./view/SingleItemGalleryView"))
 
 export default function GalleryNodeView() {
   const { data$ } = useNodeState<GalleryAttribute>()
-
-  const SplitViewGalleryView = lazy(() => import("./view/SplitViewGalleryView"))
-  const SingleItemGalleryView = lazy(() => import("./view/SingleItemGalleryView"))
 
   return (
     <GalleryProvider>

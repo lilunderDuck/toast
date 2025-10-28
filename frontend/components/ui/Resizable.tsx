@@ -35,7 +35,7 @@ const style = stylex.create({
  
 export type ResizableProps<T extends ValidComponent = "div"> = RootProps<T> & { class?: string }
  
-const Resizable = <T extends ValidComponent = "div">(props: DynamicProps<T, ResizableProps<T>>) => {
+export function Resizable<T extends ValidComponent = "div">(props: DynamicProps<T, ResizableProps<T>>) {
   const [, rest] = splitProps(props as ResizableProps, ["class"])
   return (
     <ResizablePrimitive
@@ -50,16 +50,16 @@ const Resizable = <T extends ValidComponent = "div">(props: DynamicProps<T, Resi
 
 export type ResizablePanelProps = Parameters<typeof ResizablePrimitive['Panel']>[0]
  
-const ResizablePanel = ResizablePrimitive.Panel
+export const ResizablePanel = ResizablePrimitive.Panel
  
 export type ResizableHandleProps<T extends ValidComponent = "button"> = HandleProps<T> & {
   class?: string
   withHandle?: boolean
 }
  
-const ResizableHandle = <T extends ValidComponent = "button">(
+export function ResizableHandle<T extends ValidComponent = "button">(
   props: DynamicProps<T, ResizableHandleProps<T>>
-) => {
+) {
   const [, rest] = splitProps(props as ResizableHandleProps, ["class", "withHandle"])
   return (
     <ResizablePrimitive.Handle
@@ -93,5 +93,3 @@ const ResizableHandle = <T extends ValidComponent = "button">(
     </ResizablePrimitive.Handle>
   )
 }
- 
-export { Resizable, ResizablePanel, ResizableHandle }

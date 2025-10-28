@@ -38,7 +38,7 @@ export const GalleryExtension = Node.create({
   addCommands() {
     return {
       insertGallery$: () => ({ tr }) => {
-        return insertNodeAtCurrentPosition<GalleryAttribute>(this, tr, { id: 0, viewMode: 1 })
+        return insertNodeAtCurrentPosition<GalleryAttribute>(this, tr, { id: DEFAULT_GALLERY_ID, viewMode: GalleryViewMode.SINGLE_ITEM })
       },
     }
   },
