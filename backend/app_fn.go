@@ -3,6 +3,7 @@ package backend
 import (
 	"context"
 	"toast/backend/db"
+	"toast/backend/internals"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -19,6 +20,7 @@ func New() *App {
 
 // Called at application startup
 func (a *App) startup(ctx context.Context) {
+	db.Open(internals.GROUPS_DATA_PATH)
 	a.ctx = ctx
 }
 

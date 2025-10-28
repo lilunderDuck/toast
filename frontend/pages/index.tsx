@@ -29,8 +29,8 @@ export default function Home() {
   return (
     <>
       <AppTitleBarDraggable {...stylex.attrs(style.home__titleBar)} />
-      <Show when={resource.loading}>
-        <JournalHomeProvider groups$={resource()!}>
+      <Show when={!resource.loading}>
+        <JournalHomeProvider groups$={resource() ?? []}>
           <JournalListSection />
         </JournalHomeProvider>
       </Show>

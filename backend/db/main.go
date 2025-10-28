@@ -53,12 +53,11 @@ func Open(path string) (*DbInstance, error) {
 		DirPath: path,
 	})
 	if err != nil {
+		println(err)
 		return nil, err
 	}
 
-	dbInstance := &DbInstance{
-		internal: db,
-	}
+	dbInstance := &DbInstance{internal: db}
 
 	globalDbInstance[path] = dbInstance
 

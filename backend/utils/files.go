@@ -41,6 +41,7 @@ func GetCurrentDir() (currentPath string) {
 // Makes a new folder at the given path. It will create all
 // intermediate directories in the path if they do not already exist.
 func CreateDirectory(path string) (makeDirError error) {
+	println("Create directory:", path)
 	return os.MkdirAll(path, 0666)
 }
 
