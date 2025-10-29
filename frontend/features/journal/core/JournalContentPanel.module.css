@@ -1,0 +1,12 @@
+.journalFullview [data-journal-side-bar-panel],
+.journalFullview [data-corvu-resizable-handle] {
+  display: none;
+}
+
+.journalFullview [data-journal-main-content-panel] {
+  flex-basis: 100% !important;
+}
+
+.journalFullview [data-editor] {
+  padding-inline: 8% !important;
+}

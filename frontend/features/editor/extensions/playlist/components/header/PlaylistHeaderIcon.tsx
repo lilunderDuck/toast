@@ -6,15 +6,15 @@ import { ASSETS_SERVER_URL } from "~/api";
 
 const style = stylex.create({
   header__icon: {
-    width: "7rem",
-    height: "7rem",
+    width: "5rem",
+    height: "5rem",
     borderRadius: 6,
     background: "center center no-repeat var(--icon-url)",
     flexShrink: 0,
   },
   header__iconEmpty: {
-    width: "7rem",
-    height: "7rem",
+    width: "5rem",
+    height: "5rem",
     borderRadius: 6,
     backgroundColor: "var(--gray5)",
     display: "flex",

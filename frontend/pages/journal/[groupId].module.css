@@ -5,19 +5,10 @@
   --top-header-content-side-bg: var(--sidebar-panel-bg);
 }
 
-.journalFullview {
-  --nothing: 1
+.journal [data-journal-main-content-panel] > section {
+  height: 100%;
 }
 
-.journalFullview [data-journal-side-bar-panel],
-.journalFullview [data-corvu-resizable-handle] {
-  display: none;
-}
-
-.journalFullview [data-journal-main-content-panel] {
-  flex-basis: 100% !important;
-}
-
-.journalFullview [data-editor] {
-  padding-inline: 8% !important;
+#journalTitlebar > * {
+  flex-shrink: 0;
 }

@@ -1,14 +1,15 @@
 import { createEffect, onCleanup } from "solid-js"
 // ...
 import { Editor, useEditorContext } from "~/features/editor"
-import { useJournalContext } from "~/features/journal"
+import { useJournalContentPanelContext, useJournalContext } from "~/features/journal"
 // ...
 import getJournalData from "./index.data"
 
 export default function JournalContent() {
   const journalData = getJournalData()
   const { event$, open$ } = useEditorContext()
-  const { updateJournal$, setCurrentlyOpenedJournal$ } = useJournalContext()
+  const { updateJournal$ } = useJournalContext()
+  const { setCurrentlyOpenedJournal$ } = useJournalContentPanelContext()
 
   event$.on$(EditorEvent.ON_SWITCHING, (oldData) => {
     updateJournal$(oldData.id, {

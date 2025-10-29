@@ -1,8 +1,11 @@
-import { type Accessor, createContext, createSignal, type ParentProps, type Setter, useContext } from "solid-js"
+import { type Accessor, createContext, createSignal, type ParentProps, useContext } from "solid-js"
+// ...
+import __style from "./[groupId].module.css"
 // ...
 import { createStorage, type IStorage } from "~/utils"
 import { CreateJournal, GetJournal, UpdateJournal } from "~/wailsjs/go/journal/Exports"
 import type { journal } from "~/wailsjs/go/models"
+import { useToggle } from "~/hooks"
 // ...
 import { createFileExplorerContext, createFileNode, createFolderNode, type IFileExplorerContext, type IFileExplorerProviderOptions, ROOT_FOLDER } from "./explorer"
 import { createHistoryManager, type IHistoryManager } from "./history"
@@ -27,9 +30,10 @@ export interface IJournalContext {
   sessionStorage$: JournalSessionStorage
   explorerTree$: IFileExplorerContext
   history$: IHistoryManager
-  // ...
-  currentlyOpenedJournal$: Accessor<string | undefined>
-  setCurrentlyOpenedJournal$: Setter<string | undefined>
+  sidebar$: {
+    toggle$: () => boolean
+    isHidden$: Accessor<boolean>
+  }
 }
 
 export interface IJournalProviderProps {
@@ -44,7 +48,6 @@ export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
   const groupId = () => wrappedSessionStorage.get$('journal_data$').groupId$
 
   const explorerTree = createFileExplorerContext(props.explorerOptions$)
-  const [currentlyOpenedJournal, setCurrentlyOpenedJournal] = createSignal<string>()
 
   const createJournal: IJournalContext["createJournal$"] = async (type, data) => {
     const newData = await CreateJournal(groupId(), type, data)
@@ -54,11 +57,14 @@ export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
     return newData
   }
 
+  const [isSidebarHidden, toggleHideSidebar] = useToggle()
+
   return (
     <Context.Provider value={{
-      currentlyOpenedJournal$: currentlyOpenedJournal,
-      setCurrentlyOpenedJournal$: setCurrentlyOpenedJournal,
-      // ...
+      sidebar$: {
+        isHidden$: isSidebarHidden,
+        toggle$: toggleHideSidebar
+      },
       explorerTree$: explorerTree,
       sessionStorage$: wrappedSessionStorage,
       createJournal$: createJournal,

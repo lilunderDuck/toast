@@ -81,8 +81,8 @@ export interface IFileExplorerProviderOptions {
 export function createFileExplorerContext(options: IFileExplorerProviderOptions): IFileExplorerContext {
   const data = options.getData$()
 
-  let treeCache: group.ExplorerNode[] = data.tree ?? []
-  const treeDisplayNameCache = data.mapping ?? {}
+  let treeCache: group.ExplorerNode[] = data?.tree ?? []
+  const treeDisplayNameCache = data?.mapping ?? {}
   const [isUpdating, setIsUpdating] = createSignal(false)
 
   const update = async () => {

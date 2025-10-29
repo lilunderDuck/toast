@@ -4,7 +4,7 @@ import { macro_mergeClassnames } from "macro-def"
 import stylex from "@stylexjs/stylex"
 import __style from "./PlaylistTrackItem.module.css"
 // ...
-import type { editor } from "~/wailsjs/go/models"
+import type { playlist } from "~/wailsjs/go/models"
 import { Button, ButtonRow } from "~/components"
 import { formatSecondsToMMSS } from "~/utils"
 import { createLazyLoadedDialog } from "~/hooks"
@@ -34,7 +34,7 @@ const style = stylex.create({
   }
 })
 
-interface IPlaylistTrackItemProps extends editor.PlaylistItemData {
+interface IPlaylistTrackItemProps extends playlist.PlaylistItemData {
   index$: number
   onDelete$: () => void
 }

@@ -9,7 +9,9 @@ const style = stylex.create({
     gap: 15,
     userSelect: "none",
     fontSize: 13,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    paddingBottom: 5,
+    borderBottom: "2px solid var(--gray3)"
   },
   header__index: {
     marginLeft: "0.5rem"
@@ -19,7 +21,7 @@ const style = stylex.create({
   }
 })
 
-export function PlaylistTrackHeader() {
+export function PlaylistTrackItemHeader() {
   return (
     <div class={macro_mergeClassnames(stylex.attrs(style.header), __style.itemHeader)}>
       <span {...stylex.attrs(style.header__index)}>#</span>

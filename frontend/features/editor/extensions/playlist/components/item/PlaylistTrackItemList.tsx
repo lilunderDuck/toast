@@ -5,7 +5,7 @@ import { dndzone } from "solid-dnd-directive"
 import stylex from "@stylexjs/stylex"
 // ...
 import type { IDndConsiderEvent, IDndFinalizeEvent } from "~/features/journal"
-import type { editor } from "~/wailsjs/go/models"
+import type { playlist } from "~/wailsjs/go/models"
 // ...
 import { usePlaylistContext } from "../../provider"
 import PlaylistTrackItem from "./PlaylistTrackItem"
@@ -29,14 +29,14 @@ export function PlaylistTrackItemList() {
 
   // yes, long confusing type surely won't confuse me later
   const considerDragging: EventHandler<"ul", "on:consider"> = (dragEvent) => {
-    const { items: newItems } = (dragEvent as unknown as IDndConsiderEvent<editor.PlaylistItemData>).detail
+    const { items: newItems } = (dragEvent as unknown as IDndConsiderEvent<playlist.PlaylistItemData>).detail
     items$.setItems$(newItems)
   }
 
   const finalizeDragging: EventHandler<"ul", "on:finalize"> = (dragEvent) => {
-    const { items: newItems } = (dragEvent as unknown as IDndFinalizeEvent<editor.PlaylistItemData>).detail
+    const { items: newItems } = (dragEvent as unknown as IDndFinalizeEvent<playlist.PlaylistItemData>).detail
     items$.setItems$(newItems)
-    editPlaylist$({ items: newItems } as editor.PlaylistOptions)
+    editPlaylist$({ items: newItems } as playlist.PlaylistOptions)
   }
 
   const deleteTrack = (trackId: number) => {

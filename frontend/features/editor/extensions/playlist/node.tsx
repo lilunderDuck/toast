@@ -5,7 +5,7 @@ import stylex from "@stylexjs/stylex"
 import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
 // ...
 import { usePlaylistContext } from "./provider"
-import { PlaylistAudioPlayer, PlaylistHeader, PlaylistTrackHeader, PlaylistTrackItemList } from "./components"
+import { PlaylistAudioPlayer, PlaylistHeader, PlaylistTrackItemHeader, PlaylistTrackItemList } from "./components"
 
 const style = stylex.create({
   node: {
@@ -29,7 +29,7 @@ export default function PlaylistNode() {
     <NodeViewWrapper {...stylex.attrs(style.node)}>
       <Show when={data$()}>
         <PlaylistHeader />
-        <PlaylistTrackHeader />
+        <PlaylistTrackItemHeader />
         <PlaylistTrackItemList />
         <PlaylistAudioPlayer />
       </Show>

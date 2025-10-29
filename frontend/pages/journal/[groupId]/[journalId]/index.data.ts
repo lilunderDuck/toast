@@ -5,7 +5,7 @@ export default function getJournalData() {
   return createAsync(async() => {
     const param = useParams()
     const { getJournal$, history$ } = useJournalContext()
-    const data = await getJournal$(parseInt(param.journalId))
+    const data = await getJournal$(param.journalId)
     history$.setLastOpened$(data)
     return data
   })

@@ -7,7 +7,7 @@ import type { playlist } from "~/wailsjs/go/models"
 
 /**The state of the currently focused or playing track. */
 export type FocusedTrackData = {
-  trackId$: number
+  trackId$: string
   isPlaying$: boolean
   index$: number
   name$: string
@@ -34,11 +34,11 @@ export function createTrackPlayerManager(
     }
   })
 
-  const isCurrentTrackPlaying = (trackId: number) => {
+  const isCurrentTrackPlaying = (trackId: string) => {
     return focusedTrack()?.trackId$ === trackId && focusedTrack()?.isPlaying$
   }
 
-  const playTrack = (trackId: number) => {
+  const playTrack = (trackId: string) => {
     console.log("About to play track id:", trackId)
     if (isCurrentTrackPlaying(trackId)) {
       console.log("Track already been played:", trackId)
@@ -65,7 +65,7 @@ export function createTrackPlayerManager(
     console.log("Playing track id:", trackId)
   }
 
-  const pauseTrack = (trackId: number) => {
+  const pauseTrack = (trackId: string) => {
     if (trackId !== focusedTrack()?.trackId$) return 
     player.pause$()
     setFocusedTrack(prev => ({ ...prev, isPlaying$: false }) as FocusedTrackData)
@@ -73,7 +73,7 @@ export function createTrackPlayerManager(
     console.log("Paused track id:", trackId)
   }
 
-  const togglePlayTrack = (trackId: number) => {
+  const togglePlayTrack = (trackId: string) => {
     if (focusedTrack()?.trackId$ === trackId) {
       focusedTrack()!.isPlaying$ ? pauseTrack(trackId) : playTrack(trackId)
     } else {

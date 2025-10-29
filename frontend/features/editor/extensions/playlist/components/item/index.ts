@@ -1,2 +1,2 @@
-export * from "./PlaylistTrackHeader"
+export * from "./PlaylistTrackItemHeader"
 export * from "./PlaylistTrackItemList"
