@@ -1,0 +1,12 @@
+#selectInput[data-expanded] {
+  background-color: var(--gray5);
+  color: var(--gray12) !important;
+}
+
+.selectInput__icon {
+  transition: rotate 0.25s ease-out;
+}
+
+#selectInput[data-expanded] .selectInput__icon {
+  rotate: 180deg;
+}

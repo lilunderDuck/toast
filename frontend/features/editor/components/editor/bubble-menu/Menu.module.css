@@ -1,0 +1,7 @@
+.menu [data-bubble-menu-item] {
+  width: 1.575rem;
+}
+
+.menu [data-bubble-menu-item-button] {
+  height: 1.575rem;
+}

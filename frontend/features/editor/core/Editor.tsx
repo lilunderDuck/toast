@@ -1,6 +1,6 @@
 import { onMount } from "solid-js"
 import { macro_mergeClassnames } from "macro-def"
-import { FloatingMenuPlugin, type FloatingMenuPluginProps } from "@tiptap/extension-floating-menu"
+import { type FloatingMenuPluginProps } from "@tiptap/extension-floating-menu"
 import { BubbleMenuPlugin, type BubbleMenuPluginProps } from "@tiptap/extension-bubble-menu"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -9,7 +9,7 @@ import "./Editor.css"
 // ...
 import { SolidEditorContent } from "~/libs/solid-tiptap-renderer"
 // ...
-import { AttributeEditor, BubbleMenu, FloatingMenu } from "../components"
+import { AttributeEditor, BubbleMenu } from "../components"
 import { useEditorContext } from "../provider"
 
 const style = stylex.create({
@@ -23,11 +23,6 @@ const style = stylex.create({
 export function Editor() {
   const { editor$ } = useEditorContext()
 
-  const editorChain = () => editor$().chain().focus()
-  const toggleHeading = (level: 1 | 2 | 3 | 4 | 5 | 6) => editorChain().toggleHeading({
-    level: level
-  }).run()
-
   let bubbleMenuRef!: Ref<"div">
   let floatingMenuRef!: Ref<"div">
 
@@ -36,15 +31,16 @@ export function Editor() {
     pluginKey: crypto.randomUUID(),
     element: element,
     tippyOptions: {
-      hideOnClick: "toggle"
+      arrow: true,
+      interactive: true,
     }
   })
 
   onMount(() => {
-    editor$().registerPlugin(
-      // @ts-ignore - stop yelling at me, typescript
-      FloatingMenuPlugin(getOption(floatingMenuRef))
-    )
+    // editor$().registerPlugin(
+    // @ts-ignore - stop yelling at me, typescript
+    // FloatingMenuPlugin(getOption(floatingMenuRef))
+    // )
 
     editor$().registerPlugin(
       BubbleMenuPlugin(getOption(bubbleMenuRef))
@@ -54,8 +50,8 @@ export function Editor() {
   return (
     <>
       <AttributeEditor />
-      <SolidEditorContent 
-        editor={editor$()} 
+      <SolidEditorContent
+        editor={editor$()}
         style={`--sb-track-color: var(--gray2)`}
         class={macro_mergeClassnames(
           stylex.attrs(style.editor),
@@ -63,14 +59,7 @@ export function Editor() {
           __scrollbarStyle.scrollbarVertical
         )}
       />
-      <BubbleMenu 
-        ref={bubbleMenuRef}
-        toggleHeading$={toggleHeading}
-      />
-      <FloatingMenu 
-        ref={floatingMenuRef} 
-        toggleHeading$={toggleHeading}
-      />
+      <BubbleMenu ref={bubbleMenuRef} />
     </>
   )
 }

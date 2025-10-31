@@ -234,6 +234,11 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'TOGGLE_PLAY_TRACK',
   ])
 
+  defineEnum('EditorNodeType', [
+    'INLINE',
+    'BLOCK'
+  ])
+
   return mapping
 }
 

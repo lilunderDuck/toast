@@ -1,6 +1,9 @@
-import { type NodeConfig } from "@tiptap/core"
+import { Node, type Attribute, type Command, type NodeConfig } from "@tiptap/core"
 import { Transaction } from "prosemirror-state"
-
+import type { IconTypes } from "solid-icons"
+import type { VoidComponent } from "solid-js"
+import { SolidNodeViewRenderer, type SolidEditor } from "~/libs/solid-tiptap-renderer"
+import { useEditorContext } from "../provider"
 
 /**Rxtracts the `this` type from a `NodeConfig`'s `addCommands` method.  */
 export type ThisInAddCommands = ThisParameterType<NonNullable<NodeConfig["addCommands"]>>
@@ -58,4 +61,65 @@ export function insertNodeAtCurrentPosition<T extends {}>(
   const node = theThisType.type.create(data)
   tr.replaceRangeWith(from, to, node)
   return true
+}
+
+interface IBaseEditorNodeOptions<T extends Record<string, any>> {
+  name$: string
+  commands$: Record<string, () => Command>
+  attributes$(): Record<keyof T, Pick<Attribute, "default" | "isRequired">>
+  View$: VoidComponent
+  menu$: (editorInstance: () => SolidEditor) => IEditorMenuOptions
+}
+
+export interface IEditorMenuOptions {
+  name$: string
+  icon$: IconTypes
+  run$: () => any
+}
+
+interface IEditorInlineNodeOptions<
+  T extends Record<string, any>
+> extends IBaseEditorNodeOptions<T> {
+  inputRules: NodeConfig["addInputRules"]
+}
+
+interface IEditorBlockNodeOptions<
+  T extends Record<string, any>
+> extends IBaseEditorNodeOptions<T> {
+  // ...
+}
+
+interface IEditorNodeOptionsMap<
+  T extends Record<string, any>
+> {
+  [EditorNodeType.BLOCK]: IEditorBlockNodeOptions<T>
+  [EditorNodeType.INLINE]: IEditorInlineNodeOptions<T>
+}
+
+export function createEditorNode<
+  U extends Record<string, any>,
+  T extends EditorNodeType,
+>(type: T, options: IEditorNodeOptionsMap<U>[T]) {
+  const { menus$, editor$ } = useEditorContext()
+
+  const config: Partial<NodeConfig> = {
+    name: options.name$,
+    inline: true,
+    atom: true,
+    selectable: false,
+    addAttributes: options.attributes$,
+    addNodeView: () => SolidNodeViewRenderer(options.View$)
+  }
+
+  if (type === EditorNodeType.INLINE) {
+    config.content = 'inline*'
+  } else {
+    config.addCommands = function() {
+      return options.commands$
+    }
+  }
+
+  menus$.menuOptions$().push(options.menu$(editor$))
+
+  return Node.create(config)
 }
