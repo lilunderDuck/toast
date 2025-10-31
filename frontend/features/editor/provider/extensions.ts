@@ -13,12 +13,12 @@ import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import Placeholder from '@tiptap/extension-placeholder'
 import { DetailsSummary, DetailsContent, Details } from '@tiptap/extension-details'
-import { Color } from '@tiptap/extension-color'
+import { TextStyle, BackgroundColor, Color } from '@tiptap/extension-text-style'
 import { CharacterCount } from '@tiptap/extensions'
 import { common, createLowlight } from 'lowlight'
 import { macro_mergeClassnames } from 'macro-def'
 // ...
-import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension } from "../extensions"
+import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension, SlashCommandExtension } from "../extensions"
 // ...
 import __style from "./extensions.module.css"
 import stylex from "@stylexjs/stylex"
@@ -82,6 +82,8 @@ export function getExtensions() {
       }
     }),
     Color,
+    TextStyle, 
+    BackgroundColor,
     CodeBlockLowlight.configure({
       lowlight,
       defaultLanguage: "txt",
@@ -97,6 +99,7 @@ export function getExtensions() {
     }),
     // ------- misc functionality extension ------
     CharacterCount,
+    SlashCommandExtension,
     // ------- custom extension zone -------
     TagExtension,
     LocalEmbedExtension,

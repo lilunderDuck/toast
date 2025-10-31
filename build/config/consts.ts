@@ -14,7 +14,7 @@ function makeConst() {
         propMapping[propName] = i
       }
     } else {
-      propMapping = prop
+      propMapping = JSON.parse(JSON.stringify(prop))
     }
 
     mapping.push({
@@ -70,10 +70,11 @@ export function generateConstsTypeThenSave(mapping: ConstsMapping) {
       const entries = Object.entries(definedConst.prop)
       let enumContent = ''
       for (let [enumPropName, enumPropValue] of entries) {
-        enumContent += `${enumPropName} = ${enumPropValue},`
         if (typeof enumPropValue === "string") {
           enumPropValue = `"${enumPropValue}"`
         }
+        
+        enumContent += `${enumPropName} = ${enumPropValue},`
 
         const fullName = `${definedConst.name}.${enumPropName}` as const
         definedMapping.set(fullName, enumPropValue)
@@ -238,6 +239,27 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'INLINE',
     'BLOCK'
   ])
+
+  defineEnum('EditorTextColor', {
+    'RED': '#c92222',
+    'ORANGE': '#d34f0b',
+    'YELLOW': '#b67c04',
+    'GREEN': '#149343',
+    'TEAL': '#0782a0',
+    'BLUE': '#2159d3',
+    'PURPLE': '#842ed3',
+    'GREY': '#444d59',
+    'HIGHLIGHT_RED': '#ffcece',
+    'HIGHLIGHT_ORANGE': '#fed5d5',
+    'HIGHLIGHT_YELLOW': '#fedfbb',
+    'HIGHLIGHT_GREEN': '#fef3a1',
+    'HIGHLIGHT_TEAL': '#e1fab1',
+    'HIGHLIGHT_BLUE': '#adf8e9',
+    'HIGHLIGHT_PURPLE': '#cce2fe',
+    'HIGHLIGHT_GREY': '#edddff',
+    'RESET': 0,
+    'CUSTOM': 1
+  })
 
   return mapping
 }

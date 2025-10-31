@@ -1,4 +1,4 @@
-import { type Attribute, Node } from '@tiptap/core'
+import { type Attribute, Node, type Command } from '@tiptap/core'
 // ...
 import { SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
 // ...
@@ -8,7 +8,7 @@ import GalleryNodeView from './node'
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     Gallery$: {
-      insertGallery$: () => ReturnType
+      insertGallery$: () => Command
     }
   }
 }

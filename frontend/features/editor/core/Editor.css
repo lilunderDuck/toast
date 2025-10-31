@@ -1,3 +1,78 @@
+:root {
+  --font-serif-family: "Source Serif 4", "Noto Serif", serif, "Cambria", apple-system, BlinkMacSystemFont, "Helvetica Neue", Tahoma, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono-family: "Source Code Pro", "IBM Plex Mono", "Roboto Mono", "Noto Sans Mono", "Noto Sans CJK", apple-system, BlinkMacSystemFont, "Helvetica Neue", Tahoma, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans-family: "Inter", "Source Sans 3", Poppins, apple-system, BlinkMacSystemFont, "Helvetica Neue", Tahoma, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-number-family: "Roboto Mono", "Noto Sans Mono", apple-system, BlinkMacSystemFont, "Helvetica Neue", Tahoma, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-code-family: "IBM Plex Mono", "Space Mono", Consolas, Menlo, Monaco, Courier, monospace, apple-system, BlinkMacSystemFont, "Helvetica Neue", Tahoma, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --palette-line-yellow: rgb(255, 211, 56);
+  --palette-line-orange: rgb(255, 175, 56);
+  --palette-line-tangerine: rgb(250, 124, 69);
+  --palette-line-red: rgb(237, 63, 63);
+  --palette-line-magenta: rgb(230, 96, 164);
+  --palette-line-purple: rgb(110, 82, 223);
+  --palette-line-navy: rgb(59, 37, 204);
+  --palette-line-blue: rgb(79, 144, 255);
+  --palette-line-teal: rgb(122, 226, 213);
+  --palette-line-green: rgb(124, 194, 112);
+  --palette-line-white: rgb(255, 255, 255);
+  --palette-line-black: rgb(35, 35, 35);
+  --palette-line-grey: rgb(191, 192, 191);
+  /* ... */
+  --palette-shape-yellow: rgb(255, 223, 107);
+  --palette-shape-orange: rgb(255, 196, 107);
+  --palette-shape-tangerine: rgb(251, 161, 121);
+  --palette-shape-red: rgb(241, 111, 111);
+  --palette-shape-magenta: rgb(237, 140, 189);
+  --palette-shape-purple: rgb(147, 126, 231);
+  --palette-shape-navy: rgb(122, 149, 246);
+  --palette-shape-blue: rgb(184, 227, 255);
+  --palette-shape-green: rgb(157, 209, 148);
+  --palette-shape-white: rgb(255, 255, 255);
+  --palette-shape-black: rgb(35, 35, 35);
+  --palette-shape-grey: rgb(216, 217, 216);
+  /* ... */
+  --multi-players-purple: rgba(123, 97, 255, 1);
+  --multi-players-magenta: rgba(245, 49, 179, 1);
+  --multi-players-red: rgba(243, 87, 52, 1);
+  --multi-players-orange: rgba(255, 138, 0, 1);
+  --multi-players-green: rgba(27, 196, 125, 1);
+  --palette-shape-teal: rgb(184, 242, 231);
+  --multi-players-blue: rgba(24, 160, 251, 1);
+  --multi-players-brown: rgba(154, 101, 51, 1);
+  --multi-players-grey: rgba(170, 170, 170, 1);
+  /* ... */
+  --text-highlight-pink: rgba(255, 206, 206, 1);
+  --text-highlight-red: rgba(254, 213, 213, 1);
+  --text-highlight-orange: rgba(254, 223, 187, 1);
+  --text-highlight-yellow: rgba(254, 243, 161, 1);
+  --text-highlight-green: rgba(225, 250, 177, 1);
+  --text-highlight-teal: rgba(173, 248, 233, 1);
+  --text-highlight-blue: rgba(204, 226, 254, 1);
+  --text-highlight-purple: rgba(237, 221, 255, 1);
+  --text-highlight-grey: rgba(234, 236, 239, 1);
+  /* ... */
+  --text-highlight-foreground-red: rgba(198, 34, 34, 1);
+  --text-highlight-foreground-orange: rgba(211, 79, 11, 1);
+  --text-highlight-foreground-yellow: rgba(182, 124, 4, 1);
+  --text-highlight-foreground-green: rgba(20, 147, 67, 1);
+  --text-highlight-foreground-teal: rgba(7, 130, 160, 1);
+  --text-highlight-foreground-blue: rgba(33, 89, 211, 1);
+  --text-highlight-foreground-purple: rgba(132, 46, 211, 1);
+  --text-highlight-foreground-grey: rgba(68, 77, 89, 1);
+  /* --embed-shadow: 0px 0px 0px 2px rgba(0, 0, 0, .08); */
+  --note-background-yellow: rgba(253, 230, 138, 1);
+  --note-background-orange: rgba(255, 196, 143, 1);
+  --note-background-red: rgba(250, 182, 182, 1);
+  --note-background-magenta: rgba(255, 218, 237, 1);
+  --note-background-purple: rgba(221, 214, 254, 1);
+  --note-background-blue: rgba(205, 235, 255, 1);
+  --note-background-teal: rgba(199, 248, 242, 1);
+  --note-background-green: rgba(201, 248, 193, 1);
+  --note-background-black: rgba(0, 0, 0, 1);
+  --note-background-grey: rgba(230, 230, 230, 1);
+  --note-background-white: rgba(255, 255, 255, 1);
+}
+
 .tiptap {
   outline: none;
 }

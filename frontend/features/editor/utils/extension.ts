@@ -1,11 +1,10 @@
-import { Node, type Attribute, type Command, type NodeConfig } from "@tiptap/core"
+import { type Attribute, type Command, type NodeConfig } from "@tiptap/core"
 import { Transaction } from "prosemirror-state"
 import type { IconTypes } from "solid-icons"
 import type { VoidComponent } from "solid-js"
-import { SolidNodeViewRenderer, type SolidEditor } from "~/libs/solid-tiptap-renderer"
-import { useEditorContext } from "../provider"
+import { type SolidEditor } from "~/libs/solid-tiptap-renderer"
 
-/**Rxtracts the `this` type from a `NodeConfig`'s `addCommands` method.  */
+/**Extracts the `this` type from a `NodeConfig`'s `addCommands` method.  */
 export type ThisInAddCommands = ThisParameterType<NonNullable<NodeConfig["addCommands"]>>
 /**Extracts the `this` type from a `NodeConfig`'s `addInputRules` method. **/
 export type ThisInInputRules = ThisParameterType<NonNullable<NodeConfig["addInputRules"]>>
@@ -100,26 +99,5 @@ export function createEditorNode<
   U extends Record<string, any>,
   T extends EditorNodeType,
 >(type: T, options: IEditorNodeOptionsMap<U>[T]) {
-  const { menus$, editor$ } = useEditorContext()
-
-  const config: Partial<NodeConfig> = {
-    name: options.name$,
-    inline: true,
-    atom: true,
-    selectable: false,
-    addAttributes: options.attributes$,
-    addNodeView: () => SolidNodeViewRenderer(options.View$)
-  }
-
-  if (type === EditorNodeType.INLINE) {
-    config.content = 'inline*'
-  } else {
-    config.addCommands = function() {
-      return options.commands$
-    }
-  }
-
-  menus$.menuOptions$().push(options.menu$(editor$))
-
-  return Node.create(config)
+  // TODO
 }

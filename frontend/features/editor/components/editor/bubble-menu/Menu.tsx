@@ -4,15 +4,13 @@ import type { IconTypes } from "solid-icons"
 import { macro_mergeClassnames } from "macro-def"
 import type { ChainedCommands } from "@tiptap/core"
 // ...
-import { Divider } from "~/components"
-// ...
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from "~/styles/scrollbar.module.css"
 import __style from "./Menu.module.css"
 // ...
 import { useEditorContext } from "../../../provider"
+import { ColorTextSelectInput, HeadingSelectInput } from "./input"
 import MenuItemButton from "./MenuItemButton"
-import HeadingSelectInput from "./HeadingSelectInput"
 
 const style = stylex.create({
   menu: {
@@ -98,7 +96,7 @@ export function BubbleMenu(props: IBubbleMenuProps) {
       }}
     >
       <HeadingSelectInput />
-      <Divider />
+      <div />
       <For each={menuOptions()}>
         {it => (
           <MenuItemButton
@@ -109,6 +107,8 @@ export function BubbleMenu(props: IBubbleMenuProps) {
           />
         )}
       </For>
+      <div />
+      <ColorTextSelectInput />
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { type Attribute, Node } from '@tiptap/core'
+import { type Attribute, type Command, Node } from '@tiptap/core'
 // ...
 import { NodeViewWrapper, SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
 // ...
@@ -21,7 +21,7 @@ const style = stylex.create({
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     image: {
-      insertImage$: () => ReturnType
+      insertImage$: () => Command
     }
   }
 }

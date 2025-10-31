@@ -1,15 +1,16 @@
 import { RiEditorH1, RiEditorH2, RiEditorH3, RiEditorH4, RiEditorH5, RiEditorH6 } from "solid-icons/ri"
 import { For } from "solid-js"
-import { BsCaretDownFill, BsFonts } from "solid-icons/bs"
+import { BsFonts } from "solid-icons/bs"
 import type { IconTypes } from "solid-icons"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./HeadingSelectInput.module.css"
 // ...
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "~/components"
+import { HoverCard, HoverCardContent } from "~/components"
 import { useEditorContext } from "~/features/editor"
 // ...
-import type { IBubbleMenuItem } from "./Menu"
+import type { IBubbleMenuItem } from "../Menu"
+import InputPopupTrigger from "./InputPopupTrigger"
 
 const style = stylex.create({
   input__trigger: {
@@ -48,7 +49,7 @@ const style = stylex.create({
 
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6
 
-export default function HeadingSelectInput() {
+export function HeadingSelectInput() {
   const { editor$ } = useEditorContext()
   // @ts-ignore - Property 'toggleHeading' does not exist on type 'ChainedCommands' .ts(2339)
   // it still works tho
@@ -74,23 +75,11 @@ export default function HeadingSelectInput() {
     createHeadingItem(6, RiEditorH6),
   ]
 
-  
-  const Trigger = () => {
-    return (
-      <HoverCardTrigger 
-        {...stylex.attrs(style.input__trigger)} 
-        id={__style.selectInput}
-        as="button" 
-      >
-        <BsFonts />
-        <BsCaretDownFill class={__style.selectInput__icon} />
-      </HoverCardTrigger>
-    )
-  }
-
   return (
     <HoverCard openDelay={10}>
-      <Trigger />
+      <InputPopupTrigger 
+        icon$={BsFonts}
+      />
       <HoverCardContent {...stylex.attrs(style.input__itemWrap)}>
         <For each={items()}>
           {it => (
