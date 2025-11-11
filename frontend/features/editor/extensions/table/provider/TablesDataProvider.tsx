@@ -55,7 +55,7 @@ export function TablesDataProvider(props: ParentProps<ITablesDataProviderProps>)
     // ...
 
     if (tableId() === '') {
-      updateAttribute$("id", tableId())
+      updateAttribute$("id", data.id)
     }
 
     console.log(data)
