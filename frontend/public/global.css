@@ -48,6 +48,8 @@ html, body {
   width: 100vw;
   height: 100vh;
   margin: 0;
+  /* Avoid showing scrollbar when some popover component showing */
+  overflow: hidden;
 }
 
 *, *::before, *::after {
@@ -56,6 +58,7 @@ html, body {
   /* Remove default margins + borders */
   margin: 0;
   border: none;
+  outline: none;
 }
 
 /* Improve media defaults */

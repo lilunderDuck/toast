@@ -59,14 +59,23 @@ const style = stylex.create({
   variant_danger: {
     backgroundColor: 'var(--red7)',
     ':hover': {
-      backgroundColor: 'var(--red9)',
+      backgroundColor: 'var(--red10)',
+    }
+  },
+  variant_noBackground: {
+    backgroundColor: 'tranparent',
+    color: 'var(--gray11)',
+    ':hover': {
+      backgroundColor: 'var(--gray5)',
+      color: 'var(--gray12)'
     }
   }
 })
 
 const variantMapping: Record<ButtonVariant, StylexStylesAttribute> = {
   [ButtonVariant.DEFAULT]: stylex.attrs(style.variant_default),
-  [ButtonVariant.DANGER]: stylex.attrs(style.variant_danger)
+  [ButtonVariant.DANGER]: stylex.attrs(style.variant_danger),
+  [ButtonVariant.NO_BACKGROUND]: stylex.attrs(style.variant_noBackground),
   // outline: "border border-input hover:bg-accent hover:text-accent-foreground",
   // secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
   // ghost: "hover:bg-accent hover:text-accent-foreground",

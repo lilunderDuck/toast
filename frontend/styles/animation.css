@@ -43,14 +43,16 @@
 .data-component-toast-visible > *,
 .data-component-dialog-content[data-expanded],
 .data-component-dropdown-menu[data-expanded],
-.data-component-hover-card[data-expanded] {
+.data-component-hover-card[data-expanded],
+.data-component-popover[data-expanded] {
   animation: animation_fadeAndZoomIn .1s ease-in forwards;
 }
 
 .data-component-toast-hidden > *,
 .data-component-dialog-content[data-closed],
 .data-component-dropdown-menu[data-closed],
-.data-component-hover-card[data-closed] {
+.data-component-hover-card[data-closed],
+.data-component-popover[data-close] {
   animation: animation_fadeAndZoomOut .1s ease-out forwards;
 }
 
@@ -60,8 +62,4 @@
 
 .data-component-tooltip[data-closed] {
   animation: animation_fadeAndZoomOut .08s ease-out forwards;
-}
-
-*:focus, *:focus-visible {
-  outline: 3px solid var(--blue9);
 }

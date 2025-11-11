@@ -31,7 +31,12 @@ const style = stylex.create({
     height: 25,
     backgroundColor: 'var(--color)',
     borderRadius: 6,
-    flexShrink: 0
+    flexShrink: 0,
+    transition: "0.25s ease-out",
+    border: "2px solid transparent",
+    ":hover": {
+      borderColor: "var(--gray8)"
+    }
   },
   resetButton: {
     flexShrink: 0
@@ -83,7 +88,7 @@ export function PopoverHexColorInput(props: IHexColorInputProps) {
   return (
     <HoverCard>
       <HoverCardTrigger>
-        <div {...stylex.attrs(style.colorPreview)} style={{
+        <button {...stylex.attrs(style.colorPreview)} style={{
           '--color': props.color$()
         }} />
       </HoverCardTrigger>

@@ -36,6 +36,8 @@ export function Editor() {
     }
   })
 
+  window.insertTable = () => editor$().chain().focus().insertTable$().run()
+
   onMount(() => {
     // editor$().registerPlugin(
     // @ts-ignore - stop yelling at me, typescript

@@ -1,0 +1,15 @@
+#tagInput__selectMenu [data-tag-is-selected=true] > svg {
+  display: block;
+}
+
+/* #tagInput__selectMenu [data-tag-is-selected=true] > [data-tag] {
+  ... no style applied ...
+} */
+
+#tagInput__selectMenu [data-tag-is-selected=false] > svg {
+  display: none;
+}
+
+#tagInput__selectMenu [data-tag-is-selected=false] > [data-tag] {
+  margin-left: 1.6rem;
+}

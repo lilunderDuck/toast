@@ -1,6 +1,6 @@
 import { BsPaletteFill } from "solid-icons/bs"
 import { HoverCard, HoverCardContent } from "~/components"
-import InputPopupTrigger from "./InputPopupTrigger"
+import InputPopupTrigger from "../InputPopupTrigger"
 
 import stylex from "@stylexjs/stylex"
 import { For } from "solid-js"

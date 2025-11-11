@@ -5,10 +5,6 @@ import Superscript from '@tiptap/extension-superscript'
 import Highlight from '@tiptap/extension-highlight'
 import Link from '@tiptap/extension-link'
 import Underline from '@tiptap/extension-underline'
-import Table from '@tiptap/extension-table'
-import TableCell from '@tiptap/extension-table-cell'
-import TableHeader from '@tiptap/extension-table-header'
-import TableRow from '@tiptap/extension-table-row'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -18,7 +14,7 @@ import { CharacterCount } from '@tiptap/extensions'
 import { common, createLowlight } from 'lowlight'
 import { macro_mergeClassnames } from 'macro-def'
 // ...
-import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension, SlashCommandExtension } from "../extensions"
+import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension, SlashCommandExtension, TableExtension } from "../extensions"
 // ...
 import __style from "./extensions.module.css"
 import stylex from "@stylexjs/stylex"
@@ -58,9 +54,6 @@ export function getExtensions() {
     Highlight,
     Link,
     Underline,
-    Table.configure({
-      resizable: true
-    }),
     Placeholder.configure({
       placeholder({ node }) {
         if (node.type.name === 'detailsSummary') {
@@ -70,9 +63,6 @@ export function getExtensions() {
         return "type something..."
       },
     }),
-    TableCell,
-    TableHeader,
-    TableRow,
     TaskList.configure({
       HTMLAttributes: stylex.attrs(style.ext__taskList)
     }),
@@ -105,7 +95,8 @@ export function getExtensions() {
     LocalEmbedExtension,
     GalleryExtension,
     ImageExtension,
-    PlaylistExtension
+    PlaylistExtension,
+    TableExtension
   ]
 
   pluginEvent.on$(PluginEvent.REGISTER_EDITOR_NODE, (nodeExtension) => {

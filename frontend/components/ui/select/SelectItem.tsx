@@ -22,7 +22,7 @@ const style = stylex.create({
     cursor: "default",
     userSelect: "none",
     ':hover': {
-      backgroundColor: 'var(--gray3)'
+      backgroundColor: 'var(--gray4)'
     }
   },
   itemIndicator: {
@@ -31,6 +31,10 @@ const style = stylex.create({
     right: "0.5rem",
     justifyContent: "center",
     alignItems: "center",
+  },
+  ItemIndicator__icon: {
+    width: "1rem",
+    height: "1rem"
   }
 })
 
@@ -50,8 +54,8 @@ export const SelectItem = <T extends ValidComponent = "li">(
   
   return (
     <Item
-      class={macro_mergeClassnames(local, stylex.attrs(style.item))}
       {...others}
+      class={macro_mergeClassnames(local, stylex.attrs(style.item))}
     >
       <ItemIndicator {...stylex.attrs(style.itemIndicator)}>
         <svg
@@ -62,6 +66,7 @@ export const SelectItem = <T extends ValidComponent = "li">(
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
+          {...stylex.attrs(style.ItemIndicator__icon)}
         >
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
           <path d="M5 12l5 5l10 -10" />

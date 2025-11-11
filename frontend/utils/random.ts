@@ -24,3 +24,17 @@ export function getRandomNumberFrom(from: number, to: number) {
 export function getRandomElement<T extends any[]>(fromArray: T): ArrayElement<T> {
   return fromArray[getRandomNumber(fromArray.length)]
 }
+
+
+/**Generate a sub-optimial random string within a specified `length`.
+ * @see https://stackoverflow.com/a/1349426
+ * @see https://stackoverflow.com/questions/1349404/generate-a-string-of-random-characters
+*/
+export function makeId(length: number) {
+  const CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  let result = ''
+  for (var i = 0; i < length; i++) {
+    result += CHARACTERS.charAt(getRandomNumber(CHARACTERS.length));
+  }
+  return result
+}

@@ -21,8 +21,10 @@ const style = stylex.create({
     transitionDuration: "300ms",
     cursor: "default",
     userSelect: "none",
+    color: "var(--gray11)",
     ':hover': {
-      backgroundColor: 'var(--gray3)'
+      backgroundColor: 'var(--gray5)',
+      color: "var(--gray12)",
     }
   },
 })

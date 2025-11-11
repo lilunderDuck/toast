@@ -1,5 +1,6 @@
 import stylex from "@stylexjs/stylex";
 import { macro_mergeClassnames } from "macro-def";
+import { splitProps } from "solid-js";
 
 const style = stylex.create({
   tag: {
@@ -20,21 +21,34 @@ const style = stylex.create({
       backgroundColor: "var(--color)",
       filter: "opacity(0.7) brightness(0.525)",
       borderRadius: 6,
-      zIndex: -1
+      zIndex: 1
     }
   },
   tag__content: {
     paddingBlock: 1,
     paddingInline: 5,
+    // show text after the background, not before the background
+    position: "relative",
+    zIndex: 1,
+    maxWidth: "15rem",
+    overflow: "hidden",
+    textOverflow: "ellipsis"
   },
 })
 
-export function Tag(props: HTMLAttributes<"span">) {
+export interface ITagProps extends HTMLAttributes<"span"> {
+  color$: string
+}
+
+export function Tag(props: ITagProps) {
+  const [, itsProps] = splitProps(props, ["color$"])
+
   return (
     <span
-      {...props}
+      {...itsProps}
       class={macro_mergeClassnames(props, stylex.attrs(style.tag))}
-      style={{ "--color": props.color ?? "var(--gray11)" }}
+      style={{ "--color": props.color$ ?? "var(--gray11)" }}
+      data-tag=""
     >
       <span {...stylex.attrs(style.tag__content)}>
         {props.children}

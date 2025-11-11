@@ -134,6 +134,7 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'SECONDARY',
     'GHOST',
     'LINK',
+    'NO_BACKGROUND'
   ])
 
   defineEnum('ButtonSize', [
@@ -261,6 +262,28 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'CUSTOM': 1
   })
 
+  defineConst('TABLE_INITIAL_COLUMN_WIDTH', 150, "number")
+  defineConst('TABLE_MINIMUM_COLUMN_WIDTH', 60, "number")
+
+  defineEnum('TableDataType', [
+    'NUMBER',
+    'PROGRESS',
+    'TEXT',
+    'CHECKBOX',
+    'LINK',
+    'TAG',
+    'DATE'
+  ])
+
+  defineEnum('TableDataEvent', [
+    'UPDATE',
+  ])
+
+  defineEnum('TableViewType', [
+    'TABLE',
+    'KANBAN'
+  ])
+  
   return mapping
 }
 

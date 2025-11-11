@@ -1,0 +1,116 @@
+import { createSignal, For, type VoidComponent } from "solid-js"
+// @ts-ignore - used as a directive
+import { dndzone } from "solid-dnd-directive"
+import { arrayObjects } from "~/utils"
+
+import stylex from "@stylexjs/stylex"
+
+const style = stylex.create({
+  tabList: {
+    display: "flex",
+    alignItems: "center",
+    gap: 5,
+    outline: "none"
+  },
+  tabItem: {
+    outline: "none",
+    cursor: "pointer"
+  }
+})
+
+type BaseTabData = { id: string }
+
+export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
+  const [tabs, setTabs] = createSignal<T[]>(initialTabData ?? [])
+  const [focusedTabId, setFocusedTabId] = createSignal('')
+  const [disabledTab, setDisabledTab] = createSignal(false)
+
+  const setCurrentFocusedTab = (tab: string | T) => {
+    let tabData = tab as T
+    if (typeof tab === "string") {
+      [tabData] = arrayObjects(tabs()).find$(it => it.id === tab)
+      console.assert(tabData, `[tabs handler] tabs not found: ${tab}`)
+    }
+
+    currentFocusedTab = tabData
+    setFocusedTabId(tabData.id)
+    console.log('[tabs handler] focused tab:', tabData)
+  }
+
+  const updateTab = (tabId: number | string, newData: Partial<T>) => {
+    setTabs(prev => [...arrayObjects(prev).replace$(it => it.id === tabId, newData)])
+  }
+
+  const considerDragging: EventHandler<"section", "on:consider"> = (dragEvent) => {
+    setTabs(dragEvent.detail.items as any[])
+  }
+
+  const finalizeDragging: EventHandler<"section", "on:finalize"> = (dragEvent) => {
+    setTabs(dragEvent.detail.items as any[])
+  }
+
+  let currentFocusedTab: T | undefined
+  const onClickingTab = (tabId: string) => {
+    if (currentFocusedTab?.id === tabId) {
+      return console.log("[tabs handler] already opened tab", tabId)
+    }
+
+    setCurrentFocusedTab(tabId)
+  }
+
+  setCurrentFocusedTab(tabs()[0].id)
+
+  return {
+    getCurrentFocused$() {
+      const [tabData] = arrayObjects(tabs()).find$(it => it.id === focusedTabId())
+      return tabData
+    },
+    create$(data: T) {
+      setTabs(prev => [...prev, data])
+      console.log("[tabs handler] new tab created:", data)
+    },
+    update$: updateTab,
+    setDisable$: setDisabledTab,
+    delete$(tabId: string) {
+      setTabs(prev => [...arrayObjects(prev).remove$('id', tabId)])
+    },
+    set$(newTabs: T[]) {
+      setTabs(newTabs)
+      console.log("[tabs handler] set new tabs", newTabs)
+    },
+    TabList$: (props: { tabComponent$: VoidComponent<T> }) => (
+      <section
+        {...stylex.attrs(style.tabList)}
+        use:dndzone={{
+          items: tabs,
+          type: crypto.randomUUID(),
+          dragDisabled: disabledTab(),
+          dropTargetStyle: {
+            outline: 'none'
+          }
+        }}
+        on:consider={considerDragging}
+        on:finalize={finalizeDragging}
+        data-tab-list=""
+      >
+        <For each={tabs()}>
+          {it => (
+            <button
+              {...stylex.attrs(style.tabItem)}
+              onClick={() => onClickingTab(it.id)}
+              disabled={disabledTab()}
+              data-tab-item-focused={it.id === focusedTabId()}
+            >
+              <props.tabComponent$ {...it} />
+            </button>
+          )}
+        </For>
+      </section>
+    ),
+    TabContent$: (props: { tabComponent$: VoidComponent<{ tabId$: string }> }) => (
+      <props.tabComponent$ tabId$={focusedTabId()} />
+    )
+  }
+}
+
+export type TabsHandler<T extends BaseTabData> = ReturnType<typeof createTabs<T>>

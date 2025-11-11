@@ -7,6 +7,7 @@ import (
 
 	"toast/backend/features/editor/gallery"
 	"toast/backend/features/editor/playlist"
+	"toast/backend/features/editor/table"
 
 	"toast/backend/features/journal"
 	"toast/backend/features/misc"
@@ -31,6 +32,7 @@ func GetAppConfig(icon []byte, appInstance *App) *options.App {
 		// ...
 		&playlist.Exports{},
 		&gallery.Exports{},
+		&table.Exports{},
 	}
 
 	return &options.App{

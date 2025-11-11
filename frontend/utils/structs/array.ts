@@ -91,3 +91,17 @@ export function arrayObjects<T extends AnyObject[]>(arrayOfObjects: T): IArrayOb
 export function arrayInsert<T>(array: T[], index: number, ...items: T[]) {
   array.splice(index + 1, 0, ...items)
 }
+
+/**
+ * Utility function to safely reorder an item in an array.
+ * @param {Array<T>} arr - The array to reorder.
+ * @param {number} fromIndex - The starting index of the item.
+ * @param {number} toIndex - The index where the item should be moved.
+ * @returns {Array<T>} The reordered array.
+ */
+export function reorderArray<T extends any = any>(arr: Array<T>, fromIndex: number, toIndex: number): Array<T> {
+  const newArr = [...arr]
+  const [movedItem] = newArr.splice(fromIndex, 1)
+  newArr.splice(toIndex, 0, movedItem)
+  return newArr
+}

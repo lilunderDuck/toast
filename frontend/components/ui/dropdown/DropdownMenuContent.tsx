@@ -8,10 +8,11 @@ const style = stylex.create({
   menuContent: {
     overflow: "hidden",
     zIndex: 50,
-    padding: "0.25rem",
+    paddingInline: 10,
+    paddingBlock: 5,
     borderRadius: "0.375rem",
-    backgroundColor: 'var(--gray2)',
-    border: '1px solid var(--gray4)',
+    backgroundColor: 'var(--gray3)',
+    outline: "none"
   }
 })
 

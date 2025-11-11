@@ -1,0 +1,16 @@
+#table {
+  white-space: nowrap;
+  border-spacing: 0;
+  max-height: 20rem;
+}
+
+#table th,
+#table td {
+  padding-inline: 8px;
+  padding-block: 5px;
+  border: 1px solid var(--gray4)
+}
+
+#table th {
+  color: var(--gray10);
+}
