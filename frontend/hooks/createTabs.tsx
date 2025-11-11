@@ -1,7 +1,7 @@
 import { createSignal, For, type VoidComponent } from "solid-js"
 // @ts-ignore - used as a directive
 import { dndzone } from "solid-dnd-directive"
-import { arrayObjects } from "~/utils"
+import { arrayObjects, createEvent, type IEvent } from "~/utils"
 
 import stylex from "@stylexjs/stylex"
 
@@ -20,10 +20,16 @@ const style = stylex.create({
 
 type BaseTabData = { id: string }
 
+type TabEventMap<T extends BaseTabData> = IEvent<{
+  [TabEvent.CREATE]: (tabData: T) => any
+  [TabEvent.UPDATE]: (allTabsData: T[]) => any
+}>
+
 export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
-  const [tabs, setTabs] = createSignal<T[]>(initialTabData ?? [])
+  const [tabs, setTabs] = createSignal<T[]>([])
   const [focusedTabId, setFocusedTabId] = createSignal('')
   const [disabledTab, setDisabledTab] = createSignal(false)
+  const tabEvent: TabEventMap<T> = createEvent()
 
   const setCurrentFocusedTab = (tab: string | T) => {
     let tabData = tab as T
@@ -39,6 +45,7 @@ export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
 
   const updateTab = (tabId: number | string, newData: Partial<T>) => {
     setTabs(prev => [...arrayObjects(prev).replace$(it => it.id === tabId, newData)])
+    tabEvent.emit$(TabEvent.UPDATE, tabs())
   }
 
   const considerDragging: EventHandler<"section", "on:consider"> = (dragEvent) => {
@@ -47,6 +54,7 @@ export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
 
   const finalizeDragging: EventHandler<"section", "on:finalize"> = (dragEvent) => {
     setTabs(dragEvent.detail.items as any[])
+    tabEvent.emit$(TabEvent.UPDATE, tabs())
   }
 
   let currentFocusedTab: T | undefined
@@ -56,17 +64,45 @@ export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
     }
 
     setCurrentFocusedTab(tabId)
+    console.log("[tabs handler] click", tabId)
   }
 
-  setCurrentFocusedTab(tabs()[0].id)
+  const setNewTabs = (newTabs: T[]) => {
+    if (newTabs.length === 0) {
+      return console.log("[tabs handler] no need to update tabs")
+    }
+
+    console.log(
+      "[tabs handler] Tabs data:\n",
+      "| tabs:", newTabs, "\n",
+      "| first tab:", newTabs[0], "\n"
+    )
+     
+    console.assert(
+      tabs().every(it => 'id' in it),
+      "[tabs handler] One or more tabs data is/are missing the \"id\" prop."
+    )
+
+    setTabs(newTabs)
+    setCurrentFocusedTab(newTabs[0].id)
+    console.log("[tabs handler] tabs updated")
+  }
+
+  setNewTabs(initialTabData ?? [])
 
   return {
+    on$: tabEvent.on$,
     getCurrentFocused$() {
       const [tabData] = arrayObjects(tabs()).find$(it => it.id === focusedTabId())
       return tabData
     },
     create$(data: T) {
+      console.assert(
+        'id' in data,
+        "[tabs handler] Tab data missing \"id\" prop."
+      )
       setTabs(prev => [...prev, data])
+      tabEvent.emit$(TabEvent.CREATE, data)
       console.log("[tabs handler] new tab created:", data)
     },
     update$: updateTab,
@@ -74,10 +110,7 @@ export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
     delete$(tabId: string) {
       setTabs(prev => [...arrayObjects(prev).remove$('id', tabId)])
     },
-    set$(newTabs: T[]) {
-      setTabs(newTabs)
-      console.log("[tabs handler] set new tabs", newTabs)
-    },
+    set$: setNewTabs,
     TabList$: (props: { tabComponent$: VoidComponent<T> }) => (
       <section
         {...stylex.attrs(style.tabList)}

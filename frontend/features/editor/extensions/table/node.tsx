@@ -1,11 +1,12 @@
-import { createSignal, Show } from "solid-js"
+import { createEffect, createResource, createSignal, Show } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { TableFooterCreateRowButton, TableRoot, TableTitle } from "./components"
-import { TableProvider, TablesDataProvider, useTablesDataContext, type TableAttribute, type TableGridData } from "./provider"
+import { TableFooterCreateRowButton, TableLoading, TableRoot, TableTitle } from "./components"
+import { TableProvider, TablesDataProvider, useTablesDataContext, type TableAttribute } from "./provider"
 import { useNodeState } from "../../utils"
 import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
+import { GetTableGrid } from "~/wailsjs/go/table/Exports"
 
 const style = stylex.create({
   table: {
@@ -24,24 +25,31 @@ export default function TableNodeView() {
   }
 
   const TableTabContent = (props: { tabId$: string }) => {
+    const { tabs$ } = useTablesDataContext()
     const { data$ } = useNodeState<TableAttribute>()
-    const [currentGridData, setCurrentGridData] = createSignal<TableGridData>(data$().grid[props.tabId$])
-    const [isUpdating, setIsUpdating] = createSignal(false)
+    const [resource, { refetch }] = createResource(() => props.tabId$, async(tabId) => {
+      tabs$.setDisable$(true)
+      const data = await GetTableGrid(data$().id, tabId)
+      tabs$.setDisable$(false)
+      return data
+    })
+
+    createEffect(() => refetch())
 
     return (
-      <>
-        <Show when={!isUpdating()}>
-          <TableProvider 
-            tabId$={props.tabId$} 
-            columns$={currentGridData()!.columns} 
-            rows$={currentGridData()!.rows}
-          >
-            <TableRoot>
-              <TableFooterCreateRowButton />
-            </TableRoot>
-          </TableProvider>
-        </Show>
-      </>
+      <Show when={!resource.loading} fallback={
+        <TableLoading />
+      }>
+        <TableProvider 
+          tabId$={props.tabId$} 
+          columns$={resource()!.columns} 
+          rows$={resource()!.rows}
+        >
+          <TableRoot>
+            <TableFooterCreateRowButton />
+          </TableRoot>
+        </TableProvider>
+      </Show>
     )
   }
 

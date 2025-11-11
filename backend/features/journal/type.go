@@ -48,7 +48,7 @@ type EditorAttributes struct {
 
 	// ------ generic custom node attribute ------
 
-	Id int `json:"id,omitempty"   cbor:"3,keyasint,omitempty"`
+	Id string `json:"id,omitempty"   cbor:"3,keyasint,omitempty"`
 
 	// Image, video node attribute
 
@@ -57,16 +57,12 @@ type EditorAttributes struct {
 
 	// image split view node attributes
 
-	LeftImage  ImageSplitViewAttribute `json:"leftImage,omitempty" cbor:"6,keyasint,omitempty"`
-	RightImage ImageSplitViewAttribute `json:"rightImage,omitempty" cbor:"7,keyasint,omitempty"`
+	// LeftImage  ImageSplitViewAttribute `json:"leftImage,omitempty" cbor:"6,keyasint,omitempty"`
+	// RightImage ImageSplitViewAttribute `json:"rightImage,omitempty" cbor:"7,keyasint,omitempty"`
 
 	// Gallery node attribute
 
 	ViewMode uint8 `json:"viewMode,omitempty" cbor:"8,keyasint,omitempty"`
-}
-
-type ImageSplitViewAttribute struct {
-	Name string `json:"name,omitempty"   cbor:"0,keyasint,omitempty"`
 }
 
 type EditorMarks struct { // impls cbor.Marshaler, cbor.Unmarshaler

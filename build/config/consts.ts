@@ -265,6 +265,11 @@ export function defineAllConstants(isDevMode: boolean = false) {
   defineConst('TABLE_INITIAL_COLUMN_WIDTH', 150, "number")
   defineConst('TABLE_MINIMUM_COLUMN_WIDTH', 60, "number")
 
+  defineEnum('TabEvent', [
+    'CREATE',
+    'UPDATE'
+  ])
+
   defineEnum('TableDataType', [
     'NUMBER',
     'PROGRESS',
@@ -273,7 +278,7 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'LINK',
     'TAG',
     'DATE'
-  ])
+  ]) // do not reorder
 
   defineEnum('TableDataEvent', [
     'UPDATE',

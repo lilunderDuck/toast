@@ -1,13 +1,12 @@
 package table
 
 import (
-	"toast/backend/features/editor"
+	"os"
 	"toast/backend/internals"
 	"toast/backend/utils"
 )
 
 // Reuse this function
-var writeTable, readTable, _, deleteTable = editor.CreateEmbedableMediaCollection[TableMetadata](internals.Media.Get("table"))
 var tablePaths = internals.NewTablePathsManager()
 
 type Exports struct{}
@@ -15,7 +14,7 @@ type Exports struct{}
 func (*Exports) CreateTable() (*TableMetadata, error) {
 	data := newTableMetadata()
 
-	if err := utils.BSON_WriteFile(data.Id, data); err != nil {
+	if err := utils.BSON_WriteFile(tablePaths.MetaFile(data.Id), data); err != nil {
 		return nil, err
 	}
 
@@ -23,11 +22,11 @@ func (*Exports) CreateTable() (*TableMetadata, error) {
 }
 
 func (*Exports) GetTable(tableId string) (*TableMetadata, error) {
-	return readTable(tableId)
+	return utils.BSON_ReadFile[TableMetadata](tablePaths.MetaFile(tableId))
 }
 
-func (*Exports) UpdateTable(tableId string, newData TableMetadata) error {
-	data, err := readTable(tableId)
+func (*Exports) UpdateTable(tableId string, newData TableUpdateOption) error {
+	data, err := utils.BSON_ReadFile[TableMetadata](tablePaths.MetaFile(tableId))
 	if err != nil {
 		return err
 	}
@@ -40,11 +39,18 @@ func (*Exports) UpdateTable(tableId string, newData TableMetadata) error {
 		data.Title = newData.Title
 	}
 
-	return writeTable(tableId, data)
+	return utils.BSON_WriteFile(tablePaths.MetaFile(tableId), data)
 }
 
 func (*Exports) DeleteTable(tableId string) {
-	deleteTable(tableId)
+	os.Remove(tablePaths.Base(tableId))
+}
+
+func (table *Exports) CreateTableGrid(tableId, tableGridId string) *TableGridData {
+	newData := newTableGridData()
+	table.UpdateTableGrid(tableId, tableGridId, *newData)
+
+	return newData
 }
 
 func (*Exports) GetTableGrid(tableId, tableGridId string) *TableGridData {

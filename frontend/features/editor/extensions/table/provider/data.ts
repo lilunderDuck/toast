@@ -32,25 +32,4 @@ export type TableDefaultValueMapping<T extends TableDataType> =
 
 export type TableAttribute = {
   id: string
-  title: string
-  tabs: TableTabData[]
-  grid: Record<string, TableGridData>
-}
-
-export type TableData = {
-  id: string
-  title: string
-  tabs: TableTabData[]
-  grid: Record<string, TableGridData>
-}
-
-export type TableTabData = {
-  type: TableViewType
-  name: string
-  id: string
-}
-
-export type TableGridData = {
-  rows: RowData[]
-  columns: ColumnData[]
 }

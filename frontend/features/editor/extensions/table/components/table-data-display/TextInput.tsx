@@ -6,7 +6,10 @@ export default function TextInput(props: ITableDataTypeComponentProps<string>) {
       <input 
         type="text"
         value={props.value$}
-        onChange={(e) => props.onChange$(e.currentTarget.value)}
+        onInput={(e) => {
+          console.log(e.currentTarget.value)
+          props.onChange$(e.currentTarget.value)
+        }}
       />
     </div>
   )

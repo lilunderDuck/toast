@@ -1,6 +1,5 @@
-import { createSignal, type Accessor, type Setter } from "solid-js";
-import { type RowData, type TableDefaultValueMapping } from "./data";
-import { arrayObjects } from "~/utils";
+import { createSignal, type Accessor, type Setter } from "solid-js"
+import { type RowData, type TableDefaultValueMapping } from "./data"
 
 export interface IRowManager {
   get$: Accessor<RowData[]>
@@ -20,13 +19,10 @@ export function createRowsManager(
 
   const updateData: IRowManager["updateData$"] = (rowIndex, columnKey, data) => {
     const rowData = rows()[rowIndex]
-    console.assert(rowData, `No row data exist in index: ${rowIndex}`)
+    rowData[columnKey] = data
+    setRows(rows())
 
-    setRows((prev) => arrayObjects(prev).replace$(it => it[columnKey], {
-      [columnKey]: data
-    }))
-
-    console.log("Row data at index", rowIndex, "updated to", rows()[rowIndex])
+    console.log("Row index", rowIndex, "at column", columnKey, "updated to", rows()[rowIndex])
     onDataUpdate()
   }
 
