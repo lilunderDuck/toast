@@ -1,8 +1,6 @@
-import { type Attribute, Node, type Command } from '@tiptap/core'
+import { type Command } from '@tiptap/core'
 // ...
-import { SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
-// ...
-import { insertNodeAtCurrentPosition } from '../../utils'
+import { createEditorNode, insertNodeAtCurrentPosition } from '../../utils'
 import PlaylistNode from './node'
 import { PlaylistProvider } from './provider'
 // import { LocalEmbedProvider } from './provider'
@@ -19,30 +17,29 @@ export type PlaylistAttribute = {
   id: number
 }
 
-export const PlaylistExtension = Node.create({
-  name: 'playlist',
-  group: 'block',
-  selectable: false,
-  atom: true,
-  addAttributes(): Record<keyof PlaylistAttribute, Attribute> {
-    return {
-      id: {
-        default: null,
-      }
-    }
-  },
-  addCommands() {
+export const PlaylistExtension = createEditorNode<
+  PlaylistAttribute, 
+  EditorNodeType.BLOCK
+>(EditorNodeType.BLOCK, {
+  name$: "playlist",
+  commands$() {
     return {
       insertPlaylist$: () => ({ tr }) => {
         return insertNodeAtCurrentPosition<PlaylistAttribute>(this, tr, { id: -1 })
       },
     }
   },
-  addNodeView() {
-    return SolidNodeViewRenderer(() => (
-      <PlaylistProvider>
-        <PlaylistNode />
-      </PlaylistProvider>
-    ))
+  attributes$: () => ({
+    id: {
+      default: null
+    }
+  }),
+  menu$(editorInstance) {
+    return {}
   },
+  View$: () => (
+    <PlaylistProvider>
+      <PlaylistNode />
+    </PlaylistProvider>
+  )
 })

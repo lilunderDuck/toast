@@ -1,8 +1,6 @@
-import { type Attribute, Node, type Command } from '@tiptap/core'
+import { type Command } from '@tiptap/core'
 // ...
-import { SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
-// ...
-import { insertNodeAtCurrentPosition } from '../../utils'
+import { createEditorNode, insertNodeAtCurrentPosition } from '../../utils'
 import LocalEmbedNode from './node'
 import { LocalEmbedProvider } from './provider'
 
@@ -18,30 +16,29 @@ export type LocalEmbedAttribute = {
   name: string
 }
 
-export const LocalEmbedExtension = Node.create({
-  name: 'localEmbed',
-  group: 'block',
-  selectable: false,
-  atom: true,
-  addAttributes(): Record<keyof LocalEmbedAttribute, Attribute> {
-    return {
-      name: {
-        default: null,
-      }
-    }
-  },
-  addCommands() {
+export const LocalEmbedExtension = createEditorNode<
+  LocalEmbedAttribute,
+  EditorNodeType.BLOCK
+>(EditorNodeType.BLOCK, {
+  name$: "localEmbed",
+  commands$() {
     return {
       insertLocalEmbed$: () => ({ tr }) => {
-        return insertNodeAtCurrentPosition<LocalEmbedAttribute>(this, tr, { name: '' })
+        return insertNodeAtCurrentPosition<LocalEmbedAttribute>(this, tr, { id: -1 })
       },
     }
   },
-  addNodeView() {
-    return SolidNodeViewRenderer(() => (
-      <LocalEmbedProvider>
-        <LocalEmbedNode />
-      </LocalEmbedProvider>
-    ))
+  attributes$: () => ({
+    name: {
+      default: null
+    }
+  }),
+  menu$(editorInstance) {
+    return {}
   },
+  View$: () => (
+    <LocalEmbedProvider>
+      <LocalEmbedNode />
+    </LocalEmbedProvider>
+  )
 })

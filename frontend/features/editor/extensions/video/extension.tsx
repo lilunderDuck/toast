@@ -1,8 +1,6 @@
-import { type Attribute, Node } from '@tiptap/core'
+import { NodeViewWrapper } from '~/libs/solid-tiptap-renderer'
 // ...
-import { NodeViewWrapper, SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
-// ...
-import { insertNodeAtCurrentPosition, useNodeState } from '../../utils'
+import { createEditorNode, insertNodeAtCurrentPosition, useNodeState } from '../../utils'
 import { Video, type VideoAttribute } from '../files'
 
 import stylex from "@stylexjs/stylex"
@@ -21,27 +19,23 @@ declare module '@tiptap/core' {
   }
 }
 
-export const VideoNode = Node.create({
-  name: 'video',
-  group: 'inline',
-  inline: true,
-  selectable: false,
-  atom: true,
-  addAttributes(): Record<keyof VideoAttribute, Attribute> {
-    return {
-      name: {
-        default: null,
-      }
+export const VideoNode = createEditorNode<
+  VideoAttribute, EditorNodeType.BLOCK
+>(EditorNodeType.BLOCK, {
+  name$: 'video',
+  attributes$: () => ({
+    name: {
+      default: null,
     }
-  },
-  addCommands() {
+  }),
+  commands$() {
     return {
       insertVideo$: () => ({ tr }) => {
         return insertNodeAtCurrentPosition<VideoAttribute>(this, tr, { name: '' })
       },
     }
   },
-  addNodeView: () => SolidNodeViewRenderer(() => {
+  View$() {
     const { data$ } = useNodeState<VideoAttribute>()
 
     return (
@@ -49,5 +43,8 @@ export const VideoNode = Node.create({
         <Video src$={data$().name} />
       </NodeViewWrapper>
     )
-  }),
+  },
+  menu$(editorInstance) {
+    return {}
+  },
 })

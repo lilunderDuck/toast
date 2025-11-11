@@ -1,8 +1,6 @@
-import { type Attribute, Node, type Command } from '@tiptap/core'
+import { type Command } from '@tiptap/core'
 // ...
-import { SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
-// ...
-import { insertNodeAtCurrentPosition } from '../../utils'
+import { createEditorNode, insertNodeAtCurrentPosition } from '../../utils'
 import GalleryNodeView from './node'
 
 declare module '@tiptap/core' {
@@ -20,29 +18,28 @@ export type GalleryAttribute = {
   viewMode?: number
 }
 
-export const GalleryExtension = Node.create({
-  name: 'gallery',
-  group: 'block',
-  selectable: false,
-  atom: true,
-  addAttributes(): Record<keyof GalleryAttribute, Attribute> {
-    return {
-      id: {
-        default: DEFAULT_GALLERY_ID
-      },
-      viewMode: {
-        default: null
-      }
+export const GalleryExtension = createEditorNode<
+  GalleryAttribute, 
+  EditorNodeType.BLOCK
+>(EditorNodeType.BLOCK, {
+  name$: 'gallery',
+  attributes$: () => ({
+    id: {
+      default: DEFAULT_GALLERY_ID
+    },
+    viewMode: {
+      default: null
     }
-  },
-  addCommands() {
+  }),
+  commands$() {
     return {
       insertGallery$: () => ({ tr }) => {
         return insertNodeAtCurrentPosition<GalleryAttribute>(this, tr, { id: DEFAULT_GALLERY_ID, viewMode: GalleryViewMode.SINGLE_ITEM })
       },
     }
   },
-  addNodeView() {
-    return SolidNodeViewRenderer(GalleryNodeView)
+  View$: GalleryNodeView,
+  menu$(editorInstance) {
+    return {}
   },
 })

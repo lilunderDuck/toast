@@ -1,8 +1,8 @@
-import { type Attribute, type Command, type NodeConfig } from "@tiptap/core"
+import { Node, type Attribute, type NodeConfig } from "@tiptap/core"
 import { Transaction } from "prosemirror-state"
 import type { IconTypes } from "solid-icons"
 import type { VoidComponent } from "solid-js"
-import { type SolidEditor } from "~/libs/solid-tiptap-renderer"
+import { SolidNodeViewRenderer, type SolidEditor } from "~/libs/solid-tiptap-renderer"
 
 /**Extracts the `this` type from a `NodeConfig`'s `addCommands` method.  */
 export type ThisInAddCommands = ThisParameterType<NonNullable<NodeConfig["addCommands"]>>
@@ -27,10 +27,10 @@ export type ThisInInputRules = ThisParameterType<NonNullable<NodeConfig["addInpu
  *   }
  * }
  * 
- * export const SampleNode = Node.create({
+ * export const SampleNode = createEditorNode({
  *   name: "sampleNode",
  *   // ... node related stuff ...
- *   addCommands() {
+ *   commands$() {
  *     return {
  *       insertSampleNode: () => ({ tr }) => {
  *         return insertNodeAtCurrentPosition<SampleNodeAttribute>(this, tr, {
@@ -47,12 +47,47 @@ export type ThisInInputRules = ThisParameterType<NonNullable<NodeConfig["addInpu
  * @param tr The current ProseMirror transaction.
  * @param data The attributes to be applied to the newly created node.
  * @returns Always returns `true` to signal that the command was successfully executed.
+ * @see {@link createEditorNode}
  */
 export function insertNodeAtCurrentPosition<T extends {}>(
   theThisType: ThisInAddCommands | ThisInInputRules,
   tr: Transaction,
   data: T
 ): true {
+  console.assert(
+    theThisType, 
+    [
+      "The \"this\" type is undefined.",
+      "",
+      "If your extension code currently looks something like this:",
+      "1   | export const NodeExtension = createEditorNode<...>(..., {",
+      "2   |   commands$: () => {",
+      "3   |     return {",
+      "4   |       someCommand$: () => ({ tr }) => {",
+      "5   |         return insertNodeAtCurrentPosition<...>(this, tr, ...)",
+      "    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "6   |       },",
+      "7   |     }",
+      "8   |   }",
+      "9   | })",
+      "",
+      "Please update to this:",
+      "2   |   commands$() {",
+      "    |   ^^^^^^^^^^^^^",
+      "3   |     return {",
+      "... |        ...",
+      "7   |     }",
+      "8   |   }",
+      "",
+      "Also noted that your editor will give you an error at this line, the same fix can be applied:",
+      "5   |   return insertNodeAtCurrentPosition<...>(this, tr, ...)",
+      "    |                                           ^^^^",
+      "    |    Argument of type 'undefined' is not assignable to parameter of type '[... A lot of stuff ...]' .ts(2345)",
+      "",
+      "Using arrow function in \"commands$\" property can break your extension.",
+    ].join('\n')
+  )
+
   const { $from, $to } = tr.selection
   // here we use tr.mapping.map to map the position between transaction steps
   const from = tr.mapping.map($from.pos)
@@ -64,10 +99,8 @@ export function insertNodeAtCurrentPosition<T extends {}>(
 
 interface IBaseEditorNodeOptions<T extends Record<string, any>> {
   name$: string
-  commands$: Record<string, () => Command>
   attributes$(): Record<keyof T, Pick<Attribute, "default" | "isRequired">>
   View$: VoidComponent
-  menu$: (editorInstance: () => SolidEditor) => IEditorMenuOptions
 }
 
 export interface IEditorMenuOptions {
@@ -77,15 +110,16 @@ export interface IEditorMenuOptions {
 }
 
 interface IEditorInlineNodeOptions<
-  T extends Record<string, any>
+T extends Record<string, any>
 > extends IBaseEditorNodeOptions<T> {
-  inputRules: NodeConfig["addInputRules"]
+  inputRules$?: NodeConfig["addInputRules"]
 }
 
 interface IEditorBlockNodeOptions<
-  T extends Record<string, any>
+T extends Record<string, any>
 > extends IBaseEditorNodeOptions<T> {
-  // ...
+  commands$: NodeConfig<T, any>["addCommands"]
+  menu$: (editorInstance: () => SolidEditor) => IEditorMenuOptions
 }
 
 interface IEditorNodeOptionsMap<
@@ -96,8 +130,35 @@ interface IEditorNodeOptionsMap<
 }
 
 export function createEditorNode<
-  U extends Record<string, any>,
-  T extends EditorNodeType,
->(type: T, options: IEditorNodeOptionsMap<U>[T]) {
-  // TODO
+  Attrs extends Record<string, any>,
+  // Weird confusing generic
+  NodeType extends EditorNodeType,
+>(
+  type: NodeType, 
+  options: IEditorNodeOptionsMap<Attrs>[NodeType]
+) {
+  const NODE_OPTIONS_MAPPING: Record<EditorNodeType, Partial<NodeConfig>> = {
+    [EditorNodeType.BLOCK]: {
+      group: 'block',
+      inline: false,
+      addCommands: (options as IEditorBlockNodeOptions<Attrs>).commands$,
+    },
+    [EditorNodeType.INLINE]: {
+      group: 'inline',
+      content: 'inline*',
+      inline: true,
+      addInputRules: (options as IEditorInlineNodeOptions<Attrs>).inputRules$
+    }
+  }
+
+  const nodeConfig: NodeConfig = {
+    ...NODE_OPTIONS_MAPPING[type],
+    name: options.name$,
+    selectable: false,
+    atom: true,
+    addAttributes: options.attributes$,
+    addNodeView: () => SolidNodeViewRenderer(options.View$),
+  }
+
+  return Node.create(nodeConfig)
 }

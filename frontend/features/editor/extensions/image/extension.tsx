@@ -1,8 +1,8 @@
-import { type Attribute, type Command, Node } from '@tiptap/core'
+import { type Command } from '@tiptap/core'
 // ...
-import { NodeViewWrapper, SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
+import { NodeViewWrapper } from '~/libs/solid-tiptap-renderer'
 // ...
-import { insertNodeAtCurrentPosition, useNodeState } from '../../utils'
+import { createEditorNode, insertNodeAtCurrentPosition, useNodeState } from '../../utils'
 import { ImageInput, type ImageAttribute } from '../files'
 import stylex from "@stylexjs/stylex"
 
@@ -26,37 +26,38 @@ declare module '@tiptap/core' {
   }
 }
 
-export const ImageExtension = Node.create({
-  name: 'image',
-  group: 'block',
-  selectable: false,
-  atom: true,
-  addAttributes(): Record<keyof ImageAttribute, Attribute> {
-    return {
-      name: {
-        default: null,
-      }
-    }
-  },
-  addCommands() {
+export const ImageExtension = createEditorNode<
+  ImageAttribute,
+  EditorNodeType.BLOCK
+>(EditorNodeType.BLOCK, {
+  name$: "image",
+  commands$() {
     return {
       insertImage$: () => ({ tr }) => {
         return insertNodeAtCurrentPosition<ImageAttribute>(this, tr, { name: '' })
       },
     }
   },
-  addNodeView: () => SolidNodeViewRenderer(() => {
+  attributes$: () => ({
+    name: {
+      default: null
+    }
+  }),
+  menu$(editorInstance) {
+    return {}
+  },
+  View$() {
     const { data$, updateAttribute$ } = useNodeState<ImageAttribute>()
 
     return (
       <NodeViewWrapper {...stylex.attrs(style.node)}>
-        <ImageInput 
+        <ImageInput
           onChange$={(fileName) => {
             updateAttribute$("name", fileName)
-          }} 
-          data$={data$()} 
+          }}
+          data$={data$()}
         />
       </NodeViewWrapper>
     )
-  }),
+  }
 })

@@ -1,10 +1,6 @@
 import { lazy } from 'solid-js'
-import { type Attribute, Node } from '@tiptap/core'
 // ...
-import { SolidNodeViewRenderer } from '~/libs/solid-tiptap-renderer'
-import { makeId } from '~/utils'
-// ...
-import { insertNodeAtCurrentPosition } from '../../utils'
+import { createEditorNode, insertNodeAtCurrentPosition } from '../../utils'
 import type { TableAttribute } from './provider'
 
 declare module '@tiptap/core' {
@@ -17,27 +13,28 @@ declare module '@tiptap/core' {
 
 const TableNodeView = lazy(() => import("./node"))
 
-export const TableExtension = Node.create({
-  name: 'table',
-  group: 'block',
-  inline: false,
-  selectable: false,
-  atom: true,
-  addAttributes(): Record<keyof TableAttribute, Attribute> {
-    return {
-      id: {
-        default: ''
-      },
-    }
-  },
-  addCommands() {
+export const TableExtension = createEditorNode<
+  TableAttribute,
+  EditorNodeType.BLOCK
+>(EditorNodeType.BLOCK, {
+  name$: "table",
+  commands$() {
     return {
       insertTable$: () => ({ tr }) => {
-        return insertNodeAtCurrentPosition<TableAttribute>(this, tr, { 
-          id: '',
+        return insertNodeAtCurrentPosition<TableAttribute>(this, tr, {
+          id: '' // let TablesDataProvider initialize instead
         })
-      },
+      }
     }
   },
-  addNodeView: () => SolidNodeViewRenderer(TableNodeView),
+  attributes$: () => ({
+    id: {
+      default: ""
+    }
+  }),
+  menu$(editorInstance) {
+    return {
+    }
+  },
+  View$: TableNodeView
 })

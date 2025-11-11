@@ -1,8 +1,6 @@
-import { type Attribute, InputRule, Node } from "@tiptap/core"
+import { InputRule } from "@tiptap/core"
 // ...
-import { SolidNodeViewRenderer } from "~/libs/solid-tiptap-renderer"
-// ...
-import { insertNodeAtCurrentPosition } from "../../utils"
+import { createEditorNode, insertNodeAtCurrentPosition } from "../../utils"
 import TagNodeView from "./node"
 
 export type TagAttribute = {
@@ -10,24 +8,19 @@ export type TagAttribute = {
   color?: string
 }
 
-export const TagExtension = Node.create<TagAttribute>({
-  name: 'tag',
-  group: 'inline',
-  content: 'inline*',
-  inline: true,
-  atom: true,
-  selectable: false,
-  addAttributes(): Record<keyof TagAttribute, Attribute> {
-    return {
-      name: {
-        default: ''
-      },
-      color: {
-        default: "var(--gray10)",
-      }
+export const TagExtension = createEditorNode<
+  TagAttribute, EditorNodeType.INLINE
+>(EditorNodeType.INLINE, {
+  name$: 'tag',
+  attributes$: () => ({
+    name: {
+      default: ''
+    },
+    color: {
+      default: "var(--gray10)",
     }
-  },
-  addInputRules() {
+  }),
+  inputRules$() {
     return [
       // Tiptap extension code sometime is very confusing for my small brain.
       // Here, have some code commend, future me.
@@ -45,7 +38,5 @@ export const TagExtension = Node.create<TagAttribute>({
       })
     ]
   },
-  addNodeView() {
-    return SolidNodeViewRenderer(TagNodeView)
-  },
+  View$: TagNodeView,
 })
