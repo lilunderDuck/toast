@@ -3,7 +3,7 @@ import { createContext, createSignal, type ParentProps, useContext, type Accesso
 interface IAudioContext {
   progress$: Accessor<number>
   audioTimeUpdate$: EventHandler<"audio", "onTimeUpdate">
-  data$: () => any
+  data$: AnyNoArgsFunction
 }
 
 const Context = createContext<IAudioContext>()

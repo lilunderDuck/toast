@@ -5,7 +5,7 @@ import { createEvent } from "~/utils"
 export const pluginEvent = createEvent<{
   [PluginEvent.REGISTER_EDITOR_NODE]: (nodeExtension: Node) => any,
   // ...
-  [PluginEvent.JOURNAL_LOADED]: () => any
+  [PluginEvent.JOURNAL_LOADED]: AnyNoArgsFunction
 }>()
 
 export * from "./editor"

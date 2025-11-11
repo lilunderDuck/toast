@@ -73,7 +73,7 @@ interface IBaseEditorNodeOptions<T extends Record<string, any>> {
 export interface IEditorMenuOptions {
   name$: string
   icon$: IconTypes
-  run$: () => any
+  run$: AnyNoArgsFunction
 }
 
 interface IEditorInlineNodeOptions<

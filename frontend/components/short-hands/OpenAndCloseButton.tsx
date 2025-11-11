@@ -14,8 +14,8 @@ const style = stylex.create({
 })
 
 interface IOpenAndCloseButtonProps extends HTMLAttributes<"div"> {
-  onClickingClose$?: () => any
-  onClickingOpen$?: () => any
+  onClickingClose$?: AnyNoArgsFunction
+  onClickingOpen$?: AnyNoArgsFunction
   openText$?: JSX.Element
   closeText$?: JSX.Element
   openButtonProps$?: HTMLAttributes<"button">

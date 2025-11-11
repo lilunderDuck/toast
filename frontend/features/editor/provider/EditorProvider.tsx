@@ -35,7 +35,7 @@ export type EditorEvent = IEvent<{
    * @param data The updated editor data.
    */
   [EditorEvent.ON_UPDATE]: (data: EditorData) => any
-  [EditorEvent.UPDATE_BONGO_CAT_ANIMATION]: () => any
+  [EditorEvent.UPDATE_BONGO_CAT_ANIMATION]: AnyNoArgsFunction
 }>
 
 export interface IEditorContext {
