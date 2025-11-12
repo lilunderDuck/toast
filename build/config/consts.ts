@@ -1,106 +1,135 @@
 import { mkdirSync, writeFileSync } from "node:fs"
 
 type ValidEnum = Record<string, string | number>
-type ConstsMapping = { type: string, name: string, prop: ValidEnum }[]
+type ConstsMapping = (
+  { type: "constEnum", name: string, prop: ValidEnum } |
+  { type: "const", name: string, value: any, valueType: string }
+)[]
+const DEFINED_CONST_MAPPING: ConstsMapping = []
 
-function makeConst() {
-  const mapping: ConstsMapping = []
+/**Define a `const enum`. The enum types will be available in the global scope.
+ * 
+ * This is a work-around to mimic `const enum` behavior. Because simply, `vite`, or more correctly, 
+ * `esbuild`, doesn't support `const enum` to inline the value and stuff.
+ * 
+ * This is only the solution.
+ * @param name the enum name.
+ * @param props the enum properties. If the property value is `null`, it will be replaced
+ * by a number instead.
+ * @see https://github.com/vitest-dev/vitest/discussions/3964
+ * @see https://github.com/evanw/esbuild/issues/2298#issuecomment-1146378367
+ */
+function define(name: string, props: ValidEnum | string[], options?: any): void
+/**Define a global constant that will be replaced on build time, just like the C/C++ `#define` preprocessor.
+ * @param name the name of the variable
+ * @param value the value of the variable
+ * @param type type type of the value in typescript
+ */
+function define(name: string, value: any, type?: string): void
+function define(name: string, ...stuff: any[]) {
+  const [args_1, args_2] = stuff
 
-  const defineEnum = (name: string, prop: ValidEnum | string[]) => {
+  // Check if it's a enum declaration
+  if (
+    (typeof args_1 === "object" || Array.isArray(args_1))
+  ) {
+    // Rename for better readability
+    const props = args_1
     let propMapping: ValidEnum = {}
-    if (Array.isArray(prop)) {
-      for (let i = 0; i < prop.length; i++) {
-        const propName = prop[i]
+    if (Array.isArray(props)) {
+      for (let i = 0; i < props.length; i++) {
+        const propName = props[i]
+        // Each properties of the enum will be assigned by the index
         propMapping[propName] = i
       }
     } else {
-      propMapping = JSON.parse(JSON.stringify(prop))
+      propMapping = JSON.parse(JSON.stringify(props))
     }
 
-    mapping.push({
+    DEFINED_CONST_MAPPING.push({
       name,
       prop: propMapping,
       type: "constEnum"
     })
+
+    return
   }
 
-  const defineConst = (name: string, value: any, type: string) => {
-    switch (typeof value) {
-      case "string":
-        value = `"${value}"`
-        break
-      case "object":
-        value = JSON.stringify(value)
-        break
-    }
+  let value = args_1, valueType = args_2
 
-    mapping.push({
-      name,
-      value,
-      valueType: type,
-      type: "const"
-    })
+  switch (typeof value) {
+    case "string":
+      value = `"${value}"`
+      break
+    case "object":
+      value = JSON.stringify(value)
+      break
   }
 
-  return {
-    mapping: mapping,
-    /**Simply just define all `const enum`s. The enum types will be available in the global scope.
-     * 
-     * This is a work-around to mimic `const enum` behavior. Because simply, `vite`, or more correctly, 
-     * `esbuild`, doesn't support `const enum` to inline the value and stuff.
-     * 
-     * This is only the solution.
-     * @param enumName the enum name.
-     * @param props the enum properties. If the property value is `null`, it will be replaced
-     * by a number instead.
-     * @see https://github.com/vitest-dev/vitest/discussions/3964
-     * @see https://github.com/evanw/esbuild/issues/2298#issuecomment-1146378367
-     */
-    defineEnum,
-    defineConst
+  const data = { name, value, valueType: valueType, type: "const" }
+  if (!valueType) {
+    data.valueType = value
   }
+
+  DEFINED_CONST_MAPPING.push(data)
 }
 
-export function generateConstsTypeThenSave(mapping: ConstsMapping) {
+export function generateConstsTypeThenSave() {
+  // Track the names and values of all constants that are successfully processed.
+  // 
+  // This map will be passed to esbuild's `define` option.
   const definedMapping = new Map<string, string | number>()
 
   let content = "// this file is auto-generated when on dev/build mode\n"
-  for (const definedConst of mapping) {
-    if (definedConst.type === "constEnum") {
-      const entries = Object.entries(definedConst.prop)
-      let enumContent = ''
-      for (let [enumPropName, enumPropValue] of entries) {
-        if (typeof enumPropValue === "string") {
-          enumPropValue = `"${enumPropValue}"`
+  for (const definedConst of DEFINED_CONST_MAPPING) {
+    switch (definedConst.type) {
+      case "constEnum": {
+        const entries = Object.entries(definedConst.prop)
+        const enumName = definedConst.name
+        // Constructs the enum from the inside first.
+        //   const enum MyEnum {
+        //      ... everything inside ...
+        //   }
+        let enumContent = ''
+        for (let [enumPropName, enumPropValue] of entries) {
+          // wraps it in quotes to ensure valid TypeScript code.
+          if (typeof enumPropValue === "string") {
+            enumPropValue = `"${enumPropValue}"`
+          }
+
+          // Good enough formatting (instead of one single line)
+          enumContent += `\t${enumPropName} = ${enumPropValue},\n`
+
+          const fullName = `${enumName}.${enumPropName}` as const
+          definedMapping.set(fullName, enumPropValue)
+          console.log(`Define:\t\t${fullName} = ${enumPropValue}`)
         }
-        
-        enumContent += `${enumPropName} = ${enumPropValue},`
 
-        const fullName = `${definedConst.name}.${enumPropName}` as const
-        definedMapping.set(fullName, enumPropValue)
-        console.log(`Define:\t\t${fullName} = ${enumPropValue}`)
-      }
+        content += `enum ${enumName} {\n${enumContent}\n}`
+      } break
 
-      content += `enum ${definedConst.name} {${enumContent}}`
-    } else {
-      content += `declare const ${definedConst.name}: ${definedConst.valueType};`
-      definedMapping.set(definedConst.name, definedConst.value)
-      console.log(`Define:\t\t${definedConst.name} = ${definedConst.value}`)
+      case "const": {
+        content += `declare const ${definedConst.name}: ${definedConst.valueType};\n`
+        definedMapping.set(definedConst.name, definedConst.value)
+        console.log(`Define:\t\t${definedConst.name} = ${definedConst.value}`)
+      } break
+
+      default:
+        break;
     }
   }
 
+  // Just to make sure the destination folder exists.
   mkdirSync("./build/dist", { recursive: true })
-  writeFileSync("./build/dist/consts.d.ts", `declare global {${content}}; export {}`)
+  writeFileSync("./build/dist/consts.d.ts", `declare global {\n\t${content}\n}; export {}`)
 
   return Object.fromEntries(definedMapping.entries())
 }
 
 export function defineAllConstants(isDevMode: boolean = false) {
-  const { defineEnum, mapping, defineConst } = makeConst()
+  define('isDevMode', isDevMode, 'boolean')
 
-  defineConst('isDevMode', isDevMode, 'boolean')
-
-  defineEnum('ToastActionType', [
+  define('ToastActionType', [
     'ADD_TOAST',
     'UPDATE_TOAST',
     'UPSERT_TOAST',
@@ -110,7 +139,7 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'END_PAUSE',
   ])
 
-  defineEnum('ToastType', [
+  define('ToastType', [
     'SUCCESS',
     'ERROR',
     'LOADING',
@@ -118,7 +147,7 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'CUSTOM',
   ])
 
-  defineEnum('ToastPosition', [
+  define('ToastPosition', [
     'TOP_LEFT',
     'TOP_CENTER',
     'TOP_RIGHT',
@@ -127,7 +156,7 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'BOTTOM_RIGHT',
   ])
 
-  defineEnum('ButtonVariant', [
+  define('ButtonVariant', [
     'DEFAULT',
     'DANGER',
     'OUTLINE',
@@ -137,7 +166,7 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'NO_BACKGROUND'
   ])
 
-  defineEnum('ButtonSize', [
+  define('ButtonSize', [
     'DEFAULT',
     'SMALL',
     'LARGE',
@@ -145,79 +174,79 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'UNSET',
   ])
 
-  defineEnum('FormSubmitState', [
+  define('FormSubmitState', [
     'SUCCESS',
   ])
 
-  defineEnum('SettingType', [
+  define('SettingType', [
     'CUSTOM',
     'INPUT',
     'RANGE',
     'CHECKBOX',
   ])
 
-  defineEnum('VideoLoadingStatus', [
+  define('VideoLoadingStatus', [
     'START_LOADING',
     'FINISH_LOADING',
     'ERROR',
   ])
 
-  defineEnum('ButtonRowDirection', [
+  define('ButtonRowDirection', [
     'LEFT',
     'RIGHT',
     'MIDDLE',
     'CUSTOM',
   ])
 
-  defineEnum('FileUploadType', [
+  define('FileUploadType', [
     'DIRECTORY',
     'FILE',
     'MULTI_FILE',
   ])
 
   // 1 to 1 mapping from ./backend/features/editor/utils.go
-  defineEnum('FileType', {
+  define('FileType', {
     DEFAULT: 0,
     ERROR: 255,
     IMAGE: 1,
     VIDEO: 2,
     TEXT: 3,
     AUDIO: 4
-  })
+  }) // do not reorder
 
-  defineEnum('BongoCatAnimationFrame', {
+  define('BongoCatAnimationFrame', {
     IDLE: "bc",
     RIGHT_HAND_TAPPED: "ba",
     LEFT_HAND_TAPPED: "dc"
   })
 
-  defineEnum('GalleryViewMode', [
+  define('GalleryViewMode', [
     'SINGLE_ITEM',
     'SPLIT_VIEW',
   ])
 
-  defineEnum('CurrentlyOpenedHeaderAction', [
+  define('CurrentlyOpenedHeaderAction', [
     'TOGGLE_SIDEBAR',
     'GO_BACK_TO_HOME',
   ])
 
-  defineEnum('EditorEvent', [
+  define('EditorEvent', [
     'ON_SWITCHING',
     'ON_UPDATE',
     'UPDATE_BONGO_CAT_ANIMATION',
   ])
 
-  defineEnum('JournalType', [
+  define('JournalType', [
     'JOURNAL',
     'FOLDER',
   ])
 
-  defineEnum('PluginEvent', [
+  define('PluginEvent', [
     'REGISTER_EDITOR_NODE',
     'JOURNAL_LOADED',
   ])
 
-  defineEnum('MediaState', [
+  define('MediaState', [
     'LOADING',
     'FINISHED_LOADING',
     'PLAYING',
@@ -226,22 +255,22 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'COMPLETED',
   ])
 
-  defineEnum('MediaEvent', [
+  define('MediaEvent', [
     'STATE_UPDATE',
   ])
 
-  defineEnum('PlaylistButtonRowAction', [
+  define('PlaylistButtonRowAction', [
     'NEXT_TRACK',
     'PREVIOUS_TRACK',
     'TOGGLE_PLAY_TRACK',
   ])
 
-  defineEnum('EditorNodeType', [
+  define('EditorNodeType', [
     'INLINE',
     'BLOCK'
   ])
 
-  defineEnum('EditorTextColor', {
+  define('EditorTextColor', {
     'RED': '#c92222',
     'ORANGE': '#d34f0b',
     'YELLOW': '#b67c04',
@@ -262,15 +291,12 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'CUSTOM': 1
   })
 
-  defineConst('TABLE_INITIAL_COLUMN_WIDTH', 150, "number")
-  defineConst('TABLE_MINIMUM_COLUMN_WIDTH', 60, "number")
-
-  defineEnum('TabEvent', [
+  define('TabEvent', [
     'CREATE',
     'UPDATE'
   ])
 
-  defineEnum('TableDataType', [
+  define('TableDataType', [
     'NUMBER',
     'PROGRESS',
     'TEXT',
@@ -280,19 +306,17 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'DATE'
   ]) // do not reorder
 
-  defineEnum('TableDataEvent', [
+  define('TableDataEvent', [
     'UPDATE',
   ])
 
-  defineEnum('TableViewType', [
+  define('TableViewType', [
     'TABLE',
     'KANBAN'
-  ])
-  
-  return mapping
+  ]) // do not reorder
 }
 
 if (import.meta.main) {
-  const mapping = defineAllConstants()
-  generateConstsTypeThenSave(mapping)
+  defineAllConstants()
+  generateConstsTypeThenSave()
 }
