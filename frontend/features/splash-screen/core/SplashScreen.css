@@ -1,0 +1,11 @@
+#splashScreen [data-background] {
+  animation: animation_fadeIn .35s 1s ease-out forwards;
+}
+
+#splashScreen[data-completed=true] [data-background] {
+  animation: animation_fadeOut .45s ease-out forwards;
+}
+
+#splashScreen[data-completed=true] {
+  animation: animation_fadeOut .65s ease-out forwards;
+}
