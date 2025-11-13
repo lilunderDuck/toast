@@ -36,6 +36,8 @@ export function Editor() {
     }
   })
 
+  window.insertGallery = () => editor$().chain().focus().insertGallery$().run()
+
   onMount(() => {
     // editor$().registerPlugin(
     // @ts-ignore - stop yelling at me, typescript

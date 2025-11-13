@@ -19,27 +19,13 @@ const style = stylex.create({
   scaleText: {
     minWidth: '3rem'
   },
-  highlightZoomButtonRow: {
-    backgroundColor: 'var(--gray1)',
-    borderRadius: 6,
-    opacity: 0.4,
-    transition: "0.1s ease-out",
-    ":hover": {
-      opacity: 1
-    }
-  }
 })
 
 export function ZoomButtonRow() {
   const { unzoom$, zoom$, reset$, internal$ } = useZoomAndPanContext()
 
   return (
-    <div 
-      {...stylex.attrs(
-        style.wholeThing, 
-        internal$.zoomScale$() > 1 ? style.highlightZoomButtonRow : {}
-      )}
-    >
+    <div {...stylex.attrs(style.wholeThing)}>
       <Tooltip label$="Reset to default zoom">
         <Button size$={ButtonSize.ICON} onClick={reset$} disabled={internal$.zoomScale$() === 1}>
           <TbZoomReset size={16} />

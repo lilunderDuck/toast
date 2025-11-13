@@ -1,15 +1,15 @@
-import type { gallery } from "~/wailsjs/go/models";
-import { useGalleryContext, type IGalleryContext } from "../provider";
-import { FileContentDisplay, type IImageProps, type IVideoProps } from "../../files";
-import { Show } from "solid-js";
-import { BsDisplayFill } from "solid-icons/bs";
+import type { gallery } from "~/wailsjs/go/models"
+import { useGalleryContext, type IGalleryContext } from "../../provider"
+import { FileContentDisplay, type IImageProps, type IVideoProps } from "../../../files"
+import GalleryItemEmpty from "./GalleryItemEmpty"
+import { Show } from "solid-js"
 
-interface IGalleryItemContentProps {
+interface IGalleryItemProps {
   item$: gallery.GalleryItem | undefined
   context$?: IGalleryContext
 }
 
-export function GalleryItemContent(props: IGalleryItemContentProps) {
+export function GalleryItem(props: IGalleryItemProps) {
   const { getDisplayUrl$, isFullscreen$ } = useGalleryContext() ?? props.context$
 
   const fileName = () => props.item$!.name
@@ -29,7 +29,7 @@ export function GalleryItemContent(props: IGalleryItemContentProps) {
   }
 
   return (
-    <Show when={props.item$} fallback={<BsDisplayFill size={30} />}>
+    <Show when={props.item$} fallback={<GalleryItemEmpty />}>
       <FileContentDisplay data$={{
         props$: dataMapping()!,
         type$: props.item$!.type

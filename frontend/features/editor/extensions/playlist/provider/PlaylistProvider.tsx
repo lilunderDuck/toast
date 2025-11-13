@@ -1,7 +1,7 @@
 import { createContext, onMount, type ParentProps, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 // ...
-import { useNodeState } from "~/features/editor/utils"
+import { createOrGetData, useNodeState } from "~/features/editor/utils"
 import { CreatePlaylist, UpdatePlaylist, GetPlaylist } from "~/wailsjs/go/playlist/Exports"
 import type { playlist } from "~/wailsjs/go/models"
 // ...
@@ -29,7 +29,7 @@ const Context = createContext<IPlaylistContext>()
 export function PlaylistProvider(props: ParentProps) {
   const [data, setData] = createStore() as SolidStore<playlist.PlaylistMetadata | undefined>
 
-  const { updateAttribute$, data$ } = useNodeState<PlaylistAttribute>()
+  const { data$ } = useNodeState<PlaylistAttribute>()
   const playlistId = () => data$().id
 
   const editPlaylist: IPlaylistContext["editPlaylist$"] = async (options) => {
@@ -42,18 +42,18 @@ export function PlaylistProvider(props: ParentProps) {
 
   // Initializes the playlist data on component mount, creating a new one if necessary.
   onMount(async () => {
-    if (playlistId() === -1) {
-      playlistData = await CreatePlaylist({
+    const data = await createOrGetData<playlist.PlaylistMetadata>(
+      playlistId() === -1,
+      () => CreatePlaylist({
         title: "Unnamed playlist",
         description: ""
-      } as playlist.PlaylistOptions)
-      updateAttribute$('id', playlistData.id!)
-    } else {
-      playlistData = await GetPlaylist(playlistId())
-    }
+      } as playlist.PlaylistOptions),
+      () => GetPlaylist(playlistId())
+    )
 
-    setData(playlistData)
-    trackItems.setItems$(playlistData.items ?? [])
+    setData(data)
+    trackItems.setItems$(data.items ?? [])
+    playlistData = data
   })
 
   const player = createMediaPlayer("audio")

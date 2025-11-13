@@ -7,7 +7,8 @@ import (
 )
 
 var allowedToServeMap = map[string]uint8{
-	"data": 0,
+	"data":  0,
+	"media": 0,
 }
 
 func createAssetsRoute(server *http.ServeMux) {

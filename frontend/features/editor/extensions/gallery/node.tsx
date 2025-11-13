@@ -9,6 +9,7 @@ import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
 import { GalleryProvider } from "./provider"
 import { useNodeState } from "../../utils"
 import type { GalleryAttribute } from "./extension"
+import { GalleryLoadingView } from "./components"
 
 const style = stylex.create({
   gallery: {
@@ -16,7 +17,8 @@ const style = stylex.create({
     width: "100%",
     height: "var(--gallery-height)",
     backgroundColor: "var(--gray3)",
-    marginBlock: 20
+    marginBlock: 20,
+    userSelect: "none"
   },
   gallery__content: {
     width: "100%",
@@ -39,6 +41,7 @@ export default function GalleryNodeView() {
   return (
     <GalleryProvider>
       <NodeViewWrapper class={macro_mergeClassnames(stylex.attrs(style.gallery), __style.gallery)}>
+        <GalleryLoadingView />
         <Switch fallback={<SingleItemGalleryView />}>
           <Match when={data$().viewMode === GalleryViewMode.SINGLE_ITEM}>
             <SingleItemGalleryView />

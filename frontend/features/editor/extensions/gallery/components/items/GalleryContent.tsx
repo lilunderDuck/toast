@@ -1,5 +1,5 @@
-import { type IGalleryContext, useGalleryContext } from "../provider"
-import { GalleryItemContent } from "./GalleryItemContent"
+import { type IGalleryContext, useGalleryContext } from "../../provider"
+import { GalleryItem } from "./GalleryItem"
 
 interface IGalleryContentProps {
   context$?: IGalleryContext
@@ -9,6 +9,6 @@ export function GalleryContent(props: IGalleryContentProps) {
   const { currentItem$ } = useGalleryContext() ?? props.context$
 
   return (
-    <GalleryItemContent item$={currentItem$()} context$={props.context$} />
+    <GalleryItem item$={currentItem$()} context$={props.context$} />
   )
 }

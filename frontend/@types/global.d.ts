@@ -44,6 +44,8 @@ declare global {
   type AnyFunction = (...anything: any[]) => any
   /**A type representing a function with no arguments and can return anything. */
   type AnyNoArgsFunction = () => any
+  /**A type representing a async function with no arguments and can return any `Promise`. */
+  type AnyNoArgsAsyncFunction = (...anything: any[]) => Promise<any>
 
   /**A type representing any object, where the keys are strings and the values can be of any type. */
   type AnyObject = Record<string, any>

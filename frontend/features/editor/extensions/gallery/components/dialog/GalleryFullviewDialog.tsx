@@ -1,12 +1,12 @@
 import { onCleanup, Show } from "solid-js"
 import { BsBox2HeartFill } from "solid-icons/bs"
 // ...
-import { ButtonRow, DialogContent } from "~/components"
+import { DialogContent } from "~/components"
 import { useEventListener, type ILazyDialog } from "~/hooks"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { GalleryContent } from "../GalleryContent"
+import { GalleryContent } from "../items/GalleryContent"
 import { type IGalleryContext, ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "../../provider"
 import { NextAndPrevButtons } from "../buttons/NextAndPrevButtons"
 
@@ -22,19 +22,23 @@ const style = stylex.create({
     position: "absolute",
     zIndex: 10,
     marginLeft: 10,
-    paddingRight: '5rem',
-    width: "100%"
+    marginTop: 5,
+    paddingRight: 10,
+    display: "flex",
+    gap: 10,
+    alignItems: "center",
+    backgroundColor: "var(--gray1)",
+    borderRadius: 6,
+    opacity: 0.4,
+    transition: "0.1s ease-out",
+    ":hover": {
+      opacity: 1
+    }
   },
   dialog__content: {
     width: "100%",
     height: "100%",
     userSelect: "none"
-  },
-  dialog__fileName: {
-    borderRadius: 6,
-    paddingInline: 10,
-    paddingBlock: 5,
-    backgroundColor: "var(--gray3)"
   },
   dialog__emptyGallery: {
     width: "100%",
@@ -65,13 +69,10 @@ export default function GalleryFullview(props: IGalleryFullviewProps) {
   return (
     <DialogContent {...stylex.attrs(style.dialog)} showCloseButton$={false}>
       <ZoomAndPanProvider>
-        <ButtonRow direction$={ButtonRowDirection.CUSTOM} {...stylex.attrs(style.dialog__buttonRow)}>
+        <div {...stylex.attrs(style.dialog__buttonRow)}>
           <ZoomButtonRow />
           <NextAndPrevButtons context$={props} />
-          <div {...stylex.attrs(style.dialog__fileName)}>
-            {props.currentItem$()?.name}
-          </div>
-        </ButtonRow>
+        </div>
         <div {...stylex.attrs(style.dialog__content)}>
           <Show when={props.data$().items.length === 0} fallback={
             <ZoomDisplay>
@@ -79,7 +80,9 @@ export default function GalleryFullview(props: IGalleryFullviewProps) {
             </ZoomDisplay>
           }>
             <div {...stylex.attrs(style.dialog__emptyGallery)}>
-              <BsBox2HeartFill size={40} />
+              <span>
+                <BsBox2HeartFill size={40} />
+              </span>
               Nothing in here, try uploading some files.
             </div>
           </Show>

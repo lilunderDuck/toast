@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex"
-import { GalleryButtonRow, GalleryItemContent } from "../components"
+import { GalleryButtonRow, GalleryItem } from "../components"
 import { useGalleryContext } from "../provider"
 
 const style = stylex.create({
@@ -38,14 +38,14 @@ export default function SplitViewGalleryView() {
         {...stylex.attrs(style.gallery__splitView)}
         data-gallery-view-media-content=""
       >
-        <GalleryItemContent item$={data$().items[0]} />
+        <GalleryItem item$={data$().items[0]} />
       </div>
       <div {...stylex.attrs(style.gallery__divider)} />
       <div
         {...stylex.attrs(style.gallery__splitView)}
         data-gallery-view-media-content=""
       >
-        <GalleryItemContent item$={data$().items[1]} />
+        <GalleryItem item$={data$().items[1]} />
       </div>
     </div>
   )

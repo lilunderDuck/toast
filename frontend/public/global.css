@@ -48,8 +48,6 @@ html, body {
   width: 100vw;
   height: 100vh;
   margin: 0;
-  /* Avoid showing scrollbar when some popover component showing */
-  overflow: hidden;
 }
 
 *, *::before, *::after {

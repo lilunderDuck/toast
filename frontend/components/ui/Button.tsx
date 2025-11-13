@@ -1,12 +1,9 @@
-import type { JSX, ValidComponent } from "solid-js"
 import { createSignal, Show, splitProps } from "solid-js"
-import type { PolymorphicProps } from "@kobalte/core/polymorphic"
-import { type ButtonRootProps, Root } from "@kobalte/core/button"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./Button.module.css"
 // ...
-import { defaultValueOrElse, sleep, type StylexStylesAttribute } from "../../utils"
+import { defaultValueOrElse, type StylexStylesAttribute } from "../../utils"
 import { macro_mergeClassnames } from "macro-def"
 import { SpinningCube } from "../loader"
 
