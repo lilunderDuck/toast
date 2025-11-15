@@ -15,8 +15,8 @@ export function SplashScreenProvider(props: ParentProps) {
   const [isShowing, setIsShowing] = createSignal(true)
   const [progress, setProgress] = createSignal(0)
 
-  const tasking = async() => {
-    await sleep(getRandomNumberFrom(2000, 6000))
+  const tasking = async() => { 
+    await sleep(isDevMode ? getRandomNumberFrom(1000, 2000) : getRandomNumberFrom(2000, 6000))
     setProgress(100)
     await sleep(1000)
     setIsShowing(false)

@@ -35,6 +35,13 @@ declare global {
     HTMLAttributes<ElementName>[EventName]
   // ...
 
+  type EventType<
+    ElementName extends HTMLTags, 
+    EventName extends keyof HTMLAttributes<ElementName>
+  > = 
+    Parameters<EventHandler<ElementName, EventName>>[0]
+  // ...
+
   /**A type representing an reference to a DOM element 
    * @template ElementName the html element name, example: `'div'` 
    */

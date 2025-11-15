@@ -1,12 +1,10 @@
 import stylex from "@stylexjs/stylex"
 import { macro_mergeClassnames } from "macro-def"
 import { createSignal, onMount } from "solid-js"
-import { getRandomNumber } from "~/utils"
 
 const style = stylex.create({
   input: {
     width: '100%',
-    maxWidth: '25rem',
     resize: 'none',
     paddingInline: 10,
     paddingBlock: 5,
@@ -25,6 +23,7 @@ const style = stylex.create({
 export function ResizableTextarea(props: HTMLAttributes<"textarea">) {
   const [height, setHeight] = createSignal<string>('auto')
 
+  let textareaRef!: Ref<"textarea">
   const onSlappingYourKeyboard = (inputEvent: InputEvent) => {
     const current = inputEvent.currentTarget as HTMLTextAreaElement
     updateTextarea(current)
@@ -37,17 +36,12 @@ export function ResizableTextarea(props: HTMLAttributes<"textarea">) {
     console.log('updated height')
   }
 
-  // update the textarea height right after it mounts.
+  // Update the textarea height right after it mounts.
   // 
-  // this exist is because if we set some value to this textarea, its height doesn't update
+  // This exists is because if we set some value to this textarea, its height doesn't update
   // right away. Only when you start typing something, it will update the height correctly
-  let textareaId = `_${getRandomNumber(100)}` as const
   onMount(() => {
-    console.group('mounted')
     let timeout = setTimeout(() => {
-      const textareaRef = document.getElementById(textareaId) as HTMLTextAreaElement | null
-      console.assert(textareaRef, `cannot select textarea id: ${textareaId}`)
-
       console.log('textarea ref is:', textareaRef, '. Updating now')
       updateTextarea(textareaRef!)
 
@@ -59,7 +53,7 @@ export function ResizableTextarea(props: HTMLAttributes<"textarea">) {
   return (
     <textarea
       {...props}
-      id={textareaId}
+      ref={textareaRef}
       class={macro_mergeClassnames(props, stylex.attrs(style.input))}
       style={`height: ${height()}`}
       onInput={onSlappingYourKeyboard}

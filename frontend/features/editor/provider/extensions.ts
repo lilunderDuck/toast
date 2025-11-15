@@ -1,4 +1,3 @@
-import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import StarterKit from '@tiptap/starter-kit'
 import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
@@ -8,18 +7,16 @@ import Underline from '@tiptap/extension-underline'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import Placeholder from '@tiptap/extension-placeholder'
-import { DetailsSummary, DetailsContent, Details } from '@tiptap/extension-details'
 import { TextStyle, BackgroundColor, Color } from '@tiptap/extension-text-style'
 import { CharacterCount } from '@tiptap/extensions'
-import { common, createLowlight } from 'lowlight'
 import { macro_mergeClassnames } from 'macro-def'
 // ...
-import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension, SlashCommandExtension, TableExtension } from "../extensions"
+import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension, SlashCommandExtension, TableExtension, CodeBlockExtension, PlaylistExtension } from "../extensions"
+// ...
+import { pluginEvent } from '~/plugins'
 // ...
 import __style from "./extensions.module.css"
 import stylex from "@stylexjs/stylex"
-import { PlaylistExtension } from '../extensions/playlist'
-import { pluginEvent } from '~/plugins'
 
 const style = stylex.create({
   ext__taskList: {
@@ -40,14 +37,13 @@ const style = stylex.create({
 })
 
 export function getExtensions() {
-  const lowlight = createLowlight(common)
-
   const extensions = [
     StarterKit.configure({
       codeBlock: false,
       blockquote: {
         HTMLAttributes: stylex.attrs(style.ext__blockquote)
-      }
+      },
+      code: false
     }),
     Subscript,
     Superscript,
@@ -74,19 +70,14 @@ export function getExtensions() {
     Color,
     TextStyle, 
     BackgroundColor,
-    CodeBlockLowlight.configure({
-      lowlight,
-      defaultLanguage: "txt",
-      exitOnArrowDown: false,
-    }),
-    DetailsSummary, 
-    DetailsContent, 
-    Details.configure({
-      HTMLAttributes: {
-        class: __style.details
-      },
-      openClassName: __style.detailsOpened
-    }),
+    // DetailsSummary, 
+    // DetailsContent, 
+    // Details.configure({
+    //   HTMLAttributes: {
+    //     class: __style.details
+    //   },
+    //   openClassName: __style.detailsOpened
+    // }),
     // ------- misc functionality extension ------
     CharacterCount,
     SlashCommandExtension,
@@ -96,7 +87,8 @@ export function getExtensions() {
     GalleryExtension,
     ImageExtension,
     PlaylistExtension,
-    TableExtension
+    TableExtension,
+    CodeBlockExtension
   ]
 
   pluginEvent.on$(PluginEvent.REGISTER_EDITOR_NODE, (nodeExtension) => {

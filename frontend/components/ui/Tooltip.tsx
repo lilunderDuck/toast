@@ -33,7 +33,7 @@ export interface ITooltipOptions {
   label$: JSX.Element
 }
 
-interface ITooltipProps extends HTMLAttributes<"div">, ITooltipOptions {}
+export interface ITooltipProps extends HTMLAttributes<"div">, ITooltipOptions {}
 
 export function Tooltip(
   props: ITooltipProps

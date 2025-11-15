@@ -37,6 +37,7 @@ export function Editor() {
   })
 
   window.insertGallery = () => editor$().chain().focus().insertGallery$().run()
+  window.insertCodeBlock = () => editor$().chain().focus().insertCodeBlock$().run()
 
   onMount(() => {
     // editor$().registerPlugin(
@@ -55,6 +56,7 @@ export function Editor() {
       <SolidEditorContent
         editor={editor$()}
         style={`--sb-track-color: var(--gray2)`}
+        spellcheck="false"
         class={macro_mergeClassnames(
           stylex.attrs(style.editor),
           __scrollbarStyle.scrollbar,
