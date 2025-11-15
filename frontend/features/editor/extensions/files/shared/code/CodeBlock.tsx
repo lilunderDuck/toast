@@ -8,7 +8,7 @@ import { useEditorContext } from "~/features/editor/provider"
 // ...
 import { LANGUAGE_MAPPING, useCodeBlockContext, type LanguageName } from "./provider"
 import { CodeBlockContent, CodeBlockInput, CodeBlockLanguageSelect, type ICodeBlockContentProps } from "./components"
-import hljs from "highlight.js"
+import hljs from "highlight.js/lib/core"
 
 const style = stylex.create({
   block: {
