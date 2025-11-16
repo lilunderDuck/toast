@@ -1,7 +1,6 @@
 import StarterKit from '@tiptap/starter-kit'
 import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
-import Highlight from '@tiptap/extension-highlight'
 import Link from '@tiptap/extension-link'
 import Underline from '@tiptap/extension-underline'
 import TaskItem from '@tiptap/extension-task-item'
@@ -47,7 +46,6 @@ export function getExtensions() {
     }),
     Subscript,
     Superscript,
-    Highlight,
     Link,
     Underline,
     Placeholder.configure({
