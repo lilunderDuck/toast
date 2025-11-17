@@ -1,9 +1,5 @@
-import { 
-  type IImageProps,
-  Image,
-  type IVideoProps, 
-  Video 
-} from "../shared"
+import { Image, type IImageProps } from "../image"
+import { Video, type IVideoProps } from "../video"
 
 export type FileContentPropsMapping = {
   [FileType.VIDEO]: IVideoProps

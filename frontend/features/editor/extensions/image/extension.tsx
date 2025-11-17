@@ -3,7 +3,7 @@ import { type Command } from '@tiptap/core'
 import { NodeViewWrapper } from '~/libs/solid-tiptap-renderer'
 // ...
 import { createEditorNode, insertNodeAtCurrentPosition, useNodeState } from '../../utils'
-import { ImageInput, type ImageAttribute } from '../files'
+import { ImageInput, type ImageAttribute } from '../../common/image'
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({

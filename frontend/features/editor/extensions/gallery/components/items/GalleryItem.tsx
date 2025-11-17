@@ -1,8 +1,13 @@
-import type { gallery } from "~/wailsjs/go/models"
-import { useGalleryContext, type IGalleryContext } from "../../provider"
-import { FileContentDisplay, type IImageProps, type IVideoProps } from "../../../files"
-import GalleryItemEmpty from "./GalleryItemEmpty"
 import { Show } from "solid-js"
+// ...
+import type { gallery } from "~/wailsjs/go/models"
+// ...
+import type { IVideoProps } from "~/features/editor/common/video"
+import type { IImageProps } from "~/features/editor/common/image"
+import { FileContentDisplay } from "~/features/editor/common/components"
+// ...
+import { useGalleryContext, type IGalleryContext } from "../../provider"
+import GalleryItemEmpty from "./GalleryItemEmpty"
 
 interface IGalleryItemProps {
   item$: gallery.GalleryItem | undefined

@@ -2,7 +2,7 @@ import { NodeViewWrapper } from '~/libs/solid-tiptap-renderer'
 // ...
 import { createEditorNode, insertNodeAtCurrentPosition, useNodeState } from '../../utils'
 
-import { CodeBlock, CodeBlockProvider, type CodeBlockData } from '../files/shared/code'
+import { CodeBlock, CodeBlockProvider, type CodeBlockData } from '../../common/code'
 
 export type CodeAttribute = CodeBlockData
 
