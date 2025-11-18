@@ -1,5 +1,5 @@
-import type { ISlashCommandMenuItem } from "./Menu"
-
+import type { IFloatingMenuItem } from "~/features/editor/provider"
+// ...
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({
@@ -19,13 +19,13 @@ const style = stylex.create({
   }
 })
 
-interface IMenuItemProps extends ISlashCommandMenuItem {
+interface IMenuItemProps extends IFloatingMenuItem {
   // ...
 }
 
 export function MenuItem(props: IMenuItemProps) {
   return (
-    <button {...stylex.attrs(style.menu)}>
+    <button {...stylex.attrs(style.menu)} onClick={() => props.command$().run()}>
       <props.icon$ />
       {props.name$}
     </button>

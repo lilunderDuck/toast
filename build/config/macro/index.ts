@@ -3,10 +3,11 @@ import { join } from "node:path"
 import { mergeClassnames } from "./mergeClassnames"
 import { getValueOrDefault } from "./getValueOrDefault"
 import { escapeCssUrl } from "./escapeCssUrl"
+import { randomString } from "./random"
 
 export const MACRO_EXPORTS = {
   'macro-def': {
-    macros: [mergeClassnames, getValueOrDefault, escapeCssUrl],
+    macros: [mergeClassnames, getValueOrDefault, escapeCssUrl, randomString],
   }
 }
 

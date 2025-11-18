@@ -1,15 +1,12 @@
-type Ref<V> = [() => V | null, (value: V) => void];
+export type Ref<V> = [() => V | null, (value: V) => void]
 
-const createRef = <V>(): Ref<V> => {
-  let ref: V | null = null;
+export function createRef<V>(): Ref<V> {
+  let ref: V | null = null
 
   return [
     () => ref,
     (value) => {
-      ref = value;
+      ref = value
     }
-  ];
-};
-
-export { createRef };
-export type { Ref };
+  ]
+}

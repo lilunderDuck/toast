@@ -6,9 +6,8 @@ import "highlight.js/styles/atom-one-dark.css"
 // ...
 import { useEditorContext } from "~/features/editor/provider"
 // ...
-import { LANGUAGE_MAPPING, useCodeBlockContext, type LanguageName } from "./provider"
+import { highlightCodeBlock, useCodeBlockContext, type LanguageName } from "./provider"
 import { CodeBlockContent, CodeBlockInput, CodeBlockLanguageSelect, type ICodeBlockContentProps } from "./components"
-import hljs from "highlight.js/lib/core"
 
 const style = stylex.create({
   block: {
@@ -37,47 +36,21 @@ export function CodeBlock() {
 
   let inputRef!: ICodeBlockContentProps["ref"]
 
-  const highlightCodeBlock = async () => {
-    const languageName = data$().lang
-    if (!languageName || languageName === "text") {
-      return
-    }
-
-    console.assert(
-      inputRef.className.includes("language"),
-      `"${inputRef}" missing a class with a "language-*" prefix, this will break the highlighting`
-    )
-
-    if (inputRef.dataset.highlighted === "yes") {
-      inputRef.dataset.highlighted = "no"
-    }
-
-    try {
-      hljs.highlightElement(inputRef)
-    } catch (error) {
-      console.warn("[anti-crash] failed to highlight code\n", error)
-
-      const rule = LANGUAGE_MAPPING[languageName]
-      console.assert(rule, `"${languageName}" did not exist in the mapping: LANGUAGE_MAPPING`)
-
-      hljs.registerLanguage(languageName as string, (await rule()).default)
-      hljs.highlightElement(inputRef)
-    }
-  }
+  const startHighlight = () => highlightCodeBlock(data$().lang, inputRef as Ref<"pre">)
 
   const onSelectLanguage = (lang: LanguageName) => {
     updateData$({ lang })
     if (!isShowingInput$()) {
-      highlightCodeBlock()
+      startHighlight()
     }
   }
 
   const onExitingInput = (content: string) => {
     updateData$({ codeContent: content })
-    highlightCodeBlock()
+    startHighlight()
   }
 
-  onMount(highlightCodeBlock)
+  onMount(startHighlight)
 
   const showInput = () => {
     if (!isShowingInput$()) {

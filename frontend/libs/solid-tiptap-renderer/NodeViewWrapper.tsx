@@ -12,7 +12,7 @@ export interface NodeViewWrapperProps {
 export function NodeViewWrapper<T extends HTMLTags>(props: HTMLAttributes<T> & {
   as?: T
 }) {
-  const { state } = useSolidNodeView() as SolidNodeViewContextProps<Attrs>
+  const { state$ } = useSolidNodeView() as SolidNodeViewContextProps<Attrs>
   const [local, otherProps] = splitProps(props, ["as"])
 
   return (
@@ -20,7 +20,7 @@ export function NodeViewWrapper<T extends HTMLTags>(props: HTMLAttributes<T> & {
     <Dynamic
       component={local.as || "div"}
       {...otherProps}
-      onDragStart={state().onDragStart}
+      onDragStart={state$().onDragStart}
       data-node-view-wrapper=""
     />
   )

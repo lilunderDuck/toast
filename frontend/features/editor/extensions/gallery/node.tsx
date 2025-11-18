@@ -4,10 +4,9 @@ import { macro_mergeClassnames } from "macro-def"
 import stylex from "@stylexjs/stylex"
 import __style from "./node.module.css"
 // ...
-import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
+import { NodeViewWrapper, useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 // ...
 import { GalleryProvider } from "./provider"
-import { useNodeState } from "../../utils"
 import type { GalleryAttribute } from "./extension"
 import { GalleryLoadingView } from "./components"
 
@@ -36,18 +35,18 @@ const SplitViewGalleryView = lazy(() => import("./view/SplitViewGalleryView"))
 const SingleItemGalleryView = lazy(() => import("./view/SingleItemGalleryView"))
 
 export default function GalleryNodeView() {
-  const { data$ } = useNodeState<GalleryAttribute>()
+  const { attrs$ } = useSolidNodeView<GalleryAttribute>()
 
   return (
     <GalleryProvider>
       <NodeViewWrapper class={macro_mergeClassnames(stylex.attrs(style.gallery), __style.gallery)}>
         <GalleryLoadingView />
         <Switch fallback={<SingleItemGalleryView />}>
-          <Match when={data$().viewMode === GalleryViewMode.SINGLE_ITEM}>
+          <Match when={attrs$().viewMode === GalleryViewMode.SINGLE_ITEM}>
             <SingleItemGalleryView />
           </Match>
           
-          <Match when={data$().viewMode === GalleryViewMode.SPLIT_VIEW}>
+          <Match when={attrs$().viewMode === GalleryViewMode.SPLIT_VIEW}>
             <SplitViewGalleryView />
           </Match>
         </Switch>

@@ -1,10 +1,10 @@
 import { type Accessor, createContext, createSignal, onCleanup, type ParentProps, type Setter, type Signal, useContext } from "solid-js"
 import { type LocalEmbedAttribute } from "../extension"
-import { useNodeState } from "~/features/editor/utils"
 import { useFullscreen } from "~/hooks"
 import { ASSETS_SERVER_URL } from "~/api"
 import { BrowserOpenURL } from "~/wailsjs/runtime/runtime"
 import { SaveLocalEmbed } from "~/wailsjs/go/editor/Exports"
+import { useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 
 interface ILocalEmbedContext {
   setRootRef$: Setter<Ref<"div">>
@@ -20,12 +20,12 @@ interface ILocalEmbedContext {
 const Context = createContext<ILocalEmbedContext>()
 
 export function LocalEmbedProvider(props: ParentProps) {
-  const { data$, updateAttribute$ } = useNodeState<LocalEmbedAttribute>()
+  const { attrs$, updateAttribute$ } = useSolidNodeView<LocalEmbedAttribute>()
   const [rootRef, setRootRef] = createSignal() as Signal<Ref<"div">>
   const { isFullscreen$, toggle$ } = useFullscreen(rootRef)
 
-  const isEmpty = () => data$().name == ""
-  const getEmbedUrl = () => `${ASSETS_SERVER_URL}/local-assets/embed/${data$().name}` as const
+  const isEmpty = () => attrs$().name == ""
+  const getEmbedUrl = () => `${ASSETS_SERVER_URL}/local-assets/embed/${attrs$().name}` as const
 
   let iframeRef!: Ref<"iframe">
   onCleanup(() => {

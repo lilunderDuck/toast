@@ -1,7 +1,9 @@
-import { DropdownMenuContent, DropdownMenuItem, type IDropdownMenu } from "~/components"
 import { BsImageFill, BsLayoutSplit } from "solid-icons/bs"
 import { For } from "solid-js"
-
+// ...
+import { DropdownMenuContent, DropdownMenuItem } from "~/components"
+import type { IDropdownMenu } from "~/hooks"
+// ...
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({

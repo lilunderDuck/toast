@@ -33,9 +33,7 @@ export const LocalEmbedExtension = createEditorNode<
       default: null
     }
   }),
-  menu$(editorInstance) {
-    return {}
-  },
+  
   View$: () => (
     <LocalEmbedProvider>
       <LocalEmbedNode />

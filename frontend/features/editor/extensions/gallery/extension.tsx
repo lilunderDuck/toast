@@ -42,7 +42,5 @@ export const GalleryExtension = createEditorNode<
     }
   },
   View$: GalleryNodeView,
-  menu$(editorInstance) {
-    return {}
-  },
+  
 })

@@ -34,9 +34,7 @@ export const PlaylistExtension = createEditorNode<
       default: null
     }
   }),
-  menu$(editorInstance) {
-    return {}
-  },
+  
   View$: () => (
     <PlaylistProvider>
       <PlaylistNode />

@@ -1,6 +1,6 @@
-import { NodeViewWrapper } from '~/libs/solid-tiptap-renderer'
+import { NodeViewWrapper, useSolidNodeView } from '~/libs/solid-tiptap-renderer'
 // ...
-import { createEditorNode, insertNodeAtCurrentPosition, useNodeState } from '../../utils'
+import { createEditorNode, insertNodeAtCurrentPosition } from '../../utils'
 
 import { CodeBlock, CodeBlockProvider, type CodeBlockData } from '../../common/code'
 
@@ -34,12 +34,12 @@ export const CodeBlockExtension = createEditorNode<
     }
   },
   View$() {
-    const { data$, updateAttribute$ } = useNodeState<CodeAttribute>()
+    const { attrs$, updateAttribute$ } = useSolidNodeView<CodeAttribute>()
 
     return (
       <NodeViewWrapper>
         <CodeBlockProvider
-          data$={data$()}
+          data$={attrs$()}
           onChange$={(codeData) => {
             for (const [key, value] of Object.entries(codeData)) {
               if (!key) continue
@@ -51,8 +51,5 @@ export const CodeBlockExtension = createEditorNode<
         </CodeBlockProvider>
       </NodeViewWrapper>
     )
-  },
-  menu$(editorInstance) {
-    return {}
   },
 })

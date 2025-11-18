@@ -2,9 +2,8 @@ import { onMount } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
+import { NodeViewWrapper, useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 // ...
-import { useNodeState } from "../../utils"
 import type { TagAttribute } from "./extension"
 
 const style = stylex.create({
@@ -36,7 +35,7 @@ const style = stylex.create({
 })
 
 export default function TagNodeView() {
-  const { data$ } = useNodeState<TagAttribute>()
+  const { attrs$ } = useSolidNodeView<TagAttribute>()
   let tagRef!: Ref<"span">
 
   onMount(() => {
@@ -47,11 +46,11 @@ export default function TagNodeView() {
     <NodeViewWrapper 
       as="span" 
       style={{
-        "--color": data$().color
+        "--color": attrs$().color
       }}
       {...stylex.attrs(style.tag)}
     >
-      #<span contentEditable={true} ref={tagRef} {...stylex.attrs(style.tagContent)}>{data$().name}</span>
+      #<span contentEditable={true} ref={tagRef} {...stylex.attrs(style.tagContent)}>{attrs$().name}</span>
     </NodeViewWrapper>
   )
 }

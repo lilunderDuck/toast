@@ -3,10 +3,11 @@ import { createContext, createSignal, onMount, type ParentProps, useContext } fr
 import { createTabs, type StateSlice, type TabsHandler } from "~/hooks"
 import { createEvent, type IEvent } from "~/utils"
 import type { table } from "~/wailsjs/go/models"
-import { useNodeState } from "~/features/editor/utils"
 import { CreateTable, CreateTableGrid, GetTable, UpdateTable, UpdateTableGrid } from "~/wailsjs/go/table/Exports"
 // ...
 import type { TableAttribute } from "./data"
+import { useSolidNodeView } from "~/libs/solid-tiptap-renderer"
+import { createOrGetData } from "~/features/editor/utils"
 
 type TableDataEventMap = IEvent<{
   [TableDataEvent.UPDATE]: (tableTabId: string, data: table.TableGridData) => any
@@ -25,11 +26,11 @@ interface ITablesDataProviderProps {
 }
 
 export function TablesDataProvider(props: ParentProps<ITablesDataProviderProps>) {
-  const { data$, updateAttribute$ } = useNodeState<TableAttribute>()
+  const { attrs$, updateAttribute$ } = useSolidNodeView<TableAttribute>()
 
   const event: TableDataEventMap = createEvent()
   const tabs = createTabs<table.TableTabData>([])
-  const tableId = () => data$().id
+  const tableId = () => attrs$().id
   
   const [title, setTitle] = createSignal('')
 
@@ -48,15 +49,12 @@ export function TablesDataProvider(props: ParentProps<ITablesDataProviderProps>)
   })
 
   onMount(async() => {
-    console.log(data$())
-    const data: table.TableMetadata = tableId() === '' ? 
-      await CreateTable() :
-      await GetTable(tableId())
-    // ...
-
-    if (tableId() === '') {
-      updateAttribute$("id", data.id)
-    }
+    console.log(attrs$())
+    const data = await createOrGetData<table.TableMetadata>(
+      tableId() === '',
+      CreateTable,
+      () => GetTable(tableId())
+    )
 
     console.log(data)
 

@@ -1,9 +1,5 @@
-import { Node, type Attribute, type NodeConfig } from "@tiptap/core"
-import { Transaction } from "prosemirror-state"
-import type { IconTypes } from "solid-icons"
-import type { VoidComponent } from "solid-js"
-// ...
-import { SolidNodeViewRenderer } from "~/libs/solid-tiptap-renderer"
+import type { NodeConfig } from "@tiptap/core"
+import type { Transaction } from "@tiptap/pm/state"
 
 /**Extracts the `this` type from a `NodeConfig`'s `addCommands` method.  */
 export type ThisInAddCommands = ThisParameterType<NonNullable<NodeConfig["addCommands"]>>
@@ -96,69 +92,4 @@ export function insertNodeAtCurrentPosition<T extends {}>(
   const node = theThisType.type.create(data)
   tr.replaceRangeWith(from, to, node)
   return true
-}
-
-interface IBaseEditorNodeOptions<T extends Record<string, any>> {
-  name$: string
-  attributes$(): Record<keyof T, Pick<Attribute, "default" | "isRequired">>
-  View$: VoidComponent
-}
-
-export interface IEditorMenuOptions {
-  name$: string
-  icon$: IconTypes
-  run$: AnyNoArgsFunction
-}
-
-interface IEditorInlineNodeOptions<
-T extends Record<string, any>
-> extends IBaseEditorNodeOptions<T> {
-  inputRules$?: NodeConfig["addInputRules"]
-}
-
-interface IEditorBlockNodeOptions<
-T extends Record<string, any>
-> extends IBaseEditorNodeOptions<T> {
-  commands$: NodeConfig<T, any>["addCommands"]
-}
-
-interface IEditorNodeOptionsMap<
-  T extends Record<string, any>
-> {
-  [EditorNodeType.BLOCK]: IEditorBlockNodeOptions<T>
-  [EditorNodeType.INLINE]: IEditorInlineNodeOptions<T>
-}
-
-export function createEditorNode<
-  Attrs extends Record<string, any>,
-  // Weird confusing generic
-  NodeType extends EditorNodeType,
->(
-  type: NodeType, 
-  options: IEditorNodeOptionsMap<Attrs>[NodeType]
-) {
-  const NODE_OPTIONS_MAPPING: Record<EditorNodeType, Partial<NodeConfig>> = {
-    [EditorNodeType.BLOCK]: {
-      group: 'block',
-      inline: false,
-      addCommands: (options as IEditorBlockNodeOptions<Attrs>).commands$,
-    },
-    [EditorNodeType.INLINE]: {
-      group: 'inline',
-      content: 'inline*',
-      inline: true,
-      addInputRules: (options as IEditorInlineNodeOptions<Attrs>).inputRules$
-    }
-  }
-
-  const nodeConfig: NodeConfig = {
-    ...NODE_OPTIONS_MAPPING[type],
-    name: options.name$,
-    selectable: false,
-    atom: true,
-    addAttributes: options.attributes$,
-    addNodeView: () => SolidNodeViewRenderer(options.View$),
-  }
-
-  return Node.create(nodeConfig)
 }

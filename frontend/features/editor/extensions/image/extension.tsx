@@ -1,8 +1,8 @@
 import { type Command } from '@tiptap/core'
 // ...
-import { NodeViewWrapper } from '~/libs/solid-tiptap-renderer'
+import { NodeViewWrapper, useSolidNodeView } from '~/libs/solid-tiptap-renderer'
 // ...
-import { createEditorNode, insertNodeAtCurrentPosition, useNodeState } from '../../utils'
+import { createEditorNode, insertNodeAtCurrentPosition } from '../../utils'
 import { ImageInput, type ImageAttribute } from '../../common/image'
 import stylex from "@stylexjs/stylex"
 
@@ -43,11 +43,9 @@ export const ImageExtension = createEditorNode<
       default: null
     }
   }),
-  menu$(editorInstance) {
-    return {}
-  },
+  
   View$() {
-    const { data$, updateAttribute$ } = useNodeState<ImageAttribute>()
+    const { attrs$, updateAttribute$ } = useSolidNodeView<ImageAttribute>()
 
     return (
       <NodeViewWrapper {...stylex.attrs(style.node)}>
@@ -55,7 +53,7 @@ export const ImageExtension = createEditorNode<
           onChange$={(fileName) => {
             updateAttribute$("name", fileName)
           }}
-          data$={data$()}
+          data$={attrs$()}
         />
       </NodeViewWrapper>
     )

@@ -1,6 +1,6 @@
 import { onMount } from "solid-js"
-import { macro_mergeClassnames } from "macro-def"
-import { type FloatingMenuPluginProps } from "@tiptap/extension-floating-menu"
+import { macro_mergeClassnames, macro_randomString } from "macro-def"
+import { FloatingMenuPlugin, type FloatingMenuPluginProps } from "@tiptap/extension-floating-menu"
 import { BubbleMenuPlugin, type BubbleMenuPluginProps } from "@tiptap/extension-bubble-menu"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -9,7 +9,7 @@ import "./Editor.css"
 // ...
 import { SolidEditorContent } from "~/libs/solid-tiptap-renderer"
 // ...
-import { AttributeEditor, BubbleMenu } from "../components"
+import { AttributeEditor, BubbleMenu, FloatingMenu } from "../components"
 import { useEditorContext } from "../provider"
 
 const style = stylex.create({
@@ -26,27 +26,30 @@ export function Editor() {
   let bubbleMenuRef!: Ref<"div">
   let floatingMenuRef!: Ref<"div">
 
-  const getOption = (element: HTMLElement): FloatingMenuPluginProps | BubbleMenuPluginProps => ({
-    editor: editor$(),
-    pluginKey: crypto.randomUUID(),
-    element: element,
-    tippyOptions: {
-      arrow: true,
-      interactive: true,
-    }
-  })
-
-  window.insertGallery = () => editor$().chain().focus().insertGallery$().run()
-  window.insertCodeBlock = () => editor$().chain().focus().insertCodeBlock$().run()
-
   onMount(() => {
-    // editor$().registerPlugin(
-    // @ts-ignore - stop yelling at me, typescript
-    // FloatingMenuPlugin(getOption(floatingMenuRef))
-    // )
+    editor$().registerPlugin(
+      FloatingMenuPlugin({
+        editor: editor$(),
+        pluginKey: macro_randomString(2),
+        element: floatingMenuRef,
+        tippyOptions: {
+          arrow: true,
+          interactive: true,
+          placement: "bottom"
+        }
+      })
+    )
 
     editor$().registerPlugin(
-      BubbleMenuPlugin(getOption(bubbleMenuRef))
+      BubbleMenuPlugin({
+        editor: editor$(),
+        pluginKey: macro_randomString(2),
+        element: bubbleMenuRef,
+        tippyOptions: {
+          arrow: true,
+          interactive: true,
+        }
+      })
     )
   })
 
@@ -64,6 +67,7 @@ export function Editor() {
         )}
       />
       <BubbleMenu ref={bubbleMenuRef} />
+      <FloatingMenu ref={floatingMenuRef} />
     </>
   )
 }

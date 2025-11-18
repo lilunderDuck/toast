@@ -1,10 +1,8 @@
 import { Show } from "solid-js"
 // ...
 import type { gallery } from "~/wailsjs/go/models"
-// ...
-import type { IVideoProps } from "~/features/editor/common/video"
-import type { IImageProps } from "~/features/editor/common/image"
-import { FileContentDisplay } from "~/features/editor/common/components"
+import { Video, type IVideoProps } from "~/features/editor/common/video"
+import { Image, type IImageProps } from "~/features/editor/common/image"
 // ...
 import { useGalleryContext, type IGalleryContext } from "../../provider"
 import GalleryItemEmpty from "./GalleryItemEmpty"
@@ -41,4 +39,29 @@ export function GalleryItem(props: IGalleryItemProps) {
       }} />
     </Show>
   )
+}
+
+type FileContentPropsMapping = {
+  [FileType.VIDEO]: IVideoProps
+  [FileType.IMAGE]: IImageProps
+}
+
+// @ts-ignore
+type FileContentData<T extends FileType> = { type$: T, props$: FileContentPropsMapping[T] }
+
+interface IFileContentDisplayProps {
+  data$:
+  FileContentData<FileType.VIDEO> |
+  FileContentData<FileType.IMAGE>
+  // 
+}
+
+function FileContentDisplay(props: IFileContentDisplayProps) {
+  const componentProps = () => props.data$.props$!
+  switch (props.data$.type$) {
+    case FileType.VIDEO: return <Video {...componentProps()} />
+    case FileType.IMAGE: return <Image {...componentProps()} />
+    default:
+      break
+  }
 }

@@ -314,6 +314,8 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'TABLE',
     'KANBAN'
   ]) // do not reorder
+
+  define('FLOATING_MENU_SEPERATOR', '')
 }
 
 if (import.meta.main) {

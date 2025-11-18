@@ -1,6 +1,6 @@
-import { NodeViewWrapper } from '~/libs/solid-tiptap-renderer'
+import { insertNodeAtCurrentPosition, NodeViewWrapper, useSolidNodeView } from '~/libs/solid-tiptap-renderer'
 // ...
-import { createEditorNode, insertNodeAtCurrentPosition, useNodeState } from '../../utils'
+import { createEditorNode } from '../../utils'
 import { Video, type VideoAttribute } from '../../common/video'
 
 import stylex from "@stylexjs/stylex"
@@ -36,15 +36,13 @@ export const VideoNode = createEditorNode<
     }
   },
   View$() {
-    const { data$ } = useNodeState<VideoAttribute>()
+    const { attrs$ } = useSolidNodeView<VideoAttribute>()
 
     return (
       <NodeViewWrapper {...stylex.attrs(style.nodeView)}>
-        <Video src$={data$().name} />
+        <Video src$={attrs$().name} />
       </NodeViewWrapper>
     )
   },
-  menu$(editorInstance) {
-    return {}
-  },
+  
 })

@@ -1,7 +1,7 @@
 import { createContext, type ParentProps, type Accessor, useContext, createSignal, onMount, type Setter } from "solid-js"
 import { createStore } from "solid-js/store"
 // ...
-import { createOrGetData, useNodeState } from "~/features/editor/utils"
+import { createOrGetData } from "~/features/editor/utils"
 import { createStorage } from "~/utils"
 import { ASSETS_SERVER_URL } from "~/api"
 import { useJournalContext } from "~/features/journal"
@@ -10,10 +10,11 @@ import { CreateGallery, GetGallery, UpdateGallery, UploadToGallery } from "~/wai
 // ...
 import type { GallerySessionStorage } from "./data"
 import { DEFAULT_GALLERY_ID, type GalleryAttribute } from "../extension"
+import { useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 
 export interface IGalleryContext {
   /**Gets the current gallery data. */
-  data$: () => gallery.GalleryData
+  attrs$: () => gallery.GalleryData
   /**Navigates to the next item in the gallery and updates the current index and item state. */
   next$(): void
   /**Navigates to the previous item in the gallery and updates the current index and item state. */
@@ -65,7 +66,7 @@ interface IGalleryProviderProps {
 }
 
 export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
-  const { data$ } = useNodeState<GalleryAttribute>()
+  const { attrs$ } = useSolidNodeView<GalleryAttribute>()
   const { sessionStorage$ } = useJournalContext()
   const [galleryData, setGalleryData] = createStore<gallery.GalleryData>({} as gallery.GalleryData)
 
@@ -75,7 +76,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
 
   const wrappedSessionStorage: GallerySessionStorage = createStorage(sessionStorage, 'gallery$')
 
-  const getCurrentGalleryId = () => galleryData!.id ?? data$().id 
+  const getCurrentGalleryId = () => galleryData!.id ?? attrs$().id 
   const getCurrentGroupId = () => sessionStorage$.get$("journal_data$").groupId$
   const CURRENT_INDEX_STORAGE_KEY = `${getCurrentGroupId()}.${getCurrentGalleryId()}.currIndex` as const
 
@@ -87,7 +88,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
 
   onMount(async() => {
     const data = await createOrGetData<gallery.GalleryData>(
-      data$().id === DEFAULT_GALLERY_ID,
+      attrs$().id === DEFAULT_GALLERY_ID,
       () => CreateGallery(),
       () => GetGallery(getCurrentGalleryId())
     )
@@ -140,7 +141,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
 
   return (
     <Context.Provider value={{
-      data$: () => galleryData,
+      attrs$: () => galleryData,
       currentIndex$: currentIndex,
       next$: next,
       isFullscreen$: isFullscreen,

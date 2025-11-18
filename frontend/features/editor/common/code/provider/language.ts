@@ -1,3 +1,5 @@
+import hljs from "highlight.js"
+
 export const LANGUAGE_MAPPING = {
   text: () => null,
   javascript: () => import("highlight.js/lib/languages/javascript"),
@@ -59,3 +61,29 @@ export const LANGUAGE_MAPPING = {
 
 type LanguageKey = keyof typeof LANGUAGE_MAPPING
 export type LanguageName = LanguageKey | "text"
+
+export async function highlightCodeBlock(languageName: LanguageName | undefined, preRef: Ref<"pre">) {
+  if (!languageName || languageName === "text") {
+    return
+  }
+
+  console.assert(
+    preRef.className.includes("language"),
+    `"${preRef}" missing a class with a "language-*" prefix, this will break the highlighting`
+  )
+
+  try {
+    preRef.innerHTML = hljs.highlight(preRef.innerText, {
+      language: languageName,
+      ignoreIllegals: true
+    }).value
+  } catch (error) {
+    console.warn("[anti-crash] failed to highlight code\n", error)
+
+    const rule = LANGUAGE_MAPPING[languageName]
+    console.assert(rule, `"${languageName}" did not exist in the mapping: LANGUAGE_MAPPING`)
+
+    hljs.registerLanguage(languageName as string, (await rule()).default)
+    highlightCodeBlock(languageName, preRef) // retry
+  }
+}

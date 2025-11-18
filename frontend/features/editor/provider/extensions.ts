@@ -10,7 +10,7 @@ import { TextStyle, BackgroundColor, Color } from '@tiptap/extension-text-style'
 import { CharacterCount } from '@tiptap/extensions'
 import { macro_mergeClassnames } from 'macro-def'
 // ...
-import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension, SlashCommandExtension, TableExtension, CodeBlockExtension, PlaylistExtension } from "../extensions"
+import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension, TableExtension, CodeBlockExtension, PlaylistExtension } from "../extensions"
 // ...
 import { pluginEvent } from '~/plugins'
 // ...
@@ -78,7 +78,6 @@ export function getExtensions() {
     // }),
     // ------- misc functionality extension ------
     CharacterCount,
-    SlashCommandExtension,
     // ------- custom extension zone -------
     TagExtension,
     LocalEmbedExtension,

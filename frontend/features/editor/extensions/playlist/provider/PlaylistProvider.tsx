@@ -1,7 +1,7 @@
 import { createContext, onMount, type ParentProps, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 // ...
-import { createOrGetData, useNodeState } from "~/features/editor/utils"
+import { createOrGetData } from "~/features/editor/utils"
 import { CreatePlaylist, UpdatePlaylist, GetPlaylist } from "~/wailsjs/go/playlist/Exports"
 import type { playlist } from "~/wailsjs/go/models"
 // ...
@@ -9,10 +9,11 @@ import type { PlaylistAttribute } from "../extension"
 import { createTrackItemsManager, type IPlaylistTrackItem } from "./items"
 import { createTrackPlayerManager } from "./track"
 import { createMediaPlayer } from "~/hooks"
+import { useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 
 export interface IPlaylistContext {
   /**The playlist's metadata. */
-  data$: () => playlist.PlaylistMetadata | undefined
+  attrs$: () => playlist.PlaylistMetadata | undefined
   /**Edits an existing playlist's metadata.
    * @param options The new metadata for the playlist.
    */
@@ -29,8 +30,8 @@ const Context = createContext<IPlaylistContext>()
 export function PlaylistProvider(props: ParentProps) {
   const [data, setData] = createStore() as SolidStore<playlist.PlaylistMetadata | undefined>
 
-  const { data$ } = useNodeState<PlaylistAttribute>()
-  const playlistId = () => data$().id
+  const { attrs$ } = useSolidNodeView<PlaylistAttribute>()
+  const playlistId = () => attrs$().id
 
   const editPlaylist: IPlaylistContext["editPlaylist$"] = async (options) => {
     const updatedData = await UpdatePlaylist(playlistId(), options)
@@ -62,7 +63,7 @@ export function PlaylistProvider(props: ParentProps) {
   return (
     <Context.Provider value={{
       editPlaylist$: editPlaylist,
-      data$: () => data,
+      attrs$: () => data,
       items$: trackItems,
       track$: trackPlayer,
       playlistId$: playlistId,

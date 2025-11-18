@@ -1,11 +1,10 @@
-import { createEffect, createResource, createSignal, Show } from "solid-js"
+import { createEffect, createResource, Show } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
 import { TableFooterCreateRowButton, TableLoading, TableRoot, TableTitle } from "./components"
 import { TableProvider, TablesDataProvider, useTablesDataContext, type TableAttribute } from "./provider"
-import { useNodeState } from "../../utils"
-import { NodeViewWrapper } from "~/libs/solid-tiptap-renderer"
+import { NodeViewWrapper, useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 import { GetTableGrid } from "~/wailsjs/go/table/Exports"
 
 const style = stylex.create({
@@ -26,10 +25,10 @@ export default function TableNodeView() {
 
   const TableTabContent = (props: { tabId$: string }) => {
     const { tabs$ } = useTablesDataContext()
-    const { data$ } = useNodeState<TableAttribute>()
+    const { attrs$ } = useSolidNodeView<TableAttribute>()
     const [resource, { refetch }] = createResource(() => props.tabId$, async(tabId) => {
       tabs$.setDisable$(true)
-      const data = await GetTableGrid(data$().id, tabId)
+      const data = await GetTableGrid(attrs$().id, tabId)
       tabs$.setDisable$(false)
       return data
     })

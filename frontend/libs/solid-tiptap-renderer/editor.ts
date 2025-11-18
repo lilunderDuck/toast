@@ -1,4 +1,4 @@
-import { SolidRenderer } from "./SolidRenderer"
+import { SolidRenderer } from "./internals/SolidRenderer"
 import { Editor, type EditorOptions } from "@tiptap/core"
 import { type Accessor, createSignal, type Setter } from "solid-js"
 

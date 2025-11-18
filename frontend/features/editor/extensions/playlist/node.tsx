@@ -23,11 +23,11 @@ const style = stylex.create({
 })
 
 export default function PlaylistNode() {
-  const { data$ } = usePlaylistContext()
+  const { attrs$ } = usePlaylistContext()
 
   return (
     <NodeViewWrapper {...stylex.attrs(style.node)}>
-      <Show when={data$()}>
+      <Show when={attrs$()}>
         <PlaylistHeader />
         <PlaylistTrackItemHeader />
         <PlaylistTrackItemList />
