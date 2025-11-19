@@ -1,13 +1,15 @@
 import { defineMacroProvider, vitePluginMacro } from "vite-plugin-macro"
 import { join } from "node:path"
-import { mergeClassnames } from "./mergeClassnames"
-import { getValueOrDefault } from "./getValueOrDefault"
-import { escapeCssUrl } from "./escapeCssUrl"
-import { randomString } from "./random"
+import { mergeClassnames, getValueOrDefault, escapeCssUrl, randomString } from "./core"
 
 export const MACRO_EXPORTS = {
   'macro-def': {
-    macros: [mergeClassnames, getValueOrDefault, escapeCssUrl, randomString],
+    macros: [
+      mergeClassnames, 
+      getValueOrDefault, 
+      escapeCssUrl, 
+      randomString
+    ],
   }
 }
 

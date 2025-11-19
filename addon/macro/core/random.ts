@@ -1,6 +1,5 @@
 import type { Expression } from "@babel/types"
 import { defineMacro } from "vite-plugin-macro"
-import { painfullyRebuildTemplateLiteral } from "./utils"
 
 /**Generates a random number between 0 and the specified `bound`.
  *

@@ -1,3 +1,0 @@
-import "./macro"
-
-export {}
