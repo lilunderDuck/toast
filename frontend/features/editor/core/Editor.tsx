@@ -1,5 +1,5 @@
 import { onMount } from "solid-js"
-import { macro_mergeClassnames, macro_randomString } from "macro-def"
+import { MERGE_CLASS, RANDOM_STRING } from "macro-def"
 import { FloatingMenuPlugin, type FloatingMenuPluginProps } from "@tiptap/extension-floating-menu"
 import { BubbleMenuPlugin, type BubbleMenuPluginProps } from "@tiptap/extension-bubble-menu"
 // ...
@@ -30,7 +30,7 @@ export function Editor() {
     editor$().registerPlugin(
       FloatingMenuPlugin({
         editor: editor$(),
-        pluginKey: macro_randomString(2),
+        pluginKey: RANDOM_STRING(2),
         element: floatingMenuRef,
         tippyOptions: {
           arrow: true,
@@ -43,7 +43,7 @@ export function Editor() {
     editor$().registerPlugin(
       BubbleMenuPlugin({
         editor: editor$(),
-        pluginKey: macro_randomString(2),
+        pluginKey: RANDOM_STRING(2),
         element: bubbleMenuRef,
         tippyOptions: {
           arrow: true,
@@ -60,7 +60,7 @@ export function Editor() {
         editor={editor$()}
         style={`--sb-track-color: var(--gray2)`}
         spellcheck="false"
-        class={macro_mergeClassnames(
+        class={MERGE_CLASS(
           stylex.attrs(style.editor),
           __scrollbarStyle.scrollbar,
           __scrollbarStyle.scrollbarVertical

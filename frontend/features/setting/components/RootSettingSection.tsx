@@ -5,7 +5,7 @@ import stylex from "@stylexjs/stylex"
 import { Input } from "~/components"
 // ...
 import { type ISettingSectionProps } from "../types"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   thisThing$: {
@@ -45,7 +45,7 @@ export function RootSettingName(props: ISettingSectionProps<any> & {
   inline$?: JSX.Element
 }) {
   return (
-    <h4 class={macro_mergeClassnames(
+    <h4 class={MERGE_CLASS(
       stylex.attrs(style.name),
       props.disabled$ ? stylex.attrs(style.name_disabled) : ''
     )}>
@@ -58,7 +58,7 @@ export function RootSettingName(props: ISettingSectionProps<any> & {
 export function RootSettingDescription(props: Pick<ISettingSectionProps<any>, "description$" | "disabled$">) {
   return (
     <Show when={props.description$}>
-      <p class={macro_mergeClassnames(
+      <p class={MERGE_CLASS(
         stylex.attrs(style.description),
         props.disabled$ ? stylex.attrs(style.description_disabled$) : ''
       )}>
@@ -72,7 +72,7 @@ export function RootSettingInput(props: HTMLAttributes<"input">) {
   return (
     <Input 
       {...props}
-      class={macro_mergeClassnames(
+      class={MERGE_CLASS(
         props.type !== "range" ? stylex.attrs(style.input) : ''
       )}
     />

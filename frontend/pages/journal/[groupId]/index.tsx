@@ -1,4 +1,4 @@
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 import { A } from "@solidjs/router"
 import { BsClockHistory, BsHouseDoorFill, BsPlusSquareDotted } from "solid-icons/bs"
 import { For, type ParentProps } from "solid-js"
@@ -103,7 +103,7 @@ export default function JournalWelcomePage() {
         <button
           onClick={props.onClick$}
           disabled={props.disabled$}
-          class={macro_mergeClassnames(
+          class={MERGE_CLASS(
             stylex.attrs(style.welcomePage__itemWrap),
             __style.hintItem
           )}

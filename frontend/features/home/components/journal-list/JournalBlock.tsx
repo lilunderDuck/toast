@@ -1,5 +1,5 @@
 import { BsPencilFill } from "solid-icons/bs"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 // ...
 import __style from './JournalBlock.module.css'
 import stylex from "@stylexjs/stylex"
@@ -65,7 +65,7 @@ export function JournalBlock(props: IJournalBlockProps) {
 
   return (
     <div 
-      class={macro_mergeClassnames(
+      class={MERGE_CLASS(
         stylex.attrs(style.block),
         (props.icon ? stylex.attrs(style.block__withImage) : stylex.attrs(style.block__defaultBg)).class
       )}

@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   spacer: {
@@ -10,7 +10,7 @@ const style = stylex.create({
 
 export function Spacer(props: HTMLAttributes<"div">) {
   return (
-    <div {...props} class={macro_mergeClassnames(
+    <div {...props} class={MERGE_CLASS(
       props,
       stylex.attrs(style.spacer)
     )} />

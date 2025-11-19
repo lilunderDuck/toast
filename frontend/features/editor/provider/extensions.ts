@@ -8,7 +8,7 @@ import TaskList from '@tiptap/extension-task-list'
 import Placeholder from '@tiptap/extension-placeholder'
 import { TextStyle, BackgroundColor, Color } from '@tiptap/extension-text-style'
 import { CharacterCount } from '@tiptap/extensions'
-import { macro_mergeClassnames } from 'macro-def'
+import { MERGE_CLASS } from 'macro-def'
 // ...
 import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension, TableExtension, CodeBlockExtension, PlaylistExtension } from "../extensions"
 // ...
@@ -62,7 +62,7 @@ export function getExtensions() {
     }),
     TaskItem.configure({
       HTMLAttributes: {
-        class: macro_mergeClassnames(stylex.attrs(style.ext__taskItem), __style.taskItem)
+        class: MERGE_CLASS(stylex.attrs(style.ext__taskItem), __style.taskItem)
       }
     }),
     Color,

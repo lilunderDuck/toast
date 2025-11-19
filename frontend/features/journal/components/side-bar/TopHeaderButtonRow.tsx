@@ -1,6 +1,6 @@
 import { BsArrowLeft, BsBookHalf, BsPencilFill } from "solid-icons/bs"
 import { A } from "@solidjs/router"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -41,7 +41,7 @@ export function TopHeaderButtonRow(props: HTMLAttributes<"header">) {
     <AppTitleBarDraggable {...stylex.attrs(style.header__titleBar)}>
       <header
         {...props}
-        class={macro_mergeClassnames(
+        class={MERGE_CLASS(
           props,
           stylex.attrs(style.header)
         )}

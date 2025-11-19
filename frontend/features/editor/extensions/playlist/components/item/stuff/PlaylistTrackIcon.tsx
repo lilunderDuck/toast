@@ -36,7 +36,7 @@ export function PlaylistTrackIcon(props: IPlaylistTrackIconProps) {
       </div>
     }>
       <div {...stylex.attrs(style.item__icon)} style={{
-        // "--icon-url": macro_escapeCssUrl(`${ASSETS_SERVER_URL}/local-assets/playlist/audio/${props.icon}`)
+        // "--icon-url": ESCAPE_CSS_URL(`${ASSETS_SERVER_URL}/local-assets/playlist/audio/${props.icon}`)
       }} />
     </Show>
   )

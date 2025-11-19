@@ -1,7 +1,7 @@
 import { splitProps, type ValidComponent } from "solid-js"
 import { Content, Portal, type DropdownMenuContentProps } from "@kobalte/core/dropdown-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({
@@ -27,7 +27,7 @@ export function DropdownMenuContent<T extends ValidComponent = "div">(
   return (
     <Portal>
       <Content
-        class={macro_mergeClassnames(
+        class={MERGE_CLASS(
           props,
           stylex.attrs(style.menuContent),
           "data-component-dropdown-menu"

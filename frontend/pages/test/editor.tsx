@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 import { createSignal } from "solid-js"
 import { Button, FieldInputLabel, Tooltip } from "~/components"
 import { Editor, EditorProvider, useEditorContext } from "~/features/editor"
@@ -65,7 +65,7 @@ function EditorStatePanel() {
       </FieldInputLabel>
       <pre
         innerText={data()}
-        class={macro_mergeClassnames(
+        class={MERGE_CLASS(
           "language-json",
           stylex.attrs(style.editor__jsonData)
         )}

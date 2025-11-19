@@ -3,7 +3,7 @@ import type { Expression, Identifier, ObjectProperty } from "@babel/types"
 import { escapeIdentifier, painfullyRebuildTemplateLiteral } from "./utils"
 import type { NodePath } from "@babel/traverse"
 
-export const urlBuilder = defineMacro('macro_urlBuilder')
+export const urlBuilder = defineMacro('URL_BUILDER')
   .withSignature('(baseUrl: string, queryParam?: Record<string, string | number>): string')
   .withHandler(({ path, args }, { template }) => {
     const [baseUrl, queryParam] = args as NodePath<Expression>[]
@@ -42,7 +42,7 @@ function buildUrlQueryParam(queryParam?: Expression) {
       break
 
       default:
-        throw new Error(`macro_urlBuilder() arg[1]: Case ${propValue.type} has not been handled yet.`)
+        throw new Error(`URL_BUILDER() arg[1]: Case ${propValue.type} has not been handled yet.`)
     }
 
     queryList.push(`${(prop.key as Identifier).name}=${value}`)
@@ -60,6 +60,6 @@ function getBaseUrl(baseUrl: Expression) {
     case "Identifier":
       return escapeIdentifier(baseUrl.name)
     default:
-      throw new Error(`macro_urlBuilder() arg[0]: Case ${baseUrl.type} has not been handled yet.`)
+      throw new Error(`URL_BUILDER() arg[0]: Case ${baseUrl.type} has not been handled yet.`)
   }
 }

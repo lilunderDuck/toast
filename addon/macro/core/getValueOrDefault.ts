@@ -2,7 +2,7 @@ import type { Expression, OptionalMemberExpression, StringLiteral } from "@babel
 import { defineMacro } from "vite-plugin-macro"
 import { generateCodeFromAst } from "./utils"
 
-export const getValueOrDefault = defineMacro('macro_getValueOrDefault')
+export const getValueOrDefault = defineMacro('GET_VALUE_OR_DEFAULT')
   .withSignature(
     "<T extends any, U extends any>(input: T, checkValue: any, defaultValue: U)",
     "Check if `input` is equals to `checkValue`, returns `defaultValue` if it's true, otherwise returns whatever `input` value is."

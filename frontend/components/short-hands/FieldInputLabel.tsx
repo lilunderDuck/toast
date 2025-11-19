@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   label: {
@@ -10,5 +10,5 @@ const style = stylex.create({
 })
 
 export function FieldInputLabel(props: HTMLAttributes<"label">) {
-  return <label {...props} class={macro_mergeClassnames(props, stylex.attrs(style.label))} />
+  return <label {...props} class={MERGE_CLASS(props, stylex.attrs(style.label))} />
 }

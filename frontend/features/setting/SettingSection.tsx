@@ -3,7 +3,7 @@ import { Match, type ParentProps, Show, Switch } from "solid-js"
 import { Checkbox, Input, Spacer } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   section: {
@@ -67,14 +67,14 @@ interface ISettingSectionProps<T extends SettingType> {
 }
 
 export function SettingSection<T extends SettingType>(props: ParentProps<ISettingSectionProps<T>>) {
-  const getInputStyle = () => macro_mergeClassnames(
+  const getInputStyle = () => MERGE_CLASS(
     props.type$ === SettingType.RANGE ? 
       stylex.attrs(style.seciton__inputRange) :
       stylex.attrs(style.seciton__inputEverythingElse)
     // 
   )
 
-  const getNameStyle = () => macro_mergeClassnames(
+  const getNameStyle = () => MERGE_CLASS(
     props.disabled$ ? stylex.attrs(style.section__disabledName) : ''
   )
 
@@ -107,7 +107,7 @@ export function SettingSection<T extends SettingType>(props: ParentProps<ISettin
           </Switch>
         </div>
         <Show when={props.description$}>
-          <p class={macro_mergeClassnames(
+          <p class={MERGE_CLASS(
             stylex.attrs(style.description),
             props.disabled$ ? stylex.attrs(style.section__disabledDescription) : ""
           )}>

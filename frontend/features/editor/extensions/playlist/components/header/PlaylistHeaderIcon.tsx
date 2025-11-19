@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex";
-import { macro_escapeCssUrl } from "macro-def";
+import { ESCAPE_CSS_URL } from "macro-def";
 import { BsMusicNote } from "solid-icons/bs";
 import { Show } from "solid-js";
 import { ASSETS_SERVER_URL } from "~/api";
@@ -32,7 +32,7 @@ export default function PlaylistHeaderIcon(props: { icon$?: string }) {
       </div>
     }>
       <div {...stylex.attrs(style.header__icon)} style={{
-        "--icon-url": macro_escapeCssUrl(`${ASSETS_SERVER_URL}/local-assets/playlist/icon/${props.icon$}`)
+        "--icon-url": ESCAPE_CSS_URL(`${ASSETS_SERVER_URL}/local-assets/playlist/icon/${props.icon$}`)
       }} />
     </Show>
   )

@@ -1,5 +1,5 @@
 import { For, Match, Switch } from "solid-js"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 // ...
 import { DialogContent } from "~/components"
 import type { ILazyDialog } from "~/hooks"
@@ -44,7 +44,7 @@ export default function SettingDialog(props: ISettingDialog) {
   const Sidebar = () => {
     const { config$ } = useSettingContext()
     return (
-      <aside class={macro_mergeClassnames(
+      <aside class={MERGE_CLASS(
         stylex.attrs(style.dialog__sidebar),
         __scrollbarStyle.scrollbar,
         __scrollbarStyle.scrollbarVertical,
@@ -79,7 +79,7 @@ export default function SettingDialog(props: ISettingDialog) {
         <div {...stylex.attrs(style.dialog__content)}>
           <Sidebar />
           <main
-            class={macro_mergeClassnames(
+            class={MERGE_CLASS(
               stylex.attrs(style.dialog__mainContent),
               __scrollbarStyle.scrollbar,
               __scrollbarStyle.scrollbarVertical,

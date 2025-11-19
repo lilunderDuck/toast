@@ -4,7 +4,7 @@ import stylex from "@stylexjs/stylex"
 import __style from "./Button.module.css"
 // ...
 import { defaultValueOrElse, type StylexStylesAttribute } from "../../utils"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 import { SpinningCube } from "../loader"
 
 const style = stylex.create({
@@ -116,7 +116,7 @@ export function Button(props: IButtonProps) {
       disabled={isLoading()}
       {...others}
       onClick={clickHandler}
-      class={macro_mergeClassnames(
+      class={MERGE_CLASS(
         others.class,
         __style.button,
         stylex.attrs(style.base),

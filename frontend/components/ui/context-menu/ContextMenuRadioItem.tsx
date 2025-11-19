@@ -1,7 +1,7 @@
 import { type ParentProps, splitProps, type ValidComponent } from "solid-js"
 import { type ContextMenuRadioItemProps, ItemIndicator, RadioItem } from "@kobalte/core/context-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({
@@ -49,7 +49,7 @@ export function ContextMenuRadioItem<T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IContextMenuRadioItemProps, ["class", "children"])
   return (
     <RadioItem
-      class={macro_mergeClassnames(props, stylex.attrs(style.menuRadioItem))}
+      class={MERGE_CLASS(props, stylex.attrs(style.menuRadioItem))}
       {...rest}
     >
       <span {...stylex.attrs(style.menuItemIndicator)}>

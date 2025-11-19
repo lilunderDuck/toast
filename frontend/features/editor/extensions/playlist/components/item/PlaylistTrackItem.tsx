@@ -1,5 +1,5 @@
 import { BsPencilFill, BsTrashFill } from "solid-icons/bs"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./PlaylistTrackItem.module.css"
@@ -59,11 +59,11 @@ export default function PlaylistTrackItem(props: IPlaylistTrackItemProps) {
 
   return (
     <li
-      class={macro_mergeClassnames(stylex.attrs(style.item), __style.item, __style.itemHeader)}
+      class={MERGE_CLASS(stylex.attrs(style.item), __style.item, __style.itemHeader)}
       data-playlist-item-focused={isCurrentlyFocused()}
       data-playlist-item-id={props.id}
     >
-      <div class={macro_mergeClassnames(stylex.attrs(style.item__index), __style.item__textPrimary)} onClick={togglePlayTrack}>
+      <div class={MERGE_CLASS(stylex.attrs(style.item__index), __style.item__textPrimary)} onClick={togglePlayTrack}>
         <span>{props.index$ + 1}</span>
       </div>
       <PlaylistTrackIcon icon$={props.icon} />
@@ -71,7 +71,7 @@ export default function PlaylistTrackItem(props: IPlaylistTrackItemProps) {
         name$={props.name} 
         author$={props.author} 
       />
-      <span class={macro_mergeClassnames(stylex.attrs(style.item__duration), __style.item__textPrimary)}>
+      <span class={MERGE_CLASS(stylex.attrs(style.item__duration), __style.item__textPrimary)}>
         {formatSecondsToMMSS(props.duration)}
       </span>
       <ButtonRow class={__style.item__buttonRow}>

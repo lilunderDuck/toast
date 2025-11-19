@@ -1,5 +1,5 @@
 import { Show } from "solid-js"
-import { macro_getValueOrDefault, macro_mergeClassnames } from "macro-def"
+import { GET_VALUE_OR_DEFAULT, MERGE_CLASS } from "macro-def"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./PlaylistHeader.module.css"
@@ -53,11 +53,11 @@ export function PlaylistHeader() {
   }
 
   return (
-    <header class={macro_mergeClassnames(stylex.attrs(style.header), __style.header)}>
+    <header class={MERGE_CLASS(stylex.attrs(style.header), __style.header)}>
       <PlaylistHeaderIcon icon$={data$()?.icon} />
       <div {...stylex.attrs(style.header__infoWrap)}>
         <h2>
-          {macro_getValueOrDefault(data$()?.title, "", "Unnamed playlist")}
+          {GET_VALUE_OR_DEFAULT(data$()?.title, "", "Unnamed playlist")}
         </h2>
         <Show when={data$()?.description || data$()?.description === ""}>
           <p>{data$()!.description}</p>

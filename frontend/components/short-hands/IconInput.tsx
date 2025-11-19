@@ -5,7 +5,7 @@ import { createFileUpload, SUPPORTED_IMAGE_FILTER, type FileOpenDialogOptions } 
 import { BsPlus } from "solid-icons/bs"
 import { SpinningCube } from "../loader"
 import { previewUrl } from "~/api"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   uploadZone: {
@@ -55,7 +55,7 @@ export function createIconInput(options: IIconInputOptions) {
       <Tooltip label$={options.tooltipLabel$ ?? "Click to choose an image."}>
         <div 
           onClick={open$}
-          class={macro_mergeClassnames(
+          class={MERGE_CLASS(
             stylex.attrs(style.uploadZone),
             hasNoIcon() ? stylex.attrs(style.uploadZone__noImage) : stylex.attrs(style.uploadZone__withImage)
           )}

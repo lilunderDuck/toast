@@ -1,6 +1,6 @@
 import stylex from "@stylexjs/stylex"
 import __style from "../PlaylistTrackItem.module.css"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   item__nameWrap: {
@@ -23,7 +23,7 @@ export function PlaylistTrackName(props: IPlaylistTrackNameProps) {
       <h3 class={__style.item__textPrimary}>
         {props.name$}
       </h3>
-      <span class={macro_mergeClassnames(stylex.attrs(style.item__authorName), __style.item__textSecondary)}>
+      <span class={MERGE_CLASS(stylex.attrs(style.item__authorName), __style.item__textSecondary)}>
         {props.author$}
       </span>
     </div>

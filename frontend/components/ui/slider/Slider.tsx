@@ -9,7 +9,7 @@ import {
 
 
 import stylex from "@stylexjs/stylex"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 import { SliderTrack } from "./SliderTrack"
 import { SliderFill } from "./SliderFill"
 import { SliderThumb } from "./SliderThumb"

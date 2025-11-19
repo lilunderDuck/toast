@@ -5,7 +5,7 @@ import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import * as PopoverPrimitive from "@kobalte/core/popover"
  
 import stylex from "@stylexjs/stylex"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   popover: {
@@ -37,7 +37,7 @@ const PopoverContent = <T extends ValidComponent = "div">(
   return (
     <PopoverPrimitive.Portal>
       <PopoverPrimitive.Content
-        class={macro_mergeClassnames(stylex.attrs(style.popover), local, "data-component-popover")}
+        class={MERGE_CLASS(stylex.attrs(style.popover), local, "data-component-popover")}
         {...others}
       />
     </PopoverPrimitive.Portal>

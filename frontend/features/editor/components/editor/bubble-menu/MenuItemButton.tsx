@@ -1,4 +1,4 @@
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 import type { IconTypes } from "solid-icons"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -40,7 +40,7 @@ export default function MenuItemButton(props: IMenuItemButtonProps) {
     <Tooltip label$={props.name$}>
       <button 
         onClick={props.onClick$}
-        class={macro_mergeClassnames(
+        class={MERGE_CLASS(
           stylex.attrs(style.item),
           __style.itemButton,
           props.isActive$ ? __style.active : ''

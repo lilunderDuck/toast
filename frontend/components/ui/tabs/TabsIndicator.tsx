@@ -1,7 +1,7 @@
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import { splitProps,  type ValidComponent } from "solid-js"
 import { Indicator, type TabsIndicatorProps } from "@kobalte/core/tabs"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({
@@ -23,7 +23,7 @@ export function TabsIndicator<T extends ValidComponent = "div">(
   const [local, others] = splitProps(props as ITabsIndicatorProps, ["class"])
   return (
     <Indicator
-      class={macro_mergeClassnames(local, stylex.attrs(style.tabsIndicator))}
+      class={MERGE_CLASS(local, stylex.attrs(style.tabsIndicator))}
       {...others}
     />
   )

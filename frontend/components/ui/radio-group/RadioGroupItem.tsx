@@ -4,7 +4,7 @@ import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 import { Item, ItemControl, ItemIndicator, ItemInput, type RadioGroupItemProps } from "@kobalte/core/radio-group"
 
 const style = stylex.create({
@@ -48,7 +48,7 @@ export function RadioGroupItem<T extends ValidComponent = "div">(
   
   return (
     <Item
-      class={macro_mergeClassnames(stylex.attrs(style.item), local)}
+      class={MERGE_CLASS(stylex.attrs(style.item), local)}
       {...others}
     >
       <ItemInput />

@@ -4,7 +4,7 @@ import { splitProps } from "solid-js"
 import { Content, type HoverCardContentProps, type HoverCardRootProps, Portal, Root, Trigger } from "@kobalte/core/hover-card"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   hoverCard: {
@@ -39,7 +39,7 @@ export function HoverCardContent<T extends ValidComponent = "div">(
     <Portal>
       <Content
         {...others}
-        class={macro_mergeClassnames(local, stylex.attrs(style.hoverCard), "data-component-hover-card")}
+        class={MERGE_CLASS(local, stylex.attrs(style.hoverCard), "data-component-hover-card")}
       />
     </Portal>
   )

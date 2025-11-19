@@ -5,7 +5,7 @@ import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { CloseButton, Content, Description, Overlay, Portal, Root, Title, Trigger, type DialogContentProps, type DialogDescriptionProps, type DialogOverlayProps, type DialogPortalProps, type DialogTitleProps } from "@kobalte/core/dialog"
 // ...
 import stylex from "@stylexjs/stylex"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 import __scrollbarStyle from'~/styles/scrollbar.module.css'
 // ...
 
@@ -119,7 +119,7 @@ const DialogOverlay = <T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IDialogOverlayProps, ["class"])
   return (
     <Overlay
-      class={macro_mergeClassnames(props, stylex.attrs(style.overlay), "data-component-dialog-overlay")}
+      class={MERGE_CLASS(props, stylex.attrs(style.overlay), "data-component-dialog-overlay")}
       {...rest}
     />
   )
@@ -145,7 +145,7 @@ const DialogContent = <T extends ValidComponent = "div">(
   return (
     <DialogPortal closeOnClickOutside$={props.closeOnClickOutside$}>
       <Content
-        class={macro_mergeClassnames(props, stylex.attrs(style.content), "data-component-dialog-content")}
+        class={MERGE_CLASS(props, stylex.attrs(style.content), "data-component-dialog-content")}
         {...rest}
       >
         {props.children}
@@ -162,7 +162,7 @@ const DialogContent = <T extends ValidComponent = "div">(
 const DialogHeader: Component<ComponentProps<"h2">> = (props) => {
   // const [, rest] = splitProps(props, ["class"])
   return (
-    // <h2 class={macro_mergeClassnames(props, stylex.attrs(style.header))} {...rest} />
+    // <h2 class={MERGE_CLASS(props, stylex.attrs(style.header))} {...rest} />
     <h2 {...props} />
   )
 }
@@ -170,7 +170,7 @@ const DialogHeader: Component<ComponentProps<"h2">> = (props) => {
 const DialogFooter: Component<ComponentProps<"div">> = (props) => {
   const [, rest] = splitProps(props, ["class"])
   return (
-    <div class={macro_mergeClassnames(props, stylex.attrs(style.footer))} {...rest} />
+    <div class={MERGE_CLASS(props, stylex.attrs(style.footer))} {...rest} />
   )
 }
 
@@ -184,7 +184,7 @@ const DialogTitle = <T extends ValidComponent = "h2">(
   const [, rest] = splitProps(props as IDialogTitleProps, ["class"])
   return (
     <Title
-      class={macro_mergeClassnames(props, stylex.attrs(style.title))}
+      class={MERGE_CLASS(props, stylex.attrs(style.title))}
       {...rest}
     />
   )
@@ -200,7 +200,7 @@ const DialogDescription = <T extends ValidComponent = "p">(
   const [, rest] = splitProps(props as IDialogDescriptionProps, ["class"])
   return (
     <Description
-      class={macro_mergeClassnames(props, stylex.attrs(style.description))}
+      class={MERGE_CLASS(props, stylex.attrs(style.description))}
       {...rest}
     />
   )

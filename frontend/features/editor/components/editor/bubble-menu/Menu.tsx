@@ -1,7 +1,7 @@
 import { For } from "solid-js"
 import { BsSubscript, BsSuperscript, BsTypeBold, BsTypeItalic, BsTypeStrikethrough, BsTypeUnderline } from "solid-icons/bs"
 import type { IconTypes } from "solid-icons"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 import type { ChainedCommands } from "@tiptap/core"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -82,7 +82,7 @@ export function BubbleMenu(props: IBubbleMenuProps) {
 
   return (
     <div
-      class={macro_mergeClassnames(
+      class={MERGE_CLASS(
         stylex.attrs(style.menu),
         __style.menu,
         props

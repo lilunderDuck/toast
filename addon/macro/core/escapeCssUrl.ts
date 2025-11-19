@@ -2,7 +2,7 @@ import type { Expression, OptionalMemberExpression, StringLiteral } from "@babel
 import { defineMacro } from "vite-plugin-macro"
 import { generateCodeFromAst, painfullyRebuildTemplateLiteral } from "./utils"
 
-export const escapeCssUrl = defineMacro('macro_escapeCssUrl')
+export const escapeCssUrl = defineMacro('ESCAPE_CSS_URL')
   .withSignature(
     "<const T extends any>(input: T)",
     "Escape an url, then wrap it inside `url('<something>')`"
@@ -17,7 +17,7 @@ export const escapeCssUrl = defineMacro('macro_escapeCssUrl')
       return
     }
 
-    throw new Error("macro_escapeCssUrl() args[0]: Must be a string")
+    throw new Error("ESCAPE_CSS_URL() args[0]: Must be a string")
 
   })
 // 

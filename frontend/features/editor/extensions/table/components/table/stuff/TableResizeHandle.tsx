@@ -3,7 +3,7 @@ import { useDocumentEventListener } from "~/hooks"
 import { useTableContext } from "../../../provider"
 
 import stylex from "@stylexjs/stylex"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   resizeHandle: {
@@ -81,7 +81,7 @@ export function TableResizeHandle(props: ITableResizeHandleProps) {
 
   return (
     <div
-      class={macro_mergeClassnames(
+      class={MERGE_CLASS(
         stylex.attrs(style.resizeHandle),
         resizingColumnIndex$.get$() === props.currentIndex$ ? stylex.attrs(style.resizeHandle__active) : ''
       )}

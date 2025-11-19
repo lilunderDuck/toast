@@ -10,7 +10,7 @@ import {
 } from '../util'
 import { ToastBar } from './ToastBar'
 import __style from './Toaster.module.css'
-import { macro_mergeClassnames } from 'macro-def'
+import { MERGE_CLASS } from 'macro-def'
 
 export const ToastContainer: Component<ToastContainerProps> = (props) => {
   const calculatePosition = () => {
@@ -39,7 +39,7 @@ export const ToastContainer: Component<ToastContainerProps> = (props) => {
       style={{
         '--offset': positionStyle().offset
       }}
-      class={macro_mergeClassnames(
+      class={MERGE_CLASS(
         props.toast.visible ? `${__style['sldt-active']} data-component-toast-visible` : 'data-component-toast-hidden',
         positionStyle()
       )}

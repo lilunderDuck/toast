@@ -1,4 +1,4 @@
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 // ...
 import __style from "./PlaylistTrackItem.module.css"
 import stylex from "@stylexjs/stylex"
@@ -23,7 +23,7 @@ const style = stylex.create({
 
 export function PlaylistTrackItemHeader() {
   return (
-    <div class={macro_mergeClassnames(stylex.attrs(style.header), __style.itemHeader)}>
+    <div class={MERGE_CLASS(stylex.attrs(style.header), __style.itemHeader)}>
       <span {...stylex.attrs(style.header__index)}>#</span>
       <div />
       <span {...stylex.attrs(style.header__trackText)}>Track</span>

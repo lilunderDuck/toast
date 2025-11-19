@@ -23,7 +23,7 @@ function makeId(length: number) {
   return result
 }
 
-export const randomString = defineMacro('macro_randomString')
+export const randomString = defineMacro('RANDOM_STRING')
   .withSignature(
     "(length: number): string",
     "Generate a random string"
@@ -31,7 +31,7 @@ export const randomString = defineMacro('macro_randomString')
   .withHandler(({ path, args }, { template }) => {
     let [input] = args as Expression[]
     if (input.type != "NumericLiteral") {
-      throw new SyntaxError("macro_escapeCssUrl() args[0]: Must be a number")
+      throw new SyntaxError("ESCAPE_CSS_URL() args[0]: Must be a number")
     }
 
     const length = input.value

@@ -1,7 +1,7 @@
 import { splitProps, type ValidComponent } from "solid-js"
 import { Item, type ContextMenuItemProps } from "@kobalte/core/context-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({
@@ -37,7 +37,7 @@ export function ContextMenuItem<T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IContextMenuItemProps, ["class"])
   return (
     <Item
-      class={macro_mergeClassnames(
+      class={MERGE_CLASS(
         props,
         stylex.attrs(style.menuItem)
       )}

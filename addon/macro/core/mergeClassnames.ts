@@ -3,7 +3,7 @@ import type { ConditionalExpression, Expression, ObjectExpression } from "@babel
 // ...
 import { escapeIdentifier, generateCodeFromAst, getString } from "./utils"
 
-export const mergeClassnames = defineMacro('macro_mergeClassnames')
+export const mergeClassnames = defineMacro('MERGE_CLASS')
   .withSignature(
     '<T extends (string | { class?: string | undefined } | undefined)[]>(...name: T): string',
     "Merge many class name into a giant class names."
@@ -21,7 +21,7 @@ export const mergeClassnames = defineMacro('macro_mergeClassnames')
 
       switch (prop.type) {
         // Handle conditional statement like this
-        //    macro_mergeClassnames(condition ? "this-classname" : "that-classname")
+        //    MERGE_CLASS(condition ? "this-classname" : "that-classname")
         case "ConditionalExpression":
           value = handleConditional(node as ConditionalExpression)
         break
@@ -51,7 +51,7 @@ function handleCommonCase(node: Expression, dontEscapeIdentifier = false): strin
     // There's a limit to this implementation.
     // Because the macro assumes everything you pass through is a object, you can't do this: 
     //    const classNames = "ye ye"
-    //    macro_mergeClassnames(classNames)
+    //    MERGE_CLASS(classNames)
     // Replaced with:
     //    `${"ye ye".class}` -> "undefined"
     // "classNames" must be an object with a "class" prop in it to make this works.
@@ -70,12 +70,12 @@ function handleCommonCase(node: Expression, dontEscapeIdentifier = false): strin
         (dontEscapeIdentifier ? `"${getString(node, true)}"` : getString(node, true))
 
     // Handle case when you paste in a object contains a "class" prop, like this:
-    //    macro_mergeClassnames({ class: "some class names in here" })
+    //    MERGE_CLASS({ class: "some class names in here" })
     case "ObjectExpression":
       return handleObject(node as ObjectExpression)
 
     // Handle case when you have stylex call inside, like this:
-    //    macro_mergeClassnames(stylex.attrs(style.someStyle))
+    //    MERGE_CLASS(stylex.attrs(style.someStyle))
     // 
     // When called, it will be replaced with one of these:
     // -> `{ class: "x78zum5 x6s0dn4 x883omv" }.class`  (dev mode)
@@ -111,7 +111,7 @@ function handleObject(node: ObjectExpression): string {
         }
 
         // make sure to yell if I don't handle something
-        throw new Error(`macro_mergeClassnames() -> walk: case ${prop.key.type} hasn't been handled yet.`)
+        throw new Error(`MERGE_CLASS() -> walk: case ${prop.key.type} hasn't been handled yet.`)
       case "SpreadElement":
         throw new Error("not impl")
     }
@@ -127,7 +127,7 @@ function handleConditional(node: ConditionalExpression): string {
     testCondidionString = generateCodeFromAst(node.test)
   } catch {
     // there's currently an error if you write like this
-    //   macro_mergeClassnames(some.conditionInAMethod() ? "this-class" : "that-class")
+    //   MERGE_CLASS(some.conditionInAMethod() ? "this-class" : "that-class")
     // I'll fix that later
   }
   const trufyValue = handleCommonCase(node.consequent, true)!

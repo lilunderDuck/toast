@@ -1,7 +1,7 @@
 import { SubContent, type ContextMenuSubContentProps } from "@kobalte/core/context-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import { splitProps, type ValidComponent } from "solid-js"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({
@@ -27,7 +27,7 @@ export function ContextMenuSubContent<T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IContextMenuSubContentProps, ["class"])
   return (
     <SubContent
-      class={macro_mergeClassnames(
+      class={MERGE_CLASS(
         props,
         stylex.attrs(style.menuSubContent)
       )}

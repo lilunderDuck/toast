@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   $input: {
@@ -23,7 +23,7 @@ export function Input(props: HTMLAttributes<"input">) {
     <input 
       {...props} 
       {...disableAutocompleteInEdgeIfNeeds()}
-      class={macro_mergeClassnames(
+      class={MERGE_CLASS(
         props,
         stylex.attrs(style.$input)
       )} 

@@ -1,5 +1,5 @@
 import { lazy, Match, Switch } from "solid-js"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./node.module.css"
@@ -39,7 +39,7 @@ export default function GalleryNodeView() {
 
   return (
     <GalleryProvider>
-      <NodeViewWrapper class={macro_mergeClassnames(stylex.attrs(style.gallery), __style.gallery)}>
+      <NodeViewWrapper class={MERGE_CLASS(stylex.attrs(style.gallery), __style.gallery)}>
         <GalleryLoadingView />
         <Switch fallback={<SingleItemGalleryView />}>
           <Match when={attrs$().viewMode === GalleryViewMode.SINGLE_ITEM}>

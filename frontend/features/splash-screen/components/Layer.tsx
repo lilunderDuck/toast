@@ -1,5 +1,5 @@
 import stylex from "@stylexjs/stylex"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   layer: {
@@ -14,6 +14,6 @@ interface ILayerProps extends HTMLAttributes<"div"> {
 
 export function Layer(props: ILayerProps) {
   return (
-    <div {...props} class={macro_mergeClassnames(props, stylex.attrs(style.layer))} />
+    <div {...props} class={MERGE_CLASS(props, stylex.attrs(style.layer))} />
   )
 }

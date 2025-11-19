@@ -1,5 +1,5 @@
 import { splitProps } from "solid-js"
-import { macro_mergeClassnames } from "macro-def"
+import { MERGE_CLASS } from "macro-def"
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({
@@ -20,7 +20,7 @@ export function ContextMenuLabel(props: IContextMenuLabel) {
   const [, rest] = splitProps(props, ["class", "inset"])
   return (
     <div
-      class={macro_mergeClassnames(
+      class={MERGE_CLASS(
         props,
         stylex.attrs(style.menuLabel)
       )}
