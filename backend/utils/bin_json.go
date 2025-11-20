@@ -42,34 +42,26 @@ func BSON_WriteFile(path string, anyObject any) (someError error) {
 //
 // Returns:
 //   - An error if something went wrong while reading, or nil if it read correctly.
-func base_BSON_ReadFile(path string, out any) (someError error) {
+func base_BSON_ReadFile(path string) (dataOut []byte, someError error) {
 	dataFromDisk, err := os.ReadFile(path)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return cbor.Unmarshal(dataFromDisk, out)
+	return dataFromDisk, nil
 }
 
 func BSON_ReadFile[T any](path string) (*T, error) {
 	fmt.Println("BSON read:", path)
-	var out T
-	err := base_BSON_ReadFile(path, &out)
-	return &out, err
+	data, err := base_BSON_ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	return BSON_Unmarshal[T](data)
 }
 
-func NewBSONFileHandler[T any](basePath string) (func(data T) error, func() (*T, error), func() error) {
-	writeFn := func(data T) error {
-		return BSON_WriteFile(basePath, data)
-	}
-
-	readFn := func() (*T, error) {
-		return BSON_ReadFile[T](basePath)
-	}
-
-	deleteFn := func() error {
-		return os.Remove(basePath)
-	}
-
-	return writeFn, readFn, deleteFn
+func BSON_Unmarshal[T any](in []byte) (*T, error) {
+	var out T
+	err := cbor.Unmarshal(in, &out)
+	return &out, err
 }

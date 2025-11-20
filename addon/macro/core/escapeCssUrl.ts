@@ -1,6 +1,6 @@
-import type { Expression, OptionalMemberExpression, StringLiteral } from "@babel/types"
+import type { Expression } from "@babel/types"
 import { defineMacro } from "vite-plugin-macro"
-import { generateCodeFromAst, painfullyRebuildTemplateLiteral } from "./utils"
+import { painfullyRebuildTemplateLiteral } from "./utils"
 
 export const escapeCssUrl = defineMacro('ESCAPE_CSS_URL')
   .withSignature(

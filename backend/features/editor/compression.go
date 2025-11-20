@@ -1,4 +1,4 @@
-package journal
+package editor
 
 import (
 	"toast/backend/utils"
@@ -6,14 +6,14 @@ import (
 	"github.com/fxamacker/cbor/v2"
 )
 
-type bin_JournalContentData struct {
+type bin_EditorContentData struct {
 	// Originally, this field is a string type, but it's converted to a uint8
 	// just to save spaces, ofc.
-	Type    uint8                `cbor:"0,keyasint"`
-	Attrs   EditorAttributes     `cbor:"1,keyasint,omitempty"`
-	Marks   []EditorMarks        `cbor:"2,keyasint,omitempty"`
-	Content []JournalContentData `cbor:"3,keyasint"`
-	Text    string               `cbor:"4,keyasint,omitempty"`
+	Type    uint8               `cbor:"0,keyasint"`
+	Attrs   EditorAttributes    `cbor:"1,keyasint,omitempty"`
+	Marks   []EditorMarks       `cbor:"2,keyasint,omitempty"`
+	Content []EditorContentData `cbor:"3,keyasint"`
+	Text    string              `cbor:"4,keyasint,omitempty"`
 }
 
 var editorContentTypeMap = map[string]uint8{
@@ -50,8 +50,8 @@ var editorContentTypeRemap = map[uint8]string{
 	255: "",
 }
 
-func (data *JournalContentData) MarshalCBOR() ([]byte, error) {
-	return cbor.Marshal(bin_JournalContentData{
+func (data *EditorContentData) MarshalCBOR() ([]byte, error) {
+	return cbor.Marshal(bin_EditorContentData{
 		Type:    utils.GetValueOrDefaultInMap(editorContentTypeMap, data.Type, 255),
 		Attrs:   data.Attrs,
 		Marks:   data.Marks,
@@ -60,8 +60,8 @@ func (data *JournalContentData) MarshalCBOR() ([]byte, error) {
 	})
 }
 
-func (data *JournalContentData) UnmarshalCBOR(input []byte) error {
-	var out bin_JournalContentData
+func (data *EditorContentData) UnmarshalCBOR(input []byte) error {
+	var out bin_EditorContentData
 	if err := cbor.Unmarshal(input, &out); err != nil {
 		return err
 	}

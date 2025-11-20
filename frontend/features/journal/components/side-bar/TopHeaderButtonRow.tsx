@@ -41,10 +41,7 @@ export function TopHeaderButtonRow(props: HTMLAttributes<"header">) {
     <AppTitleBarDraggable {...stylex.attrs(style.header__titleBar)}>
       <header
         {...props}
-        class={MERGE_CLASS(
-          props,
-          stylex.attrs(style.header)
-        )}
+        class={MERGE_CLASS(props, stylex.attrs(style.header))}
       >
         <Tooltip label$="Go back" tooltipOptions$={{ placement: "right" }}>
           <A href="/">

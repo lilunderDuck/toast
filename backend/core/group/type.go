@@ -5,27 +5,27 @@ import (
 	"toast/backend/utils"
 )
 
-// Defines the structure for updating an existing journal group.
-type JournalGroupOptions struct {
-	Name        string       `form:"name"        json:"name,omitempty"`
-	Description string       `form:"description" json:"description,omitempty"`
-	Icon        string       `form:"icon"        json:"icon,omitempty"`
-	Tree        ExplorerData `form:"tree"        json:"tree,omitempty"`
+// Defines the structure for updating an existing group.
+type GroupOptions struct {
+	Name        string       `json:"name,omitempty"`
+	Description string       `json:"description,omitempty"`
+	Icon        string       `json:"icon,omitempty"`
+	Explorer    ExplorerData `json:"explorer,omitempty"`
 }
 
-// Represents the complete data for a journal group
-type JournalGroupData struct {
+// Represents the complete data for a group
+type GroupData struct {
 	Id          string        `json:"id"                    cbor:"0,keyasint"`
 	Created     time.Duration `json:"created"               cbor:"1,keyasint"`
 	Modified    time.Duration `json:"modified,omitempty"    cbor:"2,keyasint,omitempty"`
 	Name        string        `json:"name"                  cbor:"3,keyasint"`
 	Description string        `json:"description,omitempty" cbor:"4,keyasint,omitempty"`
 	Icon        string        `json:"icon"                  cbor:"5,keyasint"`
-	Explorer    ExplorerData  `json:"explorer"              cbor:"6,keyasint"`
+	Explorer    ExplorerData  `json:"explorer,omitempty"    cbor:"6,keyasint,omitempty"`
 }
 
-func newJournalGroup(options *JournalGroupOptions) *JournalGroupData {
-	return &JournalGroupData{
+func newGroupData(options *GroupOptions) *GroupData {
+	return &GroupData{
 		Id:          utils.GetRandomStringWithinLength(8),
 		Created:     utils.GetCurrentDateNow(),
 		Name:        options.Name,
@@ -41,12 +41,9 @@ type ExplorerNode struct {
 	Child []ExplorerNode `form:"child" json:"child,omitempty"  cbor:"1,keyasint,omitempty"`
 }
 
-// Representing a list of virtual trees.
-type ExplorerTree []ExplorerNode
-
 type ExplorerData struct {
 	Mapping map[string]string `json:"mapping"  cbor:"0,keyasint"`
-	Tree    ExplorerTree      `json:"tree"     cbor:"1,keyasint"`
+	Tree    []ExplorerNode    `json:"tree"     cbor:"1,keyasint"`
 }
 
 type Setting struct {

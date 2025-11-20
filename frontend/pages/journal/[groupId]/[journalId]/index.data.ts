@@ -5,7 +5,9 @@ export default function getJournalData() {
   return createAsync(async() => {
     const param = useParams()
     const { getJournal$, history$ } = useJournalContext()
-    const data = await getJournal$(param.journalId)
+    
+    console.assert(param.journalId, "cannot get journal id from URL param")
+    const data = await getJournal$(param.journalId!)
     history$.setLastOpened$(data)
     return data
   })

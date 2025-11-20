@@ -11,6 +11,7 @@ export default function journalGroupData(groupId: string) {
     ])
 
     pluginEvent.emit$(PluginEvent.JOURNAL_LOADED)
+    console.log("Group data:", journalGroupData)
 
     return {
       explorerTreeData$: journalGroupData.explorer as group.ExplorerData

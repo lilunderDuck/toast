@@ -1,4 +1,4 @@
-// This is a wrapper for the lotusdb key-value store.
+// This is a wrapper for the leveldb key-value store.
 // It simplifies common operations like opening, closing, and managing a single instance
 // of a database based on a given path.
 package db
@@ -7,95 +7,93 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/lotusdblabs/lotusdb/v2"
+	"github.com/syndtr/goleveldb/leveldb"
 )
 
 // A function type used to perform a batch of
-// database operations on a given lotusdb instance.
-type lotusdbBatchFn func(db *DbInstance)
+// database operations on a given leveldb instance.
+type leveldbBatchFn func(db *Instance)
 
-// A wrapper struct that holds the internal lotusdb database instance.
-type DbInstance struct {
-	internal *lotusdb.DB
+// A wrapper struct that holds the internal leveldb database instance.
+type Instance struct {
+	internal *leveldb.DB
 }
 
-// Closes the underlying lotusdb database. It should be called when
+// Closes the underlying leveldb database. It should be called when
 // the database is no longer needed to release resources.
-func (db *DbInstance) Close() error {
+func (db *Instance) Close() error {
 	return db.internal.Close()
 }
 
-// A map used to track and store the instances of lotusdb,
+// A map used to track and store the instances of leveldb,
 // with the database path as the key.
 //
 // Notes: this is **not** thread safe
 //
 // Update: it's now thread safe, thank god
 var (
-	globalDbInstance = map[string]*DbInstance{}
-	lock             sync.Mutex
+	globalInstance = map[string]*Instance{}
+	lock           sync.Mutex
 )
 
-// Opens a lotusdb database at the specified file path.
-// Returns a instance of lotusdb.
+// Opens a leveldb database at the specified file path.
+// Returns a instance of leveldb.
 //
 // If the database for the given path is already open, it returns the existing instance.
-func Open(path string) (*DbInstance, error) {
+func Open(path string) (*Instance, error) {
 	fmt.Println("Opening: ", path)
 	lock.Lock()
 	defer lock.Unlock()
 
-	if instance, ok := globalDbInstance[path]; ok {
+	if instance, ok := globalInstance[path]; ok {
 		return instance, nil
 	}
 
-	db, err := lotusdb.Open(lotusdb.Options{
-		DirPath: path,
-	})
+	db, err := leveldb.OpenFile(path, nil)
 	if err != nil {
 		println(err)
 		return nil, err
 	}
 
-	dbInstance := &DbInstance{internal: db}
+	Instance := &Instance{internal: db}
 
-	globalDbInstance[path] = dbInstance
+	globalInstance[path] = Instance
 
-	return dbInstance, nil
+	return Instance, nil
 }
 
-// Closes the lotusdb instance at the specified path and removes it
+// Closes the leveldb instance at the specified path and removes it
 // from the global map.
 func Close(path string) {
 	lock.Lock()
 	defer lock.Unlock()
 
-	globalDbInstance[path].Close()
-	delete(globalDbInstance, path)
+	globalInstance[path].Close()
+	delete(globalInstance, path)
 }
 
-// Closes all opened lotusdb instances and clears the global singleton map.
+// Closes all opened leveldb instances and clears the global singleton map.
 func CloseAll() {
 	lock.Lock()
 	defer lock.Unlock()
 
-	for dbPath, db := range globalDbInstance {
+	for dbPath, db := range globalInstance {
 		db.Close()
-		delete(globalDbInstance, dbPath)
+		delete(globalInstance, dbPath)
 	}
 }
 
-// Gets an existing lotusdb instance for the given path.
+// Gets an existing leveldb instance for the given path.
 //
 // If an instance is not found, it attempts to open a new one.
 //
 // Note: while this function attempts to handle a missing instance,
 // it is better to call [Open()] explicitly to handle errors.
-func GetInstance(path string) *DbInstance {
+func GetInstance(path string) *Instance {
 	lock.Lock()
 	defer lock.Unlock()
 
-	instance, ok := globalDbInstance[path]
+	instance, ok := globalInstance[path]
 	if !ok {
 		fmt.Println("No instance found: ", path, ". Try opening it.")
 		newInstance, _ := Open(path)
@@ -106,10 +104,10 @@ func GetInstance(path string) *DbInstance {
 	return instance
 }
 
-// Opens a lotusdb database, executes a batch of operations, and then closes the database.
+// Opens a leveldb database, executes a batch of operations, and then closes the database.
 //
 // This function handles the full lifecycle of a temporary database session.
-func OpenThenClose(location string, batch lotusdbBatchFn) error {
+func OpenThenClose(location string, batch leveldbBatchFn) error {
 	db, err := Open(location)
 	if err != nil {
 		fmt.Println(err)

@@ -1,2 +1,7 @@
 export * from "./JournalHomeViewProviders"
 export * from "./JournalContentPanel"
+export * from "./JournalContentEditor"
+export * from "./JournalContentWelcomeView"
+export * from "./JournalSidebarPanel"
+export * from "./JournalMainContentPanel"
+export * from "./JournalRootPanel"

@@ -4,7 +4,7 @@ import __style from "./[groupId].module.css"
 // ...
 import { createStorage, type IStorage } from "~/utils"
 import { CreateJournal, GetJournal, UpdateJournal } from "~/wailsjs/go/journal/Exports"
-import type { journal } from "~/wailsjs/go/models"
+import type { notes } from "~/wailsjs/go/models"
 import { useToggle } from "~/hooks"
 // ...
 import { createFileExplorerContext, createFileNode, createFolderNode, type IFileExplorerContext, type IFileExplorerProviderOptions, ROOT_FOLDER } from "./explorer"
@@ -19,13 +19,13 @@ export type JournalSessionStorage = IStorage<{
 }>
 
 export type JournalLocalStorage = IStorage<{
-  last_opened$: journal.JournalData | null
+  last_opened$: notes.NoteData | null
 }>
 
 export interface IJournalContext {
-  createJournal$(type: number, data: journal.JournalOptions): Promise<journal.JournalData>
-  getJournal$(journalId: string): Promise<journal.JournalData>
-  updateJournal$(journalId: string, newData: journal.JournalOptions): Promise<journal.JournalData>
+  createJournal$(type: number, data: notes.CreateNoteOptions): Promise<notes.NoteData>
+  getJournal$(journalId: string): Promise<notes.NoteData>
+  updateJournal$(journalId: string, newData: notes.UpdateNoteOptions): Promise<void>
   // ...
   sessionStorage$: JournalSessionStorage
   explorerTree$: IFileExplorerContext

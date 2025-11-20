@@ -1,9 +1,12 @@
-import { Show, type ParentProps } from "solid-js"
-import { JournalProvider, useJournalContext, type IFileExplorerProviderOptions } from "../provider"
+import { onCleanup, Show, type ParentProps } from "solid-js"
+// ...
 import { UpdateGroup } from "~/wailsjs/go/group/Exports"
-import { EditorProvider } from "~/features/editor"
-import { File, Folder, JournalLoadingScreen } from "../components"
+import { CleanUpJournal } from "~/wailsjs/go/journal/Exports"
 import type { group } from "~/wailsjs/go/models"
+import { EditorProvider } from "~/features/editor"
+// ...
+import { JournalProvider, useJournalContext, type IFileExplorerProviderOptions } from "../provider"
+import { File, Folder, JournalLoadingScreen } from "../components"
 
 interface IJournalHomeProvidersProps {
   groupId$: string
@@ -12,6 +15,10 @@ interface IJournalHomeProvidersProps {
 }
 
 export function JournalHomeViewProviders(props: ParentProps<IJournalHomeProvidersProps>) {
+  onCleanup(() => {
+    CleanUpJournal(props.groupId$)
+  })
+
   const fileExplorerOption: IFileExplorerProviderOptions = {
     components$: {
       File$: (fileProps) => (
@@ -35,7 +42,8 @@ export function JournalHomeViewProviders(props: ParentProps<IJournalHomeProvider
       return props.explorerTreeData$()
     },
     onTreeUpdate$(newTree) {
-      UpdateGroup(props.groupId$, { tree: newTree } as group.JournalGroupOptions)
+      console.log("Tree update", newTree)
+      UpdateGroup(props.groupId$, { explorer: newTree } as group.GroupOptions)
     }
   }
 

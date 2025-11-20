@@ -1,9 +1,9 @@
-import type { journal } from "~/wailsjs/go/models";
+import type { notes } from "~/wailsjs/go/models";
 import type { JournalLocalStorage } from "./JournalProvider";
 
 export interface IHistoryManager {
-  getLastOpened$(): journal.JournalData | null
-  setLastOpened$(data: journal.JournalData): void
+  getLastOpened$(): notes.NoteData | null
+  setLastOpened$(data: notes.NoteData): void
 }
 
 export function createHistoryManager(localStorage: JournalLocalStorage): IHistoryManager {

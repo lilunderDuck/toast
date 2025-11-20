@@ -1,10 +1,10 @@
-import type { ParentProps } from "solid-js";
-import { CurrentlyOpenedHeader, CurrentlyOpenedJournal, type ICurrentlyOpenedHeaderProps } from "../components";
-import { useJournalContentPanelContext, useJournalContext } from "../provider";
+import type { ParentProps } from "solid-js"
+import { CurrentlyOpenedHeader, CurrentlyOpenedJournal, type ICurrentlyOpenedHeaderProps } from "../components"
+import { useJournalContentPanelContext, useJournalContext } from "../provider"
 import __style from "./JournalContentPanel.module.css"
 
 import stylex from "@stylexjs/stylex"
-import { CharacterCount } from "~/features/editor";
+import { CharacterCount } from "~/features/editor"
 
 const style = stylex.create({
   panel__mainContent: {
@@ -20,6 +20,7 @@ interface IJournalContentPanelProps {
 export function JournalContentPanel(props: ParentProps<IJournalContentPanelProps>) {
   const { sidebar$, sessionStorage$ } = useJournalContext()
   const { currentlyOpenedJournal$ } = useJournalContentPanelContext()
+  
   const bodyClassList = document.body.classList
   const topHeaderButtons: ICurrentlyOpenedHeaderProps["onClick$"] = (whichOne) => {
     switch (whichOne) {
