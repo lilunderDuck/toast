@@ -137,6 +137,6 @@ export interface IDndFinalizeEvent<T extends DragData = DefaultDragData> extends
 }
 
 export type TreeNode = { 
-  id: number, 
+  id: string, 
   child?: TreeNode[] 
 }

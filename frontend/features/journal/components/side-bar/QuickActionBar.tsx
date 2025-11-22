@@ -1,16 +1,14 @@
 import { type ParentProps } from "solid-js"
-import { BsGearFill, BsPlusSquareFill } from "solid-icons/bs"
+import { BsGearFill } from "solid-icons/bs"
 import { MERGE_CLASS } from "macro-def"
 // ...
-import { Spacer, Tooltip, type ITooltipOptions } from "~/components"
-import { createLazyLoadedDialog } from "~/hooks"
+import { Button, Spacer, Tooltip, type ITooltipOptions } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./QuickActionBar.module.css"
 import __scrollbarStyle from "~/styles/scrollbar.module.css"
 // ...
 import { createJournalSettingPage } from "../settings"
-import { useJournalContext } from "../../provider"
 
 const style = stylex.create({
   bar: {
@@ -54,13 +52,6 @@ const style = stylex.create({
 
 export function QuickActionBar(props: ParentProps) {
   const SettingDialog = createJournalSettingPage()
-  const CreateJournalDialog = createLazyLoadedDialog(
-    () => import("./dialog/CreateJournalDialog"),
-    () => ({
-      context$: useJournalContext()
-    })
-  )
-
   const tooltipOptions: ITooltipOptions["tooltipOptions$"] = {
     placement: "right"
   }
@@ -68,16 +59,15 @@ export function QuickActionBar(props: ParentProps) {
   return (
     <aside {...stylex.attrs(style.bar)}>
       <div {...stylex.attrs(style.bar__content, style.bar__actionBar)} id={__style.bar}>
-        <Tooltip label$="Create new journal" tooltipOptions$={tooltipOptions}>
-          <button {...stylex.attrs(style.bar__button)} onClick={CreateJournalDialog.show$}>
-            <BsPlusSquareFill />
-          </button>
-        </Tooltip>
         <Spacer />
         <Tooltip label$="Open setting" tooltipOptions$={tooltipOptions}>
-          <button {...stylex.attrs(style.bar__button)} onClick={SettingDialog.show$}>
+          <Button 
+            size$={ButtonSize.ICON} 
+            variant$={ButtonVariant.NO_BACKGROUND} 
+            onClick={SettingDialog.show$}
+          >
             <BsGearFill />
-          </button>
+          </Button>
         </Tooltip>
       </div>
       <div
@@ -91,7 +81,6 @@ export function QuickActionBar(props: ParentProps) {
       </div>
 
       <SettingDialog.Dialog$ />
-      <CreateJournalDialog.Dialog$ />
     </aside>
   )
 }

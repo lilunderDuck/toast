@@ -6,7 +6,7 @@ import { For, type ParentProps } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import __style from "./JournalContentWelcomeView.module.css"
 // ...
-import { FieldInputLabel } from "~/components"
+import { Label } from "~/components"
 import { useJournalContext } from "~/features/journal"
 import type { ArrayElement } from "~/utils"
 import { createLazyLoadedDialog } from "~/hooks"
@@ -125,7 +125,7 @@ export function JournalContentWelcomeView() {
           Welcome, home.
         </h1>
         <section {...stylex.attrs(style.welcomePage__section)}>
-          <FieldInputLabel>Not sure what to do next?</FieldInputLabel>
+          <Label>Not sure what to do next?</Label>
           <div id={__style.hint}>
             <For each={items}>
               {it => <HintItem {...it} />}

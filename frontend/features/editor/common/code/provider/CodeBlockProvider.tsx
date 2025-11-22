@@ -1,10 +1,8 @@
-import { createContext, createSignal, ParentProps, useContext, type Accessor, type Setter } from "solid-js"
+import { createContext, createSignal, ParentProps, useContext, type Accessor } from "solid-js"
 import type { CodeBlockData } from "./types"
 
 interface ICodeBlockContext {
   data$: Accessor<CodeBlockData>
-  isShowingInput$: Accessor<boolean>
-  setIsShowingInput$: Setter<boolean>
   updateData$: (data: Partial<CodeBlockData>) => any
 }
 
@@ -17,7 +15,6 @@ interface ICodeBlockProviderProps {
 
 export function CodeBlockProvider(props: ParentProps<ICodeBlockProviderProps>) {
   const [codeData, setCodeData] = createSignal(props.data$)
-  const [isShowingInput, setIsShowingInput] = createSignal(false)
 
   const updateData: ICodeBlockProviderProps["onChange$"] = (data) => {
     props.onChange$(data)
@@ -27,8 +24,6 @@ export function CodeBlockProvider(props: ParentProps<ICodeBlockProviderProps>) {
   return (
     <Context.Provider value={{
       data$: codeData,
-      isShowingInput$: isShowingInput, 
-      setIsShowingInput$: setIsShowingInput,
       updateData$: updateData
     }}>
       {props.children}

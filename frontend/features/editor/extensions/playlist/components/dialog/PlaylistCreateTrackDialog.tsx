@@ -1,6 +1,6 @@
 import { Show } from "solid-js"
 // ...
-import { Button, createIconInput, DialogContent, DialogHeader, FieldInput, FieldInputLabel, Tooltip } from "~/components"
+import { Button, createIconInput, DialogContent, DialogHeader, FieldInput, Label, Tooltip } from "~/components"
 import { createSubmitForm, createFileUpload, SUPPORTED_AUDIO_FILTER, type ILazyDialog } from "~/hooks"
 import { GetAudioData } from "~/wailsjs/go/playlist/Exports"
 import { previewUrl } from "~/api"
@@ -121,9 +121,9 @@ export default function PlaylistCreateTrackDialog(props: IPlaylistEditTrackItemD
   return (
     <DialogContent showCloseButton$={false}>
       <DialogHeader>Add new track.</DialogHeader>
-      <FieldInputLabel>
+      <Label>
         Audio file
-      </FieldInputLabel>
+      </Label>
       <Tooltip label$="Click to upload an audio file">
         <div {...stylex.attrs(style.dialog__audioFileUpload)} onClick={AudioFileUpload.open$}>
           <Show when={AudioFileUpload.file$()} fallback={"*No file choosen*"}>
@@ -136,9 +136,9 @@ export default function PlaylistCreateTrackDialog(props: IPlaylistEditTrackItemD
       </Tooltip>
       <div {...stylex.attrs(style.dialog__inputContent)}>
         <div>
-          <FieldInputLabel>
+          <Label>
             Cover icon
-          </FieldInputLabel>
+          </Label>
           <IconFileUpload.Input$ />
         </div>
         <Form$>

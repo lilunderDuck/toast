@@ -29,32 +29,17 @@ const style = stylex.create({
 })
 
 interface ICodeBlockContentProps {
-  onExit$(content: string): void
+  value?: string
+  onKeyDown?: EventHandler<"textarea", "onKeyDown">
 }
 
 export function CodeBlockInput(props: ParentProps<ICodeBlockContentProps>) {
-  const { setIsShowingInput$, data$ } = useCodeBlockContext()
-
-  const handleKeyPress: EventHandler<"textarea", "onKeyUp"> = (keyboardEvent) => {
-    const keyPressed = keyboardEvent.key.toLowerCase()
-    const content = keyboardEvent.currentTarget.value
-    switch (keyPressed) {
-      case "escape": return callExitEvent(content)
-      case "enter":
-        if (keyboardEvent.shiftKey) return
-        return callExitEvent(content)
-    }
-  }
-
-  const callExitEvent = (content: string) => {
-    setIsShowingInput$(false)
-    props.onExit$(content)
-  }
+  const { data$ } = useCodeBlockContext()
 
   return (
     <>
       <ResizableTextarea
-        onKeyDown={handleKeyPress}
+        onKeyDown={props.onKeyDown}
         placeholder="Type something into here..."
         value={data$().codeContent}
       />

@@ -6,7 +6,7 @@ import type { group } from "~/wailsjs/go/models"
 import { EditorProvider } from "~/features/editor"
 // ...
 import { JournalProvider, useJournalContext, type IFileExplorerProviderOptions } from "../provider"
-import { File, Folder, JournalLoadingScreen } from "../components"
+import { File, Folder } from "../components"
 
 interface IJournalHomeProvidersProps {
   groupId$: string
@@ -56,7 +56,7 @@ export function JournalHomeViewProviders(props: ParentProps<IJournalHomeProvider
 
   return (
     <EditorProvider id$={props.groupId$}>
-      <Show when={!props.isLoading$} fallback={<JournalLoadingScreen />}>
+      <Show when={!props.isLoading$}>
         <JournalProvider explorerOptions$={fileExplorerOption}>
           <Loader />
           {props.children}

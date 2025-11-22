@@ -42,5 +42,4 @@ export const GalleryExtension = createEditorNode<
     }
   },
   View$: GalleryNodeView,
-  
 })

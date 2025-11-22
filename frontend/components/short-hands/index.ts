@@ -1,6 +1,6 @@
 export * from './OpenAndCloseButton'
 export * from './FieldInput'
-export * from './FieldInputLabel'
+export * from './Label'
 export * from "./ColorInputs"
 export * from './IconInput'
 export * from './ResizableTextarea'

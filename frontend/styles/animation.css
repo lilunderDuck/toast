@@ -30,36 +30,36 @@
   100% { opacity: 1; }
 }
 
-.data-component-dialog-overlay[data-expanded],
-.data-component-context-menu[data-expanded] {
+.component-dialog-overlay[data-expanded],
+.component-context-menu[data-expanded] {
   animation: animation_fadeIn .15s ease-in forwards;
 }
 
-.data-component-dialog-overlay[data-closed],
-.data-component-context-menu[data-closed] {
+.component-dialog-overlay[data-closed],
+.component-context-menu[data-closed] {
   animation: animation_fadeOut .2s ease-out forwards;
 }
 
-.data-component-toast-visible > *,
-.data-component-dialog-content[data-expanded],
-.data-component-dropdown-menu[data-expanded],
-.data-component-hover-card[data-expanded],
-.data-component-popover[data-expanded] {
+.component-toast-visible > *,
+.component-dialog-content[data-expanded],
+.component-dropdown-menu[data-expanded],
+.component-hover-card[data-expanded],
+.component-popover[data-expanded] {
   animation: animation_fadeAndZoomIn .1s ease-in forwards;
 }
 
-.data-component-toast-hidden > *,
-.data-component-dialog-content[data-closed],
-.data-component-dropdown-menu[data-closed],
-.data-component-hover-card[data-closed],
-.data-component-popover[data-close] {
+.component-toast-hidden > *,
+.component-dialog-content[data-closed],
+.component-dropdown-menu[data-closed],
+.component-hover-card[data-closed],
+.component-popover[data-close] {
   animation: animation_fadeAndZoomOut .1s ease-out forwards;
 }
 
-.data-component-tooltip[data-expanded] {
+.component-tooltip[data-expanded] {
   animation: animation_fadeAndZoomIn .08s ease-in forwards;
 }
 
-.data-component-tooltip[data-closed] {
+.component-tooltip[data-closed] {
   animation: animation_fadeAndZoomOut .08s ease-out forwards;
 }

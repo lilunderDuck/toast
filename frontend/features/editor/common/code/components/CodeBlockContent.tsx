@@ -16,6 +16,7 @@ const style = stylex.create({
 
 export interface ICodeBlockContentProps {
   ref: Ref<"code">
+  onClick?: () => void
 }
 
 export function CodeBlockContent(props: ICodeBlockContentProps) {
@@ -23,7 +24,7 @@ export function CodeBlockContent(props: ICodeBlockContentProps) {
 
   return (
     <EditorTooltip label$="Click to change content">
-      <div {...stylex.attrs(style.input__content)}>
+      <div {...stylex.attrs(style.input__content)} onClick={props.onClick}>
         <code
           class={`language-${data$().lang}`}
           ref={props.ref}

@@ -1,10 +1,14 @@
 import type { ParentProps } from "solid-js"
-import { CurrentlyOpenedHeader, CurrentlyOpenedJournal, type ICurrentlyOpenedHeaderProps } from "../components"
-import { useJournalContentPanelContext, useJournalContext } from "../provider"
-import __style from "./JournalContentPanel.module.css"
-
-import stylex from "@stylexjs/stylex"
+import { BsLayoutSidebarInset, BsWindow } from "solid-icons/bs"
+// ...
 import { CharacterCount } from "~/features/editor"
+import { Button } from "~/components"
+// ...
+import __style from "./JournalContentPanel.module.css"
+import stylex from "@stylexjs/stylex"
+// ...
+import { useJournalContentPanelContext, useJournalContext } from "../provider"
+import { CurrentlyOpenedHeader, CurrentlyOpenedJournal, type ICurrentlyOpenedHeaderProps } from "../components"
 
 const style = stylex.create({
   panel__mainContent: {
@@ -40,7 +44,15 @@ export function JournalContentPanel(props: ParentProps<IJournalContentPanelProps
         isSidebarHidden$={sidebar$.isHidden$()}
         groupId$={sessionStorage$.get$("journal_data$").groupId$}
         id={__style.journalTitlebar}
-      />
+      >
+        <Button 
+          size$={ButtonSize.ICON} 
+          variant$={ButtonVariant.NO_BACKGROUND}
+          onClick={sidebar$.toggle$}
+        >
+          {sidebar$.isHidden$() ? <BsWindow /> : <BsLayoutSidebarInset />}
+        </Button>
+      </CurrentlyOpenedHeader>
       <CurrentlyOpenedJournal 
         name$={currentlyOpenedJournal$()}
       />

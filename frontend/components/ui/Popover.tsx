@@ -37,7 +37,7 @@ const PopoverContent = <T extends ValidComponent = "div">(
   return (
     <PopoverPrimitive.Portal>
       <PopoverPrimitive.Content
-        class={MERGE_CLASS(stylex.attrs(style.popover), local, "data-component-popover")}
+        class={MERGE_CLASS(stylex.attrs(style.popover), local, "component-popover")}
         {...others}
       />
     </PopoverPrimitive.Portal>

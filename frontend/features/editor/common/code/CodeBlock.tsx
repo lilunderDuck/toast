@@ -1,10 +1,11 @@
-import { onMount, Show } from "solid-js"
+import { onMount } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./CodeBlock.module.css"
 import "highlight.js/styles/atom-one-dark.css"
 // ...
 import { useEditorContext } from "~/features/editor/provider"
+import { createToggableInput } from "~/hooks"
 // ...
 import { highlightCodeBlock, useCodeBlockContext, type LanguageName } from "./provider"
 import { CodeBlockContent, CodeBlockInput, CodeBlockLanguageSelect, type ICodeBlockContentProps } from "./components"
@@ -32,11 +33,29 @@ const style = stylex.create({
 
 export function CodeBlock() {
   const { isReadonly$ } = useEditorContext()
-  const { data$, updateData$, isShowingInput$, setIsShowingInput$ } = useCodeBlockContext()
+  const { data$, updateData$ } = useCodeBlockContext()
 
   let inputRef!: ICodeBlockContentProps["ref"]
 
   const startHighlight = () => highlightCodeBlock(data$().lang, inputRef as Ref<"pre">)
+
+  const { Input$, isShowingInput$ } = createToggableInput({
+    component$: {
+      Input$: CodeBlockInput,
+      Readonly$(props) {
+        return <CodeBlockContent {...props} ref={inputRef} />
+      }
+    },
+    readonly$: isReadonly$,
+    label$: () => data$().codeContent,
+    onFinalize$(newContent) {
+      updateData$({ codeContent: newContent })
+      startHighlight()
+    },
+    onDiscard$() {
+      
+    },
+  })
 
   const onSelectLanguage = (lang: LanguageName) => {
     updateData$({ lang })
@@ -45,18 +64,7 @@ export function CodeBlock() {
     }
   }
 
-  const onExitingInput = (content: string) => {
-    updateData$({ codeContent: content })
-    startHighlight()
-  }
-
   onMount(startHighlight)
-
-  const showInput = () => {
-    if (!isShowingInput$()) {
-      setIsShowingInput$(true)
-    }
-  }
 
   return (
     <div {...stylex.attrs(style.block)} id={__style.block}>
@@ -68,13 +76,8 @@ export function CodeBlock() {
       </header>
       <div
         {...stylex.attrs(style.block__content)}
-        onClick={showInput}
       >
-        <Show when={!isReadonly$() && isShowingInput$()} fallback={
-          <CodeBlockContent ref={inputRef} />
-        }>
-          <CodeBlockInput onExit$={onExitingInput} />
-        </Show>
+        <Input$ />
       </div>
     </div>
   )

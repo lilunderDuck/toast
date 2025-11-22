@@ -1,4 +1,5 @@
 import { A } from "@solidjs/router"
+import { BsStickyFill } from "solid-icons/bs"
 // ...
 import { MERGE_CLASS } from "macro-def"
 // ...
@@ -7,24 +8,25 @@ import __style from "./File.module.css"
 
 const style = stylex.create({
   file: {
-    fontSize: 14,
-    marginLeft: 12,
-    display: "block",
-    marginTop: 2,
+    display: "flex",
+    alignItems: "center",
+    gap: 5,
+    paddingInline: 5,
+    paddingBlock: 2.5,
+    transition: "0.25s ease-out",
+    borderRadius: 6,
+    outline: "2px solid transparent",
+    marginRight: 5
   },
   file__name: {
-    paddingInline: 7,
-    paddingBlock: 2,
+    fontSize: 14,
+    display: "block",
+    marginTop: 2,
     width: "100%",
     textAlign: "left",
     backgroundColor: "transparent",
     color: "var(--gray11)",
     borderRadius: 6,
-    transition: "0.25s ease-out",
-    ":hover": {
-      backgroundColor: "var(--gray5)",
-      color: "var(--gray12)"
-    }
   }
 })
 
@@ -37,15 +39,16 @@ interface IFileProps {
 
 export function File(props: IFileProps) {
   return (
-    <div>
-      <A
-        href={`/journal/${props.groupId$}/${props.journalId$}`}
-        class={MERGE_CLASS(stylex.attrs(style.file, style.file__name), __style.file)}
-        data-link-no-color
-        data-no-focus-highlight
-      >
+    <A 
+      class={MERGE_CLASS(stylex.attrs(style.file), __style.file)}
+      href={`/journal/${props.groupId$}/${props.journalId$}`}
+      data-link-no-color=""
+      data-no-focus-highlight=""
+    >
+      <BsStickyFill data-journal-type="not implemented" class={__style.file__icon} />
+      <span {...stylex.attrs(style.file__name)}>
         {props.name$}
-      </A>
-    </div>
+      </span>
+    </A>
   )
 }

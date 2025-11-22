@@ -9,7 +9,6 @@ import { GetTableGrid } from "~/wailsjs/go/table/Exports"
 
 const style = stylex.create({
   table: {
-    paddingInline: 15,
     width: "100%"
   }
 })

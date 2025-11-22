@@ -14,7 +14,7 @@ export const MACRO_EXPORTS = {
 }
 
 export const macroPlugin = vitePluginMacro({
-  typesPath: join(import.meta.dirname, "../../dist/macro_def.d.ts"),
+  typesPath: join(import.meta.dirname, "../../build/dist/macro_def.d.ts"),
 })
   .use(defineMacroProvider({
     id: 'idk man',

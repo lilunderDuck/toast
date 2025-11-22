@@ -1,5 +1,5 @@
 import { createSignal, For, onCleanup } from "solid-js"
-import { Button, FieldInputLabel, Input, PopoverContent, Tag } from "~/components"
+import { Button, Label, Input, PopoverContent, Tag } from "~/components"
 import { useTagInputContext } from "./TagInputProvider"
 import stylex from "@stylexjs/stylex"
 import __style from "./TagInputPopover.module.css"
@@ -7,6 +7,7 @@ import __style from "./TagInputPopover.module.css"
 import { BsCheck } from "solid-icons/bs"
 import type { TagData } from "../../../provider"
 import TagInputHint from "./TagInputHint"
+import { createToggableInput } from "~/hooks"
 
 const style = stylex.create({
   tagInput: {
@@ -76,9 +77,9 @@ export default function TagInputPopover() {
         ref={inputRef}
       />
 
-      <FieldInputLabel {...stylex.attrs(style.tagInput__label)}>
+      <Label {...stylex.attrs(style.tagInput__label)}>
         Select tag or create a new one
-      </FieldInputLabel>
+      </Label>
       <For each={allOptions$()}>
         {(it: TagData) => (
           <Button

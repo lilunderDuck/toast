@@ -9,6 +9,6 @@ const style = stylex.create({
   }
 })
 
-export function FieldInputLabel(props: HTMLAttributes<"label">) {
+export function Label(props: HTMLAttributes<"label">) {
   return <label {...props} class={MERGE_CLASS(props, stylex.attrs(style.label))} />
 }

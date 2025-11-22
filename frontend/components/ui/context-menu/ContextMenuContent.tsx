@@ -28,7 +28,7 @@ export function ContextMenuContent<T extends ValidComponent = "div">(
         class={MERGE_CLASS(
           props,
           stylex.attrs(style.menuContent),
-          "data-component-context-menu"
+          "component-context-menu"
         )}
         {...rest}
       />

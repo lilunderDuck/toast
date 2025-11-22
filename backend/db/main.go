@@ -22,6 +22,7 @@ type Instance struct {
 // Closes the underlying leveldb database. It should be called when
 // the database is no longer needed to release resources.
 func (db *Instance) Close() error {
+	println("db closed")
 	return db.internal.Close()
 }
 
@@ -46,6 +47,7 @@ func Open(path string) (*Instance, error) {
 	defer lock.Unlock()
 
 	if instance, ok := globalInstance[path]; ok {
+		fmt.Println("Exiting instance found")
 		return instance, nil
 	}
 

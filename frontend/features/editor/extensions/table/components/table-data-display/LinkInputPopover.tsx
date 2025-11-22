@@ -1,7 +1,7 @@
 import { usePopoverContext } from "@kobalte/core/popover"
 import { onMount } from "solid-js"
 // ...
-import { Button, ButtonRow, FieldInputLabel, Input, PopoverContent } from "~/components"
+import { Button, ButtonRow, Label, Input, PopoverContent } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 
@@ -39,9 +39,9 @@ export default function LinkInputPopover(props: ILinkInputPopoverProps) {
 
   return (
     <PopoverContent>
-      <FieldInputLabel>
+      <Label>
         Enter a new url
-      </FieldInputLabel>
+      </Label>
       <Input
         type="url"
         value={props.value$}

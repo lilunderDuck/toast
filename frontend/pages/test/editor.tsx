@@ -1,7 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import { MERGE_CLASS } from "macro-def"
 import { createSignal } from "solid-js"
-import { Button, FieldInputLabel, Tooltip } from "~/components"
+import { Button, Label, Tooltip } from "~/components"
 import { Editor, EditorProvider, useEditorContext } from "~/features/editor"
 import { highlightCodeBlock } from "~/features/editor/common/code"
 
@@ -35,9 +35,9 @@ export default function EditorTestPage() {
     <div {...stylex.attrs(style.editor)}>
       <EditorProvider id$="test">
         <section {...stylex.attrs(style.editor__contentPanel)}>
-          <FieldInputLabel>
+          <Label>
             Editor
-          </FieldInputLabel>
+          </Label>
           <Editor />
         </section>
         <section {...stylex.attrs(style.editor__dataPanel)}>
@@ -60,9 +60,9 @@ function EditorStatePanel() {
 
   return (
     <section>
-      <FieldInputLabel>
+      <Label>
         JSON content
-      </FieldInputLabel>
+      </Label>
       <pre
         innerText={data()}
         class={MERGE_CLASS(
@@ -74,9 +74,9 @@ function EditorStatePanel() {
         {data() ?? "... Empty ..."}
       </pre>
 
-      <FieldInputLabel>
+      <Label>
         State control
-      </FieldInputLabel>
+      </Label>
       <Tooltip label$="Toggle readonly">
         <Button size$={ButtonSize.SMALL} onClick={() => setIsReadonly$(prev => !prev)}>
           Readonly: {JSON.stringify(isReadonly$())}
