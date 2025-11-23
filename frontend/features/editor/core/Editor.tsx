@@ -1,7 +1,7 @@
 import { onMount } from "solid-js"
 import { MERGE_CLASS, RANDOM_STRING } from "macro-def"
-import { FloatingMenuPlugin, type FloatingMenuPluginProps } from "@tiptap/extension-floating-menu"
-import { BubbleMenuPlugin, type BubbleMenuPluginProps } from "@tiptap/extension-bubble-menu"
+import { FloatingMenuPlugin } from "@tiptap/extension-floating-menu"
+import { BubbleMenuPlugin } from "@tiptap/extension-bubble-menu"
 // ...
 import stylex from "@stylexjs/stylex"
 import __scrollbarStyle from "~/styles/scrollbar.module.css"

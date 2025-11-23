@@ -2,12 +2,12 @@ import { BiSolidLeaf } from "solid-icons/bi"
 import { createSignal, Show, type ParentProps } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
-import __style from "./CharacterCount.module.css"
+import __style from "./EditorCharacterCount.module.css"
 // ...
 import { debounce } from "~/utils"
 import { SpinningCube } from "~/components"
 // ...
-import { useEditorContext } from "../../provider"
+import { useEditorContext } from "../provider"
 
 const style = stylex.create({
   counter: {

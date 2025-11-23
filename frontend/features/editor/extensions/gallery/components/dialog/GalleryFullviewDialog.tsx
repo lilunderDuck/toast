@@ -3,11 +3,12 @@ import { BsBox2HeartFill } from "solid-icons/bs"
 // ...
 import { DialogContent } from "~/components"
 import { useEventListener, type ILazyDialog } from "~/hooks"
+import { ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "~/features/pan-and-zoom"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
 import { GalleryContent } from "../items/GalleryContent"
-import { type IGalleryContext, ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "../../provider"
+import { type IGalleryContext } from "../../provider"
 import { NextAndPrevButtons } from "../buttons/NextAndPrevButtons"
 
 const style = stylex.create({

@@ -14,7 +14,7 @@ import { useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 
 export interface IGalleryContext {
   /**Gets the current gallery data. */
-  attrs$: () => gallery.GalleryData
+  data$: () => gallery.GalleryData
   /**Navigates to the next item in the gallery and updates the current index and item state. */
   next$(): void
   /**Navigates to the previous item in the gallery and updates the current index and item state. */
@@ -141,7 +141,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
 
   return (
     <Context.Provider value={{
-      attrs$: () => galleryData,
+      data$: () => galleryData,
       currentIndex$: currentIndex,
       next$: next,
       isFullscreen$: isFullscreen,

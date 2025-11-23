@@ -1,6 +1,6 @@
 import { AppTitleBarDraggable, DialogContent } from "~/components"
 import type { ILazyDialog } from "~/hooks"
-import { ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "~/features/editor/extensions/gallery"
+import { ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "~/features/pan-and-zoom"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
