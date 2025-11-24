@@ -11,6 +11,7 @@ import { SolidEditorContent } from "~/libs/solid-tiptap-renderer"
 // ...
 import { AttributeEditor, BubbleMenu, FloatingMenu } from "../components"
 import { useEditorContext } from "../provider"
+import TaskNodeView from "../extensions/tasks/node"
 
 const style = stylex.create({
   editor: {
@@ -56,6 +57,7 @@ export function Editor() {
   return (
     <>
       <AttributeEditor />
+      <TaskNodeView />
       <SolidEditorContent
         editor={editor$()}
         style={`--sb-track-color: var(--gray2)`}

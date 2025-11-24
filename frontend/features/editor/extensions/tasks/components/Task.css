@@ -1,0 +1,12 @@
+.task[data-completed=true] .task__name,
+.task[data-completed=true] .task__description {
+  text-decoration: line-through;
+}
+
+.task[data-completed=true] .task__name {
+  color: var(--gray11)
+}
+
+.task[data-completed=true] .task__description {
+  color: var(--gray10)
+}

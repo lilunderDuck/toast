@@ -1,7 +1,7 @@
 import type { ParentProps } from "solid-js"
 import { BsLayoutSidebarInset, BsWindow } from "solid-icons/bs"
 // ...
-import { CharacterCount } from "~/features/editor"
+import { EditorCharacterCount } from "~/features/editor"
 import { Button } from "~/components"
 // ...
 import __style from "./JournalContentPanel.module.css"
@@ -56,9 +56,9 @@ export function JournalContentPanel(props: ParentProps<IJournalContentPanelProps
       <CurrentlyOpenedJournal 
         name$={currentlyOpenedJournal$()}
       />
-      <CharacterCount>
+      <EditorCharacterCount>
         {!currentlyOpenedJournal$() ? (<span>Nothing</span>) : null}
-      </CharacterCount>
+      </EditorCharacterCount>
       <main {...stylex.attrs(style.panel__mainContent)}>
         {props.children}
       </main>

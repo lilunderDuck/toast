@@ -1,6 +1,6 @@
 @font-face {
   font-family: bongoCat;
-  src: url('../../assets/bongocat.woff');
+  src: url('../assets/bongocat.woff');
 }
 
 #bongoCat {

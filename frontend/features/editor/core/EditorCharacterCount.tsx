@@ -33,7 +33,7 @@ const style = stylex.create({
   }
 })
 
-export function CharacterCount(props: ParentProps) {
+export function EditorCharacterCount(props: ParentProps) {
   const { charCount$, wordCount$, event$, isAutoSaving$ } = useEditorContext()
   const [bongoCatFrame, setBongoCatFrame] = createSignal<BongoCatAnimationFrame>(BongoCatAnimationFrame.IDLE)
 
