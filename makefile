@@ -24,7 +24,7 @@ dev:
 	wails dev
 
 generate_consts:
-	deno -A ./build/config/consts.ts
+	deno -A ./addon/config/consts.ts
 
 # clean the mess I made
 clean:

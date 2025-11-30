@@ -33,7 +33,8 @@ export const TasksNode = createEditorNode<
   commands$() {
     return {
       insertVideo$: () => ({ tr }) => {
-        return insertNodeAtCurrentPosition<TasksAttribute>(this, tr, { 
+        return insertNodeAtCurrentPosition<TasksAttribute>(this, tr, {
+          tasksTree: {},
           tasks: [{
             name: "",
             completed: false,

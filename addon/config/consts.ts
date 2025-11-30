@@ -320,6 +320,23 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'ITEM',
     'LABEL'
   ])
+
+  define('TreeViewEvent', {
+    'UPDATE': 'af'
+  })
+
+  define('TreeViewUpdateType', [
+    'CREATE_NODE',
+    'UPDATE_NODE',
+    'REMOVE_NODE',
+  ])
+
+  define('TreeViewNodeType', [
+    'LEAF',
+    'PARENT',
+  ]) // do not reorder
+
+  define('TREE_VIEW_ROOT_NODE_ID', 0)
 }
 
 if (import.meta.main) {

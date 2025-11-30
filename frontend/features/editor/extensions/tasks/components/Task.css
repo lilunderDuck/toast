@@ -10,3 +10,7 @@
 .task[data-completed=true] .task__description {
   color: var(--gray10)
 }
+
+.task .task__subTaskDropIndicator {
+  padding-bottom: 2rem;
+}

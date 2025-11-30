@@ -1,44 +1,36 @@
 import { createContext, ParentProps, useContext } from "solid-js"
-import { createStore } from "solid-js/store"
 // ...
-import { arrayObjects, makeId } from "~/utils"
+import { makeId } from "~/utils"
+import { useTreeViewContext } from "~/features/tree-view"
 // ...
-import type { TaskData, TasksAttribute } from "./data"
+import type { TaskData } from "./data"
 
 interface ITaskDataContext {
-  readonly data$: TasksAttribute
+  create$(parentNodeId?: number): void
+  setIsCompleted$(taskId: number, state: boolean): void
 }
 
 const Context = createContext<ITaskDataContext>()
 
-interface ITaskDataProviderProps {
-  attrs$: TasksAttribute
-}
+export function TaskDataProvider(props: ParentProps) {
+  const { add$, editNodeData$ } = useTreeViewContext<TaskData>()
 
-export function TaskDataProvider(props: ParentProps<ITaskDataProviderProps>) {
-  const [store, setStore] = createStore(props.attrs$)
-
-  const create = (parentId?: string) => {
-    const newData: TaskData = {
+  const create: ITaskDataContext["create$"] = (parentNodeId) => {
+    add$(TreeViewNodeType.PARENT, parentNodeId ?? TREE_VIEW_ROOT_NODE_ID, {
       name: "",
       completed: false,
       id: makeId(5)
-    }
+    })
+  }
 
-    if (parentId) {
-      const [, index] = arrayObjects(store.tasks).find$(it => it.id === parentId)
-      console.assert(index !== -1, "Cannot find task parent id: %s", parentId)
-      setStore("tasks", 0, "subTask", index, newData)
-    } else {
-      setStore("tasks", store.tasks.length, newData)
-    }
-
-    console.log(store.tasks)
+  const setIsCompleted = (taskId: number, state: boolean) => {
+    editNodeData$(taskId, (prev) => ({ ...prev, completed: state }))
   }
 
   return (
     <Context.Provider value={{
-      data$: store
+      create$: create,
+      setIsCompleted$: setIsCompleted,
     }}>
       {props.children}
     </Context.Provider>
