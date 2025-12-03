@@ -38,10 +38,13 @@ export function TreeViewProvider<
   const [isDragging, setIsDragging] = createSignal(false)
 
   const callUpdateEvent = () => {
-    props.onUpdate$({
+    const newData = {
       storage: store,
       tree: treeCache
-    })
+    }
+
+    props.onUpdate$(newData)
+    console.log("[tree view] updated tree", newData)
   }
 
   const add: ITreeViewContext["add$"] = (nodeType, whichFolderId, data: T) => {
@@ -60,15 +63,20 @@ export function TreeViewProvider<
       nodeData,
       data
     )
+
+    console.log("[tree view] added new node to tree ->")
+    console.dir({ nodeType, whichFolderId, data })
   }
   
   const editNodeData: ITreeViewContext["editNodeData$"] = (nodeId, data) => {
     setStore(nodeId ?? TREE_VIEW_ROOT_NODE_ID, data as any)
     callUpdateEvent()
+    console.log("[tree view] updated node data:", nodeId)
   }
 
-  const deleteNode: ITreeViewContext["delete$"] = (parentNodeId, nodeId) => {
+  const deleteNode: ITreeViewContext["delete$"] = (_, nodeId) => {
     event.emit$(`${TreeViewUpdateType.REMOVE_NODE}-${nodeId}`)
+    console.log("[tree view] deleted node:", nodeId)
   }
 
   return (

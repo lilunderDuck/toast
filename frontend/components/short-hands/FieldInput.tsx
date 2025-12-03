@@ -1,8 +1,11 @@
 import { TextField as Kobalte } from '@kobalte/core'
-import stylex from '@stylexjs/stylex'
 import { type JSX, Show, splitProps } from 'solid-js'
-import __style from './FieldInput.module.css'
+// ...
+import stylex from '@stylexjs/stylex'
+import './FieldInput.css'
+// ...
 import { Label } from './Label'
+import { MERGE_CLASS } from 'macro-def'
 
 export type TextFieldInputRef = HTMLInputElement | HTMLTextAreaElement
 
@@ -50,7 +53,7 @@ export function FieldInput(props: TextFieldProps) {
     <Kobalte.Root
       {...rootProps}
       validationState={props.error ? 'invalid' : 'valid'}
-      id={__style.fieldInput}
+      id="fieldInput"
     >
       <Show when={props.label}>
         <Label>{props.label}</Label>
@@ -58,10 +61,18 @@ export function FieldInput(props: TextFieldProps) {
       <Show
         when={props.multiline}
         fallback={
-          <Kobalte.Input {...inputProps} type={props.type} {...stylex.attrs(style.input)} />
+          <Kobalte.Input 
+            {...inputProps} 
+            type={props.type} 
+            class={MERGE_CLASS("fieldInput__input", stylex.attrs(style.input))} 
+          />
         }
       >
-        <Kobalte.TextArea {...inputProps} autoResize {...stylex.attrs(style.input)} />
+        <Kobalte.TextArea 
+          {...inputProps} 
+          autoResize 
+          class={MERGE_CLASS("fieldInput__input", stylex.attrs(style.input))} 
+        />
       </Show>
       <Kobalte.ErrorMessage {...stylex.attrs(style.error)}>
         {props.error}

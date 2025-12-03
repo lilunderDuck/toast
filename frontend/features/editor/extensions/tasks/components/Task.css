@@ -14,3 +14,11 @@
 .task .task__subTaskDropIndicator {
   padding-bottom: 2rem;
 }
+
+.task__content .task__buttonRow {
+  visibility: hidden;
+}
+
+.task__content:hover .task__buttonRow {
+  visibility: visible;
+}

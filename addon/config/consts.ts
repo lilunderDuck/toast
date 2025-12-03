@@ -337,6 +337,11 @@ export function defineAllConstants(isDevMode: boolean = false) {
   ]) // do not reorder
 
   define('TREE_VIEW_ROOT_NODE_ID', 0)
+
+  define('TaskType', [
+    'SECTION',
+    'TASK',
+  ]) // do not reorder
 }
 
 if (import.meta.main) {

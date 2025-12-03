@@ -1,5 +1,62 @@
 import { createSignal, Show, type ParentComponent } from "solid-js"
 
+type InputContent<T extends HTMLTags> = T extends "input" | "textarea" ? string : never
+
+interface IInputShortcutHandlerOptions<T extends HTMLTags> {
+  /**Triggered when the content is changed via pressing `Enter`. 
+   * @note Pressing `Shift` + `Enter` won't trigger this event.
+   * @param newContent the new input content
+   */
+  onFinalize$?(newContent: InputContent<T>): any
+  /**Triggered when the user discard the changes via pressing `ESC` button */
+  onDiscard$?(originalContent: InputContent<T>): any
+}
+
+export function createInputShortcutHandler<T extends HTMLTags>(
+  options: IInputShortcutHandlerOptions<T>
+) {
+  const handleKeyPress = (keyboardEvent: KeyboardEvent & {
+    currentTarget: Ref<T>
+  }) => {
+    const keyPressed = keyboardEvent.key.toLowerCase()
+    isDevMode && (() => {
+      const isInputOrTextarea =
+        keyboardEvent.currentTarget instanceof HTMLTextAreaElement ||
+        keyboardEvent.currentTarget instanceof HTMLInputElement
+      // ...
+
+      if (!isInputOrTextarea) {
+        console.warn([
+          "createInputShortcutHandler(): currentTarget is not a <textrea /> or <input /> element.",
+          "You might be attach this event listener into a wrong element.\n",
+          "But, if you're only using this hook for shortcut handler stuff, that fine, but keep in mind that if you tries to access content of the input, it will be undefined.\n",
+          " 1  | const shortcutHandler = createInputShortcutHandler({",
+          " 2  |   onDiscard$(content) {",
+          " .  |     //       ^^^^^^^ will always be undefined",
+          " 3  |     // ... your code ... ",
+          " 4  |   }",
+          " 5  |   onFinalize$(content) {",
+          " .  |     //       ^^^^^^^ same here",
+          " 6  |     // ... your code ... ",
+          " 7  |   }",
+          " 8  | })",
+        ].join('\n'))
+      }
+    })()
+    // @ts-ignore
+    const content = keyboardEvent.currentTarget?.value
+    switch (keyPressed) {
+      case "escape":
+        return options.onDiscard$?.(content)
+      case "enter":
+        if (keyboardEvent.shiftKey) return
+        return options.onFinalize$?.(content)
+    }
+  }
+
+  return handleKeyPress
+}
+
 export type BaseInputComponent = ParentComponent<{
   onKeyDown?: EventType<"input", 'onKeyDown'>
   value?: string
@@ -9,7 +66,7 @@ export type BaseReadonlyComponent = ParentComponent<{
   onClick?: AnyFunction
 }>
 
-interface IInputShortcutHandlerOptions<
+interface IToggaleInputOptions<
   T extends BaseInputComponent,
   U extends BaseReadonlyComponent
 > {
@@ -19,9 +76,9 @@ interface IInputShortcutHandlerOptions<
    * @note Pressing `Shift` + `Enter` won't trigger this event.
    * @param newContent the new input content
    */
-  onFinalize$(newContent: string): any
+  onFinalize$?(newContent: string): any
   /**Triggered when the user discard the changes via pressing `ESC` button */
-  onDiscard$(originalContent: string): any
+  onDiscard$?(originalContent: string): any
   /**The initial content.
    * @default '' // empty string
    */
@@ -66,32 +123,27 @@ interface IInputShortcutHandlerOptions<
  *   )
  * }
  * ```
- * @param options see {@link IInputShortcutHandlerOptions} for options.
+ * @param options see {@link IToggaleInputOptions} for options.
  * @returns 
  */
 export function createToggableInput<
   T extends BaseInputComponent,
   U extends BaseReadonlyComponent
->(options: IInputShortcutHandlerOptions<T, U>) {
+>(options: IToggaleInputOptions<T, U>) {
   const [isShowingInput, setIsShowingInput] = createSignal(false)
   const [content, setContent] = createSignal(options.label$?.() ?? '')
 
-  const handleKeyPress = (keyboardEvent: KeyboardEvent & {
-    currentTarget: Ref<"textarea" | "input">
-  }) => {
-    const keyPressed = keyboardEvent.key.toLowerCase()
-    const content = keyboardEvent.currentTarget.value
-    switch (keyPressed) {
-      case "escape":
-        setIsShowingInput(false) 
-        return options.onDiscard$(content)
-      case "enter":
-        if (keyboardEvent.shiftKey) return
-        setContent(content)
-        setIsShowingInput(false)
-        return options.onFinalize$(content)
+  const handleKeyPress = createInputShortcutHandler({
+    onDiscard$(content) {
+      setIsShowingInput(false)
+      options.onDiscard$?.(content)
+    },
+    onFinalize$(content) {
+      setContent(content)
+      setIsShowingInput(false)
+      options.onFinalize$?.(content)
     }
-  }
+  })
 
   const shouldShowInput = () => !(options.readonly$?.() ?? false) && isShowingInput()
 
@@ -105,6 +157,7 @@ export function createToggableInput<
         </options.component$.Readonly$>
       }>
         <options.component$.Input$
+          // @ts-ignore - too lazy to fix type error 😴
           onKeyDown={handleKeyPress}
           value={content()}
         />

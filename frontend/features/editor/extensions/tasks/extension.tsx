@@ -38,7 +38,6 @@ export const TasksNode = createEditorNode<
           tasks: [{
             name: "",
             completed: false,
-            id: RANDOM_STRING(5)
           }]
         })
       },

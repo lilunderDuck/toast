@@ -84,6 +84,7 @@ const sizeMapping: Record<ButtonSize, StylexStylesAttribute> = {
   [ButtonSize.SMALL]: stylex.attrs(style.size_small),
   [ButtonSize.LARGE]: stylex.attrs(style.size_large),
   [ButtonSize.ICON]: stylex.attrs(style.size_icon),
+  [ButtonSize.UNSET]: {}
 }
 
 export interface IButtonProps extends HTMLAttributes<"button"> {

@@ -52,7 +52,7 @@ export function replaceTree(
 ) {
   if (whichFolderId === TREE_VIEW_ROOT_NODE_ID) {
     treeCacheRef = treeContent
-    console.log('replace', whichFolderId, "with", treeCacheRef)
+    console.log('[tree view] replace', whichFolderId, "with", treeCacheRef)
     return treeCacheRef
   }
 
@@ -61,6 +61,6 @@ export function replaceTree(
   console.assert(shouldBeAFolder?.child, `${whichFolderId} must be a folder.`)
 
   shouldBeAFolder!.child = treeContent
-  console.log('replace', whichFolderId, "with", treeCacheRef)
+  console.log('[tree view] replace', whichFolderId, "with", treeCacheRef)
   return treeCacheRef
 }

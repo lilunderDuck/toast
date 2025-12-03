@@ -2,7 +2,7 @@ import stylex from "@stylexjs/stylex"
 import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
-  $input: {
+  input: {
     paddingInline: 10,
     paddingBlock: 6,
     borderRadius: 6,
@@ -25,7 +25,7 @@ export function Input(props: HTMLAttributes<"input">) {
       {...disableAutocompleteInEdgeIfNeeds()}
       class={MERGE_CLASS(
         props,
-        stylex.attrs(style.$input)
+        stylex.attrs(style.input)
       )} 
     />
   )

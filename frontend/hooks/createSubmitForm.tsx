@@ -1,4 +1,4 @@
-import { type FieldValues, createForm, type SubmitHandler, reset } from "@modular-forms/solid"
+import { type FieldValues, createForm, type SubmitHandler, reset, type FieldsStore, type FieldPath } from "@modular-forms/solid"
 import { createSignal, type JSX } from "solid-js"
 // ...
 import { Button, ButtonRow } from "~/components"
@@ -25,6 +25,8 @@ export interface ISubmitFormOptions<T extends FieldValues> {
    */
   onSubmit$: SubmitHandler<T>
 }
+
+type InputsCollection = HTMLCollectionOf<Ref<"input" | "textarea">>
 
 /**Creates a form component with a submit button and handles form submission.
  * It disables the submit button while the form is being submitted.
@@ -63,37 +65,52 @@ export function createSubmitForm<T extends FieldValues>(options: ISubmitFormOpti
   const [formStore, { Form, Field }] = createForm<T>()
   const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
 
-  const submitThis: SubmitHandler<T> = async(data, submitEvent) => {
+  const submitThis: SubmitHandler<T> = async (data, submitEvent) => {
     console.log("Handle form submittion now.")
     setSubmitButtonDisabled(true)
     try {
       await options.onSubmit$(data, submitEvent)
-    } catch(error) {
+    } catch (error) {
       console.error("Submittion error:", error)
     }
 
     setSubmitButtonDisabled(false)
   }
 
+  const fieldStore: FieldsStore<T> = formStore.internal.fields
+  
+  let formRef!: Ref<"form">
+  const setFieldData = (data: T) => {
+    for (const [key, value] of Object.entries(data)) {
+      fieldStore[key as FieldPath<T>]?.value.set(value as any)
+    }
+  }
+
   return {
-    setFieldData$(data: T) {
-      reset(formStore, Object.keys(data), {
-        initialValues: Object.values(data)
-      })
+    clearFields$() {
+      for (const key of Object.keys(fieldStore)) {
+        // FIXME: very hacky way to reset the input
+        fieldStore[key as FieldPath<T>]?.value.set('' as any)
+      }
+      
+      for (const inputRef of formRef.getElementsByClassName('fieldInput__input') as InputsCollection) {
+        inputRef.value = ''
+      }
     },
+    setFieldData$: setFieldData,
     Field$: Field,
     /**Renders the form component with the submit button and handles the submit event.
      * @param props.
      * @returns `JSX.Element`
      */
     Form$: (props: Parameters<FormComponent<T>>[0]) => (
-      <Form {...props} onSubmit={submitThis}>
+      <Form {...props} onSubmit={submitThis} ref={formRef}>
         {props.children}
         <ButtonRow>
           {options.buttonRow$}
-          <Button 
-            size$={ButtonSize.SMALL} 
-            type="submit" 
+          <Button
+            size$={ButtonSize.SMALL}
+            type="submit"
             disabled={submitButtonDisabled()}
           >
             {options.submitButtonText$}

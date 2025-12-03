@@ -1,0 +1,7 @@
+.taskSection .taskSection__buttonRow {
+  opacity: 0;
+}
+
+.taskSection:hover .taskSection__buttonRow {
+  opacity: 1;
+}
