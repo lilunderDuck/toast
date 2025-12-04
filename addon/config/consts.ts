@@ -163,7 +163,8 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'SECONDARY',
     'GHOST',
     'LINK',
-    'NO_BACKGROUND'
+    'NO_BACKGROUND',
+    'UNSET'
   ])
 
   define('ButtonSize', [

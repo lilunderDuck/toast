@@ -1,29 +1,25 @@
-import { getRandomNumberFrom } from "~/utils"
+import type { BaseTreeAdditionalData, TreeData } from "~/features/tree-view"
 
 export type TaskData = {
   type: TaskType.TASK
   name: string
   description?: string
   completed: boolean
-  id: number
-}
+} & BaseTreeAdditionalData
 
 export type TaskSectionData = {
   type: TaskType.SECTION
   name: string
-  id: number
-}
+} & BaseTreeAdditionalData
 
 export const DEFAULT_TASK_DATA = {
   [TaskType.TASK]: () => ({
     name: "",
     completed: false,
-    id: getRandomNumberFrom(0, 100_000_000),
     type: TaskType.TASK
   }),
   [TaskType.SECTION]: () => ({
     name: "Untitled section",
-    id: getRandomNumberFrom(0, 100_000_000),
     type: TaskType.SECTION
   })
 }
@@ -42,7 +38,7 @@ export interface ITaskDataMapping {
 export type AnyTaskData = TaskData | TaskSectionData
 
 export type TasksAttribute = {
-  tasks: TaskData[]
+  tasks: TreeData<AnyTaskData>
 }
 
 export type TaskInputSchema = Omit<TaskData, "id" | "completed" | "type">

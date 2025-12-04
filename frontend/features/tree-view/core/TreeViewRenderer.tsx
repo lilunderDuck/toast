@@ -22,7 +22,7 @@ export function TreeViewRenderer<
   const { data$, event$, callUpdateEvent$, setIsDragging$ } = useTreeViewContext()
   const retriveData = (id: number) => data$().storage[id] as T
 
-  const RecursiveRender = (rendererProps: { child$: TreeNodeData[], folderId$: number }) => {
+  const RecursiveRender = (rendererProps: { child$: TreeNodeData[], parentId$: number }) => {
     const [items, setItems] = createSignal(rendererProps.child$)
 
     const considerDrag: EventHandler<"section", "on:consider"> = (e) => {
@@ -33,7 +33,7 @@ export function TreeViewRenderer<
 
     const update = () => {
       callUpdateEvent$(
-        replaceTree(data$().tree!, rendererProps.folderId$, items())
+        replaceTree(data$().tree, rendererProps.parentId$, items())
       )
     }
 
@@ -43,13 +43,13 @@ export function TreeViewRenderer<
       setIsDragging$(false)
     }
 
-    event$.on$(`${TreeViewUpdateType.CREATE_NODE}-${rendererProps.folderId$}`, (nodeData) => {
+    event$.on$(`${TreeViewUpdateType.CREATE_NODE}-${rendererProps.parentId$}`, (nodeData) => {
       setItems(prev => [...prev, nodeData])
       update()
     })
 
-    event$.on$(`${TreeViewUpdateType.REMOVE_NODE}-${rendererProps.folderId$}`, () => {
-      setItems(prev => arrayObjects(prev).remove$('id', rendererProps.folderId$))
+    event$.on$(`${TreeViewUpdateType.REMOVE_NODE}-${rendererProps.parentId$}`, (anyNodeId) => {
+      setItems(prev => [...arrayObjects(prev).remove$('id', anyNodeId)])
       update()
     })
 
@@ -79,13 +79,13 @@ export function TreeViewRenderer<
                   <props.Leaf$ nodeId$={it.id} data$={retriveData(it.id)} />
                 }>
                   <props.Parent$ nodeId$={it.id} data$={retriveData(it.id)}>
-                    <RecursiveRender child$={it.child!} folderId$={it.id} />
+                    <RecursiveRender child$={it.child!} parentId$={it.id} />
                   </props.Parent$>
                 </Show>
               </Show>
 
               <Show when={it.id === TREE_VIEW_ROOT_NODE_ID}>
-                <RecursiveRender child$={it.child!} folderId$={it.id} />
+                <RecursiveRender child$={it.child!} parentId$={it.id} />
               </Show>
             </>
           )}
@@ -95,6 +95,6 @@ export function TreeViewRenderer<
   }
 
   return (
-    <RecursiveRender child$={data$().tree} folderId$={TREE_VIEW_ROOT_NODE_ID} />
+    <RecursiveRender child$={data$().tree} parentId$={TREE_VIEW_ROOT_NODE_ID} />
   )
 }

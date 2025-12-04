@@ -1,11 +1,12 @@
-import { RANDOM_STRING } from 'macro-def'
-// ...
 import { insertNodeAtCurrentPosition, NodeViewWrapper, useSolidNodeView } from '~/libs/solid-tiptap-renderer'
+import { getRandomNumberFrom } from '~/utils'
+import { TreeViewProvider } from '~/features/tree-view'
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
 import { createEditorNode } from '../../utils'
-import { TaskDataProvider, type TasksAttribute } from './provider'
+import { TaskDataProvider, type AnyTaskData, type TasksAttribute } from './provider'
+import TaskNodeView from './node'
 
 const style = stylex.create({
   nodeView: {
@@ -15,8 +16,8 @@ const style = stylex.create({
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
-    video: {
-      insertVideo$: () => ReturnType
+    task: {
+      insertTask$: () => ReturnType
     }
   }
 }
@@ -27,30 +28,44 @@ export const TasksNode = createEditorNode<
   name$: 'task',
   attributes$: () => ({
     tasks: {
-      default: []
+      default: {}
     }
   }),
   commands$() {
     return {
-      insertVideo$: () => ({ tr }) => {
+      insertTask$: () => ({ tr }) => {
+        const DEFAULT_TASK_ID = getRandomNumberFrom(0, 999_999)
         return insertNodeAtCurrentPosition<TasksAttribute>(this, tr, {
-          tasksTree: {},
-          tasks: [{
-            name: "",
-            completed: false,
-          }]
+          tasks: {
+            storage: {
+              [DEFAULT_TASK_ID]: {
+                type: TaskType.SECTION,
+                name: "New task section",
+                parentId: TREE_VIEW_ROOT_NODE_ID
+              }
+            },
+            tree: [
+              { id: DEFAULT_TASK_ID, child: [] }
+            ]
+          }
         })
       },
     }
   },
   View$() {
-    const { attrs$ } = useSolidNodeView<TasksAttribute>()
-
+    const { attrs$, updateAttribute$ } = useSolidNodeView<TasksAttribute>()
+    
     return (
-      <TaskDataProvider attrs$={attrs$()}>
-        <NodeViewWrapper {...stylex.attrs(style.nodeView)}>
-        </NodeViewWrapper>
-      </TaskDataProvider>
+      <TreeViewProvider<AnyTaskData> 
+        onUpdate$={(newData) => updateAttribute$('tasks', newData)} 
+        data$={attrs$().tasks}
+      >
+        <TaskDataProvider>
+          <NodeViewWrapper {...stylex.attrs(style.nodeView)}>
+            <TaskNodeView />
+          </NodeViewWrapper>
+        </TaskDataProvider>
+      </ TreeViewProvider>
     )
   },
 })

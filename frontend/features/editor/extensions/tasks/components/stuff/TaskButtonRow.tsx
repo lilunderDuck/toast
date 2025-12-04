@@ -21,10 +21,10 @@ const style = stylex.create({
 })
 
 export function TaskButtonRow() {
-  const { setIsShowingInput$ } = useTaskContext()
+  const { setIsShowingInput$, delete$ } = useTaskContext()
   const buttonRow = [
     { icon$: BsPencilFill, name$: "Edit task", click$: () => setIsShowingInput$(true) },
-    { icon$: BsTrash, name$: "Delete task" },
+    { icon$: BsTrash, name$: "Delete task", click$: delete$ },
   ]
 
   return (

@@ -39,28 +39,60 @@ export function recursivelyFindNode(nodeId: number, child: TreeNodeData[]): Tree
 }
 
 /**Replaces the children of a specified parent node with a new array of nodes. 
- * @param treeCacheRef The reference to the tree. 
+ * @param entireTreeRef The reference to the tree. 
  * @param whichFolderId The id of the parent node.If you pass in this magic constant: 
  * `TREE_VIEW_ROOT_NODE_ID`, it will replace the whole tree.
  * @param treeContent new child content.
  * @returns the modified tree.
  */
 export function replaceTree(
-  treeCacheRef: TreeNodeData[],
+  entireTreeRef: TreeNodeData[],
   whichFolderId: number,
   treeContent: TreeNodeData[]
 ) {
   if (whichFolderId === TREE_VIEW_ROOT_NODE_ID) {
-    treeCacheRef = treeContent
-    console.log('[tree view] replace', whichFolderId, "with", treeCacheRef)
-    return treeCacheRef
+    entireTreeRef = treeContent
+    console.log('[tree view] replace', whichFolderId, "with", entireTreeRef)
+    return entireTreeRef
   }
 
-  const shouldBeAFolder = recursivelyFindNode(whichFolderId, treeCacheRef)
+  const shouldBeAFolder = recursivelyFindNode(whichFolderId, entireTreeRef)
   console.assert(shouldBeAFolder, `Could not insert to ${whichFolderId}, it must exist in the tree.`)
   console.assert(shouldBeAFolder?.child, `${whichFolderId} must be a folder.`)
 
   shouldBeAFolder!.child = treeContent
-  console.log('[tree view] replace', whichFolderId, "with", treeCacheRef)
-  return treeCacheRef
+  console.log('[tree view] replace', whichFolderId, "with", entireTreeRef)
+  return entireTreeRef
+}
+
+/**Get all node ids inside a tree.
+ * @example
+ * ```ts
+ * // Retrives every node ids inside the entire tree
+ * getAllNodeIds(entireTree)
+ * 
+ * // Retrives only a part of the tree
+ * const nodeData = recursivelyFindNode(nodeId, entireTree)
+ * getAllNodeIds(nodeData)
+ * ```
+ * 
+ * @see {@link recursivelyFindNode}
+ */
+export function getAllNodeIds(tree: TreeNodeData) {
+  const nodeIds: number[] = [tree.id]
+
+  const walk = (currentTree?: TreeNodeData[]) => {
+    if (!currentTree) return
+
+    for (const node of currentTree) {
+      nodeIds.push(node.id)
+
+      if (node.child) {
+        walk(node.child)
+      }
+    }
+  }
+
+  walk(tree.child)
+  return nodeIds
 }

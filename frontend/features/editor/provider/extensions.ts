@@ -10,7 +10,7 @@ import { TextStyle, BackgroundColor, Color } from '@tiptap/extension-text-style'
 import { CharacterCount } from '@tiptap/extensions'
 import { MERGE_CLASS } from 'macro-def'
 // ...
-import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension, TableExtension, CodeBlockExtension, PlaylistExtension } from "../extensions"
+import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension, TableExtension, CodeBlockExtension, PlaylistExtension, TasksNode } from "../extensions"
 // ...
 import { pluginEvent } from '~/plugins'
 // ...
@@ -85,7 +85,8 @@ export function getExtensions() {
     ImageExtension,
     PlaylistExtension,
     TableExtension,
-    CodeBlockExtension
+    CodeBlockExtension,
+    TasksNode
   ]
 
   pluginEvent.on$(PluginEvent.REGISTER_EDITOR_NODE, (nodeExtension) => {

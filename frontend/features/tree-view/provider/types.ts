@@ -17,7 +17,10 @@ export type TreeNodeData = {
 /**A generic base type representing the essential metadata required for every node. 
  * Used to include any specific data into the tree.
 */
-export type BaseTreeAdditionalData = {}
+export type BaseTreeAdditionalData = {
+  /**The parent node id */
+  parentId: number
+}
 
 /**The entire tree view data. It combines the structure and the metadata for fast lookups. 
  * @see {@link BaseTreeAdditionalData}
@@ -74,5 +77,7 @@ export type TreeViewUpdateTypeMap<T extends BaseTreeAdditionalData> = IEvent<{
     nodeAdditionalData: T
   ) => any
   /**Fired when a specific node is deleted. */
-  [removeEvt: `${TreeViewUpdateType.REMOVE_NODE}-${number}`]: () => any
+  [removeEvt: `${TreeViewUpdateType.REMOVE_NODE}-${number}`]: (
+    leafNodeId: number
+  ) => any
 }>

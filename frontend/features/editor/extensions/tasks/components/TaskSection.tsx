@@ -1,5 +1,5 @@
 import { For, lazy, Show, type ParentProps } from "solid-js"
-import { BsCaretDownFill, BsCaretRightFill, BsPlus } from "solid-icons/bs"
+import { BsCaretDownFill, BsCaretRightFill, BsPlus, BsTrashFill } from "solid-icons/bs"
 import { MERGE_CLASS } from "macro-def"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -7,13 +7,15 @@ import "./TaskSection.css"
 // ...
 import { Button, Input, Label, Spacer, Tooltip } from "~/components"
 import { createToggableInput, useToggle } from "~/hooks"
-import type { TreeViewComponentProps } from "~/features/tree-view"
-import { EditorTooltip } from "~/features/editor/components"
+import { type TreeViewComponentProps } from "~/features/tree-view"
+import { EditorTooltip, useEditorContext } from "~/features/editor"
 // ...
 import { useTaskDataContext, type TaskSectionData } from "../provider"
+import { CreateTaskSectionButton } from "./stuff"
 
 const style = stylex.create({
   section: {
+    marginBottom: 5
   },
   section__header: {
     display: "flex",
@@ -30,7 +32,15 @@ interface ITaskSectionProps extends TreeViewComponentProps<TaskSectionData> {
 }
 
 export function TaskSection(props: ParentProps<ITaskSectionProps>) {
-  const { update$, currentEditedTask$, setCurrentEditedTask$, create$ } = useTaskDataContext()
+  const { isReadonly$ } = useEditorContext()
+  const { 
+    update$, 
+    currentEditedTask$, 
+    setCurrentEditedTask$, 
+    create$, 
+    deleteSection$ 
+  } = useTaskDataContext()
+
   const { Input$ } = createToggableInput({
     component$: {
       Input$: (props) => (
@@ -55,9 +65,16 @@ export function TaskSection(props: ParentProps<ITaskSectionProps>) {
   const [isCollapsing, toggleCollapsing] = useToggle()
 
   const SECTION_BUTTON_ROW = [
-    { label$: "Create task", icon$: BsPlus, onClick$: () => {
-      setCurrentEditedTask$(props.nodeId$)
-    } }
+    { 
+      label$: "Create task",
+      icon$: BsPlus, 
+      onClick$: () => setCurrentEditedTask$(props.nodeId$)
+    },
+    { 
+      label$: "Delete section", 
+      icon$: BsTrashFill, 
+      onClick$: () => deleteSection$(props.nodeId$)
+    }
   ]
 
   return (
@@ -99,6 +116,9 @@ export function TaskSection(props: ParentProps<ITaskSectionProps>) {
           hideOnSubmit$={false}
           onSubmit$={(value) => create$(TaskType.TASK, props.nodeId$, value)} 
         />
+      </Show>
+      <Show when={!isReadonly$()}>
+        <CreateTaskSectionButton />
       </Show>
     </section>
   )

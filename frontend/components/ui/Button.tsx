@@ -3,7 +3,7 @@ import { createSignal, Show, splitProps } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import __style from "./Button.module.css"
 // ...
-import { defaultValueOrElse, type StylexStylesAttribute } from "../../utils"
+import { type StylexStylesAttribute } from "../../utils"
 import { MERGE_CLASS } from "macro-def"
 import { SpinningCube } from "../loader"
 
@@ -73,6 +73,7 @@ const variantMapping: Record<ButtonVariant, StylexStylesAttribute> = {
   [ButtonVariant.DEFAULT]: stylex.attrs(style.variant_default),
   [ButtonVariant.DANGER]: stylex.attrs(style.variant_danger),
   [ButtonVariant.NO_BACKGROUND]: stylex.attrs(style.variant_noBackground),
+  [ButtonVariant.UNSET]: {}
   // outline: "border border-input hover:bg-accent hover:text-accent-foreground",
   // secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
   // ghost: "hover:bg-accent hover:text-accent-foreground",
@@ -121,8 +122,8 @@ export function Button(props: IButtonProps) {
         others.class,
         __style.button,
         stylex.attrs(style.base),
-        defaultValueOrElse(variantMapping, local.variant$, ButtonVariant.DEFAULT),
-        defaultValueOrElse(sizeMapping, local.size$, ButtonSize.DEFAULT),
+        variantMapping[local.variant$ ?? ButtonVariant.DEFAULT].class,
+        sizeMapping[local.size$ ?? ButtonSize.DEFAULT].class,
       )}
     >
       <Show when={isLoading()} fallback={props.children}>

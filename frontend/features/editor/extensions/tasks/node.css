@@ -1,7 +1,0 @@
-.taskParent > .taskParent__addButton {
-  display: none !important;
-}
-
-.taskParent:hover > .taskParent__addButton {
-  display: flex !important;
-}

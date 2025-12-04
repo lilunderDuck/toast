@@ -3,10 +3,10 @@ import { For, Show } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import "./Menu.css"
 // ...
-import { getBlocksFloatingMenuOptions, useEditorContext } from "~/features/editor/provider"
+import { getBlocksFloatingMenuOptions } from "~/features/editor/provider"
+import { Label } from "~/components"
 // ...
 import { MenuItem } from "./MenuItem"
-import { Label } from "~/components"
 
 const style = stylex.create({
   menu: {
@@ -36,11 +36,9 @@ interface IFloatingMenProps {
 }
 
 export function FloatingMenu(props: IFloatingMenProps) {
-  const { editor$ } = useEditorContext()
-
   return (
     <div {...stylex.attrs(style.menu)} ref={props.ref}>
-      <For each={getBlocksFloatingMenuOptions(editor$)}>
+      <For each={getBlocksFloatingMenuOptions()}>
         {(it, index) => {
           switch (it.type$) {
             case FloatingMenuType.ITEM: return <MenuItem {...it} />
