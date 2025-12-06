@@ -42,7 +42,6 @@ export function getExtensions() {
       blockquote: {
         HTMLAttributes: stylex.attrs(style.ext__blockquote)
       },
-      code: false
     }),
     Subscript,
     Superscript,

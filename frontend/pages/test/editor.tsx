@@ -1,6 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import { MERGE_CLASS } from "macro-def"
-import { createSignal } from "solid-js"
+import { createSignal, onMount } from "solid-js"
+import __style from "~/styles/scrollbar.module.css"
 import { Button, Label, Tooltip } from "~/components"
 import { Editor, EditorProvider, useEditorContext } from "~/features/editor"
 import { highlightCodeBlock } from "~/features/editor/common/code"
@@ -49,9 +50,18 @@ export default function EditorTestPage() {
 }
 
 function EditorStatePanel() {
-  const { isReadonly$, setIsReadonly$, event$ } = useEditorContext()
+  const { isReadonly$, setIsReadonly$, event$, open$ } = useEditorContext()
   let preRef!: Ref<"pre">
   const [data, setData] = createSignal('')
+
+  onMount(async() => {
+    const response = await fetch("/editor_test.json", {
+      method: "GET",
+    })
+
+    console.assert(response.ok, "Failed to fetch /editor_test.json, file not found on ./src/public folder")
+    open$(await response.json())
+  })
 
   event$.on$(EditorEvent.ON_UPDATE, (data) => {
     setData(JSON.stringify(data))
@@ -59,7 +69,7 @@ function EditorStatePanel() {
   })
 
   return (
-    <section>
+    <section class={`${__style.scrollbar} ${__style.scrollbarVertical}`} style="max-height:100%">
       <Label>
         JSON content
       </Label>

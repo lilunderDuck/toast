@@ -68,6 +68,11 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
 
   const localStorageWrapper = createStorage(localStorage, `editor_${props.id$}`)
   const event: EditorEvent = createEvent()
+  // Local state to check which one is currently opened
+  let currentlyOpenedId = ''
+  // Another state to prevent the editor from saving after loaded.
+  let isOpening = false
+
   const editor = useEditor(({
     // @ts-ignore
     extensions: getExtensions(),
@@ -75,12 +80,14 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
       setIsAutoSaving(true)
       setWordCount(editor().storage.characterCount.words())
       setCharCount(editor().storage.characterCount.characters())
-      delayUpdate()
+      if (!isOpening) {
+        delayUpdate()
+      }
+
       event.emit$(EditorEvent.UPDATE_BONGO_CAT_ANIMATION)
     },
   }))
 
-  let currentlyOpenedId = ''
   const getCurrentData = () => ({
     content: editor().getJSON(),
     id: currentlyOpenedId
@@ -92,12 +99,12 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
   }, 1000)
 
   onMount(() => {
-    setIsReadonly(localStorageWrapper.get$('delete') ?? false)
+    setIsReadonly(localStorageWrapper.get$('readonly') ?? false)
   })
 
   const openDocument: IEditorContext["open$"] = (data) => {
     if (currentlyOpenedId === data.id) {
-      return console.log("already opened")
+      return console.log("[editor] already opened")
     }
 
     if (currentlyOpenedId !== '') {
@@ -106,9 +113,11 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
 
     console.log("incoming json data", data)
     currentlyOpenedId = data.id
+    isOpening = true
     editor().commands.setContent(data.content, true, undefined, {
       errorOnInvalidContent: true
     })
+    isOpening = false
   }
 
   return (

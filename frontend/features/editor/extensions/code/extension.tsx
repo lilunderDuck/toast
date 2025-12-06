@@ -17,7 +17,7 @@ declare module '@tiptap/core' {
 export const CodeBlockExtension = createEditorNode<
   CodeAttribute, EditorNodeType.BLOCK
 >(EditorNodeType.BLOCK, {
-  name$: 'code',
+  name$: 'codeBlock',
   attributes$: () => ({
     codeContent: {
       default: ""
