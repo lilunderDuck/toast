@@ -4,8 +4,8 @@
 package db
 
 import (
-	"fmt"
 	"sync"
+	"toast/backend/debug"
 
 	"github.com/syndtr/goleveldb/leveldb"
 )
@@ -22,7 +22,9 @@ type Instance struct {
 // Closes the underlying leveldb database. It should be called when
 // the database is no longer needed to release resources.
 func (db *Instance) Close() error {
-	println("db closed")
+	if debug.DEBUG_MODE {
+		debug.Log("Database closed")
+	}
 	return db.internal.Close()
 }
 
@@ -42,18 +44,23 @@ var (
 //
 // If the database for the given path is already open, it returns the existing instance.
 func Open(path string) (*Instance, error) {
-	fmt.Println("Opening: ", path)
-	lock.Lock()
-	defer lock.Unlock()
+	// lock.Lock()
+	// defer lock.Unlock()
 
-	if instance, ok := globalInstance[path]; ok {
-		fmt.Println("Exiting instance found")
+	if debug.DEBUG_MODE {
+		debug.Log("Opening:", "path", path)
+	}
+
+	if instance := GetInstance(path); instance != nil {
 		return instance, nil
 	}
 
 	db, err := leveldb.OpenFile(path, nil)
 	if err != nil {
-		println(err)
+		if debug.DEBUG_MODE {
+			debug.Err(err, path)
+		}
+
 		return nil, err
 	}
 
@@ -67,21 +74,27 @@ func Open(path string) (*Instance, error) {
 // Closes the leveldb instance at the specified path and removes it
 // from the global map.
 func Close(path string) {
-	lock.Lock()
-	defer lock.Unlock()
+	// lock.Lock()
+	// defer lock.Unlock()
 
 	globalInstance[path].Close()
 	delete(globalInstance, path)
+	if debug.DEBUG_MODE {
+		debug.Log("Database closed.", path)
+	}
 }
 
 // Closes all opened leveldb instances and clears the global singleton map.
 func CloseAll() {
-	lock.Lock()
-	defer lock.Unlock()
+	// lock.Lock()
+	// defer lock.Unlock()
 
-	for dbPath, db := range globalInstance {
-		db.Close()
-		delete(globalInstance, dbPath)
+	for path, instance := range globalInstance {
+		instance.Close()
+		delete(globalInstance, path)
+		if debug.DEBUG_MODE {
+			debug.Log("Database closed.", path)
+		}
 	}
 }
 
@@ -92,17 +105,22 @@ func CloseAll() {
 // Note: while this function attempts to handle a missing instance,
 // it is better to call [Open()] explicitly to handle errors.
 func GetInstance(path string) *Instance {
-	lock.Lock()
-	defer lock.Unlock()
+	// lock.Lock()
+	// defer lock.Unlock()
 
 	instance, ok := globalInstance[path]
 	if !ok {
-		fmt.Println("No instance found: ", path, ". Try opening it.")
-		newInstance, _ := Open(path)
-		instance = newInstance
+		if debug.DEBUG_MODE {
+			debug.Log("No instance found", "path", path)
+		}
+
+		return nil
 	}
 
-	fmt.Println("Existing instance found:", path)
+	if debug.DEBUG_MODE {
+		debug.Log("Existing instance found", "path", path)
+	}
+
 	return instance
 }
 
@@ -112,7 +130,9 @@ func GetInstance(path string) *Instance {
 func OpenThenClose(location string, batch leveldbBatchFn) error {
 	db, err := Open(location)
 	if err != nil {
-		fmt.Println(err)
+		if debug.DEBUG_MODE {
+			debug.Err(err)
+		}
 		return err
 	}
 

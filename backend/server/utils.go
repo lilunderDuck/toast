@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"path/filepath"
+	"toast/backend/debug"
 	"toast/backend/utils"
 )
 
@@ -58,7 +59,10 @@ func serveStaticWithFilter(
 // It also sets Access-Control-Allow-Origin to response to bypass CORS related stuff,
 // because CORS is a pain in the hell.
 func serveFile(res http.ResponseWriter, req *http.Request, filePath string) {
-	println("Serving file:", filePath)
+	if debug.DEBUG_MODE {
+		debug.Logf("Serving file: %s", filePath)
+	}
+
 	res.Header().Set("Access-Control-Allow-Origin", "*")
 	http.ServeFile(res, req, filePath)
 }

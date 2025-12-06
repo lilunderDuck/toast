@@ -1,9 +1,13 @@
 package utils
 
-func GetValueOrDefaultInMap[T comparable, U any](mapping map[T]U, key T, defaultValue U) U {
+import (
+	"toast/backend/debug"
+)
+
+func GetValueOrDefaultInMap[T comparable, U any](mapping map[T]U, key T) U {
 	value, ok := mapping[key]
-	if !ok {
-		value = defaultValue
+	if !ok && debug.DEBUG_MODE {
+		debug.Warnf("Invalid key for map %#v: %#v", mapping, key)
 	}
 
 	return value

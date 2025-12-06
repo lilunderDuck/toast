@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"toast/backend/debug"
 )
 
 // Takes a file path and rename the file's basename.
@@ -41,7 +42,10 @@ func GetCurrentDir() (currentPath string) {
 // Makes a new folder at the given path. It will create all
 // intermediate directories in the path if they do not already exist.
 func CreateDirectory(path string) (makeDirError error) {
-	println("Create directory:", path)
+	if debug.DEBUG_MODE {
+		debug.Logf("Create directory: %s", path)
+	}
+
 	return os.MkdirAll(path, 0666)
 }
 
@@ -65,15 +69,21 @@ func IsDirectoryExist(path string) (existOrNot bool) {
 	if err == nil {
 		return info.IsDir()
 	}
+
 	if os.IsNotExist(err) {
 		return false
 	}
+
 	return false
 }
 
 // Writes the given data to a file at the specified path.
 // It creates the file if it does not exist and overwrite it if it does.
 func WriteFile(pathToFile string, stuff []byte) (writeError error) {
+	if debug.DEBUG_MODE {
+		debug.Logf("Write file: %s", pathToFile)
+	}
+
 	return os.WriteFile(pathToFile, stuff, os.ModePerm)
 }
 

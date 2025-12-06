@@ -1,9 +1,9 @@
 package editor
 
 import (
-	"fmt"
 	"os"
 	"strings"
+	"toast/backend/debug"
 	"toast/backend/internals"
 	"toast/backend/utils"
 
@@ -50,7 +50,9 @@ func DetermineFileType(filePath string) (uint8, error) {
 			return FILE_TYPE__TEXT, nil
 		default:
 			// incase I need to handle other cases that I miss
-			fmt.Printf("Unknown subtype \"%s\", using default file type: %d\n", mimeTypeStr[1], FILE_TYPE__DEFAULT)
+			if debug.DEBUG_MODE {
+				debug.Errf("Unknown subtype \"%s\", using default file type: %d\n", mimeTypeStr[1], FILE_TYPE__DEFAULT)
+			}
 			return FILE_TYPE__DEFAULT, nil
 		}
 		// <- default: get file type from a mapping instead
@@ -58,7 +60,9 @@ func DetermineFileType(filePath string) (uint8, error) {
 
 	fileType, ok := mimeTypeMapping[mimeTypeStr[0]]
 	if !ok {
-		fmt.Printf("Type %s does not exist in the mapping\n", mimeTypeStr[0])
+		if debug.DEBUG_MODE {
+			debug.Errf("Type %s does not exist in the mapping\n", mimeTypeStr[0])
+		}
 		fileType = FILE_TYPE__DEFAULT
 	}
 
