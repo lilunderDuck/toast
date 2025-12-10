@@ -2,21 +2,21 @@ import { createContext, createSignal, onMount, type ParentProps, useContext } fr
 // ...
 import { createTabs, type StateSlice, type TabsHandler } from "~/hooks"
 import { createEvent, type IEvent } from "~/utils"
-import type { table } from "~/wailsjs/go/models"
-import { CreateTable, CreateTableGrid, GetTable, UpdateTable, UpdateTableGrid } from "~/wailsjs/go/table/Exports"
-// ...
-import type { TableAttribute } from "./data"
+import type { editor } from "~/wailsjs/go/models"
+import { CreateTable, CreateTableGrid, GetTable, UpdateTable, UpdateTableGrid } from "~/wailsjs/go/editor/Exports"
 import { useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 import { createOrGetData } from "~/features/editor/utils"
+// ...
+import type { TableAttribute } from "./data"
 
 type TableDataEventMap = IEvent<{
-  [TableDataEvent.UPDATE]: (tableTabId: string, data: table.TableGridData) => any
+  [TableDataEvent.UPDATE]: (tableTabId: string, data: editor.TableGridData) => any
 }>
 
 interface ITablesDataContext {
   event$: TableDataEventMap
   title$: StateSlice<string>
-  tabs$: TabsHandler<table.TableTabData>
+  tabs$: TabsHandler<editor.TableTabData>
 }
 
 const Context = createContext<ITablesDataContext>()
@@ -26,10 +26,10 @@ interface ITablesDataProviderProps {
 }
 
 export function TablesDataProvider(props: ParentProps<ITablesDataProviderProps>) {
-  const { attrs$, updateAttribute$ } = useSolidNodeView<TableAttribute>()
+  const { attrs$ } = useSolidNodeView<TableAttribute>()
 
   const event: TableDataEventMap = createEvent()
-  const tabs = createTabs<table.TableTabData>([])
+  const tabs = createTabs<editor.TableTabData>([])
   const tableId = () => attrs$().id
   
   const [title, setTitle] = createSignal('')
@@ -45,13 +45,13 @@ export function TablesDataProvider(props: ParentProps<ITablesDataProviderProps>)
   tabs.on$(TabEvent.UPDATE, (tabsData) => {
     UpdateTable(tableId(), {
       tabs: tabsData
-    } as table.TableUpdateOption)
+    } as editor.TableUpdateOption)
   })
 
   onMount(async() => {
     console.log(attrs$())
-    const data = await createOrGetData<table.TableMetadata>(
-      tableId() === '',
+    const data = await createOrGetData<editor.TableMetadata>(
+      tableId() === TABLE_DEFAULT_ID,
       CreateTable,
       () => GetTable(tableId())
     )
@@ -70,7 +70,7 @@ export function TablesDataProvider(props: ParentProps<ITablesDataProviderProps>)
           const newValue = setTitle(value)
           UpdateTable(tableId(), { 
             title: newValue as string
-          } as table.TableUpdateOption)
+          } as editor.TableUpdateOption)
           return newValue
         } 
       },

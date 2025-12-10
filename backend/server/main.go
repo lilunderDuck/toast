@@ -4,6 +4,7 @@ package server
 
 import (
 	"net/http"
+	"toast/backend/debug"
 )
 
 // Start the local journal assets server.
@@ -16,13 +17,18 @@ func StartServer() {
 
 	createAssetsRoute(server)
 	// createApiRoute(server)
-	server.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		println("Handle request:", r.URL.Path)
-	})
+	if debug.DEBUG_MODE {
+		server.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			debug.Log("Handle request:", "path", r.URL.Path)
+		})
 
-	println("One server comin' right up")
+		debug.Log("One server comin' right up")
+	}
+
 	err := http.ListenAndServe(":8000", server)
-	if err != nil {
-		println(err)
+	if debug.DEBUG_MODE {
+		if err != nil {
+			println(err) // don't make it crash on dev mode
+		}
 	}
 }

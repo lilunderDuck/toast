@@ -4,6 +4,7 @@
 package db
 
 import (
+	"path/filepath"
 	"sync"
 	"toast/backend/debug"
 
@@ -17,6 +18,7 @@ type leveldbBatchFn func(db *Instance)
 // A wrapper struct that holds the internal leveldb database instance.
 type Instance struct {
 	internal *leveldb.DB
+	name     string
 }
 
 // Closes the underlying leveldb database. It should be called when
@@ -64,7 +66,7 @@ func Open(path string) (*Instance, error) {
 		return nil, err
 	}
 
-	Instance := &Instance{internal: db}
+	Instance := &Instance{internal: db, name: filepath.Base(path)}
 
 	globalInstance[path] = Instance
 

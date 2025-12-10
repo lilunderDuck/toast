@@ -1,4 +1,4 @@
-package table
+package editor
 
 import (
 	"os"
@@ -6,10 +6,7 @@ import (
 	"toast/backend/utils"
 )
 
-// Reuse this function
 var tablePaths = internals.NewTablePathsManager()
-
-type Exports struct{}
 
 func (*Exports) CreateTable() (*TableMetadata, error) {
 	data := newTableMetadata()

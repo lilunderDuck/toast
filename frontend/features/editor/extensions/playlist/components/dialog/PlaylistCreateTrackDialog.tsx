@@ -2,7 +2,7 @@ import { Show } from "solid-js"
 // ...
 import { Button, createIconInput, DialogContent, DialogHeader, FieldInput, Label, Tooltip } from "~/components"
 import { createSubmitForm, createFileUpload, SUPPORTED_AUDIO_FILTER, type ILazyDialog } from "~/hooks"
-import { GetAudioData } from "~/wailsjs/go/playlist/Exports"
+import { GetAudioData } from "~/wailsjs/go/editor/Exports"
 import { previewUrl } from "~/api"
 import { toast } from "~/libs/solid-toast"
 // ...

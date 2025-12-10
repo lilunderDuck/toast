@@ -1,4 +1,4 @@
-package table
+package editor
 
 import "toast/backend/utils"
 

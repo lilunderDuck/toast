@@ -3,22 +3,15 @@ import { createEffect, createSignal } from "solid-js"
 import { playlistTrackUrl } from "~/api"
 import { type MediaPlayer } from "~/hooks"
 import { arrayObjects } from "~/utils"
-import type { playlist } from "~/wailsjs/go/models"
-
-/**The state of the currently focused or playing track. */
-export type FocusedTrackData = {
-  trackId$: string
-  isPlaying$: boolean
-  index$: number
-  name$: string
-}
+import type { editor } from "~/wailsjs/go/models"
+// ...
+import type { FocusedTrackData, PlaylistItemId } from "./types"
 
 export function createTrackPlayerManager(
   player: MediaPlayer,
-  data: () => playlist.PlaylistMetadata
+  data: () => editor.PlaylistMetadata
 ) {
   const [focusedTrack, setFocusedTrack] = createSignal<FocusedTrackData | null>(null)
-
   const trackItems = () => data().items
 
   createEffect(() => {
@@ -26,19 +19,20 @@ export function createTrackPlayerManager(
     if (currentState === MediaState.COMPLETED) {
       const lastTrack = focusedTrack()
       const [, lastTrackIndex] = arrayObjects(trackItems()).find$(it => it.id === lastTrack?.trackId$)
+      console.assert(lastTrackIndex !== -1, `Track ${lastTrack?.trackId$} not found`)
 
-      console.assert(lastTrackIndex !== -1, `[impossible to reach] Track ${lastTrack?.trackId$} not found`)
-      if (!trackItems()[lastTrackIndex + 1]) {
+      const nextTrack = trackItems()[lastTrackIndex + 1]
+      if (!nextTrack) {
         setFocusedTrack(null)
       }
     }
   })
 
-  const isCurrentTrackPlaying = (trackId: string) => {
+  const isCurrentTrackPlaying = (trackId: PlaylistItemId) => {
     return focusedTrack()?.trackId$ === trackId && focusedTrack()?.isPlaying$
   }
 
-  const playTrack = (trackId: string) => {
+  const playTrack = (trackId: PlaylistItemId) => {
     console.log("About to play track id:", trackId)
     if (isCurrentTrackPlaying(trackId)) {
       console.log("Track already been played:", trackId)
@@ -46,7 +40,7 @@ export function createTrackPlayerManager(
     }
 
     const [, trackIndex] = arrayObjects(trackItems()).find$(it => it.id === trackId)
-    console.assert(trackIndex !== -1, `[impossible to reach] Track ${trackId} not found`)
+    console.assert(trackIndex !== -1, `Track ${trackId} not found`)
 
     const currentTrackData = trackItems()[trackIndex]
     if (focusedTrack()?.trackId$ !== trackId) {
@@ -65,22 +59,23 @@ export function createTrackPlayerManager(
     console.log("Playing track id:", trackId)
   }
 
-  const pauseTrack = (trackId: string) => {
-    if (trackId !== focusedTrack()?.trackId$) return 
+  const pauseTrack = (trackId: PlaylistItemId) => {
+    if (trackId !== focusedTrack()?.trackId$) {
+      return console.log("Track", trackId, "is already paused.")
+    }
     player.pause$()
     setFocusedTrack(prev => ({ ...prev, isPlaying$: false }) as FocusedTrackData)
 
     console.log("Paused track id:", trackId)
   }
 
-  const togglePlayTrack = (trackId: string) => {
+  const togglePlayTrack = (trackId: PlaylistItemId) => {
     if (focusedTrack()?.trackId$ === trackId) {
       focusedTrack()!.isPlaying$ ? pauseTrack(trackId) : playTrack(trackId)
     } else {
       playTrack(trackId)
     }
   }
-
 
   return {
     focusedTrack$: focusedTrack,

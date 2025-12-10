@@ -26,11 +26,11 @@ func (EmbedableMediaPathMapping) Get(what string) *EmbedableMediaPath {
 
 var Media = EmbedableMediaPathMapping{
 	"gallery": EmbedableMediaPath{
-		MetaFile: `%s/g-%s.dat`,
+		MetaFile: `%s/gallery/%s.dat`,
 		Path:     `%s/gallery/%s`,
 	},
 	"playlist": EmbedableMediaPath{
-		MetaFile: `%s/p-%s.dat`,
+		MetaFile: `%s/playlist/%s.dat`,
 		Path:     `%s/playlist/%s`,
 	},
 }

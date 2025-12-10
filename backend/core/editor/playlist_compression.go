@@ -1,4 +1,4 @@
-package playlist
+package editor
 
 import (
 	"time"
@@ -8,9 +8,9 @@ import (
 )
 
 type bin_PlaylistItemData struct {
-	Data     []uint16 `cbor:"0,keyasint"`
-	Id       string   `cbor:"1,keyasint"`
-	Duration int      `cbor:"2,keyasint"`
+	Data     []uint16   `cbor:"0,keyasint"`
+	Id       PlaylistId `cbor:"1,keyasint"`
+	Duration int        `cbor:"2,keyasint"`
 }
 
 type bin_PlaylistMetadata struct {

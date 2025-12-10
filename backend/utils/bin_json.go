@@ -30,6 +30,10 @@ func BSON_WriteFile(path string, anyObject any) (someError error) {
 	}
 
 	if err != nil {
+		if debug.DEBUG_MODE {
+			debug.Err(err)
+		}
+
 		return err
 	}
 
@@ -48,6 +52,10 @@ func BSON_WriteFile(path string, anyObject any) (someError error) {
 func base_BSON_ReadFile(path string) (dataOut []byte, someError error) {
 	dataFromDisk, err := os.ReadFile(path)
 	if err != nil {
+		if debug.DEBUG_MODE {
+			debug.Err(err)
+		}
+
 		return nil, err
 	}
 
@@ -61,6 +69,10 @@ func BSON_ReadFile[T any](path string) (*T, error) {
 
 	data, err := base_BSON_ReadFile(path)
 	if err != nil {
+		if debug.DEBUG_MODE {
+			debug.Err(err)
+		}
+
 		return nil, err
 	}
 	return BSON_Unmarshal[T](data)
@@ -69,5 +81,11 @@ func BSON_ReadFile[T any](path string) (*T, error) {
 func BSON_Unmarshal[T any](in []byte) (*T, error) {
 	var out T
 	err := cbor.Unmarshal(in, &out)
+	if debug.DEBUG_MODE {
+		if err != nil {
+			debug.Err(err)
+		}
+	}
+
 	return &out, err
 }

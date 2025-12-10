@@ -3,7 +3,6 @@ import { type Command } from '@tiptap/core'
 import { createEditorNode, insertNodeAtCurrentPosition } from '../../utils'
 import PlaylistNode from './node'
 import { PlaylistProvider } from './provider'
-// import { LocalEmbedProvider } from './provider'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -14,7 +13,7 @@ declare module '@tiptap/core' {
 }
 
 export type PlaylistAttribute = {
-  id: number
+  id: string
 }
 
 export const PlaylistExtension = createEditorNode<
@@ -25,13 +24,13 @@ export const PlaylistExtension = createEditorNode<
   commands$() {
     return {
       insertPlaylist$: () => ({ tr }) => {
-        return insertNodeAtCurrentPosition<PlaylistAttribute>(this, tr, { id: -1 })
+        return insertNodeAtCurrentPosition<PlaylistAttribute>(this, tr, { id: PLAYLIST_DEFAULT_ID })
       },
     }
   },
   attributes$: () => ({
     id: {
-      default: null
+      default: PLAYLIST_DEFAULT_ID
     }
   }),
   

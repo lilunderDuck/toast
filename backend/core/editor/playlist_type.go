@@ -1,4 +1,4 @@
-package playlist
+package editor
 
 import (
 	"path/filepath"
@@ -6,6 +6,8 @@ import (
 	"time"
 	"toast/backend/utils"
 )
+
+type PlaylistId uint64
 
 type PlaylistOptions struct {
 	Title       string             `json:"title,omitempty"`
@@ -28,7 +30,7 @@ func newPlaylistMetadata(options *PlaylistOptions) *PlaylistMetadata {
 	return &PlaylistMetadata{
 		Title:       options.Title,
 		Description: options.Description,
-		Id:          utils.GetRandomStringWithinLength(8),
+		Id:          utils.GetRandomStringWithinLength(6),
 		Created:     utils.GetCurrentDateNow(),
 	}
 }
@@ -59,8 +61,8 @@ type PlaylistItemData struct {
 	// Description of the track
 	Description string `json:"description,omitempty"`
 	// Unique identifier of this playlist item
-	Id       string `json:"id"`
-	Duration int    `json:"duration"`
+	Id       PlaylistId `json:"id"`
+	Duration int        `json:"duration"`
 }
 
 func NewPlaylistItemData(audioDuration int, options *PlaylistItemOptions) *PlaylistItemData {
@@ -83,7 +85,7 @@ func NewPlaylistItemData(audioDuration int, options *PlaylistItemOptions) *Playl
 		Description: options.Description,
 		FileName:    audioFileName,
 		Icon:        iconFileName,
-		Id:          utils.GetRandomStringWithinLength(8),
+		Id:          PlaylistId(utils.GetRandomIntWithinLength(8)),
 		Duration:    audioDuration,
 	}
 }

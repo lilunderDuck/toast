@@ -1,40 +1,41 @@
 import { createEffect, createSignal, type Accessor, type Setter } from "solid-js"
-import type { playlist as Playlist } from "~/wailsjs/go/models"
-import { CreatePlaylistItem, UpdatePlaylist } from "~/wailsjs/go/playlist/Exports"
+import type { editor } from "~/wailsjs/go/models"
+import { CreatePlaylistItem, UpdatePlaylist } from "~/wailsjs/go/editor/Exports"
 import { arrayObjects } from "~/utils"
+import type { PlaylistItemId } from "./types"
 
 /**Managing tracks within a playlist. */
 export interface IPlaylistTrackItem {
   /**The list of track items in the playlist. */
-  items$: Accessor<Playlist.PlaylistItemData[]>
+  items$: Accessor<editor.PlaylistItemData[]>
   /**The setter function for updating the track items. */
-  setItems$: Setter<Playlist.PlaylistItemData[]>
+  setItems$: Setter<editor.PlaylistItemData[]>
   /**Adds a new track to the playlist.
    * @param options The options for creating the new playlist item.
    */
-  add$(options: Playlist.PlaylistItemOptions): Promise<void>
+  add$(options: editor.PlaylistItemOptions): Promise<void>
   /**Updates an existing track in the playlist.
    * @param trackId The ID of the track to update.
    * @param options The new data for the playlist item.
    */
-  update$(trackId: number, options: Playlist.PlaylistItemOptions): Promise<void>
+  update$(trackId: PlaylistItemId, options: editor.PlaylistItemOptions): Promise<void>
   /**Deletes a track from the playlist.
    * @param trackId The ID of the track to delete.
    */
-  delete$(trackId: number): Promise<void>
+  delete$(trackId: PlaylistItemId): Promise<void>
 }
 
-export function createTrackItemsManager(playlistId: () => number): IPlaylistTrackItem {
+export function createTrackItemsManager(playlistId: () => string): IPlaylistTrackItem {
   // It's quite a headache because we have 2 state, one for the playlist metadata
   // and another for storing track items. This is because I want to add drag and drop as well.
   // 
   // And solid's createStore() is hell-ta confusing.
-  const [trackItems, setTrackItems] = createSignal<Playlist.PlaylistItemData[]>([])
+  const [trackItems, setTrackItems] = createSignal<editor.PlaylistItemData[]>([])
   
   createEffect(() => console.log(trackItems()))
 
   const saveTrackItem = () => {
-    return UpdatePlaylist(playlistId(), { items: trackItems() } as Playlist.PlaylistOptions)
+    return UpdatePlaylist(playlistId(), { items: trackItems() } as editor.PlaylistOptions)
   }
 
   const addTrack: IPlaylistTrackItem["add$"] = async (options) => {

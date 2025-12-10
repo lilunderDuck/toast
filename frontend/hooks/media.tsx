@@ -46,15 +46,20 @@ export function createMediaPlayer(type: "audio" | "video") {
     }
   }
 
+  isDevMode && createEffect(() => {
+    console.log("[media player] changing media state to:", mediaState())
+  })
+
   const pause = () => {
     mediaRef.pause()
     setMediaState(MediaState.PAUSED)
+    console.log("[media player] Paused", mediaRef.src)
   }
 
   const changeSource = (src: string) => {
     mediaRef.src = src
     mediaRef.load()
-    console.log("New audio loaded:", src)
+    console.log("[media player] New audio loaded:", src)
   }
 
   const play = () => {
@@ -68,18 +73,20 @@ export function createMediaPlayer(type: "audio" | "video") {
         clearInterval(intervalId)
       } catch { }
     }, 10)
+    console.log("[media player] Playing", mediaRef.src)
   }
 
   const changeVolume = (volume: number) => {
     console.assert(volume >= 0, "Media volume must not be negative.")
     console.assert(volume <= 100, "Media volume must over 100%.")
     mediaRef.volume = volume
+    console.log("[media player] Media volume changed to:", volume)
   }
 
   const changeCurrentTime = (time: number) => {
     setCurrentProgress(time)
     mediaRef.currentTime = time
-    console.log("Media changed to", time, "seconds")
+    console.log("[media player] Media changed to", time, "seconds")
   }
 
   return {

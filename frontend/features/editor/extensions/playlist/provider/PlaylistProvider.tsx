@@ -1,25 +1,25 @@
 import { createContext, onMount, type ParentProps, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 // ...
+import { CreatePlaylist, UpdatePlaylist, GetPlaylist } from "~/wailsjs/go/editor/Exports"
+import type { editor } from "~/wailsjs/go/models"
 import { createOrGetData } from "~/features/editor/utils"
-import { CreatePlaylist, UpdatePlaylist, GetPlaylist } from "~/wailsjs/go/playlist/Exports"
-import type { playlist } from "~/wailsjs/go/models"
+import { createMediaPlayer } from "~/hooks"
+import { useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 // ...
 import type { PlaylistAttribute } from "../extension"
 import { createTrackItemsManager, type IPlaylistTrackItem } from "./items"
 import { createTrackPlayerManager } from "./track"
-import { createMediaPlayer } from "~/hooks"
-import { useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 
 export interface IPlaylistContext {
   /**The playlist's metadata. */
-  attrs$: () => playlist.PlaylistMetadata | undefined
+  attrs$: () => editor.PlaylistMetadata | undefined
   /**Edits an existing playlist's metadata.
    * @param options The new metadata for the playlist.
    */
-  editPlaylist$(options: playlist.PlaylistOptions): Promise<void>
+  editPlaylist$(options: editor.PlaylistOptions): Promise<void>
   /**Gets the playlist's ID. */
-  playlistId$(): number
+  playlistId$(): string
   /**Managing tracks within the playlist. */
   items$: IPlaylistTrackItem
   track$: ReturnType<typeof createTrackPlayerManager>
@@ -28,27 +28,27 @@ export interface IPlaylistContext {
 const Context = createContext<IPlaylistContext>()
 
 export function PlaylistProvider(props: ParentProps) {
-  const [data, setData] = createStore() as SolidStore<playlist.PlaylistMetadata | undefined>
+  const [data, setData] = createStore() as SolidStore<editor.PlaylistMetadata | undefined>
 
   const { attrs$ } = useSolidNodeView<PlaylistAttribute>()
   const playlistId = () => attrs$().id
 
   const editPlaylist: IPlaylistContext["editPlaylist$"] = async (options) => {
     const updatedData = await UpdatePlaylist(playlistId(), options)
-    setData(updatedData as unknown as playlist.PlaylistMetadata)
+    setData(updatedData as unknown as editor.PlaylistMetadata)
   }
 
   const trackItems = createTrackItemsManager(playlistId)
-  let playlistData: playlist.PlaylistMetadata
+  let playlistData: editor.PlaylistMetadata
 
   // Initializes the playlist data on component mount, creating a new one if necessary.
   onMount(async () => {
-    const data = await createOrGetData<playlist.PlaylistMetadata>(
-      playlistId() === -1,
+    const data = await createOrGetData<editor.PlaylistMetadata>(
+      playlistId() === PLAYLIST_DEFAULT_ID,
       () => CreatePlaylist({
         title: "Unnamed playlist",
         description: ""
-      } as playlist.PlaylistOptions),
+      } as editor.PlaylistOptions),
       () => GetPlaylist(playlistId())
     )
 

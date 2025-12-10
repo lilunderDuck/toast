@@ -1,8 +1,7 @@
-package playlist
+package editor
 
 import (
-	"toast/backend/features/audio"
-	"toast/backend/features/editor"
+	"toast/backend/core/audio"
 	"toast/backend/internals"
 	"toast/backend/utils"
 )
@@ -10,16 +9,14 @@ import (
 var writePlaylist,
 	readPlaylist,
 	uploadToPlaylist,
-	deletePlaylist = editor.CreateEmbedableMediaCollection[PlaylistMetadata](internals.Media.Get("playlist"))
+	deletePlaylist = CreateEmbedableMediaCollection[PlaylistMetadata](internals.Media.Get("playlist"))
 
 //
-
-type Exports struct{}
 
 func (*Exports) CreatePlaylist(options PlaylistOptions) (*PlaylistMetadata, error) {
 	data := newPlaylistMetadata(&options)
 
-	if err := writePlaylist(data.Id, data); err != nil {
+	if err := utils.BSON_WriteFile(tablePaths.MetaFile(data.Id), data); err != nil {
 		return nil, err
 	}
 

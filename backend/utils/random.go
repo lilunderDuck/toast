@@ -3,6 +3,7 @@ package utils
 import (
 	"math/rand"
 	"strconv"
+	"toast/backend/debug"
 
 	gonanoid "github.com/matoous/go-nanoid/v2"
 )
@@ -15,8 +16,11 @@ func GetRandomStringWithinLength(length int) string {
 // Generates a random int within the specified length.
 func GetRandomIntWithinLength(length int) int {
 	result, err := strconv.Atoi(gonanoid.MustGenerate("123456789", length))
-	if err != nil {
-		panic(err) // make sure to yell whenever weird shit happens
+	if debug.DEBUG_MODE {
+		if err != nil {
+			debug.Err(err)
+			panic(err) // make sure to yell whenever weird shit happens
+		}
 	}
 	return result
 }

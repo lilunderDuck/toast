@@ -2,16 +2,12 @@ package notes
 
 var Services map[string]*Service
 
-func GetService(groupId string) (*Service, error) {
+func GetService(groupId string) *Service {
 	service, ok := Services[groupId]
 	if !ok {
-		newService, err := NewService(groupId)
-		if err != nil {
-			return nil, err
-		}
-
+		newService := NewService(groupId)
 		service = newService
 	}
 
-	return service, nil
+	return service
 }

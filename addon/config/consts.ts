@@ -71,6 +71,7 @@ function define(name: string, ...stuff: any[]) {
     data.valueType = value
   }
 
+  // @ts-ignore - should work fine
   DEFINED_CONST_MAPPING.push(data)
 }
 
@@ -226,6 +227,8 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'SPLIT_VIEW',
   ])
 
+  define('GALLERY_DEFAULT_ID', '')
+
   define('CurrentlyOpenedHeaderAction', [
     'TOGGLE_SIDEBAR',
     'GO_BACK_TO_HOME',
@@ -265,6 +268,8 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'PREVIOUS_TRACK',
     'TOGGLE_PLAY_TRACK',
   ])
+
+  define('PLAYLIST_DEFAULT_ID', '')
 
   define('EditorNodeType', [
     'INLINE',
@@ -315,6 +320,8 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'TABLE',
     'KANBAN'
   ]) // do not reorder
+
+  define('TABLE_DEFAULT_ID', '')
 
   define('FloatingMenuType', [
     'SEPERATOR',

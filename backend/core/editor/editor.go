@@ -18,25 +18,12 @@ type EditorContentData struct { // impls cbor.Marshaler, cbor.Unmarshaler
 }
 
 type EditorAttributes struct {
-	// ------ table attribute -------
-
-	Colspan  uint `json:"colspan,omitempty"    cbor:"0,keyasint,omitempty"`
-	Rowspan  uint `json:"rowspan,omitempty"    cbor:"1,keyasint,omitempty"`
-	Colwidth uint `json:"colwidth,omitempty"   cbor:"2,keyasint,omitempty"`
-
-	// ------ generic custom node attribute ------
-
 	Id string `json:"id,omitempty"   cbor:"3,keyasint,omitempty"`
 
 	// Image, video node attribute
 
 	Name  string `json:"name,omitempty"   cbor:"4,keyasint,omitempty"`
 	Color string `json:"color,omitempty"  cbor:"5,keyasint,omitempty"`
-
-	// image split view node attributes
-
-	// LeftImage  ImageSplitViewAttribute `json:"leftImage,omitempty" cbor:"6,keyasint,omitempty"`
-	// RightImage ImageSplitViewAttribute `json:"rightImage,omitempty" cbor:"7,keyasint,omitempty"`
 
 	// Gallery node attribute
 

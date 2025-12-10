@@ -15,19 +15,11 @@ func (*Exports) CreateJournal(
 	journalType uint8,
 	options notes.CreateNoteOptions,
 ) (*notes.NoteData, error) {
-	service, err := notes.GetService(groupId)
-	if err != nil {
-		return nil, err
-	}
-	return service.Create(journalType, &options)
+	return notes.GetService(groupId).Create(journalType, &options)
 }
 
 func (*Exports) GetJournal(groupId, journalId string) (*notes.NoteData, error) {
-	service, err := notes.GetService(groupId)
-	if err != nil {
-		return nil, err
-	}
-	return service.Get(journalId)
+	return notes.GetService(groupId).Get(journalId)
 }
 
 func (group *Exports) UpdateJournal(
@@ -35,27 +27,12 @@ func (group *Exports) UpdateJournal(
 	journalId string,
 	newData *notes.UpdateNoteOptions,
 ) error {
-	service, err := notes.GetService(groupId)
-	if err != nil {
-		return err
-	}
-	return service.Update(journalId, newData)
+	return notes.GetService(groupId).Update(journalId, newData)
 }
 
 func (*Exports) DeleteJournal(groupId, journalId string) error {
-	service, err := notes.GetService(groupId)
-	if err != nil {
-		return nil
-	}
-
-	return service.Delete(journalId)
+	return notes.GetService(groupId).Delete(journalId)
 }
 
 func (*Exports) CleanUpJournal(groupId string) {
-	service, err := notes.GetService(groupId)
-	if err != nil {
-		return
-	}
-
-	service.CleanUp()
 }

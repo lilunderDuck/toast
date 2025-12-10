@@ -2,7 +2,7 @@ package notes
 
 import (
 	"time"
-	"toast/backend/features/editor"
+	"toast/backend/core/editor"
 	"toast/backend/utils"
 )
 

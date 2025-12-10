@@ -11,8 +11,6 @@ declare module '@tiptap/core' {
   }
 }
 
-export const DEFAULT_GALLERY_ID = ''
-
 export type GalleryAttribute = {
   id: string
   viewMode?: GalleryViewMode
@@ -25,7 +23,7 @@ export const GalleryExtension = createEditorNode<
   name$: 'gallery',
   attributes$: () => ({
     id: {
-      default: DEFAULT_GALLERY_ID
+      default: GALLERY_DEFAULT_ID
     },
     viewMode: {
       default: null
@@ -35,7 +33,7 @@ export const GalleryExtension = createEditorNode<
     return {
       insertGallery$: () => ({ tr }) => {
         return insertNodeAtCurrentPosition<GalleryAttribute>(this, tr, { 
-          id: DEFAULT_GALLERY_ID, 
+          id: GALLERY_DEFAULT_ID, 
           viewMode: GalleryViewMode.SINGLE_ITEM 
         })
       },

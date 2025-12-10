@@ -2,10 +2,11 @@ import { createEffect, createResource, Show } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
+import { GetTableGrid } from "~/wailsjs/go/editor/Exports"
+import { NodeViewWrapper, useSolidNodeView } from "~/libs/solid-tiptap-renderer"
+// ...
 import { TableFooterCreateRowButton, TableLoading, TableRoot, TableTitle } from "./components"
 import { TableProvider, TablesDataProvider, useTablesDataContext, type TableAttribute } from "./provider"
-import { NodeViewWrapper, useSolidNodeView } from "~/libs/solid-tiptap-renderer"
-import { GetTableGrid } from "~/wailsjs/go/table/Exports"
 
 const style = stylex.create({
   table: {

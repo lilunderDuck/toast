@@ -1,8 +1,7 @@
-package gallery
+package editor
 
 import (
 	"path/filepath"
-	"toast/backend/features/editor"
 	"toast/backend/internals"
 	"toast/backend/utils"
 )
@@ -10,11 +9,9 @@ import (
 var writeGallery,
 	readGallery,
 	uploadToGallery,
-	deleteGallery = editor.CreateEmbedableMediaCollection[GalleryData](internals.Media.Get("gallery"))
+	deleteGallery = CreateEmbedableMediaCollection[GalleryData](internals.Media.Get("gallery"))
 
 //
-
-type Exports struct{}
 
 func (*Exports) CreateGallery() *GalleryData {
 	data := newGalleryData()
@@ -49,7 +46,7 @@ func (*Exports) UploadToGallery(galleryId string, pathToFile string) (*GalleryIt
 		return nil, err
 	}
 
-	fileType, err := editor.DetermineFileType(pathToFile)
+	fileType, err := DetermineFileType(pathToFile)
 	if err != nil {
 		return nil, err
 	}

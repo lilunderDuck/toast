@@ -29,12 +29,8 @@ export const TableExtension = createEditorNode<
   },
   attributes$: () => ({
     id: {
-      default: ""
+      default: TABLE_DEFAULT_ID
     }
   }),
-  menu$(editorInstance) {
-    return {
-    }
-  },
   View$: TableNodeView
 })

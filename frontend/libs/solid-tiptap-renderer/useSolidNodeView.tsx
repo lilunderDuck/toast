@@ -1,4 +1,4 @@
-import { type Accessor, type Context, createContext, useContext } from "solid-js"
+import { type Accessor, createContext, useContext } from "solid-js"
 import { type Node, type NodeViewProps, type NodeViewRendererProps } from "@tiptap/core"
 import { Node as ProseMirrorNode } from "@tiptap/pm/model"
 // ...

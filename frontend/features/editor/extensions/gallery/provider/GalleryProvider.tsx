@@ -1,20 +1,20 @@
 import { createContext, type ParentProps, type Accessor, useContext, createSignal, onMount, type Setter } from "solid-js"
 import { createStore } from "solid-js/store"
 // ...
-import { createOrGetData } from "~/features/editor/utils"
+import { createOrGetData } from "~/features/editor"
+import { useJournalContext } from "~/features/journal"
 import { createStorage } from "~/utils"
 import { ASSETS_SERVER_URL } from "~/api"
-import { useJournalContext } from "~/features/journal"
-import type { gallery } from "~/wailsjs/go/models"
-import { CreateGallery, GetGallery, UpdateGallery, UploadToGallery } from "~/wailsjs/go/gallery/Exports"
+import type { editor } from "~/wailsjs/go/models"
+import { CreateGallery, GetGallery, UpdateGallery, UploadToGallery } from "~/wailsjs/go/editor/Exports"
+import { useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 // ...
 import type { GallerySessionStorage } from "./data"
-import { DEFAULT_GALLERY_ID, type GalleryAttribute } from "../extension"
-import { useSolidNodeView } from "~/libs/solid-tiptap-renderer"
+import { type GalleryAttribute } from "../extension"
 
 export interface IGalleryContext {
   /**Gets the current gallery data. */
-  data$: () => gallery.GalleryData
+  data$: () => editor.GalleryData
   /**Navigates to the next item in the gallery and updates the current index and item state. */
   next$(): void
   /**Navigates to the previous item in the gallery and updates the current index and item state. */
@@ -29,7 +29,7 @@ export interface IGalleryContext {
    * or the last gallery item user accessed, but sometimes it returns `undefined` 
    * if the gallery is loading.
    */
-  currentItem$: Accessor<gallery.GalleryItem | undefined>
+  currentItem$: Accessor<editor.GalleryItem | undefined>
   /**Gets the display url of an item in the gallery.
    * @param fileName The file name of the gallery item to get the URL for.
    * @returns 
@@ -68,7 +68,7 @@ interface IGalleryProviderProps {
 export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   const { attrs$ } = useSolidNodeView<GalleryAttribute>()
   const { sessionStorage$ } = useJournalContext()
-  const [galleryData, setGalleryData] = createStore<gallery.GalleryData>({} as gallery.GalleryData)
+  const [galleryData, setGalleryData] = createStore<editor.GalleryData>({} as editor.GalleryData)
 
   const [isNextButtonDisabled, setIsNextButtonDisabled] = createSignal(false)
   const [isPrevButtonDisabled, setIsPrevButtonDisabled] = createSignal(false)
@@ -84,11 +84,11 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   const [currentIndex, setCurrentIndex] = createSignal(
     wrappedSessionStorage.get$(CURRENT_INDEX_STORAGE_KEY) ?? 0
   )
-  const [currentItem, setCurrentItem] = createSignal<gallery.GalleryItem>()
+  const [currentItem, setCurrentItem] = createSignal<editor.GalleryItem>()
 
   onMount(async() => {
-    const data = await createOrGetData<gallery.GalleryData>(
-      attrs$().id === DEFAULT_GALLERY_ID,
+    const data = await createOrGetData<editor.GalleryData>(
+      attrs$().id === GALLERY_DEFAULT_ID,
       () => CreateGallery(),
       () => GetGallery(getCurrentGalleryId())
     )

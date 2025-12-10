@@ -2,15 +2,11 @@ package backend
 
 import (
 	"os"
-	"toast/backend/features/editor"
 	"toast/backend/features/group"
-
-	"toast/backend/features/editor/gallery"
-	"toast/backend/features/editor/playlist"
-	"toast/backend/features/editor/table"
-
 	"toast/backend/features/journal"
 	"toast/backend/features/misc"
+
+	"toast/backend/core/editor"
 	"toast/backend/internals"
 
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -29,10 +25,6 @@ func GetAppConfig(icon []byte, appInstance *App) *options.App {
 		&editor.Exports{},
 		&misc.Exports{},
 		&group.Exports{},
-		// ...
-		&playlist.Exports{},
-		&gallery.Exports{},
-		&table.Exports{},
 	}
 
 	return &options.App{

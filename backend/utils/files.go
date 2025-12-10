@@ -100,25 +100,33 @@ func MoveFile(sourcePath string, destPath string) error {
 	// If rename fails (likely due to cross-device move), copy and remove.
 	sourceFile, err := os.Open(sourcePath)
 	if err != nil {
+		if debug.DEBUG_MODE {
+			debug.Err(err)
+		}
 		return err
 	}
 	defer sourceFile.Close()
 
 	destFile, err := os.Create(destPath)
 	if err != nil {
+		if debug.DEBUG_MODE {
+			debug.Err(err)
+		}
 		return err
 	}
 	defer destFile.Close()
 
 	_, err = io.Copy(destFile, sourceFile)
 	if err != nil {
+		if debug.DEBUG_MODE {
+			debug.Err(err)
+		}
 		// Attempt to remove the destination file in case of copy error.
 		os.Remove(destPath)
 		return err
 	}
 
-	err = os.Remove(sourcePath)
-	return err
+	return os.Remove(sourcePath)
 }
 
 // Copies a file from a source to a destination.
@@ -127,6 +135,9 @@ func MoveFile(sourcePath string, destPath string) error {
 func CopyFile(source, destinationPath string) error {
 	sourceFile, err := os.Open(source)
 	if err != nil {
+		if debug.DEBUG_MODE {
+			debug.Err(err)
+		}
 		return err
 	}
 	defer sourceFile.Close()
@@ -149,13 +160,19 @@ func CopyFile(source, destinationPath string) error {
 
 	destinationFile, err := os.Create(destinationFilePath)
 	if err != nil {
+		if debug.DEBUG_MODE {
+			debug.Err(err)
+		}
 		return err
 	}
 	defer destinationFile.Close()
 
 	_, err = io.Copy(destinationFile, sourceFile)
-	if err != nil {
-		return err
+	if debug.DEBUG_MODE {
+		if err != nil {
+			debug.Err(err)
+		}
 	}
-	return nil
+
+	return err
 }
