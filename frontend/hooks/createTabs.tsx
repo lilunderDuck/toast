@@ -1,4 +1,4 @@
-import { createSignal, For, type VoidComponent } from "solid-js"
+import { createSignal, For, Show, type VoidComponent } from "solid-js"
 // @ts-ignore - used as a directive
 import { dndzone } from "solid-dnd-directive"
 import { arrayObjects, createEvent, type IEvent } from "~/utils"
@@ -25,6 +25,10 @@ type TabEventMap<T extends BaseTabData> = IEvent<{
   [TabEvent.UPDATE]: (allTabsData: T[]) => any
 }>
 
+export interface ITabComponentProps { 
+  tabId$: string 
+}
+
 export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
   const [tabs, setTabs] = createSignal<T[]>([])
   const [focusedTabId, setFocusedTabId] = createSignal('')
@@ -46,6 +50,7 @@ export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
   const updateTab = (tabId: number | string, newData: Partial<T>) => {
     setTabs(prev => [...arrayObjects(prev).replace$(it => it.id === tabId, newData)])
     tabEvent.emit$(TabEvent.UPDATE, tabs())
+    console.log("[tabs handler] updated tab id:", tabId, newData)
   }
 
   const considerDragging: EventHandler<"section", "on:consider"> = (dragEvent) => {
@@ -140,8 +145,10 @@ export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
         </For>
       </section>
     ),
-    TabContent$: (props: { tabComponent$: VoidComponent<{ tabId$: string }> }) => (
-      <props.tabComponent$ tabId$={focusedTabId()} />
+    TabContent$: (props: { tabComponent$: VoidComponent<ITabComponentProps> }) => (
+      <Show when={focusedTabId() !== ''}>
+        <props.tabComponent$ tabId$={focusedTabId()} />
+      </Show>
     )
   }
 }

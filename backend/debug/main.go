@@ -35,3 +35,39 @@ func Warn(something string, keyvals ...any) {
 func Err(someError error, keyvals ...any) {
 	logger.Error(someError.Error(), keyvals...)
 }
+
+func LogLabelf(label string, something string, formater ...any) {
+	logger.SetPrefix(label)
+	logger.Logf(log.InfoLevel, something, formater...)
+	logger.SetPrefix("")
+}
+
+func WarnLabelf(label string, something string, formater ...any) {
+	logger.SetPrefix(label)
+	logger.Logf(log.WarnLevel, something, formater...)
+	logger.SetPrefix("")
+}
+
+func ErrLabelf(label string, something string, formater ...any) {
+	logger.SetPrefix(label)
+	logger.Logf(log.ErrorLevel, something, formater...)
+	logger.SetPrefix("")
+}
+
+func LogLabel(label string, something string) {
+	logger.SetPrefix(label)
+	logger.Log(log.InfoLevel, something)
+	logger.SetPrefix("")
+}
+
+func WarnLabel(label string, something string) {
+	logger.SetPrefix(label)
+	logger.Log(log.WarnLevel, something)
+	logger.SetPrefix("")
+}
+
+func ErrLabel(label string, something error) {
+	logger.SetPrefix(label)
+	logger.Log(log.ErrorLevel, something)
+	logger.SetPrefix("")
+}

@@ -4,6 +4,7 @@ import stylex from "@stylexjs/stylex"
 // ...
 import { GetTableGrid } from "~/wailsjs/go/editor/Exports"
 import { NodeViewWrapper, useSolidNodeView } from "~/libs/solid-tiptap-renderer"
+import type { ITabComponentProps } from "~/hooks"
 // ...
 import { TableFooterCreateRowButton, TableLoading, TableRoot, TableTitle } from "./components"
 import { TableProvider, TablesDataProvider, useTablesDataContext, type TableAttribute } from "./provider"
@@ -23,10 +24,11 @@ export default function TableNodeView() {
     )
   }
 
-  const TableTabContent = (props: { tabId$: string }) => {
+  const TableTabContent = (props: ITabComponentProps) => {
     const { tabs$ } = useTablesDataContext()
     const { attrs$ } = useSolidNodeView<TableAttribute>()
-    const [resource, { refetch }] = createResource(() => props.tabId$, async(tabId) => {
+    const [resource, { refetch }] = createResource(() => props.tabId$, async (tabId) => {
+      console.log("[table] start fetching table grid id:", attrs$().id, "->", tabId)
       tabs$.setDisable$(true)
       const data = await GetTableGrid(attrs$().id, tabId)
       tabs$.setDisable$(false)
@@ -39,9 +41,9 @@ export default function TableNodeView() {
       <Show when={!resource.loading} fallback={
         <TableLoading />
       }>
-        <TableProvider 
-          tabId$={props.tabId$} 
-          columns$={resource()!.columns} 
+        <TableProvider
+          tabId$={props.tabId$}
+          columns$={resource()!.columns}
           rows$={resource()!.rows}
         >
           <TableRoot>

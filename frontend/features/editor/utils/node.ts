@@ -9,6 +9,8 @@ export async function createOrGetData<T extends { id: string }>(
 
   if (conditionToCreate) {
     const returnType = await createFn()
+    console.log(returnType)
+    console.assert(returnType.id, "The return type of the data must exist a \"id\" field.")
     updateAttribute$('id', returnType.id)
     return returnType
   }

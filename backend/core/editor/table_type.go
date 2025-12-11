@@ -9,14 +9,12 @@ type TableMetadata struct {
 }
 
 func newTableMetadata() *TableMetadata {
-	defaultTabs := []TableTabData{
-		{Type: 0 /*table view*/, Name: "Table view", Id: utils.GetRandomStringWithinLength(5)},
-	}
-
 	return &TableMetadata{
 		Title: "Untitled",
 		Id:    utils.GetRandomStringWithinLength(5),
-		Tabs:  defaultTabs,
+		Tabs: []TableTabData{
+			{Type: 0 /*table view*/, Name: "Table view", Id: utils.GetRandomStringWithinLength(5)},
+		},
 	}
 }
 
@@ -31,8 +29,7 @@ type TableGridData struct {
 	Columns []ColumnData `json:"columns"  cbor:"1,keyasint"`
 }
 
-func newTableGridData() *TableGridData {
-	columnId := utils.GetRandomStringWithinLength(5)
+func newTableGridData(columnId string) *TableGridData {
 	rowData := RowData{}
 	rowData[columnId] = ""
 

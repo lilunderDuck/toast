@@ -15,6 +15,15 @@ func (*Exports) CreateTable() (*TableMetadata, error) {
 		return nil, err
 	}
 
+	defaultColumnId := data.Tabs[0].Id
+
+	if err := utils.BSON_WriteFile(
+		tablePaths.TableDataFile(data.Id, defaultColumnId),
+		newTableGridData(defaultColumnId),
+	); err != nil {
+		return nil, err
+	}
+
 	return data, nil
 }
 
@@ -39,26 +48,23 @@ func (*Exports) UpdateTable(tableId string, newData TableUpdateOption) error {
 	return utils.BSON_WriteFile(tablePaths.MetaFile(tableId), data)
 }
 
-func (*Exports) DeleteTable(tableId string) {
-	os.Remove(tablePaths.Base(tableId))
+func (*Exports) DeleteTable(tableId string) error {
+	return os.Remove(tablePaths.Base(tableId))
 }
 
-func (table *Exports) CreateTableGrid(tableId, tableGridId string) *TableGridData {
-	newData := newTableGridData()
-	table.UpdateTableGrid(tableId, tableGridId, *newData)
-
-	return newData
-}
-
-func (*Exports) GetTableGrid(tableId, tableGridId string) *TableGridData {
-	data, err := utils.BSON_ReadFile[TableGridData](tablePaths.TableDataFile(tableId, tableGridId))
-	if err != nil {
-		return newTableGridData()
+func (table *Exports) CreateTableGrid(tableId, tableGridId string) (*TableGridData, error) {
+	newData := newTableGridData(tableGridId)
+	if err := table.UpdateTableGrid(tableId, tableGridId, *newData); err != nil {
+		return nil, err
 	}
 
-	return data
+	return newData, nil
 }
 
-func (*Exports) UpdateTableGrid(tableId, tableGridId string, data TableGridData) {
-	utils.BSON_WriteFile(tablePaths.TableDataFile(tableId, tableGridId), data)
+func (*Exports) GetTableGrid(tableId, tableGridId string) (*TableGridData, error) {
+	return utils.BSON_ReadFile[TableGridData](tablePaths.TableDataFile(tableId, tableGridId))
+}
+
+func (*Exports) UpdateTableGrid(tableId, tableGridId string, data TableGridData) error {
+	return utils.BSON_WriteFile(tablePaths.TableDataFile(tableId, tableGridId), data)
 }

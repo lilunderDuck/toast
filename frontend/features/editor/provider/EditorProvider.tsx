@@ -114,9 +114,13 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
     console.log("incoming json data", data)
     currentlyOpenedId = data.id
     isOpening = true
-    editor().commands.setContent(data.content, true, undefined, {
-      errorOnInvalidContent: true
-    })
+    try {
+      editor().commands.setContent(data.content, true, undefined, {
+        errorOnInvalidContent: true
+      })
+    } catch(error) {
+      console.warn(error)
+    }
     isOpening = false
   }
 

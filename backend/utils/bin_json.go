@@ -19,19 +19,19 @@ import (
 // Returns:
 //   - An error if something went wrong while saving, or nil if it saved correctly.
 func BSON_WriteFile(path string, anyObject any) (someError error) {
+	if debug.DEBUG_MODE {
+		debug.LogLabelf("BSON", "write: %s, %#v", path, anyObject)
+	}
+
 	dirToTheFile := filepath.Dir(path)
 	if !IsDirectoryExist(dirToTheFile) {
 		CreateDirectory(dirToTheFile)
 	}
 
 	binaryData, err := cbor.Marshal(anyObject)
-	if debug.DEBUG_MODE {
-		debug.Logf("BSON write: %s", path)
-	}
-
 	if err != nil {
 		if debug.DEBUG_MODE {
-			debug.Err(err)
+			debug.ErrLabel("BSON", err)
 		}
 
 		return err
@@ -53,7 +53,7 @@ func base_BSON_ReadFile(path string) (dataOut []byte, someError error) {
 	dataFromDisk, err := os.ReadFile(path)
 	if err != nil {
 		if debug.DEBUG_MODE {
-			debug.Err(err)
+			debug.ErrLabel("BSON", err)
 		}
 
 		return nil, err
@@ -64,13 +64,13 @@ func base_BSON_ReadFile(path string) (dataOut []byte, someError error) {
 
 func BSON_ReadFile[T any](path string) (*T, error) {
 	if debug.DEBUG_MODE {
-		debug.Logf("BSON read: %s", path)
+		debug.LogLabelf("BSON", "read: %s", path)
 	}
 
 	data, err := base_BSON_ReadFile(path)
 	if err != nil {
 		if debug.DEBUG_MODE {
-			debug.Err(err)
+			debug.ErrLabel("BSON", err)
 		}
 
 		return nil, err
@@ -83,7 +83,7 @@ func BSON_Unmarshal[T any](in []byte) (*T, error) {
 	err := cbor.Unmarshal(in, &out)
 	if debug.DEBUG_MODE {
 		if err != nil {
-			debug.Err(err)
+			debug.ErrLabel("BSON", err)
 		}
 	}
 

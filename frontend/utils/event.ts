@@ -76,7 +76,7 @@ export interface IEvent<TEvent extends EventMap> {
    * @param eventName 
    * @param args
    */
-  emit$<TEventName extends keyof TEvent>(eventName: TEventName, ...args: Parameters<TEvent[TEventName]>): boolean
+  emit$<TEventName extends keyof TEvent>(eventName: TEventName, ...args: Parameters<TEvent[TEventName]>): void
 }
 
 export function createEvent<T extends EventMap>(): IEvent<T> {
@@ -86,6 +86,7 @@ export function createEvent<T extends EventMap>(): IEvent<T> {
     on$(eventName, fn) {
       listeners[eventName] = listeners[eventName] || []
       listeners[eventName].push(fn)
+      console.log('[event] register:', eventName, listeners)
     },
     once$(eventName, fn) {
       listeners[eventName] = listeners[eventName] || []
@@ -108,12 +109,13 @@ export function createEvent<T extends EventMap>(): IEvent<T> {
     emit$(eventName, ...args) {
       console.log('[event] emitting:', eventName, 'with', args)
       let _listeners = listeners[eventName]
-      if (!_listeners) return true
+      if (!_listeners) {
+        console.warn('[event] could not call', eventName, ". Event haven't been registered.")
+        return
+      }
       for (const listener of _listeners) {
         listener(...args)
       }
-
-      return false
     }
   }
 }

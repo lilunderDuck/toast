@@ -312,10 +312,6 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'DATE'
   ]) // do not reorder
 
-  define('TableDataEvent', [
-    'UPDATE',
-  ])
-
   define('TableViewType', [
     'TABLE',
     'KANBAN'

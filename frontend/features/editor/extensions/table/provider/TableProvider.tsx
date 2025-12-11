@@ -2,13 +2,13 @@ import { createContext, type ParentProps, useContext } from "solid-js"
 // ...
 import { createStateSlice, type StateSlice } from "~/hooks"
 import { debounce, makeId } from "~/utils"
+import type { editor } from "~/wailsjs/go/models"
 // ...
 import type { ColumnData, RowData } from "./data"
 import { createColumnsManager, type IColumnsManager } from "./column"
 import { createRowsManager, type IRowManager } from "./row"
 import { useTablesDataContext } from "./TablesDataProvider"
 import { getTableDefaultData } from "../utils"
-import type { table } from "~/wailsjs/go/models"
 
 interface ITableContext {
   readonly rows$: IRowManager
@@ -33,13 +33,13 @@ interface ITableProviderProps {
 }
 
 export function TableProvider(props: ParentProps<ITableProviderProps>) {
-  const { event$ } = useTablesDataContext()
+  const { updateTableGrid$ } = useTablesDataContext()
 
   const updateData = debounce(() => {
-    event$.emit$(TableDataEvent.UPDATE, props.tabId$, {
+    updateTableGrid$(props.tabId$, {
       columns: columnsManager.get$(),
       rows: rowsManager.get$()
-    } as table.TableGridData)
+    } as editor.TableGridData)
   }, 1000)
 
   const columnsManager = createColumnsManager(props.columns$, updateData)
@@ -52,13 +52,13 @@ export function TableProvider(props: ParentProps<ITableProviderProps>) {
     }
 
     rowsManager.set$([...rowsManager.get$(), newData])
-    console.log("Added new row", newData, rowsManager.get$())
+    console.log("[table] Added new row", newData, rowsManager.get$())
     updateData()
   }
 
   const createColumn: ITableContext["createColumn$"] = (label, type) => {
     const rows = rowsManager.get$()
-    const newColumn: ColumnData = {
+    const newColumn: editor.ColumnData = {
       label: label,
       type: type,
       key: makeId(6),
@@ -71,6 +71,7 @@ export function TableProvider(props: ParentProps<ITableProviderProps>) {
 
     rowsManager.set$(rows)
     columnsManager.set$(prev => [...prev, newColumn])
+    console.log("[table] Added new column", newColumn, columnsManager.get$())
     updateData()
   }
 
