@@ -2,10 +2,19 @@ import { BsPlus } from "solid-icons/bs"
 // ...
 import { Button } from "~/components"
 import { createLazyLoadedDialog } from "~/hooks"
+// ...
+import { useTableContext } from "../../../provider"
 
 export function TableCreateColumnButton() {
-  const TableCreateRowDialog = createLazyLoadedDialog(
-    () => import("./TableCreateColumnDialog")
+  const { createColumn$ } = useTableContext()
+  
+  const TableCreateColumnDialog = createLazyLoadedDialog(
+    () => import("./dialog/TableCreateColumnDialog"),
+    () => ({
+      onSubmit$(schema) {
+        createColumn$(schema.name, schema.type)
+      },
+    })
   )
 
   return (
@@ -13,11 +22,11 @@ export function TableCreateColumnButton() {
       <Button
         size$={ButtonSize.ICON}
         variant$={ButtonVariant.NO_BACKGROUND}
-        onClick={TableCreateRowDialog.show$}
+        onClick={TableCreateColumnDialog.show$}
       >
         <BsPlus />
       </Button>
-      <TableCreateRowDialog.Dialog$ />
+      <TableCreateColumnDialog.Dialog$ />
     </>
   )
 }

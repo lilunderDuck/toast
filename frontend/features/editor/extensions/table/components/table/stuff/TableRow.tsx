@@ -1,6 +1,7 @@
-import { For, type Accessor, type ParentProps, type VoidComponent } from "solid-js"
+import { For, Show, type Accessor, type VoidComponent } from "solid-js"
 // ...
 import { reorderArray } from "~/utils"
+import { useEditorContext } from "~/features/editor/provider"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -27,7 +28,8 @@ const style = stylex.create({
   }
 })
 
-export function TableRow(props: ParentProps<ITableRowProps>) {
+export function TableRow(props: ITableRowProps) {
+  const { isReadonly$ } = useEditorContext()
   const { draggedRowIndex$, rows$, columns$ } = useTableContext()
 
   const handleRowDragStart = (e: EventType<"tr", "onDragStart">, index: number) => {
@@ -67,27 +69,31 @@ export function TableRow(props: ParentProps<ITableRowProps>) {
 
   return (
     <tr {...stylex.attrs(style.row)}>
-      <td
-        {...stylex.attrs(style.row__draggableHandle)}
-        draggable="true"
-        onDragStart={(e) => handleRowDragStart(e, props.rowIndex$)}
-        onDragOver={(e) => handleRowDragOver(e, props.rowIndex$)}
-        onDrop={(e) => handleRowDrop(e, props.rowIndex$)}
-        onDragEnd={handleRowDragEnd}
-        onDragLeave={handleRowDragLeave}
-      />
+      <Show when={!isReadonly$()}>
+        <td
+          {...stylex.attrs(style.row__draggableHandle)}
+          draggable="true"
+          onDragStart={(e) => handleRowDragStart(e, props.rowIndex$)}
+          onDragOver={(e) => handleRowDragOver(e, props.rowIndex$)}
+          onDrop={(e) => handleRowDrop(e, props.rowIndex$)}
+          onDragEnd={handleRowDragEnd}
+          onDragLeave={handleRowDragLeave}
+        />
+      </Show>
       <For each={columns$.get$()}>
         {(it, index) => (
           <td>
-            <props.rowItemComponent$ 
+            <props.rowItemComponent$
               {...it}
-              index$={index} 
-              value$={props.rowData$[it.key]} 
+              index$={index}
+              value$={props.rowData$[it.key]}
             />
           </td>
         )}
       </For>
-      {props.children}
+      <Show when={!isReadonly$()}>
+        <td />
+      </Show>
     </tr>
   )
 } 

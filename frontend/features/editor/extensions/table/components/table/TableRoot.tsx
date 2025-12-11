@@ -1,4 +1,4 @@
-import { For, type ParentProps } from "solid-js"
+import { For, Show, type ParentProps } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./TableRoot.module.css"
@@ -7,6 +7,7 @@ import { TableRow, TableHeader } from "./stuff"
 import { useTableContext } from "../../provider"
 import { TableDataHeader, TableDataItem } from "../table-data-display"
 import { TableCreateColumnButton } from "./stuff"
+import { useEditorContext } from "~/features/editor/provider"
 
 const style = stylex.create({
   table: {
@@ -30,6 +31,7 @@ const style = stylex.create({
 })
 
 export function TableRoot(props: ParentProps) {
+  const { isReadonly$ } = useEditorContext()
   const { columns$, rows$ } = useTableContext()
 
   return (
@@ -38,8 +40,10 @@ export function TableRoot(props: ParentProps) {
         <table {...stylex.attrs(style.table__content)} id={__style.table}>
           <thead>
             <tr>
-              {/* A single lonely <th /> for draggable handle */}
-              <th />
+              <Show when={!isReadonly$()}>
+                {/* A single lonely <th /> for draggable handle */}
+                <th />
+              </Show>
               <For each={columns$.get$()}>
                 {(col, colIndex) => (
                   <TableHeader columnIndex$={colIndex()}>
@@ -47,10 +51,12 @@ export function TableRoot(props: ParentProps) {
                   </TableHeader>
                 )}
               </For>
-              {/* Another for creating row */}
-              <th>
-                <TableCreateColumnButton />
-              </th>
+              <Show when={!isReadonly$()}>
+                {/* Another for creating row */}
+                <th>
+                  <TableCreateColumnButton />
+                </th>
+              </Show>
             </tr>
           </thead>
           <tbody>
@@ -60,9 +66,7 @@ export function TableRoot(props: ParentProps) {
                   rowData$={row}
                   rowIndex$={rowIndex()}
                   rowItemComponent$={TableDataItem}
-                >
-                  <td />
-                </TableRow>
+                />                  
               )}
             </For>
           </tbody>

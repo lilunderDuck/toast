@@ -34,9 +34,9 @@ const style = stylex.create({
 })
 
 interface ICreateJournalDialogProps extends ILazyDialog {
-  prevData$?: group.JournalGroupData
-  onSubmit$?: (data: group.JournalGroupOptions) => any
-  onUpdate$?: (data: group.JournalGroupOptions & {
+  prevData$?: group.GroupData
+  onSubmit$?: (data: group.GroupOptions) => any
+  onUpdate$?: (data: group.GroupOptions & {
     id: string
   }) => any
 }
@@ -55,11 +55,12 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
   const { Form$, Field$ } = createSubmitForm<JournalGroupOptionSchema>({
     async onSubmit$(data) {
       if (props.prevData$) {
-        const newData = { ...props.prevData$, ...data as group.JournalGroupOptions }
+        const newData = { ...props.prevData$, ...data as group.GroupOptions }
+        // @ts-ignore - we don't care about "convertValue" prop
         props.onUpdate$?.(newData)
       } else {
         data.icon = iconPath()
-        props.onSubmit$?.(data as group.JournalGroupOptions)
+        props.onSubmit$?.(data as group.GroupOptions)
       }
 
       props.close$()

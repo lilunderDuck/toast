@@ -4,7 +4,7 @@ import {
   Value,
   type SelectRootProps
 } from "@kobalte/core/select"
-import __style from "./Select.module.css"
+import "./Select.css"
 import type { ParentProps, ValidComponent } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import { MERGE_CLASS } from "macro-def"
@@ -26,6 +26,10 @@ export function Select<
   T extends ValidComponent | HTMLElement = HTMLElement
 >(props: ParentProps<SelectRootProps<Option, OptGroup, T>>) {
   return (
-    <Root {...props} id={__style.select} class={MERGE_CLASS(props, stylex.attrs(style.this))} />
+    <Root 
+      {...props} 
+      id="select" 
+      class={MERGE_CLASS(props, stylex.attrs(style.this))} 
+    />
   )
 }

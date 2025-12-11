@@ -1,3 +1,5 @@
+import type { DEFAULT_VALUE_MAPPING } from "./icon"
+
 type BaseColumnData<T = TableDataType> = {
   key: string
   label: string
@@ -15,16 +17,6 @@ export type TagColumnData = BaseColumnData<TableDataType.TAG> & { additionalData
 export type RowData = Record<string, any>
 
 export type TagData = { name: string, color: string }
-
-export const DEFAULT_VALUE_MAPPING = {
-  [TableDataType.CHECKBOX]: false,
-  [TableDataType.DATE]: new Date(),
-  [TableDataType.LINK]: '',
-  [TableDataType.NUMBER]: 0,
-  [TableDataType.PROGRESS]: 0,
-  [TableDataType.TAG]: [],
-  [TableDataType.TEXT]: ''
-} satisfies Record<TableDataType, any>
 
 export type TableDefaultValueMapping<T extends TableDataType> =
   typeof DEFAULT_VALUE_MAPPING[T]
