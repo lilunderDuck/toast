@@ -27,6 +27,9 @@ const style = stylex.create({
     position: "sticky",
     zIndex: 2,
     top: 0,
+  },
+  table__headerDraggable: {
+    width: 5
   }
 })
 
@@ -42,7 +45,7 @@ export function TableRoot(props: ParentProps) {
             <tr>
               <Show when={!isReadonly$()}>
                 {/* A single lonely <th /> for draggable handle */}
-                <th />
+                <th data-table-draggable-handle-indicator />
               </Show>
               <For each={columns$.get$()}>
                 {(col, colIndex) => (
