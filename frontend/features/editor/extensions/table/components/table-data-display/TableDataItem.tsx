@@ -10,9 +10,9 @@ import ProgressBarInput from "./ProgressBarInput"
 import TagInput from "./tags"
 import type { RowItemComponentProps } from "../table/stuff"
 
-export interface ITableDataTypeComponentProps<Type = any> { 
+export interface ITableDataTypeComponentProps<Type = any> {
   onChange$(value: Type): any
-  value$: Type 
+  value$: Type
   additionalData$?: any
   columnKey$: string
 }
@@ -33,9 +33,9 @@ export function TableDataItem(props: RowItemComponentProps) {
   console.assert(DataComponent, `Missing component or invalid data type for type: ${props.type}`)
 
   return (
-    <DataComponent 
-      onChange$={(value) => rows$.updateData$(props.index$(), props.key, value)} 
-      value$={props.value$} 
+    <DataComponent
+      onChange$={(value) => rows$.updateData$(props.index$(), props.key, value)}
+      value$={props.value$}
       additionalData$={props.additionalData}
       columnKey$={props.key}
     />

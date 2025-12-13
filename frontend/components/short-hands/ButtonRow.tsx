@@ -1,8 +1,9 @@
 import { Match, splitProps, Switch } from "solid-js"
-import stylex from "@stylexjs/stylex"
-
-import { Spacer } from "../ui"
 import { MERGE_CLASS } from "macro-def"
+// ...
+import stylex from "@stylexjs/stylex"
+// ...
+import { Spacer } from "../ui"
 
 const style = stylex.create({
   buttonRow: {

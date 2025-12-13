@@ -81,11 +81,16 @@ export function TableRow(props: ITableRowProps) {
         />
       </Show>
       <For each={columns$.get$()}>
-        {(it, index) => (
+        {(it /*, index*/) => (
           <td>
             <props.rowItemComponent$
               {...it}
-              index$={index}
+              // Yeah that took quite a while to find this bug, here is it
+              // index$={index}
+              // If we leave like that, funky stuff happens like
+              // - Rows override other rows data
+              // - Only some part of the table is saved 
+              index$={() => props.rowIndex$}
               value$={props.rowData$[it.key]}
             />
           </td>
