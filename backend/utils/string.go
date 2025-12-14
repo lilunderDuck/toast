@@ -7,6 +7,8 @@ import (
 	lzstring "github.com/daku10/go-lz-string"
 )
 
+type CompressedString []uint16
+
 func ToString(anyThing int) string {
 	return strconv.Itoa(anyThing)
 }
@@ -19,7 +21,7 @@ const NULL_CHAR = "\000"
 
 // Compresses a single string using the lz-string algorithm.
 // The function will `panic` if the compression fails
-func MustCompressString(inputString string) []uint16 {
+func MustCompressString(inputString string) CompressedString {
 	compressed, err := lzstring.Compress(inputString)
 	if err != nil {
 		panic(err)
@@ -30,7 +32,7 @@ func MustCompressString(inputString string) []uint16 {
 
 // Decompresses a compressed string back into a string.
 // The function will `panic` if the decompression fails
-func MustDecompressString(compressedString []uint16) string {
+func MustDecompressString(compressedString CompressedString) string {
 	decompressed, err := lzstring.Decompress(compressedString)
 	if err != nil {
 		panic(err)
@@ -41,12 +43,12 @@ func MustDecompressString(compressedString []uint16) string {
 
 // Joins a variable number of strings using `NULL_CHAR` as a
 // separator and then compresses the combined string.
-func CompressStrings(inputStrings ...string) []uint16 {
+func CompressStrings(inputStrings ...string) CompressedString {
 	return MustCompressString(strings.Join(inputStrings, NULL_CHAR))
 }
 
 // Decompresses a compressed string and then splits the
 // resulting string back into a slice of strings using `NULL_CHAR` as the delimiter.
-func DecompressStrings(compressedString []uint16) []string {
+func DecompressStrings(compressedString CompressedString) []string {
 	return strings.Split(MustDecompressString(compressedString), NULL_CHAR)
 }

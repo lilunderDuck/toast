@@ -82,5 +82,28 @@
 			"}",
 		],
 		"description": "Solidjs's component"
+	},
+	"CBOR's custom encoder/decoder": {
+		"scope": "go",
+		"prefix": "encode.cbor",
+		"body": [
+			"func (${1:refName} *${2:Type}) MarshalCBOR() ([]byte, error) {",
+			"\t// your custom encoder logic",
+			"}",
+			"",
+			"func (${1:refName} *${2:Type}) UnmarshalCBOR(input []byte) error {",
+			"\t// your custom decoder logic",
+			"}",
+		]
+	},
+	"Debug only on deverlopment mode": {
+		"scope": "go",
+		"prefix": "debug",
+		"body": [
+			"if ${1:debug}.DEBUG_MODE {",
+			"\tdebug.${2:Log}(${3:\"something is happening\"})",
+			"}"
+		],
+		"description": "This debug statement will also completely removed on production build as well."
 	}
 }

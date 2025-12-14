@@ -66,8 +66,8 @@ func WarnLabel(label string, something string) {
 	logger.SetPrefix("")
 }
 
-func ErrLabel(label string, something error) {
+func ErrLabel(label string, something error, stuff ...any) {
 	logger.SetPrefix(label)
-	logger.Log(log.ErrorLevel, something)
+	logger.Log(log.ErrorLevel, something, stuff...)
 	logger.SetPrefix("")
 }
