@@ -43,13 +43,15 @@ var CONTENT_TYPE_REMAP = map[uint8]string{
 }
 
 var MARK_TYPE_MAP = map[string]uint8{
-	"italic": 0,
-	"bold":   1,
-	"strike": 2,
+	"italic":    0,
+	"bold":      1,
+	"strike":    2,
+	"textStyle": 3,
 }
 
 var MARK_TYPE_REMAP = map[uint8]string{
 	0: "italic",
 	1: "bold",
 	2: "strike",
+	3: "textStyle",
 }

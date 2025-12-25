@@ -41,6 +41,9 @@ func (data *EditorContentData) UnmarshalCBOR(input []byte) error {
 	return nil
 }
 
+type bin_EditorAttributes struct {
+}
+
 type bin_EditorMarks struct {
 	// Originally, this field is a string type, but it's converted to a uint8
 	// just to save spaces, ofc.

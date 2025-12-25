@@ -18,12 +18,15 @@ type EditorContentData struct { // impls cbor.Marshaler, cbor.Unmarshaler
 }
 
 type EditorAttributes struct {
+	// ... color style attributes ...
+	BackgroundColor string `json:"backgroundColor,omitempty"   cbor:"0,keyasint,omitempty"`
+	Color           string `json:"color,omitempty"   cbor:"1,keyasint,omitempty"`
+
 	Id string `json:"id,omitempty"   cbor:"3,keyasint,omitempty"`
 
 	// Image, video node attribute
 
-	Name  string `json:"name,omitempty"   cbor:"4,keyasint,omitempty"`
-	Color string `json:"color,omitempty"  cbor:"5,keyasint,omitempty"`
+	Name string `json:"name,omitempty"   cbor:"4,keyasint,omitempty"`
 
 	// Gallery node attribute
 
