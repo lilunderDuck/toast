@@ -60,7 +60,6 @@ require (
 require (
 	github.com/charmbracelet/log v0.4.2
 	github.com/dhowden/tag v0.0.0-20240417053706-3d75831295e8
-	github.com/jinzhu/copier v0.4.0
 	github.com/matoous/go-nanoid/v2 v2.1.0
 	github.com/syndtr/goleveldb v1.0.0
 )

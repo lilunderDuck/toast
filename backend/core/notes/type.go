@@ -30,9 +30,6 @@ func newNoteData(journalType uint8, options *CreateNoteOptions) *NoteData {
 		Type:    journalType,
 		Created: utils.GetCurrentDateNow(),
 		Name:    options.Name,
-		Data: editor.EditorContentData{
-			Type:    "doc",
-			Content: []editor.EditorContentData{},
-		},
+		Data:    *editor.NewEditorContentData(),
 	}
 }

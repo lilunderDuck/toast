@@ -9,26 +9,27 @@ func NewEditorContentData() *EditorContentData {
 	}
 }
 
-type EditorContentData struct { // impls cbor.Marshaler, cbor.Unmarshaler
+// impls cbor.Marshaler, cbor.Unmarshaler
+type EditorContentData struct {
 	Type    string              `json:"type"             cbor:"0,keyasint"`
-	Attrs   EditorAttributes    `json:"attrs,omitempty"  cbor:"1,keyasint,omitempty"  copier:"Attrs"`
-	Marks   []EditorMarks       `json:"marks,omitempty"  cbor:"2,keyasint,omitempty"  copier:"Marks"`
-	Content []EditorContentData `json:"content"          cbor:"3,keyasint"            copier:"Content"`
-	Text    string              `json:"text,omitempty"   cbor:"4,keyasint,omitempty"  copier:"Text"`
+	Attrs   EditorAttributes    `json:"attrs,omitempty"  cbor:"1,keyasint,omitempty"`
+	Marks   []EditorMarks       `json:"marks,omitempty"  cbor:"2,keyasint,omitempty"`
+	Content []EditorContentData `json:"content"          cbor:"3,keyasint"`
+	Text    string              `json:"text,omitempty"   cbor:"4,keyasint,omitempty"`
 }
 
 type bin_EditorContentData struct {
 	Type    uint8               `cbor:"0,keyasint"`
-	Attrs   EditorAttributes    `cbor:"1,keyasint,omitempty"  copier:"Attrs"`
-	Marks   []EditorMarks       `cbor:"2,keyasint,omitempty"  copier:"Marks"`
-	Content []EditorContentData `cbor:"3,keyasint"            copier:"Content"`
-	Text    string              `cbor:"4,keyasint,omitempty"  copier:"Text"`
+	Attrs   EditorAttributes    `cbor:"1,keyasint,omitempty"`
+	Marks   []EditorMarks       `cbor:"2,keyasint,omitempty"`
+	Content []EditorContentData `cbor:"3,keyasint"`
+	Text    string              `cbor:"4,keyasint,omitempty"`
 }
 
 type EditorAttributes struct {
 	// ... color style attributes ...
 	BackgroundColor string `json:"backgroundColor,omitempty"   cbor:"0,keyasint,omitempty"`
-	Color           string `json:"color,omitempty"   cbor:"1,keyasint,omitempty"`
+	Color           string `json:"color,omitempty"             cbor:"1,keyasint,omitempty"`
 
 	Id string `json:"id,omitempty"   cbor:"3,keyasint,omitempty"`
 
@@ -44,7 +45,7 @@ type EditorAttributes struct {
 type bin_EditorAttributes struct {
 	// ... color style attributes ...
 	BackgroundColor string `json:"backgroundColor,omitempty"   cbor:"0,keyasint,omitempty"`
-	Color           string `json:"color,omitempty"   cbor:"1,keyasint,omitempty"`
+	Color           string `json:"color,omitempty"             cbor:"1,keyasint,omitempty"`
 
 	Id string `json:"id,omitempty"   cbor:"3,keyasint,omitempty"`
 
@@ -57,7 +58,8 @@ type bin_EditorAttributes struct {
 	ViewMode uint8 `json:"viewMode,omitempty" cbor:"8,keyasint,omitempty"`
 }
 
-type EditorMarks struct { // impls cbor.Marshaler, cbor.Unmarshaler
+// impls cbor.Marshaler, cbor.Unmarshaler
+type EditorMarks struct {
 	Type string `json:"type"             cbor:"0,keyasint"`
 	Text string `json:"text,omitempty"   cbor:"1,keyasint,omitempty"`
 }

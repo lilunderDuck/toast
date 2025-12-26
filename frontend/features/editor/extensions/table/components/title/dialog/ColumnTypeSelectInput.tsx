@@ -1,7 +1,7 @@
 import { Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components"
 
 import stylex from "@stylexjs/stylex"
-import { TABLE_DATA_TYPE_MAPPING, TABLE_DATA_TYPES } from "../../../../provider"
+import { TABLE_DATA_TYPE_MAPPING, TABLE_DATA_TYPES } from "../../../provider"
 
 const style = stylex.create({
   select__item: {
