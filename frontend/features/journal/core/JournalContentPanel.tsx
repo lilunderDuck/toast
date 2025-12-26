@@ -14,6 +14,7 @@ const style = stylex.create({
   panel__mainContent: {
     height: "calc(100% - var(--top-header-height))",
     width: "100%",
+    flexShrink: 0
   }
 })
 

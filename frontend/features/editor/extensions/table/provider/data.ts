@@ -1,3 +1,4 @@
+import type { IEvent } from "~/utils"
 import type { DEFAULT_VALUE_MAPPING } from "./icon"
 
 type BaseColumnData<T = TableDataType> = {
@@ -25,3 +26,8 @@ export type TableDefaultValueMapping<T extends TableDataType> =
 export type TableAttribute = {
   id: string
 }
+
+export type TableEventMap = IEvent<{
+  insertRow: () => any
+  insertColumn: (name: string, type: TableDataType) => any
+}>

@@ -95,9 +95,6 @@ export function TableRow(props: ITableRowProps) {
           </td>
         )}
       </For>
-      <Show when={!isReadonly$()}>
-        <td />
-      </Show>
     </tr>
   )
 } 

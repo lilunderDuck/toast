@@ -6,7 +6,7 @@ import { GetTableGrid } from "~/wailsjs/go/editor/Exports"
 import { NodeViewWrapper, useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 import type { ITabComponentProps } from "~/hooks"
 // ...
-import { TableFooterCreateRowButton, TableLoading, TableRoot, TableTitle } from "./components"
+import { TableLoading, TableRoot, TableTitle } from "./components"
 import { TableProvider, TablesDataProvider, useTablesDataContext, type TableAttribute } from "./provider"
 
 const style = stylex.create({
@@ -46,9 +46,7 @@ export default function TableNodeView() {
           columns$={resource()!.columns}
           rows$={resource()!.rows}
         >
-          <TableRoot>
-            <TableFooterCreateRowButton />
-          </TableRoot>
+          <TableRoot />
         </TableProvider>
       </Show>
     )

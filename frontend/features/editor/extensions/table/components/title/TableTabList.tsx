@@ -5,6 +5,8 @@ import __style from "./TableTabList.module.css"
 // ...
 import { createLazyLoadedDialog, createLazyLoadedDropdownMenu } from "~/hooks"
 import { Button, Spacer, Tooltip } from "~/components"
+// ...
+import type { ITableMoreOptionsDropdownMenuProps } from "./TableMoreOptionsDropdownMenu"
 import { useTablesDataContext } from "../../provider"
 
 const style = stylex.create({
@@ -36,7 +38,16 @@ const TAB_VIEW_MAPPING = {
 }
 
 export function TableTabList() {
-  const { tabs$ } = useTablesDataContext()
+  const { tabs$, event$ } = useTablesDataContext()
+
+  const TableCreateColumnDialog = createLazyLoadedDialog(
+    () => import("./dialog/TableCreateColumnDialog"),
+    () => ({
+      onSubmit$(schema) {
+        event$.emit$("insertColumn", schema.name, schema.type)
+      },
+    })
+  )
 
   const TableMoreOptionsDropdownMenu = createLazyLoadedDropdownMenu(
     () => import("./TableMoreOptionsDropdownMenu"),
@@ -46,9 +57,15 @@ export function TableTabList() {
           case "edit":
             EditTableTabDialog.show$()
             break
+          case "insert_column":
+            TableCreateColumnDialog.show$()
+            break
+          case "insert_row":
+            event$.emit$("insertRow")
+            break
         }
       },
-    })
+    }) as ITableMoreOptionsDropdownMenuProps
   )
 
   const EditTableTabDialog = createLazyLoadedDialog(
@@ -99,6 +116,7 @@ export function TableTabList() {
       </Tooltip>
 
       <EditTableTabDialog.Dialog$ />
+      <TableCreateColumnDialog.Dialog$ />
     </div>
   )
 }

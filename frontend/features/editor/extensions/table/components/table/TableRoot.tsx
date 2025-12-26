@@ -1,27 +1,32 @@
 import { For, Show, type ParentProps } from "solid-js"
+import { MERGE_CLASS } from "macro-def"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./TableRoot.module.css"
+import "~/styles/scrollbar.css"
+// ...
+import { useEditorContext } from "~/features/editor/provider"
 // ...
 import { TableRow, TableHeader } from "./stuff"
 import { useTableContext } from "../../provider"
 import { TableDataHeader, TableDataItem } from "../table-data-display"
 import { TableCreateColumnButton } from "./stuff"
-import { useEditorContext } from "~/features/editor/provider"
 
 const style = stylex.create({
   table: {
     userSelect: "none",
-    width: "100%"
+    width: "100%",
   },
   table__outer: {
-    overflowX: "auto",
+    width: "100%",
+    // hacky way to show the table horizontal scrollbar
+    maxWidth: "calc(100% - 2.375rem)",
   },
   table__content: {
-    width: "auto"
+    width: "auto",
     // Ensure the table itself doesn't restrict width
-    // tableLayout: "fixed"
-    // how the fuck can I make the table scrollable
+    tableLayout: "fixed",
+    paddingRight: "3rem"
   },
   table__head: {
     position: "sticky",
@@ -30,6 +35,9 @@ const style = stylex.create({
   },
   table__headerDraggable: {
     width: 5
+  },
+  table__draggableRowHandleIndicator: {
+    width: 2
   }
 })
 
@@ -39,13 +47,13 @@ export function TableRoot(props: ParentProps) {
 
   return (
     <div {...stylex.attrs(style.table)}>
-      <div {...stylex.attrs(style.table__outer)}>
+      <div class={MERGE_CLASS('scrollbar', 'scrollbarHorizontal', stylex.attrs(style.table__outer))}>
         <table {...stylex.attrs(style.table__content)} id={__style.table}>
           <thead>
             <tr>
               <Show when={!isReadonly$()}>
                 {/* A single lonely <th /> for draggable handle */}
-                <th data-table-draggable-handle-indicator />
+                <th {...stylex.attrs(style.table__draggableRowHandleIndicator)} />
               </Show>
               <For each={columns$.get$()}>
                 {(col, colIndex) => (
@@ -54,12 +62,6 @@ export function TableRoot(props: ParentProps) {
                   </TableHeader>
                 )}
               </For>
-              <Show when={!isReadonly$()}>
-                {/* Another for creating row */}
-                <th>
-                  <TableCreateColumnButton />
-                </th>
-              </Show>
             </tr>
           </thead>
           <tbody>
@@ -69,7 +71,7 @@ export function TableRoot(props: ParentProps) {
                   rowData$={row}
                   rowIndex$={rowIndex()}
                   rowItemComponent$={TableDataItem}
-                />                  
+                />
               )}
             </For>
           </tbody>

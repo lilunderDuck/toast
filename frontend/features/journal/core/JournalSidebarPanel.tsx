@@ -4,7 +4,8 @@ import stylex from "@stylexjs/stylex";
 
 const style = stylex.create({
   sidebar: {
-    backgroundColor: "var(--sidebar-panel-bg)"
+    backgroundColor: "var(--sidebar-panel-bg)",
+    flexShrink: 0
   },
   sidebar__header: {
     height: "var(--top-header-height)"

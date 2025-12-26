@@ -33,7 +33,7 @@ interface ITableProviderProps {
 }
 
 export function TableProvider(props: ParentProps<ITableProviderProps>) {
-  const { updateTableGrid$ } = useTablesDataContext()
+  const { updateTableGrid$, event$ } = useTablesDataContext()
 
   const updateData = debounce(() => {
     updateTableGrid$(props.tabId$, {
@@ -58,12 +58,12 @@ export function TableProvider(props: ParentProps<ITableProviderProps>) {
 
   const createColumn: ITableContext["createColumn$"] = (label, type) => {
     const rows = rowsManager.get$()
-    const newColumn: editor.ColumnData = {
+    const newColumn = {
       label: label,
       type: type,
       key: makeId(6),
       additionalData: undefined
-    }
+    } as editor.TableColumnData
 
     for (const row of rows) {
       row[newColumn.key] = getTableDefaultData(newColumn.type)
@@ -75,6 +75,9 @@ export function TableProvider(props: ParentProps<ITableProviderProps>) {
     updateData()
   }
 
+  event$.on$("insertColumn", createColumn)
+  event$.on$("insertRow", createRow)
+
   return (
     <Context.Provider value={{
       columns$: columnsManager,
@@ -83,7 +86,7 @@ export function TableProvider(props: ParentProps<ITableProviderProps>) {
       draggedRowIndex$: createStateSlice(),
       draggedColumnIndex$: createStateSlice(),
       resizingColumnIndex$: createStateSlice(),
-      columnWidths$: createStateSlice([0]),
+      columnWidths$: createStateSlice([50]),
       startX$: createStateSlice(),
       // ...
       createColumn$: createColumn,

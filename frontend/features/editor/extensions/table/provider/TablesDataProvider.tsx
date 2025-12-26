@@ -1,18 +1,19 @@
 import { createContext, createSignal, onMount, type ParentProps, useContext } from "solid-js"
 // ...
 import { createTabs, type StateSlice, type TabsHandler } from "~/hooks"
-import { type IEvent } from "~/utils"
+import { createEvent, type IEvent } from "~/utils"
 import type { editor } from "~/wailsjs/go/models"
 import { CreateTable, CreateTableGrid, GetTable, UpdateTable, UpdateTableGrid } from "~/wailsjs/go/editor/Exports"
 import { useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 import { createOrGetData } from "~/features/editor/utils"
 // ...
-import type { TableAttribute } from "./data"
+import type { TableAttribute, TableEventMap } from "./data"
 
 interface ITablesDataContext {
   title$: StateSlice<string>
   tabs$: TabsHandler<editor.TableTabData>
   updateTableGrid$(tableTabId: string, data: editor.TableGridData): Promise<void>
+  readonly event$: TableEventMap
 }
 
 const Context = createContext<ITablesDataContext>()
@@ -73,9 +74,10 @@ export function TablesDataProvider(props: ParentProps<ITablesDataProviderProps>)
             title: newValue as string
           } as editor.TableUpdateOption)
           return newValue
-        } 
+        }
       },
       tabs$: tabs,
+      event$: createEvent(),
       updateTableGrid$: updateTableGrid
     }}>
       {props.children}
