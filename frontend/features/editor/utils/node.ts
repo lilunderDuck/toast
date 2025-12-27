@@ -1,6 +1,8 @@
 import { useSolidNodeView } from "~/libs/solid-tiptap-renderer"
+// ...
+import type { EditorGenericIdAttribute } from "../provider"
 
-export async function createOrGetData<T extends { id: string }>(
+export async function createOrGetData<T extends EditorGenericIdAttribute>(
   conditionToCreate: boolean,
   createFn: AnyNoArgsAsyncFunction,
   getFn: AnyNoArgsAsyncFunction

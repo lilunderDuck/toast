@@ -1,4 +1,3 @@
-import type { JSONContent } from '@tiptap/core'
 import {
   createContext,
   createSignal,
@@ -9,34 +8,16 @@ import {
   type Setter
 } from "solid-js"
 // ...
-import { createEvent, createStorage, debounce, type IEvent } from "~/utils"
+import { createEvent, createStorage, debounce } from "~/utils"
 import { type SolidEditor, useEditor } from '~/libs/solid-tiptap-renderer'
 // ...
 import { getExtensions } from './extensions'
+import type { EditorData, EditorEventMap } from './data'
 
 export interface IEditorProviderProps {
   /**A unique id for this editor instance. */
   id$: string
 }
-
-export type EditorData = {
-  /**The unique identifier for the current editor's content. */
-  id: string
-  /**The content of the editor. */
-  content: JSONContent
-}
-
-export type EditorEvent = IEvent<{
-  /**Fired when the editor is switching to a new document. 
-   * @param oldData The data of the document before being replaced.
-   */
-  [EditorEvent.ON_SWITCHING]: (oldData: EditorData) => any
-  /**Fired when the editor's content is updated. 
-   * @param data The updated editor data.
-   */
-  [EditorEvent.ON_UPDATE]: (data: EditorData) => any
-  [EditorEvent.UPDATE_BONGO_CAT_ANIMATION]: AnyNoArgsFunction
-}>
 
 export interface IEditorContext {
   /**The editor instance */
@@ -52,7 +33,7 @@ export interface IEditorContext {
    */
   open$(data: EditorData): void
   /**Basically every editor event related stuff is in here. */
-  event$: EditorEvent
+  event$: EditorEventMap
   wordCount$: Accessor<number>
   charCount$: Accessor<number>
   isAutoSaving$: Accessor<boolean>
@@ -67,7 +48,7 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
   const [charCount, setCharCount] = createSignal(0)
 
   const localStorageWrapper = createStorage(localStorage, `editor_${props.id$}`)
-  const event: EditorEvent = createEvent()
+  const event: EditorEventMap = createEvent()
   // Local state to check which one is currently opened
   let currentlyOpenedId = ''
   // Another state to prevent the editor from saving after loaded.
@@ -111,7 +92,7 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
       event.emit$(EditorEvent.ON_SWITCHING, getCurrentData())
     }
 
-    console.log("incoming json data", data)
+    console.log("[editor] incoming json data", data)
     currentlyOpenedId = data.id
     isOpening = true
     try {

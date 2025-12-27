@@ -10,7 +10,16 @@ import { TextStyle, BackgroundColor, Color } from '@tiptap/extension-text-style'
 import { CharacterCount } from '@tiptap/extensions'
 import { MERGE_CLASS } from 'macro-def'
 // ...
-import { LocalEmbedExtension, TagExtension, GalleryExtension, ImageExtension, TableExtension, CodeBlockExtension, PlaylistExtension, TasksNode } from "../extensions"
+import { 
+  LocalEmbedExtension, 
+  TagExtension, 
+  GalleryExtension, 
+  ImageExtension, 
+  TableExtension, 
+  CodeBlockExtension, 
+  PlaylistExtension, 
+  TasksNode 
+} from "../extensions"
 // ...
 import { pluginEvent } from '~/plugins'
 // ...

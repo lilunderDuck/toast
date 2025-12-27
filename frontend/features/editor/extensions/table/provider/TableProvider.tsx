@@ -1,10 +1,10 @@
 import { createContext, type ParentProps, useContext } from "solid-js"
 // ...
 import { createStateSlice, type StateSlice } from "~/hooks"
-import { debounce, makeId } from "~/utils"
+import { arrayObjects, debounce, makeId } from "~/utils"
 import type { editor } from "~/wailsjs/go/models"
 // ...
-import type { ColumnData, RowData } from "./data"
+import type { ColumnData, RowData, TagColumnData } from "./data"
 import { createColumnsManager, type IColumnsManager } from "./column"
 import { createRowsManager, type IRowManager } from "./row"
 import { useTablesDataContext } from "./TablesDataProvider"
@@ -17,11 +17,12 @@ interface ITableContext {
   draggedRowIndex$: StateSlice<number | undefined>
   draggedColumnIndex$: StateSlice<number | undefined>
   resizingColumnIndex$: StateSlice<number | undefined>
-  columnWidths$: StateSlice<number[]>
+  // columnWidths$: StateSlice<number[]>
   startX$: StateSlice<number | undefined>
   // ...
   createRow$(): void
   createColumn$(label: string, type: TableDataType): void
+  deleteColumn$(columnId: string): void
 }
 
 const Context = createContext<ITableContext>()
@@ -65,6 +66,17 @@ export function TableProvider(props: ParentProps<ITableProviderProps>) {
       additionalData: undefined
     } as editor.TableColumnData
 
+    switch (type) {
+      case TableDataType.TAG:
+        (newColumn.additionalData as unknown as TagColumnData["additionalData"]) = {
+          tags: []
+        }
+        break;
+    
+      default:
+        break;
+    }
+
     for (const row of rows) {
       row[newColumn.key] = getTableDefaultData(newColumn.type)
     }
@@ -72,6 +84,24 @@ export function TableProvider(props: ParentProps<ITableProviderProps>) {
     rowsManager.set$(rows)
     columnsManager.set$(prev => [...prev, newColumn])
     console.log("[table] Added new column", newColumn, columnsManager.get$())
+    updateData()
+  }
+
+  const deleteColumn: ITableContext["deleteColumn$"] = (columnId) => {
+    const columnArray = arrayObjects(columnsManager.get$())
+    if (isDevMode) {
+      const [previousData] = columnArray.find$(it => it.key === columnId)
+      console.assert(previousData, `Could not find column id: "${columnId}".`)
+    }
+
+    columnsManager.set$(prev => [...arrayObjects(prev).remove$("key", columnId)])
+
+    const rows = rowsManager.get$()
+    for (const row of rows) {
+      delete row[columnId]
+    }
+
+    rowsManager.set$(rows)
     updateData()
   }
 
@@ -86,11 +116,12 @@ export function TableProvider(props: ParentProps<ITableProviderProps>) {
       draggedRowIndex$: createStateSlice(),
       draggedColumnIndex$: createStateSlice(),
       resizingColumnIndex$: createStateSlice(),
-      columnWidths$: createStateSlice([50]),
+      // columnWidths$: createStateSlice([50]),
       startX$: createStateSlice(),
       // ...
       createColumn$: createColumn,
-      createRow$: createRow
+      createRow$: createRow,
+      deleteColumn$: deleteColumn
     }}>
       {props.children}
     </Context.Provider>

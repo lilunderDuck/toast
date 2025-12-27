@@ -1,4 +1,4 @@
-import { createSignal, Show, type Component } from "solid-js"
+import { createSignal, Show, type ParentProps } from "solid-js"
 // ...
 import type { LazyComponent } from "./types"
 import { ContextMenu, ContextMenuTrigger } from "../../components/ui"
@@ -9,7 +9,6 @@ export interface IContextMenu {
 }
 
 export function createLazyLoadedContextMenu<Props extends IContextMenu>(
-  TriggerComponent: Component,
   Component: LazyComponent<Props>, 
   // @ts-ignore  should work
   itProps: () => LazyComponentProps<LazyComponent<Props>> = () => {}
@@ -29,7 +28,7 @@ export function createLazyLoadedContextMenu<Props extends IContextMenu>(
   const LazyComponent = createLazyComponent(Component)
 
   return {
-    ContextMenu$() {
+    ContextMenu$(props: ParentProps) {
       return (
         <ContextMenu>
           <ContextMenuTrigger as="div" onMouseUp={(e) => {
@@ -37,7 +36,7 @@ export function createLazyLoadedContextMenu<Props extends IContextMenu>(
               show()
             }
           }}>
-            <TriggerComponent />
+            {props.children}
           </ContextMenuTrigger>
           <Show when={showing()}>
             <LazyComponent {...itProps()} close$={close} />

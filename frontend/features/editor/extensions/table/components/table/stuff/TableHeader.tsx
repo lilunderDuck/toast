@@ -1,16 +1,20 @@
 import type { ParentProps } from "solid-js"
 // ...
 import { reorderArray } from "~/utils"
+import { createLazyLoadedContextMenu } from "~/hooks"
 // ...
 import { useTableContext } from "../../../provider"
 import { TableItem } from "./TableItem"
+import type { ITableHeaderContextMenuProps } from "./TableHeaderContextMenu"
+import { Tooltip } from "~/components"
 
 interface ITableHeaderProps {
   columnIndex$: number
+  columnId$: string
 }
 
 export function TableHeader(props: ParentProps<ITableHeaderProps>) {
-  const { draggedColumnIndex$, columns$, resizingColumnIndex$, columnWidths$ } = useTableContext()
+  const { draggedColumnIndex$, columns$, resizingColumnIndex$, /*columnWidths$,*/ deleteColumn$ } = useTableContext()
 
   const handleColDragStart = (e: EventType<"th", "onDragStart">, index: number) => {
     resizingColumnIndex$.set$(index)
@@ -48,6 +52,22 @@ export function TableHeader(props: ParentProps<ITableHeaderProps>) {
     // document.querySelectorAll('th').forEach(th => th.classList.remove('border-r-4', 'border-r-blue-300', 'border-opacity-70'))
   }
 
+  const TableHeaderContextMenu = createLazyLoadedContextMenu(
+    () => import("./TableHeaderContextMenu"),
+    () => ({
+      action$(type) {
+        switch (type) {
+          case "delete_column":
+            deleteColumn$(props.columnId$)
+            break;
+
+          default:
+            break;
+        }
+      },
+    }) as ITableHeaderContextMenuProps
+  )
+
   return (
     <th
       scope="col"
@@ -57,11 +77,15 @@ export function TableHeader(props: ParentProps<ITableHeaderProps>) {
       onDrop={(e) => handleColDrop(e, props.columnIndex$)}
       onDragEnd={handleColDragEnd}
       onDragLeave={handleColDragLeave}
-      style={{ width: columnWidths$.get$()[props.columnIndex$] + 'px' }}
+      // style={{ width: columnWidths$.get$()[props.columnIndex$] + 'px' }}
     >
-      <TableItem>
-        {props.children}
-      </TableItem>
+      <Tooltip label$="Right click for more options">
+        <TableHeaderContextMenu.ContextMenu$>
+          <TableItem>
+            {props.children}
+          </TableItem>
+        </TableHeaderContextMenu.ContextMenu$>
+      </Tooltip>
     </th>
   )
 }

@@ -2,6 +2,7 @@ import { type Command } from '@tiptap/core'
 // ...
 import { createEditorNode, insertNodeAtCurrentPosition } from '../../utils'
 import GalleryNodeView from './node'
+import type { EditorGenericIdAttribute } from '../../provider'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -11,10 +12,10 @@ declare module '@tiptap/core' {
   }
 }
 
+
 export type GalleryAttribute = {
-  id: string
   viewMode?: GalleryViewMode
-}
+} & EditorGenericIdAttribute
 
 export const GalleryExtension = createEditorNode<
   GalleryAttribute, 

@@ -1,5 +1,6 @@
 import type { IEvent } from "~/utils"
 import type { DEFAULT_VALUE_MAPPING } from "./icon"
+import type { EditorGenericIdAttribute } from "~/features/editor/provider"
 
 type BaseColumnData<T = TableDataType> = {
   key: string
@@ -23,9 +24,7 @@ export type TableDefaultValueMapping<T extends TableDataType> =
   typeof DEFAULT_VALUE_MAPPING[T]
 // ...
 
-export type TableAttribute = {
-  id: string
-}
+export type TableAttribute = EditorGenericIdAttribute
 
 export type TableEventMap = IEvent<{
   insertRow: () => any

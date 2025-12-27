@@ -1,13 +1,15 @@
 import { createSignal, For, onCleanup } from "solid-js"
-import { Button, Label, Input, PopoverContent, Tag } from "~/components"
-import { useTagInputContext } from "./TagInputProvider"
+import { BsCheck } from "solid-icons/bs"
+// ...
 import stylex from "@stylexjs/stylex"
 import __style from "./TagInputPopover.module.css"
-
-import { BsCheck } from "solid-icons/bs"
+// ...
+import { createInputShortcutHandler } from "~/hooks"
+import { Button, Label, Input, PopoverContent, Tag } from "~/components"
+// ...
+import { useTagInputContext } from "./TagInputProvider"
 import type { TagData } from "../../../provider"
 import TagInputHint from "./TagInputHint"
-import { createToggableInput } from "~/hooks"
 
 const style = stylex.create({
   tagInput: {
@@ -44,16 +46,14 @@ export default function TagInputPopover() {
     startSearching$(searchedQuery.toLowerCase().trim())
   }
 
-  const slappingYaKeyboard: EventHandler<"input", "onKeyUp"> = (keyboardEvent) => {
-    const keyPressed = keyboardEvent.key.toLowerCase()
-    switch (keyPressed) {
-      case "esc": return cleanSearchResult$()
-      case "enter": return createTag()
-    
-      default:
-        break;
-    }
-  }
+  const inputShortcut = createInputShortcutHandler({
+    onDiscard$() {
+      cleanSearchResult$()
+    },
+    onFinalize$() {
+      createTag()
+    },
+  })
 
   const createTag = () => {
     createNewTag$(tagHint$()!.name$, color())
@@ -73,7 +73,7 @@ export default function TagInputPopover() {
       <Input
         placeholder="Type something..."
         onInput={searchHard}
-        onKeyUp={slappingYaKeyboard}
+        onKeyUp={inputShortcut}
         ref={inputRef}
       />
 
@@ -97,9 +97,9 @@ export default function TagInputPopover() {
         )}
       </For>
 
-      <TagInputHint 
-        color$={color} 
-        setColor$={setColor} 
+      <TagInputHint
+        color$={color}
+        setColor$={setColor}
         onCreateNewTag$={createTag}
       />
 

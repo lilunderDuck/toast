@@ -1,8 +1,9 @@
 import { type Command } from '@tiptap/core'
+import { lazy } from 'solid-js'
 // ...
 import { createEditorNode, insertNodeAtCurrentPosition } from '../../utils'
-import PlaylistNode from './node'
 import { PlaylistProvider } from './provider'
+import type { EditorGenericIdAttribute } from '../../provider'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -12,9 +13,9 @@ declare module '@tiptap/core' {
   }
 }
 
-export type PlaylistAttribute = {
-  id: string
-}
+const PlaylistNodeView = lazy(() => import('./node'))
+
+export type PlaylistAttribute = EditorGenericIdAttribute
 
 export const PlaylistExtension = createEditorNode<
   PlaylistAttribute, 
@@ -36,7 +37,7 @@ export const PlaylistExtension = createEditorNode<
   
   View$: () => (
     <PlaylistProvider>
-      <PlaylistNode />
+      <PlaylistNodeView />
     </PlaylistProvider>
   )
 })

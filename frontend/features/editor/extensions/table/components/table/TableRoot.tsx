@@ -10,7 +10,6 @@ import { useEditorContext } from "~/features/editor/provider"
 import { TableRow, TableHeader } from "./stuff"
 import { useTableContext } from "../../provider"
 import { TableDataHeader, TableDataItem } from "../table-data-display"
-import { TableCreateColumnButton } from "./stuff"
 
 const style = stylex.create({
   table: {
@@ -20,7 +19,7 @@ const style = stylex.create({
   table__outer: {
     width: "100%",
     // hacky way to show the table horizontal scrollbar
-    maxWidth: "calc(100% - 2.375rem)",
+    maxWidth: "63.5vw",
   },
   table__content: {
     width: "auto",
@@ -57,7 +56,7 @@ export function TableRoot(props: ParentProps) {
               </Show>
               <For each={columns$.get$()}>
                 {(col, colIndex) => (
-                  <TableHeader columnIndex$={colIndex()}>
+                  <TableHeader columnIndex$={colIndex()} columnId$={col.key}>
                     <TableDataHeader {...col} />
                   </TableHeader>
                 )}

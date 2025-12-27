@@ -22,7 +22,7 @@ const style = stylex.create({
   }
 })
 
-export default function PlaylistNode() {
+export default function PlaylistNodeView() {
   const { attrs$ } = usePlaylistContext()
 
   return (

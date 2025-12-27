@@ -9,6 +9,9 @@ const style = stylex.create({
     alignItems: "center",
     gap: 5
   },
+  tagInput__placeholder: {
+    color: "var(--gray10)"
+  }
 })
 
 export default function TagInputPopoverTrigger() {
@@ -17,7 +20,7 @@ export default function TagInputPopoverTrigger() {
   return (
     <PopoverTrigger as="div" {...stylex.attrs(style.tagInput__display)}>
       <For each={selectedOptions$()} fallback={
-        <span>Click to select</span>
+        <span {...stylex.attrs(style.tagInput__placeholder)}>Click to select</span>
       }>
         {it => (
           <Tag color$={it.color}>

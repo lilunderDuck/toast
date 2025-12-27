@@ -6,7 +6,7 @@
 
 #table th,
 #table td {
-  padding-inline: 2px;
+  padding-inline: 5px;
   border: 1px solid var(--gray4)
 }
 

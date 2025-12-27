@@ -28,7 +28,7 @@ interface ITableResizeHandleProps {
 }
 
 export function TableResizeHandle(props: ITableResizeHandleProps) {
-  const { draggedColumnIndex$, resizingColumnIndex$, startX$, columnWidths$ } = useTableContext()
+  const { draggedColumnIndex$, resizingColumnIndex$, startX$, /*columnWidths$*/ } = useTableContext()
   const startResize = (e: EventType<"div", "onMouseDown">, index: number) => {
     e.preventDefault()
     // Prevent drag and resize conflict
@@ -55,20 +55,20 @@ export function TableResizeHandle(props: ITableResizeHandleProps) {
 
     const deltaX = e.clientX - startX$.get$()!
 
-    columnWidths$.set$(prevWidths => {
-      const newWidths = [...prevWidths]
-      const currentWidth = newWidths[props.currentIndex$]
+    // columnWidths$.set$(prevWidths => {
+    //   const newWidths = [...prevWidths]
+    //   const currentWidth = newWidths[props.currentIndex$]
 
-      const newWidth = Math.max(TABLE_MINIMUM_COLUMN_WIDTH, currentWidth + deltaX)
+    //   const newWidth = Math.max(TABLE_MINIMUM_COLUMN_WIDTH, currentWidth + deltaX)
 
-      if (newWidth !== currentWidth) {
-        newWidths[props.currentIndex$] = newWidth
-        // Only update startX if width actually changed (prevents jitter)
-        startX$.set$(e.clientX)
-      }
+    //   if (newWidth !== currentWidth) {
+    //     newWidths[props.currentIndex$] = newWidth
+    //     // Only update startX if width actually changed (prevents jitter)
+    //     startX$.set$(e.clientX)
+    //   }
 
-      return newWidths
-    })
+    //   return newWidths
+    // })
   })
 
   const mouseUpHandler = useDocumentEventListener('mouseup', (e) => {

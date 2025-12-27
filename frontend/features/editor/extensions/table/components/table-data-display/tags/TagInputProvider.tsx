@@ -42,10 +42,18 @@ interface ITagInputProviderProps {
 }
 
 export function TagInputProvider(props: ParentProps<ITagInputProviderProps>) {
-  console.assert(Array.isArray(props.options$), "Tag options$ prop should be an array.")
+  if (isDevMode) {
+    if (!Array.isArray(props.options$)) {
+      console.warn(
+        '[table - TagInputProvider] Tag props.options$ prop should be an array.\n',
+        'Current props.options$ value is:', props.options$, "\n",
+        'It will be reset back to empty array ->', []
+      )
+    }
+  }
 
   const [selectedOptions, setSelectedOptions] = createSignal(props.value$ ?? [])
-  const [allOptions, setAllOptions] = createSignal<TagData[]>(props.options$)
+  const [allOptions, setAllOptions] = createSignal<TagData[]>(props.options$ ?? [])
   const [tagHint, setTagHint] = createSignal<ITagHint>()
 
   const { columns$ } = useTableContext()
@@ -57,6 +65,7 @@ export function TagInputProvider(props: ParentProps<ITagInputProviderProps>) {
 
   const toggleSelect = (tagData: TagData) => {
     isInSelectedOptions(tagData.name) ? removeTag(tagData) : addTag(tagData)
+    console.log("[table - TagInputProvider] toggle select tag", tagData)
   }
 
   const addTag = (tagData: TagData) => {
@@ -72,9 +81,19 @@ export function TagInputProvider(props: ParentProps<ITagInputProviderProps>) {
   const createNewTag = (name: string, color: string) => {
     const tagData = { name, color }
     columns$.updateData$<TagColumnData>(props.columnId$, (prev) => {
-      const tagsData = prev.additionalData.tags
+      if (isDevMode) {
+        if (!prev.additionalData?.tags) {
+          console.warn(
+            '[table - TagInputProvider] Missing additional data: \"tags\" for this tag column.',
+            'It could be because the column is incorrectly created.',
+            'It will be reset back to ->', []
+          )
+        }
+      }
+
+      const tagsData: TagData[] = prev.additionalData?.tags ?? []
       tagsData.push(tagData)
-      console.log(tagsData)
+      console.log('[table - TagInputProvider] all tags data:', tagsData)
       return {
         additionalData: {
           tags: tagsData
@@ -83,6 +102,8 @@ export function TagInputProvider(props: ParentProps<ITagInputProviderProps>) {
     })
 
     addTag(tagData)
+    setAllOptions(prev => [...prev, tagData])
+    console.log("[table - TagInputProvider] new tag created:", tagData)
   }
 
   // Store all options to this variable when searching.
@@ -110,19 +131,19 @@ export function TagInputProvider(props: ParentProps<ITagInputProviderProps>) {
     const searchResult = cachedAllOptions.filter(it => it.name.includes(query))
 
     setAllOptions(searchResult)
-    console.log("search query:", query, "result:", searchResult)
+    console.log("[table - TagInputProvider] search query:", query, "result:", searchResult)
   }
 
   const cleanSearchResult = () => {
     // Avoid getting zero result when opening the select tag option menu.
     // This can be done by not searching anything and then clicking outside
     // to close the popover
-    if (!cachedAllOptions) return console.log("no need to clean search result")
+    if (!cachedAllOptions) return console.log("[table - TagInputProvider] no need to clean search result")
 
     setAllOptions(cachedAllOptions!)
     setTagHint(undefined)
     cachedAllOptions = undefined
-    console.log("search result cleaned")
+    console.log("[table - TagInputProvider] search result cleaned")
   }
 
   return (

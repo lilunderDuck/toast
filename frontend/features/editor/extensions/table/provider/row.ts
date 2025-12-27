@@ -22,7 +22,7 @@ export function createRowsManager(
     rowData[columnKey] = data
     setRows(rows())
 
-    console.log("Row index", rowIndex, "at column", columnKey, "updated to", rows()[rowIndex])
+    console.log("[table] Row index", rowIndex, "at column", columnKey, "updated to", rows()[rowIndex])
     onDataUpdate()
   }
 
