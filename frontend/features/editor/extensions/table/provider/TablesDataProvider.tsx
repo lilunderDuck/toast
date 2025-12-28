@@ -1,9 +1,9 @@
 import { createContext, createSignal, onMount, type ParentProps, useContext } from "solid-js"
 // ...
 import { createTabs, type StateSlice, type TabsHandler } from "~/hooks"
-import { createEvent, type IEvent } from "~/utils"
+import { createEvent, makeId } from "~/utils"
 import type { editor } from "~/wailsjs/go/models"
-import { CreateTable, CreateTableGrid, GetTable, UpdateTable, UpdateTableGrid } from "~/wailsjs/go/editor/Exports"
+import { CreateTable, CreateTableGrid, DeleteTable, GetTable, UpdateTable, UpdateTableGrid } from "~/wailsjs/go/editor/Exports"
 import { useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 import { createOrGetData } from "~/features/editor/utils"
 // ...
@@ -13,6 +13,8 @@ interface ITablesDataContext {
   title$: StateSlice<string>
   tabs$: TabsHandler<editor.TableTabData>
   updateTableGrid$(tableTabId: string, data: editor.TableGridData): Promise<void>
+  deleteTable$(): void
+  createTableTab$(): void
   readonly event$: TableEventMap
 }
 
@@ -23,7 +25,7 @@ interface ITablesDataProviderProps {
 }
 
 export function TablesDataProvider(props: ParentProps<ITablesDataProviderProps>) {
-  const { attrs$ } = useSolidNodeView<TableAttribute>()
+  const { attrs$, delete$ } = useSolidNodeView<TableAttribute>()
 
   const tabs = createTabs<editor.TableTabData>([])
   const tableId = () => attrs$().id
@@ -78,7 +80,20 @@ export function TablesDataProvider(props: ParentProps<ITablesDataProviderProps>)
       },
       tabs$: tabs,
       event$: createEvent(),
-      updateTableGrid$: updateTableGrid
+      updateTableGrid$: updateTableGrid,
+      deleteTable$() {
+        DeleteTable(tableId())
+        delete$()
+      },
+      createTableTab$() {
+        const NEW_TAB_ID = makeId(5)
+        tabs.create$({
+          id: NEW_TAB_ID,
+          name: "Table view",
+          type: TableViewType.TABLE
+        })
+        CreateTableGrid(tableId(), NEW_TAB_ID)
+      }
     }}>
       {props.children}
     </Context.Provider>

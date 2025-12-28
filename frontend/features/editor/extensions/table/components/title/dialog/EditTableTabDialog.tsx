@@ -20,7 +20,7 @@ export default function EditTableTabDialog(props: IEditTableTabDialogProps) {
       props.onSubmit$(data)
       props.close$()
     },
-    submitButtonText$: "Edit",
+    submitButtonText$: props.oldTitle$ ? "Edit" : "Create",
     buttonRow$: (
       <Button
         variant$={ButtonVariant.DANGER}
@@ -39,7 +39,7 @@ export default function EditTableTabDialog(props: IEditTableTabDialogProps) {
       </DialogTitle>
       <Form$>
         <Field$ name="newTitle$">
-          {(store, inputProps) => (
+          {(_, inputProps) => (
             <Input
               type="text"
               placeholder={props.oldTitle$}

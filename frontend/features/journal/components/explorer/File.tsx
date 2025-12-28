@@ -1,5 +1,4 @@
 import { A } from "@solidjs/router"
-import { BsStickyFill } from "solid-icons/bs"
 // ...
 import { MERGE_CLASS } from "macro-def"
 // ...
@@ -45,7 +44,6 @@ export function File(props: IFileProps) {
       data-link-no-color=""
       data-no-focus-highlight=""
     >
-      <BsStickyFill data-journal-type="not implemented" class={__style.file__icon} />
       <span {...stylex.attrs(style.file__name)}>
         {props.name$}
       </span>

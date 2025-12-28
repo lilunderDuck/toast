@@ -116,6 +116,7 @@ export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
       setTabs(prev => [...arrayObjects(prev).remove$('id', tabId)])
     },
     set$: setNewTabs,
+    get$: tabs,
     TabList$: (props: { tabComponent$: VoidComponent<T> }) => (
       <section
         {...stylex.attrs(style.tabList)}

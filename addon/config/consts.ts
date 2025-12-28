@@ -317,6 +317,19 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'KANBAN'
   ]) // do not reorder
 
+  define('TableEvent', [
+    'INSERT_ROW',
+    'INSERT_COLUMN'
+  ])
+
+  define('TableMoreOptionsDropdownAction', [
+    'EDIT_CURRENT_TAB',
+    'INSERT_ROW',
+    'INSERT_COLUMN',
+    'DELETE_CURRENT_TAB',
+    'DELETE_ALL'
+  ])
+
   define('TABLE_DEFAULT_ID', '')
 
   define('FloatingMenuType', [

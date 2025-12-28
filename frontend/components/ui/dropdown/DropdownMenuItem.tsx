@@ -19,14 +19,20 @@ const style = stylex.create({
     transitionProperty: "color, background-color, border-color, text-decoration-color, fill, stroke",
     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
     transitionDuration: "300ms",
-    cursor: "default",
     userSelect: "none",
+  },
+  menuItem__default: {
+    cursor: "default",
     color: "var(--gray11)",
     ':hover': {
       backgroundColor: 'var(--gray5)',
       color: "var(--gray12)",
     }
   },
+  menuItem__disabled: {
+    cursor: "not-allowed",
+    color: "var(--gray10)"
+  }
 })
 
 export interface IDropdownMenuItemProps<T extends ValidComponent = "div"> extends DropdownMenuItemProps<T> {
@@ -41,7 +47,8 @@ export function DropdownMenuItem<T extends ValidComponent = "div">(
     <Item
       class={MERGE_CLASS(
         props,
-        stylex.attrs(style.menuItem)
+        stylex.attrs(style.menuItem),
+        props.disabled ? stylex.attrs(style.menuItem__disabled) : stylex.attrs(style.menuItem__default)
       )}
       {...rest}
     />

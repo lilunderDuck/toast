@@ -27,6 +27,6 @@ export type TableDefaultValueMapping<T extends TableDataType> =
 export type TableAttribute = EditorGenericIdAttribute
 
 export type TableEventMap = IEvent<{
-  insertRow: () => any
-  insertColumn: (name: string, type: TableDataType) => any
+  [TableEvent.INSERT_ROW]: () => any
+  [TableEvent.INSERT_COLUMN]: (name: string, type: TableDataType) => any
 }>

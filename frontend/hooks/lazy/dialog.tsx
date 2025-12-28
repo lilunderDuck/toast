@@ -43,3 +43,6 @@ export function createLazyLoadedDialog<Props extends ILazyDialog>(
     close$: close
   }
 }
+
+export type LazyDialog<T extends ILazyDialog = ILazyDialog> = 
+  ReturnType<typeof createLazyLoadedDialog<T>>

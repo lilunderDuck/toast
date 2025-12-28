@@ -5,7 +5,8 @@ import { DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "~/
 import { type IDropdownMenu } from "~/hooks"
 
 export interface ITableMoreOptionsDropdownMenuProps extends IDropdownMenu {
-  actions$: (action: "edit" | `insert_${"row" | "column"}`) => any
+  actions$: (action: TableMoreOptionsDropdownAction) => any
+  totalTabs$: number
 }
 
 export default function TableMoreOptionsDropdownMenu(
@@ -13,27 +14,30 @@ export default function TableMoreOptionsDropdownMenu(
 ) {
   return (
     <DropdownMenuContent>
-      <DropdownMenuItem onClick={() => props.actions$("insert_row")}>
+      <DropdownMenuItem onClick={() => props.actions$(TableMoreOptionsDropdownAction.INSERT_ROW)}>
         <AiOutlineInsertRowBelow />
         <span>Insert row</span>
       </DropdownMenuItem>
-      <DropdownMenuItem onClick={() => props.actions$("insert_column")}>
+      <DropdownMenuItem onClick={() => props.actions$(TableMoreOptionsDropdownAction.INSERT_COLUMN)}>
         <AiOutlineInsertRowRight />
         <span>Insert column</span>
       </DropdownMenuItem>
 
       <DropdownMenuSeparator />
-      <DropdownMenuItem onClick={() => props.actions$("edit")}>
+      <DropdownMenuItem onClick={() => props.actions$(TableMoreOptionsDropdownAction.INSERT_ROW)}>
         <BsPencilFill />
         <span>Edit current tab name</span>
       </DropdownMenuItem>
 
       <DropdownMenuSeparator />
-      <DropdownMenuItem>
+      <DropdownMenuItem 
+        onClick={() => props.actions$(TableMoreOptionsDropdownAction.DELETE_CURRENT_TAB)}
+        disabled={props.totalTabs$ == 1}
+      >
         <BsTrash2Fill />
         <span>Delete current view</span>
       </DropdownMenuItem>
-      <DropdownMenuItem>
+      <DropdownMenuItem onClick={() => props.actions$(TableMoreOptionsDropdownAction.DELETE_ALL)}>
         <BsTrash2Fill />
         <span>Delete all</span>
       </DropdownMenuItem>

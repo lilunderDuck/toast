@@ -105,8 +105,8 @@ export function TableProvider(props: ParentProps<ITableProviderProps>) {
     updateData()
   }
 
-  event$.on$("insertColumn", createColumn)
-  event$.on$("insertRow", createRow)
+  event$.on$(TableEvent.INSERT_COLUMN, createColumn)
+  event$.on$(TableEvent.INSERT_ROW, createRow)
 
   return (
     <Context.Provider value={{

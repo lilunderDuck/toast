@@ -1,4 +1,4 @@
-import { createSignal, onCleanup, type ParentProps, Show } from "solid-js"
+import { createSignal, type ParentProps, Show } from "solid-js"
 import {  } from "@kobalte/core/dropdown-menu"
 // ...
 import type { LazyComponent } from "./types"
@@ -9,11 +9,11 @@ export interface IDropdownMenu {
   close$(): void
 }
 
+type OtherDropdownMenuProps<Props extends IDropdownMenu> = () => Omit<Props, "close$">
+
 export function createLazyLoadedDropdownMenu<Props extends IDropdownMenu>(
   Component: LazyComponent<Props>, 
-  // still no auto-complete on lazy loaded component for some reason...
-  // @ts-ignore  should work
-  itProps: () => Omit<LazyDialogComponent<Props>, "close$"> = () => {}
+  itProps = (() => {}) as OtherDropdownMenuProps<Props>
 ) {
   const [showing, setIsShowing] = createSignal(false)
 

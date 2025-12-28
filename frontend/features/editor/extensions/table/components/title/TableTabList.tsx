@@ -1,13 +1,13 @@
-import { BsKanbanFill, BsPlusLg, BsTabletFill, BsThreeDots } from "solid-icons/bs"
+import { BsKanbanFill, BsPlusLg } from "solid-icons/bs"
+import { FaSolidTableColumns } from "solid-icons/fa"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./TableTabList.module.css"
 // ...
-import { createLazyLoadedDialog, createLazyLoadedDropdownMenu } from "~/hooks"
 import { Button, Spacer, Tooltip } from "~/components"
 // ...
-import type { ITableMoreOptionsDropdownMenuProps } from "./TableMoreOptionsDropdownMenu"
 import { useTablesDataContext } from "../../provider"
+import { TableMoreOptionsButton } from "./TableMoreOptionsButton"
 
 const style = stylex.create({
   tab: {
@@ -28,7 +28,7 @@ const style = stylex.create({
 
 const TAB_VIEW_MAPPING = {
   [TableViewType.TABLE]: {
-    icon$: BsTabletFill,
+    icon$: FaSolidTableColumns,
     defaultName$: "Table view"
   },
   [TableViewType.KANBAN]: {
@@ -38,53 +38,12 @@ const TAB_VIEW_MAPPING = {
 }
 
 export function TableTabList() {
-  const { tabs$, event$ } = useTablesDataContext()
-
-  const TableCreateColumnDialog = createLazyLoadedDialog(
-    () => import("./dialog/TableCreateColumnDialog"),
-    () => ({
-      onSubmit$(schema) {
-        event$.emit$("insertColumn", schema.name, schema.type)
-      },
-    })
-  )
-
-  const TableMoreOptionsDropdownMenu = createLazyLoadedDropdownMenu(
-    () => import("./TableMoreOptionsDropdownMenu"),
-    () => ({
-      actions$(action) {
-        switch (action) {
-          case "edit":
-            EditTableTabDialog.show$()
-            break
-          case "insert_column":
-            TableCreateColumnDialog.show$()
-            break
-          case "insert_row":
-            event$.emit$("insertRow")
-            break
-        }
-      },
-    }) as ITableMoreOptionsDropdownMenuProps
-  )
-
-  const EditTableTabDialog = createLazyLoadedDialog(
-    () => import("./EditTableTabDialog"),
-    () => ({
-      oldTitle$: tabs$.getCurrentFocused$().name,
-      onSubmit$(data) {
-        const currentTab = tabs$.getCurrentFocused$()
-        tabs$.update$(currentTab.id, {
-          name: data.newTitle$
-        })
-      },
-    })
-  )
+  const { tabs$, createTableTab$ } = useTablesDataContext()
 
   return (
     <div {...stylex.attrs(style.tab)} id={__style.tabs}>
       <tabs$.TabList$ tabComponent$={(props) => {
-        const view = TAB_VIEW_MAPPING[props.type]
+        const view = TAB_VIEW_MAPPING[props.type as TableViewType]
         return (
           <div
             {...stylex.attrs(style.tab__item)}
@@ -100,23 +59,14 @@ export function TableTabList() {
         <Button
           size$={ButtonSize.ICON}
           variant$={ButtonVariant.NO_BACKGROUND}
+          onClick={createTableTab$}
         >
           <BsPlusLg />
         </Button>
       </Tooltip>
       <Tooltip label$="More options">
-        <TableMoreOptionsDropdownMenu.DropdownMenu$>
-          <Button
-            size$={ButtonSize.ICON}
-            variant$={ButtonVariant.NO_BACKGROUND}
-          >
-            <BsThreeDots />
-          </Button>
-        </TableMoreOptionsDropdownMenu.DropdownMenu$>
+        <TableMoreOptionsButton />
       </Tooltip>
-
-      <EditTableTabDialog.Dialog$ />
-      <TableCreateColumnDialog.Dialog$ />
     </div>
   )
 }
