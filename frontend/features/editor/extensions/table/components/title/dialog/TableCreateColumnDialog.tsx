@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js"
 // ...
 import { DialogContent, DialogTitle, FieldInput } from "~/components"
-import { createSubmitForm, type ILazyDialog } from "~/hooks"
+import { createSubmitForm, type IBaseLazyDialog } from "~/hooks"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -13,7 +13,7 @@ const style = stylex.create({
   }
 })
 
-interface ITableCreateColumnDialogProps extends ILazyDialog {
+interface ITableCreateColumnDialogProps extends IBaseLazyDialog {
   onSubmit$(schema: TableColumnSchema): void
 }
 

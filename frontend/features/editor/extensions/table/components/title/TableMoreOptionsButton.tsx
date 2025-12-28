@@ -43,7 +43,7 @@ export function TableMoreOptionsButton(props: ITableMoreOptionsButtonProps) {
     () => import("./TableMoreOptionsDropdownMenu"),
     () => ({
       totalTabs$: tabs$.get$().length,
-      actions$(action) {
+      action$(action) {
         switch (action) {
           case TableMoreOptionsDropdownAction.EDIT_CURRENT_TAB:
             return EditTableTabDialog.show$()

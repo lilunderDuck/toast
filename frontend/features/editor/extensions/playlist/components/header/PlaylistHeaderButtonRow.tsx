@@ -11,8 +11,7 @@ const style = stylex.create({
   }
 })
 
-export interface IPlaylistHeaderButtonRowProps {
-  onClick$(action: "edit_metadata$" | "add_track_item$"): any
+export interface IPlaylistHeaderButtonRowProps extends IActionHandler<PlaylistHeaderButtonRowAction> {
 }
 
 export function PlaylistHeaderButtonRow(props: IPlaylistHeaderButtonRowProps) {
@@ -21,7 +20,7 @@ export function PlaylistHeaderButtonRow(props: IPlaylistHeaderButtonRowProps) {
       <Tooltip label$="Add track">
         <Button
           size$={ButtonSize.ICON}
-          onClick={() => props.onClick$("add_track_item$")}
+          onClick={() => props.action$(PlaylistHeaderButtonRowAction.ADD_TRACK_ITEM)}
         >
           <BsPlus />
         </Button>
@@ -29,7 +28,7 @@ export function PlaylistHeaderButtonRow(props: IPlaylistHeaderButtonRowProps) {
       <Tooltip label$="Edit playlist">
         <Button
           size$={ButtonSize.ICON}
-          onClick={() => props.onClick$("edit_metadata$")}
+          onClick={() => props.action$(PlaylistHeaderButtonRowAction.EDIT_METADATA)}
         >
           <BsPencilFill />
         </Button>

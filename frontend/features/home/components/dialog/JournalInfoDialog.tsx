@@ -9,7 +9,7 @@ import { Button, ButtonRow, DialogContent, Spacer } from "~/components"
 import { type group } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 import { formatDate, goTimeToDate } from "~/utils"
-import type { ILazyDialog } from "~/hooks"
+import type { IBaseLazyDialog } from "~/hooks"
 
 const style = stylex.create({
   dialog: {
@@ -61,7 +61,7 @@ const style = stylex.create({
   }
 })
 
-interface IJournalInfoDialogProps extends ILazyDialog, group.JournalGroupData {
+interface IJournalInfoDialogProps extends IBaseLazyDialog, group.JournalGroupData {
   // 
 }
 

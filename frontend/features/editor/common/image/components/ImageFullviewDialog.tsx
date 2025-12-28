@@ -1,5 +1,5 @@
 import { AppTitleBarDraggable, DialogContent } from "~/components"
-import type { ILazyDialog } from "~/hooks"
+import type { IBaseLazyDialog } from "~/hooks"
 import { ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "~/features/pan-and-zoom"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -24,7 +24,7 @@ const style = stylex.create({
   }
 })
 
-interface IImageFullviewDialogProps extends ILazyDialog {
+interface IImageFullviewDialogProps extends IBaseLazyDialog {
   src$: string
 }
 

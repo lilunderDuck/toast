@@ -57,7 +57,7 @@ export function TableHeader(props: ParentProps<ITableHeaderProps>) {
     () => ({
       action$(type) {
         switch (type) {
-          case "delete_column":
+          case TableHeaderContextMenuAction.DELETE_COLUMN:
             deleteColumn$(props.columnId$)
             break;
 

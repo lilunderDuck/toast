@@ -1,7 +1,7 @@
 import { Button, ButtonRow, DialogContent, DialogDescription, DialogHeader } from "~/components"
-import type { ILazyDialog } from "~/hooks"
+import type { IBaseLazyDialog } from "~/hooks"
 
-interface ITableDeleteComfirmationDialogProps extends ILazyDialog {
+interface ITableDeleteComfirmationDialogProps extends IBaseLazyDialog {
   onConfirmDeletion$(): void
 }
 

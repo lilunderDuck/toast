@@ -1,7 +1,7 @@
 import { required } from "@modular-forms/solid"
 // ...
 import { Button, createIconInput, DialogContent, DialogHeader, FieldInput } from "~/components"
-import { createSubmitForm, type ILazyDialog } from "~/hooks"
+import { createSubmitForm, type IBaseLazyDialog } from "~/hooks"
 import type { playlist } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 // ...
@@ -35,7 +35,7 @@ type PlaylistMetadataSchema = {
   description?: playlist.PlaylistMetadata["description"]
 }
 
-interface IPlaylistEditMetadataDialogProps extends ILazyDialog {
+interface IPlaylistEditMetadataDialogProps extends IBaseLazyDialog {
   prevData$: playlist.PlaylistMetadata
   context$: IPlaylistContext
 }

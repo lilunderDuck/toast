@@ -2,9 +2,9 @@ import { A } from "@solidjs/router"
 import { BiRegularTestTube } from "solid-icons/bi"
 import { BsLink45deg } from "solid-icons/bs"
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "~/components"
-import type { IDropdownMenu } from "~/hooks"
+import type { IBaseDropdownMenu } from "~/hooks"
 
-interface IJournalListHeaderDropdownProps extends IDropdownMenu {}
+interface IJournalListHeaderDropdownProps extends IBaseDropdownMenu {}
 
 export default function JournalListHeaderDropdown(props: IJournalListHeaderDropdownProps) {
   return (

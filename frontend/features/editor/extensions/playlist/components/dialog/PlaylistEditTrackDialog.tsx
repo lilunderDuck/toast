@@ -1,7 +1,7 @@
 import { required } from "@modular-forms/solid"
 // ...
 import { Button, createIconInput, DialogContent, DialogHeader, FieldInput } from "~/components"
-import { createSubmitForm, type ILazyDialog } from "~/hooks"
+import { createSubmitForm, type IBaseLazyDialog } from "~/hooks"
 import type { playlist } from "~/wailsjs/go/models"
 import { playlistTrackUrl } from "~/api"
 // ...
@@ -36,7 +36,7 @@ type PlaylistTrackSchema = {
   description?: string
 }
 
-interface IPlaylistEditTrackItemDialogProps extends ILazyDialog {
+interface IPlaylistEditTrackItemDialogProps extends IBaseLazyDialog {
   prevData$: playlist.PlaylistItemData
   context$: IPlaylistContext
   currentTrackIndex$: number

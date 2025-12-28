@@ -3,7 +3,7 @@ import { createSignal, Match, Switch } from "solid-js"
 import stylex from "@stylexjs/stylex"
 import __style from "./GalleryDirectoryUploadDialog.module.css"
 // ...
-import { Button, ButtonRow, DialogContent, DialogHeader, type ILazyDialog, RadioGroup, RadioGroupItem, RadioGroupItemLabel, Tooltip } from "~/components"
+import { Button, ButtonRow, DialogContent, DialogHeader, type IBaseLazyDialog, RadioGroup, RadioGroupItem, RadioGroupItemLabel, Tooltip } from "~/components"
 import { createFileUpload } from "~/hooks"
 
 const style = stylex.create({
@@ -41,7 +41,7 @@ const style = stylex.create({
   }
 })
 
-interface IGalleryDirectoryUploadDialogProps extends ILazyDialog {}
+interface IGalleryDirectoryUploadDialogProps extends IBaseLazyDialog {}
 
 export default function GalleryDirectoryUploadDialog(props: IGalleryDirectoryUploadDialogProps) {
   const [selectedPath, setSelectedPath] = createSignal('')

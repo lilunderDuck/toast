@@ -45,10 +45,10 @@ export function PlaylistHeader() {
     })
   )
 
-  const buttonRowClicked: IPlaylistHeaderButtonRowProps["onClick$"] = (action) => {
+  const buttonRowClicked: IPlaylistHeaderButtonRowProps["action$"] = (action) => {
     switch (action) {
-      case "add_track_item$": return PlaylistCreateTrackDialog.show$()
-      case "edit_metadata$": return PlaylistEditMetadataDialog.show$()
+      case PlaylistHeaderButtonRowAction.ADD_TRACK_ITEM: return PlaylistCreateTrackDialog.show$()
+      case PlaylistHeaderButtonRowAction.EDIT_METADATA: return PlaylistEditMetadataDialog.show$()
     }
   }
 
@@ -67,7 +67,7 @@ export function PlaylistHeader() {
             {items$.items$().length} track
           </span>
           <Spacer />
-          <PlaylistHeaderButtonRow onClick$={buttonRowClicked} />
+          <PlaylistHeaderButtonRow action$={buttonRowClicked} />
         </div>
       </div>
 

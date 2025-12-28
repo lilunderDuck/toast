@@ -2,7 +2,7 @@ import { createSignal } from "solid-js"
 import { required } from "@modular-forms/solid"
 // ...
 import { DialogContent, DialogHeader, FieldInput, RadioGroup, RadioGroupItem, RadioGroupItemLabel } from "~/components"
-import { createSubmitForm, type ILazyDialog } from "~/hooks"
+import { createSubmitForm, type IBaseLazyDialog } from "~/hooks"
 import { type IJournalContext } from "~/features/journal/provider"
 import { journal } from "~/wailsjs/go/models"
 // ...
@@ -22,7 +22,7 @@ type JournalOptionsSchema = {
 
 type JournalTypeStr = 'type_journal$' | 'type_folder$'
 
-interface ICreateJournalDialogProps extends ILazyDialog {
+interface ICreateJournalDialogProps extends IBaseLazyDialog {
   context$: IJournalContext
 }
 

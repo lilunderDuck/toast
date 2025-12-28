@@ -5,13 +5,13 @@ import type { LazyComponent } from "./types"
 import { DropdownMenu, DropdownMenuTrigger } from "../../components/ui"
 import { createLazyComponent } from "./utils"
 
-export interface IDropdownMenu {
+export interface IBaseDropdownMenu {
   close$(): void
 }
 
-type OtherDropdownMenuProps<Props extends IDropdownMenu> = () => Omit<Props, "close$">
+type OtherDropdownMenuProps<Props extends IBaseDropdownMenu> = () => Omit<Props, "close$">
 
-export function createLazyLoadedDropdownMenu<Props extends IDropdownMenu>(
+export function createLazyLoadedDropdownMenu<Props extends IBaseDropdownMenu>(
   Component: LazyComponent<Props>, 
   itProps = (() => {}) as OtherDropdownMenuProps<Props>
 ) {

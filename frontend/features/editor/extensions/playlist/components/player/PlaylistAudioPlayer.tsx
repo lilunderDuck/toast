@@ -50,7 +50,7 @@ const percentageToCurrentDuration = (currentProgressInPercentage: number, totalD
 export function PlaylistAudioPlayer() {
   const { track$, data$ } = usePlaylistContext()
 
-  const controlTrack: IPlaylistButtonRowProps["onClick$"] = (action) => {
+  const controlTrack: IPlaylistButtonRowProps["action$"] = (action) => {
     switch (action) {
       case PlaylistButtonRowAction.TOGGLE_PLAY_TRACK:
         const trackId = track$.focusedTrack$()?.trackId$ ?? data$()!.items[0].id
@@ -68,7 +68,7 @@ export function PlaylistAudioPlayer() {
       <PlaylistButtonRow
         isDisabled$={track$.focusedTrack$() == null}
         isPlaying$={track$.focusedTrack$()?.isPlaying$ ?? false}
-        onClick$={controlTrack}
+        action$={controlTrack}
       />
       <div {...stylex.attrs(style.player__slider)}>
         <span>

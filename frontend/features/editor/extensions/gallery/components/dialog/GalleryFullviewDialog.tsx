@@ -2,7 +2,7 @@ import { onCleanup, Show } from "solid-js"
 import { BsBox2HeartFill } from "solid-icons/bs"
 // ...
 import { DialogContent } from "~/components"
-import { useEventListener, type ILazyDialog } from "~/hooks"
+import { useEventListener, type IBaseLazyDialog } from "~/hooks"
 import { ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "~/features/pan-and-zoom"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -52,7 +52,7 @@ const style = stylex.create({
   }
 })
 
-interface IGalleryFullviewProps extends ILazyDialog, IGalleryContext { }
+interface IGalleryFullviewProps extends IBaseLazyDialog, IGalleryContext { }
 
 export default function GalleryFullview(props: IGalleryFullviewProps) {
   props.setIsFullscreen$(true)

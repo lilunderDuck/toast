@@ -2,7 +2,7 @@ import { BsImageFill, BsLayoutSplit } from "solid-icons/bs"
 import { For } from "solid-js"
 // ...
 import { DropdownMenuContent, DropdownMenuItem } from "~/components"
-import type { IDropdownMenu } from "~/hooks"
+import type { IBaseDropdownMenu } from "~/hooks"
 // ...
 import stylex from "@stylexjs/stylex"
 
@@ -17,7 +17,7 @@ const style = stylex.create({
   }
 })
 
-interface IUploadDropdownMenu extends IDropdownMenu {
+interface IUploadDropdownMenu extends IBaseDropdownMenu {
   onChange$(mode: GalleryViewMode): void
 }
 

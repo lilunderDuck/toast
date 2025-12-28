@@ -27,7 +27,7 @@ export function JournalContentPanel(props: ParentProps<IJournalContentPanelProps
   const { currentlyOpenedJournal$ } = useJournalContentPanelContext()
   
   const bodyClassList = document.body.classList
-  const topHeaderButtons: ICurrentlyOpenedHeaderProps["onClick$"] = (whichOne) => {
+  const topHeaderButtons: ICurrentlyOpenedHeaderProps["action$"] = (whichOne) => {
     switch (whichOne) {
       case CurrentlyOpenedHeaderAction.TOGGLE_SIDEBAR:
         sidebar$.toggle$()
@@ -41,7 +41,7 @@ export function JournalContentPanel(props: ParentProps<IJournalContentPanelProps
   return (
     <section>
       <CurrentlyOpenedHeader
-        onClick$={topHeaderButtons}
+        action$={topHeaderButtons}
         isSidebarHidden$={sidebar$.isHidden$()}
         groupId$={sessionStorage$.get$("journal_data$").groupId$}
         id={__style.journalTitlebar}

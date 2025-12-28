@@ -269,6 +269,11 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'TOGGLE_PLAY_TRACK',
   ])
 
+  define('PlaylistHeaderButtonRowAction', [
+    'EDIT_METADATA',
+    'ADD_TRACK_ITEM'
+  ])
+
   define('PLAYLIST_DEFAULT_ID', '')
 
   define('EditorNodeType', [
@@ -328,6 +333,11 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'INSERT_COLUMN',
     'DELETE_CURRENT_TAB',
     'DELETE_ALL'
+  ])
+
+  define('TableHeaderContextMenuAction', [
+    'DELETE_COLUMN',
+    'EDIT_TAG_OPTIONS'
   ])
 
   define('TABLE_DEFAULT_ID', '')

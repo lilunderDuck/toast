@@ -1,7 +1,7 @@
 import { Show } from "solid-js"
 // ...
 import { Button, createIconInput, DialogContent, DialogHeader, FieldInput, Label, Tooltip } from "~/components"
-import { createSubmitForm, createFileUpload, SUPPORTED_AUDIO_FILTER, type ILazyDialog } from "~/hooks"
+import { createSubmitForm, createFileUpload, SUPPORTED_AUDIO_FILTER, type IBaseLazyDialog } from "~/hooks"
 import { GetAudioData } from "~/wailsjs/go/editor/Exports"
 import { previewUrl } from "~/api"
 import { toast } from "~/libs/solid-toast"
@@ -48,7 +48,7 @@ type PlaylistTrackSchema = {
   description?: string
 }
 
-interface IPlaylistEditTrackItemDialogProps extends ILazyDialog {
+interface IPlaylistEditTrackItemDialogProps extends IBaseLazyDialog {
   context$: IPlaylistContext
 }
 

@@ -28,10 +28,9 @@ const style = stylex.create({
   }
 })
 
-export interface ICurrentlyOpenedHeaderProps {
+export interface ICurrentlyOpenedHeaderProps extends IActionHandler<CurrentlyOpenedHeaderAction> {
   isSidebarHidden$: boolean
   groupId$: string
-  onClick$(whichOne: CurrentlyOpenedHeaderAction): void
   id?: string
 }
 

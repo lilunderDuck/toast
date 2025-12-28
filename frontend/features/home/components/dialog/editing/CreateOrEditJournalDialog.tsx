@@ -5,7 +5,7 @@ import stylex from "@stylexjs/stylex"
 import __style from "./CreateOrEditJournalDialog.module.css"
 // ...
 import { Button, DialogContent, DialogHeader, FieldInput } from "~/components"
-import { createSubmitForm, createFileUpload, SUPPORTED_IMAGE_PATTERN, type ILazyDialog } from "~/hooks"
+import { createSubmitForm, createFileUpload, SUPPORTED_IMAGE_PATTERN, type IBaseLazyDialog } from "~/hooks"
 import type { group } from "~/wailsjs/go/models"
 // ...
 import IconUploadInput from "./IconUploadInput"
@@ -33,7 +33,7 @@ const style = stylex.create({
   }
 })
 
-interface ICreateJournalDialogProps extends ILazyDialog {
+interface ICreateJournalDialogProps extends IBaseLazyDialog {
   prevData$?: group.GroupData
   onSubmit$?: (data: group.GroupOptions) => any
   onUpdate$?: (data: group.GroupOptions & {

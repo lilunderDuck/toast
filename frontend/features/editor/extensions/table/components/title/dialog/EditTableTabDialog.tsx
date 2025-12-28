@@ -1,5 +1,5 @@
 import { Button, DialogContent, DialogTitle, Input } from "~/components"
-import { createSubmitForm, type ILazyDialog } from "~/hooks"
+import { createSubmitForm, type IBaseLazyDialog } from "~/hooks"
 
 import stylex from "@stylexjs/stylex"
 
@@ -9,7 +9,7 @@ const style = stylex.create({
   }
 })
 
-export interface IEditTableTabDialogProps extends ILazyDialog {
+export interface IEditTableTabDialogProps extends IBaseLazyDialog {
   oldTitle$?: string
   onSubmit$(data: { newTitle$: string }): any
 }

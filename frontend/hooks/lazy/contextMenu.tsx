@@ -4,11 +4,11 @@ import type { LazyComponent } from "./types"
 import { ContextMenu, ContextMenuTrigger } from "../../components/ui"
 import { createLazyComponent } from "./utils"
 
-export interface IContextMenu {
+export interface IBaseContextMenu {
   // ...
 }
 
-export function createLazyLoadedContextMenu<Props extends IContextMenu>(
+export function createLazyLoadedContextMenu<Props extends IBaseContextMenu>(
   Component: LazyComponent<Props>, 
   // @ts-ignore  should work
   itProps: () => LazyComponentProps<LazyComponent<Props>> = () => {}

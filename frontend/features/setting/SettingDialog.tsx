@@ -2,7 +2,7 @@ import { For, Match, Switch } from "solid-js"
 import { MERGE_CLASS } from "macro-def"
 // ...
 import { DialogContent } from "~/components"
-import type { ILazyDialog } from "~/hooks"
+import type { IBaseLazyDialog } from "~/hooks"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./SettingDialog.module.css"
@@ -38,7 +38,7 @@ const style = stylex.create({
   }
 })
 
-interface ISettingDialog extends ISettingProviderProps<any>, ILazyDialog {}
+interface ISettingDialog extends ISettingProviderProps<any>, IBaseLazyDialog {}
 
 export default function SettingDialog(props: ISettingDialog) {
   const Sidebar = () => {

@@ -17,14 +17,13 @@ const style = stylex.create({
   }
 })
 
-export interface IPlaylistButtonRowProps {
+export interface IPlaylistButtonRowProps extends IActionHandler<PlaylistButtonRowAction> {
   isPlaying$: boolean
   isDisabled$: boolean
-  onClick$(action: PlaylistButtonRowAction): void
 }
 
 export default function PlaylistButtonRow(props: IPlaylistButtonRowProps) {
-  const call = (event: PlaylistButtonRowAction) => () => props.onClick$(event)
+  const call = (event: PlaylistButtonRowAction) => () => props.action$(event)
 
   return (
     <div {...stylex.attrs(style.buttonRow)}>
