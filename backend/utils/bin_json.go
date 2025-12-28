@@ -3,6 +3,7 @@ package utils
 import (
 	"os"
 	"path/filepath"
+	"reflect"
 	"toast/backend/debug"
 
 	"github.com/fxamacker/cbor/v2"
@@ -78,9 +79,25 @@ func BSON_ReadFile[T any](path string) (*T, error) {
 	return BSON_Unmarshal[T](data)
 }
 
+// Anti-crashing: avoid cbor sometimes treating `map[string]any` as `map[any]any`,
+// which is bad, because when we decided to read the data from disk,
+// it just not works.
+//
+// Boys, the agony begins by this one single log:
+//
+//	FAT | json: unsupported type: map[interface {}]interface {}
+var decoderOption = cbor.DecOptions{
+	DefaultMapType: reflect.TypeFor[map[string]any](),
+}
+
 func BSON_Unmarshal[T any](in []byte) (*T, error) {
+	decoderMode, err := decoderOption.DecMode()
+	if err != nil {
+		return nil, err
+	}
+
 	var out T
-	err := cbor.Unmarshal(in, &out)
+	err = decoderMode.Unmarshal(in, &out)
 	if debug.DEBUG_MODE {
 		if err != nil {
 			debug.ErrLabel("BSON", err)
