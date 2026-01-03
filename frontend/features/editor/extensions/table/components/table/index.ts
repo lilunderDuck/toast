@@ -5,3 +5,5 @@
 // 
 // Great time! 
 export * from "./TableRoot"
+export * from "./CreateTableColumnButton"
+export * from "./CreateTableRowButton"

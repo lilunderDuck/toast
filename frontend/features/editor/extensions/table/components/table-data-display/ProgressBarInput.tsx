@@ -2,6 +2,7 @@ import stylex from "@stylexjs/stylex"
 import { createSignal } from "solid-js"
 import type { ITableDataTypeComponentProps } from "./TableDataItem"
 import { isInRange } from "../../utils"
+import { useEditorContext } from "~/features/editor/provider"
 
 const style = stylex.create({
   progressBar: {
@@ -38,6 +39,7 @@ const style = stylex.create({
 })
 
 export default function ProgressBarInput(props: ITableDataTypeComponentProps<number>) {
+  const { isReadonly$ } = useEditorContext()
   console.assert(
     typeof props.value$ === "number",
     "<ProgressBar /> value must be a number"
@@ -65,6 +67,7 @@ export default function ProgressBarInput(props: ITableDataTypeComponentProps<num
     >
       <input
         {...stylex.attrs(style.progressBar__input)}
+        disabled={isReadonly$()}
         ref={inputRef}
         type="range"
         min={0}

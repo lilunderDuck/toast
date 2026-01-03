@@ -1,5 +1,4 @@
 import { createSignal, type ParentProps, Show } from "solid-js"
-import {  } from "@kobalte/core/dropdown-menu"
 // ...
 import type { LazyComponent } from "./types"
 import { DropdownMenu, DropdownMenuTrigger } from "../../components/ui"

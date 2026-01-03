@@ -5,22 +5,11 @@ import { Button } from "~/components"
 // ...
 import { useTablesDataContext } from "../../provider"
 
-interface ITableMoreOptionsButtonProps { }
-
-export function TableMoreOptionsButton(props: ITableMoreOptionsButtonProps) {
-  const { event$, tabs$, deleteTable$ } = useTablesDataContext()
-
-  const TableCreateColumnDialog = createLazyLoadedDialog(
-    () => import("./dialog/TableCreateColumnDialog"),
-    () => ({
-      onSubmit$(schema) {
-        event$.emit$(TableEvent.INSERT_COLUMN, schema.name, schema.type)
-      },
-    })
-  )
+export function TableMoreOptionsButton() {
+  const { tabs$, deleteTable$ } = useTablesDataContext()
 
   const EditTableTabDialog = createLazyLoadedDialog(
-    () => import("./dialog/EditTableTabDialog"),
+    () => import("../dialog/EditTableTabDialog"),
     () => ({
       oldTitle$: tabs$.getCurrentFocused$().name,
       onSubmit$(data) {
@@ -33,7 +22,7 @@ export function TableMoreOptionsButton(props: ITableMoreOptionsButtonProps) {
   )
 
   const TableDeleteConfirmationDialog = createLazyLoadedDialog(
-    () => import("./dialog/TableDeleteConfirmationDialog"),
+    () => import("../dialog/TableDeleteConfirmationDialog"),
     () => ({
       onConfirmDeletion$: deleteTable$,
     })
@@ -47,10 +36,6 @@ export function TableMoreOptionsButton(props: ITableMoreOptionsButtonProps) {
         switch (action) {
           case TableMoreOptionsDropdownAction.EDIT_CURRENT_TAB:
             return EditTableTabDialog.show$()
-          case TableMoreOptionsDropdownAction.INSERT_COLUMN:
-            return TableCreateColumnDialog.show$()
-          case TableMoreOptionsDropdownAction.INSERT_ROW:
-            return event$.emit$(TableEvent.INSERT_ROW)
           case TableMoreOptionsDropdownAction.DELETE_CURRENT_TAB:
             throw 'Not working on this case yet'
           case TableMoreOptionsDropdownAction.DELETE_ALL:
@@ -71,7 +56,6 @@ export function TableMoreOptionsButton(props: ITableMoreOptionsButtonProps) {
         </Button>
       </TableMoreOptionsDropdownMenu.DropdownMenu$>
       <EditTableTabDialog.Dialog$ />
-      <TableCreateColumnDialog.Dialog$ />
       <TableDeleteConfirmationDialog.Dialog$ />
     </>
   )

@@ -1,7 +1,7 @@
-import { For, Show, type Accessor, type VoidComponent } from "solid-js"
+import { For, type Accessor, type VoidComponent } from "solid-js"
 // ...
 import { reorderArray } from "~/utils"
-import { useEditorContext } from "~/features/editor/provider"
+import { EditorEditModeOnly } from "~/features/editor/components"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -28,7 +28,6 @@ const style = stylex.create({
 })
 
 export function TableRow(props: ITableRowProps) {
-  const { isReadonly$ } = useEditorContext()
   const { draggedRowIndex$, rows$, columns$ } = useTableContext()
 
   const handleRowDragStart = (e: EventType<"tr", "onDragStart">, index: number) => {
@@ -68,7 +67,7 @@ export function TableRow(props: ITableRowProps) {
 
   return (
     <tr {...stylex.attrs(style.row)}>
-      <Show when={!isReadonly$()}>
+      <EditorEditModeOnly>
         <td
           {...stylex.attrs(style.row__draggableHandle)}
           draggable="true"
@@ -78,7 +77,7 @@ export function TableRow(props: ITableRowProps) {
           onDragEnd={handleRowDragEnd}
           onDragLeave={handleRowDragLeave}
         />
-      </Show>
+      </EditorEditModeOnly>
       <For each={columns$.get$()}>
         {(it /*, index*/) => (
           <td>

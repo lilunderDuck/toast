@@ -2,7 +2,9 @@ import { createToggableInput } from "~/hooks"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { Input, Tooltip } from "~/components"
+import { Input } from "~/components"
+import { EditorTooltip } from "~/features/editor/components"
+import { useEditorContext } from "~/features/editor/provider"
 // ...
 import { useTablesDataContext } from "../../provider"
 import { TableTabList } from "./TableTabList"
@@ -27,6 +29,7 @@ const style = stylex.create({
 
 export function TableTitle() {
   const { title$ } = useTablesDataContext()
+  const { isReadonly$ } = useEditorContext()
 
   let inputRef!: Ref<"input">
 
@@ -40,18 +43,18 @@ export function TableTitle() {
         />
       ),
       Readonly$: (props) => (
-        <h2 {...props} {...stylex.attrs(style.title__heading)}>
-          <Tooltip label$="Click to change table title">
+        <EditorTooltip label$="Click to change table title">
+          <h2 {...props} {...stylex.attrs(style.title__heading)}>
             {titleDisplay()}
-          </Tooltip>
-        </h2>
+          </h2>
+        </EditorTooltip>
       )
     },
+    readonly$: isReadonly$,
     label$: title$.get$,
     onFinalize$(newContent) {
       title$.set$(newContent)
     },
-    onDiscard$() {}
   })
 
   const titleDisplay = () => title$.get$() === "" ? "Untitled" : title$.get$()

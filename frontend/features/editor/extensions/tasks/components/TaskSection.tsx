@@ -8,7 +8,7 @@ import "./TaskSection.css"
 import { Button, Input, Label, Spacer, Tooltip } from "~/components"
 import { createToggableInput, useToggle } from "~/hooks"
 import { type TreeViewComponentProps } from "~/features/tree-view"
-import { EditorTooltip, useEditorContext } from "~/features/editor"
+import { EditorEditModeOnly, EditorTooltip, useEditorContext } from "~/features/editor"
 // ...
 import { useTaskDataContext, type TaskSectionData } from "../provider"
 import { CreateTaskSectionButton } from "./stuff"
@@ -117,9 +117,9 @@ export function TaskSection(props: ParentProps<ITaskSectionProps>) {
           onSubmit$={(value) => create$(TaskType.TASK, props.nodeId$, value)} 
         />
       </Show>
-      <Show when={!isReadonly$()}>
+      <EditorEditModeOnly>
         <CreateTaskSectionButton />
-      </Show>
+      </EditorEditModeOnly>
     </section>
   )
 }

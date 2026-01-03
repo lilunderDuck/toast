@@ -1,4 +1,4 @@
-import { createContext, createSignal, onMount, type ParentProps, useContext } from "solid-js"
+import { createContext, createEffect, createSignal, onMount, type ParentProps, useContext } from "solid-js"
 // ...
 import { createTabs, type StateSlice, type TabsHandler } from "~/hooks"
 import { createEvent, makeId } from "~/utils"
@@ -6,6 +6,7 @@ import type { editor } from "~/wailsjs/go/models"
 import { CreateTable, CreateTableGrid, DeleteTable, GetTable, UpdateTable, UpdateTableGrid } from "~/wailsjs/go/editor/Exports"
 import { useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 import { createOrGetData } from "~/features/editor/utils"
+import { useEditorContext } from "~/features/editor/provider"
 // ...
 import type { TableAttribute, TableEventMap } from "./data"
 
@@ -26,6 +27,7 @@ interface ITablesDataProviderProps {
 
 export function TablesDataProvider(props: ParentProps<ITablesDataProviderProps>) {
   const { attrs$, delete$ } = useSolidNodeView<TableAttribute>()
+  const { isReadonly$ } = useEditorContext()
 
   const tabs = createTabs<editor.TableTabData>([])
   const tableId = () => attrs$().id
@@ -53,6 +55,11 @@ export function TablesDataProvider(props: ParentProps<ITablesDataProviderProps>)
     console.log('[table] update table tab', tabsData)
   })
 
+  const disableTabOnEditorReadonly = () => {
+    tabs.setDisable$(isReadonly$())
+    console.log('[table] disable tab:', isReadonly$())
+  }
+
   onMount(async() => {
     const data = await createOrGetData<editor.TableMetadata>(
       tableId() === TABLE_DEFAULT_ID,
@@ -64,7 +71,10 @@ export function TablesDataProvider(props: ParentProps<ITablesDataProviderProps>)
 
     setTitle(data.title)
     tabs.set$(data.tabs)
+    disableTabOnEditorReadonly()
   })
+
+  createEffect(disableTabOnEditorReadonly)
 
   return (
     <Context.Provider value={{

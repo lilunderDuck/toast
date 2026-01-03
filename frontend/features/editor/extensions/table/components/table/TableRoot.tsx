@@ -1,15 +1,17 @@
-import { For, Show, type ParentProps } from "solid-js"
+import { For } from "solid-js"
 import { MERGE_CLASS } from "macro-def"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./TableRoot.module.css"
 import "~/styles/scrollbar.css"
 // ...
-import { useEditorContext } from "~/features/editor/provider"
+import { EditorEditModeOnly } from "~/features/editor/components"
 // ...
 import { TableRow, TableHeader } from "./stuff"
 import { useTableContext } from "../../provider"
 import { TableDataHeader, TableDataItem } from "../table-data-display"
+import CreateTableColumnButton from "./CreateTableColumnButton"
+import CreateTableRowButton from "./CreateTableRowButton"
 
 const style = stylex.create({
   table: {
@@ -20,12 +22,14 @@ const style = stylex.create({
     width: "100%",
     // hacky way to show the table horizontal scrollbar
     maxWidth: "63.5vw",
+    display: "flex"
   },
   table__content: {
     width: "auto",
     // Ensure the table itself doesn't restrict width
     tableLayout: "fixed",
-    paddingRight: "3rem"
+    paddingRight: "3rem",
+    flexShrink: 0
   },
   table__head: {
     position: "sticky",
@@ -40,8 +44,7 @@ const style = stylex.create({
   }
 })
 
-export function TableRoot(props: ParentProps) {
-  const { isReadonly$ } = useEditorContext()
+export function TableRoot() {
   const { columns$, rows$ } = useTableContext()
 
   return (
@@ -50,10 +53,10 @@ export function TableRoot(props: ParentProps) {
         <table {...stylex.attrs(style.table__content)} id={__style.table}>
           <thead>
             <tr>
-              <Show when={!isReadonly$()}>
+              <EditorEditModeOnly>
                 {/* A single lonely <th /> for draggable handle */}
                 <th {...stylex.attrs(style.table__draggableRowHandleIndicator)} />
-              </Show>
+              </EditorEditModeOnly>
               <For each={columns$.get$()}>
                 {(col, colIndex) => (
                   <TableHeader columnIndex$={colIndex()} columnId$={col.key}>
@@ -75,9 +78,9 @@ export function TableRoot(props: ParentProps) {
             </For>
           </tbody>
         </table>
+        <CreateTableColumnButton />
       </div>
-      {void console.log(rows$.get$())}
-      {props.children}
+      <CreateTableRowButton />
     </div>
   )
 }

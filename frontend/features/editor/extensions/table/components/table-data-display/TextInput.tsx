@@ -1,3 +1,4 @@
+import { useEditorContext } from "~/features/editor/provider";
 import type { ITableDataTypeComponentProps } from "./TableDataItem";
 
 import stylex from "@stylexjs/stylex"
@@ -11,9 +12,12 @@ const style = stylex.create({
 })
 
 export default function TextInput(props: ITableDataTypeComponentProps<string>) {
+  const { isReadonly$ } = useEditorContext()
+
   return (
     <div>
       <input 
+        disabled={isReadonly$()}
         {...stylex.attrs(style.text__input)}
         type="text"
         placeholder="Empty"

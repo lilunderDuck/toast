@@ -8,6 +8,7 @@ import { Button, Spacer, Tooltip } from "~/components"
 // ...
 import { useTablesDataContext } from "../../provider"
 import { TableMoreOptionsButton } from "./TableMoreOptionsButton"
+import { EditorEditModeOnly } from "~/features/editor/components"
 
 const style = stylex.create({
   tab: {
@@ -54,19 +55,21 @@ export function TableTabList() {
           </div>
         )
       }} />
-      <Spacer />
-      <Tooltip label$="New table tab">
-        <Button
-          size$={ButtonSize.ICON}
-          variant$={ButtonVariant.NO_BACKGROUND}
-          onClick={createTableTab$}
-        >
-          <BsPlusLg />
-        </Button>
-      </Tooltip>
-      <Tooltip label$="More options">
-        <TableMoreOptionsButton />
-      </Tooltip>
+      <EditorEditModeOnly>
+        <Spacer />
+        <Tooltip label$="New table tab">
+          <Button
+            size$={ButtonSize.ICON}
+            variant$={ButtonVariant.NO_BACKGROUND}
+            onClick={createTableTab$}
+          >
+            <BsPlusLg />
+          </Button>
+        </Tooltip>
+        <Tooltip label$="More options">
+          <TableMoreOptionsButton />
+        </Tooltip>
+      </EditorEditModeOnly>
     </div>
   )
 }

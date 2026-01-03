@@ -1,5 +1,4 @@
 import { BsPencilFill, BsTrash2Fill } from "solid-icons/bs"
-import { AiOutlineInsertRowBelow, AiOutlineInsertRowRight } from "solid-icons/ai"
 // ...
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "~/components"
 import { type IBaseDropdownMenu } from "~/hooks"
@@ -13,16 +12,6 @@ export default function TableMoreOptionsDropdownMenu(
 ) {
   return (
     <DropdownMenuContent>
-      <DropdownMenuItem onClick={() => props.action$(TableMoreOptionsDropdownAction.INSERT_ROW)}>
-        <AiOutlineInsertRowBelow />
-        <span>Insert row</span>
-      </DropdownMenuItem>
-      <DropdownMenuItem onClick={() => props.action$(TableMoreOptionsDropdownAction.INSERT_COLUMN)}>
-        <AiOutlineInsertRowRight />
-        <span>Insert column</span>
-      </DropdownMenuItem>
-
-      <DropdownMenuSeparator />
       <DropdownMenuItem onClick={() => props.action$(TableMoreOptionsDropdownAction.EDIT_CURRENT_TAB)}>
         <BsPencilFill />
         <span>Edit current tab name</span>

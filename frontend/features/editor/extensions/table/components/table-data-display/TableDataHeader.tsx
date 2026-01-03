@@ -1,9 +1,10 @@
 import stylex from "@stylexjs/stylex"
 // ...
-import { TABLE_DATA_TYPE_MAPPING, useTableContext, type ColumnData } from "../../provider"
-// ...
 import { Input } from "~/components"
 import { createToggableInput } from "~/hooks"
+// ...
+import { useTableContext, type ColumnData } from "../../provider"
+import { TABLE_DATA_TYPE_MAPPING } from "../../constants"
 
 const style = stylex.create({
   header: {

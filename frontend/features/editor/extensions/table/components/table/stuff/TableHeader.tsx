@@ -2,11 +2,12 @@ import type { ParentProps } from "solid-js"
 // ...
 import { reorderArray } from "~/utils"
 import { createLazyLoadedContextMenu } from "~/hooks"
+import { Tooltip } from "~/components"
+import { EditorEditModeWrapper } from "~/features/editor/components"
 // ...
 import { useTableContext } from "../../../provider"
 import { TableItem } from "./TableItem"
 import type { ITableHeaderContextMenuProps } from "./TableHeaderContextMenu"
-import { Tooltip } from "~/components"
 
 interface ITableHeaderProps {
   columnIndex$: number
@@ -79,13 +80,17 @@ export function TableHeader(props: ParentProps<ITableHeaderProps>) {
       onDragLeave={handleColDragLeave}
       // style={{ width: columnWidths$.get$()[props.columnIndex$] + 'px' }}
     >
-      <Tooltip label$="Right click for more options">
-        <TableHeaderContextMenu.ContextMenu$>
-          <TableItem>
+      <EditorEditModeWrapper root$={(props) => (
+        <Tooltip label$="Right click for more options">
+          <TableHeaderContextMenu.ContextMenu$>
             {props.children}
-          </TableItem>
-        </TableHeaderContextMenu.ContextMenu$>
-      </Tooltip>
+          </TableHeaderContextMenu.ContextMenu$>
+        </Tooltip>
+      )}>
+        <TableItem>
+          {props.children}
+        </TableItem>
+      </EditorEditModeWrapper>
     </th>
   )
 }
