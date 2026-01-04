@@ -5,9 +5,9 @@ import { createFileUpload, createLazyLoadedDropdownMenu, SUPPORTED_VIDEO_FILTER 
 
 import stylex from "@stylexjs/stylex"
 import { UploadMedia } from "~/wailsjs/go/editor/Exports"
-import { useJournalContext } from "~/features/journal"
 import { useSolidNodeView } from "~/libs/solid-tiptap-renderer"
 import type { VideoAttribute } from "~/features/video"
+import { useEditorContext } from "~/features/editor"
 
 const style = stylex.create({
   button: {
@@ -24,8 +24,8 @@ interface IVideoMoreOptionButtonProps {
 }
 
 export function VideoMoreOptionButton(props: IVideoMoreOptionButtonProps) {
-  const { sessionStorage$ } = useJournalContext()
   const { updateAttribute$ } = useSolidNodeView<VideoAttribute>()
+  const { EDITOR_ID$ } = useEditorContext()
   
   const { open$ } = createFileUpload({
     type$: FileUploadType.FILE,
@@ -34,10 +34,7 @@ export function VideoMoreOptionButton(props: IVideoMoreOptionButtonProps) {
       Filters: [SUPPORTED_VIDEO_FILTER]
     },
     async onFinish$(file) {
-      const fileName = await UploadMedia(
-        sessionStorage$.get$('journal_data$').groupId$,
-        file
-      )
+      const fileName = await UploadMedia(EDITOR_ID$, file)
 
       updateAttribute$('name', fileName)
     },

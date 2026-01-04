@@ -13,6 +13,7 @@ import __style from "./ImageInput.module.css"
 import type { ImageAttribute } from "./data"
 import { Image } from "./Image"
 import { ImageButtonRow } from "./components"
+import { useEditorContext } from "../editor"
 
 const style = stylex.create({
   input: {
@@ -55,7 +56,7 @@ interface IImageInputProps {
 
 export function ImageInput(props: IImageInputProps) {
   const { sessionStorage$ } = useJournalContext()
-  const groupId = () => sessionStorage$.get$('journal_data$').groupId$
+  const { EDITOR_ID$ } = useEditorContext()
   const { open$, isUploading$, error$ } = createFileUpload({
     type$: FileUploadType.FILE,
     dialogOptions$: {
@@ -65,7 +66,7 @@ export function ImageInput(props: IImageInputProps) {
       ]
     },
     async onFinish$(filePath) {
-      const fileName = await UploadMedia(groupId(), filePath)
+      const fileName = await UploadMedia(EDITOR_ID$, filePath)
       await props.onChange$(fileName)
     },
   })
@@ -77,7 +78,7 @@ export function ImageInput(props: IImageInputProps) {
     })
   )
 
-  const getImageUrl = () => `${ASSETS_SERVER_URL}/local-assets/media/${groupId()}/${props.data$!.name}` as const
+  const getImageUrl = () => `${ASSETS_SERVER_URL}/local-assets/media/${EDITOR_ID$}/${props.data$!.name}` as const
 
   return (
     <div {...stylex.attrs(style.input)} id={__style.input}>

@@ -7,7 +7,7 @@ import stylex from "@stylexjs/stylex"
 import { VideoMoreOptionButton } from './components'
 import { EditorEditModeOnly } from '../../components'
 import { ASSETS_SERVER_URL } from '~/api'
-import { useJournalContext } from '~/features/journal'
+import { useEditorContext } from '../..'
 
 const style = stylex.create({
   nodeView: {
@@ -42,11 +42,11 @@ export const VideoNode = createEditorNode<
   },
   View$() {
     const { attrs$ } = useSolidNodeView<VideoAttribute>()
-    const { sessionStorage$ } = useJournalContext()
+    const { EDITOR_ID$ } = useEditorContext()
 
     return (
       <NodeViewWrapper {...stylex.attrs(style.nodeView)}>
-        <Video src$={`${ASSETS_SERVER_URL}/local-assets/data/media/${sessionStorage$.get$('journal_data$').groupId$}/${attrs$().name}`} />
+        <Video src$={`${ASSETS_SERVER_URL}/local-assets/data/media/${EDITOR_ID$}/${attrs$().name}`} />
         <EditorEditModeOnly>
           <VideoMoreOptionButton />
         </EditorEditModeOnly>

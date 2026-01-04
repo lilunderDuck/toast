@@ -1,8 +1,7 @@
 import { createContext, type ParentProps, type Accessor, useContext, createSignal, onMount, type Setter } from "solid-js"
 import { createStore } from "solid-js/store"
 // ...
-import { createOrGetData } from "~/features/editor"
-import { useJournalContext } from "~/features/journal"
+import { createOrGetData, useEditorContext } from "~/features/editor"
 import { createStorage } from "~/utils"
 import { ASSETS_SERVER_URL } from "~/api"
 import type { editor } from "~/wailsjs/go/models"
@@ -67,7 +66,7 @@ interface IGalleryProviderProps {
 
 export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   const { attrs$ } = useSolidNodeView<GalleryAttribute>()
-  const { sessionStorage$ } = useJournalContext()
+  const { EDITOR_ID$ } = useEditorContext()
   const [galleryData, setGalleryData] = createStore<editor.GalleryData>({} as editor.GalleryData)
 
   const [isNextButtonDisabled, setIsNextButtonDisabled] = createSignal(false)
@@ -77,8 +76,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   const wrappedSessionStorage: GallerySessionStorage = createStorage(sessionStorage, 'gallery$')
 
   const getCurrentGalleryId = () => galleryData!.id ?? attrs$().id 
-  const getCurrentGroupId = () => sessionStorage$.get$("journal_data$").groupId$
-  const CURRENT_INDEX_STORAGE_KEY = `${getCurrentGroupId()}.${getCurrentGalleryId()}.currIndex` as const
+  const CURRENT_INDEX_STORAGE_KEY = `${EDITOR_ID$}.${getCurrentGalleryId()}.currIndex` as const
 
   // Tracks current item displayed in both default view and fullscreen view
   const [currentIndex, setCurrentIndex] = createSignal(

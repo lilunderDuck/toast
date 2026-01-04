@@ -37,6 +37,11 @@ export interface IEditorContext {
   wordCount$: Accessor<number>
   charCount$: Accessor<number>
   isAutoSaving$: Accessor<boolean>
+  /**The current editor id is opened. For 100% of the cases, this is the journal group id. 
+   * 
+   * This constant is used for editor data savings.
+   */
+  readonly EDITOR_ID$: string
 }
 
 const Context = createContext<IEditorContext>()
@@ -100,13 +105,14 @@ export function EditorProvider(props: ParentProps<IEditorProviderProps>) {
         errorOnInvalidContent: true
       })
     } catch(error) {
-      console.warn(error)
+      console.warn("[editor]", error)
     }
     isOpening = false
   }
 
   return (
     <Context.Provider value={{
+      EDITOR_ID$: props.id$,
       editor$: editor,
       setIsReadonly$(state) {
         setIsReadonly(state)
