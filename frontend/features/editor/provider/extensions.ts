@@ -18,7 +18,8 @@ import {
   TableExtension, 
   CodeBlockExtension, 
   PlaylistExtension, 
-  TasksNode 
+  TasksNode, 
+  VideoNode
 } from "../extensions"
 // ...
 import { pluginEvent } from '~/plugins'
@@ -94,7 +95,8 @@ export function getExtensions() {
     PlaylistExtension,
     TableExtension,
     CodeBlockExtension,
-    TasksNode
+    TasksNode,
+    VideoNode
   ]
 
   pluginEvent.on$(PluginEvent.REGISTER_EDITOR_NODE, (nodeExtension) => {

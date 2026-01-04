@@ -20,7 +20,7 @@ const style = stylex.create({
     minHeight: "20rem"
   },
   loadingVideoLayer: {
-    backgroundColor: "var(--gray3)",
+    backgroundColor: "var(--gray2)",
     width: "100%",
     height: "100%",
     display: "flex",
@@ -113,7 +113,7 @@ export function Video(props: ParentProps<IVideoProps>) {
 
             <Match when={videoStatus() === VideoLoadingStatus.ERROR}>
               <BsCameraVideoOffFill size={30} />
-              Cannot load this video, please check the video file path. <a onClick={resetVideo}>Reload?</a>
+              Cannot load this video, please check the video file path.
             </Match>
           </Switch>
         </div>

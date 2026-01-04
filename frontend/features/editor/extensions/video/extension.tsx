@@ -4,10 +4,15 @@ import { Video, type VideoAttribute } from '~/features/video'
 import { createEditorNode } from '../../utils'
 
 import stylex from "@stylexjs/stylex"
+import { VideoMoreOptionButton } from './components'
+import { EditorEditModeOnly } from '../../components'
+import { ASSETS_SERVER_URL } from '~/api'
+import { useJournalContext } from '~/features/journal'
 
 const style = stylex.create({
   nodeView: {
-    marginBottom: 20
+    marginBottom: 20,
+    position: "relative"
   }
 })
 
@@ -37,12 +42,15 @@ export const VideoNode = createEditorNode<
   },
   View$() {
     const { attrs$ } = useSolidNodeView<VideoAttribute>()
+    const { sessionStorage$ } = useJournalContext()
 
     return (
       <NodeViewWrapper {...stylex.attrs(style.nodeView)}>
-        <Video src$={attrs$().name} />
+        <Video src$={`${ASSETS_SERVER_URL}/local-assets/data/media/${sessionStorage$.get$('journal_data$').groupId$}/${attrs$().name}`} />
+        <EditorEditModeOnly>
+          <VideoMoreOptionButton />
+        </EditorEditModeOnly>
       </NodeViewWrapper>
     )
-  },
-  
+  }
 })

@@ -133,6 +133,10 @@ func MoveFile(sourcePath string, destPath string) error {
 // It handles cases where the destination directory does not exist and ensures
 // a destination file with the same name is not overwritten by creating a new, unique name.
 func CopyFile(source, destinationPath string) error {
+	if debug.DEBUG_MODE {
+		debug.Log("Coping file.", "source", source, "dest path", destinationPath)
+	}
+
 	sourceFile, err := os.Open(source)
 	if err != nil {
 		if debug.DEBUG_MODE {
@@ -155,7 +159,13 @@ func CopyFile(source, destinationPath string) error {
 
 	// Ensure the destination directory exists.
 	if !IsDirectoryExist(destinationPath) {
-		CreateDirectory(destinationPath)
+		if err := CreateDirectory(destinationPath); err != nil {
+			if debug.DEBUG_MODE {
+				debug.Err(err)
+			}
+
+			return err
+		}
 	}
 
 	destinationFile, err := os.Create(destinationFilePath)

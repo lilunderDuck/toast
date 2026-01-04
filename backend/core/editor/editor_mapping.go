@@ -14,7 +14,7 @@ var CONTENT_TYPE_MAP = map[string]uint8{
 	"image":          10,
 	"horizontalRule": 11,
 	"playlist":       12,
-	"-":              13, // unused
+	"video":          13, // unused
 	"orderedList":    14,
 	"bulletList":     15,
 	"listItem":       16,
@@ -35,7 +35,7 @@ var CONTENT_TYPE_REMAP = map[uint8]string{
 	10:  "image",
 	11:  "horizontalRule",
 	12:  "playlist",
-	13:  "-", // unused
+	13:  "video", // unused
 	14:  "orderedList",
 	15:  "bulletList",
 	16:  "listItem",

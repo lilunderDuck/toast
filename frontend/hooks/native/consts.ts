@@ -8,3 +8,8 @@ export const SUPPORTED_AUDIO_FILTER = {
   DisplayName: "Audio file",
   Pattern: "*.mp3"
 }
+
+export const SUPPORTED_VIDEO_FILTER = {
+  DisplayName: "Video file",
+  Pattern: "*.mp4"
+}

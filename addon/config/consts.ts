@@ -193,6 +193,10 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'ERROR',
   ])
 
+  define('VideoMoreOptionAction', [
+    'PICK_VIDEO'
+  ])
+
   define('ButtonRowDirection', [
     'LEFT',
     'RIGHT',

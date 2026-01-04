@@ -23,7 +23,7 @@ func (*Exports) UploadMedia(groupId string, filePath string) (newFileName string
 		return fileName, nil
 	}
 
-	err = utils.CopyFile(filePath, savedLocation)
+	err = utils.CopyFile(filePath, filepath.Dir(savedLocation))
 	if err != nil {
 		return "", err
 	}
