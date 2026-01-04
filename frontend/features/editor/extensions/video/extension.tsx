@@ -1,7 +1,7 @@
 import { insertNodeAtCurrentPosition, NodeViewWrapper, useSolidNodeView } from '~/libs/solid-tiptap-renderer'
+import { Video, type VideoAttribute } from '~/features/video'
 // ...
 import { createEditorNode } from '../../utils'
-import { Video, type VideoAttribute } from '../../common/video'
 
 import stylex from "@stylexjs/stylex"
 

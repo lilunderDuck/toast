@@ -4,7 +4,7 @@ import { createSignal, onMount } from "solid-js"
 import __style from "~/styles/scrollbar.module.css"
 import { Button, Label, Tooltip } from "~/components"
 import { Editor, EditorProvider, useEditorContext } from "~/features/editor"
-import { highlightCodeBlock } from "~/features/editor/common/code"
+import { highlightCodeBlock } from "~/features/code-block"
 
 const style = stylex.create({
   editor: {

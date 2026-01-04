@@ -3,7 +3,7 @@ import { createSignal } from "solid-js"
 import sampleVideo from "~/assets/le_fishe_full.mp4"
 // ...
 import { CheckboxSettingSection, CustomSettingSection, RangeSettingSection, SubSetting } from "~/features/setting"
-import { Video } from "~/features/editor/common/video"
+import { Video } from "~/features/video"
 // ...
 import stylex from "@stylexjs/stylex"
 

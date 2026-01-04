@@ -1,10 +1,11 @@
 import { type Command } from '@tiptap/core'
 // ...
 import { NodeViewWrapper, useSolidNodeView } from '~/libs/solid-tiptap-renderer'
+import { ImageInput, type ImageAttribute } from '~/features/image'
+// ...
+import stylex from "@stylexjs/stylex"
 // ...
 import { createEditorNode, insertNodeAtCurrentPosition } from '../../utils'
-import { ImageInput, type ImageAttribute } from '../../common/image'
-import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({
   node: {
