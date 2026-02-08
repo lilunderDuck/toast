@@ -1,5 +1,4 @@
 import { createAsync } from "@solidjs/router"
-import { pluginEvent } from "~/plugins"
 // ...
 import { GetGroup } from "~/wailsjs/go/group/Exports"
 import type { group } from "~/wailsjs/go/models"
@@ -10,7 +9,6 @@ export default function journalGroupData(groupId: string) {
       GetGroup(groupId),
     ])
 
-    pluginEvent.emit$(PluginEvent.JOURNAL_LOADED)
     console.log("Group data:", journalGroupData)
 
     return {

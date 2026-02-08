@@ -6,9 +6,20 @@ export function createMediaPlayer(type: "audio" | "video") {
   const [buffered, setBuffered] = createSignal(0)
   const [currentProgress, setCurrentProgress] = createSignal(0)
 
-  createEffect(() => {
-    console.log("Current media state changed to:", mediaState())
-  })
+  if (isDevMode) {
+    const stateMapping: Record<MediaState, string> = {
+      [MediaState.COMPLETED]: 'MediaState.COMPLETED',
+      [MediaState.PLAYING]: 'MediaState.PLAYING',
+      [MediaState.FINISHED_LOADING]: 'MediaState.FINISHED_LOADING',
+      [MediaState.PAUSED]: 'MediaState.PAUSED',
+      [MediaState.ERROR]: 'MediaState.ERROR',
+      [MediaState.LOADING]: 'MediaState.LOADING',
+    }
+
+    createEffect(() => {
+      console.log("Current media state changed to:", stateMapping[mediaState()])
+    })
+  }
 
   let mediaRef!: Ref<"audio" | "video">
   const mediaProps: HTMLAttributes<"audio" | "video"> = {

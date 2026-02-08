@@ -11,18 +11,13 @@ import { CharacterCount } from '@tiptap/extensions'
 import { MERGE_CLASS } from 'macro-def'
 // ...
 import { 
-  LocalEmbedExtension, 
   TagExtension, 
-  GalleryExtension, 
   ImageExtension, 
   TableExtension, 
   CodeBlockExtension, 
-  PlaylistExtension, 
   TasksNode, 
   VideoNode
 } from "../extensions"
-// ...
-import { pluginEvent } from '~/plugins'
 // ...
 import __style from "./extensions.module.css"
 import stylex from "@stylexjs/stylex"
@@ -89,19 +84,12 @@ export function getExtensions() {
     CharacterCount,
     // ------- custom extension zone -------
     TagExtension,
-    LocalEmbedExtension,
-    GalleryExtension,
     ImageExtension,
-    PlaylistExtension,
     TableExtension,
     CodeBlockExtension,
     TasksNode,
     VideoNode
   ]
-
-  pluginEvent.on$(PluginEvent.REGISTER_EDITOR_NODE, (nodeExtension) => {
-    extensions.push(nodeExtension)
-  })
 
   return extensions
 }
