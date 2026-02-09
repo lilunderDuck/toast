@@ -1,5 +1,4 @@
 import { type ParentProps } from "solid-js"
-import { Handle } from '@corvu/resizable'
 import { useParams } from "@solidjs/router"
 // ...
 import stylex from "@stylexjs/stylex"
@@ -7,9 +6,9 @@ import __style from "./[groupId].module.css"
 // ...
 import {
   JournalHomeViewProviders,
-  JournalSidebarPanel,
   JournalMainContentPanel,
-  JournalRootPanel
+  JournalRootPanel,
+  JournalTopHeader
 } from "~/features/journal"
 // ...
 import journalGroupData from "./[groupId].data"
@@ -26,20 +25,16 @@ const style = stylex.create({
 })
 
 export default function JournalPage(props: ParentProps) {
-  const param = useParams()
-  const currentGroupId = () => param.groupId!
-
-  const journalData = journalGroupData(currentGroupId())
+  const journalData = journalGroupData().get$
 
   return (
     <JournalHomeViewProviders
-      groupId$={currentGroupId()}
+      groupId$={journalGroupData().groupId$}
       explorerTreeData$={() => journalData()?.explorerTreeData$!}
       isLoading$={!journalData()}
     >
       <JournalRootPanel>
-        <JournalSidebarPanel />
-        {/* <Handle {...stylex.attrs(style.home__resizePanelHandle)} /> */}
+        <JournalTopHeader />
         <JournalMainContentPanel>
           {props.children}
         </JournalMainContentPanel>

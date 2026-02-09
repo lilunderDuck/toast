@@ -21,7 +21,8 @@ const style = stylex.create({
     position: "fixed",
     right: 0,
     top: 0,
-    zIndex: 1000
+    zIndex: 1000,
+    userSelect: "none"
   },
   titleBar__button: {
     outline: 'none',
@@ -70,11 +71,7 @@ export function AppTitleBarButton() {
               isFullscreen() ? WindowFullscreen() : WindowUnfullscreen()
             }}
           >
-            <Show when={isFullscreen()} fallback={
-              <img class="icon" src={maximizeIcon} draggable="false" />
-            }>
-              <img class="icon" src={restoreIcon} draggable="false" />
-            </Show>
+            <img class="icon" src={isFullscreen() ? restoreIcon : maximizeIcon} draggable="false" />
           </button>
         </div>
         <div {...stylex.attrs(style.titleBar__closeButton)}>

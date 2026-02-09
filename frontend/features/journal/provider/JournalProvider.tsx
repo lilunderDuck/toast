@@ -7,7 +7,6 @@ import { CreateJournal, GetJournal, UpdateJournal } from "~/wailsjs/go/journal/E
 import type { notes } from "~/wailsjs/go/models"
 import { useToggle } from "~/hooks"
 // ...
-import { createFileExplorerContext, createFileNode, createFolderNode, type IFileExplorerContext, type IFileExplorerProviderOptions, ROOT_FOLDER } from "./explorer"
 import { createHistoryManager, type IHistoryManager } from "./history"
 
 export type JournalSessionStorage = IStorage<{
@@ -28,7 +27,6 @@ export interface IJournalContext {
   updateJournal$(journalId: string, newData: notes.UpdateNoteOptions): Promise<void>
   // ...
   sessionStorage$: JournalSessionStorage
-  explorerTree$: IFileExplorerContext
   history$: IHistoryManager
   sidebar$: {
     toggle$: () => boolean
@@ -37,7 +35,6 @@ export interface IJournalContext {
 }
 
 export interface IJournalProviderProps {
-  explorerOptions$: IFileExplorerProviderOptions
 }
 
 const Context = createContext<IJournalContext>()
@@ -47,14 +44,8 @@ export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
   const wrappedLocalStorage: JournalLocalStorage = createStorage(sessionStorage, "j"/*journal*/)
   const groupId = () => wrappedSessionStorage.get$('journal_data$').groupId$
 
-  const explorerTree = createFileExplorerContext(props.explorerOptions$)
-
   const createJournal: IJournalContext["createJournal$"] = async (type, data) => {
-    const newData = await CreateJournal(groupId(), type, data)
-    const explorerNode = (type == 1 ? createFolderNode : createFileNode)(newData.id)
-    // @ts-ignore
-    explorerTree.tree$.create$(explorerNode, ROOT_FOLDER, newData)
-    return newData
+    return await CreateJournal(groupId(), type, data)
   }
 
   const [isSidebarHidden, toggleHideSidebar] = useToggle()
@@ -65,7 +56,6 @@ export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
         isHidden$: isSidebarHidden,
         toggle$: toggleHideSidebar
       },
-      explorerTree$: explorerTree,
       sessionStorage$: wrappedSessionStorage,
       createJournal$: createJournal,
       getJournal$: (journalId) => GetJournal(groupId(), journalId),

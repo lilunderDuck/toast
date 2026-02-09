@@ -1,12 +1,10 @@
 import { onCleanup, Show, type ParentProps } from "solid-js"
 // ...
-import { UpdateGroup } from "~/wailsjs/go/group/Exports"
 import { CleanUpJournal } from "~/wailsjs/go/journal/Exports"
 import type { group } from "~/wailsjs/go/models"
 import { EditorProvider } from "~/libs/editor"
 // ...
-import { JournalProvider, useJournalContext, type IFileExplorerProviderOptions } from "../provider"
-import { File, Folder } from "../components"
+import { JournalProvider, useJournalContext } from "../provider"
 
 interface IJournalHomeProvidersProps {
   groupId$: string
@@ -19,34 +17,6 @@ export function JournalHomeViewProviders(props: ParentProps<IJournalHomeProvider
     CleanUpJournal(props.groupId$)
   })
 
-  const fileExplorerOption: IFileExplorerProviderOptions = {
-    components$: {
-      File$: (fileProps) => (
-        <File
-          groupId$={props.groupId$}
-          journalId$={fileProps.id}
-          name$={fileProps.name}
-        />
-      ),
-      Folder$: (props) => (
-        <Folder
-          folderId$={props.id}
-          onClick={props.onClick}
-          name$={props.name}
-        >
-          {props.children}
-        </Folder>
-      )
-    },
-    getData$() {
-      return props.explorerTreeData$()
-    },
-    onTreeUpdate$(newTree) {
-      console.log("Tree update", newTree)
-      UpdateGroup(props.groupId$, { explorer: newTree } as group.GroupOptions)
-    }
-  }
-
   const Loader = () => {
     const { sessionStorage$ } = useJournalContext()
     sessionStorage$.set$('journal_data$', { groupId$: props.groupId$ })
@@ -57,7 +27,7 @@ export function JournalHomeViewProviders(props: ParentProps<IJournalHomeProvider
   return (
     <EditorProvider id$={props.groupId$}>
       <Show when={!props.isLoading$}>
-        <JournalProvider explorerOptions$={fileExplorerOption}>
+        <JournalProvider>
           <Loader />
           {props.children}
         </JournalProvider>

@@ -1,7 +1,11 @@
-import { JournalContentWelcomeView } from "~/features/journal"
+import { JournalContentEditor } from "~/features/journal"
+// ...
+import getJournalData from "./index.data"
 
-export default function JournalWelcomePage() {
+export default function JournalContent() {
+  const journalData = getJournalData()
+
   return (
-    <JournalContentWelcomeView />
+    <JournalContentEditor journalData$={journalData()} />
   )
 }

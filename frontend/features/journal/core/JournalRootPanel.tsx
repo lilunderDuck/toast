@@ -1,5 +1,4 @@
 import { onCleanup, type ParentProps } from "solid-js"
-import { Root } from "@corvu/resizable"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./JournalRootPanel.module.css"

@@ -1,16 +1,15 @@
-import { Panel } from "@corvu/resizable"
-
+import type { ParentProps } from "solid-js"
+// ...
 import stylex from "@stylexjs/stylex"
+// ...
 import { JournalContentPanelProvider } from "../provider"
 import { JournalContentPanel } from "./JournalContentPanel"
-import type { ParentProps } from "solid-js"
 
 const style = stylex.create({
   home__contentPanel: {
     backgroundColor: "var(--content-panel-bg)",
     position: "relative",
-    // display: "grid",
-    // gridTemplateColumns: "1fr 0.7fr"
+    paddingInline: 20
   }
 })
 
@@ -20,9 +19,8 @@ interface IJournalMainContentPanelProps {
 
 export function JournalMainContentPanel(props: ParentProps<IJournalMainContentPanelProps>) {
   return (
-    <Panel
+    <div
       {...stylex.attrs(style.home__contentPanel)}
-      initialSize={0.7}
       data-journal-main-content-panel=""
     >
       <JournalContentPanelProvider tabPanelId$="1">
@@ -30,6 +28,6 @@ export function JournalMainContentPanel(props: ParentProps<IJournalMainContentPa
           {props.children}
         </JournalContentPanel>
       </JournalContentPanelProvider>
-    </Panel>
+    </div>
   )
 }
