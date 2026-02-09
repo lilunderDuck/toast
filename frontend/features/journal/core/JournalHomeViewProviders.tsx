@@ -3,7 +3,7 @@ import { onCleanup, Show, type ParentProps } from "solid-js"
 import { UpdateGroup } from "~/wailsjs/go/group/Exports"
 import { CleanUpJournal } from "~/wailsjs/go/journal/Exports"
 import type { group } from "~/wailsjs/go/models"
-import { EditorProvider } from "~/features/editor"
+import { EditorProvider } from "~/libs/editor"
 // ...
 import { JournalProvider, useJournalContext, type IFileExplorerProviderOptions } from "../provider"
 import { File, Folder } from "../components"

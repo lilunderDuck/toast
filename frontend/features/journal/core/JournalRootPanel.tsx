@@ -23,8 +23,8 @@ export function JournalRootPanel(props: ParentProps<IJournalRootPanelProps>) {
   })
 
   return (
-    <Root {...stylex.attrs(style.home)}>
+    <div {...stylex.attrs(style.home)}>
       {props.children}
-    </Root>
+    </div>
   )
 }

@@ -1,6 +1,6 @@
 import { createEffect, onCleanup } from "solid-js"
 // ...
-import { Editor, useEditorContext } from "~/features/editor"
+import { Editor, useEditorContext } from "~/libs/editor"
 import { useJournalContentPanelContext, useJournalContext } from "~/features/journal"
 import type { notes } from "~/wailsjs/go/models"
 // ...

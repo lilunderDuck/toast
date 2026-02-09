@@ -39,7 +39,7 @@ export default function JournalPage(props: ParentProps) {
     >
       <JournalRootPanel>
         <JournalSidebarPanel />
-        <Handle {...stylex.attrs(style.home__resizePanelHandle)} />
+        {/* <Handle {...stylex.attrs(style.home__resizePanelHandle)} /> */}
         <JournalMainContentPanel>
           {props.children}
         </JournalMainContentPanel>

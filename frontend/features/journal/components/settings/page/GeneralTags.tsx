@@ -2,7 +2,7 @@ import { createSignal, For, lazy, Show } from "solid-js"
 // ...
 import { type TagData } from "~/features/journal/provider"
 import { Button, Input, Spacer, Tag } from "~/components"
-import { CustomSettingSection } from "~/features/setting"
+import { CustomSettingSection } from "~/libs/setting-screen"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./GeneralTags.module.css"

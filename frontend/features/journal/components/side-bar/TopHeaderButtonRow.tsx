@@ -5,7 +5,7 @@ import { MERGE_CLASS } from "macro-def"
 import stylex from "@stylexjs/stylex"
 // ...
 import { AppTitleBarDraggable, Button, Spacer, Tooltip } from "~/components"
-import { useEditorContext } from "~/features/editor"
+import { useEditorContext } from "~/libs/editor"
 import { createLazyLoadedDialog } from "~/hooks"
 // ...
 import { useJournalContext } from "../../provider"

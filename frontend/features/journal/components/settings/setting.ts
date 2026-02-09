@@ -5,7 +5,7 @@ import { createLazyLoadedDialog } from "~/hooks"
 
 export function createJournalSettingPage() {
   return createLazyLoadedDialog(
-    () => import("~/features/setting"),
+    () => import("~/libs/setting-screen"),
     () => ({
       config$: [
         {

@@ -1,0 +1,32 @@
+import type { IEvent } from "~/utils"
+import type { DEFAULT_VALUE_MAPPING } from "./icon"
+import type { EditorGenericIdAttribute } from "~/libs/editor/provider"
+
+type BaseColumnData<T = TableDataType> = {
+  key: string
+  label: string
+  type: T
+  additionalData?: unknown
+}
+
+export type ColumnData =
+  BaseColumnData |
+  TagColumnData
+// ...
+
+export type TagColumnData = BaseColumnData<TableDataType.TAG> & { additionalData: { tags: TagData[] } }
+
+export type RowData = Record<string, any>
+
+export type TagData = { name: string, color: string }
+
+export type TableDefaultValueMapping<T extends TableDataType> =
+  typeof DEFAULT_VALUE_MAPPING[T]
+// ...
+
+export type TableAttribute = EditorGenericIdAttribute
+
+export type TableEventMap = IEvent<{
+  [TableEvent.INSERT_ROW]: () => any
+  [TableEvent.INSERT_COLUMN]: (name: string, type: TableDataType) => any
+}>
