@@ -15,26 +15,26 @@ APP_PROD_BUILD_FLAGS = -ldflags="-s -w -buildid=" -skipembedcreate -trimpath
 .PHONY: build dev clean test
 
 app_resource:
-	deno bundle -o ${CACHE_BUILD_DIR}/fetchPackageJson.js ${TOOLS_DIR}/package_used/fetchPackageJson.ts
 	go build -o ${CACHE_BUILD_DIR}/generate.exe ${TOOLS_DIR}/package_used/generate.go
-	deno --allow-read --allow-write --allow-net ${CACHE_BUILD_DIR}/fetchPackageJson.js
+	bun ${TOOLS_DIR}/package_used/fetchPackageJson.ts
 	${CACHE_BUILD_DIR}/generate.exe
 
-build: app_resource
+build:
 	wails build ${APP_PROD_BUILD_FLAGS}
 
-build_debug: app_resource
+build_debug:
 	wails build ${APP_PROD_BUILD_FLAGS} -windowsconsole -race -devtools
 
 dev:
 	wails dev ${APP_TAGS_DEBUG}
 
 generate_consts:
-	deno -A ./addon/config/consts.ts
+	bun ./addon/config/consts.ts
 
 # clean the mess I made
 clean:
 	del ./build/out/bin
 
-test:
-	deno test --unstable-sloppy-imports -A --no-check ./build/tools/test/index.ts
+install:
+	go install github.com/wailsapp/wails/v2/cmd/wails@latest
+	bun install

@@ -1,5 +1,5 @@
 import { Match, Switch } from "solid-js"
-import { TbZoomReset, TbZoomIn, TbZoomOut } from 'solid-icons/tb'
+import { TbFillZoomCancel, TbFillZoomIn, TbFillZoomOut } from 'solid-icons/tb'
 // ...
 import { Button, Tooltip } from "~/components"
 // ...
@@ -28,18 +28,18 @@ export function ZoomButtonRow() {
     <div {...stylex.attrs(style.wholeThing)}>
       <Tooltip label$="Reset to default zoom">
         <Button size$={ButtonSize.ICON} onClick={reset$} disabled={internal$.zoomScale$() === 1}>
-          <TbZoomReset size={16} />
+          <TbFillZoomCancel size={16} />
         </Button>
       </Tooltip>
       <div />
       <Tooltip label$="Zoom out">
         <Button size$={ButtonSize.ICON} onClick={unzoom$} disabled={internal$.zoomScale$() === 0}>
-          <TbZoomOut size={16} />
+          <TbFillZoomOut size={16} />
         </Button>
       </Tooltip>
       <Tooltip label$="Zoom in">
         <Button size$={ButtonSize.ICON} onClick={zoom$}>
-          <TbZoomIn size={16} />
+          <TbFillZoomIn size={16} />
         </Button>
       </Tooltip>
       <span {...stylex.attrs(style.scaleText)}>

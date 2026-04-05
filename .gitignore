@@ -17,6 +17,7 @@ wailsjs
 # ----- Dependencies & package manager ----- 
 /node_modules
 deno.lock
+bun.lock
 
 # ----- IDEs and editors ----- 
 /.idea
