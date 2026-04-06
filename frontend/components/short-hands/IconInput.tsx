@@ -17,7 +17,7 @@ const style = stylex.create({
     width: "var(--icon-input-size)",
     height: "var(--icon-input-size)",
     ":hover": {
-      border: "2px solid var(--gray7)"
+      border: "2px solid var(--overlay0)"
     }
   },
   uploadZone__withImage: {
@@ -25,7 +25,7 @@ const style = stylex.create({
     backgroundSize: "cover"
   },
   uploadZone__noImage: {
-    backgroundColor: "var(--gray3)",
+    backgroundColor: "var(--base)",
   }
 })
 

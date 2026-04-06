@@ -10,7 +10,7 @@ const style = stylex.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "var(--gray3)",
+    backgroundColor: "var(--base)",
     borderRadius: 6,
     position: "relative"
   },
@@ -23,7 +23,7 @@ const style = stylex.create({
   },
   input__uploadZone: {
     borderRadius: 6,
-    border: "2px solid var(--gray6)",
+    border: "2px solid var(--surface2)",
     flexFlow: "column",
     gap: 10
   },

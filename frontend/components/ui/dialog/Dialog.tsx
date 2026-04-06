@@ -31,7 +31,7 @@ const style = stylex.create({
   content: {
     paddingInline: 15,
     paddingBlock: 10,
-    backgroundColor: "var(--gray2)",
+    backgroundColor: "var(--mantle)",
     position: "relative",
     outline: "none"
   },
@@ -48,7 +48,7 @@ const style = stylex.create({
     opacity: 0.7,
     zIndex: 10,
     outline: "none",
-    backgroundColor: "var(--gray5)",
+    backgroundColor: "var(--surface1)",
     ":hover": {
       opacity: 1,
     },

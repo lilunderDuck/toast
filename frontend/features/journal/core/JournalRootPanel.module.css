@@ -1,6 +1,6 @@
 .journal {
-  --sidebar-panel-bg: var(--gray1);
-  --content-panel-bg: var(--gray1);
+  --sidebar-panel-bg: var(--crust);
+  --content-panel-bg: var(--crust);
   --top-header-height: 34px;
   --top-header-content-side-bg: var(--sidebar-panel-bg);
 }

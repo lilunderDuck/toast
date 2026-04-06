@@ -5,7 +5,7 @@ const style = stylex.create({
   kbd: {
     borderStyle: 'solid',
     borderRadius: '0.375rem',
-    borderColor: 'var(--gray7)',
+    borderColor: 'var(--overlay0)',
     borderWidth: '1px 1px 3px',
     backgroundColor: '#131212',
     paddingInline: '0.4em',

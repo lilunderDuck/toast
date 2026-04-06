@@ -22,10 +22,15 @@ const style = stylex.create({
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
     boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-    backgroundColor: 'var(--gray2)',
-    border: '1px solid var(--gray5)',
+    backgroundColor: 'var(--mantle)',
+    border: '1px solid var(--surface1)',
     userSelect: 'none'
   },
+  tooltipBorder: {
+    border: "2px solid",
+    borderImageSource: "linear-gradient(to bottom, #27035e, #1a0336)",
+    borderImageSlice: 1, /* Required to make the gradient fill the border */
+  }
 })
 
 export interface ITooltipOptions {
@@ -52,7 +57,7 @@ export function Tooltip(
       <Portal>
         <Content
           {...others}
-          class={MERGE_CLASS(stylex.attrs(style.tooltip), others, "component-tooltip")}
+          class={MERGE_CLASS(stylex.attrs(style.tooltip, style.tooltipBorder), others, "component-tooltip")}
         >
           {local.label$}
         </Content>

@@ -11,7 +11,7 @@ const style = stylex.create({
     padding: "0.25rem",
     borderRadius: "0.375rem",
     borderWidth: "1px",
-    backgroundColor: 'var(--gray3)',
+    backgroundColor: 'var(--base)',
   },
 })
 

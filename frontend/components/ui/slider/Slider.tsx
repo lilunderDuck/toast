@@ -26,7 +26,7 @@ const style = stylex.create({
     alignItems: "center",
     touchAction: "none",
     userSelect: "none",
-    backgroundColor: "var(--gray5)"
+    backgroundColor: "var(--surface1)"
   }
 })
 
@@ -42,7 +42,7 @@ export function Slider<T extends ValidComponent = "div">(
   return (
     <div 
       class={local.class} 
-      style={`--fill-color:${props.fillColor$ ?? "var(--gray6)"}`}
+      style={`--fill-color:${props.fillColor$ ?? "var(--surface2)"}`}
       {...stylex.attrs(style.root__wrap)}
     >
       <Root

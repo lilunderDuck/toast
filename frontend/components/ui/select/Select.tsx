@@ -11,7 +11,7 @@ import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   this: {
-    backgroundColor: 'var(--gray4)',
+    backgroundColor: 'var(--surface0)',
     borderRadius: 6
   }
 })

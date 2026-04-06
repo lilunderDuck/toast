@@ -57,7 +57,7 @@ const style = stylex.create({
     paddingLeft: 10
   },
   noDesc: {
-    color: "var(--gray11)"
+    color: "var(--subtext0)"
   }
 })
 

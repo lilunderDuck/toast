@@ -12,7 +12,7 @@ const style = stylex.create({
   menu: {
     width: "14.5rem",
     fontSize: 14,
-    backgroundColor: "var(--gray3)",
+    backgroundColor: "var(--base)",
     borderRadius: 6,
     padding: 5
   },
@@ -25,7 +25,7 @@ const style = stylex.create({
   menu__seperatorLine: {
     width: "100%",
     height: 2,
-    backgroundColor: "var(--gray7)",
+    backgroundColor: "var(--overlay0)",
     marginTop: 10,
     marginBottom: 5
   }

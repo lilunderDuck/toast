@@ -11,7 +11,7 @@ const style = stylex.create({
     gap: 5
   },
   tagInput__placeholder: {
-    color: "var(--gray10)"
+    color: "var(--crust0)"
   }
 })
 

@@ -15,7 +15,7 @@ const style = stylex.create({
   button__seperator: {
     width: "100%",
     height: 3,
-    backgroundColor: "var(--gray4)",
+    backgroundColor: "var(--surface0)",
     borderRadius: 6
   },
   button__text: {

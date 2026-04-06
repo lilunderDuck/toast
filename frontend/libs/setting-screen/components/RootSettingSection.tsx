@@ -19,11 +19,11 @@ const style = stylex.create({
     alignItems: "center"
   },
   name_disabled: {
-    color: "var(--gray10)"
+    color: "var(--crust0)"
   },
   description: {
     fontSize: 14,
-    color: "var(--gray11)",
+    color: "var(--subtext0)",
     paddingRight: "2rem"
   },
   description_disabled$: {

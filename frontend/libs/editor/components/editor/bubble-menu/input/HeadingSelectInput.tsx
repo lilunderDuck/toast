@@ -21,10 +21,10 @@ const style = stylex.create({
     borderRadius: 6,
     alignItems: "center",
     height: "1.575rem",
-    color: "var(--gray11)",
+    color: "var(--subtext0)",
     ":hover": {
-      backgroundColor: "var(--gray5)",
-      color: "var(--gray12)",
+      backgroundColor: "var(--surface1)",
+      color: "var(--text)",
     }
   },
   input__itemWrap: {
@@ -40,9 +40,9 @@ const style = stylex.create({
     alignItems: "center",
     gap: 10,
     fontSize: 14,
-    color: "var(--gray11)",
+    color: "var(--subtext0)",
     ":hover": {
-      color: "var(--gray12)"
+      color: "var(--text)"
     }
   }
 })

@@ -18,7 +18,7 @@ const style = stylex.create({
     whiteSpace: "break-spaces"
   },
   input__contentEmpty: {
-    color: "var(--gray11)"
+    color: "var(--subtext0)"
   },
   input__shortcutHint: {
     fontSize: 14,

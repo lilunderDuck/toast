@@ -19,7 +19,7 @@ const style = stylex.create({
     overflowX: "hidden",
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
-    color: "var(--gray11)",
+    color: "var(--subtext0)",
     flexShrink: 0
   },
   header: {

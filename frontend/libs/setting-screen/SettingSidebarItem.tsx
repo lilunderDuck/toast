@@ -13,9 +13,9 @@ const style = stylex.create({
     paddingInline: 9,
     paddingBlock: 2,
     borderRadius: 6,
-    backgroundColor: "var(--gray5)",
+    backgroundColor: "var(--surface1)",
     display: "block",
-    color: "var(--gray11)",
+    color: "var(--subtext0)",
     fontSize: 14,
     height: "100%"
   },
@@ -24,7 +24,7 @@ const style = stylex.create({
     paddingBlock: 5,
     borderRadius: 6,
     gap: 10,
-    color: "var(--gray11)",
+    color: "var(--subtext0)",
     transition: "0.15s ease-out",
     backgroundColor: "transparent",
     textAlign: "left",
@@ -33,8 +33,8 @@ const style = stylex.create({
     alignItems: "center",
     width: "100%",
     ":hover": {
-      color: "var(--gray12)",
-      backgroundColor: "var(--gray4)",
+      color: "var(--text)",
+      backgroundColor: "var(--surface0)",
     }
   }
 })

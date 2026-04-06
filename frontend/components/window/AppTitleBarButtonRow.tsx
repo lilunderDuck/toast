@@ -32,13 +32,13 @@ const style = stylex.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    color: 'var(--gray11)',
+    color: 'var(--subtext0)',
     borderRadius: '0 !important',
   },
   titleBar__otherButton: {
     paddingInline: 'var(--title-bar-button-padding)',
     ":hover": {
-      backgroundColor: "var(--gray4)"
+      backgroundColor: "var(--surface0)"
     }
   },
   titleBar__closeButton: {

@@ -32,7 +32,7 @@ const style = stylex.create({
     paddingBlock: 6,
     borderRadius: 6,
     outline: 'none',
-    backgroundColor: 'var(--gray4)',
+    backgroundColor: 'var(--surface0)',
     width: '100%',
     resize: 'none'
   },

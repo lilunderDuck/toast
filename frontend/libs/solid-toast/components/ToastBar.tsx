@@ -16,8 +16,8 @@ const style = stylex.create({
   toastBar: {
     display: 'flex',
     alignItems: 'center',
-    color: 'var(--gray12)',
-    background: 'var(--gray5)',
+    color: 'var(--text)',
+    background: 'var(--surface1)',
     boxShadow: '0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05)',
     maxWidth: '350px',
     pointerEvents: 'auto',

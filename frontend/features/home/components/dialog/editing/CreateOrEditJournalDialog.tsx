@@ -24,11 +24,11 @@ const style = stylex.create({
     gap: 10,
   },
   uploadZone: {
-    backgroundColor: "var(--gray3)",
+    backgroundColor: "var(--base)",
     cursor: "pointer",
     borderRadius: 6,
     ":hover": {
-      border: "2px solid var(--gray7)"
+      border: "2px solid var(--overlay0)"
     }
   }
 })

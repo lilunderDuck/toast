@@ -1,9 +1,9 @@
 #tabItem {
-  color: var(--gray10);
+  color: var(--crust0);
   outline: none;
 }
 
 [data-tab-item-focused=true] #tabItem {
-  background-color: var(--gray4);
-  color: var(--gray12);
+  background-color: var(--surface0);
+  color: var(--text);
 }

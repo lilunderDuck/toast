@@ -12,5 +12,5 @@
 }
 
 .taskItem[data-checked=true] {
-  color: var(--gray10)
+  color: var(--crust0)
 }

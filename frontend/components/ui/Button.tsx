@@ -42,15 +42,15 @@ const style = stylex.create({
   size_icon: {
     paddingInline: '0.375rem',
     paddingBlock: '0.375rem',
-    color: 'var(--gray11)',
+    color: 'var(--subtext0)',
     ':hover': {
-      color: 'var(--gray12)',
+      color: 'var(--text)',
     }
   },
   variant_default: {
-    backgroundColor: 'var(--gray5)',
+    backgroundColor: 'var(--surface1)',
     ':hover': {
-      backgroundColor: 'var(--gray6)',
+      backgroundColor: 'var(--surface2)',
     }
   },
   variant_danger: {
@@ -61,10 +61,10 @@ const style = stylex.create({
   },
   variant_noBackground: {
     backgroundColor: 'tranparent',
-    color: 'var(--gray11)',
+    color: 'var(--subtext0)',
     ':hover': {
-      backgroundColor: 'var(--gray5)',
-      color: 'var(--gray12)'
+      backgroundColor: 'var(--surface1)',
+      color: 'var(--text)'
     }
   }
 })

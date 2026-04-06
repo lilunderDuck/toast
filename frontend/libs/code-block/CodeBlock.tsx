@@ -13,7 +13,7 @@ import { CodeBlockContent, CodeBlockInput, CodeBlockLanguageSelect, type ICodeBl
 const style = stylex.create({
   block: {
     width: "100%",
-    backgroundColor: "var(--gray3)",
+    backgroundColor: "var(--base)",
     paddingBottom: 10,
     marginBottom: 20,
     borderRadius: 6

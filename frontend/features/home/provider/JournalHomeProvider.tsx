@@ -10,22 +10,23 @@ import { CreateGroup, UpdateGroup } from "~/wailsjs/go/group/Exports"
 
 interface IJournalHomeContext {
   /**Reactive array of all journal groups. */
-  groups$: Accessor<group.JournalGroupData[]>
+  groups$: Accessor<group.GroupData[]>
   /**Asynchronously creates a new journal group and updates the UI.
    * @param data Options for the new journal group.
    */
-  addGroup$(data: group.JournalGroupOptions): Promise<void>
+  addGroup$(data: group.GroupOptions): Promise<void>
   /**Asynchronously edits an existing journal group and updates the UI.
    * @param targetGroupId The group id to edit.
    * @param options The new options for the journal group.
    */
-  editGroup$(targetGroupId: string, options: group.JournalGroupOptions): Promise<void>
+  editGroup$(targetGroupId: string, options: group.GroupData): Promise<void>
+
 }
 
 const Context = createContext<IJournalHomeContext>()
 
 interface IJournalHomeProviderProps {
-  groups$: group.JournalGroupData[]
+  groups$: group.GroupData[]
 }
 
 export function JournalHomeProvider(props: ParentProps<IJournalHomeProviderProps>) {

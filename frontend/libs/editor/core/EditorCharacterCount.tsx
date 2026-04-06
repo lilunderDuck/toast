@@ -16,14 +16,14 @@ const style = stylex.create({
     position: "fixed",
     bottom: 0,
     right: 0,
-    backgroundColor: "var(--gray4)",
+    backgroundColor: "var(--surface0)",
     gap: 15,
     paddingInline: 10,
     paddingBlock: 5,
     borderTopLeftRadius: 6,
     fontSize: 12,
     userSelect: "none",
-    color: "var(--gray11)"
+    color: "var(--subtext0)"
   },
   counter__readonlyIconIndicator: {
     color: "var(--blue8)"

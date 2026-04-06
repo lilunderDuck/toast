@@ -11,7 +11,7 @@ const style = stylex.create({
     paddingInline: 10,
     paddingBlock: 5,
     borderRadius: "0.375rem",
-    backgroundColor: 'var(--gray3)',
+    backgroundColor: 'var(--base)',
     outline: "none"
   }
 })

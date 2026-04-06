@@ -23,15 +23,15 @@ const style = stylex.create({
   },
   menuItem__default: {
     cursor: "default",
-    color: "var(--gray11)",
+    color: "var(--subtext0)",
     ':hover': {
-      backgroundColor: 'var(--gray5)',
-      color: "var(--gray12)",
+      backgroundColor: 'var(--surface1)',
+      color: "var(--text)",
     }
   },
   menuItem__disabled: {
     cursor: "not-allowed",
-    color: "var(--gray10)"
+    color: "var(--crust0)"
   }
 })
 

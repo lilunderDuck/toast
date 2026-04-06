@@ -13,7 +13,7 @@ const style = stylex.create({
     height: "100%",
     position: "fixed",
     zIndex: 20,
-    backgroundColor: "var(--gray1)",
+    backgroundColor: "var(--crust)",
   },
   screen__titleBarDraggable: {
     position: "absolute"

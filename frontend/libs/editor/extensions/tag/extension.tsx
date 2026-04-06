@@ -17,7 +17,7 @@ export const TagExtension = createEditorNode<
       default: ''
     },
     color: {
-      default: "var(--gray10)",
+      default: "var(--crust0)",
     }
   }),
   inputRules$() {

@@ -13,7 +13,7 @@ const style = stylex.create({
     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
     transitionDuration: "300ms",
     top: 6,
-    backgroundColor: "var(--gray8)"
+    backgroundColor: "var(--overlay1)"
   }
 })
 

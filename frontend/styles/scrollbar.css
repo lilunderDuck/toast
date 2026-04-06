@@ -1,6 +1,6 @@
 .scrollbar {
-  --sb-track-color: var(--gray3);
-  --sb-thumb-color: var(--gray4);
+  --sb-track-color: var(--base);
+  --sb-thumb-color: var(--surface0);
   --sb-border-radius: 3px;
   --sb-thumb-pad: 1px;
   --sb-size: 12px;

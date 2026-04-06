@@ -11,7 +11,7 @@ const style = stylex.create({
   form: {
     paddingInline: 15,
     paddingBlock: 10,
-    backgroundColor: "var(--gray2)",
+    backgroundColor: "var(--mantle)",
     marginTop: 10,
     borderRadius: 6
   },

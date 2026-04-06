@@ -16,7 +16,7 @@ const style = stylex.create({
     width: "100%",
     height: "100%",
     ":hover": {
-      border: "2px solid var(--gray7)"
+      border: "2px solid var(--overlay0)"
     }
   },
   uploadZone__withImage: {
@@ -24,7 +24,7 @@ const style = stylex.create({
     backgroundSize: "cover"
   },
   uploadZone__noImage: {
-    backgroundColor: "var(--gray3)",
+    backgroundColor: "var(--base)",
   }
 })
 

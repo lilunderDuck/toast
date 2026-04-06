@@ -11,17 +11,17 @@ const style = stylex.create({
     display: "flex",
     alignItems: "center",
     gap: 10,
-    color: "var(--gray11)",
+    color: "var(--subtext0)",
     width: "1.575rem",
     height: "1.575rem",
     ":hover": {
-      backgroundColor: "var(--gray5)",
-      color: "var(--gray12)",
+      backgroundColor: "var(--surface1)",
+      color: "var(--text)",
     }
   },
   item__active: {
-    backgroundColor: "var(--gray5)",
-    color: "var(--gray12)"
+    backgroundColor: "var(--surface1)",
+    color: "var(--text)"
   },
   item__name: {
     fontSize: 15

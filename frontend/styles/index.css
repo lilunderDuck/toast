@@ -9,43 +9,38 @@ body > div[aria-hidden] > [data-popper-positioner] {
   z-index: 1000 !important;
 }
 
-/* The follow CSS reset was taken from https://www.joshwcomeau.com/css/custom-css-reset/, thank! */
+/* The follow CSS reset was take from https://www.joshwcomeau.com/css/custom-css-reset/, thank! */
 :root {
-  /* Colors and stuff */
-  --gray1: #111111;
-  --gray2: #191919;
-  --gray3: #222222;
-  --gray4: #2A2A2A;
-  --gray5: #313131;
-  --gray6: #3A3A3A; 
-  --gray7: #484848;
-  --gray8: #484848;
-  --gray9: #6E6E6E;
-  --gray10: #7B7B7B;
-  --gray11: #B4B4B4;
-  --gray12: #EEEEEE;
-  /* ... */
-  --crimson3: #381525;
-  --crimson9: #E93D82;
-  /* ... */
-  --blue3: #0D2847;
-  --blue5: #004074;
-  --blue6: #104D87;
-  --blue8: #2870BD;
-  --blue9: #0090FF;
-  --blue10: #3B9EFF;
-  /* ... */
-  --tomato9: #E54D2E;
-  --tomato8: #AC4D39;
-  /* ... */
-  --plum9: #AB4ABA;
-  /* ... */
-  --red5: #611623;
-  --red7: #8C333A;
-  --red9: #E5484D;
-  --red10: #EC5D5E;
-  /* ... */
-  --green11: #3DD68C;
+  --rosewater: #f5e0dc;
+  --flamingo: #f2cdcd;
+  --pink: #f5c2e7;
+  --mauve: #cba6f7;
+  --red: #f38ba8;
+  --maroon: #eba0ac;
+  --peach: #fab387;
+  --yellow: #f9e2af;
+  --green: #a6e3a1;
+  --teal: #94e2d5;
+  --sky: #89dceb;
+  --sapphire: #74c7ec;
+  --blue: #89b4fa;
+  --lavender: #b4befe;
+  --text: #cdd6f4;
+  --subtext1: #bac2de;
+  --subtext0: #a6adc8;
+  --overlay2: #9399b2;
+  --overlay1: #7f849c;
+  --overlay0: #6c7086;
+  --surface2: #585b70;
+  --surface1: #45475a;
+  --surface0: #313244;
+  --base: #1e1e2e;
+  --mantle: #181825;
+  --crust: rgb(17, 17, 27);
+
+  background-color: var(--crust);
+  color: var(--text);
+
   color-scheme: dark !important;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: 400;

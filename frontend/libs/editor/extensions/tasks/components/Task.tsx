@@ -18,7 +18,7 @@ const style = stylex.create({
     paddingTop: 5,
     borderLeft: "1px solid transparent",
     ":hover": {
-      borderColor: "var(--gray7)"
+      borderColor: "var(--overlay0)"
     }
   },
   task__subTaskDragIndicator: {

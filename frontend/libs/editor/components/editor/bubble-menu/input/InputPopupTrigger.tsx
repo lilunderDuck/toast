@@ -16,10 +16,10 @@ const style = stylex.create({
     borderRadius: 6,
     alignItems: "center",
     height: "1.575rem",
-    color: "var(--gray11)",
+    color: "var(--subtext0)",
     ":hover": {
-      backgroundColor: "var(--gray5)",
-      color: "var(--gray12)",
+      backgroundColor: "var(--surface1)",
+      color: "var(--text)",
     }
   },
 })

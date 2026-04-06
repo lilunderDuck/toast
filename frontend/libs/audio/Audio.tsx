@@ -6,7 +6,7 @@ const style = stylex.create({
   audio: {
     paddingInline: 15,
     paddingBlock: 10,
-    backgroundColor: "var(--gray3)",
+    backgroundColor: "var(--base)",
     borderRadius: 6,
   }
 })

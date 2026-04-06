@@ -6,7 +6,7 @@ import type { Toast } from "~/libs/solid-toast/util"
 
 const style = stylex.create({
   toast: {
-    backgroundColor: "var(--gray4)",
+    backgroundColor: "var(--surface0)",
     paddingBlock: 5,
     paddingInline: 10,
     width: "18rem"
@@ -20,7 +20,7 @@ const style = stylex.create({
   toast__description: {
     marginLeft: 25,
     fontSize: 13,
-    color: "var(--gray11)"
+    color: "var(--subtext0)"
   }
 })
 

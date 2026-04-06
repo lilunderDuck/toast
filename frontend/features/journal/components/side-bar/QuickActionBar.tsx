@@ -39,13 +39,13 @@ const style = stylex.create({
     height: 25,
     borderRadius: 6,
     backgroundColor: "transparent",
-    color: "var(--gray10)",
+    color: "var(--crust0)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     ":hover": {
-      backgroundColor: "var(--gray4)",
-      color: "var(--gray12)",
+      backgroundColor: "var(--surface0)",
+      color: "var(--text)",
     }
   }
 })

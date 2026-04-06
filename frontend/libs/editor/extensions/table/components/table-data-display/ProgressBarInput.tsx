@@ -15,7 +15,7 @@ const style = stylex.create({
     width: "100%",
     appearance: "none",
     height: 15,
-    background: "linear-gradient(90deg, var(--progress-bar-color) var(--progress), var(--gray5) var(--progress))",
+    background: "linear-gradient(90deg, var(--progress-bar-color) var(--progress), var(--surface1) var(--progress))",
     // change input slider color
     accentColor: "var(--progress-bar-color)",
     outline: "none",

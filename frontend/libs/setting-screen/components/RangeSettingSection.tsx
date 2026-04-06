@@ -19,7 +19,7 @@ const style = stylex.create({
     justifyContent: "space-between",
     fontSize: 11,
     marginBottom: 5,
-    color: "var(--gray11)",
+    color: "var(--subtext0)",
     display: "flex"
   }
 })

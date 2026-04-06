@@ -23,7 +23,7 @@ const style = stylex.create({
     position: "relative"
   },
   row__draggableHandle: {
-    backgroundColor: "var(--gray6)"
+    backgroundColor: "var(--surface2)"
   }
 })
 

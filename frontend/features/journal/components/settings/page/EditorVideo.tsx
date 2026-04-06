@@ -12,12 +12,12 @@ const style = stylex.create({
     paddingLeft: 15,
     paddingBlock: 5,
     marginTop: 5,
-    borderLeft: "2px solid var(--gray10)"
+    borderLeft: "2px solid var(--crust0)"
   },
   videoIndicatorPreview: {
     marginTop: 5,
     height: "10rem",
-    backgroundColor: "var(--gray6)",
+    backgroundColor: "var(--surface2)",
     position: "relative"
   }
 })

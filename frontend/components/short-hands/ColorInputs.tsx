@@ -21,7 +21,7 @@ const style = stylex.create({
     width: '100%',
     fontSize: 15,
     paddingInline: 15,
-    backgroundColor: 'var(--gray4)',
+    backgroundColor: 'var(--surface0)',
     ':focus': {
       outline: 'none'
     }
@@ -35,7 +35,7 @@ const style = stylex.create({
     transition: "0.25s ease-out",
     border: "2px solid transparent",
     ":hover": {
-      borderColor: "var(--gray8)"
+      borderColor: "var(--overlay1)"
     }
   },
   resetButton: {

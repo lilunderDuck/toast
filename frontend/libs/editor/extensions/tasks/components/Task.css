@@ -4,11 +4,11 @@
 }
 
 .task[data-completed=true] .task__name {
-  color: var(--gray11)
+  color: var(--subtext0)
 }
 
 .task[data-completed=true] .task__description {
-  color: var(--gray10)
+  color: var(--crust0)
 }
 
 .task .task__subTaskDropIndicator {

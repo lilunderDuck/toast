@@ -53,6 +53,7 @@ func GetAppConfig(icon []byte, appInstance *App) *options.App {
 		OnShutdown:       appInstance.shutdown,
 		WindowStartState: options.Normal,
 		Bind:             binding,
+		BackgroundColour: options.NewRGB(17, 17, 17),
 		// Windows platform specific options
 		Windows: &windows.Options{
 			WebviewIsTransparent: false,

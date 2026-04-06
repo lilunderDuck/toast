@@ -1,4 +1,4 @@
 .itemButton.active {
-  background-color: var(--gray5);
-  color: var(--gray12);
+  background-color: var(--surface1);
+  color: var(--text);
 }

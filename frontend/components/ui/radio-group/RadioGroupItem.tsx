@@ -19,7 +19,7 @@ const style = stylex.create({
     borderRadius: "50%",
     width: 18,
     height: 18,
-    border: '1px solid var(--gray11)'
+    border: '1px solid var(--subtext0)'
   },
   itemIndicator: {
     display: "flex",
@@ -28,7 +28,7 @@ const style = stylex.create({
     height: "100%",
   },
   itemIndicatorIcon: {
-    color: "var(--gray11)",
+    color: "var(--subtext0)",
     fill: "currentColor"
   }
 })

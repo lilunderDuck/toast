@@ -58,7 +58,7 @@ export function Editor() {
       <AttributeEditor />
       <SolidEditorContent
         editor={editor$()}
-        style={`--sb-track-color: var(--gray2)`}
+        style={`--sb-track-color: var(--mantle)`}
         spellcheck="false"
         class={MERGE_CLASS(
           stylex.attrs(style.editor),

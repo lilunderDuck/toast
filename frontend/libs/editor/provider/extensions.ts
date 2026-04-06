@@ -32,11 +32,11 @@ const style = stylex.create({
     gap: 10
   },
   ext__blockquote: {
-    borderLeft: "2px solid var(--gray6)",
+    borderLeft: "2px solid var(--surface2)",
     paddingLeft: 15,
     paddingBlock: 10,
     fontStyle: "italic",
-    color: "var(--gray11)"
+    color: "var(--subtext0)"
   }
 })
 

@@ -6,7 +6,7 @@ const style = stylex.create({
     width: '100%'
   },
   dividerLine: {
-    backgroundColor: 'var(--gray5)',
+    backgroundColor: 'var(--surface1)',
     width: '100%',
     height: 2
   }

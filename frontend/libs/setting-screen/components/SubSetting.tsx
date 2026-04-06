@@ -6,7 +6,7 @@ const style = stylex.create({
     paddingLeft: 15,
     paddingBlock: 5,
     marginTop: 5,
-    borderLeft: "2px solid var(--gray10)"
+    borderLeft: "2px solid var(--crust0)"
   },
 })
 

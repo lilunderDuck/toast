@@ -83,7 +83,7 @@
 }
 
 .tiptap pre {
-  background: var(--gray4);
+  background: var(--surface0);
   border-radius: 0.5rem;
   color: var(--white);
   font-family: 'JetBrainsMono', monospace;
@@ -116,7 +116,7 @@
 
 .tiptap td,
 .tiptap th {
-  border: 1px solid var(--gray6);
+  border: 1px solid var(--surface2);
   box-sizing: border-box;
   min-width: 1em;
   padding: 6px 8px;
@@ -130,7 +130,7 @@
 }
 
 .tiptap .selectedCell:after {
-  background: var(--gray2);
+  background: var(--mantle);
   content: "";
   left: 0;
   right: 0;
@@ -173,7 +173,7 @@ p.is-editor-empty:first-child::before {
   margin-top: 6rem !important;
   max-height: 20rem;
   overflow-y: scroll;
-  background-color: var(--gray5);
+  background-color: var(--surface1);
   border-radius: 6;
 }
 

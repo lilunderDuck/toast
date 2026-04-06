@@ -47,7 +47,7 @@ export function Tag(props: ITagProps) {
     <span
       {...itsProps}
       class={MERGE_CLASS(props, stylex.attrs(style.tag))}
-      style={{ "--color": props.color$ ?? "var(--gray11)" }}
+      style={{ "--color": props.color$ ?? "var(--subtext0)" }}
       data-tag=""
     >
       <span {...stylex.attrs(style.tag__content)}>

@@ -8,7 +8,7 @@ const style = stylex.create({
     borderRadius: 6,
     transition: '0.25s ease-out',
     outline: 'none',
-    backgroundColor: 'var(--gray4)',
+    backgroundColor: 'var(--surface0)',
     width: '100%',
   }
 })

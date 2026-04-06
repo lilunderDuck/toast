@@ -10,7 +10,7 @@ const style = stylex.create({
   slider__input: {
     appearance: 'none',
     width: '100%',
-    background: 'var(--gray6)',
+    background: 'var(--surface2)',
     outline: 'none',
     opacity: 0.7,
     position: "absolute",
@@ -31,7 +31,7 @@ const style = stylex.create({
   },
   slider__buffered: {
     width: "var(--slider-buffered-progress)",
-    backgroundColor: "var(--gray4)",
+    backgroundColor: "var(--surface0)",
     zIndex: 0
   }
 })

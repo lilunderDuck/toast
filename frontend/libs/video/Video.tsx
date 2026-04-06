@@ -20,7 +20,7 @@ const style = stylex.create({
     minHeight: "20rem"
   },
   loadingVideoLayer: {
-    backgroundColor: "var(--gray2)",
+    backgroundColor: "var(--mantle)",
     width: "100%",
     height: "100%",
     display: "flex",

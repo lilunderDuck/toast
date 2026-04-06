@@ -22,7 +22,7 @@ const style = stylex.create({
   task__descriptionWrap: {
     paddingLeft: "2.7rem",
     fontSize: 13,
-    color: "var(--gray11)"
+    color: "var(--subtext0)"
   }
 })
 

@@ -19,7 +19,7 @@ const style = stylex.create({
     borderRadius: 6,
     userSelect: "none",
     display: "flex",
-    backgroundColor: "var(--gray3)",
+    backgroundColor: "var(--base)",
     gap: 3,
   },
 })

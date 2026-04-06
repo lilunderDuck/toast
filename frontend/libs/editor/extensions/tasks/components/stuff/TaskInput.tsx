@@ -13,7 +13,7 @@ const style = stylex.create({
     paddingInline: 10,
     paddingBlock: 5,
     borderRadius: 6,
-    backgroundColor: "var(--gray2)",
+    backgroundColor: "var(--mantle)",
   }
 })
 

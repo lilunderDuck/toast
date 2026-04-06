@@ -12,8 +12,8 @@ const style = stylex.create({
     borderRadius: "0.375rem",
     borderWidth: "1px",
     boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-    backgroundColor: 'var(--gray2)',
-    border: '1px solid var(--gray4)',
+    backgroundColor: 'var(--mantle)',
+    border: '1px solid var(--surface0)',
   },
 })
 

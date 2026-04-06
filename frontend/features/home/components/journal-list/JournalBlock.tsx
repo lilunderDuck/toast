@@ -22,7 +22,7 @@ const style = stylex.create({
     backgroundSize: "cover"
   },
   block__defaultBg: {
-    backgroundColor: "var(--gray2)"
+    backgroundColor: "var(--mantle)"
   },
   block__editButton: {
     position: "absolute",

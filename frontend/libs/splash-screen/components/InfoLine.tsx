@@ -8,7 +8,7 @@ const style = stylex.create({
     paddingBlock: 2,
     marginLeft: 10,
     marginTop: 5,
-    backgroundColor: "var(--gray1)",
+    backgroundColor: "var(--crust)",
     borderRadius: 6,
     width: "fit-content",
     fontSize: 13

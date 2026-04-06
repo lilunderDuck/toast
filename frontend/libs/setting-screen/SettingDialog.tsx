@@ -31,7 +31,7 @@ const style = stylex.create({
   dialog__mainContent: {
     width: "100%",
     height: "100%",
-    backgroundColor: "var(--gray3)",
+    backgroundColor: "var(--base)",
     paddingInline: 15,
     paddingTop: 10,
     paddingBottom: "5rem"

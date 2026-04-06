@@ -34,7 +34,7 @@ const style = stylex.create({
   },
   input__uploadZone: {
     borderRadius: 6,
-    border: "2px solid var(--gray6)",
+    border: "2px solid var(--surface2)",
     flexFlow: "column",
     gap: 10
   },
