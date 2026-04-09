@@ -5,9 +5,25 @@ import (
 	"strings"
 
 	lzstring "github.com/daku10/go-lz-string"
+	"github.com/fxamacker/cbor/v2"
 )
 
-type CompressedString []uint16
+type CompressableString string
+
+func (this *CompressableString) MarshalCBOR() ([]byte, error) {
+	return cbor.Marshal(MustCompressString(string(*this)))
+}
+
+func (this *CompressableString) UnmarshalCBOR(input []byte) error {
+	var out string
+	err := cbor.Unmarshal(input, &out)
+	if err != nil {
+		return err
+	}
+
+	*this = CompressableString(out)
+	return nil
+}
 
 func ToString(anyThing int) string {
 	return strconv.Itoa(anyThing)
@@ -21,7 +37,7 @@ const NULL_CHAR = "\000"
 
 // Compresses a single string using the lz-string algorithm.
 // The function will `panic` if the compression fails
-func MustCompressString(inputString string) CompressedString {
+func MustCompressString(inputString string) []uint16 {
 	compressed, err := lzstring.Compress(inputString)
 	if err != nil {
 		panic(err)
@@ -32,7 +48,7 @@ func MustCompressString(inputString string) CompressedString {
 
 // Decompresses a compressed string back into a string.
 // The function will `panic` if the decompression fails
-func MustDecompressString(compressedString CompressedString) string {
+func MustDecompressString(compressedString []uint16) string {
 	decompressed, err := lzstring.Decompress(compressedString)
 	if err != nil {
 		panic(err)
@@ -43,12 +59,12 @@ func MustDecompressString(compressedString CompressedString) string {
 
 // Joins a variable number of strings using `NULL_CHAR` as a
 // separator and then compresses the combined string.
-func CompressStrings(inputStrings ...string) CompressedString {
+func CompressStrings(inputStrings ...string) []uint16 {
 	return MustCompressString(strings.Join(inputStrings, NULL_CHAR))
 }
 
 // Decompresses a compressed string and then splits the
 // resulting string back into a slice of strings using `NULL_CHAR` as the delimiter.
-func DecompressStrings(compressedString CompressedString) []string {
+func DecompressStrings(compressedString []uint16) []string {
 	return strings.Split(MustDecompressString(compressedString), NULL_CHAR)
 }

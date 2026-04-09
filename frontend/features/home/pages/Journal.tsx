@@ -20,11 +20,6 @@ const style = stylex.create({
     gap: 10,
     flexWrap: "wrap",
     display: "flex"
-  },
-  section__titleBar: {
-    width: "100%",
-    position: "fixed",
-    top: 0
   }
 })
 
@@ -36,7 +31,6 @@ export default function Journal() {
   return (
     <JournalHomeProvider groups$={resource() ?? []}>
       <main {...stylex.attrs(style.section)}>
-        <AppTitleBarDraggable {...stylex.attrs(style.section__titleBar)} />
         <JournalListHeader name$="Your journal" />
         <Show when={!resource.loading}>
           <div {...stylex.attrs(style.section__list)} id={__style.list}>

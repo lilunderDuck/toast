@@ -4,10 +4,11 @@ import "./JournalHomeSidebar.css"
 import { AppTitleBarDraggable } from "~/components"
 import { useJournalHomeRootContext } from "../provider/JournalHomeRootProvider"
 import { BiSolidNote } from "solid-icons/bi"
+import { RiMediaPlayList2Fill } from "solid-icons/ri"
 
 const style = stylex.create({
   sidebar: {
-    width: "15rem",
+    width: "35%",
     height: "100%",
     flexShrink: 0,
     paddingInline: 5,
@@ -19,7 +20,9 @@ const style = stylex.create({
     width: "100%",
     color: "var(--subtext1)",
     paddingInline: 10,
-    paddingBlock: 5
+    paddingBlock: 5,
+    userSelect: "none",
+    marginBottom: 5
   },
   sidebar__titleBar: {
     width: "100%",
@@ -34,6 +37,11 @@ export function JournalHomeSidebar() {
       name$: "Journal",
       icon$: BiSolidNote,
       pageId$: JournalPage.JOURNAL_HOME
+    },
+    {
+      name$: "Playlist",
+      icon$: RiMediaPlayList2Fill,
+      pageId$: JournalPage.PLAYLIST_HOME
     }
   ]
 
