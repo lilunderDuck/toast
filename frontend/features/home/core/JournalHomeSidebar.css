@@ -1,0 +1,8 @@
+#homeSidebar__item:hover {
+  background-color: var(--overlay1);
+  color: var(--text)
+}
+
+#homeSidebar__itemActive {
+  background-color: #25606a;
+}

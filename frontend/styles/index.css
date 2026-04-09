@@ -36,7 +36,7 @@ body > div[aria-hidden] > [data-popper-positioner] {
   --surface0: #313244;
   --base: #1e1e2e;
   --mantle: #181825;
-  --crust: rgb(17, 17, 27);
+  --crust: #11111b;
 
   background-color: var(--crust);
   color: var(--text);

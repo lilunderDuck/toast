@@ -52,6 +52,7 @@
     "chart.js": "^4.5.0",
     "highlight.js": "^11.11.1",
     "lowlight": "^3.3.0",
+    "molcss": "^0.2.5",
     "prosemirror-state": "^1.4.3",
     "solid-colorful": "^0.0.2",
     "solid-dnd-directive": "^0.2.0",

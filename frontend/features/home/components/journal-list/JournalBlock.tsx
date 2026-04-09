@@ -9,7 +9,7 @@ import { type group } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 import { createLazyLoadedDialog } from "~/hooks"
 // ...
-import { useJournalHomeContext } from "../../provider"
+import { useJournalHomeContext } from "../../provider/JournalHomeProvider"
 
 const style = stylex.create({
   block: {

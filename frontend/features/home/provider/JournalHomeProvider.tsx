@@ -1,12 +1,12 @@
-import { type Accessor, createContext, createSignal, type ParentProps, useContext } from "solid-js"
+import { type Accessor, createContext, createSignal, type ParentProps, type Setter, useContext } from "solid-js"
 // ...
 import { toast } from "~/libs/solid-toast"
 import { arrayObjects } from "~/utils"
 import type { ToastOptions } from "~/libs/solid-toast/util"
 import type { group } from "~/wailsjs/go/models"
+import { CreateGroup, UpdateGroup } from "~/wailsjs/go/group/Exports"
 // ...
 import { GroupAddedToast, GroupEditedToast } from "../components"
-import { CreateGroup, UpdateGroup } from "~/wailsjs/go/group/Exports"
 
 interface IJournalHomeContext {
   /**Reactive array of all journal groups. */
@@ -20,7 +20,6 @@ interface IJournalHomeContext {
    * @param options The new options for the journal group.
    */
   editGroup$(targetGroupId: string, options: group.GroupData): Promise<void>
-
 }
 
 const Context = createContext<IJournalHomeContext>()

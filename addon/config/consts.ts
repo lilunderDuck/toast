@@ -249,6 +249,11 @@ export function defineAllConstants(isDevMode: boolean = false) {
     'FOLDER',
   ])
 
+  define('JournalPage', [
+    'JOURNAL_HOME',
+    'PLAYLIST_HOME',
+  ])
+
   define('PluginEvent', [
     'REGISTER_EDITOR_NODE',
     'JOURNAL_LOADED',

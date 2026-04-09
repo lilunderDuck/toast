@@ -4,7 +4,7 @@ import { BsPlus } from "solid-icons/bs"
 import { Tooltip } from "~/components"
 import { createLazyLoadedDialog } from "~/hooks"
 // ...
-import { useJournalHomeContext } from "../../provider"
+import { useJournalHomeContext } from "../../provider/JournalHomeProvider"
 
 const style = stylex.create({
   button: {
