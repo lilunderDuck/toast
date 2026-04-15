@@ -91,6 +91,7 @@ button {
   transition: 0.15s ease-out;
   background-color: transparent;
   border-radius: 0.325rem;
+  color: currentColor;
 }
 
 button:disabled {

@@ -10,6 +10,7 @@ type PlaylistTrackData struct { // impl: simdb.Entity
 	Icon     utils.CompressableString `cbor:"2,keyasint" json:"icon"`
 	Duration uint                     `cbor:"3,keyasint" json:"duration"`
 	Id       int                      `cbor:"4,keyasint" json:"id"`
+	Filename utils.CompressableString `cbor:"4,keyasint" json:"filename"`
 }
 
 func (data PlaylistTrackData) ID() (jsonField string, value any) {

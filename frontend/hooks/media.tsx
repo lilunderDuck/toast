@@ -1,5 +1,11 @@
 import { createEffect, createSignal, Show } from "solid-js"
 
+type MediaPlayerProps = Omit<
+  HTMLAttributes<"audio" | "video">,
+  "onProgress" | "onPlaying" | "onCanPlayThrough" | "onEnded" | "onTimeUpdate" |
+  "ref" | "preload"
+>
+
 export function createMediaPlayer(type: "audio" | "video") {
   const [mediaState, setMediaState] = createSignal(MediaState.LOADING)
   const [duration, setDuration] = createSignal(0)
@@ -17,15 +23,15 @@ export function createMediaPlayer(type: "audio" | "video") {
     }
 
     createEffect(() => {
-      console.log("Current media state changed to:", stateMapping[mediaState()])
+      console.debug("[media player] current media state changed to:", stateMapping[mediaState()])
     })
   }
 
   let mediaRef!: Ref<"audio" | "video">
   const mediaProps: HTMLAttributes<"audio" | "video"> = {
-    preload: "metadata",
     ref: mediaRef,
-    onProgress() {
+    preload: "metadata",
+    onLoadedData() {
       setMediaState(MediaState.LOADING)
     },
     onPlaying() {
@@ -34,6 +40,7 @@ export function createMediaPlayer(type: "audio" | "video") {
     onCanPlayThrough() {
       setMediaState(MediaState.FINISHED_LOADING)
       setDuration(mediaRef.duration)
+      console.debug("[media player] duration:", mediaRef.duration)
     },
     onEnded() {
       setMediaState(MediaState.COMPLETED)
@@ -57,10 +64,6 @@ export function createMediaPlayer(type: "audio" | "video") {
     }
   }
 
-  isDevMode && createEffect(() => {
-    console.log("[media player] changing media state to:", mediaState())
-  })
-
   const pause = () => {
     mediaRef.pause()
     setMediaState(MediaState.PAUSED)
@@ -69,7 +72,7 @@ export function createMediaPlayer(type: "audio" | "video") {
 
   const changeSource = (src: string) => {
     mediaRef.src = src
-    mediaRef.load()
+    setCurrentProgress(0)
     console.log("[media player] New audio loaded:", src)
   }
 
@@ -82,14 +85,15 @@ export function createMediaPlayer(type: "audio" | "video") {
       try {
         await mediaRef.play()
         clearInterval(intervalId)
-      } catch { }
-    }, 10)
+      } catch { 
+        console.warn("[media player] media haven't finished loading, retrying...")
+      }
+    }, 100)
     console.log("[media player] Playing", mediaRef.src)
   }
 
   const changeVolume = (volume: number) => {
-    console.assert(volume >= 0, "Media volume must not be negative.")
-    console.assert(volume <= 100, "Media volume must over 100%.")
+    console.assert(volume >= 0 && volume <= 100, "[media player] volume must not be negative and must not over 100. Your current volume is: " + volume)
     mediaRef.volume = volume
     console.log("[media player] Media volume changed to:", volume)
   }
@@ -97,7 +101,7 @@ export function createMediaPlayer(type: "audio" | "video") {
   const changeCurrentTime = (time: number) => {
     setCurrentProgress(time)
     mediaRef.currentTime = time
-    console.log("[media player] Media changed to", time, "seconds")
+    console.log("[media player] current time changed to", time, "seconds")
   }
 
   return {
@@ -110,9 +114,12 @@ export function createMediaPlayer(type: "audio" | "video") {
     play$: play,
     setVolume$: changeVolume,
     changeSource$: changeSource,
-    Player$: () => (
-      <Show when={type === "audio"}>
-        <audio ref={mediaRef} {...mediaProps} />
+    ref$: () => mediaRef,
+    Player$: (props: MediaPlayerProps) => (
+      <Show when={type === "audio"} fallback={
+        <video ref={mediaRef} {...props} {...mediaProps} />
+      }>
+        <audio ref={mediaRef} {...props} {...mediaProps} />
       </Show>
     )
   }

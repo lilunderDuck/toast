@@ -1,0 +1,26 @@
+#item__index {
+  width: 2rem;
+}
+
+#item__name {
+  width: 35%;
+  text-align: left;
+}
+
+#item__artist {
+  width: 35%;
+  text-align: left;
+}
+
+#item__duration {
+  width: 10%;
+}
+
+#item__icon {
+  width: 2.5rem;
+}
+
+#item__playlistItem[data-current-track=true],
+#item__playlistItem[data-current-track=true]:hover {
+  background-color: var(--surface0) !important;
+}

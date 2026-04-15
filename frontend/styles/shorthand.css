@@ -1,0 +1,7 @@
+.showOnHover > .showOnHover__hide {
+  opacity: 0;
+}
+
+.showOnHover:hover > .showOnHover__hide {
+  opacity: 1;
+}
