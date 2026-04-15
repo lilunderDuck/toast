@@ -6,7 +6,11 @@ type MediaPlayerProps = Omit<
   "ref" | "preload"
 >
 
-export function createMediaPlayer(type: "audio" | "video") {
+interface IMediaPlayerListener {
+  onEnded$(): void
+}
+
+export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IMediaPlayerListener>) {
   const [mediaState, setMediaState] = createSignal(MediaState.LOADING)
   const [duration, setDuration] = createSignal(0)
   const [buffered, setBuffered] = createSignal(0)
@@ -43,6 +47,7 @@ export function createMediaPlayer(type: "audio" | "video") {
       console.debug("[media player] duration:", mediaRef.duration)
     },
     onEnded() {
+      listener?.onEnded$?.()
       setMediaState(MediaState.COMPLETED)
     },
     onTimeUpdate() {

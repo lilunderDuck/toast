@@ -3,7 +3,7 @@ import type { playlist } from "~/wailsjs/go/models"
 import { GetAllPlaylistTrack, GetPlaylistData,  } from "~/wailsjs/go/playlist/Exports"
 import { playlistTrackUrl } from "../api"
 import { arrayObjects } from "~/utils"
-import { createMediaPlayer, type MediaPlayer } from "~/hooks"
+import { createMediaPlayer, useEventListener, type MediaPlayer } from "~/hooks"
 
 interface IPlaylistContext {
   data$: Accessor<playlist.PlaylistData | null>
@@ -24,7 +24,11 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
   const [playlistTracks, setPlaylistTrack] = createSignal<playlist.PlaylistTrackData[]>([])
   const [playlistData, setPlaylistData] = createSignal<playlist.PlaylistData | null>(null)
   const [currentTrack, setCurrentTrack] = createSignal<playlist.PlaylistTrackData | null>(null)
-  const audioPlayer = createMediaPlayer("audio")
+  const audioPlayer = createMediaPlayer("audio", {
+    onEnded$() {
+      goToNextTrackIfCan()
+    }
+  })
   
   let audioRef!: Ref<"audio">
 
@@ -40,14 +44,13 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
 
   const playTrack = (trackIndex: number) => {
     const track = playlistTracks()[trackIndex]
+    console.log("Track", trackIndex, "is", track)
     if (currentTrack()?.id === track.id) {
       return console.warn("this track is already played")
     }
+    
     audioPlayer.changeSource$(playlistTrackUrl(playlistData()!.id, track.name))
     setCurrentTrack(track)
-
-    console.log("Track", trackIndex, "is", track)
-
     audioPlayer.play$()
   }
 
@@ -70,12 +73,6 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
 
     playTrack(currentIndex + 1)
   }
-
-  createEffect(() => {
-    if (audioPlayer.state$() === MediaState.COMPLETED) {
-      goToNextTrackIfCan()
-    }
-  })
 
   return (
     <Context.Provider value={{
