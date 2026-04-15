@@ -1,15 +1,13 @@
 import stylex from "@stylexjs/stylex"
 import { BsPlus } from "solid-icons/bs"
 // ...
-import { Tooltip } from "~/components"
+import { Button, Tooltip } from "~/components"
 import { createLazyLoadedDialog } from "~/hooks"
 // ...
 import { useJournalHomeContext } from "../../provider/JournalHomeProvider"
 
 const style = stylex.create({
   button: {
-    width: "10rem",
-    height: "10rem",
     display: "flex",
     justifyContent: "center",
     alignItems: "center"
@@ -28,13 +26,14 @@ export function CreateJournalButton() {
   return (
     <>
       <Tooltip label$="Create new jounal groups">
-        <button 
+        <Button 
           {...stylex.attrs(style.button)} 
           onClick={CreateJournalDialog.show$}
-          data-block
+          size$={ButtonSize.ICON}
+          variant$={ButtonVariant.NO_BACKGROUND}
         >
           <BsPlus size={20} />
-        </button>
+        </Button>
       </Tooltip>
       <CreateJournalDialog.Dialog$ />
     </>

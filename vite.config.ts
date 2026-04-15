@@ -28,7 +28,23 @@ export default defineConfig(({ command }) => {
       optimizeCssModules(),
       macroPlugin
     ],
+    // Windows 11 workaround: for some goddamn reason, in a windows 10 enviroment, this config
+    // is fine, but in windows 11, it has this error in wails:
+    //    ERR | [ExternalAssetHandler] Proxy error: EOF
+    //
+    // Even more confusingly, the console gave me these error:
+    //    Failed to load resource: the server responded with a status of 502 (Bad Gateway)
+    //    Uncaught (in promise) TypeError: Failed to fetch dynamically imported module: [...]
+    // 
+    // On my god, this took me way too long to fix this goddamn issue, AUGHHH!!!
+    //
+    // Maybe there's something changed between windows 10 and 11, but WHY???
+    // I hate you, microsoft.
+    base: "/",
     server: {
+      host: '127.0.0.1', 
+      strictPort: true,
+    // ----------------------------------------------------------------
       port: 3000,
       watch: {
         // make sure any wails stuff excluded from the watch list

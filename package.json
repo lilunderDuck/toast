@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "vite",
-    "dev": "vite",
+    "dev": "vite --host 127.0.0.1 --port 3000",
     "build": "vite build",
     "serve": "vite preview",
     "test": "deno test --unstable-sloppy-imports -A ./build/test/index.ts"

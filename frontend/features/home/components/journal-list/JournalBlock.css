@@ -1,0 +1,11 @@
+#block #block__editButton {
+  opacity: 0;
+}
+
+#block:hover #block__editButton {
+  opacity: 1;
+}
+
+#block[data-block-has-icon=false]:hover #block__icon {
+  background-color: var(--overlay1);
+}

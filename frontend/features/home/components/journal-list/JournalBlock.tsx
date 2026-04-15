@@ -1,7 +1,7 @@
 import { BsPencilFill } from "solid-icons/bs"
 import { MERGE_CLASS } from "macro-def"
 // ...
-import __style from './JournalBlock.module.css'
+import './JournalBlock.css'
 import stylex from "@stylexjs/stylex"
 // ...
 import { Button, Spacer } from "~/components"
@@ -13,11 +13,31 @@ import { useJournalHomeContext } from "../../provider/JournalHomeProvider"
 
 const style = stylex.create({
   block: {
-    width: "10rem",
-    height: "10rem",
+    width: "100%",
     position: "relative",
+    display: "flex",
+    paddingInline: 10,
+    paddingBlock: 5,
+    gap: 10,
+    marginBottom: 10,
+    outline: "4px solid transparent",
+    backgroundColor: "var(--mantle)",
+    borderRadius: 6,
+    textAlign: "left",
+    ":hover": {
+      outlineColor: "var(--sapphire)"
+    }
   },
-  block__withImage: {
+  block__icon: {
+    width: "5rem",
+    height: "5rem",
+    flexShrink: 0,
+    borderRadius: 6
+  },
+  block__noIcon: {
+    backgroundColor: "var(--base)"
+  },
+  block__withIcon: {
     background: "center center no-repeat var(--img-url)",
     backgroundSize: "cover"
   },
@@ -32,18 +52,16 @@ const style = stylex.create({
     marginRight: 10,
   },
   block__content: {
-    padding: 10,
     width: "100%",
     height: "100%",
     display: "flex",
     flexDirection: "column"
   },
   block__name: {
-    fontSize: 13
   }
 })
 
-interface IJournalBlockProps extends group.JournalGroupData {
+interface IJournalBlockProps extends group.GroupData {
   // ...
 }
 
@@ -64,37 +82,38 @@ export function JournalBlock(props: IJournalBlockProps) {
   )
 
   return (
-    <div 
-      class={MERGE_CLASS(
-        stylex.attrs(style.block),
-        (props.icon ? stylex.attrs(style.block__withImage) : stylex.attrs(style.block__defaultBg)).class
-      )}
-      id={__style.block}
-      data-block
+    <button 
+      {...stylex.attrs(style.block)}
+      id="block"
+      data-block-has-icon={props.icon !== undefined && props.icon !== ""}
       style={{
         '--img-url': `url("${ASSETS_SERVER_URL}/local-assets/${props.id}/icons/${props.icon}")`
       }}
     >
-      <Button 
-        {...stylex.attrs(style.block__editButton)} 
-        size$={ButtonSize.ICON} 
-        id={__style.editButton} 
-        onClick={EditJournalDialog.show$}
-      >
-        <BsPencilFill />
-      </Button>
+      <div 
+        {...stylex.attrs(style.block__icon, style.block__noIcon)} 
+        id="block__icon" 
+      />
       <div 
         {...stylex.attrs(style.block__content)}
         onClick={JournalInfoDialog.show$}
       >
-        <Spacer />
-        <span {...stylex.attrs(style.block__name)}>
+        <h2 {...stylex.attrs(style.block__name)}>
           {props.name}
-        </span>
+        </h2>
       </div>
 
+      <Button 
+        {...stylex.attrs(style.block__editButton)} 
+        size$={ButtonSize.ICON} 
+        id="block__editButton" 
+        onClick={EditJournalDialog.show$}
+      >
+        <BsPencilFill />
+      </Button>
+      {/* ... */}
       <JournalInfoDialog.Dialog$ />
       <EditJournalDialog.Dialog$ />
-    </div>
+    </button>
   )
 }

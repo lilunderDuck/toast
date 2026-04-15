@@ -1,5 +1,5 @@
 #homeSidebar__item:hover {
-  background-color: var(--overlay1);
+  background-color: var(--surface0);
   color: var(--text)
 }
 

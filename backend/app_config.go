@@ -33,7 +33,7 @@ func GetAppConfig(icon []byte, appInstance *App) *options.App {
 		Title:     WINDOW_TITLE,
 		Frameless: true,
 		Width:     1000,
-		Height:    768,
+		Height:    708,
 		AssetServer: &assetserver.Options{
 			Assets: os.DirFS(internals.RESOURCE_FOLDER_PATH),
 			// Well, my intrusive thoughts *thought* that it'd be better to merge everything into
@@ -55,7 +55,7 @@ func GetAppConfig(icon []byte, appInstance *App) *options.App {
 		OnShutdown:       appInstance.shutdown,
 		WindowStartState: options.Normal,
 		Bind:             binding,
-		BackgroundColour: options.NewRGB(17, 17, 17),
+		BackgroundColour: options.NewRGB(17, 17, 27),
 		// Windows platform specific options
 		Windows: &windows.Options{
 			WebviewIsTransparent: false,
