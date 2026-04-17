@@ -19,7 +19,7 @@ export function createInputShortcutHandler<T extends HTMLTags>(
     currentTarget: Ref<T>
   }) => {
     const keyPressed = keyboardEvent.key.toLowerCase()
-    isDevMode && (() => {
+    if (TOAST_DEBUG) {
       const isInputOrTextarea =
         keyboardEvent.currentTarget instanceof HTMLTextAreaElement ||
         keyboardEvent.currentTarget instanceof HTMLInputElement
@@ -42,7 +42,8 @@ export function createInputShortcutHandler<T extends HTMLTags>(
           " 8  | })",
         ].join('\n'))
       }
-    })()
+    }
+    
     // @ts-ignore
     const content = keyboardEvent.currentTarget?.value
     switch (keyPressed) {

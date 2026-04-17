@@ -89,7 +89,7 @@ export function TableProvider(props: ParentProps<ITableProviderProps>) {
 
   const deleteColumn: ITableContext["deleteColumn$"] = (columnId) => {
     const columnArray = arrayObjects(columnsManager.get$())
-    if (isDevMode) {
+    if (TOAST_DEBUG) {
       const [previousData] = columnArray.find$(it => it.key === columnId)
       console.assert(previousData, `Could not find column id: "${columnId}".`)
     }

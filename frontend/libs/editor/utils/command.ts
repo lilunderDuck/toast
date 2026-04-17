@@ -6,7 +6,7 @@ export function getCommand<T extends keyof ChainedCommands>(commandName: T) {
   const { editor$ } = useEditorContext()
   return (...args: Parameters<ChainedCommands[T]>) => {
     const command = editor$().chain().focus()[commandName]
-    isDevMode && (() => {
+    if (TOAST_DEBUG) {
       // @ts-ignore - sometime this will be undefined
       if (command) return
 
@@ -37,7 +37,7 @@ export function getCommand<T extends keyof ChainedCommands>(commandName: T) {
         " 9  |   return extension",
         " 10 | }"
       ].join('\n'))
-    })()
+    }
 
     // @ts-ignore - very nasty code
     return (command(...args) as ChainedCommands).focus()

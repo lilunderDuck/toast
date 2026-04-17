@@ -7,7 +7,7 @@ import { AppTitleBarButton } from '~/components'
 export default function App(props: ParentProps) {
   return (
     <>
-      {/* <Show when={!isDevMode}>
+      {/* <Show when={!TOAST_DEBUG}>
         <SplashScreenProvider>
           <SplashScreen />
         </SplashScreenProvider>

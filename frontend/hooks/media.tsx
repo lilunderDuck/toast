@@ -16,7 +16,7 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
   const [buffered, setBuffered] = createSignal(0)
   const [currentProgress, setCurrentProgress] = createSignal(0)
 
-  if (isDevMode) {
+  if (TOAST_DEBUG) {
     const stateMapping: Record<MediaState, string> = {
       [MediaState.COMPLETED]: 'MediaState.COMPLETED',
       [MediaState.PLAYING]: 'MediaState.PLAYING',

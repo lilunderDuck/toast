@@ -42,7 +42,7 @@ interface ITagInputProviderProps {
 }
 
 export function TagInputProvider(props: ParentProps<ITagInputProviderProps>) {
-  if (isDevMode) {
+  if (TOAST_DEBUG) {
     if (!Array.isArray(props.options$)) {
       console.warn(
         '[table - TagInputProvider] Tag props.options$ prop should be an array.\n',
@@ -81,7 +81,7 @@ export function TagInputProvider(props: ParentProps<ITagInputProviderProps>) {
   const createNewTag = (name: string, color: string) => {
     const tagData = { name, color }
     columns$.updateData$<TagColumnData>(props.columnId$, (prev) => {
-      if (isDevMode) {
+      if (TOAST_DEBUG) {
         if (!prev.additionalData?.tags) {
           console.warn(
             '[table - TagInputProvider] Missing additional data: \"tags\" for this tag column.',

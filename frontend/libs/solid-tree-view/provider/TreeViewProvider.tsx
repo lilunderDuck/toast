@@ -88,13 +88,13 @@ export function TreeViewProvider<
     // Just to make sure that I'm not accidentally do weird stuff on dev mode.
     // 
     // But... I'm already sure that this will *always* work in production.
-    isDevMode && (() => {
+    if (TOAST_DEBUG) {
       if (parentNodeId === TREE_VIEW_ROOT_NODE_ID) return
 
       const thisTree = recursivelyFindNode(parentNodeId!, treeCache)!
       console.assert(thisTree, `Could not insert to ${parentNodeId}, it must exist in the tree.`)
       console.assert(thisTree?.child, `${parentNodeId} must be a folder.`)
-    })()
+    }
 
     setStore(nodeData.id, data)
     event.emit$(

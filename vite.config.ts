@@ -13,9 +13,9 @@ import { macroPlugin } from './addon/macro'
 const BUILD_SAVED_PATH = "./build/out/bin/resource"
 
 export default defineConfig(({ command }) => {
-  const isDevMode = command !== "build"
+  const TOAST_DEBUG = command !== "build"
 
-  defineAllConstants(isDevMode)
+  defineAllConstants(TOAST_DEBUG)
   const definedMapping = generateConstsTypeThenSave()
 
   return {
@@ -62,7 +62,7 @@ export default defineConfig(({ command }) => {
         output: OUTPUT_FILENAME
       }
     },
-    esbuild: isDevMode ? undefined : ESBUILD_OPTIONS,
+    esbuild: TOAST_DEBUG ? undefined : ESBUILD_OPTIONS,
     resolve: {
       alias: getAliasPath(tsconfig, __dirname)
     },

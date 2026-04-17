@@ -56,14 +56,14 @@ export function TaskDataProvider(props: ParentProps) {
 
     // Asserting just to make sure no weird shit will happen
     console.assert(DEFAULT_TASK_DATA[type], "Missing default data for task type: %d", type)
-    isDevMode && (() => {
+    if (TOAST_DEBUG) {
       if (type === TaskType.SECTION) {
         console.assert(
           parentNodeId === TREE_VIEW_ROOT_NODE_ID,
           "Task section can only be created in the top root node."
         )
       }
-    })()
+    }
 
     const taskData = { 
       ...DEFAULT_TASK_DATA[type]() as ITaskDataMapping[T]["data"], 
@@ -103,7 +103,7 @@ export function TaskDataProvider(props: ParentProps) {
     deleteNode$(taskId, sectionId)
   }
 
-  isDevMode && (
+  TOAST_DEBUG && (
     createEffect(() => {
       console.log("[task] current edited task is:", currentEditedTask())
     })

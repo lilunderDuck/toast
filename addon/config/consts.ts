@@ -128,7 +128,7 @@ export function generateConstsTypeThenSave() {
 }
 
 export function defineAllConstants(isDevMode: boolean = false) {
-  define('isDevMode', isDevMode, 'boolean')
+  define('TOAST_DEBUG', isDevMode, 'boolean')
 
   define('ToastActionType', [
     'ADD_TOAST',

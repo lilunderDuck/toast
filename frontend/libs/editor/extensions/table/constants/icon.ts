@@ -55,9 +55,9 @@ export const DEFAULT_VALUE_MAPPING = {
   [TableDataType.TEXT]: ''
 } satisfies Record<TableDataType, any>
 
-isDevMode && (() => {
+if (TOAST_DEBUG) {
   console.assert(
     Object.keys(TABLE_DATA_TYPE_MAPPING).length === Object.keys(DEFAULT_VALUE_MAPPING).length,
     "One of the TABLE_DATA_TYPE_MAPPING or DEFAULT_VALUE_MAPPING is missing one or many table data type. Please update the code."
   )
-})()
+}
