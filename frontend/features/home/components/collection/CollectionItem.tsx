@@ -11,13 +11,13 @@ const style = stylex.create({
   }
 })
 
-interface IPlaylistItemProps extends playlist.PlaylistData {
+interface ICollectionItemProps extends playlist.PlaylistData {
   // define your component props here
 }
 
-export function PlaylistItem(props: IPlaylistItemProps) {
+export function CollectionItem(props: ICollectionItemProps) {
   return (
-    <A href={`/playlist/${props.id}`}>
+    <A href={`/collection/playlist/${props.id}`}>
       <div {...stylex.attrs(style.item)}>
         <span>{props.name}</span>
       </div>

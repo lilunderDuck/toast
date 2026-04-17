@@ -13,7 +13,7 @@ const style = stylex.create({
 })
 
 const Journal = lazy(() => import("../pages/Journal"))
-const Playlist = lazy(() => import("../pages/Playlist"))
+const Collection = lazy(() => import("../pages/Collection"))
 
 export function JournalHomeMainContent() {
   const { currentPage$ } = useJournalHomeRootContext()
@@ -25,8 +25,8 @@ export function JournalHomeMainContent() {
           <Journal />
         </Match>
 
-        <Match when={currentPage$() === JournalPage.PLAYLIST_HOME}>
-          <Playlist />
+        <Match when={currentPage$() === JournalPage.COLLECTION_HOME}>
+          <Collection />
         </Match>
       </Switch>
     </>

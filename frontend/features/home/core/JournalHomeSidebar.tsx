@@ -41,7 +41,7 @@ export function JournalHomeSidebar() {
     {
       name$: "Playlist",
       icon$: RiMediaPlayList2Fill,
-      pageId$: JournalPage.PLAYLIST_HOME
+      pageId$: JournalPage.COLLECTION_HOME
     }
   ]
 

@@ -251,7 +251,7 @@ export function defineAllConstants(isDevMode: boolean = false) {
 
   define('JournalPage', [
     'JOURNAL_HOME',
-    'PLAYLIST_HOME',
+    'COLLECTION_HOME',
   ])
 
   define('PluginEvent', [

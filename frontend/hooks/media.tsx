@@ -90,8 +90,8 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
       try {
         await mediaRef.play()
         clearInterval(intervalId)
-      } catch { 
-        console.warn("[media player] media haven't finished loading, retrying...")
+      } catch(error) { 
+        console.warn(error)
       }
     }, 100)
     console.log("[media player] Playing", mediaRef.src)

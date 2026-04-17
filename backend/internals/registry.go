@@ -5,14 +5,12 @@ import (
 	"strconv"
 )
 
-var playlistRootDir = DATA_FOLDER_PATH + "/playlist"
-
 type playlistPathRegistry struct {
 	Root string
 }
 
 var PlaylistPathRegistry = playlistPathRegistry{
-	Root: DATA_FOLDER_PATH + "/playlist",
+	Root: DATA_FOLDER_PATH + "/collection/playlist",
 }
 
 func (reg *playlistPathRegistry) TracksData(id int) string {
