@@ -1,0 +1,370 @@
+[
+  {
+    "type": "enum",
+    "name": "ToastActionType",
+    "members": [
+      "ADD_TOAST",
+      "UPDATE_TOAST",
+      "UPSERT_TOAST",
+      "DISMISS_TOAST",
+      "REMOVE_TOAST",
+      "START_PAUSE",
+      "END_PAUSE"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "ToastType",
+    "members": [
+      "SUCCESS",
+      "ERROR",
+      "LOADING",
+      "BLANK",
+      "CUSTOM"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "ToastPosition",
+    "members": [
+      "TOP_LEFT",
+      "TOP_CENTER",
+      "TOP_RIGHT",
+      "BOTTOM_LEFT",
+      "BOTTOM_CENTER",
+      "BOTTOM_RIGHT"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "ButtonVariant",
+    "members": [
+      "DEFAULT",
+      "DANGER",
+      "OUTLINE",
+      "SECONDARY",
+      "GHOST",
+      "LINK",
+      "NO_BACKGROUND",
+      "UNSET"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "ButtonSize",
+    "members": [
+      "DEFAULT",
+      "SMALL",
+      "LARGE",
+      "ICON",
+      "UNSET"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "FormSubmitState",
+    "members": [
+      "SUCCESS"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "SettingType",
+    "members": [
+      "CUSTOM",
+      "INPUT",
+      "RANGE",
+      "CHECKBOX"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "VideoLoadingStatus",
+    "members": [
+      "START_LOADING",
+      "FINISH_LOADING",
+      "ERROR"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "VideoMoreOptionAction",
+    "members": [
+      "PICK_VIDEO"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "ButtonRowDirection",
+    "members": [
+      "LEFT",
+      "RIGHT",
+      "MIDDLE",
+      "CUSTOM"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "FileUploadType",
+    "members": [
+      "DIRECTORY",
+      "FILE",
+      "MULTI_FILE"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "FileType",
+    "members": {
+      "DEFAULT": 0,
+      "ERROR": 255,
+      "IMAGE": 1,
+      "VIDEO": 2,
+      "TEXT": 3,
+      "AUDIO": 4
+    }
+  },
+  {
+    "type": "enum",
+    "name": "BongoCatAnimationFrame",
+    "members": {
+      "IDLE": "bc",
+      "RIGHT_HAND_TAPPED": "ba",
+      "LEFT_HAND_TAPPED": "dc"
+    }
+  },
+  {
+    "type": "enum",
+    "name": "GalleryViewMode",
+    "members": [
+      "SINGLE_ITEM",
+      "SPLIT_VIEW"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "CurrentlyOpenedHeaderAction",
+    "members": [
+      "TOGGLE_SIDEBAR",
+      "GO_BACK_TO_HOME"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "EditorEvent",
+    "members": [
+      "ON_SWITCHING",
+      "ON_UPDATE",
+      "UPDATE_BONGO_CAT_ANIMATION"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "JournalType",
+    "members": [
+      "JOURNAL",
+      "FOLDER"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "JournalPage",
+    "members": [
+      "JOURNAL_HOME",
+      "COLLECTION_HOME"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "PluginEvent",
+    "members": [
+      "REGISTER_EDITOR_NODE",
+      "JOURNAL_LOADED"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "MediaState",
+    "members": [
+      "LOADING",
+      "FINISHED_LOADING",
+      "PLAYING",
+      "PAUSED",
+      "ERROR",
+      "COMPLETED"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "MediaEvent",
+    "members": [
+      "STATE_UPDATE"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "PlaylistButtonRowAction",
+    "members": [
+      "NEXT_TRACK",
+      "PREVIOUS_TRACK",
+      "TOGGLE_PLAY_TRACK"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "PlaylistHeaderButtonRowAction",
+    "members": [
+      "EDIT_METADATA",
+      "ADD_TRACK_ITEM"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "EditorNodeType",
+    "members": [
+      "INLINE",
+      "BLOCK"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "EditorTextColor",
+    "members": {
+      "RED": "#c92222",
+      "ORANGE": "#d34f0b",
+      "YELLOW": "#b67c04",
+      "GREEN": "#149343",
+      "TEAL": "#0782a0",
+      "BLUE": "#2159d3",
+      "PURPLE": "#842ed3",
+      "GREY": "#444d59",
+      "HIGHLIGHT_RED": "#ffcece",
+      "HIGHLIGHT_ORANGE": "#fed5d5",
+      "HIGHLIGHT_YELLOW": "#fedfbb",
+      "HIGHLIGHT_GREEN": "#fef3a1",
+      "HIGHLIGHT_TEAL": "#e1fab1",
+      "HIGHLIGHT_BLUE": "#adf8e9",
+      "HIGHLIGHT_PURPLE": "#cce2fe",
+      "HIGHLIGHT_GREY": "#edddff",
+      "RESET": 0,
+      "CUSTOM": 1
+    }
+  },
+  {
+    "type": "enum",
+    "name": "TabEvent",
+    "members": [
+      "CREATE",
+      "UPDATE"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "TableDataType",
+    "members": [
+      "NUMBER",
+      "PROGRESS",
+      "TEXT",
+      "CHECKBOX",
+      "LINK",
+      "TAG",
+      "DATE"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "TableViewType",
+    "members": [
+      "TABLE",
+      "KANBAN"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "TableEvent",
+    "members": [
+      "INSERT_ROW",
+      "INSERT_COLUMN"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "TableMoreOptionsDropdownAction",
+    "members": [
+      "EDIT_CURRENT_TAB",
+      "INSERT_ROW",
+      "INSERT_COLUMN",
+      "DELETE_CURRENT_TAB",
+      "DELETE_ALL"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "TableHeaderContextMenuAction",
+    "members": [
+      "DELETE_COLUMN",
+      "EDIT_TAG_OPTIONS"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "FloatingMenuType",
+    "members": [
+      "SEPERATOR",
+      "ITEM",
+      "LABEL"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "TreeViewEvent",
+    "members": {
+      "UPDATE": "af"
+    }
+  },
+  {
+    "type": "enum",
+    "name": "TreeViewUpdateType",
+    "members": [
+      "CREATE_NODE",
+      "UPDATE_NODE",
+      "REMOVE_NODE"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "TreeViewNodeType",
+    "members": [
+      "LEAF",
+      "PARENT"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "TaskType",
+    "members": [
+      "SECTION",
+      "TASK"
+    ]
+  },
+  {
+    "type": "const",
+    "name": "GALLERY_DEFAULT_ID",
+    "value": ""
+  },
+  {
+    "type": "const",
+    "name": "PLAYLIST_DEFAULT_ID",
+    "value": ""
+  },
+  {
+    "type": "const",
+    "name": "TABLE_DEFAULT_ID",
+    "value": ""
+  },
+  {
+    "type": "const",
+    "name": "TREE_VIEW_ROOT_NODE_ID",
+    "value": 0
+  }
+]

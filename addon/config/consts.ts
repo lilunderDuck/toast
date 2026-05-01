@@ -1,10 +1,25 @@
-import { mkdirSync, writeFileSync } from "node:fs"
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs"
 
 type ValidEnum = Record<string, string | number>
 type ConstsMapping = (
   { type: "constEnum", name: string, prop: ValidEnum } |
   { type: "const", name: string, value: any, valueType: string }
 )[]
+
+type EnumOption = {
+  type: "enum"
+  name: string
+  members: string[] | Record<string, number>[]
+}
+
+type ConstOption = {
+  type: "const"
+  name: string
+  value: string
+}
+
+type ConstConfigOption = EnumOption | ConstOption
+
 const DEFINED_CONST_MAPPING: ConstsMapping = []
 
 /**Define a `const enum`. The enum types will be available in the global scope.
@@ -130,254 +145,26 @@ export function generateConstsTypeThenSave() {
 export function defineAllConstants(isDevMode: boolean = false) {
   define('TOAST_DEBUG', isDevMode, 'boolean')
 
-  define('ToastActionType', [
-    'ADD_TOAST',
-    'UPDATE_TOAST',
-    'UPSERT_TOAST',
-    'DISMISS_TOAST',
-    'REMOVE_TOAST',
-    'START_PAUSE',
-    'END_PAUSE',
-  ])
+  const data: ConstConfigOption[] = JSON.parse(readFileSync("./consts_config.json", { 
+    encoding: "utf-8" 
+  }))
 
-  define('ToastType', [
-    'SUCCESS',
-    'ERROR',
-    'LOADING',
-    'BLANK',
-    'CUSTOM',
-  ])
+  for (const config of data) {
+    switch (config.type) {
+      case "enum":
+        define(config.name, config.members)
+      break
 
-  define('ToastPosition', [
-    'TOP_LEFT',
-    'TOP_CENTER',
-    'TOP_RIGHT',
-    'BOTTOM_LEFT',
-    'BOTTOM_CENTER',
-    'BOTTOM_RIGHT',
-  ])
-
-  define('ButtonVariant', [
-    'DEFAULT',
-    'DANGER',
-    'OUTLINE',
-    'SECONDARY',
-    'GHOST',
-    'LINK',
-    'NO_BACKGROUND',
-    'UNSET'
-  ])
-
-  define('ButtonSize', [
-    'DEFAULT',
-    'SMALL',
-    'LARGE',
-    'ICON',
-    'UNSET',
-  ])
-
-  define('FormSubmitState', [
-    'SUCCESS',
-  ])
-
-  define('SettingType', [
-    'CUSTOM',
-    'INPUT',
-    'RANGE',
-    'CHECKBOX',
-  ])
-
-  define('VideoLoadingStatus', [
-    'START_LOADING',
-    'FINISH_LOADING',
-    'ERROR',
-  ])
-
-  define('VideoMoreOptionAction', [
-    'PICK_VIDEO'
-  ])
-
-  define('ButtonRowDirection', [
-    'LEFT',
-    'RIGHT',
-    'MIDDLE',
-    'CUSTOM',
-  ])
-
-  define('FileUploadType', [
-    'DIRECTORY',
-    'FILE',
-    'MULTI_FILE',
-  ])
-
-  // 1 to 1 mapping from ./backend/features/editor/utils.go
-  define('FileType', {
-    DEFAULT: 0,
-    ERROR: 255,
-    IMAGE: 1,
-    VIDEO: 2,
-    TEXT: 3,
-    AUDIO: 4
-  }) // do not reorder
-
-  define('BongoCatAnimationFrame', {
-    IDLE: "bc",
-    RIGHT_HAND_TAPPED: "ba",
-    LEFT_HAND_TAPPED: "dc"
-  })
-
-  define('GalleryViewMode', [
-    'SINGLE_ITEM',
-    'SPLIT_VIEW',
-  ])
+      case "const":
+        define(config.name, config.value)
+      break
+    }
+  }
 
   define('GALLERY_DEFAULT_ID', '')
-
-  define('CurrentlyOpenedHeaderAction', [
-    'TOGGLE_SIDEBAR',
-    'GO_BACK_TO_HOME',
-  ])
-
-  define('EditorEvent', [
-    'ON_SWITCHING',
-    'ON_UPDATE',
-    'UPDATE_BONGO_CAT_ANIMATION',
-  ])
-
-  define('JournalType', [
-    'JOURNAL',
-    'FOLDER',
-  ])
-
-  define('JournalPage', [
-    'JOURNAL_HOME',
-    'COLLECTION_HOME',
-  ])
-
-  define('PluginEvent', [
-    'REGISTER_EDITOR_NODE',
-    'JOURNAL_LOADED',
-  ])
-
-  define('MediaState', [
-    'LOADING',
-    'FINISHED_LOADING',
-    'PLAYING',
-    'PAUSED',
-    'ERROR',
-    'COMPLETED',
-  ])
-
-  define('MediaEvent', [
-    'STATE_UPDATE',
-  ])
-
-  define('PlaylistButtonRowAction', [
-    'NEXT_TRACK',
-    'PREVIOUS_TRACK',
-    'TOGGLE_PLAY_TRACK',
-  ])
-
-  define('PlaylistHeaderButtonRowAction', [
-    'EDIT_METADATA',
-    'ADD_TRACK_ITEM'
-  ])
-
   define('PLAYLIST_DEFAULT_ID', '')
-
-  define('EditorNodeType', [
-    'INLINE',
-    'BLOCK'
-  ])
-
-  define('EditorTextColor', {
-    'RED': '#c92222',
-    'ORANGE': '#d34f0b',
-    'YELLOW': '#b67c04',
-    'GREEN': '#149343',
-    'TEAL': '#0782a0',
-    'BLUE': '#2159d3',
-    'PURPLE': '#842ed3',
-    'GREY': '#444d59',
-    'HIGHLIGHT_RED': '#ffcece',
-    'HIGHLIGHT_ORANGE': '#fed5d5',
-    'HIGHLIGHT_YELLOW': '#fedfbb',
-    'HIGHLIGHT_GREEN': '#fef3a1',
-    'HIGHLIGHT_TEAL': '#e1fab1',
-    'HIGHLIGHT_BLUE': '#adf8e9',
-    'HIGHLIGHT_PURPLE': '#cce2fe',
-    'HIGHLIGHT_GREY': '#edddff',
-    'RESET': 0,
-    'CUSTOM': 1
-  })
-
-  define('TabEvent', [
-    'CREATE',
-    'UPDATE'
-  ])
-
-  define('TableDataType', [
-    'NUMBER',
-    'PROGRESS',
-    'TEXT',
-    'CHECKBOX',
-    'LINK',
-    'TAG',
-    'DATE'
-  ]) // do not reorder
-
-  define('TableViewType', [
-    'TABLE',
-    'KANBAN'
-  ]) // do not reorder
-
-  define('TableEvent', [
-    'INSERT_ROW',
-    'INSERT_COLUMN'
-  ])
-
-  define('TableMoreOptionsDropdownAction', [
-    'EDIT_CURRENT_TAB',
-    'INSERT_ROW',
-    'INSERT_COLUMN',
-    'DELETE_CURRENT_TAB',
-    'DELETE_ALL'
-  ])
-
-  define('TableHeaderContextMenuAction', [
-    'DELETE_COLUMN',
-    'EDIT_TAG_OPTIONS'
-  ])
-
   define('TABLE_DEFAULT_ID', '')
-
-  define('FloatingMenuType', [
-    'SEPERATOR',
-    'ITEM',
-    'LABEL'
-  ])
-
-  define('TreeViewEvent', {
-    'UPDATE': 'af'
-  })
-
-  define('TreeViewUpdateType', [
-    'CREATE_NODE',
-    'UPDATE_NODE',
-    'REMOVE_NODE',
-  ])
-
-  define('TreeViewNodeType', [
-    'LEAF',
-    'PARENT',
-  ]) // do not reorder
-
   define('TREE_VIEW_ROOT_NODE_ID', 0)
-
-  define('TaskType', [
-    'SECTION',
-    'TASK',
-  ]) // do not reorder
 }
 
 if (import.meta.main) {
