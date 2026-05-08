@@ -4,8 +4,9 @@ import { GetGroups } from "~/wailsjs/go/group/Exports"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { CreateJournalButton, JournalBlock, JournalListHeader } from "../components"
+import { CreateJournalButton, JournalBlock, JournalListHeader, TagListButton, TotalJournalText } from "../components"
 import { JournalHomeProvider } from "../provider/JournalHomeProvider"
+import { Spacer } from "~/components"
 
 const style = stylex.create({
   section: {
@@ -19,7 +20,8 @@ const style = stylex.create({
     paddingBlock: 5,
     display: "flex",
     gap: 10,
-    marginBottom: 15
+    marginBottom: 15,
+    userSelect: "none"
   },
   section__list: {
     height: "80vh",
@@ -37,6 +39,9 @@ export default function Journal() {
         <JournalListHeader name$="Your journal" />
         <header {...stylex.attrs(style.section__header)}>
           <CreateJournalButton />
+          <TagListButton />
+          <Spacer />
+          <TotalJournalText />
         </header>
         <Show when={!resource.loading}>
           <div class={`${stylex.attrs(style.section__list).class} scrollbar scrollbarVertical`}>

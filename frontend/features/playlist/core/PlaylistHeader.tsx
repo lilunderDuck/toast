@@ -1,4 +1,3 @@
-import { PlaylistIcon } from "../components"
 import { usePlaylistContext } from "../provider"
 
 import stylex from "@stylexjs/stylex"
@@ -6,11 +5,25 @@ import stylex from "@stylexjs/stylex"
 const style = stylex.create({
   header: {
     width: "100%",
+    height: "14rem",
     display: "flex",
     gap: 15,
     paddingInline: 15,
-    marginBottom: 10
+    paddingTop: 35,
+    paddingBottom: 10,
+    marginBottom: 10,
+    backgroundColor: "var(--mantle)",
+    userSelect: "none",
+    position: "relative"
   },
+  header__titleWrap: {
+    width: "100%",
+    position: "absolute",
+    bottom: 0
+  },
+  header__info: {
+    fontSize: 14
+  }
 })
 
 interface IPlaylistJeaderProps {
@@ -18,13 +31,14 @@ interface IPlaylistJeaderProps {
 }
 
 export function PlaylistHeader(props: IPlaylistJeaderProps) {
-  const { data$ } = usePlaylistContext()
-  return (
+  const { data$, tracks$ } = usePlaylistContext()
+  return (  
     <header {...stylex.attrs(style.header)}>
-      <PlaylistIcon size$="9.75rem" icon$={data$()?.icon} />
-      <div>
+      <div {...stylex.attrs(style.header__titleWrap)}>
         <h1>{data$()?.name}</h1>
-        <span>Total runtime: {data$()?.totalDuration}</span>
+        <span {...stylex.attrs(style.header__info)}>
+          {tracks$().length} tracks • Runtime: {data$()?.totalDuration}
+        </span>
       </div>
     </header>
   )

@@ -5,9 +5,8 @@ import { PlaylistItem } from "../components"
 
 const style = stylex.create({
   itemList: {
-    height: "calc(100vh - 23.25rem)",
-    paddingBottom: "5rem",
-    paddingRight: 10,
+    paddingBottom: "10rem",
+    paddingRight: 20,
   }
 })
 
@@ -19,7 +18,7 @@ export function PlaylistItemList(props: IPlaylistItemListProps) {
   const { tracks$ } = usePlaylistContext()
   
   return (
-    <div class={`${stylex.attrs(style.itemList).class} scrollbar scrollbarVertical`}>
+    <div {...stylex.attrs(style.itemList)}>
       <For each={tracks$()}>
         {(it, index) => (
           <PlaylistItem {...it} index$={index()} />

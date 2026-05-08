@@ -53,7 +53,7 @@ export function CodeBlock() {
       startHighlight()
     },
     onDiscard$() {
-      
+      // do nothing
     },
   })
 

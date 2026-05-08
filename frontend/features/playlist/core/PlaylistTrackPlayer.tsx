@@ -8,7 +8,12 @@ const style = stylex.create({
     paddingInline: 10,
     paddingBlock: 5,
     backgroundColor: "var(--base)",
-    marginTop: 10
+    marginTop: 10,
+    position: "fixed",
+    bottom: 0
+  },
+  player__currentTrackWrap: {
+
   }
 })
 
@@ -21,7 +26,9 @@ export function PlaylistTrackPlayer(props: IPlaylistTrackPlayerProps) {
 
   return (
     <div {...stylex.attrs(style.player)}>
-      {/*  */}
+      <div>
+        
+      </div>
     </div>
   )
 }

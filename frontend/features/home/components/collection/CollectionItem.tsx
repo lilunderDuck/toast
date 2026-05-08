@@ -1,25 +1,32 @@
-import { playlist } from "~/wailsjs/go/models"
-
 import stylex from "@stylexjs/stylex"
 import { A } from "@solidjs/router"
 
 const style = stylex.create({
   item: {
-    width: "15rem",
-    height: "15rem",
-    borderRadius: 6
+    width: "13rem",
+    height: "13rem",
+    borderRadius: 6,
+    border: "3px solid transparent",
+    ":hover": {
+      borderColor: "var(--blue)"
+    }
+  },
+  item__name: {
+    fontSize: 14
   }
 })
 
-interface ICollectionItemProps extends playlist.PlaylistData {
-  // define your component props here
+interface ICollectionItemProps {
+  backgroundUrl$: string
+  href$: string
+  name$: string
 }
 
 export function CollectionItem(props: ICollectionItemProps) {
   return (
-    <A href={`/collection/playlist/${props.id}`}>
+    <A href={props.href$}>
       <div {...stylex.attrs(style.item)}>
-        <span>{props.name}</span>
+        <span>{props.name$}</span>
       </div>
     </A>
   )

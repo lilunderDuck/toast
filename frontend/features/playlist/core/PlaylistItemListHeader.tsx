@@ -5,7 +5,7 @@ import { PlaylistItemListHeaderSeperator } from "../components"
 
 const style = stylex.create({
   header: {
-    paddingInline: 10,
+    paddingInline: 20,
     paddingBlock: 5,
     display: "flex",
     alignItems: "center",

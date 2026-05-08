@@ -26,10 +26,8 @@ const style = stylex.create({
     border: '1px solid var(--surface1)',
     userSelect: 'none'
   },
-  tooltipBorder: {
-    border: "2px solid",
-    borderImageSource: "linear-gradient(to bottom, #27035e, #1a0336)",
-    borderImageSlice: 1, /* Required to make the gradient fill the border */
+  tooltip__trigger: {
+    width: "fit-content"
   }
 })
 
@@ -51,13 +49,13 @@ export function Tooltip(
 
   return (
     <Root openDelay={0} closeDelay={0} gutter={4} {...local.tooltipOptions$}>
-      <Trigger as="div">
+      <Trigger as="div" {...stylex.attrs(style.tooltip__trigger)}>
         {local.children}
-      </Trigger>
+      </Trigger>  
       <Portal>
         <Content
           {...others}
-          class={MERGE_CLASS(stylex.attrs(style.tooltip, style.tooltipBorder), others, "component-tooltip")}
+          class={MERGE_CLASS(stylex.attrs(style.tooltip), others, "component-tooltip")}
         >
           {local.label$}
         </Content>

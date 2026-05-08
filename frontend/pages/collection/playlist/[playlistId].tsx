@@ -1,15 +1,21 @@
-import { useParams } from "@solidjs/router"
+import { A, useParams } from "@solidjs/router"
 // ...
 import stylex from "@stylexjs/stylex"
 import "~/styles/scrollbar.css"
+import "./[playlistId].css"
 // ...
-import { AppTitleBarDraggable, Button } from "~/components"
+import { AppTitleBarDraggable, Button, Tooltip } from "~/components"
 import { PlaylistHeader, PlaylistItemList, PlaylistItemListHeader, PlaylistProvider, PlaylistTrackPlayer } from "~/features/playlist"
+import { BsArrowLeft } from "solid-icons/bs"
 
 const style = stylex.create({
   page: {
     width: "100%",
-    padding: 10
+    height: "100%",
+  },
+  page__titleBar: {
+    paddingInline: 5,
+    position: "fixed"
   }
 })
 
@@ -18,14 +24,22 @@ export default function PlaylistPage() {
 
   return (
     <PlaylistProvider playlistId$={parseInt(param.playlistId!)}>
-      <AppTitleBarDraggable>
-        <Button
-          size$={ButtonSize.ICON}
-          variant$={ButtonVariant.NO_BACKGROUND}
-        >
-        </Button>
+      <AppTitleBarDraggable {...stylex.attrs(style.page__titleBar)}>
+        <A href="/">
+          <Tooltip label$="Go back to home">
+            <Button
+              size$={ButtonSize.ICON}
+              variant$={ButtonVariant.NO_BACKGROUND}
+            >
+              <BsArrowLeft />
+            </Button>
+          </Tooltip>
+        </A>
       </AppTitleBarDraggable>
-      <div {...stylex.attrs(style.page)}>
+      <div 
+        class={`${stylex.attrs(style.page).class} scrollbar scrollbarVertical`}
+        id="playlist__page"
+      >
         <PlaylistHeader />
         <PlaylistItemListHeader />
         <PlaylistItemList />

@@ -4,7 +4,7 @@ import { MERGE_CLASS } from "macro-def"
 import './JournalBlock.css'
 import stylex from "@stylexjs/stylex"
 // ...
-import { Button, Spacer } from "~/components"
+import { Button, Spacer, Tag } from "~/components"
 import { type group } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 import { createLazyLoadedDialog } from "~/hooks"
@@ -20,12 +20,12 @@ const style = stylex.create({
     paddingBlock: 5,
     gap: 10,
     marginBottom: 10,
-    outline: "4px solid transparent",
+    border: "4px solid transparent",
     backgroundColor: "var(--mantle)",
     borderRadius: 6,
     textAlign: "left",
     ":hover": {
-      outlineColor: "var(--sapphire)"
+      borderColor: "var(--sapphire)"
     }
   },
   block__icon: {
@@ -58,6 +58,10 @@ const style = stylex.create({
     flexDirection: "column"
   },
   block__name: {
+  },
+  block__description: {
+    fontSize: 14,
+    marginBottom: 5
   }
 })
 
@@ -101,6 +105,9 @@ export function JournalBlock(props: IJournalBlockProps) {
         <h2 {...stylex.attrs(style.block__name)}>
           {props.name}
         </h2>
+        <p {...stylex.attrs(style.block__description)}>
+          {props.description}
+        </p>
       </div>
 
       <Button 

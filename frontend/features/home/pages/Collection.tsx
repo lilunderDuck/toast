@@ -1,7 +1,8 @@
 import stylex from "@stylexjs/stylex"
 import { createResource, For } from "solid-js";
 import { GetAllPlaylistsData } from "~/wailsjs/go/playlist/Exports";
-import { CollectionDivider, CollectionItem } from "../components";
+import { CollectionDivider, CollectionItem, PlaylistCollectionItem } from "../components";
+import { playlistIconUrl } from "~/features/playlist/api";
 
 const style = stylex.create({
   collection: {
@@ -25,9 +26,7 @@ export default function Collection() {
         Playlist
       </CollectionDivider>
       <For each={resource() ?? []}>
-        {it => (
-          <CollectionItem {...it} />
-        )}
+        {it => <PlaylistCollectionItem {...it} />}
       </For>
     </main>
   )
