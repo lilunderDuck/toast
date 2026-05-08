@@ -24,3 +24,26 @@
 #item__playlistItem[data-current-track=true]:hover {
   background-color: var(--surface0) !important;
 }
+
+#item__indexNumber {
+  display: block;
+}
+
+#item__playIcon {
+  padding-left: 8px;
+  display: none;
+}
+
+#item__playlistItem:hover #item__indexNumber,
+#item__playlistItem[data-current-track=true] #item__indexNumber {
+  display: none;
+}
+
+#item__playlistItem:hover #item__playIcon,
+#item__playlistItem[data-current-track=true] #item__playIcon {
+  display: block;
+}
+
+#item__playlistItem[data-current-track=true] #item__playIcon {
+  color: var(--sapphire);
+}

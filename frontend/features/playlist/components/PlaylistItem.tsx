@@ -5,6 +5,8 @@ import type { playlist } from "~/wailsjs/go/models"
 // ...
 import { usePlaylistContext } from "../provider"
 import { PlaylistIcon } from "./PlaylistIcon"
+import { FaSolidPlay } from "solid-icons/fa"
+import { Tooltip } from "~/components"
 
 const style = stylex.create({
   item: {
@@ -40,13 +42,20 @@ export function PlaylistItem(props: IPlaylistItemProps) {
       data-current-track={currentTrack$()?.id === props.id}
       id="item__playlistItem"
     >
-      <div 
-        {...stylex.attrs(style.item__index)}
-        id="item__index"
-        onClick={() => playTrack$(props.index$)}
-      >
-        {props.index$ + 1}
-      </div>
+      <Tooltip label$="Play track" tooltipOptions$={{ placement: "right" }}>
+        <div 
+          {...stylex.attrs(style.item__index)}
+          id="item__index"
+          onClick={() => playTrack$(props.index$)}
+        >
+          <span id="item__indexNumber">
+            {props.index$ + 1}
+          </span>
+          <span id="item__playIcon">
+            <FaSolidPlay />
+          </span>
+        </div>
+      </Tooltip>
       <PlaylistIcon size$="2.5rem" icon$={props.icon} />
       <div id="item__name">
         {props.name}
