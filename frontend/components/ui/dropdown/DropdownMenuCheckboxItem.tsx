@@ -1,7 +1,6 @@
 import { splitProps, type ParentProps, type ValidComponent } from "solid-js"
 import { CheckboxItem, ItemIndicator, type DropdownMenuCheckboxItemProps } from "@kobalte/core/dropdown-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
-import { MERGE_CLASS } from "macro-def"
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({
@@ -47,13 +46,10 @@ export function DropdownMenuCheckboxItem<T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IDropdownMenuCheckboxItemProps, ["class", "children"])
   return (
     <CheckboxItem
-      class={MERGE_CLASS(
-        props,
-        stylex.attrs(style.menuCheckboxItem)
-      )}
+      class={`${stylex.attrs(style.menuCheckboxItem).class} ${props.class ?? ""}`}
       {...rest}
     >
-      <span class={MERGE_CLASS(stylex.attrs(style.menuItemIndicator))}>
+      <span {...stylex.attrs(style.menuItemIndicator)}>
         <ItemIndicator>
           <svg
             xmlns="http://www.w3.org/2000/svg"

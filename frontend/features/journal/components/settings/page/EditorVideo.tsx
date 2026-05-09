@@ -3,7 +3,6 @@ import { createSignal } from "solid-js"
 import sampleVideo from "~/assets/le_fishe_full.mp4"
 // ...
 import { CheckboxSettingSection, CustomSettingSection, RangeSettingSection, SubSetting } from "~/libs/setting-screen"
-import { Video } from "~/libs/video"
 // ...
 import stylex from "@stylexjs/stylex"
 
@@ -58,7 +57,6 @@ export default function EditorVideo() {
         name$="Testing section for lazies."
         description$="A little preview for you, because going in and out of setting page does talking some times"
       >
-        <Video src$={sampleVideo} />
       </CustomSettingSection>
     </>
   )

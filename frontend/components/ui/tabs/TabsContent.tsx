@@ -4,7 +4,6 @@ import { splitProps } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { Content, type TabsContentProps } from "@kobalte/core/tabs"
 import stylex from "@stylexjs/stylex"
-import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   tabsContent: {
@@ -22,7 +21,7 @@ export function TabsContent<T extends ValidComponent = "div">(
   const [local, others] = splitProps(props as ITabsContentProps, ["class"])
   return (
     <Content
-      class={MERGE_CLASS(local, stylex.attrs(style.tabsContent))}
+      class={`${stylex.attrs(style.tabsContent).class} ${local.class ?? ""}`}
       {...others}
     />
   )

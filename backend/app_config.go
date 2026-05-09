@@ -3,11 +3,9 @@ package backend
 import (
 	"os"
 	"toast/backend/features/group"
-	"toast/backend/features/journal"
 	"toast/backend/features/misc"
 	"toast/backend/features/playlist"
 
-	"toast/backend/core/editor"
 	"toast/backend/internals"
 
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -22,8 +20,6 @@ func GetAppConfig(icon []byte, appInstance *App) *options.App {
 
 	binding := []any{
 		appInstance,
-		&journal.Exports{},
-		&editor.Exports{},
 		&misc.Exports{},
 		&group.Exports{},
 		&playlist.Exports{},

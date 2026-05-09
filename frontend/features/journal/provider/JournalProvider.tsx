@@ -3,8 +3,6 @@ import { type Accessor, createContext, type ParentProps, useContext } from "soli
 import __style from "./[groupId].module.css"
 // ...
 import { createStorage, type IStorage } from "~/utils"
-import { CreateJournal, GetJournal, UpdateJournal } from "~/wailsjs/go/journal/Exports"
-import type { notes } from "~/wailsjs/go/models"
 import { useToggle } from "~/hooks"
 // ...
 import { createHistoryManager, type IHistoryManager } from "./history"
@@ -18,13 +16,13 @@ export type JournalSessionStorage = IStorage<{
 }>
 
 export type JournalLocalStorage = IStorage<{
-  last_opened$: notes.NoteData | null
+  last_opened$: null
 }>
 
 export interface IJournalContext {
-  createJournal$(type: number, data: notes.CreateNoteOptions): Promise<notes.NoteData>
-  getJournal$(journalId: string): Promise<notes.NoteData>
-  updateJournal$(journalId: string, newData: notes.UpdateNoteOptions): Promise<void>
+  createJournal$(type: number, data: null): Promise<null>
+  getJournal$(journalId: string): Promise<null>
+  updateJournal$(journalId: string, newData: null): Promise<void>
   // ...
   sessionStorage$: JournalSessionStorage
   history$: IHistoryManager
@@ -45,7 +43,7 @@ export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
   const groupId = () => wrappedSessionStorage.get$('journal_data$').groupId$
 
   const createJournal: IJournalContext["createJournal$"] = async (type, data) => {
-    return await CreateJournal(groupId(), type, data)
+    return null
   }
 
   const [isSidebarHidden, toggleHideSidebar] = useToggle()
@@ -58,8 +56,8 @@ export function JournalProvider(props: ParentProps<IJournalProviderProps>) {
       },
       sessionStorage$: wrappedSessionStorage,
       createJournal$: createJournal,
-      getJournal$: (journalId) => GetJournal(groupId(), journalId),
-      updateJournal$: (journalId, newData) => UpdateJournal(groupId(), journalId, newData),
+      getJournal$: (journalId) => {},
+      updateJournal$: (journalId, newData) => {},
       history$: createHistoryManager(wrappedLocalStorage)
     }}>
       {props.children}

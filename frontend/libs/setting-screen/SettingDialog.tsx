@@ -1,12 +1,11 @@
 import { For, Match, Switch } from "solid-js"
-import { MERGE_CLASS } from "macro-def"
 // ...
 import { DialogContent } from "~/components"
 import type { IBaseLazyDialog } from "~/hooks"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./SettingDialog.module.css"
-import __scrollbarStyle from "~/styles/scrollbar.module.css"
+import "~/styles/scrollbar.css"
 // ...
 import { SettingSidebarItem } from "./SettingSidebarItem"
 import { type ISettingProviderProps, SettingProvider, useSettingContext } from "./SettingProvider"
@@ -44,12 +43,7 @@ export default function SettingDialog(props: ISettingDialog) {
   const Sidebar = () => {
     const { config$ } = useSettingContext()
     return (
-      <aside class={MERGE_CLASS(
-        stylex.attrs(style.dialog__sidebar),
-        __scrollbarStyle.scrollbar,
-        __scrollbarStyle.scrollbarVertical,
-        __scrollbarStyle.invsScrollbar
-      )}>
+      <aside class={`${stylex.attrs(style.dialog__sidebar).class} scrollbar scrollbarVertical invsScrollbar`}>
         <For each={config$}>
           {it => <SettingSidebarItem {...it} />}
         </For>
@@ -79,12 +73,7 @@ export default function SettingDialog(props: ISettingDialog) {
         <div {...stylex.attrs(style.dialog__content)}>
           <Sidebar />
           <main
-            class={MERGE_CLASS(
-              stylex.attrs(style.dialog__mainContent),
-              __scrollbarStyle.scrollbar,
-              __scrollbarStyle.scrollbarVertical,
-              __scrollbarStyle.invsScrollbar
-            )}
+            class={`${stylex.attrs(style.dialog__mainContent).class} scrollbar scrollbarVertical invsScrollbar`}
             id={__style.mainContent}
           >
             <MainContent />

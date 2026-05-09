@@ -1,7 +1,6 @@
 import type { ValidComponent } from "solid-js"
 import { splitProps } from "solid-js"
 import { BsCheck } from "solid-icons/bs"
-import { MERGE_CLASS } from "macro-def"
 import { Root, Input, Control, Indicator, type CheckboxRootProps } from "@kobalte/core/checkbox"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 
@@ -34,7 +33,7 @@ export function Checkbox<T extends ValidComponent = "div">(
 ) {
   const [local, others] = splitProps(props as ICheckboxRootProps, ["class"])
   return (
-    <Root {...others} class={MERGE_CLASS(local, stylex.attrs(style.checkbox))}>
+    <Root {...others} class={`${stylex.attrs(style.checkbox)} ${local.class ?? ""}`}>
       <Input class="peer" />
       <Control {...stylex.attrs(style.checkboxControl)}>
         <Indicator>

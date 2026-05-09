@@ -1,12 +1,11 @@
 import { type ParentProps } from "solid-js"
 import { BsGearFill } from "solid-icons/bs"
-import { MERGE_CLASS } from "macro-def"
 // ...
 import { Button, Spacer, Tooltip, type ITooltipOptions } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 import __style from "./QuickActionBar.module.css"
-import __scrollbarStyle from "~/styles/scrollbar.module.css"
+import "~/styles/scrollbar.css"
 // ...
 import { createJournalSettingPage } from "../settings"
 
@@ -71,11 +70,7 @@ export function QuickActionBar(props: ParentProps) {
         </Tooltip>
       </div>
       <div
-        class={MERGE_CLASS(
-          stylex.attrs(style.bar__content, style.bar__explorer),
-          __scrollbarStyle.scrollbar,
-          __scrollbarStyle.scrollbarVertical,
-        )}
+        class={`${stylex.attrs(style.bar__content, style.bar__explorer).class} scrollbar scrollbarVertical`}
       >
         {props.children}
       </div>

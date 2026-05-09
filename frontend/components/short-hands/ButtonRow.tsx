@@ -1,5 +1,4 @@
 import { Match, splitProps, Switch } from "solid-js"
-import { MERGE_CLASS } from "macro-def"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -23,7 +22,7 @@ export function ButtonRow(props: IButtonRowProps) {
   const [, itsProps] = splitProps(props, ["direction$"])
 
   return (
-    <div {...itsProps} class={MERGE_CLASS(props, stylex.attrs(style.buttonRow))}>
+    <div {...itsProps} class={`${stylex.attrs(style.buttonRow).class} ${props.class ?? ""}`}>
       <Switch fallback={
         <>
           <Spacer />

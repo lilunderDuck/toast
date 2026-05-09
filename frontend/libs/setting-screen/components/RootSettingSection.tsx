@@ -5,7 +5,6 @@ import stylex from "@stylexjs/stylex"
 import { Input } from "~/components"
 // ...
 import { type ISettingSectionProps } from "../types"
-import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   thisThing$: {
@@ -45,10 +44,7 @@ export function RootSettingName(props: ISettingSectionProps<any> & {
   inline$?: JSX.Element
 }) {
   return (
-    <h4 class={MERGE_CLASS(
-      stylex.attrs(style.name),
-      props.disabled$ ? stylex.attrs(style.name_disabled) : ''
-    )}>
+    <h4 class={`${stylex.attrs(style.name).class} ${props.disabled$ ? stylex.attrs(style.name_disabled) : ''}`}>
       {props.name$}
       {props.inline$}
     </h4>
@@ -58,10 +54,7 @@ export function RootSettingName(props: ISettingSectionProps<any> & {
 export function RootSettingDescription(props: Pick<ISettingSectionProps<any>, "description$" | "disabled$">) {
   return (
     <Show when={props.description$}>
-      <p class={MERGE_CLASS(
-        stylex.attrs(style.description),
-        props.disabled$ ? stylex.attrs(style.description_disabled$) : ''
-      )}>
+      <p class={`${stylex.attrs(style.description).class} ${props.disabled$ ? stylex.attrs(style.description_disabled$) : ''}`}>
         {props.description$}
       </p>
     </Show>
@@ -72,9 +65,7 @@ export function RootSettingInput(props: HTMLAttributes<"input">) {
   return (
     <Input 
       {...props}
-      class={MERGE_CLASS(
-        props.type !== "range" ? stylex.attrs(style.input) : ''
-      )}
+      class={props.type !== "range" ? stylex.attrs(style.input).class : ''}
     />
   )
 }

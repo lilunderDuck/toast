@@ -1,10 +1,9 @@
 import { BsPencilFill } from "solid-icons/bs"
-import { MERGE_CLASS } from "macro-def"
 // ...
 import './JournalBlock.css'
 import stylex from "@stylexjs/stylex"
 // ...
-import { Button, Spacer, Tag } from "~/components"
+import { Button } from "~/components"
 import { type group } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 import { createLazyLoadedDialog } from "~/hooks"

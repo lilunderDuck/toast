@@ -1,7 +1,5 @@
 import type { ParentProps } from "solid-js"
 // ...
-import { EditorCharacterCount } from "~/libs/editor"
-// ...
 import __style from "./JournalContentPanel.module.css"
 import stylex from "@stylexjs/stylex"
 // ...
@@ -24,9 +22,6 @@ export function JournalContentPanel(props: ParentProps<IJournalContentPanelProps
 
   return (
     <section>
-      <EditorCharacterCount>
-        {!currentlyOpenedJournal$() ? (<span>Nothing</span>) : null}
-      </EditorCharacterCount>
       <main {...stylex.attrs(style.panel__mainContent)}>
         {props.children}
       </main>

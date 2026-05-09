@@ -1,5 +1,4 @@
 import stylex from "@stylexjs/stylex";
-import { MERGE_CLASS } from "macro-def";
 import { splitProps } from "solid-js";
 
 const style = stylex.create({
@@ -46,7 +45,7 @@ export function Tag(props: ITagProps) {
   return (
     <span
       {...itsProps}
-      class={MERGE_CLASS(props, stylex.attrs(style.tag))}
+      class={`${stylex.attrs(style.tag).class} ${props.class ?? ""}`}
       style={{ "--color": props.color$ ?? "var(--subtext0)" }}
       data-tag=""
     >

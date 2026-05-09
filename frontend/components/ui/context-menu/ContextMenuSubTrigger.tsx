@@ -2,7 +2,6 @@ import { type ContextMenuSubTriggerProps, SubTrigger } from "@kobalte/core/conte
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
 import { type ParentProps, splitProps, type ValidComponent } from "solid-js"
-import { MERGE_CLASS } from "macro-def"
 import { Spacer } from "../Flex"
 
 const style = stylex.create({
@@ -39,10 +38,7 @@ export function ContextMenuSubTrigger<T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IContextMenuSubTriggerProps, ["class", "children"])
   return (
     <SubTrigger
-      class={MERGE_CLASS(
-        props,
-        stylex.attrs(style.menuSubContent)
-      )}
+      class={`${stylex.attrs(style.menuSubContent)} ${props.class}`}
       {...rest}
     >
       <div {...stylex.attrs(style.iconWrap)}>

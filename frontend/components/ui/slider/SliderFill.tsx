@@ -1,7 +1,6 @@
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import { Fill, type SliderFillProps } from "@kobalte/core/slider"
 import { splitProps, type ValidComponent } from "solid-js"
-import { MERGE_CLASS } from "macro-def"
 
 import stylex from "@stylexjs/stylex"
 
@@ -24,7 +23,7 @@ export function SliderFill<T extends ValidComponent = "div">(
   const [local, others] = splitProps(props as ISliderFillProps, ["class"])
   return (
     <Fill
-      class={MERGE_CLASS(stylex.attrs(style.fill), local)}
+      class={`${stylex.attrs(style.fill).class} ${local.class ?? ""}`}
       {...others}
     />
   )

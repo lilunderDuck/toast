@@ -1,11 +1,9 @@
 import { BsArrowLeft, BsBookHalf, BsPencilFill, BsPlus } from "solid-icons/bs"
 import { A } from "@solidjs/router"
-import { MERGE_CLASS } from "macro-def"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
 import { AppTitleBarDraggable, Button, Spacer, Tooltip } from "~/components"
-import { useEditorContext } from "~/libs/editor"
 import { createLazyLoadedDialog } from "~/hooks"
 // ...
 import { useJournalContext } from "../../provider"
@@ -24,8 +22,6 @@ const style = stylex.create({
 })
 
 export function TopHeaderButtonRow(props: HTMLAttributes<"header">) {
-  const { setIsReadonly$, isReadonly$ } = useEditorContext()
-
   const CreateJournalDialog = createLazyLoadedDialog(
     () => import("./dialog/CreateJournalDialog"),
     () => ({
@@ -37,7 +33,7 @@ export function TopHeaderButtonRow(props: HTMLAttributes<"header">) {
     <AppTitleBarDraggable {...stylex.attrs(style.header__titleBar)}>
       <header
         {...props}
-        class={MERGE_CLASS(props, stylex.attrs(style.header))}
+        class={`${stylex.attrs(style.header).class} ${props.class ?? ""}`}
       >
         <Tooltip label$="Go back" tooltipOptions$={{ placement: "right" }}>
           <A href="/">
@@ -64,9 +60,9 @@ export function TopHeaderButtonRow(props: HTMLAttributes<"header">) {
           <Button
             variant$={ButtonVariant.NO_BACKGROUND}
             size$={ButtonSize.ICON}
-            onClick={() => setIsReadonly$(prev => !prev)}
+            onClick={() => {}}
           >
-            {isReadonly$() ? <BsBookHalf /> : <BsPencilFill />}
+            {true ? <BsBookHalf /> : <BsPencilFill />}
           </Button>
         </Tooltip>
       </header>

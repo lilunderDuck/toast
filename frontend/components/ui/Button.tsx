@@ -4,7 +4,6 @@ import stylex from "@stylexjs/stylex"
 import __style from "./Button.module.css"
 // ...
 import { type StylexStylesAttribute } from "../../utils"
-import { MERGE_CLASS } from "macro-def"
 import { SpinningCube } from "../loader"
 
 const style = stylex.create({
@@ -112,19 +111,21 @@ export function Button(props: IButtonProps) {
     }
   }
 
+  const inputClasses = () => 
+    others.class + " " +
+    __style.button + " " +
+    stylex.attrs(style.base).class + " " +
+    variantMapping[local.variant$ ?? ButtonVariant.DEFAULT].class + " " +
+    sizeMapping[local.size$ ?? ButtonSize.DEFAULT].class + " "
+  // 
+
   return (
     <button
       type="button"
       disabled={isLoading()}
       {...others}
       onClick={clickHandler}
-      class={MERGE_CLASS(
-        others.class,
-        __style.button,
-        stylex.attrs(style.base),
-        variantMapping[local.variant$ ?? ButtonVariant.DEFAULT].class,
-        sizeMapping[local.size$ ?? ButtonSize.DEFAULT].class,
-      )}
+      class={inputClasses()}
     >
       <Show when={isLoading()} fallback={props.children}>
         <SpinningCube cubeSize$={30} />

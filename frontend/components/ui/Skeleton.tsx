@@ -4,7 +4,6 @@ import stylex from "@stylexjs/stylex"
  
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { type SkeletonRootProps, Root } from "@kobalte/core/skeleton"
-import { MERGE_CLASS } from "macro-def"
 
 const pulseAnimation = stylex.keyframes({
   '50%': {
@@ -29,7 +28,7 @@ export function Skeleton<T extends ValidComponent = "div">(
   const [local, others] = splitProps(props as ISkeletonRootProps, ["class"])
   return (
     <Root
-      class={MERGE_CLASS(stylex.attrs(style.spookySkeleton), local)}
+      class={`${stylex.attrs(style.spookySkeleton).class} ${local.class ?? ""}`}
       {...others}
     />
   )

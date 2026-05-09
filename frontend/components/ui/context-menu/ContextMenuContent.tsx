@@ -1,7 +1,6 @@
 import { splitProps, type ValidComponent } from "solid-js"
 import { Content, Portal, type ContextMenuContentProps } from "@kobalte/core/context-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
-import { MERGE_CLASS } from "macro-def"
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({
@@ -25,11 +24,7 @@ export function ContextMenuContent<T extends ValidComponent = "div">(
   return (
     <Portal>
       <Content
-        class={MERGE_CLASS(
-          props,
-          stylex.attrs(style.menuContent),
-          "component-context-menu"
-        )}
+        class={`${stylex.attrs(style.menuContent)} component-context-menu ${props.class ?? ""}`}
         {...rest}
       />
     </Portal>

@@ -1,7 +1,0 @@
-.taskSectionButton > * {
-  opacity: 0;
-}
-
-.taskSectionButton:hover > * {
-  opacity: 1;
-}

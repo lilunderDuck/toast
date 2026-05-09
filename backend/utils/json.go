@@ -34,3 +34,13 @@ func WriteJsonFile(path string, anyJson any) error {
 
 	return os.WriteFile(path, rawData, 0667)
 }
+
+func ReadJsonFile[T any](path string) (T, error) {
+	dataInDisk, err := os.ReadFile(path)
+	var dummy T
+	if err != nil {
+		return dummy, err
+	}
+
+	return ParseJson[T](dataInDisk)
+}

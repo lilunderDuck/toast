@@ -1,5 +1,4 @@
 import stylex from "@stylexjs/stylex"
-import { MERGE_CLASS } from "macro-def"
 import { createSignal, onMount } from "solid-js"
 
 const style = stylex.create({
@@ -54,7 +53,7 @@ export function ResizableTextarea(props: HTMLAttributes<"textarea">) {
     <textarea
       {...props}
       ref={textareaRef}
-      class={MERGE_CLASS(props, stylex.attrs(style.input))}
+      class={`${stylex.attrs(style.input).class} ${props.class ?? ""}`}
       style={`height: ${height()}`}
       onInput={onSlappingYourKeyboard}
     />

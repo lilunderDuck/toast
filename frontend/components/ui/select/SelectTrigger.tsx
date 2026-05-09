@@ -1,8 +1,7 @@
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
-import { Icon, type SelectTriggerProps, Trigger } from "@kobalte/core/select"
+import { type SelectTriggerProps, Trigger } from "@kobalte/core/select"
 import stylex from "@stylexjs/stylex"
-import { type JSX, Show, splitProps, type ValidComponent } from "solid-js"
-import { MERGE_CLASS } from "macro-def"
+import { type JSX, splitProps, type ValidComponent } from "solid-js"
 
 const style = stylex.create({
   trigger: {
@@ -39,7 +38,7 @@ export function SelectTrigger<T extends ValidComponent = "button">(
   return (
     // @ts-ignore
     <Trigger
-      class={MERGE_CLASS(local, stylex.attrs(style.trigger))}
+      class={`${stylex.attrs(style.trigger).class} ${local.class ?? ""}`}
       {...others}
     >
       {local.children}

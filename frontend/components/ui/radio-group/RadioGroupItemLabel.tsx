@@ -3,8 +3,6 @@ import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { ItemLabel, type RadioGroupLabelProps } from "@kobalte/core/radio-group"
 // ...
 import stylex from "@stylexjs/stylex"
-// ...
-import { MERGE_CLASS } from "macro-def"
 
 interface IRadioGroupLabelProps<T extends ValidComponent = "label"> extends RadioGroupLabelProps<T> {
   class?: string | undefined
@@ -24,7 +22,7 @@ export function RadioGroupItemLabel<T extends ValidComponent = "label">(
   const [local, others] = splitProps(props as IRadioGroupLabelProps, ["class"])
   return (
     <ItemLabel
-      class={MERGE_CLASS(stylex.attrs(style.itemLabel), local)}
+      class={`${stylex.attrs(style.itemLabel).class} ${local.class}`}
       {...others}
     />
   )

@@ -10,7 +10,6 @@ import {
 } from '../util'
 import { ToastBar } from './ToastBar'
 import __style from './Toaster.module.css'
-import { MERGE_CLASS } from 'macro-def'
 
 export const ToastContainer: Component<ToastContainerProps> = (props) => {
   const calculatePosition = () => {
@@ -39,10 +38,7 @@ export const ToastContainer: Component<ToastContainerProps> = (props) => {
       style={{
         '--offset': positionStyle().offset
       }}
-      class={MERGE_CLASS(
-        props.toast.visible ? `${__style['sldt-active']} component-toast-visible` : 'component-toast-hidden',
-        positionStyle()
-      )}
+      class={`${props.toast.visible ? `${__style['sldt-active']} component-toast-visible` : 'component-toast-hidden'} ${positionStyle()}`}
       onMouseEnter={() =>
         dispatch({
           type: ToastActionType.START_PAUSE,

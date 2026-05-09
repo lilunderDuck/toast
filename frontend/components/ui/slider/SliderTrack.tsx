@@ -2,7 +2,6 @@ import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import { type SliderTrackProps, Track } from "@kobalte/core/slider"
 import stylex from "@stylexjs/stylex"
 import { splitProps, type ValidComponent } from "solid-js"
-import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   track: {
@@ -23,7 +22,7 @@ export function SliderTrack<T extends ValidComponent = "div">(
   const [local, others] = splitProps(props as ISliderTrackProps, ["class"])
   return (
     <Track
-      class={MERGE_CLASS(stylex.attrs(style.track), local)}
+      class={`${stylex.attrs(style.track).class} ${local.class ?? ""}`}
       {...others}
     />
   )

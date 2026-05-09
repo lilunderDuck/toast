@@ -4,7 +4,6 @@ import { Show, splitProps } from "solid-js"
 import type { DynamicProps, HandleProps, RootProps } from "@corvu/resizable"
 import ResizablePrimitive from "@corvu/resizable"
 import stylex from "@stylexjs/stylex"
-import { MERGE_CLASS } from "macro-def"
  
 const style = stylex.create({
   resizable: {
@@ -40,10 +39,7 @@ export function Resizable<T extends ValidComponent = "div">(props: DynamicProps<
   return (
     <ResizablePrimitive
       {...rest}
-      class={MERGE_CLASS(
-        props,
-        stylex.attrs(style.resizable)
-      )}
+      class={`${stylex.attrs(style.resizable).class} ${props.class ?? ""}`}
     />
   )
 }
@@ -64,13 +60,10 @@ export function ResizableHandle<T extends ValidComponent = "button">(
   return (
     <ResizablePrimitive.Handle
       {...rest}
-      class={MERGE_CLASS(
-        props,
-        stylex.attrs(style.resizableHandle)
-      )}
+      class={`${stylex.attrs(style.resizable).class} ${props.class ?? ""}`}
     >
       <Show when={props.withHandle}>
-        <div class={MERGE_CLASS(stylex.attrs(style.resiableIconHandle))}>
+        <div {...stylex.attrs(style.resiableIconHandle)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

@@ -5,7 +5,6 @@ import stylex from '@stylexjs/stylex'
 import './FieldInput.css'
 // ...
 import { Label } from './Label'
-import { MERGE_CLASS } from 'macro-def'
 
 export type TextFieldInputRef = HTMLInputElement | HTMLTextAreaElement
 
@@ -64,14 +63,14 @@ export function FieldInput(props: TextFieldProps) {
           <Kobalte.Input 
             {...inputProps} 
             type={props.type} 
-            class={MERGE_CLASS("fieldInput__input", stylex.attrs(style.input))} 
+            class={`${stylex.attrs(style.input).class} fieldInput__input`} 
           />
         }
       >
         <Kobalte.TextArea 
           {...inputProps} 
           autoResize 
-          class={MERGE_CLASS("fieldInput__input", stylex.attrs(style.input))} 
+          class={`${stylex.attrs(style.input).class} fieldInput__input`} 
         />
       </Show>
       <Kobalte.ErrorMessage {...stylex.attrs(style.error)}>

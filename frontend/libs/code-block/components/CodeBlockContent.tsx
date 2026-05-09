@@ -1,5 +1,4 @@
 import stylex from "@stylexjs/stylex"
-import { EditorTooltip } from "~/libs/editor"
 import { useCodeBlockContext } from "../provider"
 import { Show } from "solid-js"
 
@@ -23,19 +22,17 @@ export function CodeBlockContent(props: ICodeBlockContentProps) {
   const { data$ } = useCodeBlockContext()
 
   return (
-    <EditorTooltip label$="Click to change content">
-      <div {...stylex.attrs(style.input__content)} onClick={props.onClick}>
-        <code
-          class={`language-${data$().lang}`}
-          ref={props.ref}
-        >
-          <Show when={data$().codeContent === ""} fallback={data$().codeContent}>
-            <span {...stylex.attrs(style.input__contentEmpty)}>
-              Nothing in here
-            </span>
-          </Show>
-        </code>
-      </div>
-    </EditorTooltip>
+    <div {...stylex.attrs(style.input__content)} onClick={props.onClick}>
+      <code
+        class={`language-${data$().lang}`}
+        ref={props.ref}
+      >
+        <Show when={data$().codeContent === ""} fallback={data$().codeContent}>
+          <span {...stylex.attrs(style.input__contentEmpty)}>
+            Nothing in here
+          </span>
+        </Show>
+      </code>
+    </div>
   )
 }

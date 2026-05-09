@@ -1,6 +1,5 @@
 import { Chart, type ChartTypeRegistry, type TooltipModel } from "chart.js"
 import stylex from "@stylexjs/stylex"
-import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   chartjsTooltip: {
@@ -42,11 +41,7 @@ export function showTooltip(context: ChartContext) {
     return
   }
 
-  el.className = MERGE_CLASS(
-    stylex.attrs(style.chartjsTooltip), 
-    model.yAlign ? `no-transform` : ''
-  )
-
+  el.className = `${stylex.attrs(style.chartjsTooltip).class} ${model.yAlign ? `no-transform` : ''}`
   let content = ""
 
   for (const title of model.title) {

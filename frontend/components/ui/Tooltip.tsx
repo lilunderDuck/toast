@@ -9,7 +9,6 @@ import {
   type TooltipRootOptions
 } from "@kobalte/core/tooltip"
 import stylex from "@stylexjs/stylex"
-import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   tooltip: {
@@ -55,7 +54,7 @@ export function Tooltip(
       <Portal>
         <Content
           {...others}
-          class={MERGE_CLASS(stylex.attrs(style.tooltip), others, "component-tooltip")}
+          class={`${stylex.attrs(style.tooltip).class} component-tooltip ${others.class ?? ""}`}
         >
           {local.label$}
         </Content>

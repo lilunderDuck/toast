@@ -4,7 +4,6 @@ import stylex from "@stylexjs/stylex"
 import __style from "./CodeBlock.module.css"
 import "highlight.js/styles/atom-one-dark.css"
 // ...
-import { useEditorContext } from "~/libs/editor/provider"
 import { createToggableInput } from "~/hooks"
 // ...
 import { highlightCodeBlock, useCodeBlockContext, type LanguageName } from "./provider"
@@ -32,7 +31,6 @@ const style = stylex.create({
 })
 
 export function CodeBlock() {
-  const { isReadonly$ } = useEditorContext()
   const { data$, updateData$ } = useCodeBlockContext()
 
   let inputRef!: ICodeBlockContentProps["ref"]
@@ -46,7 +44,7 @@ export function CodeBlock() {
         return <CodeBlockContent {...props} ref={inputRef} />
       }
     },
-    readonly$: isReadonly$,
+    readonly$: () => true,
     label$: () => data$().codeContent,
     onFinalize$(newContent) {
       updateData$({ codeContent: newContent })

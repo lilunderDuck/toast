@@ -2,7 +2,6 @@ import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import { Item, ItemIndicator, ItemLabel, type SelectItemProps } from "@kobalte/core/select"
 import stylex from "@stylexjs/stylex"
 import { splitProps, type ParentProps, type ValidComponent } from "solid-js"
-import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   item: {
@@ -55,7 +54,7 @@ export const SelectItem = <T extends ValidComponent = "li">(
   return (
     <Item
       {...others}
-      class={MERGE_CLASS(local, stylex.attrs(style.item))}
+      class={`${stylex.attrs(style.item).class} ${local.class ?? ""}`}
     >
       <ItemIndicator {...stylex.attrs(style.itemIndicator)}>
         <svg

@@ -8,6 +8,6 @@ import (
 
 var packageListFile = filepath.Join(internals.RESOURCE_FOLDER_PATH, "pkl.res")
 
-func (*Exports) GetPackageListData() (*[]PackageContentData, error) {
-	return utils.BSON_ReadFile[[]PackageContentData](packageListFile)
+func (*Exports) GetPackageListData() ([]PackageContentData, error) {
+	return utils.ReadJsonFile[[]PackageContentData](packageListFile)
 }

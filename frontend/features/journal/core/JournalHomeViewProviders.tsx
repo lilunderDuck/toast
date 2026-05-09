@@ -1,8 +1,6 @@
 import { onCleanup, Show, type ParentProps } from "solid-js"
 // ...
-import { CleanUpJournal } from "~/wailsjs/go/journal/Exports"
 import type { group } from "~/wailsjs/go/models"
-import { EditorProvider } from "~/libs/editor"
 // ...
 import { JournalProvider, useJournalContext } from "../provider"
 
@@ -14,7 +12,7 @@ interface IJournalHomeProvidersProps {
 
 export function JournalHomeViewProviders(props: ParentProps<IJournalHomeProvidersProps>) {
   onCleanup(() => {
-    CleanUpJournal(props.groupId$)
+    // CleanUpJournal(props.groupId$)
   })
 
   const Loader = () => {
@@ -25,13 +23,11 @@ export function JournalHomeViewProviders(props: ParentProps<IJournalHomeProvider
   }
 
   return (
-    <EditorProvider id$={props.groupId$}>
-      <Show when={!props.isLoading$}>
-        <JournalProvider>
-          <Loader />
-          {props.children}
-        </JournalProvider>
-      </Show>
-    </EditorProvider>
+    <Show when={!props.isLoading$}>
+      <JournalProvider>
+        <Loader />
+        {props.children}
+      </JournalProvider>
+    </Show>
   )
 }

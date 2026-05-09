@@ -1,6 +1,5 @@
 import stylex from "@stylexjs/stylex"
 import { splitProps } from "solid-js"
-import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   menuShortcut: {
@@ -12,5 +11,5 @@ const style = stylex.create({
 
 export function DropdownMenuShortcut(props: HTMLAttributes<"span">) {
   const [, rest] = splitProps(props, ["class"])
-  return <span class={MERGE_CLASS(props, stylex.attrs(style.menuShortcut))} {...rest} />
+  return <span class={`${stylex.attrs(style.menuShortcut).class} ${props.class ?? ""}`} {...rest} />
 }

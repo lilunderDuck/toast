@@ -7,7 +7,6 @@ import {
 import "./Select.css"
 import type { ParentProps, ValidComponent } from "solid-js"
 import stylex from "@stylexjs/stylex"
-import { MERGE_CLASS } from "macro-def"
 
 const style = stylex.create({
   this: {
@@ -28,8 +27,8 @@ export function Select<
   return (
     <Root 
       {...props} 
+      {...stylex.attrs(style.this)}
       id="select" 
-      class={MERGE_CLASS(props, stylex.attrs(style.this))} 
     />
   )
 }
