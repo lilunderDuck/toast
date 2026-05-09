@@ -1,7 +1,6 @@
-import { Show, type ParentProps } from 'solid-js'
+import { type ParentProps } from 'solid-js'
 // ...
 import { Toaster } from '~/libs/solid-toast'
-import { SplashScreen, SplashScreenProvider } from '~/libs/splash-screen'
 import { AppTitleBarButton } from '~/components'
 
 export default function App(props: ParentProps) {

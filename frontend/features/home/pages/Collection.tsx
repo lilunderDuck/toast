@@ -1,8 +1,12 @@
 import stylex from "@stylexjs/stylex"
-import { createResource, For } from "solid-js";
-import { GetAllPlaylistsData } from "~/wailsjs/go/playlist/Exports";
+import { createResource, createSignal, For, onCleanup, onMount } from "solid-js";
+import { CleanupPlaylists, GetAllPlaylistsData, InitPlaylists } from "~/wailsjs/go/playlist/Exports";
 import { CollectionDivider, CollectionItem, PlaylistCollectionItem } from "../components";
-import { playlistIconUrl } from "~/features/playlist/api";
+import type { playlist } from "~/wailsjs/go/models";
+
+interface ICollections {
+  playlist$: playlist.PlaylistData[]
+}
 
 const style = stylex.create({
   collection: {
@@ -11,13 +15,23 @@ const style = stylex.create({
     padding: 5,
     userSelect: "none"
   },
-  collection__dividerWrap: {
-    width: "100%",
+  collection__list: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 10
   }
 })
 
 export default function Collection() {
-  const [resource] = createResource(() => GetAllPlaylistsData())
+  const [collections, setCollections] = createSignal<ICollections | null>(null)
+  onMount(async() => {
+    await InitPlaylists()
+    setCollections({
+      playlist$: await GetAllPlaylistsData()
+    })
+  })
+
+  onCleanup(CleanupPlaylists)
   
   return (
     <main {...stylex.attrs(style.collection)}>
@@ -25,9 +39,11 @@ export default function Collection() {
       <CollectionDivider>
         Playlist
       </CollectionDivider>
-      <For each={resource() ?? []}>
-        {it => <PlaylistCollectionItem {...it} />}
-      </For>
+      <div {...stylex.attrs(style.collection__list)}>
+        <For each={collections()?.playlist$ ?? []}>
+          {it => <PlaylistCollectionItem {...it} />}
+        </For>
+      </div>
     </main>
   )
 }

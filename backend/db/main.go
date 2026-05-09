@@ -1,36 +1,35 @@
-// This is a wrapper for the leveldb key-value store.
+// This is a wrapper for the key-value store.
 // It simplifies common operations like opening, closing, and managing a single instance
 // of a database based on a given path.
 package db
 
 import (
 	"path/filepath"
-	"sync"
 	"toast/backend/debug"
 
-	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/tidwall/buntdb"
 )
 
 // A function type used to perform a batch of
-// database operations on a given leveldb instance.
-type leveldbBatchFn func(db *Instance)
+// database operations on a given instance.
+type batchFn func(db *Instance)
 
-// A wrapper struct that holds the internal leveldb database instance.
+// A wrapper struct that holds the internal database instance.
 type Instance struct {
-	internal *leveldb.DB
+	internal *buntdb.DB
 	name     string
 }
 
-// Closes the underlying leveldb database. It should be called when
+// Closes the underlying database. It should be called when
 // the database is no longer needed to release resources.
 func (db *Instance) Close() error {
 	if debug.DEBUG_MODE {
-		debug.Log("Database closed")
+		debug.LogLabel("db/json", "Database closed")
 	}
 	return db.internal.Close()
 }
 
-// A map used to track and store the instances of leveldb,
+// A map used to track and store the instances of currently opened database instance,
 // with the database path as the key.
 //
 // Notes: this is **not** thread safe
@@ -38,26 +37,22 @@ func (db *Instance) Close() error {
 // Update: it's now thread safe, thank god
 var (
 	globalInstance = map[string]*Instance{}
-	lock           sync.Mutex
 )
 
-// Opens a leveldb database at the specified file path.
-// Returns a instance of leveldb.
+// Opens a database at the specified file path.
+// Returns the database instance.
 //
 // If the database for the given path is already open, it returns the existing instance.
 func Open(path string) (*Instance, error) {
-	// lock.Lock()
-	// defer lock.Unlock()
-
 	if debug.DEBUG_MODE {
-		debug.Log("Opening:", "path", path)
+		debug.LogLabelf("db/json", "Opening: %s", path)
 	}
 
 	if instance := GetInstance(path); instance != nil {
 		return instance, nil
 	}
 
-	db, err := leveldb.OpenFile(path, nil)
+	db, err := buntdb.Open(path)
 	if err != nil {
 		if debug.DEBUG_MODE {
 			debug.Err(err, path)
@@ -66,19 +61,17 @@ func Open(path string) (*Instance, error) {
 		return nil, err
 	}
 
-	Instance := &Instance{internal: db, name: filepath.Base(path)}
-
-	globalInstance[path] = Instance
-
-	return Instance, nil
+	instance := &Instance{
+		internal: db,
+		name:     filepath.Base(path),
+	}
+	globalInstance[path] = instance
+	return instance, nil
 }
 
-// Closes the leveldb instance at the specified path and removes it
+// Closes the instance at the specified path and removes it
 // from the global map.
 func Close(path string) {
-	// lock.Lock()
-	// defer lock.Unlock()
-
 	globalInstance[path].Close()
 	delete(globalInstance, path)
 	if debug.DEBUG_MODE {
@@ -86,11 +79,8 @@ func Close(path string) {
 	}
 }
 
-// Closes all opened leveldb instances and clears the global singleton map.
+// Closes all opened instances and clears the global singleton map.
 func CloseAll() {
-	// lock.Lock()
-	// defer lock.Unlock()
-
 	for path, instance := range globalInstance {
 		instance.Close()
 		delete(globalInstance, path)
@@ -100,44 +90,25 @@ func CloseAll() {
 	}
 }
 
-// Gets an existing leveldb instance for the given path.
+// Gets an existing instance for the given path.
 //
 // If an instance is not found, it attempts to open a new one.
 //
 // Note: while this function attempts to handle a missing instance,
 // it is better to call [Open()] explicitly to handle errors.
 func GetInstance(path string) *Instance {
-	// lock.Lock()
-	// defer lock.Unlock()
-
 	instance, ok := globalInstance[path]
 	if !ok {
 		if debug.DEBUG_MODE {
-			debug.Log("No instance found", "path", path)
+			debug.LogLabelf("db/json", "No instance found: %s", path)
 		}
 
 		return nil
 	}
 
 	if debug.DEBUG_MODE {
-		debug.Log("Existing instance found", "path", path)
+		debug.LogLabelf("db/json", "Existing instance found: %s", path)
 	}
 
 	return instance
-}
-
-// Opens a leveldb database, executes a batch of operations, and then closes the database.
-//
-// This function handles the full lifecycle of a temporary database session.
-func OpenThenClose(location string, batch leveldbBatchFn) error {
-	db, err := Open(location)
-	if err != nil {
-		if debug.DEBUG_MODE {
-			debug.Err(err)
-		}
-		return err
-	}
-
-	batch(db)
-	return db.Close()
 }

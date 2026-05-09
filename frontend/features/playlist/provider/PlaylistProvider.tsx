@@ -1,9 +1,9 @@
-import { createContext, createSignal, type ParentProps, useContext, type Accessor, onMount, Show, createEffect } from "solid-js"
+import { createContext, createSignal, type ParentProps, useContext, type Accessor, onMount, Show } from "solid-js"
 import type { playlist } from "~/wailsjs/go/models"
-import { GetAllPlaylistTrack, GetPlaylistData,  } from "~/wailsjs/go/playlist/Exports"
+import { GetAllPlaylistTrack, GetPlaylistData, ResyncDuration,  } from "~/wailsjs/go/playlist/Exports"
 import { playlistTrackUrl } from "../api"
 import { arrayObjects } from "~/utils"
-import { createMediaPlayer, useEventListener, type MediaPlayer } from "~/hooks"
+import { createMediaPlayer, type MediaPlayer } from "~/hooks"
 
 interface IPlaylistContext {
   data$: Accessor<playlist.PlaylistData | null>
@@ -11,6 +11,7 @@ interface IPlaylistContext {
   playTrack$(index: number): void
   pauseCurrentTrack$(): void
   currentTrack$: Accessor<playlist.PlaylistTrackData | null>
+  resyncTracksDuration$(): Promise<void>
   player$: MediaPlayer
 }
 
@@ -59,6 +60,7 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
   }
 
   const goToNextTrackIfCan = () => {
+    console.assert(playlistData(), "playlist data have not been fetched yet")
     if (!currentTrack()) return
     // Extra search to find the track current index.
     // Implementation notes: we also have to handle the case when you dragged 
@@ -74,6 +76,13 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
     playTrack(currentIndex + 1)
   }
 
+  const resyncTracksDuration = async() => {
+    console.assert(playlistData(), "playlist data have not been fetched yet")
+    const updatedData = await ResyncDuration(playlistData()!.id)
+    setPlaylistData(updatedData.metadata)
+    setPlaylistTrack(updatedData.tracks)
+  }
+
   return (
     <Context.Provider value={{
       tracks$: playlistTracks,
@@ -81,6 +90,7 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
       pauseCurrentTrack$: pauseCurrentlyPlayedTrack,
       playTrack$: playTrack,
       currentTrack$: currentTrack,
+      resyncTracksDuration$: resyncTracksDuration,
       player$: audioPlayer,
     }}>
       {props.children}

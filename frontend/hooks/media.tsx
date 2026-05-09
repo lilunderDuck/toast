@@ -44,7 +44,7 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
     onCanPlayThrough() {
       setMediaState(MediaState.FINISHED_LOADING)
       setDuration(mediaRef.duration)
-      console.debug("[media player] duration:", mediaRef.duration)
+      console.log("[media player] duration:", mediaRef.duration, "seconds")
     },
     onEnded() {
       listener?.onEnded$?.()
@@ -121,11 +121,7 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
     changeSource$: changeSource,
     ref$: () => mediaRef,
     Player$: (props: MediaPlayerProps) => (
-      <Show when={type === "audio"} fallback={
-        <video ref={mediaRef} {...props} {...mediaProps} />
-      }>
-        <audio ref={mediaRef} {...props} {...mediaProps} />
-      </Show>
+      <video ref={mediaRef} {...props} {...mediaProps} />
     )
   }
 }

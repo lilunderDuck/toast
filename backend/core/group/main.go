@@ -1,7 +1,6 @@
 package group
 
 import (
-	"os"
 	"path/filepath"
 	"toast/backend/db"
 	"toast/backend/utils"
@@ -15,7 +14,7 @@ type Service struct {
 }
 
 func NewService() *Service {
-	db, err := db.Open(GetBasePath())
+	db, err := db.Open(GetBasePath() + "/all.db")
 	if err != nil {
 		panic(err)
 	}
@@ -38,16 +37,6 @@ func (group *Service) Create(options *GroupOptions) (*GroupData, error) {
 
 func (group *Service) GetAll() []GroupData {
 	groups := []GroupData{}
-	group.Db.Iterate(func(key, data []byte) {
-		outData, err := utils.BSON_Unmarshal[GroupData](data)
-		// Well, unmarshal some data must work.
-		// If it panics, the data might be corrupted in some way.
-		if err != nil {
-			panic(err)
-		}
-
-		groups = append(groups, *outData)
-	})
 
 	return groups
 }
@@ -85,14 +74,6 @@ func (group *Service) Update(groupId string, newData *GroupOptions) error {
 }
 
 func (group *Service) Delete(groupId string) error {
-	if err := group.Db.Delete([]byte(groupId)); err != nil {
-		return err
-	}
-
-	if err := os.Remove(filepath.Join(group.BasePath, groupId)); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -125,7 +106,7 @@ func (group *Service) Write(groupId string, data *GroupData) error {
 		return err
 	}
 
-	return group.Db.Set([]byte(groupId), binData)
+	return nil
 }
 
 func (group *Service) Read(groupId string) (*GroupData, error) {

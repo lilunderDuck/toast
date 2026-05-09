@@ -1,65 +1,62 @@
 package playlist
 
 import (
-	"encoding/json"
 	"os"
+	"strconv"
+	"toast/backend/db"
 	"toast/backend/debug"
-	"toast/backend/internals"
+	"toast/backend/utils"
 )
 
-func (*Exports) GetAllPlaylistTrack(id int) (*[]PlaylistTrackData, error) {
-	if debug.DEBUG_MODE {
-		debug.LogLabelf("playlist", "Getting all playlist tracks with id: %d", id)
-	}
-	data, err := os.ReadFile(internals.PlaylistPathRegistry.TracksData(id))
+func playlistDb(id int) *db.Instance {
+	return db.GetInstance(getPlaylistPath(id))
+}
+
+func (playlist *Exports) GetAllPlaylistTrack(id int) ([]PlaylistTrackData, error) {
+	rawData, err := os.ReadFile(getPlaylistEntriesFilePath(id))
 	if err != nil {
 		return nil, err
 	}
 
-	var out []PlaylistTrackData
-	err = json.Unmarshal(data, &out)
-	return &out, err
+	data, err := utils.ParseJson[[]PlaylistTrackData](rawData)
+	return data, err
 }
 
-func (*Exports) AddPlaylistTrackData(id int, data PlaylistTrackData) error {
+func (playlist *Exports) AddPlaylistTrackData(id int, data PlaylistTrackData) error {
 	if debug.DEBUG_MODE {
 		debug.LogLabelf("playlist", "Adding playlist tracks: %#v", data)
 	}
-	driver := playlistDbs[id]
-	return driver.Insert(data)
+
+	return playlistDb(id).Set(strconv.Itoa(id), utils.StringifyJson(data))
 }
 
-func (*Exports) UpdatePlaylistTrackData(id int, data *PlaylistTrackData) error {
+func (playlist *Exports) UpdatePlaylistTrackData(id int, newData PlaylistTrackData) error {
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("playlist", "Updating track from playlist id: %d - %#v", id, data)
-	}
-	driver := playlistDbs[id]
-
-	var playlistData PlaylistTrackData
-	err := driver.Open(PlaylistTrackData{}).
-		Where("id", "=", data.Id).
-		First().
-		AsEntity(&playlistData)
-	//
-	if err != nil {
-		return err
+		debug.LogLabelf("playlist", "Updating track from playlist id: %d - %#v", id, newData)
 	}
 
-	if data.Artist != "" {
-		playlistData.Artist = data.Artist
-	}
+	return playlistDb(id).Update(strconv.Itoa(id), func(oldDataInDb string) (string, error) {
+		data, err := utils.ParseJsonString[PlaylistTrackData](oldDataInDb)
+		if err != nil {
+			return "", err
+		}
 
-	if data.Duration != 0 {
-		playlistData.Duration = data.Duration
-	}
+		if data.Artist != "" {
+			data.Artist = newData.Artist
+		}
 
-	if data.Icon != "" {
-		playlistData.Icon = data.Icon
-	}
+		if data.Duration != 0 {
+			data.Duration = newData.Duration
+		}
 
-	if data.Name != "" {
-		playlistData.Name = data.Name
-	}
+		if data.Icon != "" {
+			data.Icon = newData.Icon
+		}
 
-	return driver.Update(playlistData)
+		if data.Name != "" {
+			data.Name = newData.Name
+		}
+
+		return utils.StringifyJson(data), nil
+	})
 }
