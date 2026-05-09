@@ -1,15 +1,23 @@
 package db
 
 import (
+	"fmt"
 	"strings"
 	"toast/backend/debug"
 
 	"github.com/tidwall/buntdb"
 )
 
+func debugFormatDatabaseName(name string) string {
+	leftBracket := debug.FormatWith(debug.COLOR_GRAY, debug.STYLE_NONE, "[")
+	rightBracket := debug.FormatWith(debug.COLOR_GRAY, debug.STYLE_NONE, "]")
+	dbName := debug.FormatWith(debug.COLOR_MAGENTA, debug.STYLE_BOLD, name)
+	return fmt.Sprintf("%s%s%s", leftBracket, dbName, rightBracket)
+}
+
 func (db *Instance) Get(key string) (string, error) {
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("json/db", "[%s] get %s", db.name, key)
+		debug.InfoLabelf("db/json", "%s get %s", debugFormatDatabaseName(db.name), key)
 	}
 
 	out := ""
@@ -19,28 +27,47 @@ func (db *Instance) Get(key string) (string, error) {
 		return err
 	})
 
+	if debug.DEBUG_MODE {
+		if err != nil {
+			debug.ErrLabel("db/json", err)
+		}
+	}
+
 	return out, err
 }
 
 func (db *Instance) Set(key string, value string) error {
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("json/db", "[%s] set %s = %s", db.name, key, value)
+		debug.InfoLabelf("db/json", "%s set %s = %s", debugFormatDatabaseName(db.name), key, value)
 	}
 
-	return db.internal.Update(func(tx *buntdb.Tx) error {
+	err := db.internal.Update(func(tx *buntdb.Tx) error {
 		_, _, err := tx.Set(key, value, nil)
+		if debug.DEBUG_MODE {
+			if err != nil {
+				debug.ErrLabel("db/json", err)
+			}
+		}
 		return err
 	})
+
+	if debug.DEBUG_MODE {
+		if err != nil {
+			debug.ErrLabel("db/json", err)
+		}
+	}
+
+	return err
 }
 
 type updateFn func(oldData string) (string, error)
 
 func (db *Instance) Update(key string, updateFn updateFn) error {
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("json/db", "[%s] updating %s", db.name, key)
+		debug.InfoLabelf("db/json", "%s updating %s", debugFormatDatabaseName(db.name), key)
 	}
 
-	return db.internal.Update(func(tx *buntdb.Tx) error {
+	err := db.internal.Update(func(tx *buntdb.Tx) error {
 		value, err := tx.Get(key)
 		if err != nil {
 			return err
@@ -54,22 +81,35 @@ func (db *Instance) Update(key string, updateFn updateFn) error {
 		_, _, err = tx.Set(key, newValue, nil)
 		return err
 	})
+
+	if debug.DEBUG_MODE {
+		if err != nil {
+			debug.ErrLabel("db/json", err)
+		}
+	}
+
+	return err
 }
 
 func (db *Instance) Delete(key string) error {
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("json/db", "[%s] delete %s", db.name, key)
+		debug.InfoLabelf("db/json", "%s delete %s", debugFormatDatabaseName(db.name), key)
 	}
 
 	return db.internal.Update(func(tx *buntdb.Tx) error {
 		_, err := tx.Delete(key)
+		if debug.DEBUG_MODE {
+			if err != nil {
+				debug.ErrLabel("db/json", err)
+			}
+		}
 		return err
 	})
 }
 
 func (db *Instance) Iterate(fn func(key, data string)) {
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("json/db", "[%s] iterating...", db.name)
+		debug.InfoLabelf("db/json", "%s iterating...", debugFormatDatabaseName(db.name))
 	}
 
 	db.internal.View(func(tx *buntdb.Tx) error {
@@ -77,13 +117,20 @@ func (db *Instance) Iterate(fn func(key, data string)) {
 			fn(key, value)
 			return true
 		})
+
+		if debug.DEBUG_MODE {
+			if err != nil {
+				debug.ErrLabel("db/json", err)
+			}
+		}
+
 		return err
 	})
 }
 
 func (db *Instance) GetAll() string {
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("json/db", "[%s] get all data", db.name)
+		debug.InfoLabelf("db/json", "%s get all data", debugFormatDatabaseName(db.name))
 	}
 
 	var stringBuilder strings.Builder

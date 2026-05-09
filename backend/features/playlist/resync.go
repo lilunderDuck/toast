@@ -8,7 +8,7 @@ import (
 
 func (playlist *Exports) ResyncDuration(playlistId int) (*UpdatedPlaylist, error) {
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("playlist", "start resyncing all tracks duration...")
+		debug.InfoLabelf("playlist", "start resyncing all tracks duration...")
 	}
 
 	entries, err := playlist.GetAllPlaylistTrack(playlistId)
@@ -21,7 +21,11 @@ func (playlist *Exports) ResyncDuration(playlistId int) (*UpdatedPlaylist, error
 		duration, err := audio.GetDuration(getTrackPath(playlistId, entries[i].Filename))
 		if err != nil {
 			if debug.DEBUG_MODE {
-				debug.ErrLabelf("playlist", "failed to get %s duration, skipping...", entries[i].Filename)
+				debug.ErrLabelf(
+					"playlist",
+					"failed to get %s duration, skipping...",
+					debug.FormatFilename(entries[i].Filename),
+				)
 			}
 			continue
 		}
@@ -30,7 +34,12 @@ func (playlist *Exports) ResyncDuration(playlistId int) (*UpdatedPlaylist, error
 		entries[i].Duration = durationRounded
 		totalDuration += durationRounded
 		if debug.DEBUG_MODE {
-			debug.LogLabelf("playlist", "synced %s duration: %d seconds", entries[i].Filename, durationRounded)
+			debug.InfoLabelf(
+				"playlist",
+				"synced %s duration: %s seconds in total",
+				debug.FormatFilename(entries[i].Filename),
+				debug.FormatNumbers(totalDuration),
+			)
 		}
 	}
 
@@ -41,8 +50,12 @@ func (playlist *Exports) ResyncDuration(playlistId int) (*UpdatedPlaylist, error
 
 	metadata.TotalDuration = totalDuration
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("playlist", "updated playlist total duration: %d seconds", totalDuration)
-		debug.LogLabelf("playlist", "done!")
+		debug.InfoLabelf(
+			"playlist",
+			"updated playlist total duration: %s seconds in total",
+			debug.FormatNumbers(totalDuration),
+		)
+		debug.InfoLabelf("playlist", "done!")
 	}
 
 	return &UpdatedPlaylist{

@@ -16,11 +16,11 @@ func GetRandomStringWithinLength(length int) string {
 // Generates a random int within the specified length.
 func GetRandomIntWithinLength(length int) int {
 	result, err := strconv.Atoi(gonanoid.MustGenerate("123456789", length))
-	if debug.DEBUG_MODE {
-		if err != nil {
-			debug.Err(err)
-			panic(err) // make sure to yell whenever weird shit happens
+	if err != nil {
+		if debug.DEBUG_MODE {
+			debug.ErrLabel("rand", err)
 		}
+		panic(err) // make sure to yell whenever weird shit happens
 	}
 	return result
 }

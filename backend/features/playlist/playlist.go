@@ -44,7 +44,7 @@ func (playlist *Exports) CreatePlaylistData(data PlaylistData) error {
 
 func (playlist *Exports) UpdatePlaylistData(id int, newData PlaylistData) error {
 	if debug.DEBUG_MODE {
-		debug.LogLabel("playlist", "updating playlist data")
+		debug.InfoLabel("playlist", "updating playlist data")
 	}
 
 	mergedData := PlaylistData{}
@@ -58,7 +58,7 @@ func (playlist *Exports) UpdatePlaylistData(id int, newData PlaylistData) error 
 	}
 
 	if debug.DEBUG_MODE {
-		debug.LogLabel("playlist", "updating playlist data from database...")
+		debug.InfoLabel("playlist", "updating playlist data from database...")
 	}
 
 	err := playlist.database.Update(strconv.Itoa(id), func(oldRawData string) (string, error) {
@@ -92,7 +92,7 @@ func (playlist *Exports) UpdatePlaylistData(id int, newData PlaylistData) error 
 	}
 
 	if debug.DEBUG_MODE {
-		debug.LogLabel("playlist", "updating playlist data from database...")
+		debug.InfoLabel("playlist", "updating playlist data from database...")
 	}
 
 	err = utils.WriteJsonFile(getPlaylistMetadataFilePath(id), mergedData)

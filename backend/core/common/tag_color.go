@@ -120,7 +120,7 @@ func parseHexColor(hex string) *EncodedTagColorData {
 				HEX_FULL_LENGTH,
 				HEX_FULL_WITH_ALPHA_LENGTH,
 			)
-			debug.ErrLabel("color", insufficentLength, "color", hex)
+			debug.ErrLabel("color", insufficentLength)
 		}
 	}
 

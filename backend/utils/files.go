@@ -43,7 +43,7 @@ func GetCurrentDir() (currentPath string) {
 // intermediate directories in the path if they do not already exist.
 func CreateDirectory(path string) (makeDirError error) {
 	if debug.DEBUG_MODE {
-		debug.Logf("Create directory: %s", path)
+		debug.InfoLabelf("dir", "Create directory: %s", path)
 	}
 
 	return os.MkdirAll(path, 0666)
@@ -81,7 +81,7 @@ func IsDirectoryExist(path string) (existOrNot bool) {
 // It creates the file if it does not exist and overwrite it if it does.
 func WriteFile(pathToFile string, stuff []byte) (writeError error) {
 	if debug.DEBUG_MODE {
-		debug.Logf("Write file: %s", pathToFile)
+		debug.InfoLabelf("file", "Write file: %s", pathToFile)
 	}
 
 	return os.WriteFile(pathToFile, stuff, os.ModePerm)
@@ -101,7 +101,7 @@ func MoveFile(sourcePath string, destPath string) error {
 	sourceFile, err := os.Open(sourcePath)
 	if err != nil {
 		if debug.DEBUG_MODE {
-			debug.Err(err)
+			debug.ErrLabel("file", err)
 		}
 		return err
 	}
@@ -110,7 +110,7 @@ func MoveFile(sourcePath string, destPath string) error {
 	destFile, err := os.Create(destPath)
 	if err != nil {
 		if debug.DEBUG_MODE {
-			debug.Err(err)
+			debug.ErrLabel("file", err)
 		}
 		return err
 	}
@@ -119,7 +119,7 @@ func MoveFile(sourcePath string, destPath string) error {
 	_, err = io.Copy(destFile, sourceFile)
 	if err != nil {
 		if debug.DEBUG_MODE {
-			debug.Err(err)
+			debug.ErrLabel("file", err)
 		}
 		// Attempt to remove the destination file in case of copy error.
 		os.Remove(destPath)
@@ -134,13 +134,13 @@ func MoveFile(sourcePath string, destPath string) error {
 // a destination file with the same name is not overwritten by creating a new, unique name.
 func CopyFile(source, destinationPath string) error {
 	if debug.DEBUG_MODE {
-		debug.Log("Coping file.", "source", source, "dest path", destinationPath)
+		debug.InfoLabelf("file", "Coping file.\nsource:\t%s\ndest:\t%s", source, destinationPath)
 	}
 
 	sourceFile, err := os.Open(source)
 	if err != nil {
 		if debug.DEBUG_MODE {
-			debug.Err(err)
+			debug.ErrLabel("file", err)
 		}
 		return err
 	}
@@ -161,7 +161,7 @@ func CopyFile(source, destinationPath string) error {
 	if !IsDirectoryExist(destinationPath) {
 		if err := CreateDirectory(destinationPath); err != nil {
 			if debug.DEBUG_MODE {
-				debug.Err(err)
+				debug.ErrLabel("file", err)
 			}
 
 			return err
@@ -171,7 +171,7 @@ func CopyFile(source, destinationPath string) error {
 	destinationFile, err := os.Create(destinationFilePath)
 	if err != nil {
 		if debug.DEBUG_MODE {
-			debug.Err(err)
+			debug.ErrLabel("file", err)
 		}
 		return err
 	}
@@ -180,7 +180,7 @@ func CopyFile(source, destinationPath string) error {
 	_, err = io.Copy(destinationFile, sourceFile)
 	if debug.DEBUG_MODE {
 		if err != nil {
-			debug.Err(err)
+			debug.ErrLabel("file", err)
 		}
 	}
 

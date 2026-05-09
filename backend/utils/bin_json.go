@@ -21,7 +21,7 @@ import (
 //   - An error if something went wrong while saving, or nil if it saved correctly.
 func BSON_WriteFile(path string, anyObject any) (someError error) {
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("BSON", "write: %s, %#v", path, anyObject)
+		debug.InfoLabelf("BSON", "write: %s, %#v", path, anyObject)
 	}
 
 	dirToTheFile := filepath.Dir(path)
@@ -65,7 +65,7 @@ func base_BSON_ReadFile(path string) (dataOut []byte, someError error) {
 
 func BSON_ReadFile[T any](path string) (*T, error) {
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("BSON", "read: %s", path)
+		debug.InfoLabelf("BSON", "read: %s", path)
 	}
 
 	data, err := base_BSON_ReadFile(path)

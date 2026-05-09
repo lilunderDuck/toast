@@ -9,7 +9,7 @@ import (
 
 func ExecuteCommand(name string, command ...string) {
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("internals", "Executing command: %s %s", name, strings.Join(command, " "))
+		debug.InfoLabelf("internals", "Executing command: %s %s", name, strings.Join(command, " "))
 	}
 
 	cmd := exec.Command(name, command...)

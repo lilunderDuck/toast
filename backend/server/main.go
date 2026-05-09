@@ -19,16 +19,16 @@ func StartServer() {
 	// createApiRoute(server)
 	if debug.DEBUG_MODE {
 		server.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-			debug.Log("Handle request:", "path", r.URL.Path)
+			debug.InfoLabelf("assets", "Handle request: %s", debug.FormatPath(r.URL.Path))
 		})
 
-		debug.Log("One server comin' right up")
+		debug.InfoLabel("assets", "One server comin' right up")
 	}
 
 	err := http.ListenAndServe(":8000", server)
 	if debug.DEBUG_MODE {
 		if err != nil {
-			println(err) // don't make it crash on dev mode
+			debug.WarnLabelf("assets", "Server already been opened.\n%s", err.Error())
 		}
 	}
 }

@@ -24,7 +24,7 @@ type Instance struct {
 // the database is no longer needed to release resources.
 func (db *Instance) Close() error {
 	if debug.DEBUG_MODE {
-		debug.LogLabel("db/json", "Database closed")
+		debug.InfoLabelf("db/json", "%s Database closed.", debugFormatDatabaseName(db.name))
 	}
 	return db.internal.Close()
 }
@@ -45,7 +45,7 @@ var (
 // If the database for the given path is already open, it returns the existing instance.
 func Open(path string) (*Instance, error) {
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("db/json", "Opening: %s", path)
+		debug.InfoLabelf("db/json", "Opening: %s", debug.FormatPath(path))
 	}
 
 	if instance := GetInstance(path); instance != nil {
@@ -55,7 +55,7 @@ func Open(path string) (*Instance, error) {
 	db, err := buntdb.Open(path)
 	if err != nil {
 		if debug.DEBUG_MODE {
-			debug.Err(err, path)
+			debug.ErrLabel("db/json", err)
 		}
 
 		return nil, err
@@ -74,9 +74,6 @@ func Open(path string) (*Instance, error) {
 func Close(path string) {
 	globalInstance[path].Close()
 	delete(globalInstance, path)
-	if debug.DEBUG_MODE {
-		debug.Log("Database closed.", path)
-	}
 }
 
 // Closes all opened instances and clears the global singleton map.
@@ -84,9 +81,6 @@ func CloseAll() {
 	for path, instance := range globalInstance {
 		instance.Close()
 		delete(globalInstance, path)
-		if debug.DEBUG_MODE {
-			debug.Log("Database closed.", path)
-		}
 	}
 }
 
@@ -100,14 +94,14 @@ func GetInstance(path string) *Instance {
 	instance, ok := globalInstance[path]
 	if !ok {
 		if debug.DEBUG_MODE {
-			debug.LogLabelf("db/json", "No instance found: %s", path)
+			debug.InfoLabelf("db/json", "No instance found: %s", debug.FormatPath(path))
 		}
 
 		return nil
 	}
 
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("db/json", "Existing instance found: %s", path)
+		debug.InfoLabelf("db/json", "Existing instance found: %s", debug.FormatPath(path))
 	}
 
 	return instance

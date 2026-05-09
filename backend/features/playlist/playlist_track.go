@@ -24,7 +24,7 @@ func (playlist *Exports) GetAllPlaylistTrack(id int) ([]PlaylistTrackData, error
 
 func (playlist *Exports) AddPlaylistTrackData(id int, data PlaylistTrackData) error {
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("playlist", "Adding playlist tracks: %#v", data)
+		debug.InfoLabelf("playlist", "Adding playlist tracks: %#v", data)
 	}
 
 	return playlistDb(id).Set(strconv.Itoa(id), utils.StringifyJson(data))
@@ -32,7 +32,7 @@ func (playlist *Exports) AddPlaylistTrackData(id int, data PlaylistTrackData) er
 
 func (playlist *Exports) UpdatePlaylistTrackData(id int, newData PlaylistTrackData) error {
 	if debug.DEBUG_MODE {
-		debug.LogLabelf("playlist", "Updating track from playlist id: %d - %#v", id, newData)
+		debug.InfoLabelf("playlist", "Updating track from playlist id: %d - %#v", id, newData)
 	}
 
 	return playlistDb(id).Update(strconv.Itoa(id), func(oldDataInDb string) (string, error) {

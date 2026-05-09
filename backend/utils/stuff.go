@@ -7,7 +7,7 @@ import (
 func GetValueOrDefaultInMap[T comparable, U any](mapping map[T]U, key T) U {
 	value, ok := mapping[key]
 	if !ok && debug.DEBUG_MODE {
-		debug.Warnf("Invalid key for map %#v: %#v", mapping, key)
+		debug.WarnLabelf("", "Invalid key for map %#v: %#v", mapping, key)
 	}
 
 	return value

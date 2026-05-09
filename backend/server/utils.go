@@ -25,6 +25,10 @@ func serveStatic(serverInstance *http.ServeMux, path string, whatPath string) {
 	serverInstance.HandleFunc(path+"/{anything...}", func(res http.ResponseWriter, req *http.Request) {
 		serveFile(res, req, filepath.Join(whatPath, req.PathValue("anything")))
 	})
+
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("assets", "registered static assets handler: %s", path)
+	}
 }
 
 // Serves files from a given local directory, but with an added
@@ -52,6 +56,10 @@ func serveStaticWithFilter(
 
 		serveFile(res, req, filepath.Join(whatPath, path))
 	})
+
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("assets", "registered static assets handler with filter: %s", path)
+	}
 }
 
 // Serving file in a very efficent way. (which means it can deals with range request too).
@@ -60,7 +68,7 @@ func serveStaticWithFilter(
 // because CORS is a pain in the hell.
 func serveFile(res http.ResponseWriter, req *http.Request, filePath string) {
 	if debug.DEBUG_MODE {
-		debug.Logf("Serving file: %s", filePath)
+		debug.InfoLabelf("assets", "Serving file: %s", debug.FormatPath(filePath))
 	}
 
 	res.Header().Set("Access-Control-Allow-Origin", "*")
