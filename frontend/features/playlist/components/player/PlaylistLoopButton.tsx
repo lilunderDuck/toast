@@ -75,15 +75,15 @@ export function PlaylistLoopButton() {
       >
         <Switch>
           <Match when={loopingState$() === PlaylistLoopState.NO_REPEAT}>
-            <TbOutlineRepeatOff />
+            <TbOutlineRepeatOff size="1.2rem" />
           </Match>
 
           <Match when={loopingState$() === PlaylistLoopState.REPEAT_ONCE}>
-            <TbOutlineRepeatOnce />
+            <TbOutlineRepeatOnce size="1.2rem" />
           </Match>
 
           <Match when={loopingState$() === PlaylistLoopState.REPEAT_PLAYLIST}>
-            <TbOutlineRepeat />
+            <TbOutlineRepeat size="1.2rem" />
           </Match>
         </Switch>
       </button>

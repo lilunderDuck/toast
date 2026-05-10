@@ -82,6 +82,10 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
   }
 
   const play = () => {
+    const isEnded = currentProgress() === duration()
+    if (isEnded) {
+      setCurrentProgress(0)
+    }
     mediaRef.currentTime = currentProgress()
     // weird hack to forcefully play the audio.
     // this is a workaround for this error when calling play() method:
