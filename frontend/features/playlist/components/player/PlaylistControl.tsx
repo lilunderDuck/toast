@@ -1,5 +1,4 @@
 import { BsCaretLeftFill, BsCaretRightFill, BsVolumeUpFill } from "solid-icons/bs"
-import { ImLoop } from "solid-icons/im"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -7,6 +6,7 @@ import { Spacer, Tooltip } from "~/components"
 // ...
 import { usePlaylistContext } from "../../provider"
 import { PlaylistTogglePlayIcon } from "./PlaylistTogglePlayIcon"
+import type { ParentProps } from "solid-js"
 
 const style = stylex.create({
   playlistControl__mainControl: {
@@ -45,13 +45,10 @@ const style = stylex.create({
   playlistControl__playButton: {
     borderRadius: "50%",
     backgroundColor: "#3d4151",
-  },
-  playlistControl__spacer: {
-    width: "100%"
   }
 })
 
-export function PlaylistControl() {
+export function PlaylistControl(props: ParentProps) {
   const { shouldDisableNextBtn$, shouldDisablePrevBtn$, currentTrack$, player$, togglePlayTrack$, goToNextTrackIfCan$, goToPrevTrackIfCan$ } = usePlaylistContext()
 
   return (
@@ -91,11 +88,7 @@ export function PlaylistControl() {
       </div>
       <Spacer />
       <div {...stylex.attrs(style.playlistControl__otherControl)}>
-        <Tooltip label$="Loop currently played track">
-          <button {...stylex.attrs(style.playlistControl__smallButton, style.playlistControl__button)}>
-            <ImLoop size="1.2rem" />
-          </button>
-        </Tooltip>
+        {props.children}
         <Tooltip label$="Click to mute">
           <button {...stylex.attrs(style.playlistControl__smallButton, style.playlistControl__button)}>
             <BsVolumeUpFill size="1.2rem" />

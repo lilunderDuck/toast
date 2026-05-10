@@ -25,6 +25,11 @@
   background-color: var(--surface0) !important;
 }
 
+#item__playlistItem[data-current-track=true][data-loop-current=true],
+#item__playlistItem[data-current-track=true][data-loop-current=true]:hover {
+  background-color: #3862a6 !important;
+}
+
 #item__indexNumber {
   display: block;
 }
@@ -42,8 +47,4 @@
 #item__playlistItem:hover #item__playIcon,
 #item__playlistItem[data-current-track=true] #item__playIcon {
   display: block;
-}
-
-#item__playlistItem[data-current-track=true] #item__playIcon {
-  color: var(--sapphire);
 }

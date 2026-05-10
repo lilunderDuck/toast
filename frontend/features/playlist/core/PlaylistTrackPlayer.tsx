@@ -1,6 +1,5 @@
 import stylex from "@stylexjs/stylex"
-import { PlaylistControl, PlaylistCurrentTrackView, PlaylistProgress } from "../components"
-import { Spacer } from "~/components"
+import { PlaylistControl, PlaylistCurrentTrackView, PlaylistLoopButton, PlaylistProgress } from "../components"
 
 const style = stylex.create({
   player: {
@@ -26,7 +25,9 @@ export function PlaylistTrackPlayer() {
       <PlaylistProgress />
       <div {...stylex.attrs(style.player__content)}>
         <PlaylistCurrentTrackView />
-        <PlaylistControl />
+        <PlaylistControl>
+          <PlaylistLoopButton />
+        </PlaylistControl>
       </div>
     </div>
   )

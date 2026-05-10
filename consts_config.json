@@ -348,6 +348,15 @@
     ]
   },
   {
+    "type": "enum",
+    "name": "PlaylistLoopState",
+    "members": [
+      "REPEAT_ONCE",
+      "REPEAT_PLAYLIST",
+      "NO_REPEAT"
+    ]
+  },
+  {
     "type": "const",
     "name": "GALLERY_DEFAULT_ID",
     "value": ""

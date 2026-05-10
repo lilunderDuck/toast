@@ -1,4 +1,4 @@
-import { createContext, createSignal, type ParentProps, useContext, type Accessor, onMount, Show } from "solid-js"
+import { createContext, createSignal, type ParentProps, useContext, type Accessor, onMount, Show, type Setter } from "solid-js"
 import type { playlist } from "~/wailsjs/go/models"
 import { GetAllPlaylistTrack, GetPlaylistData, ResyncDuration,  } from "~/wailsjs/go/playlist/Exports"
 import { playlistTrackUrl } from "../api"
@@ -21,6 +21,8 @@ interface IPlaylistContext {
   goToNextTrackIfCan$(): void
   shouldDisableNextBtn$: Accessor<boolean>
   shouldDisablePrevBtn$: Accessor<boolean>
+  loopingState$: Accessor<PlaylistLoopState>
+  setLoopingState$: Setter<PlaylistLoopState>
   player$: MediaPlayer
 }
 
@@ -37,6 +39,8 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
 
   const [shouldDisableNextBtn, setShouldDisableNextBtn] = createSignal(true)
   const [shouldDisablePrevBtn, setShouldDisablePrevBtn] = createSignal(true)
+
+  const [loopingState, setLoopingState] = createSignal(PlaylistLoopState.NO_REPEAT)
 
   const audioPlayer = createMediaPlayer("audio", {
     onEnded$() {
@@ -93,13 +97,18 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
   }
 
   const goToNextTrackIfCan = () => {
+    if (loopingState() === PlaylistLoopState.REPEAT_ONCE) {
+      audioPlayer.play$()
+      return
+    }
+
     console.log("Going to next track...")
     console.assert(playlistData(), "playlist data have not been fetched yet")
     
     // Extra search to find the track current index.
     // Implementation notes: we also have to handle the case when you dragged 
     // other tracks/currently played tracks to somewhere, that means the index will be changed.
-    const [, currentIndex] = arrayObjects(playlistTracks()).find$(
+    let [, currentIndex] = arrayObjects(playlistTracks()).find$(
       it => it.id === currentTrack()!.data$.id
     )
     
@@ -107,8 +116,12 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
     const nextTrack = playlistTracks()[currentIndex + 1]
     console.log("Next track is", nextTrack)
     if (!nextTrack) {
-      setShouldDisableNextBtn(true)
-      return
+      if (loopingState() !== PlaylistLoopState.REPEAT_PLAYLIST) {
+        setShouldDisableNextBtn(true)
+        return
+      }
+      
+      currentIndex = -1
     }
 
     playTrack(currentIndex + 1)
@@ -165,6 +178,8 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
       goToPrevTrackIfCan$: goToPrevTrackIfCan,
       shouldDisableNextBtn$: shouldDisableNextBtn,
       shouldDisablePrevBtn$: shouldDisablePrevBtn,
+      loopingState$: loopingState, 
+      setLoopingState$: setLoopingState,
       player$: audioPlayer,
     }}>
       {props.children}

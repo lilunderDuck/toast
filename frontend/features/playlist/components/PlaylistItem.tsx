@@ -35,7 +35,7 @@ interface IPlaylistItemProps extends playlist.PlaylistTrackData {
 }
 
 export function PlaylistItem(props: IPlaylistItemProps) {
-  const { currentTrack$, togglePlayTrack$, player$ } = usePlaylistContext()
+  const { currentTrack$, togglePlayTrack$, player$, loopingState$ } = usePlaylistContext()
 
   const isCurrentTrack = () => currentTrack$()?.data$.id === props.id
 
@@ -51,6 +51,7 @@ export function PlaylistItem(props: IPlaylistItemProps) {
     <button 
       {...stylex.attrs(style.item)} 
       data-current-track={currentTrack$()?.data$.id === props.id}
+      data-loop-current={loopingState$() === PlaylistLoopState.REPEAT_ONCE}
       id="item__playlistItem"
     >
       <Tooltip label$="Play track" tooltipOptions$={{ placement: "right" }}>
