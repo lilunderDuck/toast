@@ -13,7 +13,7 @@ export default function PlaylistHeaderMoreOptionDropdown(props: IPlaylistHeaderM
   const resyncDuration = async() => {
     setDisableResyncDurationItem(true)
     await props.action$("resyncDuration$")
-    setDisableResyncDurationItem(true)
+    setDisableResyncDurationItem(false)
   }
 
   return (

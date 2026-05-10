@@ -2,11 +2,12 @@ import stylex from "@stylexjs/stylex"
 import "./PlaylistItem.css"
 // ...
 import type { playlist } from "~/wailsjs/go/models"
+import { Tooltip } from "~/components"
+import { formatSecondsToMMSS } from "~/utils"
 // ...
 import { usePlaylistContext } from "../provider"
 import { PlaylistIcon } from "./PlaylistIcon"
-import { FaSolidPlay } from "solid-icons/fa"
-import { Tooltip } from "~/components"
+import { PlaylistTogglePlayIcon } from "./player"
 
 const style = stylex.create({
   item: {
@@ -34,25 +35,35 @@ interface IPlaylistItemProps extends playlist.PlaylistTrackData {
 }
 
 export function PlaylistItem(props: IPlaylistItemProps) {
-  const { playTrack$, currentTrack$ } = usePlaylistContext()
+  const { currentTrack$, togglePlayTrack$, player$ } = usePlaylistContext()
+
+  const isCurrentTrack = () => currentTrack$()?.data$.id === props.id
+
+  const determineState = () => {
+    if (isCurrentTrack()) {
+      return player$.state$()
+    }
+
+    return MediaState.PLAYING // to show the play icon
+  }
 
   return (
     <button 
       {...stylex.attrs(style.item)} 
-      data-current-track={currentTrack$()?.id === props.id}
+      data-current-track={currentTrack$()?.data$.id === props.id}
       id="item__playlistItem"
     >
       <Tooltip label$="Play track" tooltipOptions$={{ placement: "right" }}>
         <div 
           {...stylex.attrs(style.item__index)}
           id="item__index"
-          onClick={() => playTrack$(props.index$)}
+          onClick={() => togglePlayTrack$(props.index$)}
         >
           <span id="item__indexNumber">
             {props.index$ + 1}
           </span>
           <span id="item__playIcon">
-            <FaSolidPlay />
+            <PlaylistTogglePlayIcon state$={determineState()} />
           </span>
         </div>
       </Tooltip>
@@ -64,7 +75,7 @@ export function PlaylistItem(props: IPlaylistItemProps) {
         {props.artist}
       </div>
       <div id="item__duration">
-        {props.duration}
+        {formatSecondsToMMSS(props.duration)}
       </div>
     </button>
   )

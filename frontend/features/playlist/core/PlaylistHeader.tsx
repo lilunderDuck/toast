@@ -1,9 +1,9 @@
-import { Icon } from "@kobalte/core/select"
 import { playlistIconUrl } from "../api"
 import { usePlaylistContext } from "../provider"
 
 import stylex from "@stylexjs/stylex"
 import { PlaylistHeaderDropdownButton } from "../components"
+import { formatSecondsToMMSS } from "~/utils"
 
 const style = stylex.create({
   header: {
@@ -40,11 +40,7 @@ const style = stylex.create({
   }
 })
 
-interface IPlaylistJeaderProps {
-  // define your component props here
-}
-
-export function PlaylistHeader(props: IPlaylistJeaderProps) {
+export function PlaylistHeader() {
   const { data$, tracks$ } = usePlaylistContext()
   const coverIconUrl = () => data$()?.coverIcon ? 
     `--cover-icon-url:url("${playlistIconUrl(data$()!.id, data$()!.coverIcon!)}")` as const :
@@ -56,7 +52,7 @@ export function PlaylistHeader(props: IPlaylistJeaderProps) {
       <div {...stylex.attrs(style.header__titleWrap)}>
         <h1>{data$()?.name}</h1>
         <span {...stylex.attrs(style.header__info)}>
-          {tracks$().length} tracks • Runtime: {data$()?.totalDuration}
+          {tracks$().length} tracks • Runtime: {formatSecondsToMMSS(data$()?.totalDuration ?? 0)}
         </span>
       </div>
       <div {...stylex.attrs(style.header__moreOptionButton)}>
