@@ -26,7 +26,6 @@ export function PlaylistTrackPlayer() {
       <PlaylistProgress />
       <div {...stylex.attrs(style.player__content)}>
         <PlaylistCurrentTrackView />
-        <Spacer />
         <PlaylistControl />
       </div>
     </div>

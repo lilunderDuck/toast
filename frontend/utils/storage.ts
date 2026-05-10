@@ -3,7 +3,7 @@ export interface IStorage<Mapping extends Record<string, any>> {
    * @param key The key to retrieve the value for.
    * @returns The value associated with the key or `undefined` if the key does not exist.
    */
-  get$<T extends keyof Mapping>(key: T): Mapping[T]
+  get$<T extends keyof Mapping>(key: T): Mapping[T] | null
   /**Sets the value associated with the given key.
    * @param key The key to set the value for.
    * @param value The value to set for the key.

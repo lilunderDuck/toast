@@ -11,10 +11,11 @@ const style = stylex.create({
     gap: 10,
     alignItems: "center",
     userSelect: "none",
-    paddingInline: 10
+    paddingInline: 10,
+    paddingBlock: 5
   },
   player__progressTime: {
-    fontSize: 14
+    fontSize: 13
   },
   player__progressWrap: {
     width: "100%",
@@ -40,14 +41,18 @@ export function PlaylistProgress() {
 
   return (
     <div {...stylex.attrs(style.player__progressContainer)}>
-      <span>{formatSecondsToMMSS(player$.currentProgress$())}</span>
+      <span {...stylex.attrs(style.player__progressTime)}>
+        {formatSecondsToMMSS(player$.currentProgress$())}
+      </span>
       <div {...stylex.attrs(style.player__progressWrap)}>
         <div
           {...stylex.attrs(style.player__progress)}
           style={`--current-progress:${getCurrentProgress()}%`}
         />
       </div>
-      <span>{formatSecondsToMMSS(player$.totalDuration$())}</span>
+      <span {...stylex.attrs(style.player__progressTime)}>
+        {formatSecondsToMMSS(player$.totalDuration$())}
+      </span>
     </div>
   )
 }

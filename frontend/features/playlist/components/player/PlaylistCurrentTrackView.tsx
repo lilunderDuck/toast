@@ -10,21 +10,30 @@ const style = stylex.create({
     alignItems: "center",
     gap: 10,
     userSelect: "none",
-    width: "14rem"
-  }
+    width: "24rem",
+    flexShrink: 0
+  },
+  playlist__nameAndAuthor: {
+    display: "flex",
+    alignItems: "stretch",
+    flexDirection: "column"
+  },
 })
 
 export function PlaylistCurrentTrackView() {
   const { currentTrack$ } = usePlaylistContext()
   return (
-    <div {...stylex.attrs(style.playlist__currentTrack)}>
-      <Show when={currentTrack$()}>
-        <PlaylistIcon size$="4rem" icon$={currentTrack$()?.data$.icon ?? ""} />
-        <div>
-          <div>{currentTrack$()!.data$.name}</div>
-          <div>{currentTrack$()!.data$.artist}</div>
-        </div>
-      </Show>
-    </div>
+    <>
+      <div {...stylex.attrs(style.playlist__currentTrack)}>
+        <Show when={currentTrack$()}>
+          <PlaylistIcon size$="4rem" icon$={currentTrack$()?.data$.icon ?? ""} />
+          <div {...stylex.attrs(style.playlist__nameAndAuthor)}>
+            <h4>{currentTrack$()!.data$.name}</h4>
+            <div>{currentTrack$()!.data$.artist}</div>
+          </div>
+        </Show>
+      </div>
+      <div />
+    </>
   )
 }
