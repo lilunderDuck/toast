@@ -44,6 +44,10 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
 
   const audioPlayer = createMediaPlayer("audio", {
     onEnded$() {
+      if (loopingState() === PlaylistLoopState.REPEAT_ONCE) {
+        audioPlayer.play$()
+        return
+      }
       goToNextTrackIfCan()
     }
   })
@@ -97,11 +101,6 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
   }
 
   const goToNextTrackIfCan = () => {
-    if (loopingState() === PlaylistLoopState.REPEAT_ONCE) {
-      audioPlayer.play$()
-      return
-    }
-
     console.log("Going to next track...")
     console.assert(playlistData(), "playlist data have not been fetched yet")
     
