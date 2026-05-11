@@ -5,7 +5,7 @@ import { stylex as stylexPlugin } from "vite-plugin-stylex-dev"
 import { optimizeCssModules } from "vite-plugin-optimize-css-modules"
 // ... 
 import tsconfig from './tsconfig.json'
-import { getAliasPath, ESBUILD_OPTIONS, OUTPUT_FILENAME, DEV_OPTIMIZE_OPTIONS, generateConstsTypeThenSave, defineAllConstants } from "./addon/config"
+import { getAliasPath, ESBUILD_OPTIONS, OUTPUT_FILENAME, generateConstsTypeThenSave, defineAllConstants } from "./addon/config"
 import { macroPlugin } from './addon/macro'
 
 // Make sure to update the code in ./backend/internals/path.go if you're planning
@@ -54,7 +54,6 @@ export default defineConfig(({ command }) => {
     },
     define: definedMapping,
     publicDir: "./frontend/public/",
-    optimizeDeps: DEV_OPTIMIZE_OPTIONS,
     build: {
       target: 'esnext',
       outDir: BUILD_SAVED_PATH,

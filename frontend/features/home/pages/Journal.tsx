@@ -2,12 +2,12 @@ import { createResource, For, Show } from "solid-js"
 import { MdOutlineFilter_list_off } from 'solid-icons/md'
 // ...
 import { GetGroups } from "~/wailsjs/go/group/Exports"
+import { Spacer } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
 import { CreateJournalButton, JournalBlock, JournalListHeader, TagListButton, TotalJournalText } from "../components"
 import { JournalHomeProvider } from "../provider/JournalHomeProvider"
-import { Spacer } from "~/components"
 
 const style = stylex.create({
   section: {
