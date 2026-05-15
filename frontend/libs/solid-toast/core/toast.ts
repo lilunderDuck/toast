@@ -83,13 +83,15 @@ toast.dismiss = (toastId?: string) => {
   })
 }
 
+export type ToastPromiseMessages<T> = {
+  loading: Renderable
+  success: ValueOrFunction<Renderable, T>
+  error: ValueOrFunction<Renderable, any>
+}
+
 toast.promise = <T>(
   promise: Promise<T>,
-  msgs: {
-    loading: Renderable
-    success: ValueOrFunction<Renderable, T>
-    error: ValueOrFunction<Renderable, any>
-  },
+  msgs: ToastPromiseMessages<T>,
   opts?: ToastOptions
 ) => {
   const id = toast.loading(msgs.loading, { ...opts, duration: 2000, })

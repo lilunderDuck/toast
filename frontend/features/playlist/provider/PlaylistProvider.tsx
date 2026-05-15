@@ -4,6 +4,8 @@ import { GetAllPlaylistTrack, GetPlaylistData, ResyncDuration,  } from "~/wailsj
 import { playlistTrackUrl } from "../api"
 import { arrayObjects } from "~/utils"
 import { createMediaPlayer, type MediaPlayer } from "~/hooks"
+import { toast } from "~/libs/solid-toast"
+import { playlistDurationResyncToast } from "../components"
 
 interface ICurrentTrackData {
   data$: playlist.PlaylistTrackData
@@ -147,7 +149,9 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
 
   const resyncTracksDuration = async() => {
     console.assert(playlistData(), "playlist data have not been fetched yet")
-    const updatedData = await ResyncDuration(playlistData()!.id)
+    const updatedData = await toast.promise(ResyncDuration(playlistData()!.id), playlistDurationResyncToast, {
+      position: ToastPosition.TOP_RIGHT
+    })
     setPlaylistData(updatedData.metadata)
     setPlaylistTrack(updatedData.tracks)
   }

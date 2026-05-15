@@ -25,8 +25,8 @@
   background-color: var(--surface0) !important;
 }
 
-#item__playlistItem[data-current-track=true][data-loop-current=true],
-#item__playlistItem[data-current-track=true][data-loop-current=true]:hover {
+[data-loop-current=true] #item__playlistItem[data-current-track=true],
+[data-loop-current=true] #item__playlistItem[data-current-track=true]:hover {
   background-color: #3862a6 !important;
 }
 

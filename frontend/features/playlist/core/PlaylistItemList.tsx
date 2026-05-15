@@ -6,7 +6,6 @@ import { PlaylistItem } from "../components"
 const style = stylex.create({
   itemList: {
     paddingBottom: "10rem",
-    paddingRight: 20,
   }
 })
 
@@ -15,10 +14,13 @@ interface IPlaylistItemListProps {
 }
 
 export function PlaylistItemList(props: IPlaylistItemListProps) {
-  const { tracks$ } = usePlaylistContext()
+  const { tracks$, loopingState$ } = usePlaylistContext()
   
   return (
-    <div {...stylex.attrs(style.itemList)}>
+    <div 
+      {...stylex.attrs(style.itemList)} 
+      data-loop-current={loopingState$() === PlaylistLoopState.REPEAT_ONCE}
+    >
       <For each={tracks$()}>
         {(it, index) => (
           <PlaylistItem {...it} index$={index()} />
