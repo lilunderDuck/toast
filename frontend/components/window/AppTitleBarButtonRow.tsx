@@ -37,14 +37,16 @@ const style = stylex.create({
   },
   titleBar__otherButton: {
     paddingInline: 'var(--title-bar-button-padding)',
+    transition: "0.15s ease-out",
     ":hover": {
       backgroundColor: "var(--surface0)"
     }
   },
   titleBar__closeButton: {
     paddingInline: 'var(--title-bar-button-padding)',
+    transition: "0.15s ease-out",
     ":hover": {
-      backgroundColor: "var(--red9)"
+      backgroundColor: "#ff4747"
     }
   }
 })
