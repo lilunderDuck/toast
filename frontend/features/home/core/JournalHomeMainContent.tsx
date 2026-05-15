@@ -3,6 +3,8 @@ import { useJournalHomeRootContext } from "../provider/JournalHomeRootProvider"
 
 import stylex from "@stylexjs/stylex"
 import { AppTitleBarDraggable } from "~/components"
+import Journal from "../pages/Journal"
+import Collection from "../pages/Collection"
 
 const style = stylex.create({
   titleBar: {
@@ -11,9 +13,6 @@ const style = stylex.create({
     right: 0
   }
 })
-
-const Journal = lazy(() => import("../pages/Journal"))
-const Collection = lazy(() => import("../pages/Collection"))
 
 export function JournalHomeMainContent() {
   const { currentPage$ } = useJournalHomeRootContext()

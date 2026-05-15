@@ -1,10 +1,14 @@
-import stylex from "@stylexjs/stylex"
-import { For } from "solid-js"
-import "./JournalHomeSidebar.css"
-import { AppTitleBarDraggable } from "~/components"
-import { useJournalHomeRootContext } from "../provider/JournalHomeRootProvider"
 import { BiSolidNote } from "solid-icons/bi"
 import { RiMediaPlayList2Fill } from "solid-icons/ri"
+import { For } from "solid-js"
+// ...
+import stylex from "@stylexjs/stylex"
+import "./JournalHomeSidebar.css"
+import toastIcon from "~/assets/toast.jpg"
+// ...
+import { AppTitleBarDraggable } from "~/components"
+// ...
+import { useJournalHomeRootContext } from "../provider/JournalHomeRootProvider"
 
 const style = stylex.create({
   sidebar: {
@@ -26,7 +30,16 @@ const style = stylex.create({
   },
   sidebar__titleBar: {
     width: "100%",
+    marginBottom: 10
   },
+  sidebar__titleBarIcon: {
+    width: "calc(var(--title-bar-thiccness) - 6px)",
+    height: "calc(var(--title-bar-thiccness) - 6px)",
+    background: "center center no-repeat var(--icon)",
+    backgroundSize: "cover",
+    borderRadius: "50%",
+    marginLeft: 10
+  }
 })
 
 export function JournalHomeSidebar() {
@@ -47,7 +60,12 @@ export function JournalHomeSidebar() {
 
   return (
     <aside {...stylex.attrs(style.sidebar)}>
-      <AppTitleBarDraggable {...stylex.attrs(style.sidebar__titleBar)} />
+      <AppTitleBarDraggable {...stylex.attrs(style.sidebar__titleBar)}>
+        <div 
+          {...stylex.attrs(style.sidebar__titleBarIcon)}  
+          style={`--icon:url("${toastIcon}")`}
+        />
+      </AppTitleBarDraggable>
       <For each={SIDEBAR_ITEMS}>
         {it => (
           <button 
