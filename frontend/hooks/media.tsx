@@ -1,4 +1,7 @@
-import { createEffect, createSignal, Show } from "solid-js"
+import { createEffect, createSignal } from "solid-js"
+// ...
+import { getMediaCurrentPercentage, getMediaCurrentTimeByPercentage } from "~/utils" // documentation only
+import { MediaProgressSlider } from "~/components" // documentation only
 
 type MediaPlayerProps = Omit<
   HTMLAttributes<"audio" | "video">,
@@ -10,11 +13,21 @@ interface IMediaPlayerListener {
   onEnded$(): void
 }
 
+/**
+ * @param type 
+ * @param listener
+ * @see {@link MediaProgressSlider} - Helper component to handle seeking and stuff
+ * @see {@link getMediaCurrentPercentage}
+ * @see {@link getMediaCurrentTimeByPercentage}
+ * @returns 
+ */
 export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IMediaPlayerListener>) {
   const [mediaState, setMediaState] = createSignal(MediaState.LOADING)
   const [duration, setDuration] = createSignal(0)
   const [buffered, setBuffered] = createSignal(0)
   const [currentProgress, setCurrentProgress] = createSignal(0)
+  const [currentVolume, setCurentVolume] = createSignal(100)
+  const [isMuted, setIsMuted] = createSignal(false)
 
   if (TOAST_DEBUG) {
     const stateMapping: Record<MediaState, string> = {
@@ -103,14 +116,21 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
 
   const changeVolume = (volume: number) => {
     console.assert(volume >= 0 && volume <= 100, "[media player] volume must not be negative and must not over 100. Your current volume is: " + volume)
-    mediaRef.volume = volume
+    console.assert(!isNaN(volume), "[media player] volume is not a number")
+    mediaRef.volume = volume / 100
     console.log("[media player] Media volume changed to:", volume)
+    setCurentVolume(volume)
   }
 
   const changeCurrentTime = (time: number) => {
     setCurrentProgress(time)
     mediaRef.currentTime = time
     console.log("[media player] current time changed to", time, "seconds")
+  }
+
+  const toggleMute = () => {
+    setIsMuted(prev => !prev)
+    mediaRef.muted = isMuted()
   }
 
   return {
@@ -124,6 +144,9 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
     setVolume$: changeVolume,
     changeSource$: changeSource,
     ref$: () => mediaRef,
+    volume$: currentVolume,
+    isMuted$: isMuted,
+    toggleMute$: toggleMute,
     Player$: (props: MediaPlayerProps) => (
       <video ref={mediaRef} {...props} {...mediaProps} />
     )

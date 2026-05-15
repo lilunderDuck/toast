@@ -1,6 +1,7 @@
 import stylex from "@stylexjs/stylex"
-import __style from "./MediaProgressSlider.module.css"
+import "./MediaProgressSlider.css"
 import { createSignal, splitProps } from "solid-js"
+import { SliderInput } from "./SliderInput"
 
 const style = stylex.create({
   slider: {
@@ -8,31 +9,20 @@ const style = stylex.create({
     position: "relative"
   },
   slider__input: {
-    appearance: 'none',
-    width: '100%',
-    background: 'var(--surface2)',
-    outline: 'none',
-    opacity: 0.7,
-    position: "absolute",
-    transition: 'opacity .2s',
-    ":hover": {
-      opacity: 1
-    },
-    "::-webkit-slider-thumb": {
-      cursor: "pointer",
-      appearance: 'none',
-      backgroundColor: "var(--blue9)",
-    }
+    top: -2,
+    width: "100%",  
   },
   slider__progress: {
     width: "var(--slider-progress)",
-    backgroundColor: "var(--blue9)",
-    zIndex: 1
+    backgroundColor: "var(--blue)",
+    zIndex: 1,
+    borderRadius: 6
   },
   slider__buffered: {
     width: "var(--slider-buffered-progress)",
     backgroundColor: "var(--surface0)",
-    zIndex: 0
+    zIndex: 0,
+    borderRadius: 6
   }
 })
 
@@ -66,21 +56,25 @@ export function MediaProgressSlider(props: ISliderProps) {
   }
 
   return (
-    <div id={__style.slider} {...stylex.attrs(style.slider)} style={{
-      "--slider-progress": `${getCurrentProgress()}%`,
-      "--slider-buffered-progress": `${props.bufferedProgress$}%`
-    }}>
+    <div 
+      id="progressSlider"
+      style={`--slider-progress:${getCurrentProgress()}%`} 
+      {...stylex.attrs(style.slider)}
+    >
       <div {...stylex.attrs(style.slider__progress)} />
-      <div {...stylex.attrs(style.slider__buffered)} />
-      <input
+      <div 
+        {...stylex.attrs(style.slider__buffered)} 
+        style={`--slider-buffered-progress:${props.bufferedProgress$}%`}
+      />
+      <SliderInput
         {...stylex.attrs(style.slider__input)}
-        type="range"
         min={0}
         max={100}
         step={0.0000001}
         value={getCurrentProgress()}
         onInput={inputIsSliding}
         onChange={updateNewProgress}
+        id="progressSlider__input"
         {...itsProps}
       />
     </div>

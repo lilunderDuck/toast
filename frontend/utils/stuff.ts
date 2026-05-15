@@ -50,20 +50,11 @@ export function formatSecondsToMMSS(seconds: number) {
   return new Date(seconds * 1000).toISOString().substr(11, 8)
 }
 
-export function getNavigationType(): 'navigate' | 'reload' | 'back_forward' | 'prerender' | undefined {
-  // There is one navigation entry per document
-  const entry = performance.getEntriesByType('navigation')[0]
-  console.log(entry)
-  if (entry && typeof entry.type === 'string') {
-    // 'navigate' | 'reload' | 'back_forward' | 'prerender'
-    return entry.type;
-  }
-  // Fallback to the deprecated API (values: 0,1,2,255)
-  if (performance.navigation) {
-    const t = performance.navigation.type;
-    return t === 1 ? 'reload'
-         : t === 2 ? 'back_forward'
-         : 'navigate';
-  }
-  return undefined;
+export function getMediaCurrentPercentage(currentProgressInSeconds: number, mediaTotalDuration: number) {
+  const progress = (currentProgressInSeconds / mediaTotalDuration) * 100
+  return isNaN(progress) ? 0 : progress
+}
+
+export function getMediaCurrentTimeByPercentage(inPercentage: number, mediaTotalDuration: number) {
+  return mediaTotalDuration * (inPercentage / 100)
 }

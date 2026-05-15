@@ -1,8 +1,9 @@
 import stylex from "@stylexjs/stylex"
 // ...
-import { formatSecondsToMMSS } from "~/utils"
+import { formatSecondsToMMSS, getMediaCurrentPercentage, getMediaCurrentTimeByPercentage } from "~/utils"
 // ...
 import { usePlaylistContext } from "../../provider"
+import { MediaProgressSlider } from "~/components"
 
 const style = stylex.create({
   player__progressContainer: {
@@ -32,24 +33,23 @@ const style = stylex.create({
 })
 
 export function PlaylistProgress() {
-  const { player$ } = usePlaylistContext()
-  
-  const getCurrentProgress = () => {
-    const progress = (player$.currentProgress$() / player$.totalDuration$()) * 100
-    return isNaN(progress) ? 0 : progress
-  }
+  const { player$, data$ } = usePlaylistContext()
 
   return (
     <div {...stylex.attrs(style.player__progressContainer)}>
       <span {...stylex.attrs(style.player__progressTime)}>
         {formatSecondsToMMSS(player$.currentProgress$())}
       </span>
-      <div {...stylex.attrs(style.player__progressWrap)}>
-        <div
-          {...stylex.attrs(style.player__progress)}
-          style={`--current-progress:${getCurrentProgress()}%`}
-        />
-      </div>
+      <MediaProgressSlider 
+        bufferedProgress$={player$.bufferedProgress$()}
+        onChange$={(percent) => {
+          player$.changeCurrentTime$(
+            getMediaCurrentTimeByPercentage(percent, player$.totalDuration$())
+          )
+        }}
+        progress$={getMediaCurrentPercentage(player$.currentProgress$(), player$.totalDuration$())}
+        disabled={!data$()}
+      />
       <span {...stylex.attrs(style.player__progressTime)}>
         {formatSecondsToMMSS(player$.totalDuration$())}
       </span>

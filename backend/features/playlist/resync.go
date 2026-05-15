@@ -64,8 +64,20 @@ func (playlist *Exports) ResyncDuration(playlistId int) (*UpdatedPlaylist, error
 	}, nil
 }
 
-func (playlist *Exports) ResyncAllPlaylists() error {
-	return nil
+func (playlist *Exports) ResyncAllPlaylists() ([]PlaylistData, error) {
+	playlists := playlist.GetAllPlaylistsData()
+	if len(playlists) == 0 {
+		if debug.DEBUG_MODE {
+			debug.InfoLabel("playlist", "No playlist yet, no need to resync")
+		}
+		return playlists, nil
+	}
+
+	if debug.DEBUG_MODE {
+		debug.InfoLabel("playlist", "Start updating existing playlist metadata")
+	}
+
+	return playlists, nil
 }
 
 func (playlist *Exports) DontCutOffMyTrack(playlistId int) error {

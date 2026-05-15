@@ -132,3 +132,7 @@ a[data-no-focus-highlight] {
 * ::backdrop {
   backdrop-filter: blur(2px);
 }
+
+*:disabled {
+  cursor: not-allowed;
+}
