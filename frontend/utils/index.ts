@@ -1,8 +1,6 @@
 export * from "./style"
 export * from "./event"
 export * from './stuff'
-export * from './storage'
 export * from './random'
-export * from './db'
 // ...
 export * from './structs'

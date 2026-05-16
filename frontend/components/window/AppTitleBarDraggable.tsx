@@ -9,7 +9,7 @@ const style = stylex.create({
     userSelect: "none",
     display: "flex",
     alignItems: "center",
-    zIndex: 9
+    zIndex: 9,
   }
 })
 

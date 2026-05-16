@@ -34,7 +34,7 @@ export default function Collection() {
   onCleanup(CleanupPlaylists)
   
   return (
-    <main {...stylex.attrs(style.collection)}>
+    <main {...stylex.attrs(style.collection)} id="journalHome__mainContent">
       <h1>Collection</h1>
       <CollectionDivider>
         Playlist

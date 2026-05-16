@@ -1,4 +1,4 @@
-import { type Accessor, createContext, createSignal, type ParentProps, type Setter, useContext } from "solid-js"
+import { type Accessor, createContext, createSignal, type ParentProps, useContext } from "solid-js"
 // ...
 import { toast } from "~/libs/solid-toast"
 import { arrayObjects } from "~/utils"

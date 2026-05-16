@@ -1,0 +1,4 @@
+[data-journal-home-show-sidebar=false] #journalHome__mainContent {
+  padding-top: var(--title-bar-thiccness);
+  padding-inline: 10px;
+}

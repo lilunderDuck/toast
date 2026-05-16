@@ -1,4 +1,4 @@
-import { type FieldValues, createForm, type SubmitHandler, reset, type FieldsStore, type FieldPath } from "@modular-forms/solid"
+import { type FieldValues, createForm, type SubmitHandler, type FieldsStore, type FieldPath } from "@modular-forms/solid"
 import { createSignal, type JSX } from "solid-js"
 // ...
 import { Button, ButtonRow } from "~/components"

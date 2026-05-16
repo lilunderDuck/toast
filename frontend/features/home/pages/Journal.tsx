@@ -54,7 +54,7 @@ export default function Journal() {
 
   return (
     <JournalHomeProvider groups$={resource() ?? []}>
-      <main {...stylex.attrs(style.section)}>
+      <main {...stylex.attrs(style.section)} id="journalHome__mainContent">
         <JournalListHeader name$="Your journal" />
         <header {...stylex.attrs(style.section__header)}>
           <CreateJournalButton />
