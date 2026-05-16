@@ -1,6 +1,7 @@
 import { Group, Portal, RadioGroup, Sub, Trigger } from "@kobalte/core/dropdown-menu"
 
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   dropdown__trigger: {
@@ -9,7 +10,7 @@ const style = stylex.create({
 })
 
 export const DropdownMenuTrigger: typeof Trigger = (props) => {
-  return <Trigger {...props} class={`${stylex.attrs(style.dropdown__trigger).class} ${props!.class}`} />
+  return <Trigger {...props} class={`${CLS(style.dropdown__trigger)} ${props!.class}`} />
 }
 
 export const DropdownMenuPortal = Portal

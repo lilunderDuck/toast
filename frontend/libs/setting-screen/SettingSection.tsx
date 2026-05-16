@@ -67,11 +67,11 @@ interface ISettingSectionProps<T extends SettingType> {
 
 export function SettingSection<T extends SettingType>(props: ParentProps<ISettingSectionProps<T>>) {
   const getInputStyle = () => props.type$ === SettingType.RANGE ? 
-    stylex.attrs(style.seciton__inputRange).class :
-    stylex.attrs(style.seciton__inputEverythingElse).class
+    CLS(style.seciton__inputRange) :
+    CLS(style.seciton__inputEverythingElse)
   // 
 
-  const getNameStyle = () => props.disabled$ ? stylex.attrs(style.section__disabledName).class : ''
+  const getNameStyle = () => props.disabled$ ? CLS(style.section__disabledName) : ''
 
   return (
     <section {...stylex.attrs(style.section)}>
@@ -102,7 +102,7 @@ export function SettingSection<T extends SettingType>(props: ParentProps<ISettin
           </Switch>
         </div>
         <Show when={props.description$}>
-          <p class={`${stylex.attrs(style.description).class} ${props.disabled$ ? stylex.attrs(style.section__disabledDescription) : ""}`}>
+          <p class={`${CLS(style.description)} ${props.disabled$ ? stylex.attrs(style.section__disabledDescription) : ""}`}>
             {props.description$}
           </p>
         </Show>

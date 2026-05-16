@@ -4,6 +4,7 @@ import { splitProps } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { type TabsListProps, List } from "@kobalte/core/tabs"
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   tabsList: {
@@ -27,7 +28,7 @@ export function TabsList<T extends ValidComponent = "div">(
   return (
     <List
       {...others}
-      class={`${stylex.attrs(style.tabsList).class} ${local.class ?? ""}`}
+      class={`${CLS(style.tabsList)} ${local.class ?? ""}`}
     />
   )
 }

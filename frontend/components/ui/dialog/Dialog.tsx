@@ -6,6 +6,7 @@ import { CloseButton, Content, Description, Overlay, Portal, Root, Title, Trigge
 // ...
 import stylex from "@stylexjs/stylex"
 import '~/styles/scrollbar.css'
+import { CLS } from "macro-def"
 // ...
 
 const style = stylex.create({
@@ -144,7 +145,7 @@ const DialogContent = <T extends ValidComponent = "div">(
   return (
     <DialogPortal closeOnClickOutside$={props.closeOnClickOutside$}>
       <Content
-        class={`${stylex.attrs(style.content).class} component-dialog-content ${props.class ?? ""}`}
+        class={`${CLS(style.content)} component-dialog-content ${props.class ?? ""}`}
         {...rest}
       >
         {props.children}
@@ -167,7 +168,7 @@ const DialogHeader: Component<ComponentProps<"h2">> = (props) => {
 const DialogFooter: Component<ComponentProps<"div">> = (props) => {
   const [, rest] = splitProps(props, ["class"])
   return (
-    <div class={`${stylex.attrs(style.footer).class} ${props.class ?? ""}`} {...rest} />
+    <div class={`${CLS(style.footer)} ${props.class ?? ""}`} {...rest} />
   )
 }
 
@@ -181,7 +182,7 @@ const DialogTitle = <T extends ValidComponent = "h2">(
   const [, rest] = splitProps(props as IDialogTitleProps, ["class"])
   return (
     <Title
-      class={`${stylex.attrs(style.title).class} ${props.class ?? ""}`}
+      class={`${CLS(style.title)} ${props.class ?? ""}`}
       {...rest}
     />
   )
@@ -197,7 +198,7 @@ const DialogDescription = <T extends ValidComponent = "p">(
   const [, rest] = splitProps(props as IDialogDescriptionProps, ["class"])
   return (
     <Description
-      class={`${stylex.attrs(style.description).class} ${props.class ?? ""}`}
+      class={`${CLS(style.description)} ${props.class ?? ""}`}
       {...rest}
     />
   )

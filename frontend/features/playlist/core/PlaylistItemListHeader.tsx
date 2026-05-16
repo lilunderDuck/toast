@@ -2,6 +2,7 @@ import stylex from "@stylexjs/stylex"
 import "../components/PlaylistItem.css"
 import "~/styles/shorthand.css" // explicit import
 import { PlaylistItemListHeaderSeperator } from "../components"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   header: {
@@ -18,7 +19,7 @@ const style = stylex.create({
 
 export function PlaylistItemListHeader() {
   return (
-    <header class={`${stylex.attrs(style.header).class} showOnHover`}>
+    <header class={`${CLS(style.header)} showOnHover`}>
       <div id="item__index">
         #
       </div>

@@ -1,4 +1,5 @@
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   header__seperator: {
@@ -16,7 +17,7 @@ interface IPlaylistItemListHeaderSeperatorProps {
 export function PlaylistItemListHeaderSeperator(props: IPlaylistItemListHeaderSeperatorProps) {
   return (
     <div 
-      class={`${stylex.attrs(style.header__seperator).class} ${props.class}`} 
+      class={`${CLS(style.header__seperator)} ${props.class}`} 
     />
   )
 }

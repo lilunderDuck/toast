@@ -7,6 +7,7 @@ import "./[playlistId].css"
 import { AppTitleBarDraggable, Button, Tooltip } from "~/components"
 import { PlaylistHeader, PlaylistItemList, PlaylistItemListHeader, PlaylistProvider, PlaylistTrackPlayer } from "~/features/playlist"
 import { BsArrowLeft } from "solid-icons/bs"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   page: {
@@ -37,7 +38,7 @@ export default function PlaylistPage() {
         </A>
       </AppTitleBarDraggable>
       <div 
-        class={`${stylex.attrs(style.page).class} scrollbar scrollbarVertical`}
+        class={`${CLS(style.page)} scrollbar scrollbarVertical`}
         id="playlist__page"
       >
         <PlaylistHeader />

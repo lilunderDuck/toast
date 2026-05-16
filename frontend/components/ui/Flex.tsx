@@ -1,4 +1,5 @@
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   spacer: {
@@ -9,6 +10,6 @@ const style = stylex.create({
 
 export function Spacer(props: HTMLAttributes<"div">) {
   return (
-    <div {...props} class={`${stylex.attrs(style.spacer).class} ${props.class ?? ""}`} />
+    <div {...props} class={`${CLS(style.spacer)} ${props.class ?? ""}`} />
   )
 }

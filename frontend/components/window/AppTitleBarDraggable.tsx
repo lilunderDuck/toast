@@ -1,3 +1,4 @@
+import { CLS } from "macro-def"
 import __style from "./AppTitleBar.module.css"
 
 import stylex from "@stylexjs/stylex"
@@ -15,6 +16,6 @@ const style = stylex.create({
 
 export function AppTitleBarDraggable(props: HTMLAttributes<"div">) {
   return (
-    <div {...props} class={`${stylex.attrs(style.titleBar).class} ${props.class ?? ""}`} style="--wails-draggable: drag" id={__style.buttonRow} />
+    <div {...props} class={`${CLS(style.titleBar)} ${props.class ?? ""}`} style="--wails-draggable: drag" id={__style.buttonRow} />
   )
 }

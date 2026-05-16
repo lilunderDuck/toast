@@ -13,6 +13,6 @@ interface ILayerProps extends HTMLAttributes<"div"> {
 
 export function Layer(props: ILayerProps) {
   return (
-    <div {...props} class={`${stylex.attrs(style.layer).class} ${props.class ?? ""}`} />
+    <div {...props} class={`${CLS(style.layer)} ${props.class ?? ""}`} />
   )
 }

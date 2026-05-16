@@ -17,7 +17,7 @@ export function SubSetting(props: HTMLAttributes<"div">) {
   return (
     <div 
       {...props}
-      class={`${stylex.attrs(style.subSetting).class} ${props.class ?? ""}`}
+      class={`${CLS(style.subSetting)} ${props.class ?? ""}`}
     />
   )
 }

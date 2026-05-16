@@ -1,4 +1,5 @@
 import stylex from "@stylexjs/stylex";
+import { CLS } from "macro-def";
 import { splitProps } from "solid-js";
 
 const style = stylex.create({
@@ -45,7 +46,7 @@ export function Tag(props: ITagProps) {
   return (
     <span
       {...itsProps}
-      class={`${stylex.attrs(style.tag).class} ${props.class ?? ""}`}
+      class={`${CLS(style.tag)} ${props.class ?? ""}`}
       style={{ "--color": props.color$ ?? "var(--subtext0)" }}
       data-tag=""
     >

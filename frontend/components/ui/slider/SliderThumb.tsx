@@ -1,6 +1,7 @@
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import { Input, type SliderThumbProps, Thumb } from "@kobalte/core/slider"
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 import { type ParentProps, splitProps, type ValidComponent } from "solid-js"
 
 const style = stylex.create({
@@ -28,7 +29,7 @@ export function SliderThumb<T extends ValidComponent = "span">(
   const [local, others] = splitProps(props as ISliderThumbProps, ["class", "children"])
   return (
     <Thumb
-      class={`${stylex.attrs(style.thumb).class} ${local.class ?? ""}`}
+      class={`${CLS(style.thumb)} ${local.class ?? ""}`}
       {...others}
     >
       <Input />

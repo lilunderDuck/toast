@@ -3,6 +3,7 @@ import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
 import { type ParentProps, splitProps, type ValidComponent } from "solid-js"
 import { Spacer } from "../Flex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   menuSubContent: {
@@ -38,7 +39,7 @@ export function DropdownMenuSubTrigger<T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IDropdownMenuSubTriggerProps, ["class", "children"])
   return (
     <SubTrigger
-      class={`${stylex.attrs(style.menuSubContent).class} ${props.class ?? ""}`}
+      class={`${CLS(style.menuSubContent)} ${props.class ?? ""}`}
       {...rest}
     >
       <div {...stylex.attrs(style.iconWrap)}>

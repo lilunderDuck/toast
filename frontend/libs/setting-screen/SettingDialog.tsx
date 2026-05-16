@@ -43,7 +43,7 @@ export default function SettingDialog(props: ISettingDialog) {
   const Sidebar = () => {
     const { config$ } = useSettingContext()
     return (
-      <aside class={`${stylex.attrs(style.dialog__sidebar).class} scrollbar scrollbarVertical invsScrollbar`}>
+      <aside class={`${CLS(style.dialog__sidebar)} scrollbar scrollbarVertical invsScrollbar`}>
         <For each={config$}>
           {it => <SettingSidebarItem {...it} />}
         </For>
@@ -73,7 +73,7 @@ export default function SettingDialog(props: ISettingDialog) {
         <div {...stylex.attrs(style.dialog__content)}>
           <Sidebar />
           <main
-            class={`${stylex.attrs(style.dialog__mainContent).class} scrollbar scrollbarVertical invsScrollbar`}
+            class={`${CLS(style.dialog__mainContent)} scrollbar scrollbarVertical invsScrollbar`}
             id={__style.mainContent}
           >
             <MainContent />

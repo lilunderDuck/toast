@@ -3,6 +3,7 @@ import { Fill, type SliderFillProps } from "@kobalte/core/slider"
 import { splitProps, type ValidComponent } from "solid-js"
 
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   fill: {
@@ -23,7 +24,7 @@ export function SliderFill<T extends ValidComponent = "div">(
   const [local, others] = splitProps(props as ISliderFillProps, ["class"])
   return (
     <Fill
-      class={`${stylex.attrs(style.fill).class} ${local.class ?? ""}`}
+      class={`${CLS(style.fill)} ${local.class ?? ""}`}
       {...others}
     />
   )

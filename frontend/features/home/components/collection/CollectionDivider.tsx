@@ -1,7 +1,9 @@
-import { Label } from "~/components"
-
-import stylex from "@stylexjs/stylex"
 import type { ParentProps } from "solid-js"
+// ...
+import stylex from "@stylexjs/stylex"
+import "~/styles/shorthand.css"
+// ...
+import { Label } from "~/components"
 
 const style = stylex.create({
   divider: {
@@ -26,7 +28,6 @@ export function CollectionDivider(props: ParentProps<ICollectionDividerProps>) {
   return (
     <Label {...stylex.attrs(style.divider)}>
       {props.children}
-      <div  />
     </Label>
   )
 }

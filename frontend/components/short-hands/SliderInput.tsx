@@ -1,4 +1,5 @@
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   slider__input: {
@@ -30,7 +31,7 @@ export function SliderInput(props: ISliderInputProps) {
     <input
       {...props}
       type="range"
-      class={`${props.class ?? ""} ${stylex.attrs(style.slider__input).class}`}
+      class={`${props.class ?? ""} ${CLS(style.slider__input)}`}
       style={`--slider-progress:${props.value}%`}
     />
   )

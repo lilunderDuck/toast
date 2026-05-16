@@ -2,6 +2,7 @@ import { splitProps, type ValidComponent } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { type TabsTriggerProps, Trigger } from "@kobalte/core/tabs"
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   tabsTrigger: {
@@ -30,7 +31,7 @@ export function TabsTrigger<T extends ValidComponent = "button">(
   const [local, others] = splitProps(props as ITabsTriggerProps, ["class"])
   return (
     <Trigger
-      class={`${stylex.attrs(style.tabsTrigger).class} ${local.class ?? ""}`}
+      class={`${CLS(style.tabsTrigger)} ${local.class ?? ""}`}
       {...others}
     />
   )

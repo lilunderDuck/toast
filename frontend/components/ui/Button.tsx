@@ -5,6 +5,7 @@ import __style from "./Button.module.css"
 // ...
 import { type StylexStylesAttribute } from "../../utils"
 import { SpinningCube } from "../loader"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   base: {
@@ -68,23 +69,23 @@ const style = stylex.create({
   }
 })
 
-const variantMapping: Record<ButtonVariant, StylexStylesAttribute> = {
-  [ButtonVariant.DEFAULT]: stylex.attrs(style.variant_default),
-  [ButtonVariant.DANGER]: stylex.attrs(style.variant_danger),
-  [ButtonVariant.NO_BACKGROUND]: stylex.attrs(style.variant_noBackground),
-  [ButtonVariant.UNSET]: {}
+const variantMapping: Record<ButtonVariant, string> = {
+  [ButtonVariant.DEFAULT]: CLS(style.variant_default),
+  [ButtonVariant.DANGER]: CLS(style.variant_danger),
+  [ButtonVariant.NO_BACKGROUND]: CLS(style.variant_noBackground),
+  [ButtonVariant.UNSET]: ""
   // outline: "border border-input hover:bg-accent hover:text-accent-foreground",
   // secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
   // ghost: "hover:bg-accent hover:text-accent-foreground",
   // link: "text-primary underline-offset-4 hover:underline"
 }
 
-const sizeMapping: Record<ButtonSize, StylexStylesAttribute> = {
-  [ButtonSize.DEFAULT]: stylex.attrs(style.size_default),
-  [ButtonSize.SMALL]: stylex.attrs(style.size_small),
-  [ButtonSize.LARGE]: stylex.attrs(style.size_large),
-  [ButtonSize.ICON]: stylex.attrs(style.size_icon),
-  [ButtonSize.UNSET]: {}
+const sizeMapping: Record<ButtonSize, string> = {
+  [ButtonSize.DEFAULT]: CLS(style.size_default),
+  [ButtonSize.SMALL]: CLS(style.size_small),
+  [ButtonSize.LARGE]: CLS(style.size_large),
+  [ButtonSize.ICON]: CLS(style.size_icon),
+  [ButtonSize.UNSET]: ""
 }
 
 export interface IButtonProps extends HTMLAttributes<"button"> {
@@ -111,21 +112,13 @@ export function Button(props: IButtonProps) {
     }
   }
 
-  const inputClasses = () => 
-    others.class + " " +
-    __style.button + " " +
-    stylex.attrs(style.base).class + " " +
-    variantMapping[local.variant$ ?? ButtonVariant.DEFAULT].class + " " +
-    sizeMapping[local.size$ ?? ButtonSize.DEFAULT].class + " "
-  // 
-
   return (
     <button
       type="button"
       disabled={isLoading()}
       {...others}
       onClick={clickHandler}
-      class={inputClasses()}
+      class={`${__style.button} ${others.class ?? ""} ${CLS(style.base)} ${variantMapping[local.variant$ ?? ButtonVariant.DEFAULT]} ${sizeMapping[local.size$ ?? ButtonSize.DEFAULT]}`}
     >
       <Show when={isLoading()} fallback={props.children}>
         <SpinningCube cubeSize$={30} />

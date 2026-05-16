@@ -1,6 +1,7 @@
 import { BiSolidNote } from "solid-icons/bi"
 import { RiMediaPlayList2Fill } from "solid-icons/ri"
 import { For, Show } from "solid-js"
+import { CLS } from "macro-def"
 // ...
 import stylex from "@stylexjs/stylex"
 import "./JournalHomeSidebar.css"
@@ -66,7 +67,7 @@ export function JournalHomeSidebar() {
 
   return (
     <Show when={isShowingSidebar$()}>
-      <aside class={`${stylex.attrs(style.sidebar).class} ${isShowingSidebar$() ? stylex.attrs(style.sidebar__withSidebar).class : stylex.attrs(style.sidebar__noSidebar).class}`}>
+      <aside class={`${CLS(style.sidebar)} ${isShowingSidebar$() ? CLS(style.sidebar__withSidebar) : CLS(style.sidebar__noSidebar)}`}>
         <AppTitleBarDraggable {...stylex.attrs(style.sidebar__titleBar)}>
           <JournalHomeTitleBarIcon />
           <ToggleHideSidebarButton />

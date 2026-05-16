@@ -5,6 +5,7 @@ import { createFileUpload, SUPPORTED_IMAGE_FILTER, type FileOpenDialogOptions } 
 import { BsPlus } from "solid-icons/bs"
 import { SpinningCube } from "../loader"
 import { previewUrl } from "~/api"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   uploadZone: {
@@ -47,7 +48,7 @@ export function createIconInput(options: IIconInputOptions) {
   const hasNoIcon = () => !options.initialIconUrl$?.() || !file$()
   const iconPreviewUrl = () => previewUrl(file$()!)
 
-  const inputClasses = () => `${stylex.attrs(style.uploadZone).class} ${hasNoIcon() ? stylex.attrs(style.uploadZone__noImage).class : stylex.attrs(style.uploadZone__withImage).class}`
+  const inputClasses = () => `${CLS(style.uploadZone)} ${hasNoIcon() ? CLS(style.uploadZone__noImage) : CLS(style.uploadZone__withImage)}`
 
   return {
     file$: file$,

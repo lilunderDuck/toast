@@ -1,4 +1,5 @@
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   label: {
@@ -9,5 +10,5 @@ const style = stylex.create({
 })
 
 export function Label(props: HTMLAttributes<"label">) {
-  return <label {...props} class={`${stylex.attrs(style.label).class} ${props.class ?? ""}`} />
+  return <label {...props} class={`${CLS(style.label)} ${props.class ?? ""}`} />
 }

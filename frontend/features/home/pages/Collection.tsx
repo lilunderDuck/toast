@@ -1,8 +1,9 @@
 import stylex from "@stylexjs/stylex"
-import { createResource, createSignal, For, onCleanup, onMount } from "solid-js";
+import { createSignal, For, onCleanup, onMount } from "solid-js";
 import { CleanupPlaylists, GetAllPlaylistsData, InitPlaylists } from "~/wailsjs/go/playlist/Exports";
-import { CollectionDivider, CollectionItem, PlaylistCollectionItem } from "../components";
+import { CollectionDivider, PlaylistCollectionItem } from "../components";
 import type { playlist } from "~/wailsjs/go/models";
+import { RiMediaGalleryFill, RiMediaPlayList2Fill } from "solid-icons/ri";
 
 interface ICollections {
   playlist$: playlist.PlaylistData[]
@@ -37,6 +38,7 @@ export default function Collection() {
     <main {...stylex.attrs(style.collection)} id="journalHome__mainContent">
       <h1>Collection</h1>
       <CollectionDivider>
+        <RiMediaPlayList2Fill />
         Playlist
       </CollectionDivider>
       <div {...stylex.attrs(style.collection__list)}>
@@ -44,6 +46,10 @@ export default function Collection() {
           {it => <PlaylistCollectionItem {...it} />}
         </For>
       </div>
+      <CollectionDivider>
+        <RiMediaGalleryFill />
+        Gallery
+      </CollectionDivider>
     </main>
   )
 }

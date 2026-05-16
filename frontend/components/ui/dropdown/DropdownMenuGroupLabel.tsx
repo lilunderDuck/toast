@@ -2,6 +2,7 @@ import { splitProps, type ValidComponent } from "solid-js"
 import { type DropdownMenuGroupLabelProps, GroupLabel } from "@kobalte/core/dropdown-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   menuGroupLabel: {
@@ -23,7 +24,7 @@ export function DropdownMenuGroupLabel<T extends ValidComponent = "span">(
   const [, rest] = splitProps(props as IDropdownMenuGroupLabelProps, ["class"])
   return (
     <GroupLabel
-      class={`${stylex.attrs(style.menuGroupLabel).class} ${props.class ?? ""}`}
+      class={`${CLS(style.menuGroupLabel)} ${props.class ?? ""}`}
       {...rest}
     />
   )

@@ -5,6 +5,7 @@ import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import * as PopoverPrimitive from "@kobalte/core/popover"
  
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   popover: {
@@ -36,7 +37,7 @@ const PopoverContent = <T extends ValidComponent = "div">(
   return (
     <PopoverPrimitive.Portal>
       <PopoverPrimitive.Content
-        class={`${stylex.attrs(style.popover).class} component-popover ${local.class ?? ""}`}
+        class={`${CLS(style.popover)} component-popover ${local.class ?? ""}`}
         {...others}
       />
     </PopoverPrimitive.Portal>

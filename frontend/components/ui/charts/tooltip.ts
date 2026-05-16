@@ -1,5 +1,6 @@
 import { Chart, type ChartTypeRegistry, type TooltipModel } from "chart.js"
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   chartjsTooltip: {
@@ -41,25 +42,25 @@ export function showTooltip(context: ChartContext) {
     return
   }
 
-  el.className = `${stylex.attrs(style.chartjsTooltip).class} ${model.yAlign ? `no-transform` : ''}`
+  el.className = `${CLS(style.chartjsTooltip)} ${model.yAlign ? `no-transform` : ''}`
   let content = ""
 
   for (const title of model.title) {
-    content += /*html*/`<h3 class="${stylex.attrs(style.title).class}">${title}</h3>`
+    content += /*html*/`<h3 class="${CLS(style.title)}">${title}</h3>`
   }
 
   model.title.forEach((title) => {
     content +=
-      /*html*/`<h3 class="${stylex.attrs(style.title).class}">${title}</h3>`
+      /*html*/`<h3 class="${CLS(style.title)}">${title}</h3>`
   })
 
-  content += /*html*/`<div class="${stylex.attrs(style.whateverThisIs).class}">`
+  content += /*html*/`<div class="${CLS(style.whateverThisIs)}">`
   const body = model.body.flatMap((body) => body.lines)
   body.forEach((line, i) => {
     const colors = model.labelColors[i]
     content += /*html*/`
-        <div class="${stylex.attrs(style.uhhh).class}">
-          <span class="${stylex.attrs(style.alsoThis).class}" style="background: ${colors.backgroundColor} border-color: ${colors.borderColor}"></span>
+        <div class="${CLS(style.uhhh)}">
+          <span class="${CLS(style.alsoThis)}" style="background: ${colors.backgroundColor} border-color: ${colors.borderColor}"></span>
           ${line}
         </div>`
   })

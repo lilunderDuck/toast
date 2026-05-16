@@ -1,6 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import type { JSX } from "solid-js"
 import __style from "./SpinningCube.module.css"
+import { CLS } from "macro-def"
 
 const spinningAnimation = stylex.keyframes({
   '0%': {
@@ -69,7 +70,7 @@ export function SpinningCube(props: ISpinningCubeProps) {
   return (
     <div 
       style={{ '--cube-size': `${getCubeSize()}px` }} 
-      class={`${stylex.attrs(style.cubeBound).class} ${__style.thisCube}`}
+      class={`${CLS(style.cubeBound)} ${__style.thisCube}`}
     >
       <div {...stylex.attrs(style.cube, style.cubeBound)}>
         <CubeFace {...stylex.attrs(style.top)} />
@@ -85,6 +86,6 @@ export function SpinningCube(props: ISpinningCubeProps) {
 
 function CubeFace(props: JSX.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div class={`${props.class} ${stylex.attrs(style.cubeFace, style.cubeBound).class}`} />
+    <div class={`${props.class} ${CLS(style.cubeFace)} ${CLS(style.cubeBound)}`} />
   )
 }

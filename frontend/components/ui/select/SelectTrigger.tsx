@@ -1,6 +1,7 @@
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { type SelectTriggerProps, Trigger } from "@kobalte/core/select"
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 import { type JSX, splitProps, type ValidComponent } from "solid-js"
 
 const style = stylex.create({
@@ -38,7 +39,7 @@ export function SelectTrigger<T extends ValidComponent = "button">(
   return (
     // @ts-ignore
     <Trigger
-      class={`${stylex.attrs(style.trigger).class} ${local.class ?? ""}`}
+      class={`${CLS(style.trigger)} ${local.class ?? ""}`}
       {...others}
     >
       {local.children}

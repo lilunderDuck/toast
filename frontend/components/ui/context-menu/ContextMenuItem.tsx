@@ -2,6 +2,7 @@ import { splitProps, type ValidComponent } from "solid-js"
 import { Item, type ContextMenuItemProps } from "@kobalte/core/context-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   menuItem: {
@@ -36,7 +37,7 @@ export function ContextMenuItem<T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IContextMenuItemProps, ["class"])
   return (
     <Item
-      class={`${stylex.attrs(style.menuItem).class} ${props.class ?? ""}`}
+      class={`${CLS(style.menuItem)} ${props.class ?? ""}`}
       {...rest}
     />
   )

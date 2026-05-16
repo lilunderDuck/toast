@@ -6,6 +6,7 @@ import { AppTitleBarDraggable } from "~/components"
 import Journal from "../pages/Journal"
 import Collection from "../pages/Collection"
 import { JournalHomeTitleBarIcon, ToggleHideSidebarButton } from "../components"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   titleBar: {
@@ -26,7 +27,7 @@ export function JournalHomeMainContent() {
   const { currentPage$, isShowingSidebar$ } = useJournalHomeRootContext()
   return (
     <>
-      <AppTitleBarDraggable class={`${stylex.attrs(style.titleBar).class} ${isShowingSidebar$() ? stylex.attrs(style.titleBar__withSidebar).class : stylex.attrs(style.titleBar__noSidebar).class}`}>
+      <AppTitleBarDraggable class={`${CLS(style.titleBar)} ${isShowingSidebar$() ? CLS(style.titleBar__withSidebar) : CLS(style.titleBar__noSidebar)}`}>
         <Show when={!isShowingSidebar$()}>
           <JournalHomeTitleBarIcon />
           <ToggleHideSidebarButton />

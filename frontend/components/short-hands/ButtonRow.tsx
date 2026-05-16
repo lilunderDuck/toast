@@ -3,6 +3,7 @@ import { Match, splitProps, Switch } from "solid-js"
 import stylex from "@stylexjs/stylex"
 // ...
 import { Spacer } from "../ui"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   buttonRow: {
@@ -22,7 +23,7 @@ export function ButtonRow(props: IButtonRowProps) {
   const [, itsProps] = splitProps(props, ["direction$"])
 
   return (
-    <div {...itsProps} class={`${stylex.attrs(style.buttonRow).class} ${props.class ?? ""}`}>
+    <div {...itsProps} class={`${CLS(style.buttonRow)} ${props.class ?? ""}`}>
       <Switch fallback={
         <>
           <Spacer />

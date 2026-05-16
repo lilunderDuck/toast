@@ -4,6 +4,7 @@ import { splitProps } from "solid-js"
 import { Content, type HoverCardContentProps, type HoverCardRootProps, Portal, Root, Trigger } from "@kobalte/core/hover-card"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   hoverCard: {
@@ -38,7 +39,7 @@ export function HoverCardContent<T extends ValidComponent = "div">(
     <Portal>
       <Content
         {...others}
-        class={`${stylex.attrs(style.hoverCard).class} component-hover-card ${local.class ?? ""}`}
+        class={`${CLS(style.hoverCard)} component-hover-card ${local.class ?? ""}`}
       />
     </Portal>
   )

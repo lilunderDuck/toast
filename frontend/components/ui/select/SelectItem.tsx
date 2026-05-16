@@ -1,6 +1,7 @@
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import { Item, ItemIndicator, ItemLabel, type SelectItemProps } from "@kobalte/core/select"
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 import { splitProps, type ParentProps, type ValidComponent } from "solid-js"
 
 const style = stylex.create({
@@ -54,7 +55,7 @@ export const SelectItem = <T extends ValidComponent = "li">(
   return (
     <Item
       {...others}
-      class={`${stylex.attrs(style.item).class} ${local.class ?? ""}`}
+      class={`${CLS(style.item)} ${local.class ?? ""}`}
     >
       <ItemIndicator {...stylex.attrs(style.itemIndicator)}>
         <svg

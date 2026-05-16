@@ -1,5 +1,8 @@
 import { A } from "@solidjs/router"
+import { CLS } from "macro-def"
+// ...
 import stylex from "@stylexjs/stylex"
+// ...
 import { Tooltip } from "~/components"
 import { playlistIconUrl } from "~/features/playlist/api"
 import type { playlist } from "~/wailsjs/go/models"
@@ -41,6 +44,7 @@ interface IPlaylistCollectionItemProps extends playlist.PlaylistData {
 }
 
 export function PlaylistCollectionItem(props: IPlaylistCollectionItemProps) {
+
   return (
     <A href={`/collection/playlist/${props.id}`}>
       <Tooltip label$={props.name}>

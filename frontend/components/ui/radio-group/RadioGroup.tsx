@@ -4,6 +4,7 @@ import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { Root, type RadioGroupRootProps } from "@kobalte/core/radio-group"
 // ...
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   group: {
@@ -21,6 +22,6 @@ export function RadioGroup<T extends ValidComponent = "div">(
 ) {
   const [local, others] = splitProps(props as IRadioGroupRootProps, ["class"])
   return (
-    <Root class={`${stylex.attrs(style.group).class} ${local.class ?? ""}`} {...others} />
+    <Root class={`${CLS(style.group)} ${local.class ?? ""}`} {...others} />
   )
 }

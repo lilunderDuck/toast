@@ -2,6 +2,7 @@ import { splitProps, type ParentProps, type ValidComponent } from "solid-js"
 import { CheckboxItem, ItemIndicator, type ContextMenuCheckboxItemProps } from "@kobalte/core/context-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   menuItemIndicator: {
@@ -46,7 +47,7 @@ export function ContextMenuCheckboxItem<T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IContextMenuCheckboxItemProps, ["class", "children"])
   return (
     <CheckboxItem
-      class={`${stylex.attrs(style.menuCheckboxItem).class} ${props}`}
+      class={`${CLS(style.menuCheckboxItem)} ${props}`}
       {...rest}
     >
       <span {...stylex.attrs(style.menuItemIndicator)}>

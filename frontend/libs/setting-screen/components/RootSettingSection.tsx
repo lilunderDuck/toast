@@ -44,7 +44,7 @@ export function RootSettingName(props: ISettingSectionProps<any> & {
   inline$?: JSX.Element
 }) {
   return (
-    <h4 class={`${stylex.attrs(style.name).class} ${props.disabled$ ? stylex.attrs(style.name_disabled) : ''}`}>
+    <h4 class={`${CLS(style.name)} ${props.disabled$ ? stylex.attrs(style.name_disabled) : ''}`}>
       {props.name$}
       {props.inline$}
     </h4>
@@ -54,7 +54,7 @@ export function RootSettingName(props: ISettingSectionProps<any> & {
 export function RootSettingDescription(props: Pick<ISettingSectionProps<any>, "description$" | "disabled$">) {
   return (
     <Show when={props.description$}>
-      <p class={`${stylex.attrs(style.description).class} ${props.disabled$ ? stylex.attrs(style.description_disabled$) : ''}`}>
+      <p class={`${CLS(style.description)} ${props.disabled$ ? stylex.attrs(style.description_disabled$) : ''}`}>
         {props.description$}
       </p>
     </Show>
@@ -65,7 +65,7 @@ export function RootSettingInput(props: HTMLAttributes<"input">) {
   return (
     <Input 
       {...props}
-      class={props.type !== "range" ? stylex.attrs(style.input).class : ''}
+      class={props.type !== "range" ? CLS(style.input) : ''}
     />
   )
 }

@@ -50,7 +50,7 @@ export function ToastBar(props: ToastBarProps) {
   return (
     <div
       ref={el}
-      class={`${props.toast.class} ${stylex.attrs(style.toastBar).class}`}
+      class={`${props.toast.class} ${CLS(style.toastBar)}`}
     >
       <ToastIconContainer {...props.toast} theme={props.toast.iconTheme} />
 

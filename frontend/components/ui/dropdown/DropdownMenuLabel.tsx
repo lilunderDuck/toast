@@ -1,5 +1,6 @@
 import { splitProps } from "solid-js"
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   menuLabel: {
@@ -19,7 +20,7 @@ export function DropdownMenuLabel(props: IDropdownMenuLabel) {
   const [, rest] = splitProps(props, ["class", "inset"])
   return (
     <div
-      class={`${stylex.attrs(style.menuLabel).class} ${props.class ?? ""}`}
+      class={`${CLS(style.menuLabel)} ${props.class ?? ""}`}
       {...rest}
     />
   )

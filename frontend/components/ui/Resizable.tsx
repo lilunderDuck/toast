@@ -4,6 +4,7 @@ import { Show, splitProps } from "solid-js"
 import type { DynamicProps, HandleProps, RootProps } from "@corvu/resizable"
 import ResizablePrimitive from "@corvu/resizable"
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
  
 const style = stylex.create({
   resizable: {
@@ -39,7 +40,7 @@ export function Resizable<T extends ValidComponent = "div">(props: DynamicProps<
   return (
     <ResizablePrimitive
       {...rest}
-      class={`${stylex.attrs(style.resizable).class} ${props.class ?? ""}`}
+      class={`${CLS(style.resizable)} ${props.class ?? ""}`}
     />
   )
 }
@@ -60,7 +61,7 @@ export function ResizableHandle<T extends ValidComponent = "button">(
   return (
     <ResizablePrimitive.Handle
       {...rest}
-      class={`${stylex.attrs(style.resizable).class} ${props.class ?? ""}`}
+      class={`${CLS(style.resizable)} ${props.class ?? ""}`}
     >
       <Show when={props.withHandle}>
         <div {...stylex.attrs(style.resiableIconHandle)}>

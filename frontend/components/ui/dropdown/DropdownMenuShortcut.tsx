@@ -1,4 +1,5 @@
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 import { splitProps } from "solid-js"
 
 const style = stylex.create({
@@ -11,5 +12,5 @@ const style = stylex.create({
 
 export function DropdownMenuShortcut(props: HTMLAttributes<"span">) {
   const [, rest] = splitProps(props, ["class"])
-  return <span class={`${stylex.attrs(style.menuShortcut).class} ${props.class ?? ""}`} {...rest} />
+  return <span class={`${CLS(style.menuShortcut)} ${props.class ?? ""}`} {...rest} />
 }

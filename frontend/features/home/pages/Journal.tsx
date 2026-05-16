@@ -1,5 +1,6 @@
 import { createResource, For, Show } from "solid-js"
 import { MdOutlineFilter_list_off } from 'solid-icons/md'
+import { CLS } from "macro-def"
 // ...
 import { GetGroups } from "~/wailsjs/go/group/Exports"
 import { Spacer } from "~/components"
@@ -64,7 +65,7 @@ export default function Journal() {
         </header>
         <Show when={!resource.loading}>
           <Show when={resource()!.length == 0} fallback={
-            <div class={`${stylex.attrs(style.section__list).class} scrollbar scrollbarVertical`}>
+            <div class={`${CLS(style.section__list)} scrollbar scrollbarVertical`}>
               <For each={resource()}>
                 {it => <JournalBlock {...it} />}
               </For>

@@ -2,6 +2,7 @@ import { type ParentProps, splitProps, type ValidComponent } from "solid-js"
 import { type DropdownMenuRadioItemProps, ItemIndicator, RadioItem } from "@kobalte/core/dropdown-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   menuRadioItem: {
@@ -48,7 +49,7 @@ export function DropdownMenuRadioItem<T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IDropdownMenuRadioItemProps, ["class", "children"])
   return (
     <RadioItem
-      class={`${stylex.attrs(style.menuRadioItem).class} ${props.class ?? ""}`}
+      class={`${CLS(style.menuRadioItem)} ${props.class ?? ""}`}
       {...rest}
     >
       <span {...stylex.attrs(style.menuItemIndicator)}>

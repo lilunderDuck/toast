@@ -5,6 +5,7 @@ import stylex from '@stylexjs/stylex'
 import './FieldInput.css'
 // ...
 import { Label } from './Label'
+import { CLS } from 'macro-def'
 
 export type TextFieldInputRef = HTMLInputElement | HTMLTextAreaElement
 
@@ -63,14 +64,14 @@ export function FieldInput(props: TextFieldProps) {
           <Kobalte.Input 
             {...inputProps} 
             type={props.type} 
-            class={`${stylex.attrs(style.input).class} fieldInput__input`} 
+            class={`${CLS(style.input)} fieldInput__input`} 
           />
         }
       >
         <Kobalte.TextArea 
           {...inputProps} 
           autoResize 
-          class={`${stylex.attrs(style.input).class} fieldInput__input`} 
+          class={`${CLS(style.input)} fieldInput__input`} 
         />
       </Show>
       <Kobalte.ErrorMessage {...stylex.attrs(style.error)}>

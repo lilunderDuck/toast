@@ -2,6 +2,7 @@ import { splitProps, type ValidComponent } from "solid-js"
 import { Content, Portal, type DropdownMenuContentProps } from "@kobalte/core/dropdown-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   menuContent: {
@@ -26,7 +27,7 @@ export function DropdownMenuContent<T extends ValidComponent = "div">(
   return (
     <Portal>
       <Content
-        class={`${stylex.attrs(style.menuContent).class} component-dropdown-menu ${props.class ?? ""}`}
+        class={`${CLS(style.menuContent)} component-dropdown-menu ${props.class ?? ""}`}
         {...rest}
       />
     </Portal>

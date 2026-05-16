@@ -9,6 +9,7 @@ import {
   type TooltipRootOptions
 } from "@kobalte/core/tooltip"
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   tooltip: {
@@ -54,7 +55,7 @@ export function Tooltip(
       <Portal>
         <Content
           {...others}
-          class={`${stylex.attrs(style.tooltip).class} component-tooltip ${others.class ?? ""}`}
+          class={`${CLS(style.tooltip)} component-tooltip ${others.class ?? ""}`}
         >
           {local.label$}
         </Content>

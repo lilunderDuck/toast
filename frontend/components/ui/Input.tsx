@@ -1,4 +1,5 @@
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   input: {
@@ -22,7 +23,7 @@ export function Input(props: HTMLAttributes<"input">) {
     <input 
       {...props} 
       {...disableAutocompleteInEdgeIfNeeds()}
-      class={`${stylex.attrs(style.input)} ${props.class}`} 
+      class={`${CLS(style.input)} ${props.class}`} 
     />
   )
 }
