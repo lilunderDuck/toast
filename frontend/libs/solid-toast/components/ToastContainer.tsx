@@ -18,7 +18,7 @@ export const ToastContainer: Component<ToastContainerProps> = (props) => {
     const positionStyle = getToastWrapperStyles(position)
 
     return {
-      class: positionStyle.class,
+      class: positionStyle,
       offset
     }
   }

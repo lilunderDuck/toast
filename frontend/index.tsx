@@ -32,5 +32,3 @@ render(
   ),
   root,
 )
-
-new Date()

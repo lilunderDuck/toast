@@ -10,6 +10,7 @@ import {
   animateToastOnHide
 } from '../util'
 import { ToastIconContainer } from './ToastIconContainer'
+import { CLS } from 'macro-def'
 
 const style = stylex.create({
   toastBar: {

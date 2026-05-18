@@ -1,10 +1,10 @@
+import { CLS } from 'macro-def'
 import { setDefaultOpts, defaultOpts, store, dispatch, defaultToasterOptions } from '../core'
 import type { 
   IToasterProps, 
   Toast, 
 } from './toast'
 import stylex from '@stylexjs/stylex'
-import { NO_STYLE, type StylexStylesAttribute } from '~/utils'
 
 export const generateID = (() => {
   let count = 0
@@ -51,18 +51,16 @@ function isThisPositionOnTop(position: ToastPosition) {
   return [ToastPosition.TOP_CENTER, ToastPosition.TOP_LEFT, ToastPosition.TOP_RIGHT].includes(position)
 }
 
-export function getToastWrapperStyles(position: ToastPosition): StylexStylesAttribute {
+export function getToastWrapperStyles(position: ToastPosition): string {
   const isOnTop = isThisPositionOnTop(position)
   const isCentered = [ToastPosition.TOP_CENTER, ToastPosition.BOTTOM_CENTER].includes(position)
   const isRighted = [ToastPosition.BOTTOM_RIGHT, ToastPosition.TOP_RIGHT].includes(position)
   
-  const computedStyle = stylex.attrs(
-    style.baseToastStyle,
-    isOnTop ? style.top : style.bottom,
-    isCentered ? style.centered : (
-      isRighted ? style.right : NO_STYLE
-    )
-  )
+  const horizontalPositionStyle = isOnTop ? CLS(style.top) : CLS(style.bottom)
+  const verticalPositionStyle = isCentered ?
+    CLS(style.centered) :
+    isRighted ? CLS(style.right) : ""
+  const computedStyle = `${CLS(style.baseToastStyle)} ${horizontalPositionStyle} ${isCentered} ${verticalPositionStyle}`
 
   return computedStyle
 }
