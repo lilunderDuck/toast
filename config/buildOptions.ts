@@ -1,4 +1,4 @@
-import type { Rollup, ESBuildOptions, UserConfig } from "vite"
+import type { Rollup, ESBuildOptions } from "vite"
 
 export const BASE_OUTPUT_DIRECTORY = './build'
 export const OUTPUT_DIRECTORY = `${BASE_OUTPUT_DIRECTORY}/out`
