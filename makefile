@@ -21,6 +21,7 @@ app_resource:
 
 build:
 	wails build ${APP_PROD_BUILD_FLAGS}
+	bun ./build/scripts/mangle.js ./config/mangle.json
 
 build_debug:
 	wails build ${APP_PROD_BUILD_FLAGS} -windowsconsole -race -devtools

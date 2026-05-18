@@ -1,0 +1,4 @@
+{
+  "targetDir": "./build/out/bin/resource",
+  "preset": ["propsEndWithDollarSign"]
+}
