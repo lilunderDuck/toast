@@ -1,4 +1,4 @@
-import type { JSX } from "solid-js"
+import type { ComponentProps, JSX } from "solid-js"
 import { splitProps } from "solid-js"
 
 import {
@@ -36,11 +36,10 @@ export interface ITooltipOptions {
   label$: JSX.Element
 }
 
-export interface ITooltipProps extends HTMLAttributes<"div">, ITooltipOptions {}
+export interface ITooltipProps extends HTMLAttributes<"div">, ITooltipOptions {
+}
 
-export function Tooltip(
-  props: ITooltipProps
-) {
+export function Tooltip(props: ITooltipProps) {
   const [local, others] = splitProps(props, [
     /* @__KEY__ */"tooltipOptions$", 
     /* @__KEY__ */"label$", 
@@ -49,7 +48,10 @@ export function Tooltip(
 
   return (
     <Root openDelay={0} closeDelay={0} gutter={4} {...local.tooltipOptions$}>
-      <Trigger as="div" {...stylex.attrs(style.tooltip__trigger)}>
+      <Trigger
+        as="div"
+        {...stylex.attrs(style.tooltip__trigger)}
+      >
         {local.children}
       </Trigger>  
       <Portal>

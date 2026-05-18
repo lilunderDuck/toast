@@ -1,9 +1,7 @@
 import { createSignal, Show, splitProps } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
-import __style from "./Button.module.css"
 // ...
-import { type StylexStylesAttribute } from "../../utils"
 import { SpinningCube } from "../loader"
 import { CLS } from "macro-def"
 
@@ -118,7 +116,7 @@ export function Button(props: IButtonProps) {
       disabled={isLoading()}
       {...others}
       onClick={clickHandler}
-      class={`${__style.button} ${others.class ?? ""} ${CLS(style.base)} ${variantMapping[local.variant$ ?? ButtonVariant.DEFAULT]} ${sizeMapping[local.size$ ?? ButtonSize.DEFAULT]}`}
+      class={`${others.class ?? ""} ${CLS(style.base)} ${variantMapping[local.variant$ ?? ButtonVariant.DEFAULT]} ${sizeMapping[local.size$ ?? ButtonSize.DEFAULT]}`}
     >
       <Show when={isLoading()} fallback={props.children}>
         <SpinningCube cubeSize$={30} />

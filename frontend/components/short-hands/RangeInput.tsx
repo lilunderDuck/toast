@@ -22,11 +22,11 @@ const style = stylex.create({
   }
 })
 
-interface ISliderInputProps extends Omit<HTMLAttributes<"input">, "type"> {
+interface IRangeInputProps extends Omit<HTMLAttributes<"input">, "type"> {
   // define your component props here
 }
 
-export function SliderInput(props: ISliderInputProps) {
+export function RangeInput(props: IRangeInputProps) {
   return (
     <input
       {...props}

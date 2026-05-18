@@ -1,4 +1,3 @@
-export * from "./ColorAndStuff"
 export * from "./Checkbox"
 export * from "./Resizable"
 export * from "./Divider"

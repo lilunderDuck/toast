@@ -1,9 +1,10 @@
 import stylex from "@stylexjs/stylex"
-import { createSignal, For, onCleanup, onMount } from "solid-js";
+import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import { CleanupPlaylists, GetAllPlaylistsData, InitPlaylists } from "~/wailsjs/go/playlist/Exports";
-import { CollectionDivider, PlaylistCollectionItem } from "../components";
+import { CollectionLabel, CollectionItem, CollectionItemsSkeleton } from "../components";
 import type { playlist } from "~/wailsjs/go/models";
 import { RiMediaGalleryFill, RiMediaPlayList2Fill } from "solid-icons/ri";
+import { playlistIconUrl } from "~/features/playlist/api";
 
 interface ICollections {
   playlist$: playlist.PlaylistData[]
@@ -19,7 +20,8 @@ const style = stylex.create({
   collection__list: {
     display: "flex",
     flexWrap: "wrap",
-    gap: 10
+    gap: 10,
+    minHeight: "10rem"
   }
 })
 
@@ -37,19 +39,38 @@ export default function Collection() {
   return (
     <main {...stylex.attrs(style.collection)} id="journalHome__mainContent">
       <h1>Collection</h1>
-      <CollectionDivider>
+      <CollectionLabel>
         <RiMediaPlayList2Fill />
         Playlist
-      </CollectionDivider>
+      </CollectionLabel>
       <div {...stylex.attrs(style.collection__list)}>
-        <For each={collections()?.playlist$ ?? []}>
-          {it => <PlaylistCollectionItem {...it} />}
-        </For>
+        <Show when={collections()} fallback={
+          <CollectionItemsSkeleton />
+        }>
+          <For each={collections()?.playlist$ ?? []}>
+            {it => (
+              <CollectionItem 
+                href$={`/collection/playlist/${it.id}`}
+                iconUrl$={playlistIconUrl(it.id, it.icon ?? "")}
+                name$={it.name}
+                tooltipLabel$={it.name}
+              />
+            )}
+          </For>
+        </Show>
       </div>
-      <CollectionDivider>
+
+      <CollectionLabel>
         <RiMediaGalleryFill />
         Gallery
-      </CollectionDivider>
+      </CollectionLabel>
+      <div {...stylex.attrs(style.collection__list)}>
+        <Show when={collections()} fallback={
+          <CollectionItemsSkeleton />
+        }>
+          
+        </Show>
+      </div>
     </main>
   )
 }

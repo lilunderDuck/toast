@@ -3,7 +3,7 @@ import { MdOutlineFilter_list_off } from 'solid-icons/md'
 import { CLS } from "macro-def"
 // ...
 import { GetGroups } from "~/wailsjs/go/group/Exports"
-import { Spacer } from "~/components"
+import { PlaceholderView, Spacer } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -30,22 +30,11 @@ const style = stylex.create({
     height: "80vh",
   },
   section__emptyJournalView: {
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    gap: 10,
-    userSelect: "none",
     position: "absolute",
     top: 0,
     left: 0,
     zIndex: -1
   },
-  section__emptyJournalViewContent: {
-    textAlign: "center"
-  }
 })
 
 export default function Journal() {
@@ -71,12 +60,12 @@ export default function Journal() {
               </For>
             </div>
           }>
-            <div {...stylex.attrs(style.section__emptyJournalView)}>
-              <span>
-                <MdOutlineFilter_list_off size="4.5rem" />
-              </span>
-              <span>No journal here, try creating a new journal.</span>
-            </div>
+            <PlaceholderView 
+              icons$={<MdOutlineFilter_list_off size="4.5rem" />}
+              {...stylex.attrs(style.section__emptyJournalView)}
+            >
+              No journal here, try creating a new journal.
+            </PlaceholderView>
           </Show>
         </Show>
       </main>

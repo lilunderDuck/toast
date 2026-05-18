@@ -1,6 +1,3 @@
-import { Show } from "solid-js"
-import { Portal } from "solid-js/web"
-// ...
 import stylex from "@stylexjs/stylex"
 import __style from "./AppTitleBar.module.css"
 import minimizeIcon from "~/assets/icons/min-w-10.png"
@@ -11,7 +8,6 @@ import closeIcon from "~/assets/icons/close-w-20.png"
 import { WindowFullscreen, WindowMinimise, WindowUnfullscreen } from "~/wailsjs/runtime/runtime"
 import { WindowClose } from "~/wailsjs/go/backend/App"
 import { useToggle } from "~/hooks"
-// ...
 
 const style = stylex.create({
   titleBar: {
@@ -55,36 +51,34 @@ export function AppTitleBarButton() {
   const [isFullscreen, toggleFullscreen] = useToggle()
 
   return (
-    <Portal>
-      <div {...stylex.attrs(style.titleBar)} id={__style.buttonRow}>
-        <div {...stylex.attrs(style.titleBar__otherButton)}>
-          <button 
-            {...stylex.attrs(style.titleBar__button)}
-            onClick={WindowMinimise}
-          >
-            <img class="icon" src={minimizeIcon} draggable="false" />
-          </button>
-        </div>
-        <div {...stylex.attrs(style.titleBar__otherButton)}>
-          <button
-            {...stylex.attrs(style.titleBar__button)}
-            onClick={() => {
-              toggleFullscreen()
-              isFullscreen() ? WindowFullscreen() : WindowUnfullscreen()
-            }}
-          >
-            <img class="icon" src={isFullscreen() ? restoreIcon : maximizeIcon} draggable="false" />
-          </button>
-        </div>
-        <div {...stylex.attrs(style.titleBar__closeButton)}>
-          <button 
-            {...stylex.attrs(style.titleBar__button)}
-            onClick={WindowClose}
-          >
-            <img class="icon" src={closeIcon} draggable="false" />
-          </button>
-        </div>
+    <div {...stylex.attrs(style.titleBar)} id={__style.buttonRow}>
+      <div {...stylex.attrs(style.titleBar__otherButton)}>
+        <button 
+          {...stylex.attrs(style.titleBar__button)}
+          onClick={WindowMinimise}
+        >
+          <img class="icon" src={minimizeIcon} draggable="false" />
+        </button>
       </div>
-    </Portal>
+      <div {...stylex.attrs(style.titleBar__otherButton)}>
+        <button
+          {...stylex.attrs(style.titleBar__button)}
+          onClick={() => {
+            toggleFullscreen()
+            isFullscreen() ? WindowFullscreen() : WindowUnfullscreen()
+          }}
+        >
+          <img class="icon" src={isFullscreen() ? restoreIcon : maximizeIcon} draggable="false" />
+        </button>
+      </div>
+      <div {...stylex.attrs(style.titleBar__closeButton)}>
+        <button 
+          {...stylex.attrs(style.titleBar__button)}
+          onClick={WindowClose}
+        >
+          <img class="icon" src={closeIcon} draggable="false" />
+        </button>
+      </div>
+    </div>
   )
 }

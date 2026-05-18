@@ -15,7 +15,8 @@ const pulseAnimation = stylex.keyframes({
 const style = stylex.create({
   spookySkeleton: {
     animation: `${pulseAnimation} 2s cubic-bezier(.4,0,.6,1) infinite`,
-    backgroundColor: '#212123'
+    backgroundColor: 'var(--surface0)',
+    borderRadius: 6
   }
 })
 

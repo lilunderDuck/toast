@@ -1,4 +1,5 @@
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 // ...
 import type { JSX, ParentProps } from "solid-js"
 
@@ -17,11 +18,12 @@ const style = stylex.create({
 
 interface IPlaceholderViewProps {
   icons$: JSX.Element
+  class?: string
 }
 
 export function PlaceholderView(props: ParentProps<IPlaceholderViewProps>) {
   return (
-    <div {...stylex.attrs(style.placeholder)}>
+    <div class={`${CLS(style.placeholder)} ${props.class ?? ""}`}>
       <span>
         {props.icons$}
       </span>

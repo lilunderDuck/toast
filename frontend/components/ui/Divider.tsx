@@ -6,15 +6,23 @@ const style = stylex.create({
     width: '100%'
   },
   dividerLine: {
-    backgroundColor: 'var(--surface1)',
+    backgroundColor: 'var(--divider-color)',
     width: '100%',
-    height: 2
+    height: 'var(--divider-thickness)'
   }
 })
 
-export function Divider() {
+interface IDividerProps {
+  color$?: string
+  thicknessInPx$?: number
+}
+
+export function Divider(props: IDividerProps) {
   return (
-    <div {...stylex.attrs(style.divider)}>
+    <div 
+      {...stylex.attrs(style.divider)} 
+      style={`--divider-color:${props.color$ ?? "var(--surface1)"};--divider-thickness:${props.thicknessInPx$ ?? 2}px`}
+    >
       <div {...stylex.attrs(style.dividerLine)} />
     </div>
   )

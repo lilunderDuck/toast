@@ -3,7 +3,7 @@ import type { ParentProps } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { SliderInput, Spacer, Tooltip } from "~/components"
+import { RangeInput, Spacer, Tooltip } from "~/components"
 // ...
 import { usePlaylistContext } from "../../provider"
 import { PlaylistTogglePlayIcon } from "./PlaylistTogglePlayIcon"
@@ -104,7 +104,7 @@ export function PlaylistControl(props: ParentProps) {
         </Tooltip>
         <Tooltip label$={`Current volume: ${player$.volume$()}%`}>
           <div>
-            <SliderInput 
+            <RangeInput 
               min={0} 
               max={100} 
               step={1} 

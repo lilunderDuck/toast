@@ -1,7 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import "./MediaProgressSlider.css"
 import { createSignal, splitProps } from "solid-js"
-import { SliderInput } from "./SliderInput"
+import { RangeInput } from "./RangeInput"
 
 const style = stylex.create({
   slider: {
@@ -66,7 +66,7 @@ export function MediaProgressSlider(props: ISliderProps) {
         {...stylex.attrs(style.slider__buffered)} 
         style={`--slider-buffered-progress:${props.bufferedProgress$}%`}
       />
-      <SliderInput
+      <RangeInput
         {...stylex.attrs(style.slider__input)}
         min={0}
         max={100}

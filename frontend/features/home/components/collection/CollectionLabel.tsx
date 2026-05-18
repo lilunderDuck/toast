@@ -13,18 +13,13 @@ const style = stylex.create({
     display: "flex",
     alignItems: "center",
     gap: 10
-  },
-  divider__line: {
-    width: "100%",
-    height: 1,
-    backgroundColor: "var(--overlay0)"
   }
 })
 
-interface ICollectionDividerProps {
+interface ICollectionLabelProps {
 }
 
-export function CollectionDivider(props: ParentProps<ICollectionDividerProps>) {
+export function CollectionLabel(props: ParentProps<ICollectionLabelProps>) {
   return (
     <Label {...stylex.attrs(style.divider)}>
       {props.children}
