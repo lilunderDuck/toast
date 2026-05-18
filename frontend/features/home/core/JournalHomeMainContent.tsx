@@ -1,12 +1,15 @@
 import { Match, Show, Switch } from "solid-js"
-import { useJournalHomeRootContext } from "../provider/JournalHomeRootProvider"
-
+import { CLS } from "macro-def"
+// ...
 import stylex from "@stylexjs/stylex"
+// ...
 import { AppTitleBarDraggable } from "~/components"
+// ...
+import { useJournalHomeRootContext } from "../provider/JournalHomeRootProvider"
+import { JournalHomeTitleBarIcon, ToggleHideSidebarButton } from "../components"
 import Journal from "../pages/Journal"
 import Collection from "../pages/Collection"
-import { JournalHomeTitleBarIcon, ToggleHideSidebarButton } from "../components"
-import { CLS } from "macro-def"
+import StickyNotes from "../pages/StickyNotes"
 
 const style = stylex.create({
   titleBar: {
@@ -34,12 +37,16 @@ export function JournalHomeMainContent() {
         </Show>
       </AppTitleBarDraggable>
       <Switch>
-        <Match when={currentPage$() === JournalPage.JOURNAL_HOME}>
+        <Match when={currentPage$() === "journal_page$"}>
           <Journal />
         </Match>
 
-        <Match when={currentPage$() === JournalPage.COLLECTION_HOME}>
+        <Match when={currentPage$() === "collection_page$"}>
           <Collection />
+        </Match>
+
+        <Match when={currentPage$() === "sticky_note_page$"}>
+          <StickyNotes />
         </Match>
       </Switch>
     </>

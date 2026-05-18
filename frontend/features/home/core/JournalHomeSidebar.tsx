@@ -1,4 +1,4 @@
-import { BiSolidNote } from "solid-icons/bi"
+import { FaSolidBookOpenReader, FaSolidNoteSticky } from "solid-icons/fa"
 import { RiMediaPlayList2Fill } from "solid-icons/ri"
 import { For, Show } from "solid-js"
 import { CLS } from "macro-def"
@@ -8,7 +8,7 @@ import "./JournalHomeSidebar.css"
 // ...
 import { AppTitleBarDraggable } from "~/components"
 // ...
-import { useJournalHomeRootContext } from "../provider/JournalHomeRootProvider"
+import { useJournalHomeRootContext, type IJournalHomePageData } from "../provider/JournalHomeRootProvider"
 import { JournalHomeTitleBarIcon, ToggleHideSidebarButton } from "../components"
 
 const style = stylex.create({
@@ -19,6 +19,7 @@ const style = stylex.create({
   },
   sidebar__withSidebar: {
     width: "35%",
+    maxWidth: "24rem"
   },
   sidebar__noSidebar: {
     // ...
@@ -52,17 +53,22 @@ const style = stylex.create({
 export function JournalHomeSidebar() {
   const { currentPage$, _setCurrentPage$, isShowingSidebar$ } = useJournalHomeRootContext()
 
-  const SIDEBAR_ITEMS = [
+  const SIDEBAR_ITEMS: IJournalHomePageData[] = [
     {
       name$: "Journal",
-      icon$: BiSolidNote,
-      pageId$: JournalPage.JOURNAL_HOME
+      icon$: FaSolidBookOpenReader,
+      pageId$: "journal_page$"
     },
     {
-      name$: "Playlist",
+      name$: "Sticky notes",
+      icon$: FaSolidNoteSticky,
+      pageId$: "sticky_note_page$"
+    },
+    {
+      name$: "Collection",
       icon$: RiMediaPlayList2Fill,
-      pageId$: JournalPage.COLLECTION_HOME
-    }
+      pageId$: "collection_page$"
+    },
   ]
 
   return (

@@ -7,12 +7,11 @@ import { PlaceholderView, Spacer } from "~/components"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { CreateJournalButton, JournalBlock, JournalListHeader, TagListButton, TotalJournalText } from "../components"
+import { CreateJournalButton, JournalBlock, TagListButton, TotalJournalText } from "../components"
 import { JournalHomeProvider } from "../provider/JournalHomeProvider"
 
 const style = stylex.create({
   section: {
-    padding: 10,
     overflowY: "auto",
     height: "100%",
     width: "100%",
@@ -45,7 +44,7 @@ export default function Journal() {
   return (
     <JournalHomeProvider groups$={resource() ?? []}>
       <main {...stylex.attrs(style.section)} id="journalHome__mainContent">
-        <JournalListHeader name$="Your journal" />
+        <h1>Jour journal</h1>
         <header {...stylex.attrs(style.section__header)}>
           <CreateJournalButton />
           <TagListButton />

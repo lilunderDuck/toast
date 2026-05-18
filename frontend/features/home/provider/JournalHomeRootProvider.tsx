@@ -1,12 +1,20 @@
-import { CLS } from "macro-def"
+import type { IconTypes } from "solid-icons"
 import { createContext, createEffect, ParentProps, useContext, type Accessor, type Setter } from "solid-js"
 import { usePersistedSignal } from "~/hooks"
 
+type JournalPageId = "journal_page$" | "collection_page$" | "sticky_note_page$"
+
 interface IJournalHomeRootContext {
-  currentPage$: Accessor<JournalPage>
-  _setCurrentPage$: Setter<JournalPage>
+  currentPage$: Accessor<JournalPageId>
+  _setCurrentPage$: Setter<JournalPageId>
   isShowingSidebar$: Accessor<boolean>
   _setIsShowingSidebar$: Setter<boolean>
+}
+
+export interface IJournalHomePageData {
+  name$: string
+  icon$: IconTypes
+  pageId$: JournalPageId
 }
 
 const Context = createContext<IJournalHomeRootContext>()
@@ -15,7 +23,7 @@ interface IJournalHomeRootProviderProps {
 }
 
 export function JournalHomeRootProvider(props: ParentProps<IJournalHomeRootProviderProps>) {
-  const [currentPage, setCurrentPage] = usePersistedSignal<JournalPage>(sessionStorage, "home_last_page", JournalPage.JOURNAL_HOME)
+  const [currentPage, setCurrentPage] = usePersistedSignal<JournalPageId>(sessionStorage, "home_last_page", "journal_page$")
   const [isShowingSidebar, setIsShowingSidebar] = usePersistedSignal(localStorage, "home_show_sidebar", true)
 
   createEffect(() => {

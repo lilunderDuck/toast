@@ -86,12 +86,12 @@ export function HexColorInput(props: IHexColorInputProps) {
 
 export function PopoverHexColorInput(props: IHexColorInputProps) {
   return (
-    <HoverCard>
-      <HoverCardTrigger>
-        <button {...stylex.attrs(style.colorPreview)} style={{
-          '--color': props.color$()
-        }} />
-      </HoverCardTrigger>
+    <HoverCard openDelay={10} closeDelay={10}>
+      <HoverCardTrigger 
+        as="button" 
+        style={`--color:${props.color$()}`} 
+        {...stylex.attrs(style.colorPreview)}
+      />
       <HoverCardContent {...stylex.attrs(style.popoverCard_content)}>
         <HexColorInput {...props} />
       </HoverCardContent>

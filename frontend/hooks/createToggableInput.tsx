@@ -1,5 +1,9 @@
 import { createSignal, Show, type ParentComponent } from "solid-js"
 
+// Note: if you ignore `never` type, then there's an very helpful log message on
+// dev mode to hold your bear back.
+// 
+// You can't escape.
 type InputContent<T extends HTMLTags> = T extends "input" | "textarea" ? string : never
 
 interface IInputShortcutHandlerOptions<T extends HTMLTags> {
@@ -12,6 +16,12 @@ interface IInputShortcutHandlerOptions<T extends HTMLTags> {
   onDiscard$?(originalContent: InputContent<T>): any
 }
 
+/**A helper utility to create a keyboard event handler to implement click-to-edit-text
+ * UI pattens, specifically for text inputs and textareas.
+ * @param options see {@link IInputShortcutHandlerOptions} for options
+ * @returns A handler function.
+ * @see {@link InputContent}
+ */
 export function createInputShortcutHandler<T extends HTMLTags>(
   options: IInputShortcutHandlerOptions<T>
 ) {
@@ -36,7 +46,7 @@ export function createInputShortcutHandler<T extends HTMLTags>(
           " 3  |     // ... your code ... ",
           " 4  |   }",
           " 5  |   onFinalize$(content) {",
-          " .  |     //       ^^^^^^^ same here",
+          " .  |     //        ^^^^^^^ same here",
           " 6  |     // ... your code ... ",
           " 7  |   }",
           " 8  | })",
@@ -44,7 +54,7 @@ export function createInputShortcutHandler<T extends HTMLTags>(
       }
     }
     
-    // @ts-ignore
+    // @ts-ignore - will work just fine
     const content = keyboardEvent.currentTarget?.value
     switch (keyPressed) {
       case "escape":
@@ -58,10 +68,11 @@ export function createInputShortcutHandler<T extends HTMLTags>(
   return handleKeyPress
 }
 
-export type BaseInputComponent = ParentComponent<{
-  onKeyDown?: EventType<"input", 'onKeyDown'>
-  value?: string
-}>
+export type BaseInputComponent = ParentComponent<Partial<{
+  onKeyDown: EventHandler<"input", 'onKeyDown'>
+  onBlur: EventHandler<"input", 'onBlur'>
+  value: string
+}>>
 
 export type BaseReadonlyComponent = ParentComponent<{
   onClick?: AnyFunction
@@ -71,7 +82,7 @@ interface IToggaleInputOptions<
   T extends BaseInputComponent,
   U extends BaseReadonlyComponent
 > {
-  /**Keeps it permanently read-only if set this to `true` */
+  /**Keeps it permanently read-only if set this to `true`. */
   readonly$?(): boolean
   /**Triggered when the content is changed via pressing `Enter`. 
    * @note Pressing `Shift` + `Enter` won't trigger this event.
@@ -83,7 +94,7 @@ interface IToggaleInputOptions<
   /**The initial content.
    * @default '' // empty string
    */
-  label$?(): string
+  initialContent$?(): string
   component$: {
     Input$: T,
     Readonly$: U
@@ -104,7 +115,14 @@ interface IToggaleInputOptions<
  * )
  * 
  * const EditableTitle = () => {
+ *   const [readonly, setReadonly] = createSignal(false)  
+ * 
  *   const { Input$ } = createToggableInput({
+ *     // You can pass in an Accessor to this
+ *     readonly$: readonly,
+ *     // or passing a regular function returns a boolean
+ *     readonly$: () => true,
+ *     // ---------------------------------
  *     label$: () => "Hello",
  *     onFinalize$: (newContent) => {
  *       // Do something with the newContent parameter,
@@ -126,19 +144,24 @@ interface IToggaleInputOptions<
  * ```
  * @param options see {@link IToggaleInputOptions} for options.
  * @returns 
+ * @see {@link BaseInputComponent}
+ * @see {@link BaseReadonlyComponent}
  */
 export function createToggableInput<
   T extends BaseInputComponent,
   U extends BaseReadonlyComponent
 >(options: IToggaleInputOptions<T, U>) {
   const [isShowingInput, setIsShowingInput] = createSignal(false)
-  const [content, setContent] = createSignal(options.label$?.() ?? '')
+  const [content, setContent] = createSignal(options.initialContent$?.() ?? '')
+
+  let inputRef!: Ref<"input">
+  const discardContent: IInputShortcutHandlerOptions<"input">["onDiscard$"] = (content) => {
+    setIsShowingInput(false)
+    options.onDiscard$?.(content)
+  }
 
   const handleKeyPress = createInputShortcutHandler({
-    onDiscard$(content) {
-      setIsShowingInput(false)
-      options.onDiscard$?.(content)
-    },
+    onDiscard$: discardContent,
     onFinalize$(content) {
       setContent(content)
       setIsShowingInput(false)
@@ -148,19 +171,31 @@ export function createToggableInput<
 
   const shouldShowInput = () => !(options.readonly$?.() ?? false) && isShowingInput()
 
+  const discardWhenClickingOutside: EventHandler<"input", "onBlur"> = () => {
+    discardContent("") // nothing to be saved
+  }
+
+  const showInput = () => {
+    setIsShowingInput(true)
+    // Make sure that inputRef is not undefined, we wait for a little bit
+    // to make sure that it exist in the DOM.
+    queueMicrotask(() => inputRef?.focus())
+  }
+
   return {
     /**An `Accessor` to get whether the input is currently on readonly mode or not */
     isShowingInput$: isShowingInput,
     Input$: () => (
       <Show when={shouldShowInput()} fallback={
-        <options.component$.Readonly$ onClick={() => setIsShowingInput(true)}>
+        <options.component$.Readonly$ onClick={showInput}>
           {content()}
         </options.component$.Readonly$>
       }>
         <options.component$.Input$
-          // @ts-ignore - too lazy to fix type error 😴
           onKeyDown={handleKeyPress}
+          onBlur={discardWhenClickingOutside}
           value={content()}
+          ref={inputRef}
         />
       </Show>
     )
