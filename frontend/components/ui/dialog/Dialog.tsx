@@ -11,7 +11,7 @@ import { CLS } from "macro-def"
 
 const style = stylex.create({
   portal: {
-    zIndex: 900,
+    zIndex: 30,
     width: "100%",
     height: "100%",
     position: "fixed",
@@ -24,9 +24,9 @@ const style = stylex.create({
     position: "fixed",
     width: "100%",
     height: "100%",
-    zIndex: 900,
-    backdropFilter: "blur(4px)",
-    backgroundColor: "#000000ab",
+    zIndex: 30,
+    backdropFilter: "blur(3px)",
+    backgroundColor: "#11111b8d",
   },
   content: {
     paddingInline: 15,
@@ -119,7 +119,7 @@ const DialogOverlay = <T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IDialogOverlayProps, ["class"])
   return (
     <Overlay
-      class={`${stylex.attrs(style.overlay)} component-dialog-overlay ${props.class ?? ''}`}
+      class={`${CLS(style.overlay)} component-dialog-overlay ${props.class ?? ''}`}
       {...rest}
     />
   )

@@ -1,7 +1,9 @@
-.showOnHover > .showOnHover__hide {
+.showOnHover .showOnHover__hide {
   opacity: 0;
+  transition: 0.15s ease-out;
 }
 
-.showOnHover:hover > .showOnHover__hide {
+.showOnHover:hover .showOnHover__hide,
+.showOnHover__alwaysShow {
   opacity: 1;
 }

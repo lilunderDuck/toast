@@ -15,11 +15,13 @@ export function createLazyLoadedDialog<Props extends IBaseLazyDialog>(
   // @ts-ignore  should work
   itProps: () => Omit<LazyDialogComponent<Props>, "close$"> = () => {}
 ) {
+  let stayLoaded = false
   const [showing, setIsShowing] = createSignal(false)
   const show = () => {
     setIsShowing(false)
     setIsShowing(true)
     console.log('[lazy dialog] shown')
+    stayLoaded = true
   }
 
   const close = () => {
@@ -32,8 +34,8 @@ export function createLazyLoadedDialog<Props extends IBaseLazyDialog>(
   return {
     Dialog$() {
       return (
-        <Show when={showing()}>
-          <Dialog defaultOpen={true} preventScroll={false} modal={true}>
+        <Show when={stayLoaded || showing()}>
+          <Dialog preventScroll={false} modal={true} open={showing()}>
             <LazyComponent {...itProps() as LazyDialogComponent<Props>} close$={close} />
           </Dialog>
         </Show>

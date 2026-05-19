@@ -1,8 +1,12 @@
-import stylex from "@stylexjs/stylex"
 import { CLS } from "macro-def"
-import { createSignal } from "solid-js"
-import { PopoverHexColorInput, Input } from "~/components"
-import { createToggableInput } from "~/hooks"
+// ...
+import stylex from "@stylexjs/stylex"
+// ...
+import { createLazyLoadedDialog } from "~/hooks"
+// ...
+import type { StickyNoteAction } from "./types"
+import { StickyNoteTitle } from "./StickyNoteTitle"
+import { useStickyNoteContext } from "./StickyNoteProvider"
 
 const style = stylex.create({
   block: {
@@ -13,14 +17,6 @@ const style = stylex.create({
     position: "relative",
     paddingInline: 10,
     paddingBlock: 5,
-  },
-  block__noBackground: {
-    backgroundColor: "var(--mantle)",
-    ":hover": {
-      backgroundColor: "var(--base)",
-    },
-  },
-  block__withBackground: {
     "::before": {
       content: "",
       width: "100%",
@@ -34,57 +30,48 @@ const style = stylex.create({
       borderRadius: 6,
     }
   },
-  block__header: {
-    width: "100%",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  block__hexColorInputTrigger: {
-    borderRadius: "50%"
+  block__content: {
+    fontSize: 13,
+    wordBreak: "break-word"
   }
 })
 
-interface IStickyNoteBlockProps {
-  color?: string
-}
+export function StickyNoteBlock() {
+  const context = useStickyNoteContext()
+  const { color$, buttonRowShouldAlwaysShow$, data$ } = context
 
-export function StickyNoteBlock(props: IStickyNoteBlockProps) {
-  const [color, setColor] = createSignal("#313244")
+  const { Dialog$, show$: showFullViewDialog, close$ } = createLazyLoadedDialog(
+    () => import("../dialog/StickyNoteFullViewDialog"),
+    () => ({
+      action$: stickyNoteActionHandler,
+      context$: context
+    })
+  )
 
-  const { Input$ } = createToggableInput({
-    component$: {
-      Input$: (props) => <Input {...props} />,
-      Readonly$: (props) => (
-        <span onClick={props.onClick}>
-          {props.children}
-        </span>
-      )
-    },
-    initialContent$() {
-      return "Note title"
-    },
-    onDiscard$(originalContent) {
-      console.log("discard:", originalContent)
-    },
-    onFinalize$(newContent) {
-      console.log("finalize:", newContent)
+  const stickyNoteActionHandler: IActionHandler<StickyNoteAction>["action$"] = (type) => {
+    console.log("selected:", type)
+    switch (type) {
+      case "delete_sticky_note$":
+        close$()
+      break
+      
+      case "open_sticky_note_in_fullview$":
+        showFullViewDialog()
+      break
     }
-  })
+  }
 
   return (
-    <div 
-      class={`${CLS(style.block)} ${props.color ? CLS(style.block__withBackground) : CLS(style.block__noBackground)}`}
-      style={`--sticky-note-background-color:${color()}`}
+    <div
+      class={`${CLS(style.block)} ${buttonRowShouldAlwaysShow$() ? "showOnHover__alwaysShow" : "showOnHover"}`}
+      style={`--sticky-note-background-color:${color$()}`}
     >
-      <h3 {...stylex.attrs(style.block__header)}>
-        <Input$ />
-        <PopoverHexColorInput 
-          color$={color} 
-          setColor$={setColor} 
-          onReset$={() => {}}
-        />
-      </h3>
+      <StickyNoteTitle action$={stickyNoteActionHandler} />
+      <p {...stylex.attrs(style.block__content)}>
+        {data$().content}
+      </p>
+
+      <Dialog$ />
     </div>
   )
 }

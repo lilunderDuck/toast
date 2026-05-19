@@ -1,2 +1,5 @@
 export * from "./StickyNoteBlock"
 export * from "./StickyNoteCreateButton"
+export * from "./StickyNoteProvider"
+export * from "./StickyNoteTitle"
+export * from "./types"

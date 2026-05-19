@@ -1,7 +1,7 @@
 import stylex from "@stylexjs/stylex"
 import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import { CleanupPlaylists, GetAllPlaylistsData, InitPlaylists } from "~/wailsjs/go/playlist/Exports";
-import { CollectionLabel, CollectionItem, CollectionItemsSkeleton } from "../components";
+import { CollectionLabel, CollectionItem } from "../components";
 import type { playlist } from "~/wailsjs/go/models";
 import { RiMediaGalleryFill, RiMediaPlayList2Fill } from "solid-icons/ri";
 import { playlistIconUrl } from "~/features/playlist/api";
@@ -43,9 +43,7 @@ export default function Collection() {
         Playlist
       </CollectionLabel>
       <div {...stylex.attrs(style.collection__list)}>
-        <Show when={collections()} fallback={
-          <CollectionItemsSkeleton />
-        }>
+        <Show when={collections()}>
           <For each={collections()?.playlist$ ?? []}>
             {it => (
               <CollectionItem 
@@ -64,9 +62,7 @@ export default function Collection() {
         Gallery
       </CollectionLabel>
       <div {...stylex.attrs(style.collection__list)}>
-        <Show when={collections()} fallback={
-          <CollectionItemsSkeleton />
-        }>
+        <Show when={collections()}>
           
         </Show>
       </div>

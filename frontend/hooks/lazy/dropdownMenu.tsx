@@ -8,6 +8,10 @@ export interface IBaseDropdownMenu {
   close$(): void
 }
 
+interface IDropdownMenuProps {
+  onOpen$?: (isOpened: boolean) => void
+}
+
 type OtherDropdownMenuProps<Props extends IBaseDropdownMenu> = () => Omit<Props, "close$">
 
 export function createLazyLoadedDropdownMenu<Props extends IBaseDropdownMenu>(
@@ -29,9 +33,9 @@ export function createLazyLoadedDropdownMenu<Props extends IBaseDropdownMenu>(
   const LazyComponent = createLazyComponent(Component)
 
   return {
-    DropdownMenu$(props: ParentProps) {
+    DropdownMenu$(props: ParentProps<IDropdownMenuProps>) {
       return (
-        <DropdownMenu>
+        <DropdownMenu onOpenChange={props.onOpen$}>
           <DropdownMenuTrigger as="div" onClick={show}>
             {props.children}
           </DropdownMenuTrigger>

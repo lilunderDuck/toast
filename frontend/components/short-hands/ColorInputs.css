@@ -2,3 +2,8 @@
 .react-colorful {
   width: 100% !important;
 }
+
+/* There's a little "padding" between the 2 color slider, so I just yeet it */
+.react-colorful__saturation {
+  border-bottom: none !important;
+}
