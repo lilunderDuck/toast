@@ -74,3 +74,7 @@ func readPlaylistMetadataFile(playlistId string) (PlaylistData, error) {
 func writePlaylistMetadataFile(playlistId string, data PlaylistData) error {
 	return utils.WriteJsonFile(getPlaylistMetadataFilePath(playlistId), data)
 }
+
+func writePlaylistEntryFile(playlistId string, data []PlaylistTrackData) error {
+	return utils.WriteJsonFile(getPlaylistEntriesFilePath(playlistId), data)
+}

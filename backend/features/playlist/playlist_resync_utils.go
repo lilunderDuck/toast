@@ -57,7 +57,11 @@ func (playlist *Exports) Playlist_resyncTrackDuration(playlistId string) (*Updat
 		debug.InfoLabelf("playlist", "done!")
 	}
 
-	if err := playlist.Playlist_update(metadata.Id, *metadata); err != nil {
+	if err := playlist.Playlist_update(playlistId, *metadata); err != nil {
+		return nil, err
+	}
+
+	if err := writePlaylistEntryFile(playlistId, entries); err != nil {
 		return nil, err
 	}
 

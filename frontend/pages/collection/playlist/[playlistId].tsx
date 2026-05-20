@@ -24,7 +24,7 @@ export default function PlaylistPage() {
   const param = useParams()
 
   return (
-    <PlaylistProvider playlistId$={parseInt(param.playlistId!)}>
+    <PlaylistProvider playlistId$={param.playlistId!}>
       <AppTitleBarDraggable {...stylex.attrs(style.page__titleBar)}>
         <A href="/">
           <Tooltip label$="Go back to home">
