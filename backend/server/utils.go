@@ -27,7 +27,7 @@ func serveStatic(serverInstance *http.ServeMux, path string, whatPath string) {
 	})
 
 	if debug.DEBUG_MODE {
-		debug.InfoLabelf("assets", "registered static assets handler: %s", path)
+		debug.InfoLabelf("assets", "registered static assets handler: %s", debug.FormatPath(path))
 	}
 }
 

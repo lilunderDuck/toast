@@ -34,10 +34,13 @@ const style = stylex.create({
     outline: 'none',
     backgroundColor: 'var(--surface0)',
     width: '100%',
-    resize: 'none'
+    resize: 'none',
+    "::placeholder": {
+      color: "var(--subtext0)"
+    }
   },
   error: {
-    color: 'var(--red10)',
+    color: 'var(--red)',
     fontSize: 14
   }
 })

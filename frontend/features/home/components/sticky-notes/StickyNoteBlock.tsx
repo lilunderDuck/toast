@@ -30,16 +30,12 @@ const style = stylex.create({
       backgroundColor: "var(--sticky-note-background-color)",
       borderRadius: 6,
     }
-  },
-  block__content: {
-    fontSize: 13,
-    wordBreak: "break-word"
   }
 })
 
 export function StickyNoteBlock() {
   const context = useStickyNoteContext()
-  const { color$, buttonRowShouldAlwaysShow$, data$ } = context
+  const { color$, buttonRowShouldAlwaysShow$, ContentInput$, onDelete$ } = context
 
   const { Dialog$, show$: showFullViewDialog, close$ } = createLazyLoadedDialog(
     () => import("../dialog/StickyNoteFullViewDialog"),
@@ -53,6 +49,7 @@ export function StickyNoteBlock() {
     console.log("selected:", type)
     switch (type) {
       case "delete_sticky_note$":
+        onDelete$()
         close$()
       break
       
@@ -68,9 +65,7 @@ export function StickyNoteBlock() {
       style={`--sticky-note-background-color:${color$()}`}
     >
       <StickyNoteTitle action$={stickyNoteActionHandler} />
-      <p {...stylex.attrs(style.block__content)}>
-        {data$().content}
-      </p>
+      <ContentInput$ />
 
       <Dialog$ />
     </div>

@@ -4,6 +4,7 @@
 package db
 
 import (
+	"fmt"
 	"path/filepath"
 	"strings"
 	"toast/backend/debug"
@@ -24,8 +25,16 @@ type Instance struct {
 // Closes the underlying database. It should be called when
 // the database is no longer needed to release resources.
 func (db *Instance) Close() error {
+	err := db.internal.Shrink()
+	if err != nil {
+		if debug.DEBUG_MODE {
+			debug.ErrLabelf("db/json", "%s %v", debugFormatDatabaseName(db.name), err)
+		}
+		return err
+	}
+
 	if debug.DEBUG_MODE {
-		debug.InfoLabelf("db/json", "%s Database closed.", debugFormatDatabaseName(db.name))
+		debug.InfoLabelf("db/json", "%s closing database...", debugFormatDatabaseName(db.name))
 	}
 	return db.internal.Close()
 }
@@ -73,10 +82,13 @@ func Open(path string) (*Instance, error) {
 		return nil, err
 	}
 
-	instance := &Instance{
-		internal: db,
-		name:     filepath.Base(path),
+	instance := &Instance{internal: db}
+	if debug.DEBUG_MODE {
+		filePath, fileName := filepath.Split(path)
+		instance.name = fmt.Sprintf("%s/%s", filepath.Base(filePath), fileName)
+		debug.InfoLabelf("db/json", "%s opened to mess with the data", debugFormatDatabaseName(instance.name))
 	}
+
 	globalInstance[path] = instance
 	return instance, nil
 }

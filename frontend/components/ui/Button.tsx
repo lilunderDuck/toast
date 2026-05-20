@@ -17,7 +17,11 @@ const style = stylex.create({
     transitionProperty: "color, background-color, border-color, text-decoration-color, fill, stroke",
     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
     transitionDuration: "300ms",
-    outline: "none"
+    outline: "none",
+    color: "var(--subtext0)",
+    ":hover": {
+      color: "var(--text)",
+    }
   },
   size_default: {
     paddingTop: "0.5rem",
@@ -52,9 +56,9 @@ const style = stylex.create({
     }
   },
   variant_danger: {
-    backgroundColor: 'var(--red7)',
+    backgroundColor: '#aa3e5c',
     ':hover': {
-      backgroundColor: 'var(--red10)',
+      backgroundColor: '#cc5576',
     }
   },
   variant_noBackground: {

@@ -2,6 +2,7 @@ import { type FieldValues, createForm, type SubmitHandler, type FieldsStore, typ
 import { createSignal, type JSX } from "solid-js"
 // ...
 import { Button, ButtonRow } from "~/components"
+import type { FieldInput } from "~/components"
 
 // intentionally hacking the types, totally worth it
 export type CreateForm<T extends {}> = ReturnType<typeof createForm<T>>
@@ -32,14 +33,13 @@ type InputsCollection = HTMLCollectionOf<Ref<"input" | "textarea">>
  * It disables the submit button while the form is being submitted.
  * @example
  * ```tsx
- * import { createForm } from "@modular-forms/solid"
  * // define your schema
  * type Schema = {
  *   something: string
  * }
  * 
  * // create your submit form
- * const { Form$ } = createSubmitForm<Schema>({
+ * const { Form$, Field$ } = createSubmitForm<Schema>({
  *   submitButtonText$: "Submit data",
  *   async onSubmit$(data) {
  *     // ... do something with the submit data here ...
@@ -50,7 +50,16 @@ type InputsCollection = HTMLCollectionOf<Ref<"input" | "textarea">>
  * 
  * // now you can use it in your component
  * <Form$>
- *   Something inside here
+ *   <Field$ name="something">
+ *     {(field, inputProps) => <FieldInput
+ *        {...inputProps}
+ *        placeholder="Enter something into this"
+ *        label="Something"
+ *        error={field.error}
+ *        value={field.value}
+ *     />}
+ *   </Field$>
+ *   ...
  * </Form$>
  * ```
  *
@@ -60,6 +69,7 @@ type InputsCollection = HTMLCollectionOf<Ref<"input" | "textarea">>
  * @returns An object containing the enhanced form component.
  * 
  * @see {@link ISubmitFormOptions} for form creation options.
+ * @see {@link FieldInput} {@link FieldInput}
  */
 export function createSubmitForm<T extends FieldValues>(options: ISubmitFormOptions<T>) {
   const [formStore, { Form, Field }] = createForm<T>()

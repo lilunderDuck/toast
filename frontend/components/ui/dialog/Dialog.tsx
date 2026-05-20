@@ -41,7 +41,7 @@ const style = stylex.create({
     right: "1rem",
     width: 30,
     height: 30,
-    borderRadius: "0.125rem",
+    borderRadius: 6,
     transitionProperty: "opacity",
     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
     transitionDuration: "300ms",
@@ -151,7 +151,7 @@ const DialogContent = <T extends ValidComponent = "div">(
         {props.children}
         <Show when={props.showCloseButton$ ?? true}>
           <CloseButton {...stylex.attrs(style.closeButton)}>
-            <BsX />
+            <BsX size={40} />
           </CloseButton>
         </Show>
       </Content>

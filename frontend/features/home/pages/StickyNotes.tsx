@@ -1,6 +1,11 @@
+import { createSignal, For } from "solid-js"
+// ...
 import stylex from "@stylexjs/stylex"
-import { StickyNoteBlock, StickyNoteCreateButton } from "../components"
-import { StickyNoteProvider } from "../components/sticky-notes/StickyNoteProvider"
+// ...
+import { arrayObjects } from "~/utils"
+// ...
+import { StickyNoteBlock, StickyNoteCreateButton, StickyNoteProvider } from "../components"
+import { StickyNotesProvider, useStickyNotesContext } from "../provider/StickyNotesProvider"
 
 const style = stylex.create({
   note__list: {
@@ -15,25 +20,28 @@ const style = stylex.create({
 })
 
 export default function StickyNotes() {
+  const NoteList = () => {
+    const { data$ } = useStickyNotesContext()
+    return (
+      <For each={data$()}>
+        {it => (
+          <StickyNoteProvider data$={it}>
+            <StickyNoteBlock />
+          </StickyNoteProvider>
+        )}
+      </For>
+    )
+  }
+
   return (
-    <main id="journalHome__mainContent">
-      <h1>Sticky notes</h1>
-      <div {...stylex.attrs(style.note__list)}>
-        <StickyNoteProvider data$={{
-          title: "hello",
-          content: "This is a test!",
-          color: "#ffffff"
-        }}>
-          <StickyNoteBlock />
-        </StickyNoteProvider>
-        <StickyNoteProvider data$={{
-          title: "world",
-          content: "Sticky note is used to temporary note something. It's not meant to be used as another way to save your novel or something."
-        }}>
-          <StickyNoteBlock />
-        </StickyNoteProvider>
-        <StickyNoteCreateButton />
-      </div>
-    </main>
+    <StickyNotesProvider>
+      <main id="journalHome__mainContent">
+        <h1>Sticky notes</h1>
+        <div {...stylex.attrs(style.note__list)}>
+          <NoteList />
+          <StickyNoteCreateButton />
+        </div>
+      </main>
+    </StickyNotesProvider>
   )
 }

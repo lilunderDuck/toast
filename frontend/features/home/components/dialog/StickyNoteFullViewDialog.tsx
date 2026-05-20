@@ -1,3 +1,5 @@
+import { BsX } from "solid-icons/bs"
+// ...
 import { DialogContent } from "~/components"
 import type { IBaseLazyDialog } from "~/hooks"
 import type { IContextBridge } from "~/utils"
@@ -5,8 +7,6 @@ import type { IContextBridge } from "~/utils"
 import stylex from "@stylexjs/stylex"
 // ...
 import { StickyNoteTitle, type IStickyNoteContext, type StickyNoteAction } from "../sticky-notes"
-import { CloseButton } from "@kobalte/core/dialog"
-import { BsX } from "solid-icons/bs"
 
 const style = stylex.create({
   dialog: {
@@ -23,10 +23,6 @@ const style = stylex.create({
     opacity: 0.25,
     backgroundColor: "var(--sticky-note-background-color)",
     borderRadius: 6,
-  },
-  dialog__noteContent: {
-    fontSize: 14,
-    wordBreak: "break-word"
   },
   dialog__button: {
     width: 30,
@@ -63,9 +59,8 @@ export default function StickyNoteFullViewDialog(props: IStickyNoteFullViewDialo
           <BsX size={30} />
         </button>
       </StickyNoteTitle>
-      <p {...stylex.attrs(style.dialog__noteContent)}>
-        {props.context$!.data$().content}
-      </p>
+      {/* @ts-ignore */}
+      <props.context$.ContentInput$ />
     </DialogContent>
   )
 }

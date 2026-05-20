@@ -1,5 +1,9 @@
-import stylex from "@stylexjs/stylex"
 import { BsPlus } from "solid-icons/bs"
+// ...
+import stylex from "@stylexjs/stylex"
+// ...
+import { createLazyLoadedDialog } from "~/hooks"
+import { useStickyNotesContext } from "../../provider/StickyNotesProvider"
 
 const style = stylex.create({
   block: {
@@ -18,14 +22,24 @@ const style = stylex.create({
   }
 })
 
-interface IStickyNoteCreateButtonProps {
-  // define your component props here
-}
+export function StickyNoteCreateButton() {
+  const { addStickyNote$ } = useStickyNotesContext()
 
-export function StickyNoteCreateButton(props: IStickyNoteCreateButtonProps) {
+  const { Dialog$, show$ } = createLazyLoadedDialog(
+    () => import("../dialog/StickyNoteCreateDialog"),
+    () => ({
+      onSubmit$(data) {
+        addStickyNote$(data)
+      },
+    })
+  )
+
   return (
-    <button {...stylex.attrs(style.block)}>
-      <BsPlus size={30} />
-    </button>
+    <>
+      <button {...stylex.attrs(style.block)} onClick={show$}>
+        <BsPlus size={30} />
+      </button>
+      <Dialog$ />
+    </>
   )
 }

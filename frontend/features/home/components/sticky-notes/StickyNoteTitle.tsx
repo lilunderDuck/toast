@@ -4,7 +4,7 @@ import { BsThreeDots } from "solid-icons/bs"
 // ...
 import { HoveredHexColorInput } from "~/components"
 import type { IContextBridge } from "~/utils"
-import { createLazyLoadedDropdownMenu, createToggableInput } from "~/hooks"
+import { createLazyLoadedDropdownMenu } from "~/hooks"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
@@ -29,21 +29,6 @@ const style = stylex.create({
       backgroundColor: "var(--surface0)"
     }
   },
-  block__input: {
-    backgroundColor: "var(--surface0)",
-    color: "var(--text)",
-    outline: "none",
-    width: "100%",
-    padding: 0,
-    paddingInline: 10,
-    borderRadius: 6,
-  },
-  block__readonlyInput: {
-    width: "100%",
-    overflowX: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap"
-  },
   block__header: {
     width: "100%",
     display: "flex",
@@ -62,35 +47,8 @@ export function StickyNoteTitle(props: ParentProps<IStickyNoteTitleProps>) {
     color$,
     setColor$,
     setButtonRowShouldAlwaysShow$,
-    data$,
-    updateData$
+    TitleInput$,
   } = useStickyNoteContext() ?? props.context$!
-
-  const { Input$ } = createToggableInput({
-    component$: {
-      Input$: (props) => (
-        <input
-          {...stylex.attrs(style.block__input)}
-          {...props}
-        />
-      ),
-      Readonly$: (props) => (
-        <span {...stylex.attrs(style.block__readonlyInput)} onClick={props.onClick}>
-          {props.children}
-        </span>
-      )
-    },
-    initialContent$() {
-      return data$().title
-    },
-    onDiscard$(originalContent) {
-      console.log("discard:", originalContent)
-    },
-    onFinalize$(newContent) {
-      console.log("finalize:", newContent)
-      updateData$({ title: newContent }) 
-    }
-  })
 
   const { DropdownMenu$ } = createLazyLoadedDropdownMenu(
     () => import("../dropdown/StickyNoteMoreOptionDropdown"),
@@ -102,7 +60,7 @@ export function StickyNoteTitle(props: ParentProps<IStickyNoteTitleProps>) {
 
   return (
     <h3 {...stylex.attrs(style.block__header)}>
-      <Input$ />
+      <TitleInput$ />
       <div class={`${CLS(style.block__buttonRow)} showOnHover__hide`}>
         <DropdownMenu$ onOpen$={setButtonRowShouldAlwaysShow$}>
           <button {...stylex.attrs(style.block__button)}>

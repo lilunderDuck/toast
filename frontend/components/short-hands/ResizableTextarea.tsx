@@ -14,7 +14,7 @@ const style = stylex.create({
     outline: 'none',
     borderRadius: 7,
     fontSize: 13,
-    fontFamily: 'Menlo,Monaco,Consolas,Courier New,monospace',
+    // fontFamily: 'Menlo,Monaco,Consolas,Courier New,monospace',
     lineHeight: 1.25,
     overflowY: 'hidden',
   }
