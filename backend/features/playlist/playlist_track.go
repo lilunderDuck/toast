@@ -2,17 +2,16 @@ package playlist
 
 import (
 	"os"
-	"strconv"
 	"toast/backend/db"
 	"toast/backend/debug"
 	"toast/backend/utils"
 )
 
-func playlistDb(id int) *db.Instance {
+func playlistDb(id string) *db.Instance {
 	return db.GetInstance(getPlaylistPath(id))
 }
 
-func (playlist *Exports) GetAllPlaylistTrack(id int) ([]PlaylistTrackData, error) {
+func (playlist *Exports) GetAllPlaylistTrack(id string) ([]PlaylistTrackData, error) {
 	rawData, err := os.ReadFile(getPlaylistEntriesFilePath(id))
 	if err != nil {
 		return nil, err
@@ -22,20 +21,20 @@ func (playlist *Exports) GetAllPlaylistTrack(id int) ([]PlaylistTrackData, error
 	return data, err
 }
 
-func (playlist *Exports) AddPlaylistTrackData(id int, data PlaylistTrackData) error {
+func (playlist *Exports) AddPlaylistTrackData(id string, data PlaylistTrackData) error {
 	if debug.DEBUG_MODE {
 		debug.InfoLabelf("playlist", "Adding playlist tracks: %#v", data)
 	}
 
-	return playlistDb(id).Set(strconv.Itoa(id), utils.StringifyJson(data))
+	return playlistDb(id).Set(id, utils.StringifyJson(data))
 }
 
-func (playlist *Exports) UpdatePlaylistTrackData(id int, newData PlaylistTrackData) error {
+func (playlist *Exports) UpdatePlaylistTrackData(id string, newData PlaylistTrackData) error {
 	if debug.DEBUG_MODE {
-		debug.InfoLabelf("playlist", "Updating track from playlist id: %d - %#v", id, newData)
+		debug.InfoLabelf("playlist", "Updating track from playlist id: %s - %#v", id, newData)
 	}
 
-	return playlistDb(id).Update(strconv.Itoa(id), func(oldDataInDb string) (string, error) {
+	return playlistDb(id).Update(id, func(oldDataInDb string) (string, error) {
 		data, err := utils.ParseJsonString[PlaylistTrackData](oldDataInDb)
 		if err != nil {
 			return "", err

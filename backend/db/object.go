@@ -151,3 +151,19 @@ func (db *Instance) GetAll() string {
 
 	return stringBuilder.String()
 }
+
+func (db *Instance) Has(key string) bool {
+	result := false
+	db.internal.View(func(tx *buntdb.Tx) error {
+		_, err := tx.Get(key)
+		if err != nil {
+			result = false
+		} else {
+			result = true
+		}
+
+		return nil
+	})
+
+	return result
+}

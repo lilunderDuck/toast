@@ -13,7 +13,7 @@ type PlaylistData struct {
 	Name          string `json:"name"`
 	Icon          string `json:"icon,omitempty"`
 	TotalDuration uint   `json:"totalDuration"`
-	Id            int    `json:"id"`
+	Id            string `json:"id"`
 	CoverIcon     string `json:"coverIcon,omitempty"`
 }
 

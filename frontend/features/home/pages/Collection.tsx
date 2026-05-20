@@ -1,10 +1,13 @@
-import stylex from "@stylexjs/stylex"
 import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
-import { CleanupPlaylists, GetAllPlaylistsData, InitPlaylists } from "~/wailsjs/go/playlist/Exports";
-import { CollectionLabel, CollectionItem } from "../components";
-import type { playlist } from "~/wailsjs/go/models";
 import { RiMediaGalleryFill, RiMediaPlayList2Fill } from "solid-icons/ri";
+// ...
+import stylex from "@stylexjs/stylex"
+// ...
+import { CleanupPlaylists, GetAllPlaylistsData, InitPlaylists, ResyncAllPlaylists } from "~/wailsjs/go/playlist/Exports";
+import type { playlist } from "~/wailsjs/go/models";
 import { playlistIconUrl } from "~/features/playlist/api";
+// ...
+import { CollectionItem, CollectionSection, type ICollectionSectionProps } from "../components";
 
 interface ICollections {
   playlist$: playlist.PlaylistData[]
@@ -34,38 +37,46 @@ export default function Collection() {
   })
 
   onCleanup(CleanupPlaylists)
+
+  const playlistActionHandler: ICollectionSectionProps["action$"] = async(type) => {
+    switch (type) {
+      case "resync_collection$":
+        const updatedPlaylist = await ResyncAllPlaylists()
+        setCollections(prev => ({ ...prev, playlist$: updatedPlaylist }))
+      break;
+    
+      default:
+        break;
+    }
+  }
   
   return (
     <main {...stylex.attrs(style.collection)} id="journalHome__mainContent">
       <h1>Collection</h1>
-      <CollectionLabel>
-        <RiMediaPlayList2Fill />
-        Playlist
-      </CollectionLabel>
-      <div {...stylex.attrs(style.collection__list)}>
-        <Show when={collections()}>
-          <For each={collections()?.playlist$ ?? []}>
-            {it => (
-              <CollectionItem 
-                href$={`/collection/playlist/${it.id}`}
-                iconUrl$={playlistIconUrl(it.id, it.icon ?? "")}
-                name$={it.name}
-                tooltipLabel$={it.name}
-              />
-            )}
-          </For>
-        </Show>
-      </div>
+      <CollectionSection icon$={RiMediaPlayList2Fill} label$="Playlist" action$={playlistActionHandler}>
+        <div {...stylex.attrs(style.collection__list)}>
+          <Show when={collections()}>
+            <For each={collections()?.playlist$ ?? []}>
+              {it => (
+                <CollectionItem 
+                  href$={`/collection/playlist/${it.id}`}
+                  iconUrl$={playlistIconUrl(it.id, it.icon ?? "")}
+                  name$={it.name}
+                  tooltipLabel$={it.name}
+                />
+              )}
+            </For>
+          </Show>
+        </div>
+      </CollectionSection>
 
-      <CollectionLabel>
-        <RiMediaGalleryFill />
-        Gallery
-      </CollectionLabel>
-      <div {...stylex.attrs(style.collection__list)}>
-        <Show when={collections()}>
-          
-        </Show>
-      </div>
+      <CollectionSection icon$={RiMediaGalleryFill} label$="Gallery">
+        <div {...stylex.attrs(style.collection__list)}>
+          <Show when={collections()}>
+            <></>
+          </Show>
+        </div>
+      </CollectionSection>
     </main>
   )
 }

@@ -2,7 +2,6 @@ package playlist
 
 import (
 	"os"
-	"strconv"
 	"toast/backend/debug"
 	"toast/backend/utils"
 )
@@ -16,7 +15,7 @@ func (playlist *Exports) GetAllPlaylistsData() []PlaylistData {
 	return data
 }
 
-func (playlist *Exports) GetPlaylistData(playlistId int) (*PlaylistData, error) {
+func (playlist *Exports) GetPlaylistData(playlistId string) (*PlaylistData, error) {
 	rawData, err := os.ReadFile(getPlaylistMetadataFilePath(playlistId))
 	if err != nil {
 		debug.ErrLabel("playlist", err)
@@ -34,7 +33,7 @@ func (playlist *Exports) GetPlaylistData(playlistId int) (*PlaylistData, error) 
 }
 
 func (playlist *Exports) CreatePlaylistData(data PlaylistData) error {
-	err := playlist.database.Set(strconv.Itoa(data.Id), utils.StringifyJson(data))
+	err := playlist.database.Set(data.Id, utils.StringifyJson(data))
 	if err != nil {
 		return err
 	}
@@ -42,7 +41,7 @@ func (playlist *Exports) CreatePlaylistData(data PlaylistData) error {
 	return utils.CreateDirectory(getPlaylistPath(data.Id))
 }
 
-func (playlist *Exports) UpdatePlaylistData(id int, newData PlaylistData) error {
+func (playlist *Exports) UpdatePlaylistData(id string, newData PlaylistData) error {
 	if debug.DEBUG_MODE {
 		debug.InfoLabel("playlist", "updating playlist data")
 	}
@@ -61,7 +60,7 @@ func (playlist *Exports) UpdatePlaylistData(id int, newData PlaylistData) error 
 		debug.InfoLabel("playlist", "updating playlist data from database...")
 	}
 
-	err := playlist.database.Update(strconv.Itoa(id), func(oldRawData string) (string, error) {
+	err := playlist.database.Update(id, func(oldRawData string) (string, error) {
 		data, err := utils.ParseJsonString[PlaylistData](oldRawData)
 		if err != nil {
 			return "", err

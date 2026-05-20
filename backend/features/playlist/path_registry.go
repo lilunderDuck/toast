@@ -2,7 +2,6 @@ package playlist
 
 import (
 	"path/filepath"
-	"strconv"
 	"toast/backend/core/collection"
 	"toast/backend/internals"
 )
@@ -12,22 +11,22 @@ var pathRegistry = collection.CollectionPathRegistry{
 	Database: internals.DATA_FOLDER_PATH + "/collection/playlist/all.db",
 }
 
-func getPlaylistPath(id int) string {
-	return filepath.Join(pathRegistry.Root, strconv.Itoa(id))
+func getPlaylistPath(id string) string {
+	return filepath.Join(pathRegistry.Root, id)
 }
 
-func getPlaylistMetadataFilePath(id int) string {
+func getPlaylistMetadataFilePath(id string) string {
 	return filepath.Join(getPlaylistPath(id), "meta.json")
 }
 
-func getPlaylistEntriesFilePath(id int) string {
+func getPlaylistEntriesFilePath(id string) string {
 	return filepath.Join(getPlaylistPath(id), "entries.json")
 }
 
-func getTrackPath(id int, fileName string) string {
+func getTrackPath(id string, fileName string) string {
 	return filepath.Join(getPlaylistPath(id), "tracks", fileName)
 }
 
-func getTrackIconPath(id int, fileName string) string {
+func getTrackIconPath(id string, fileName string) string {
 	return filepath.Join(getPlaylistPath(id), "icons", fileName)
 }
