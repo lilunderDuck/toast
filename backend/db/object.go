@@ -153,17 +153,21 @@ func (db *Instance) GetAll() string {
 }
 
 func (db *Instance) Has(key string) bool {
-	result := false
-	db.internal.View(func(tx *buntdb.Tx) error {
+	err := db.internal.View(func(tx *buntdb.Tx) error {
 		_, err := tx.Get(key)
-		if err != nil {
-			result = false
-		} else {
-			result = true
-		}
-
-		return nil
+		return err
 	})
 
-	return result
+	if debug.DEBUG_MODE {
+		status := ""
+		if err != buntdb.ErrNotFound {
+			status = "does exist"
+		} else {
+			status = "does not exist"
+		}
+
+		debug.InfoLabelf("db/json", "%s key %s %s", debugFormatDatabaseName(db.name), key, status)
+	}
+
+	return err != buntdb.ErrNotFound
 }

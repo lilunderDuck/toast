@@ -1,6 +1,6 @@
 import { createContext, createSignal, type ParentProps, useContext, type Accessor, onMount, Show, type Setter } from "solid-js"
 import type { playlist } from "~/wailsjs/go/models"
-import { GetAllPlaylistTrack, GetPlaylistData, ResyncDuration,  } from "~/wailsjs/go/playlist/Exports"
+import { Playlist_get, Playlist_getAllTrack, Playlist_resyncTrackDuration } from "~/wailsjs/go/playlist/Exports"
 import { playlistTrackUrl } from "../api"
 import { arrayObjects } from "~/utils"
 import { createMediaPlayer, type MediaPlayer } from "~/hooks"
@@ -31,7 +31,7 @@ interface IPlaylistContext {
 const Context = createContext<IPlaylistContext>()
 
 interface IPlaylistProviderProps {
-  playlistId$: number
+  playlistId$: string
 }
 
 export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
@@ -56,8 +56,8 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
   
   onMount(async() => {
     const [data, entries] = await Promise.all([
-      GetPlaylistData(props.playlistId$),
-      GetAllPlaylistTrack(props.playlistId$)
+      Playlist_get(props.playlistId$),
+      Playlist_getAllTrack(props.playlistId$)
     ])
 
     setPlaylistData(data)
@@ -149,7 +149,7 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
 
   const resyncTracksDuration = async() => {
     console.assert(playlistData(), "playlist data have not been fetched yet")
-    const updatedData = await toast.promise(ResyncDuration(playlistData()!.id), playlistDurationResyncToast, {
+    const updatedData = await toast.promise(Playlist_resyncTrackDuration(playlistData()!.id), playlistDurationResyncToast, {
       position: ToastPosition.TOP_RIGHT
     })
     setPlaylistData(updatedData.metadata)

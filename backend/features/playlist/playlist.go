@@ -6,19 +6,33 @@ import (
 	"toast/backend/utils"
 )
 
-func (playlist *Exports) GetAllPlaylistsData() []PlaylistData {
+func (playlist *Exports) Playlist_getAll() []PlaylistData {
+	if debug.DEBUG_MODE {
+		debug.InfoLabel("playlist", "get all playlist...")
+	}
+
 	data, err := utils.ParseJsonString[[]PlaylistData](playlist.database.GetAll())
 	if err != nil {
-		debug.ErrLabel("playlist", err)
+		if debug.DEBUG_MODE {
+			debug.ErrLabelf("playlist", "The backend has ran into a grave mistake and the app can't do anything about it")
+			debug.ErrLabel("playlist", err)
+		}
 		return []PlaylistData{}
 	}
+
 	return data
 }
 
-func (playlist *Exports) GetPlaylistData(playlistId string) (*PlaylistData, error) {
+func (playlist *Exports) Playlist_get(playlistId string) (*PlaylistData, error) {
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("playlist", "get playlist %s...", playlistId)
+	}
+
 	rawData, err := os.ReadFile(getPlaylistMetadataFilePath(playlistId))
 	if err != nil {
-		debug.ErrLabel("playlist", err)
+		if debug.DEBUG_MODE {
+			debug.ErrLabel("playlist", err)
+		}
 		return nil, err
 	}
 
@@ -29,10 +43,13 @@ func (playlist *Exports) GetPlaylistData(playlistId string) (*PlaylistData, erro
 		}
 	}
 
-	return &data, err
+	return &data, err // if there's an error, then this returns nil and err
 }
 
-func (playlist *Exports) CreatePlaylistData(data PlaylistData) error {
+func (playlist *Exports) Playlist_create(data PlaylistData) error {
+	if debug.DEBUG_MODE {
+		debug.InfoLabel("playlist", "creating playlist...")
+	}
 	err := playlist.database.Set(data.Id, utils.StringifyJson(data))
 	if err != nil {
 		return err
@@ -41,46 +58,23 @@ func (playlist *Exports) CreatePlaylistData(data PlaylistData) error {
 	return utils.CreateDirectory(getPlaylistPath(data.Id))
 }
 
-func (playlist *Exports) UpdatePlaylistData(id string, newData PlaylistData) error {
+func (playlist *Exports) Playlist_update(id string, newData PlaylistData) error {
 	if debug.DEBUG_MODE {
-		debug.InfoLabel("playlist", "updating playlist data")
+		debug.InfoLabel("playlist", "updating playlist...")
+	}
+
+	if err := playlist.ensureDatabaseOpen(); err != nil {
+		return err
 	}
 
 	mergedData := PlaylistData{}
-	shouldCloseAutomatically := false
-	if playlist.database == nil {
-		if debug.DEBUG_MODE {
-			debug.WarnLabelf("playlist", "database already closed, attempting to open to update data...")
-		}
-		playlist.InitPlaylists()
-		shouldCloseAutomatically = true
-	}
-
-	if debug.DEBUG_MODE {
-		debug.InfoLabel("playlist", "updating playlist data from database...")
-	}
-
 	err := playlist.database.Update(id, func(oldRawData string) (string, error) {
 		data, err := utils.ParseJsonString[PlaylistData](oldRawData)
 		if err != nil {
 			return "", err
 		}
 
-		if newData.CoverIcon != "" {
-			data.CoverIcon = newData.CoverIcon
-		}
-
-		if newData.Icon != "" {
-			data.Icon = newData.Icon
-		}
-
-		if newData.Name != "" {
-			data.Name = newData.Name
-		}
-
-		if newData.TotalDuration != 0 {
-			data.TotalDuration = newData.TotalDuration
-		}
+		mergePlaylistData(&data, newData)
 
 		mergedData = data
 		return utils.StringifyJson(data), nil
@@ -90,18 +84,9 @@ func (playlist *Exports) UpdatePlaylistData(id string, newData PlaylistData) err
 		return err
 	}
 
-	if debug.DEBUG_MODE {
-		debug.InfoLabel("playlist", "updating playlist data from database...")
-	}
+	return writePlaylistMetadataFile(id, mergedData)
+}
 
-	err = utils.WriteJsonFile(getPlaylistMetadataFilePath(id), mergedData)
-	if err != nil {
-		return err
-	}
-
-	if shouldCloseAutomatically {
-		playlist.CleanupPlaylists()
-	}
-
-	return nil
+func (playlist *Exports) Playlist_delete(id string) {
+	panic("TODO: should just delete the playlist instead of panicing")
 }

@@ -1,7 +1,6 @@
 package playlist
 
 import (
-	"os"
 	"toast/backend/db"
 	"toast/backend/debug"
 	"toast/backend/utils"
@@ -11,27 +10,24 @@ func playlistDb(id string) *db.Instance {
 	return db.GetInstance(getPlaylistPath(id))
 }
 
-func (playlist *Exports) GetAllPlaylistTrack(id string) ([]PlaylistTrackData, error) {
-	rawData, err := os.ReadFile(getPlaylistEntriesFilePath(id))
-	if err != nil {
-		return nil, err
+func (playlist *Exports) Playlist_getAllTrack(id string) ([]PlaylistTrackData, error) {
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("playlist", "getting all track data of %s", id)
 	}
-
-	data, err := utils.ParseJson[[]PlaylistTrackData](rawData)
-	return data, err
+	return utils.ReadJsonFile[[]PlaylistTrackData](getPlaylistEntriesFilePath(id))
 }
 
-func (playlist *Exports) AddPlaylistTrackData(id string, data PlaylistTrackData) error {
+func (playlist *Exports) Playlist_addTrack(id string, data PlaylistTrackData) error {
 	if debug.DEBUG_MODE {
-		debug.InfoLabelf("playlist", "Adding playlist tracks: %#v", data)
+		debug.InfoLabelf("playlist", "adding playlist tracks: %#v", data)
 	}
 
 	return playlistDb(id).Set(id, utils.StringifyJson(data))
 }
 
-func (playlist *Exports) UpdatePlaylistTrackData(id string, newData PlaylistTrackData) error {
+func (playlist *Exports) Playlist_updateTrack(id string, newData PlaylistTrackData) error {
 	if debug.DEBUG_MODE {
-		debug.InfoLabelf("playlist", "Updating track from playlist id: %s - %#v", id, newData)
+		debug.InfoLabelf("playlist", "updating track from playlist id: %s - %#v", id, newData)
 	}
 
 	return playlistDb(id).Update(id, func(oldDataInDb string) (string, error) {
@@ -40,21 +36,7 @@ func (playlist *Exports) UpdatePlaylistTrackData(id string, newData PlaylistTrac
 			return "", err
 		}
 
-		if data.Artist != "" {
-			data.Artist = newData.Artist
-		}
-
-		if data.Duration != 0 {
-			data.Duration = newData.Duration
-		}
-
-		if data.Icon != "" {
-			data.Icon = newData.Icon
-		}
-
-		if data.Name != "" {
-			data.Name = newData.Name
-		}
+		mergePlaylistTrackData(&data, newData)
 
 		return utils.StringifyJson(data), nil
 	})

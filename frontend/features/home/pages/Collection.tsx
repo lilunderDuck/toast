@@ -3,7 +3,7 @@ import { RiMediaGalleryFill, RiMediaPlayList2Fill } from "solid-icons/ri";
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { CleanupPlaylists, GetAllPlaylistsData, InitPlaylists, ResyncAllPlaylists } from "~/wailsjs/go/playlist/Exports";
+import { Playlist_getAll, Playlist_init, Playlist_resyncAll } from "~/wailsjs/go/playlist/Exports";
 import type { playlist } from "~/wailsjs/go/models";
 import { playlistIconUrl } from "~/features/playlist/api";
 // ...
@@ -30,18 +30,18 @@ const style = stylex.create({
 export default function Collection() {
   const [collections, setCollections] = createSignal<ICollections | null>(null)
   onMount(async() => {
-    await InitPlaylists()
+    await Playlist_init()
     setCollections({
-      playlist$: await GetAllPlaylistsData()
+      playlist$: await Playlist_getAll()
     })
   })
 
-  onCleanup(CleanupPlaylists)
+  onCleanup(Playlist_init)
 
   const playlistActionHandler: ICollectionSectionProps["action$"] = async(type) => {
     switch (type) {
       case "resync_collection$":
-        const updatedPlaylist = await ResyncAllPlaylists()
+        const updatedPlaylist = await Playlist_resyncAll()
         setCollections(prev => ({ ...prev, playlist$: updatedPlaylist }))
       break;
     

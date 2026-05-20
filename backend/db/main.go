@@ -5,6 +5,7 @@ package db
 
 import (
 	"path/filepath"
+	"strings"
 	"toast/backend/debug"
 
 	"github.com/tidwall/buntdb"
@@ -33,8 +34,6 @@ func (db *Instance) Close() error {
 // with the database path as the key.
 //
 // Notes: this is **not** thread safe
-//
-// Update: it's now thread safe, thank god
 var (
 	globalInstance = map[string]*Instance{}
 )
@@ -55,6 +54,19 @@ func Open(path string) (*Instance, error) {
 	db, err := buntdb.Open(path)
 	if err != nil {
 		if debug.DEBUG_MODE {
+			if strings.Contains(err.Error(), "invalid database") {
+				iHaveMessedUp := []string{
+					"Well, if the code reached this point, then I have to safely say",
+					"to you that we've messed up... quite good, to the point that the",
+					"database just refuse to open. Isn't that lovely?",
+					"",
+					"At least it's not in a *binary format*, so it's not really the end",
+					"of the world, basically.",
+					"",
+					"Also, how did you get here? Did you build this app in debug mode?",
+				}
+				debug.ErrLabelf("db/json", "%s", strings.Join(iHaveMessedUp, "\n"))
+			}
 			debug.ErrLabel("db/json", err)
 		}
 

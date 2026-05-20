@@ -58,3 +58,7 @@ func FormatNumbers[T AnyNumber](number T) string {
 func FormatFilename(filename string) string {
 	return FormatWith(COLOR_CYAN, STYLE_NONE, filename)
 }
+
+func FormatErrorName(errorName string) string {
+	return FormatWith(COLOR_RED, STYLE_NONE, errorName)
+}
