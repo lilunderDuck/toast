@@ -3,6 +3,7 @@ import { createContext, createSignal, ParentProps, useContext, type Accessor, ty
 import { ResizableTextarea } from "~/components"
 import { createToggableInput } from "~/hooks"
 import { useStickyNotesContext } from "../../provider/StickyNotesProvider"
+import type { sticky_notes } from "~/wailsjs/go/models"
 
 const style = stylex.create({
   block__input: {
@@ -21,9 +22,10 @@ const style = stylex.create({
     whiteSpace: "nowrap"
   },
   block__contentInput: {
+    fontSize: 15,
   },
   block__contentReadonlyInput: {
-    fontSize: 13,
+    fontSize: 15,
     wordBreak: "break-word",
     whiteSpace: "break-spaces"
   }
@@ -34,8 +36,8 @@ export interface IStickyNoteContext {
   setColor$: Setter<string>
   buttonRowShouldAlwaysShow$: Accessor<boolean>
   setButtonRowShouldAlwaysShow$: Setter<boolean>
-  data$: Accessor<IStickyNoteProviderProps["data$"]>
-  updateData$: (newData: Partial<IStickyNoteProviderProps["data$"]>) => void
+  data$: Accessor<sticky_notes.StickyNoteData>
+  updateData$: (newData: Partial<sticky_notes.StickyNoteData>) => void
   TitleInput$: Component
   ContentInput$: Component
   onDelete$(): any
@@ -44,17 +46,12 @@ export interface IStickyNoteContext {
 const Context = createContext<IStickyNoteContext>()
 
 interface IStickyNoteProviderProps {
-  data$: {
-    title: string
-    content: string
-    color?: string
-    id: number
-  }
+  data$: sticky_notes.StickyNoteData
 }
 
 export function StickyNoteProvider(props: ParentProps<IStickyNoteProviderProps>) {
-  const { deleteStickyNote$ } = useStickyNotesContext()
-  const [color, setColor] = createSignal(props.data$.color ?? "#313244")
+  const { deleteStickyNote$, updateStickyNote$ } = useStickyNotesContext()
+  const [color, setColor] = createSignal(props.data$.color)
   const [data, setData] = createSignal<IStickyNoteProviderProps["data$"]>(props.data$)
   const [buttonRowShouldAlwaysShow, setButtonRowShouldAlwaysShow] = createSignal(false)
 
@@ -112,8 +109,8 @@ export function StickyNoteProvider(props: ParentProps<IStickyNoteProviderProps>)
   })
 
   const updateData: IStickyNoteContext["updateData$"] = (newData) => {
-    const data = setData(prev => ({ ...prev, ...newData }))
-    // TODO: save data
+    setData(prev => ({ ...prev, ...newData }))
+    updateStickyNote$(props.data$.id, newData)
   }
 
   return (

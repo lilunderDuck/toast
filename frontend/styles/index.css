@@ -76,6 +76,7 @@ img, picture, video, canvas, svg {
 /* Inherit fonts for form controls */
 input, button, textarea, select {
   font: inherit;
+  color: var(--text);
 }
 
 /* Enable keyword animations */

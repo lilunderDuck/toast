@@ -1,0 +1,11 @@
+#stickyNoteDialog__leftPanel {
+  width: 30%;
+}
+
+#stickyNoteDialog__rightPanel {
+  width: 70%;
+}
+
+#stickyNoteDialog__rightPanel textarea {
+  width: 100% !important;
+}

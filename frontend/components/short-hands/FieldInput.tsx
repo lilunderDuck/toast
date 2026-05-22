@@ -36,7 +36,7 @@ const style = stylex.create({
     width: '100%',
     resize: 'none',
     "::placeholder": {
-      color: "var(--subtext0)"
+      color: "var(--subtext1)"
     }
   },
   error: {

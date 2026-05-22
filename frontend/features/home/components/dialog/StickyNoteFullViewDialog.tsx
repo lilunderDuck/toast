@@ -36,6 +36,9 @@ const style = stylex.create({
     ":hover": {
       backgroundColor: "var(--surface0)"
     }
+  },
+  dialog__someSpacesBellow: {
+    padding: 3
   }
 })
 
@@ -59,6 +62,7 @@ export default function StickyNoteFullViewDialog(props: IStickyNoteFullViewDialo
           <BsX size={30} />
         </button>
       </StickyNoteTitle>
+      <div {...stylex.attrs(style.dialog__someSpacesBellow)} />
       {/* @ts-ignore */}
       <props.context$.ContentInput$ />
     </DialogContent>

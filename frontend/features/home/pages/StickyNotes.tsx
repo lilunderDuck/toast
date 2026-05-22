@@ -1,8 +1,6 @@
-import { createSignal, For } from "solid-js"
+import { For } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
-// ...
-import { arrayObjects } from "~/utils"
 // ...
 import { StickyNoteBlock, StickyNoteCreateButton, StickyNoteProvider } from "../components"
 import { StickyNotesProvider, useStickyNotesContext } from "../provider/StickyNotesProvider"
