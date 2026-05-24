@@ -2,7 +2,7 @@ import stylex from "@stylexjs/stylex";
 import "./JournalHomeRoot.css"
 import { JournalHomeRootProvider } from "../provider/JournalHomeRootProvider";
 import type { ParentProps } from "solid-js";
-import { SettingProvider } from "~/libs/setting-screen";
+import { SettingProvider } from "~/features/settings";
 
 const style = stylex.create({
   home: {

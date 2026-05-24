@@ -8,7 +8,7 @@ import toastIcon from "~/assets/toast.jpg"
 import { AppTitleBarDraggable, Button } from "~/components"
 // ...
 import { useJournalHomeRootContext } from "../provider/JournalHomeRootProvider"
-import { useSettingContext } from "~/libs/setting-screen"
+import { useSettingContext } from "~/features/settings"
 
 const style = stylex.create({
   sidebar__titleBar: {
