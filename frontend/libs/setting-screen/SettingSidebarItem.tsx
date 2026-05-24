@@ -2,7 +2,7 @@ import { For } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { type ISettingConfig, useSettingContext } from "./SettingProvider"
+import { type ISettingConfig, useSettingContext } from "./provider/SettingProvider"
 
 const style = stylex.create({
   item: {

@@ -6,10 +6,8 @@ import { CLS } from "macro-def"
 import stylex from "@stylexjs/stylex"
 import "./JournalHomeSidebar.css"
 // ...
-import { AppTitleBarDraggable } from "~/components"
-// ...
 import { useJournalHomeRootContext, type IJournalHomePageData } from "../provider/JournalHomeRootProvider"
-import { JournalHomeTitleBarIcon, ToggleHideSidebarButton } from "../components"
+import { JournalHomeTitleBar } from "../components"
 
 const style = stylex.create({
   sidebar: {
@@ -38,7 +36,6 @@ const style = stylex.create({
   sidebar__titleBar: {
     width: "100%",
     marginBottom: 10,
-    gap: 10
   },
   sidebar__titleBarIcon: {
     width: "calc(var(--title-bar-thiccness) - 6px)",
@@ -74,10 +71,7 @@ export function JournalHomeSidebar() {
   return (
     <Show when={isShowingSidebar$()}>
       <aside class={`${CLS(style.sidebar)} ${isShowingSidebar$() ? CLS(style.sidebar__withSidebar) : CLS(style.sidebar__noSidebar)}`}>
-        <AppTitleBarDraggable {...stylex.attrs(style.sidebar__titleBar)}>
-          <JournalHomeTitleBarIcon />
-          <ToggleHideSidebarButton />
-        </AppTitleBarDraggable>
+        <JournalHomeTitleBar {...stylex.attrs(style.sidebar__titleBar)} />
         <For each={SIDEBAR_ITEMS}>
           {it => (
             <button 

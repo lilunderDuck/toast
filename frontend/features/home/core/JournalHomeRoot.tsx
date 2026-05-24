@@ -2,6 +2,7 @@ import stylex from "@stylexjs/stylex";
 import "./JournalHomeRoot.css"
 import { JournalHomeRootProvider } from "../provider/JournalHomeRootProvider";
 import type { ParentProps } from "solid-js";
+import { SettingProvider } from "~/libs/setting-screen";
 
 const style = stylex.create({
   home: {
@@ -18,10 +19,20 @@ const style = stylex.create({
 
 export function JournalHomeRoot(props: ParentProps) {
   return (
-    <JournalHomeRootProvider>
-      <div {...stylex.attrs(style.home)}>
-        {props.children}
-      </div>
-    </JournalHomeRootProvider>
+    <SettingProvider<ISettingTest> 
+      config$={[]} 
+      data$={{
+        something: 1
+      }} 
+      pages$={{
+        "something": () => <></>
+      }}
+    >
+      <JournalHomeRootProvider>
+        <div {...stylex.attrs(style.home)}>
+          {props.children}
+        </div>
+      </JournalHomeRootProvider>
+    </SettingProvider>
   )
 }

@@ -1,4 +1,5 @@
 import { For, Match, Switch } from "solid-js"
+import { CLS } from "macro-def"
 // ...
 import { DialogContent } from "~/components"
 import type { IBaseLazyDialog } from "~/hooks"
@@ -8,7 +9,7 @@ import __style from "./SettingDialog.module.css"
 import "~/styles/scrollbar.css"
 // ...
 import { SettingSidebarItem } from "./SettingSidebarItem"
-import { type ISettingProviderProps, SettingProvider, useSettingContext } from "./SettingProvider"
+import { type ISettingProviderProps, SettingProvider, useSettingContext } from "./provider"
 
 const style = stylex.create({
   dialog: {

@@ -1,4 +1,5 @@
 import { Match, type ParentProps, Show, Switch } from "solid-js"
+import { CLS } from "macro-def"
 // ...
 import { Checkbox, Input, Spacer } from "~/components"
 // ...
@@ -102,7 +103,7 @@ export function SettingSection<T extends SettingType>(props: ParentProps<ISettin
           </Switch>
         </div>
         <Show when={props.description$}>
-          <p class={`${CLS(style.description)} ${props.disabled$ ? stylex.attrs(style.section__disabledDescription) : ""}`}>
+          <p class={`${CLS(style.description)} ${props.disabled$ ? CLS(style.section__disabledDescription) : ""}`}>
             {props.description$}
           </p>
         </Show>

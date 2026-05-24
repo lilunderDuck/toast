@@ -6,10 +6,10 @@ import stylex from "@stylexjs/stylex"
 import { AppTitleBarDraggable } from "~/components"
 // ...
 import { useJournalHomeRootContext } from "../provider/JournalHomeRootProvider"
-import { JournalHomeTitleBarIcon, ToggleHideSidebarButton } from "../components"
 import Journal from "../pages/Journal"
 import Collection from "../pages/Collection"
 import StickyNotes from "../pages/StickyNotes"
+import { JournalHomeTitleBar } from "../components"
 
 const style = stylex.create({
   titleBar: {
@@ -32,8 +32,7 @@ export function JournalHomeMainContent() {
     <>
       <AppTitleBarDraggable class={`${CLS(style.titleBar)} ${isShowingSidebar$() ? CLS(style.titleBar__withSidebar) : CLS(style.titleBar__noSidebar)}`}>
         <Show when={!isShowingSidebar$()}>
-          <JournalHomeTitleBarIcon />
-          <ToggleHideSidebarButton />
+          <JournalHomeTitleBar />
         </Show>
       </AppTitleBarDraggable>
       <Switch>

@@ -12,7 +12,7 @@ export function SplashScreenProvider(props: ParentProps) {
   const [progress, setProgress] = createSignal(0)
 
   const tasking = async() => { 
-    await sleep(TOAST_DEBUG ? getRandomNumberFrom(1000, 2000) : getRandomNumberFrom(2000, 6000))
+    await sleep(getRandomNumberFrom(1000, 2000))
     setProgress(100)
     await sleep(1000)
     setIsShowing(false)

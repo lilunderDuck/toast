@@ -3,5 +3,4 @@ export * from "./journal-list"
 export * from "./collection"
 export * from "./sticky-notes"
 // ...
-export * from "./JournalHomeTitleBarIcon"
-export * from "./ToggleHideSidebarButton"
+export * from "./JournalHomeTitleBar"

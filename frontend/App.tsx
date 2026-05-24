@@ -2,15 +2,15 @@ import { type ParentProps } from 'solid-js'
 // ...
 import { Toaster } from '~/libs/solid-toast'
 import { AppTitleBarButton } from '~/components'
+// ...
+import { SplashScreen, SplashScreenProvider } from './libs/splash-screen'
 
 export default function App(props: ParentProps) {
   return (
     <>
-      {/* <Show when={!TOAST_DEBUG}>
-        <SplashScreenProvider>
-          <SplashScreen />
-        </SplashScreenProvider>
-      </Show> */}
+      <SplashScreenProvider>
+        <SplashScreen />
+      </SplashScreenProvider>
       <Toaster />
       <AppTitleBarButton />
       {props.children}

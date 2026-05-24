@@ -32,7 +32,7 @@ export interface ISettingProviderProps<T> {
 export function SettingProvider<T extends {}>(props: ParentProps<ISettingProviderProps<T>>) {
   const [currentPage, setCurrentPage] = createSignal('')
 
-  setCurrentPage(props.config$[0].items$[0].pageId$) // first page
+  // setCurrentPage(props.config$[0].items$[0].pageId$) // first page
   
   return (
     <Context.Provider value={{
@@ -52,6 +52,6 @@ export function SettingProvider<T extends {}>(props: ParentProps<ISettingProvide
 }
 
 export function useSettingContext<T extends {}>() {
-  // unsafe type casting
+  console.assert(useContext(Context), "you must wrap your component with <SettingProvider /> in order to use useSettingContext()")
   return useContext<ISettingContext<T>>(Context as any)!
 }

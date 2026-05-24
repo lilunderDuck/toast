@@ -1,4 +1,5 @@
 import stylex from "@stylexjs/stylex"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   layer: {

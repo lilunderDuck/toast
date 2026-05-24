@@ -1,0 +1,3 @@
+interface ISettingTest {
+  something: number
+}
