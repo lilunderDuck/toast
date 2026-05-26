@@ -22,7 +22,7 @@ const style = stylex.create({
     cursor: "default",
     userSelect: "none",
     ':hover': {
-      backgroundColor: 'var(--surface0)'
+      backgroundColor: 'var(--surface1)'
     }
   },
   itemIndicator: {

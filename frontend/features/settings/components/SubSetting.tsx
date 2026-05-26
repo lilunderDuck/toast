@@ -1,3 +1,5 @@
+import { CLS } from "macro-def"
+// ...
 import stylex from "@stylexjs/stylex"
 
 const style = stylex.create({
@@ -8,10 +10,6 @@ const style = stylex.create({
     borderLeft: "2px solid var(--crust0)"
   },
 })
-
-interface ISubSettingProps {
-  // define your component props here
-}
 
 export function SubSetting(props: HTMLAttributes<"div">) {
   return (

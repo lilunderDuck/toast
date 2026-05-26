@@ -1,5 +1,9 @@
-#splashScreen [data-background] {
-  animation: animation_fadeIn .35s 1s ease-out forwards;
+#splashScreen {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 20;
+  user-select: none;
 }
 
 #splashScreen[data-completed=true] [data-background] {
@@ -7,5 +11,5 @@
 }
 
 #splashScreen[data-completed=true] {
-  animation: animation_fadeOut .65s ease-out forwards;
+  animation: animation_fadeOut .25s ease-out forwards;
 }

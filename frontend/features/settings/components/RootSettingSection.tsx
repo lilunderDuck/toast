@@ -4,8 +4,7 @@ import { CLS } from "macro-def"
 import stylex from "@stylexjs/stylex"
 // ...
 import { Input } from "~/components"
-// ...
-import { type ISettingSectionProps } from "../types"
+import type { ISettingSectionProps } from "../provider"
 
 const style = stylex.create({
   thisThing$: {
@@ -24,7 +23,8 @@ const style = stylex.create({
   description: {
     fontSize: 14,
     color: "var(--subtext0)",
-    paddingRight: "2rem"
+    paddingRight: "2rem",
+    wordBreak: "break-all"
   },
   description_disabled$: {
     color: "var(--gray9)"
@@ -45,7 +45,7 @@ export function RootSettingName(props: ISettingSectionProps<any> & {
   inline$?: JSX.Element
 }) {
   return (
-    <h4 class={`${CLS(style.name)} ${props.disabled$ ? stylex.attrs(style.name_disabled) : ''}`}>
+    <h4 class={`${CLS(style.name)} ${props.disabled$ ? CLS(style.name_disabled) : ''}`}>
       {props.name$}
       {props.inline$}
     </h4>
@@ -55,7 +55,7 @@ export function RootSettingName(props: ISettingSectionProps<any> & {
 export function RootSettingDescription(props: Pick<ISettingSectionProps<any>, "description$" | "disabled$">) {
   return (
     <Show when={props.description$}>
-      <p class={`${CLS(style.description)} ${props.disabled$ ? stylex.attrs(style.description_disabled$) : ''}`}>
+      <p class={`${CLS(style.description)} ${props.disabled$ ? CLS(style.description_disabled$) : ''}`}>
         {props.description$}
       </p>
     </Show>

@@ -1,0 +1,12 @@
+@keyframes progressBar__moveToRight {
+  0% {
+    left: -5%
+  }
+  100% {
+    left: 105%
+  }
+}
+
+#progressBar__infinite {
+  animation: progressBar__moveToRight 5.5s steps(90) infinite;
+}

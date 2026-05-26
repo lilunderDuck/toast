@@ -4,16 +4,17 @@ import { Toaster } from '~/libs/solid-toast'
 import { AppTitleBarButton } from '~/components'
 // ...
 import { SplashScreen, SplashScreenProvider } from './features/splash'
+import { SettingProvider } from './features/settings'
 
 export default function App(props: ParentProps) {
   return (
-    <>
+    <SettingProvider>
       <SplashScreenProvider>
-        <SplashScreen />
+        <SplashScreen variant$={SplashScreenVariant.DEFAULT} />
       </SplashScreenProvider>
       <Toaster />
       <AppTitleBarButton />
       {props.children}
-    </>
+    </SettingProvider>
   )
 }

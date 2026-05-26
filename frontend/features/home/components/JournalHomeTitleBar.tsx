@@ -30,7 +30,7 @@ interface IJournalHomeTitleBarProps {
 
 export function JournalHomeTitleBar(props: IJournalHomeTitleBarProps) {
   const { isShowingSidebar$, _setIsShowingSidebar$ } = useJournalHomeRootContext()
-  const {  } = useSettingContext()
+  const { showSettingDialog$ } = useSettingContext()
   
   return (
     <AppTitleBarDraggable class={`${CLS(style.sidebar__titleBar)} ${props.class ?? ""}`}>
@@ -52,9 +52,7 @@ export function JournalHomeTitleBar(props: IJournalHomeTitleBarProps) {
       <Button
         size$={ButtonSize.ICON}
         variant$={ButtonVariant.NO_BACKGROUND}
-        onClick={() => {
-
-        }}
+        onClick={showSettingDialog$}
       >
         <BsGearFill />
       </Button>

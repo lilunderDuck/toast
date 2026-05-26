@@ -1,0 +1,196 @@
+import { createSignal, For, onCleanup, onMount } from "solid-js"
+// ...
+import stylex from "@stylexjs/stylex"
+import "./NeoforgeSplashScreen.css"
+import "~/styles/animation.css"
+import toastIcon from "~/assets/toast.jpg"
+// ...
+import { AppTitleBarDraggable } from "~/components"
+import { type backend } from "~/wailsjs/go/models"
+import { GetCurrentAppUsage } from "~/wailsjs/go/backend/App"
+import { sleep } from "~/utils"
+// ...
+import { useSplashScreenContext } from "../../provider"
+import { NeoforgeLogMessage, NeoforgeProgressBar, NeoforgeSpinningFoxIcon } from "./components"
+import { createlogMessageManager, createProgressBarManager } from "./utils"
+import type { IPreviewable } from "~/features/settings"
+import { CLS } from "macro-def"
+
+const style = stylex.create({
+  screen: {
+    backgroundColor: "#ef323d",
+  },
+  screen__content: {
+    aspectRatio: "16 / 9",
+    width: "100%",
+    height: "56.25cqw",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+  },
+  screen__memInfo: {
+    marginTop: 5,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    gap: 5
+  },
+  screen__progressBar: {
+    width: "100%",
+    paddingTop: "12rem",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    gap: 5
+  },
+  screen__messageLog: {
+    width: "100%",
+    position: "absolute",
+    bottom: 0,
+    paddingLeft: 10,
+    paddingBottom: 5
+  },
+  screen__icon: {
+    width: "10rem",
+    height: "10rem",
+    borderRadius: "50%",
+    background: "center center no-repeat var(--icon)",
+    backgroundSize: "contain",
+    position: "absolute",
+    left: "50%",
+    transform: "translateX(-50%)",
+    marginTop: 10,
+    animation: "animation_fadeIn 0.25s ease-out"
+  },
+})
+
+export default function NeoforgeSplashScreen(props: IPreviewable) {
+  const { progress$, hideScreen$ } = useSplashScreenContext()
+  const { logMessages$, pushLogMessage$ } = createlogMessageManager(props)
+  const { addProgressBar$, progressBars$ } = createProgressBarManager()
+  const [appUsage, setAppUsage] = createSignal<backend.AppUsage>({
+    allocatedMB: 0,
+    cpuUsage: 0,
+    totalHeapSize: 0
+  })
+
+  let appUsageIntervalId = 0
+
+  onMount(async() => {
+    appUsageIntervalId = setInterval(async() => {
+      const stats = await GetCurrentAppUsage()
+      setAppUsage(stats)
+    }, 1000) as unknown as number
+
+    pushLogMessage$("toast_engine loading 1.0.0")
+    const scanningModProgressBar = addProgressBar$("neoforge_scanning_mod$", {
+      isInfiniteLoading$: true,
+      label$: "Scanning mod cannidate"
+    })
+
+    if (props.preview$) {
+      return // stop
+    }
+
+    await sleep(2000)
+    scanningModProgressBar.updateLabel$("Loading toast")
+
+    await sleep(2000)
+    scanningModProgressBar.updateLabel$("Loading bootstrap resources")
+    
+    await sleep(4000)
+    scanningModProgressBar.updateLabel$("Loading mod")
+
+    const steps = [
+      "Mod Construction",
+      "Registry Initialization",
+      "Config Loading",
+    ]
+
+    for (const step of steps) {
+      const modStateProgressBar = addProgressBar$("neoforge_mod_state$", {
+        label$: step,
+        currentProgress$: 0
+      })
+
+      for (let i = 1; i <= 10; i++) {
+        await sleep(100)
+        modStateProgressBar.updateProgress$((i / 10) * 100)
+      }
+
+      modStateProgressBar.remove$()
+      if (step === steps[2]) {
+        await sleep(1700)
+      }
+    }
+
+    scanningModProgressBar.remove$()
+    const toastProgress = addProgressBar$("toast_progress$", {
+      currentProgress$: 0,
+      label$: "Toast progress"
+    })
+
+    for (let i = 1; i <= 10; i++) {
+      await sleep(100)
+      toastProgress.updateProgress$((i / 10) * 100)
+      if (i === 5) {
+        const sidedSetupProgressBar = addProgressBar$("neoforge_sided_setup$", {
+          currentProgress$: 0,
+          label$: "Sided setup"
+        })
+
+        for (let j = 1; j <= 10; j++) {
+          await sleep(100)
+          sidedSetupProgressBar.updateProgress$((j / 10) * 100)
+        }
+
+        sidedSetupProgressBar.remove$()
+      }
+    }
+
+    clearInterval(appUsageIntervalId)
+    await sleep(2000)
+    hideScreen$()
+  })
+
+  onCleanup(() => {
+    clearInterval(appUsageIntervalId)
+  })
+
+  GetCurrentAppUsage().then(setAppUsage)
+
+  const totalHeapUsedInPercentage = () => {
+    const percentage = appUsage().allocatedMB / appUsage().totalHeapSize * 100
+    return isNaN(percentage) ? 0 : percentage
+  }
+
+  return (
+    <div 
+      class={`${CLS(style.screen)} splashScreen__neoforge`}
+      data-completed={progress$() === 100} 
+      id="splashScreen"
+    >
+      <AppTitleBarDraggable />
+      <div {...stylex.attrs(style.screen__content)}>
+        <div {...stylex.attrs(style.screen__memInfo)}>
+          <NeoforgeProgressBar currentProgress$={totalHeapUsedInPercentage()} />
+          Memory: {appUsage().allocatedMB}/{appUsage().totalHeapSize} MB ({totalHeapUsedInPercentage().toFixed(1)}%)  CPU: {appUsage().cpuUsage.toFixed(1)}%
+        </div>
+        <div
+          {...stylex.attrs(style.screen__icon)}
+          style={`--icon:url('${toastIcon}')`}
+        />
+        <div {...stylex.attrs(style.screen__progressBar)}>
+          <For each={progressBars$()}>
+            {it => <NeoforgeProgressBar {...it} />}
+          </For>
+        </div>
+        <NeoforgeLogMessage messages$={logMessages$} />
+        <NeoforgeSpinningFoxIcon />
+      </div>
+    </div>
+  )
+}

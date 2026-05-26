@@ -3,7 +3,7 @@ import { Spacer } from "~/components"
 import stylex from "@stylexjs/stylex"
 // ...
 import { RootSettingDescription, RootSettingInput, RootSettingName, RootSettingSection } from "./RootSettingSection"
-import type { ISettingSectionProps } from "../types"
+import type { ISettingSectionProps } from "./types"
 
 const style = stylex.create({
   section: {

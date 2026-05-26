@@ -1,19 +1,16 @@
+import { onMount } from "solid-js"
+// ...
 import stylex from "@stylexjs/stylex"
-import "./DefaultSplashScreen.css"
 import toastIcon from "~/assets/toast.jpg"
-import background from "../../assets/background.svg"
 // ...
 import { AppTitleBarDraggable, FourDotsSpinningLoader } from "~/components"
+import { sleep } from "~/utils"
 // ...
 import { Layer } from "../../components"
 import { useSplashScreenContext } from "../../provider"
 
 const style = stylex.create({
   screen: {
-    width: "100%",
-    height: "100%",
-    position: "fixed",
-    zIndex: 20,
     backgroundColor: "var(--crust)",
   },
   screen__titleBarDraggable: {
@@ -60,7 +57,12 @@ const style = stylex.create({
 })
 
 export default function DefaultSplashScreen() {
-  const { progress$ } = useSplashScreenContext()
+  const { progress$, hideScreen$ } = useSplashScreenContext()
+
+  onMount(async() => {
+    await sleep(2000)
+    hideScreen$()
+  })
 
   return (
     <div 
@@ -72,9 +74,6 @@ export default function DefaultSplashScreen() {
       <AppTitleBarDraggable
         {...stylex.attrs(style.screen__titleBarDraggable)}
       />
-      <Layer data-background {...stylex.attrs(style.background)} style={`--background:url('${background}')`}>
-        <div {...stylex.attrs(style.background__filter)} />
-      </Layer>
       <Layer {...stylex.attrs(style.screen__iconWrap)}>
         <div
           {...stylex.attrs(style.screen__icon)}

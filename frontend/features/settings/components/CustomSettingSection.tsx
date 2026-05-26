@@ -3,7 +3,7 @@ import { type ParentProps } from "solid-js"
 import stylex from "@stylexjs/stylex"
 // ...
 import { RootSettingDescription, RootSettingName, RootSettingSection } from "./RootSettingSection"
-import { type ISettingSectionProps } from "../types"
+import type { ISettingSectionProps } from "../provider"
 
 interface ICustomSettingSectionProps extends ISettingSectionProps<number> {
   // ...

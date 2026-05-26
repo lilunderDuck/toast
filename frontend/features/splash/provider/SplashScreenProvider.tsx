@@ -1,8 +1,9 @@
 import { createContext, createSignal, onMount, ParentProps, Show, useContext, type Accessor } from "solid-js"
-import { getRandomNumberFrom, sleep } from "~/utils"
+import { sleep } from "~/utils"
 
 interface ISplashScreenContext {
   progress$: Accessor<number>
+  hideScreen$(): void
 }
 
 const Context = createContext<ISplashScreenContext>()
@@ -12,17 +13,22 @@ export function SplashScreenProvider(props: ParentProps) {
   const [progress, setProgress] = createSignal(0)
 
   const tasking = async() => { 
-    await sleep(getRandomNumberFrom(1000, 2000))
-    setProgress(100)
-    await sleep(1000)
-    setIsShowing(false)
+    // await sleep(getRandomNumberFrom(1000, 2000))
+    // setProgress(100)
+    // await sleep(1000)
+    // setIsShowing(false)
   }
 
   onMount(() => tasking())
   
   return (
     <Context.Provider value={{
-      progress$: progress
+      progress$: progress,
+      async hideScreen$() {
+        setProgress(100)
+        await sleep(1000)
+        setIsShowing(false)
+      }
     }}>
       <Show when={isShowing()}>
         {props.children}
@@ -32,5 +38,8 @@ export function SplashScreenProvider(props: ParentProps) {
 }
 
 export function useSplashScreenContext() {
-  return useContext(Context)!
+  return useContext(Context)! ?? {
+    progress$: () => 50,
+    hideScreen$: () => {}
+  }
 }

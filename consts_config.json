@@ -375,5 +375,13 @@
     "type": "const",
     "name": "TREE_VIEW_ROOT_NODE_ID",
     "value": 0
+  },
+  {
+    "type": "enum",
+    "name": "SplashScreenVariant",
+    "members": [
+      "DEFAULT",
+      "MC_NEOFORGE"
+    ]
   }
 ]

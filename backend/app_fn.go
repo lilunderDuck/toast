@@ -2,9 +2,13 @@ package backend
 
 import (
 	"context"
+	"runtime"
+	"time"
 	"toast/backend/db"
+	"toast/backend/debug"
 
-	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"github.com/shirou/gopsutil/cpu"
+	wails_runtime "github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 type App struct {
@@ -42,22 +46,54 @@ func (a *App) shutdown(ctx context.Context) {
 //
 // Why this method doesn't exist in the javascript side? huh-?
 func (a *App) WindowClose() {
-	runtime.Quit(a.ctx)
+	wails_runtime.Quit(a.ctx)
 }
 
-func (a *App) OpenDirectoryDialog(options runtime.OpenDialogOptions) (string, error) {
-	return runtime.OpenDirectoryDialog(a.ctx, options)
+func (a *App) OpenDirectoryDialog(options wails_runtime.OpenDialogOptions) (string, error) {
+	return wails_runtime.OpenDirectoryDialog(a.ctx, options)
 }
 
-func (a *App) OpenFileDialog(options runtime.OpenDialogOptions) (string, error) {
-	return runtime.OpenFileDialog(a.ctx, options)
+func (a *App) OpenFileDialog(options wails_runtime.OpenDialogOptions) (string, error) {
+	return wails_runtime.OpenFileDialog(a.ctx, options)
 }
 
-func (a *App) OpenMultipleFilesDialog(options runtime.OpenDialogOptions) ([]string, error) {
-	return runtime.OpenMultipleFilesDialog(a.ctx, options)
+func (a *App) OpenMultipleFilesDialog(options wails_runtime.OpenDialogOptions) ([]string, error) {
+	return wails_runtime.OpenMultipleFilesDialog(a.ctx, options)
 }
 
 // OpenNewWindow opens a new Wails window
 func (a *App) OpenNewWindow(title string) error {
 	return nil
+}
+
+type AppUsage struct {
+	AllocatedMB   uint64  `json:"allocatedMB"`
+	TotalHeapSize uint64  `json:"totalHeapSize"`
+	CpuUsage      float64 `json:"cpuUsage"`
+}
+
+func (a *App) GetCurrentAppUsage() AppUsage {
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+	percentage, err := cpu.PercentWithContext(a.ctx, time.Second, false)
+	cpuUsage := float64(0)
+	if err != nil {
+		if debug.DEBUG_MODE {
+			debug.WarnLabelf("app", "could not get the current cpu usage:\n%v", err)
+		}
+
+		cpuUsage = 0
+	} else {
+		cpuUsage = percentage[0]
+	}
+
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("app", "heap allocated: %d MB, total heap: %d MB, cpu: %f%%", m.Alloc/1024/1024, m.HeapSys/1024/1024, cpuUsage)
+	}
+
+	return AppUsage{
+		AllocatedMB:   m.Alloc / 1024 / 1024,
+		TotalHeapSize: m.HeapSys / 1024 / 1024,
+		CpuUsage:      cpuUsage,
+	}
 }

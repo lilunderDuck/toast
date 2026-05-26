@@ -2,7 +2,8 @@ import { For } from "solid-js"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import { type ISettingConfig, useSettingContext } from "./provider/SettingProvider"
+import { type ISettingConfig } from "../provider/SettingProvider"
+import { CLS } from "macro-def"
 
 const style = stylex.create({
   item: {
@@ -29,19 +30,27 @@ const style = stylex.create({
     backgroundColor: "transparent",
     textAlign: "left",
     display: "flex",
-    justifyContent: "center",
     alignItems: "center",
     width: "100%",
+  },
+  item__buttonInactive: {
     ":hover": {
       color: "var(--text)",
       backgroundColor: "var(--surface0)",
     }
+  },
+  item__buttonActive: {
+    color: "var(--text)",
+    backgroundColor: "var(--blue)",
   }
 })
 
-export function SettingSidebarItem(props: ISettingConfig) {
-  const { setCurrentPage$ } = useSettingContext()
+interface ISettingSidebarItemProps extends ISettingConfig {
+  onClick$(item: ISettingConfig["items$"][0]): void
+  isCurrentPage$(item: ISettingConfig["items$"][0]): boolean
+}
 
+export function SettingSidebarItem(props: ISettingSidebarItemProps) {
   return (
     <section {...stylex.attrs(style.item)}>
       <label {...stylex.attrs(style.item__label)}>
@@ -50,8 +59,8 @@ export function SettingSidebarItem(props: ISettingConfig) {
       <For each={props.items$}>
         {item => (
           <button
-            onClick={() => setCurrentPage$(item.pageId$)}
-            {...stylex.attrs(style.item__button)}
+            onClick={() => props.onClick$(item)}
+            class={`${CLS(style.item__button)} ${props.isCurrentPage$(item) ? CLS(style.item__buttonActive) : CLS(style.item__buttonInactive)}`}
           >
             <item.icon$ />
             {item.name$}

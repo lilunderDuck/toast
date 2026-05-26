@@ -1,0 +1,9 @@
+@font-face {
+  font-family: monocraft;
+  src: url('../../assets/monocraft.ttf');
+}
+
+.splashScreen__neoforge {
+  font-family: monocraft;
+  color: white;
+}

@@ -2,7 +2,7 @@ import type { Component, ComponentProps, JSX, ValidComponent } from "solid-js"
 import { Show, splitProps } from "solid-js"
 import { BsX } from "solid-icons/bs"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
-import { CloseButton, Content, Description, Overlay, Portal, Root, Title, Trigger, type DialogContentProps, type DialogDescriptionProps, type DialogOverlayProps, type DialogPortalProps, type DialogTitleProps } from "@kobalte/core/dialog"
+import { CloseButton, Content, Description, Overlay, Portal, Root, Title, Trigger, useDialogContext, type DialogContentProps, type DialogDescriptionProps, type DialogOverlayProps, type DialogPortalProps, type DialogTitleProps } from "@kobalte/core/dialog"
 // ...
 import stylex from "@stylexjs/stylex"
 import '~/styles/scrollbar.css'
@@ -135,6 +135,8 @@ interface IDialogContentProps<T extends ValidComponent = "div"> extends DialogCo
 const DialogContent = <T extends ValidComponent = "div">(
   props: PolymorphicProps<T, IDialogContentProps<T>>,
 ) => {
+  const { close } = useDialogContext()
+
   const [, rest] = splitProps(props as IDialogContentProps, [
     "class",
     "children",
@@ -150,7 +152,7 @@ const DialogContent = <T extends ValidComponent = "div">(
       >
         {props.children}
         <Show when={props.showCloseButton$ ?? true}>
-          <CloseButton {...stylex.attrs(style.closeButton)}>
+          <CloseButton {...stylex.attrs(style.closeButton)} onClick={close}>
             <BsX size={40} />
           </CloseButton>
         </Show>

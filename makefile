@@ -31,7 +31,7 @@ dev:
 	wails dev ${APP_TAGS_DEBUG}
 
 generate_consts:
-	bun ./addon/config/consts.ts
+	bun ./config/consts.ts
 
 # clean the mess I made
 clean:
