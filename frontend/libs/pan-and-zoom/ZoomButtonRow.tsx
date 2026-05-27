@@ -1,4 +1,4 @@
-import { Match, Switch } from "solid-js"
+import { Match, Switch, type ParentProps } from "solid-js"
 import { TbFillZoomCancel, TbFillZoomIn, TbFillZoomOut } from 'solid-icons/tb'
 // ...
 import { Button, Tooltip } from "~/components"
@@ -21,7 +21,7 @@ const style = stylex.create({
   },
 })
 
-export function ZoomButtonRow() {
+export function ZoomButtonRow(props: ParentProps) {
   const { unzoom$, zoom$, reset$, internal$ } = useZoomAndPanContext()
 
   return (
@@ -54,6 +54,7 @@ export function ZoomButtonRow() {
           </Match>
         </Switch>
       </span>
+      {props.children}
     </div>
   )
 }

@@ -4,6 +4,9 @@ import { usePlaylistContext } from "../provider"
 import stylex from "@stylexjs/stylex"
 import { PlaylistHeaderDropdownButton } from "../components"
 import { formatSecondsToMMSS } from "~/utils"
+import { Button, Tooltip } from "~/components"
+import { BsImageFill, BsPlus } from "solid-icons/bs"
+import { createLazyLoadedDialog } from "~/hooks"
 
 const style = stylex.create({
   header: {
@@ -36,19 +39,29 @@ const style = stylex.create({
     bottom: 0,
     right: 0,
     paddingRight: 20,
-    paddingBottom: 15
+    paddingBottom: 15,
+    display: "flex",
+    alignItems: "center",
+    gap: 5
   }
 })
 
 export function PlaylistHeader() {
   const { data$, tracks$ } = usePlaylistContext()
   const coverIconUrl = () => data$()?.coverIcon ? 
-    `--cover-icon-url:url("${playlistIconUrl(data$()!.id, data$()!.coverIcon!)}")` as const :
+    playlistIconUrl(data$()!.id, data$()!.coverIcon!) :
     ""
   // ...
 
+  const { Dialog$: ImageFullviewDialog, show$: showImageFullviewDialog } = createLazyLoadedDialog(
+    () => import("~/components/dialog/ImageFullviewDialogContent"),
+    () => ({
+      imageSrc$: coverIconUrl()
+    })
+  )
+
   return (  
-    <header {...stylex.attrs(style.header)} style={coverIconUrl()}>
+    <header {...stylex.attrs(style.header)} style={`--cover-icon-url:url("${coverIconUrl()}")`}>
       <div {...stylex.attrs(style.header__titleWrap)}>
         <h1>{data$()?.name}</h1>
         <span {...stylex.attrs(style.header__info)}>
@@ -56,8 +69,27 @@ export function PlaylistHeader() {
         </span>
       </div>
       <div {...stylex.attrs(style.header__moreOptionButton)}>
+        <Tooltip label$="View playlist background image">
+          <Button 
+            size$={ButtonSize.ICON}
+            variant$={ButtonVariant.NO_BACKGROUND}
+            onClick={showImageFullviewDialog}
+          >
+            <BsImageFill />
+          </Button>
+        </Tooltip>
+        <Tooltip label$="Add track">
+          <Button 
+            size$={ButtonSize.ICON}
+            variant$={ButtonVariant.NO_BACKGROUND}
+          >
+            <BsPlus />
+          </Button>
+        </Tooltip>
         <PlaylistHeaderDropdownButton />
       </div>
+
+      <ImageFullviewDialog />
     </header>
   )
 }

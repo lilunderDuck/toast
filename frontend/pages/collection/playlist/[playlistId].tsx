@@ -38,7 +38,7 @@ export default function PlaylistPage() {
         </A>
       </AppTitleBarDraggable>
       <div 
-        class={`${CLS(style.page)} scrollbar scrollbarVertical`}
+        class={`${CLS(style.page)} scrollbar scrollbarVertical invsScrollbar`}
         id="playlist__page"
       >
         <PlaylistHeader />

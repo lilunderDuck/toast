@@ -1,13 +1,11 @@
 import { BsThreeDots } from "solid-icons/bs"
-import { Button } from "~/components"
+// ...
+import { Button, Tooltip } from "~/components"
 import { createLazyLoadedDropdownMenu } from "~/hooks"
+// ...
 import { usePlaylistContext } from "../provider"
 
-interface IPlaylistHeaderDropdownButtonProps {
-  // define your component props here
-}
-
-export function PlaylistHeaderDropdownButton(props: IPlaylistHeaderDropdownButtonProps) {
+export function PlaylistHeaderDropdownButton() {
   const { resyncTracksDuration$ } = usePlaylistContext()
   
   const TableMoreOptionsDropdownMenu = createLazyLoadedDropdownMenu(
@@ -29,12 +27,14 @@ export function PlaylistHeaderDropdownButton(props: IPlaylistHeaderDropdownButto
 
   return (
     <TableMoreOptionsDropdownMenu.DropdownMenu$>
-      <Button
-        size$={ButtonSize.ICON}
-        variant$={ButtonVariant.NO_BACKGROUND}
-      >
-        <BsThreeDots />
-      </Button>
+      <Tooltip label$="More options">
+        <Button
+          size$={ButtonSize.ICON}
+          variant$={ButtonVariant.NO_BACKGROUND}
+        >
+          <BsThreeDots />
+        </Button>
+      </Tooltip>
     </TableMoreOptionsDropdownMenu.DropdownMenu$>
   )
 }

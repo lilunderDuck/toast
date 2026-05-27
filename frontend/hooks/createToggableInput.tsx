@@ -70,7 +70,6 @@ export function createInputShortcutHandler<T extends HTMLTags>(
 
 export type BaseInputComponent = ParentComponent<Partial<{
   onKeyDown: EventHandler<"input", 'onKeyDown'>
-  onBlur: EventHandler<"input", 'onBlur'>
   value: string
 }>>
 
@@ -171,10 +170,6 @@ export function createToggableInput<
 
   const shouldShowInput = () => !(options.readonly$?.() ?? false) && isShowingInput()
 
-  const discardWhenClickingOutside: EventHandler<"input", "onBlur"> = () => {
-    discardContent("") // nothing to be saved
-  }
-
   const showInput = () => {
     setIsShowingInput(true)
     // Make sure that inputRef is not undefined, we wait for a little bit
@@ -193,7 +188,6 @@ export function createToggableInput<
       }>
         <options.component$.Input$
           onKeyDown={handleKeyPress}
-          onBlur={discardWhenClickingOutside}
           value={content()}
           ref={inputRef}
         />
