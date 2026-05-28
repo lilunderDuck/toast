@@ -1,10 +1,12 @@
 import { createContext, createSignal, type ParentProps, useContext, type Accessor, onMount, Show, type Setter } from "solid-js"
+// ...
 import type { playlist } from "~/wailsjs/go/models"
-import { Playlist_get, Playlist_getAllTrack, Playlist_resyncTrackDuration } from "~/wailsjs/go/playlist/Exports"
-import { playlistTrackUrl } from "../api"
+import { Playlist_get, Playlist_getAllTrack, Playlist_resyncTrackDuration, Playlist_updateTrack } from "~/wailsjs/go/playlist/Exports"
 import { arrayObjects } from "~/utils"
 import { createMediaPlayer, type MediaPlayer } from "~/hooks"
 import { toast } from "~/libs/solid-toast"
+// ...
+import { playlistTrackUrl } from "../api"
 import { playlistDurationResyncToast } from "../components"
 
 interface ICurrentTrackData {
@@ -15,14 +17,18 @@ interface ICurrentTrackData {
 interface IPlaylistContext {
   data$: Accessor<playlist.PlaylistData | null>
   tracks$: Accessor<playlist.PlaylistTrackData[]>
-  togglePlayTrack$(index: number): void
-  pauseCurrentTrack$(): void
+  _setTracks$: Setter<playlist.PlaylistTrackData[]>
   currentTrack$: Accessor<ICurrentTrackData | null>
+  updateTrack$(trackId: number, updatedData: Partial<playlist.PlaylistTrackData>): Promise<void>
+  togglePlayTrack$(index: number): void
   resyncTracksDuration$(): Promise<void>
+  saveTrackData$(): Promise<void>
+
   goToPrevTrackIfCan$(): void
   goToNextTrackIfCan$(): void
   shouldDisableNextBtn$: Accessor<boolean>
   shouldDisablePrevBtn$: Accessor<boolean>
+
   loopingState$: Accessor<PlaylistLoopState>
   setLoopingState$: Setter<PlaylistLoopState>
   player$: MediaPlayer
@@ -35,7 +41,7 @@ interface IPlaylistProviderProps {
 }
 
 export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
-  const [playlistTracks, setPlaylistTrack] = createSignal<playlist.PlaylistTrackData[]>([])
+  const [playlistTracks, setPlaylistTracks] = createSignal<playlist.PlaylistTrackData[]>([])
   const [playlistData, setPlaylistData] = createSignal<playlist.PlaylistData | null>(null)
   const [currentTrack, setCurrentTrack] = createSignal<ICurrentTrackData | null>(null)
 
@@ -61,7 +67,7 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
     ])
 
     setPlaylistData(data)
-    setPlaylistTrack(entries)
+    setPlaylistTracks(entries)
   })
 
   const playTrack = (trackIndex: number) => {
@@ -128,7 +134,6 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
     playTrack(currentIndex + 1)
   }
 
-
   const goToPrevTrackIfCan = () => {
     console.log("Going to previous track...")
     console.assert(playlistData(), "playlist data have not been fetched yet")
@@ -153,7 +158,7 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
       position: ToastPosition.TOP_RIGHT
     })
     setPlaylistData(updatedData.metadata)
-    setPlaylistTrack(updatedData.tracks)
+    setPlaylistTracks(updatedData.tracks)
   }
 
   const togglePlayTrack: IPlaylistContext["togglePlayTrack$"] = (index) => {
@@ -169,11 +174,21 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
     }
   }
 
+  const saveTrackData = async() => {
+    console.log("Playlist track is currently saving...")
+    Playlist_updateTrack(props.playlistId$, playlistTracks())
+  }
+
+  const updateTrack: IPlaylistContext["updateTrack$"] = async(trackId, updatedData) => {
+    setPlaylistTracks(prev => arrayObjects(prev).replace$(it => it.id === trackId, updatedData))
+    saveTrackData()
+  }
+
   return (
     <Context.Provider value={{
       tracks$: playlistTracks,
+      _setTracks$: setPlaylistTracks,
       data$: playlistData,
-      pauseCurrentTrack$: pauseCurrentlyPlayedTrack,
       togglePlayTrack$: togglePlayTrack,
       currentTrack$: currentTrack,
       resyncTracksDuration$: resyncTracksDuration,
@@ -184,6 +199,8 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
       loopingState$: loopingState, 
       setLoopingState$: setLoopingState,
       player$: audioPlayer,
+      saveTrackData$: saveTrackData,
+      updateTrack$: updateTrack,
     }}>
       {props.children}
       <Show when={playlistData()}>

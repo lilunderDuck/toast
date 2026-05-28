@@ -14,13 +14,7 @@ type Service struct {
 }
 
 func NewService() *Service {
-	db, err := db.Open(GetBasePath() + "/all.db")
-	if err != nil {
-		panic(err)
-	}
-
 	return &Service{
-		Db:       db,
 		BasePath: GetBasePath(),
 	}
 }
