@@ -383,5 +383,13 @@
       "DEFAULT",
       "MC_NEOFORGE"
     ]
+  },
+  {
+    "type": "enum",
+    "name": "PlaylistHeaderDropdownAction",
+    "members": [
+      "RESYNC_DURATION",
+      "VIEW_BACKGROUND"
+    ]
   }
 ]

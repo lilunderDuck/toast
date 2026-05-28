@@ -1,12 +1,13 @@
-import { playlistIconUrl } from "../api"
-import { usePlaylistContext } from "../provider"
-
+import { BsPlus, BsThreeDots } from "solid-icons/bs"
+// ...
 import stylex from "@stylexjs/stylex"
-import { PlaylistHeaderDropdownButton } from "../components"
+// ...
 import { formatSecondsToMMSS } from "~/utils"
 import { Button, Tooltip } from "~/components"
-import { BsImageFill, BsPlus } from "solid-icons/bs"
-import { createLazyLoadedDialog } from "~/hooks"
+import { createLazyLoadedDialog, createLazyLoadedDropdownMenu } from "~/hooks"
+// ...
+import { playlistIconUrl } from "../api"
+import { usePlaylistContext } from "../provider"
 
 const style = stylex.create({
   header: {
@@ -47,7 +48,7 @@ const style = stylex.create({
 })
 
 export function PlaylistHeader() {
-  const { data$, tracks$ } = usePlaylistContext()
+  const { data$, tracks$, resyncTracksDuration$ } = usePlaylistContext()
   const coverIconUrl = () => data$()?.coverIcon ? 
     playlistIconUrl(data$()!.id, data$()!.coverIcon!) :
     ""
@@ -60,6 +61,27 @@ export function PlaylistHeader() {
     })
   )
 
+  const TableMoreOptionsDropdownMenu = createLazyLoadedDropdownMenu(
+    () => import("../components/dropdown/PlaylistHeaderMoreOptionDropdown"),
+    () => ({
+      action$(type) {
+        switch (type) {
+          case PlaylistHeaderDropdownAction.RESYNC_DURATION:
+            resyncTracksDuration$()
+          break;
+
+          case PlaylistHeaderDropdownAction.VIEW_BACKGROUND:
+            showImageFullviewDialog()
+          break;
+        
+          default:
+            console.warn("case", type, "have not been handled yet.")
+            break;
+        }
+      },
+    })
+  )
+
   return (  
     <header {...stylex.attrs(style.header)} style={`--cover-icon-url:url("${coverIconUrl()}")`}>
       <div {...stylex.attrs(style.header__titleWrap)}>
@@ -69,15 +91,6 @@ export function PlaylistHeader() {
         </span>
       </div>
       <div {...stylex.attrs(style.header__moreOptionButton)}>
-        <Tooltip label$="View playlist background image">
-          <Button 
-            size$={ButtonSize.ICON}
-            variant$={ButtonVariant.NO_BACKGROUND}
-            onClick={showImageFullviewDialog}
-          >
-            <BsImageFill />
-          </Button>
-        </Tooltip>
         <Tooltip label$="Add track">
           <Button 
             size$={ButtonSize.ICON}
@@ -86,7 +99,16 @@ export function PlaylistHeader() {
             <BsPlus />
           </Button>
         </Tooltip>
-        <PlaylistHeaderDropdownButton />
+        <TableMoreOptionsDropdownMenu.DropdownMenu$>
+          <Tooltip label$="More options">
+            <Button
+              size$={ButtonSize.ICON}
+              variant$={ButtonVariant.NO_BACKGROUND}
+            >
+              <BsThreeDots />
+            </Button>
+          </Tooltip>
+        </TableMoreOptionsDropdownMenu.DropdownMenu$>
       </div>
 
       <ImageFullviewDialog />

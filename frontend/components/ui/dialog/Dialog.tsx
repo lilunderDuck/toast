@@ -2,7 +2,7 @@ import type { Component, ComponentProps, JSX, ValidComponent } from "solid-js"
 import { Show, splitProps } from "solid-js"
 import { BsX } from "solid-icons/bs"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
-import { CloseButton, Content, Description, Overlay, Portal, Root, Title, Trigger, useDialogContext, type DialogContentProps, type DialogDescriptionProps, type DialogOverlayProps, type DialogPortalProps, type DialogTitleProps } from "@kobalte/core/dialog"
+import { CloseButton, Content, Description, Overlay, Portal, Root, Title, useDialogContext, type DialogContentProps, type DialogDescriptionProps, type DialogOverlayProps, type DialogPortalProps, type DialogTitleProps } from "@kobalte/core/dialog"
 // ...
 import stylex from "@stylexjs/stylex"
 import '~/styles/scrollbar.css'
@@ -85,7 +85,6 @@ const style = stylex.create({
 })
 
 const Dialog = Root
-const DialogTrigger = Trigger
 
 interface IDialogPortal extends DialogPortalProps {
   closeOnClickOutside$?: boolean
@@ -213,5 +212,4 @@ export {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 }

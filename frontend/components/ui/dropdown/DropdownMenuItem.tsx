@@ -12,7 +12,7 @@ const style = stylex.create({
     position: "relative",
     paddingBlock: '0.375rem',
     paddingInline: '0.5rem',
-    borderRadius: "0.125rem",
+    borderRadius: 6,
     outlineStyle: "none",
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
@@ -20,6 +20,7 @@ const style = stylex.create({
     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
     transitionDuration: "300ms",
     userSelect: "none",
+    width: "100%"
   },
   menuItem__default: {
     cursor: "default",
