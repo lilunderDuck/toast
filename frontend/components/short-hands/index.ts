@@ -2,7 +2,6 @@ export * from './OpenAndCloseButton'
 export * from './FieldInput'
 export * from './Label'
 export * from "./ColorInputs"
-export * from './IconInput'
 export * from './ResizableTextarea'
 export * from './ButtonRow'
 export * from './MediaProgressSlider'

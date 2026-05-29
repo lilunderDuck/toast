@@ -1,7 +1,7 @@
 import { createContext, createSignal, type ParentProps, useContext, type Accessor, onMount, Show, type Setter } from "solid-js"
 // ...
 import type { playlist } from "~/wailsjs/go/models"
-import { Playlist_get, Playlist_getAllTrack, Playlist_resyncTrackDuration, Playlist_updateTrack } from "~/wailsjs/go/playlist/Exports"
+import { Playlist_createTrack, Playlist_get, Playlist_getAllTrack, Playlist_resyncTrackDuration, Playlist_updateTrack } from "~/wailsjs/go/playlist/Exports"
 import { arrayObjects } from "~/utils"
 import { createMediaPlayer, type MediaPlayer } from "~/hooks"
 import { toast } from "~/libs/solid-toast"
@@ -23,6 +23,7 @@ interface IPlaylistContext {
   togglePlayTrack$(index: number): void
   resyncTracksDuration$(): Promise<void>
   saveTrackData$(): Promise<void>
+  addTrack$(options: playlist.PlaylistCreateTrackOption): Promise<void>
 
   goToPrevTrackIfCan$(): void
   goToNextTrackIfCan$(): void
@@ -184,6 +185,12 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
     saveTrackData()
   }
 
+  const addTrack: IPlaylistContext["addTrack$"] = async(data) => {
+    const newTrackData = await Playlist_createTrack(props.playlistId$, data)
+    setPlaylistTracks(prev => [...prev, newTrackData])
+    saveTrackData()
+  }
+
   return (
     <Context.Provider value={{
       tracks$: playlistTracks,
@@ -201,6 +208,7 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
       player$: audioPlayer,
       saveTrackData$: saveTrackData,
       updateTrack$: updateTrack,
+      addTrack$: addTrack,
     }}>
       {props.children}
       <Show when={playlistData()}>

@@ -1,11 +1,10 @@
 import stylex from "@stylexjs/stylex"
-import { JSX, Show } from "solid-js"
-import { Tooltip } from "../ui"
+import { JSX, Show, type Accessor } from "solid-js"
 import { createFileUpload, SUPPORTED_IMAGE_FILTER, type FileOpenDialogOptions } from "~/hooks"
 import { BsPlus } from "solid-icons/bs"
-import { SpinningCube } from "../loader"
 import { previewUrl } from "~/api"
 import { CLS } from "macro-def"
+import { SpinningCube, Tooltip } from "~/components"
 
 const style = stylex.create({
   uploadZone: {
@@ -16,8 +15,14 @@ const style = stylex.create({
     alignItems: "center",
     width: "var(--icon-input-size)",
     height: "var(--icon-input-size)",
+  },
+  uploadZone__disabled: {
+    cursor: "not-allowed",
+  },
+  uploadZone__allowed: {
+    border: "4px solid transparent",
     ":hover": {
-      border: "2px solid var(--overlay0)"
+      borderColor: "var(--blue)"
     }
   },
   uploadZone__withImage: {
@@ -34,6 +39,7 @@ interface IIconInputOptions {
   tooltipLabel$?: JSX.Element
   initialIconUrl$?: () => string
   dialogOptions$: Omit<FileOpenDialogOptions, "Filters">
+  disabled$?: Accessor<boolean>
 }
 
 export function createIconInput(options: IIconInputOptions) {
@@ -45,15 +51,15 @@ export function createIconInput(options: IIconInputOptions) {
     }
   })
 
-  const hasNoIcon = () => !options.initialIconUrl$?.() || !file$()
+  const hasNoIcon = () => !file$()
   const iconPreviewUrl = () => previewUrl(file$()!)
 
-  const inputClasses = () => `${CLS(style.uploadZone)} ${hasNoIcon() ? CLS(style.uploadZone__noImage) : CLS(style.uploadZone__withImage)}`
+  const inputClasses = () => `${CLS(style.uploadZone)} ${(options.disabled$ ?? (() => false))() ? CLS(style.uploadZone__disabled) : CLS(style.uploadZone__allowed)} ${hasNoIcon() ? CLS(style.uploadZone__noImage) : CLS(style.uploadZone__withImage)}`
 
   return {
     file$: file$,
     isUploading$: isUploading$,
-    Input$: () => (
+    IconInput$: () => (
       <Tooltip label$={options.tooltipLabel$ ?? "Click to choose an image."}>
         <div 
           onClick={open$}

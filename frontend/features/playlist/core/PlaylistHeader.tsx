@@ -48,16 +48,25 @@ const style = stylex.create({
 })
 
 export function PlaylistHeader() {
-  const { data$, tracks$, resyncTracksDuration$ } = usePlaylistContext()
+  const { data$, tracks$, resyncTracksDuration$, addTrack$ } = usePlaylistContext()
   const coverIconUrl = () => data$()?.coverIcon ? 
     playlistIconUrl(data$()!.id, data$()!.coverIcon!) :
     ""
   // ...
 
-  const { Dialog$: ImageFullviewDialog, show$: showImageFullviewDialog } = createLazyLoadedDialog(
+  const ImageFullviewDialog = createLazyLoadedDialog(
     () => import("~/components/dialog/ImageFullviewDialogContent"),
     () => ({
       imageSrc$: coverIconUrl()
+    })
+  )
+
+  const PlaylistAddTrackDialog = createLazyLoadedDialog(
+    () => import("../components/dialog/PlaylistAddTrackDialog"),
+    () => ({
+      onSubmit$(data) {
+        addTrack$(data)
+      },
     })
   )
 
@@ -71,7 +80,7 @@ export function PlaylistHeader() {
           break;
 
           case PlaylistHeaderDropdownAction.VIEW_BACKGROUND:
-            showImageFullviewDialog()
+            ImageFullviewDialog.show$()
           break;
         
           default:
@@ -95,6 +104,7 @@ export function PlaylistHeader() {
           <Button 
             size$={ButtonSize.ICON}
             variant$={ButtonVariant.NO_BACKGROUND}
+            onClick={PlaylistAddTrackDialog.show$}
           >
             <BsPlus />
           </Button>
@@ -111,7 +121,8 @@ export function PlaylistHeader() {
         </TableMoreOptionsDropdownMenu.DropdownMenu$>
       </div>
 
-      <ImageFullviewDialog />
+      <ImageFullviewDialog.Dialog$ />
+      <PlaylistAddTrackDialog.Dialog$ />
     </header>
   )
 }
