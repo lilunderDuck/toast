@@ -8,7 +8,6 @@
     "types": [
       "vite/client", 
       "vite-plugin-pages/client-solid",
-      "./frontend/@types/global.d.ts",
       "./build/dist/macro_def.d.ts",
       "./build/dist/consts.d.ts",
       "@types/node"

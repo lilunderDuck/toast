@@ -1,4 +1,6 @@
 import { css } from "molcss"
+// ...
+import type { HTMLAttributes } from "~/utils"
 
 const label = css`
   font-size: 13.5; // sub-pixel perfect 👍

@@ -1,4 +1,3 @@
-export * from "./style"
 export * from "./event"
 export * from './stuff'
 export * from './random'

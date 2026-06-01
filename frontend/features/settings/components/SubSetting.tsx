@@ -1,21 +1,19 @@
-import { CLS } from "macro-def"
+import { css } from "molcss"
 // ...
-import stylex from "@stylexjs/stylex"
+import type { HTMLAttributes } from "~/utils"
 
-const style = stylex.create({
-  subSetting: {
-    paddingLeft: 15,
-    paddingBlock: 5,
-    marginTop: 5,
-    borderLeft: "2px solid var(--crust0)"
-  },
-})
+const subSetting = css`
+  padding-left: 15px;
+  padding-block: 5px;
+  margin-top: 5px;
+  border-left: 2px solid var(--crust0);
+`
 
 export function SubSetting(props: HTMLAttributes<"div">) {
   return (
     <div 
       {...props}
-      class={`${CLS(style.subSetting)} ${props.class ?? ""}`}
+      class={`${subSetting} ${props.class ?? ""}`}
     />
   )
 }

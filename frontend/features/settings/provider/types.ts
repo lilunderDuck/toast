@@ -1,5 +1,7 @@
 import type { IconTypes } from "solid-icons"
 import type { JSX } from "solid-js"
+// ...
+import type { HTMLAttributes } from "~/utils"
 
 export interface IPreviewable {
   preview$?: boolean

@@ -1,4 +1,6 @@
 import { css } from "molcss"
+// ...
+import type { HTMLAttributes } from "~/utils"
 
 const spacer = css`
   flex: 1 1 0%;

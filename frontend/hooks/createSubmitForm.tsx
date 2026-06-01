@@ -3,6 +3,7 @@ import { createSignal, type JSX } from "solid-js"
 // ...
 import { Button, ButtonRow } from "~/components"
 import type { FieldInput } from "~/components"
+import type { Ref } from "~/utils"
 
 // intentionally hacking the types, totally worth it
 export type CreateForm<T extends {}> = ReturnType<typeof createForm<T>>

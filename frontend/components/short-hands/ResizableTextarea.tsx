@@ -1,5 +1,7 @@
 import { createSignal, onMount } from "solid-js"
 // ...
+import type { HTMLAttributes, Ref } from "~/utils"
+// ...
 import { css } from "molcss"
 
 const input = css`

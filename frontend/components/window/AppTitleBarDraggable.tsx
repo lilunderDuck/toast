@@ -1,4 +1,6 @@
 import { css } from "molcss"
+// ...
+import type { HTMLAttributes } from "~/utils"
 
 const titleBar = css`
   height: var(--title-bar-thiccness);

@@ -1,27 +1,24 @@
-import { splitProps } from "solid-js"
-import stylex from "@stylexjs/stylex"
-import { CLS } from "macro-def"
+import { css } from "molcss"
+// ...
+import type { HTMLAttributes } from "~/utils"
 
-const style = stylex.create({
-  menuLabel: {
-    paddingInline: '0.5rem',
-    paddingBlock: '0.375rem',
-    fontSize: "0.875rem",
-    lineHeight: "1.25rem",
-    fontWeight: 600
-  }
-})
+const menuLabel = css`
+  padding-inline: 0.5rem;
+  padding-block: 0.375rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+`
 
 export interface IContextMenuLabel extends HTMLAttributes<"div"> {
   inset?: boolean
 }
 
 export function ContextMenuLabel(props: IContextMenuLabel) {
-  const [, rest] = splitProps(props, ["class", "inset"])
   return (
     <div
-      class={`${CLS(style.menuLabel)} ${props.class ?? ""}`}
-      {...rest}
+      class={`${menuLabel} ${props.class ?? ""}`}
+      {...props}
     />
   )
 }

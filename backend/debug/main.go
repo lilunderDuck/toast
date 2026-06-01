@@ -1,11 +1,17 @@
+// A custom logging library to log stuff into the console in dev mode.
+//
+// Notes: to make sure everything in this library does not include in the final build, or
+// there's a specific code that you want to **only be run in dev mode**,
+// make sure to warp it with
+//
+//	if debug.DEBUG_MODE {
+//	  // ... your code here ...
+//	}
 package debug
 
 import (
 	"fmt"
 	"os"
-	"time"
-
-	"github.com/charmbracelet/log"
 )
 
 func InfoLabel(label string, something string) {
@@ -24,11 +30,6 @@ func FatalLabel(label string, detail error) {
 	fmt.Printf("%s %s | %s\n", formatLabel(label), LOG_LABEL_FATAL, formatContent(detail.Error()))
 	os.Exit(1)
 }
-
-var logger = log.NewWithOptions(os.Stdout, log.Options{
-	ReportTimestamp: true,
-	TimeFormat:      time.Kitchen,
-})
 
 func InfoLabelf(label string, something string, formater ...any) {
 	InfoLabel(label, fmt.Sprintf(something, formater...))

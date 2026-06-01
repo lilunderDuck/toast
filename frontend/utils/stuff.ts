@@ -1,3 +1,5 @@
+import type { AnyFunction } from "./types"
+
 /**Pauses execution for a specified number of milliseconds.
  * @param delayInMs The number of milliseconds to delay.
  * @returns A Promise that resolves after the delay.

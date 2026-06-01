@@ -1,3 +1,5 @@
+import type { AnyFunction } from "./types"
+
 type EventMap = { [eventName: string]: AnyFunction }
 
 export interface IEvent<TEvent extends EventMap> {

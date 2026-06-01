@@ -1,31 +1,25 @@
 import { type Accessor, createContext, createSignal, type ParentProps, useContext } from "solid-js"
 // ...
-import { toast } from "~/libs/solid-toast"
-import { arrayObjects } from "~/utils"
 import type { ToastOptions } from "~/libs/solid-toast/util"
-import type { group } from "~/wailsjs/go/models"
-import { CreateGroup, UpdateGroup } from "~/wailsjs/go/group/Exports"
-// ...
-import { GroupAddedToast, GroupEditedToast } from "../components"
 
 interface IJournalHomeContext {
   /**Reactive array of all journal groups. */
-  groups$: Accessor<group.GroupData[]>
+  groups$: Accessor<[]>
   /**Asynchronously creates a new journal group and updates the UI.
    * @param data Options for the new journal group.
    */
-  addGroup$(data: group.GroupOptions): Promise<void>
+  addGroup$(data: null): Promise<void>
   /**Asynchronously edits an existing journal group and updates the UI.
    * @param targetGroupId The group id to edit.
    * @param options The new options for the journal group.
    */
-  editGroup$(targetGroupId: string, options: group.GroupData): Promise<void>
+  editGroup$(targetGroupId: string, options: null): Promise<void>
 }
 
 const Context = createContext<IJournalHomeContext>()
 
 interface IJournalHomeProviderProps {
-  groups$: group.GroupData[]
+  groups$: []
 }
 
 export function JournalHomeProvider(props: ParentProps<IJournalHomeProviderProps>) {
@@ -40,16 +34,8 @@ export function JournalHomeProvider(props: ParentProps<IJournalHomeProviderProps
     <Context.Provider value={{
       groups$: groups,
       async addGroup$(data) {
-        const newGroup = await CreateGroup(data)
-        setGroups(prev => [newGroup, ...prev])
-        toast.custom((toast) => <GroupAddedToast {...toast} name$={newGroup.name} />, toastOptions)
-        console.log("added group:", data)
       },
       async editGroup$(targetGroupId, options) {
-        const newData = await UpdateGroup(targetGroupId, options)
-        setGroups(prev => [...arrayObjects(prev).replace$(it => it.id === targetGroupId, newData)])
-        toast.custom((toast) => <GroupEditedToast {...toast} name$={newData.name} />, toastOptions)
-        console.log("edited group:", targetGroupId, options)
       }
     }}>
       {props.children}

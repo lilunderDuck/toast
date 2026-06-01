@@ -1,4 +1,6 @@
-import { createSignal, Show, type ParentComponent } from "solid-js"
+import { createSignal, Show, type ParentComponent, type Ref } from "solid-js"
+// ...
+import type { AnyFunction, EventHandler, HTMLTags } from "~/utils"
 
 // Note: if you ignore `never` type, then there's an very helpful log message on
 // dev mode to hold your bear back.

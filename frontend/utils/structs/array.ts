@@ -1,3 +1,5 @@
+import type { AnyObject } from "../types";
+
 /**Extracts the element type of an array.
  * @template ArrayType The type of the array.
  * @returns The element type of the array.

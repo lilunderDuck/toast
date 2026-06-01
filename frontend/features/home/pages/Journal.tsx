@@ -1,7 +1,6 @@
 import { createResource, For, Show } from "solid-js"
 import { MdOutlineFilter_list_off } from 'solid-icons/md'
 // ...
-import { GetGroups } from "~/wailsjs/go/group/Exports"
 import { PlaceholderView, Spacer } from "~/components"
 // ...
 import { css } from "molcss"
@@ -40,7 +39,7 @@ const section__emptyJournalView = css`
 
 export default function Journal() {
   const [resource] = createResource(async () => {
-    return await GetGroups()
+    return []
   })
 
   return (

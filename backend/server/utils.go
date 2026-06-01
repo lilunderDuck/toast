@@ -58,7 +58,7 @@ func serveStaticWithFilter(
 	})
 
 	if debug.DEBUG_MODE {
-		debug.InfoLabelf("assets", "registered static assets handler with filter: %s", path)
+		debug.InfoLabelf("assets", "registered static assets handler with filter: %s", debug.FormatPath(path))
 	}
 }
 

@@ -1,16 +1,13 @@
-import stylex from "@stylexjs/stylex"
-import { CLS } from "macro-def"
-import { splitProps } from "solid-js"
+import { css } from "molcss"
+// ...
+import type { HTMLAttributes } from "~/utils"
 
-const style = stylex.create({
-  menuShortcut: {
-    fontSize: "0.75rem",
-    letterSpacing: "0.1em",
-    opacity: 0.6
-  },
-})
+const menuShortcut = css`
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  opacity: 0.6;
+`
 
 export function DropdownMenuShortcut(props: HTMLAttributes<"span">) {
-  const [, rest] = splitProps(props, ["class"])
-  return <span class={`${CLS(style.menuShortcut)} ${props.class ?? ""}`} {...rest} />
+  return <span class={`${menuShortcut} ${props.class ?? ""}`} {...props} />
 }

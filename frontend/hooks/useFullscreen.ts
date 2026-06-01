@@ -5,6 +5,7 @@
 import { type Accessor, createMemo, createSignal, onCleanup } from 'solid-js'
 import { type ConfigurableDocument } from './types'
 import { useEventListener } from './useEventListener'
+import type { Ref } from '~/utils'
 
 export interface UseFullscreenOptions extends ConfigurableDocument {
   /**
@@ -23,7 +24,7 @@ const FULL_SCREEN_ATTRIBUTE_NAME = "currently-in-fullscreen"
  */
 export function useFullscreen<
   T extends keyof HTMLElementTagNameMap
->(target?: Accessor<Ref<T>>, options: UseFullscreenOptions = {}) {
+>(target: Accessor<Ref<T>>, options: UseFullscreenOptions = {}) {
   const { document = window.document, autoExit = true } = options
 
   const targetAccessor = createMemo(target)

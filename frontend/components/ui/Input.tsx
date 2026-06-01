@@ -1,4 +1,6 @@
 import { css } from "molcss"
+// ...
+import type { HTMLAttributes } from "~/utils"
 
 const input = css`
   padding-inline: 10px;

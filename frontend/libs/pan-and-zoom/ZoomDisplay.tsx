@@ -1,45 +1,41 @@
-import stylex from "@stylexjs/stylex"
-import __style from "./ZoomDisplay.module.css"
-import { useZoomAndPanContext } from "./ZoomAndPanProvider"
 import type { ParentProps } from "solid-js"
+// ...
+import __style from "./ZoomDisplay.module.css"
+import { css } from "molcss"
+// ...
+import type { Ref } from "~/utils"
+// ...
+import { useZoomAndPanContext } from "./ZoomAndPanProvider"
 
-const style = stylex.create({
-  imageDisplay: {
-    width: '100%',
-    height: '100%',
-    // positon: 'relative',
-    overflow: 'hidden',
-    display: "flex",
-    justifyContent: "center",
-    alignItems: 'center',
-  },
-  wrapRoot: {
-    width: '100%',
-    height: '100%',
-  },
-  imageWrap: {
-    width: '100%',
-    height: '100%',
-    transition: 'scale 0.25s cubic-bezier(0.17, 0.67, 0.11, 0.95)',
-    scale: 'var(--image-scale)',
-  },
-  image: {
-    userSelect: 'none',
-    width: '100%',
-    height: '100%',
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  limitImgHeight: {
-    maxHeight: "100vh"
-  },
-  scrollContainer: {
-    width: '100%',
-    height: '100%',
-    overflow: 'scroll'
-  }
-})
+const zoomDisplay = css`
+  width: 100%;
+  height: 100%;
+  // positon: 'relative',
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const zoomDisplay__contentWrap = css`
+  width: 100%;
+  height: 100%;
+  transition: scale 0.25s cubic-bezier(0.17, 0.67, 0.11, 0.95);
+  scale: var(--image-scale);
+`
+
+const zoomDisplay__content = css`
+  user-select: none;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const zoomDisplay__limitContentHeight = css`
+  max-height: 100vh;
+`
 
 export function ZoomDisplay(props: ParentProps) {
   const { internal$ } = useZoomAndPanContext()
@@ -123,12 +119,12 @@ export function ZoomDisplay(props: ParentProps) {
 
   return (
     <div 
-      {...stylex.attrs(style.imageDisplay)} 
+      class={zoomDisplay} 
       onMouseDown={dragStart}
       ref={targetElement}
     >
       <div
-        {...stylex.attrs(style.imageWrap)}
+        class={zoomDisplay__contentWrap}
         style={{
           '--image-scale': internal$.zoomScale$(),
           'transform': `translate(${imagePosition().x}px, ${imagePosition().y}px)`,
@@ -136,7 +132,7 @@ export function ZoomDisplay(props: ParentProps) {
         ref={draggableRef}
       >
         <div
-          {...stylex.attrs(style.image, internal$.zoomScale$() <= 1 ? style.limitImgHeight : {})}
+          class={`${zoomDisplay__content} ${internal$.zoomScale$() <= 1 ? zoomDisplay__limitContentHeight : ""}`}
           id={__style.display}
           ref={imgRef}
         >

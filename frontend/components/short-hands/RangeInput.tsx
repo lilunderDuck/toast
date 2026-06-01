@@ -1,4 +1,6 @@
 import { css } from "molcss"
+// ...
+import type { HTMLAttributes } from "~/utils"
 
 const slider__input = css`
   appearance: none;

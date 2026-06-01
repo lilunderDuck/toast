@@ -1,10 +1,14 @@
 import { CLS } from 'macro-def'
+// ...
 import { setDefaultOpts, defaultOpts, store, dispatch, defaultToasterOptions } from '../core'
 import type { 
   IToasterProps, 
   Toast, 
 } from './toast'
+// ...
 import stylex from '@stylexjs/stylex'
+// ...
+import type { Ref } from '~/utils'
 
 export const generateID = (() => {
   let count = 0

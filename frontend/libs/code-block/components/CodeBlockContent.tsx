@@ -1,6 +1,10 @@
-import stylex from "@stylexjs/stylex"
-import { useCodeBlockContext } from "../provider"
 import { Show } from "solid-js"
+// ...
+import stylex from "@stylexjs/stylex"
+// ...
+import type { Ref } from "~/utils"
+// ...
+import { useCodeBlockContext } from "../provider"
 
 const style = stylex.create({
   input__content: {

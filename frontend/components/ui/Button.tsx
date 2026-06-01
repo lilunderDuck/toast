@@ -1,8 +1,8 @@
-import { createSignal, Show, splitProps } from "solid-js"
+import { splitProps } from "solid-js"
 // ...
 import { css } from "molcss"
 // ...
-import { SpinningCube } from "../loader"
+import type { HTMLAttributes } from "~/utils"
 
 const base = css`
   display: inline-flex;
@@ -101,34 +101,15 @@ export interface IButtonProps extends HTMLAttributes<"button"> {
 
 export function Button(props: IButtonProps) {
   const [local, others] = splitProps(props, ["variant$", "size$"])
-  const [isLoading, setIsLoading] = createSignal(false)
-
-  const clickHandler: EventHandler<"button", "onClick"> = async(mouseEvent) => {
-    if (isLoading()) return
-    
-    const thisOnClickCallback = props.onClick
-    if (!thisOnClickCallback) return
-
-    if (thisOnClickCallback instanceof Promise) {
-      setIsLoading(true)
-      await thisOnClickCallback(mouseEvent)
-      setIsLoading(false)
-    } else {
-      thisOnClickCallback(mouseEvent)
-    }
-  }
 
   return (
     <button
       type="button"
       disabled={isLoading()}
       {...others}
-      onClick={clickHandler}
       class={`${base} ${variantMapping[local.variant$ ?? ButtonVariant.DEFAULT]} ${sizeMapping[local.size$ ?? ButtonSize.DEFAULT]} ${others.class ?? ""}`}
     >
-      <Show when={isLoading()} fallback={props.children}>
-        <SpinningCube cubeSize$={30} />
-      </Show>
+      {props.children}
     </button>
   )
 }

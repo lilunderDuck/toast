@@ -1,4 +1,5 @@
 import { createEffect } from 'solid-js'
+import { CLS } from 'macro-def'
 // ...
 import stylex from '@stylexjs/stylex'
 // ...
@@ -10,7 +11,8 @@ import {
   animateToastOnHide
 } from '../util'
 import { ToastIconContainer } from './ToastIconContainer'
-import { CLS } from 'macro-def'
+// ...
+import type { Ref } from '~/utils'
 
 const style = stylex.create({
   toastBar: {

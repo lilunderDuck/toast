@@ -10,6 +10,8 @@ import {
 } from "@kobalte/core/tooltip"
 // ...
 import { css } from "molcss"
+// ...
+import type { HTMLAttributes } from "~/utils"
 
 const tooltip = css`
   overflow: hidden;

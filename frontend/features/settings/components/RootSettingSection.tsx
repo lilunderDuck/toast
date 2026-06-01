@@ -4,6 +4,8 @@ import { CLS } from "macro-def"
 import stylex from "@stylexjs/stylex"
 // ...
 import { Input } from "~/components"
+import type { HTMLAttributes } from "~/utils"
+// ...
 import type { ISettingSectionProps } from "../provider"
 
 const style = stylex.create({

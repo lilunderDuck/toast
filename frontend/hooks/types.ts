@@ -1,5 +1,5 @@
 import type { Accessor } from 'solid-js'
-import type { AccessorArray, Setter, Signal } from 'solid-js/types/reactive/signal'
+import type { AccessorArray, Setter, Signal } from 'solid-js'
 
 /**
  * Any function

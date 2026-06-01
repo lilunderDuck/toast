@@ -1,6 +1,8 @@
 import { splitProps } from "solid-js"
 // ...
 import { css } from "molcss"
+// ...
+import type { HTMLAttributes } from "~/utils"
 
 const tag = css`
   border-radius: 6px;

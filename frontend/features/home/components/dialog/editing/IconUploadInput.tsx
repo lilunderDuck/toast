@@ -5,6 +5,7 @@ import { css } from "molcss"
 // ...
 import { SpinningCube, Tooltip } from "~/components"
 import { ASSETS_SERVER_URL } from "~/api"
+import type { HTMLAttributes } from "~/utils"
 
 const uploadZone = css`
   cursor: pointer;

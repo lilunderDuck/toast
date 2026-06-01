@@ -5,6 +5,7 @@ import __style from "./CodeBlock.module.css"
 import "highlight.js/styles/atom-one-dark.css"
 // ...
 import { createToggableInput } from "~/hooks"
+import type { Ref } from "~/utils"
 // ...
 import { highlightCodeBlock, useCodeBlockContext, type LanguageName } from "./provider"
 import { CodeBlockContent, CodeBlockInput, CodeBlockLanguageSelect, type ICodeBlockContentProps } from "./components"

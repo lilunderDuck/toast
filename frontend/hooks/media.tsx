@@ -1,6 +1,6 @@
 import { createEffect, createSignal } from "solid-js"
 // ...
-import { getMediaCurrentPercentage, getMediaCurrentTimeByPercentage } from "~/utils" // documentation only
+import { getMediaCurrentPercentage, getMediaCurrentTimeByPercentage, type HTMLAttributes, type Ref } from "~/utils" // documentation only
 import { MediaProgressSlider } from "~/components" // documentation only
 
 type MediaPlayerProps = Omit<

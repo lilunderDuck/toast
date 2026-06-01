@@ -1,9 +1,10 @@
 import { Match, type ParentProps, Show, Switch } from "solid-js"
 import { CLS } from "macro-def"
 // ...
-import { Checkbox, Input, Spacer } from "~/components"
-// ...
 import stylex from "@stylexjs/stylex"
+// ...
+import { Checkbox, Input, Spacer } from "~/components"
+import type { HTMLAttributes } from "~/utils"
 
 const style = stylex.create({
   section: {
