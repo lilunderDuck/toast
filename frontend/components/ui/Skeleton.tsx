@@ -1,24 +1,16 @@
 import type { ValidComponent } from "solid-js"
 import { splitProps } from "solid-js"
-import stylex from "@stylexjs/stylex"
- 
+import type { SkeletonRootProps } from "@kobalte/core/skeleton"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
-import { type SkeletonRootProps, Root } from "@kobalte/core/skeleton"
-import { CLS } from "macro-def"
+// ... 
+import { css } from "molcss"
+import "./Skeleton.css"
 
-const pulseAnimation = stylex.keyframes({
-  '50%': {
-    opacity: 0.5
-  }
-})
-
-const style = stylex.create({
-  spookySkeleton: {
-    animation: `${pulseAnimation} 2s cubic-bezier(.4,0,.6,1) infinite`,
-    backgroundColor: 'var(--surface0)',
-    borderRadius: 6
-  }
-})
+const spookySkeleton = css`
+  animation: skeleton__pulseAnimation 2s cubic-bezier(.4,0,.6,1) infinite;
+  background-color: var(--surface0);
+  border-radius: 6px;
+`
 
 export interface ISkeletonRootProps<T extends ValidComponent = "div"> extends SkeletonRootProps<T> {
   class?: string | undefined
@@ -29,8 +21,8 @@ export function Skeleton<T extends ValidComponent = "div">(
 ) {
   const [local, others] = splitProps(props as ISkeletonRootProps, ["class"])
   return (
-    <Root
-      class={`${CLS(style.spookySkeleton)} ${local.class ?? ""}`}
+    <div
+      class={`${spookySkeleton} ${local.class ?? ""}`}
       {...others}
     />
   )

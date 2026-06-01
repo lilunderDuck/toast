@@ -1,50 +1,42 @@
-#item__index {
+.playlist__trackIndex {
   width: 2rem;
 }
 
-#item__name {
+.playlist__trackName {
   width: 35%;
   text-align: left;
 }
 
-#item__artist {
+.playlist__trackArtist {
   width: 35%;
   text-align: left;
 }
 
-#item__duration {
+.playlist__trackDuration {
   width: 10%;
+  text-align: left;
 }
 
-#item__icon {
+.playlist__trackIcon {
   width: 2.5rem;
 }
 
-#item__playlistItem[data-current-track=true],
-#item__playlistItem[data-current-track=true]:hover {
+.playlist__trackItem.playlist__currentTrack,
+.playlist__trackItem.playlist__currentTrack:hover {
   background-color: var(--surface0) !important;
 }
 
-[data-loop-current=true] #item__playlistItem[data-current-track=true],
-[data-loop-current=true] #item__playlistItem[data-current-track=true]:hover {
+.playlist__currentlyLoopingOneTrack .playlist__trackItem.playlist__currentTrack,
+.playlist__currentlyLoopingOneTrack .playlist__trackItem.playlist__currentTrack:hover {
   background-color: #3862a6 !important;
 }
 
-#item__indexNumber {
-  display: block;
-}
-
-#item__playIcon {
-  padding-left: 8px;
+.playlist__trackItem:hover .playlist__trackIndexNumber,
+.playlist__trackItem.playlist__currentTrack .playlist__trackIndexNumber {
   display: none;
 }
 
-#item__playlistItem:hover #item__indexNumber,
-#item__playlistItem[data-current-track=true] #item__indexNumber {
-  display: none;
-}
-
-#item__playlistItem:hover #item__playIcon,
-#item__playlistItem[data-current-track=true] #item__playIcon {
+.playlist__trackItem:hover .playlist__trackPlayIcon,
+.playlist__trackItem.playlist__currentTrack .playlist__trackPlayIcon {
   display: block;
 }

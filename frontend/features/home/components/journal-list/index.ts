@@ -1,4 +1,3 @@
-export * from "./JournalListSkeleton"
 export * from "./JournalBlock"
 export * from "./CreateJournalButton"
 export * from "./TagListButton"

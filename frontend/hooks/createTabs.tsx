@@ -1,22 +1,22 @@
 import { createSignal, For, Show, type VoidComponent } from "solid-js"
 // @ts-ignore - used as a directive
 import { dndzone } from "solid-dnd-directive"
+// ...
+import { css } from "molcss"
+// ...
 import { arrayObjects, createEvent, type IEvent } from "~/utils"
 
-import stylex from "@stylexjs/stylex"
+const tabList = css`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  outline: none;
+`
 
-const style = stylex.create({
-  tabList: {
-    display: "flex",
-    alignItems: "center",
-    gap: 5,
-    outline: "none"
-  },
-  tabItem: {
-    outline: "none",
-    cursor: "pointer"
-  }
-})
+const tabItem = css`
+  outline: none;
+  cursor: pointer;
+`
 
 type BaseTabData = { id: string }
 
@@ -119,7 +119,7 @@ export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
     get$: tabs,
     TabList$: (props: { tabComponent$: VoidComponent<T> }) => (
       <section
-        {...stylex.attrs(style.tabList)}
+        class={tabList}
         use:dndzone={{
           items: tabs,
           type: crypto.randomUUID(),
@@ -135,7 +135,7 @@ export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
         <For each={tabs()}>
           {it => (
             <button
-              {...stylex.attrs(style.tabItem)}
+              class={tabItem}
               onClick={() => onClickingTab(it.id)}
               disabled={disabledTab()}
               data-tab-item-focused={it.id === focusedTabId()}

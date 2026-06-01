@@ -1,0 +1,12 @@
+@keyframes neoforge__foxSpinning {
+  from {
+    background-position: 0px 0px;
+  }
+  to {
+    background-position: 0px -3584px;
+  }
+}
+
+.spinningFox__animation {
+  animation: neoforge__foxSpinning 1.2s infinite steps(28);
+}

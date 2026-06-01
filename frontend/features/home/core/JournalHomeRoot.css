@@ -1,9 +1,9 @@
-[data-journal-home-show-sidebar=false] #journalHome__mainContent {
+[data-journal-home-show-sidebar=false] .journalHome__mainContent {
   padding-top: var(--title-bar-thiccness);
   padding-inline: 20px;
 }
 
-#journalHome__mainContent {
+.journalHome__mainContent {
   padding: 10px;
   width: 100%;
   height: 100%;

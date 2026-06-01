@@ -1,25 +1,28 @@
-import { ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "~/libs/pan-and-zoom";
-import { Button, DialogContent, Tooltip } from "../ui";
-import type { IBaseLazyDialog } from "~/hooks";
+import { BsX } from "solid-icons/bs"
+// ...
+import { css } from "molcss"
+// ...
+import { ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "~/libs/pan-and-zoom"
+import type { IBaseLazyDialog } from "~/hooks"
+// ...
+import { Button, DialogContent, Tooltip } from "../ui"
 
-import stylex from "@stylexjs/stylex"
-import { BsX } from "solid-icons/bs";
 
-const style = stylex.create({
-  dialog: {
-    width: "100%",
-    height: "100%",
-    padding: "0 !important",
-    backgroundColor: "transparent !important"
-  },
-  dialog__image: {
-    height: "auto"
-  },
-  dialog__zoomButtonRow: {
-    position: "absolute",
-    zIndex: 20
-  }
-})
+const dialog = css`
+  width: 100%;
+  height: 100%;
+  padding: 0 !important;
+  background-color: transparent !important;
+`
+
+const dialog__image = css`
+  height: auto;
+`
+
+const dialog__zoomButtonRow = css`
+  position: absolute;
+  z-index: 20;
+`
 
 interface IImageFullviewDialogContentProps extends IBaseLazyDialog {
   imageSrc$: string
@@ -27,9 +30,9 @@ interface IImageFullviewDialogContentProps extends IBaseLazyDialog {
 
 export default function ImageFullviewDialogContent(props: IImageFullviewDialogContentProps) {
   return (
-    <DialogContent {...stylex.attrs(style.dialog)} showCloseButton$={false}>
+    <DialogContent class={dialog} showCloseButton$={false}>
       <ZoomAndPanProvider>
-        <div {...stylex.attrs(style.dialog__zoomButtonRow)}>
+        <div class={dialog__zoomButtonRow}>
           <ZoomButtonRow>
             <Tooltip label$="Close">
               <Button 
@@ -42,7 +45,7 @@ export default function ImageFullviewDialogContent(props: IImageFullviewDialogCo
           </ZoomButtonRow>
         </div>
         <ZoomDisplay>
-          <img {...stylex.attrs(style.dialog__image)} src={props.imageSrc$} />
+          <img class={dialog__image} src={props.imageSrc$} />
         </ZoomDisplay>
       </ZoomAndPanProvider>
     </DialogContent>

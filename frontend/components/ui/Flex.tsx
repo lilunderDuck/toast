@@ -1,15 +1,12 @@
-import stylex from "@stylexjs/stylex"
-import { CLS } from "macro-def"
+import { css } from "molcss"
 
-const style = stylex.create({
-  spacer: {
-    flex: '1 1 0%',
-    placeSelf: 'stretch'
-  }
-})
+const spacer = css`
+  flex: 1 1 0%;
+  place-self: stretch;
+`
 
 export function Spacer(props: HTMLAttributes<"div">) {
   return (
-    <div {...props} class={`${CLS(style.spacer)} ${props.class ?? ""}`} />
+    <div {...props} class={`${spacer} ${props.class ?? ""}`} />
   )
 }

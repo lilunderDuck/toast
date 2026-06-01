@@ -3,7 +3,7 @@ import { BsCalendar2Date, BsPencilFill } from "solid-icons/bs"
 import { A } from "@solidjs/router"
 // ...
 import __style from "./JournalInfoDialog.module.css"
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 // ...
 import { Button, ButtonRow, DialogContent, Spacer } from "~/components"
 import { type group } from "~/wailsjs/go/models"
@@ -11,55 +11,59 @@ import { ASSETS_SERVER_URL } from "~/api"
 import { formatDate, goTimeToDate } from "~/utils"
 import type { IBaseLazyDialog } from "~/hooks"
 
-const style = stylex.create({
-  dialog: {
-    minWidth: "35rem",
-    minHeight: "20rem",
-    padding: "0 !important",
-    position: "relative"
-  },
-  background: {
-    position: "absolute",
-    top: 0,
-    backgroundSize: "cover",
-    backgroundPosition: "50% 50%",
-    filter: "blur(7px)",
-    width: "100%",
-    height: "100%",
-    "::before": {
-      content: "",
-      display: "block",
-      backgroundColor: "#000000a1",
-      background: "center center no-repeat var(--img-url)",
-      backgroundSize: "cover",
-      width: "100%",
-      height: "100%",
-    }
-  },
-  content: {
-    position: "relative",
-    zIndex: 1,
-    paddingInline: 15,
-    paddingBlock: 10
-  },
-  infoSection: {
-    marginTop: 15,
-    marginBottom: 20,
-    userSelect: "none"
-  },
-  infoLine: {
-    gap: 10,
-    marginBottom: 2,
-    display: "flex",
-    alignItems: "center"
-  },
-  infoContent: {
-    paddingLeft: 10
-  },
-  noDesc: {
-    color: "var(--subtext0)"
+const dialog = css`
+  min-width: 35rem;
+  min-height: 20rem;
+  padding: 0 !important;
+  position: relative;
+`
+
+const dialog__background = css`
+  position: absolute;
+  top: 0;
+  background-size: cover;
+  background-position: 50% 50%;
+  filter: blur(7px);
+  width: 100%;
+  height: 100%;
+  &::before {
+    content: "";
+    display: block;
+    background-color: #000000a1;
+    background: center center no-repeat var(--img-url);
+    background-size: cover;
+    width: 100%;
+    height: 100%;
   }
-})
+`
+
+const dialog__content = css`
+  position: relative;
+  z-index: 1;
+  padding-inline: 15px;
+  padding-block: 10px;
+`
+
+const dialog__infoSection = css`
+  margin-top: 15px;
+  margin-bottom: 20px;
+  user-select: none;
+`
+
+const dialog__infoLine = css`
+  gap: 10px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+`
+
+const dialog__infoContent = css`
+  padding-left: 10px;
+`
+
+const dialog__noDesc = css`
+  color: var(--subtext0);
+`
 
 interface IJournalInfoDialogProps extends IBaseLazyDialog, group.JournalGroupData {
   // 
@@ -73,15 +77,15 @@ export default function JournalInfoDialog(props: IJournalInfoDialogProps) {
 
   return (
     <DialogContent
-      {...stylex.attrs(style.dialog)}
+      class={dialog}
       style={`--img-url:url("${ASSETS_SERVER_URL}/local-assets/${props.id}/icons/${props.icon}")`}
       id={__style.dialogContent}
     >
-      <main {...stylex.attrs(style.content)} id={__style.content}>
+      <main class={dialog__content} id={__style.content}>
         <h1>{props.name}</h1>
         <p>
           <Show when={props.description} fallback={
-            <span {...stylex.attrs(style.noDesc)}>
+            <span class={dialog__noDesc}>
               <i>No description provided.</i>
             </span>
           }>
@@ -89,15 +93,15 @@ export default function JournalInfoDialog(props: IJournalInfoDialogProps) {
           </Show>
         </p>
 
-        <section {...stylex.attrs(style.infoSection)}>
+        <section class={dialog__infoSection}>
           <label>Info & Stats</label>
-          <ul {...stylex.attrs(style.infoContent)}>
+          <ul class={dialog__infoContent}>
             <For each={data}>
               {it => {
                 if (!it.value$) return
 
                 return (
-                  <li {...stylex.attrs(style.infoLine)}>
+                  <li class={dialog__infoLine}>
                     <it.icon$ /> <b>{it.name$}</b>: {it.value$}
                   </li>
                 )
@@ -119,7 +123,7 @@ export default function JournalInfoDialog(props: IJournalInfoDialogProps) {
       </main>
 
       <Show when={props.icon}>
-        <div {...stylex.attrs(style.background)} />
+        <div class={dialog__background} />
       </Show>
     </DialogContent>
   )

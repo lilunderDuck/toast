@@ -1,11 +1,10 @@
 import { TextField as Kobalte } from '@kobalte/core'
 import { type JSX, Show, splitProps } from 'solid-js'
 // ...
-import stylex from '@stylexjs/stylex'
+import { css } from 'molcss'
 import './FieldInput.css'
 // ...
 import { Label } from './Label'
-import { CLS } from 'macro-def'
 
 export type TextFieldInputRef = HTMLInputElement | HTMLTextAreaElement
 
@@ -26,24 +25,23 @@ export type TextFieldProps = {
   onBlur: JSX.EventHandler<TextFieldInputRef, FocusEvent>
 }
 
-const style = stylex.create({
-  input: {
-    paddingInline: 10,
-    paddingBlock: 6,
-    borderRadius: 6,
-    outline: 'none',
-    backgroundColor: 'var(--surface0)',
-    width: '100%',
-    resize: 'none',
-    "::placeholder": {
-      color: "var(--subtext1)"
-    }
-  },
-  error: {
-    color: 'var(--red)',
-    fontSize: 14
+const input = css`
+  padding-inline: 10px;
+  padding-block: 6px;
+  border-radius: 6px;
+  outline: none;
+  background-color: var(--surface0);
+  width: 100%;
+  resize: none;
+  &::placeholder {
+    color: var(--subtext1);
   }
-})
+`
+
+const input__error = css`
+  color: var(--red);
+  font-size: 14px;
+`
 
 export function FieldInput(props: TextFieldProps) {
   const [rootProps, inputProps] = splitProps(
@@ -67,17 +65,17 @@ export function FieldInput(props: TextFieldProps) {
           <Kobalte.Input 
             {...inputProps} 
             type={props.type} 
-            class={`${CLS(style.input)} fieldInput__input`} 
+            class={`${input} fieldInput__input`} 
           />
         }
       >
         <Kobalte.TextArea 
           {...inputProps} 
           autoResize 
-          class={`${CLS(style.input)} fieldInput__input`} 
+          class={`${input} fieldInput__input`} 
         />
       </Show>
-      <Kobalte.ErrorMessage {...stylex.attrs(style.error)}>
+      <Kobalte.ErrorMessage class={input__error}>
         {props.error}
       </Kobalte.ErrorMessage>
     </Kobalte.Root>

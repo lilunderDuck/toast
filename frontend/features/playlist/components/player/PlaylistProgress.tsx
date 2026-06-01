@@ -1,43 +1,30 @@
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 // ...
 import { formatSecondsToMMSS, getMediaCurrentPercentage, getMediaCurrentTimeByPercentage } from "~/utils"
+import { MediaProgressSlider } from "~/components"
 // ...
 import { usePlaylistContext } from "../../provider"
-import { MediaProgressSlider } from "~/components"
 
-const style = stylex.create({
-  player__progressContainer: {
-    width: "100%",
-    display: "flex",
-    gap: 10,
-    alignItems: "center",
-    userSelect: "none",
-    paddingInline: 10,
-    paddingBlock: 5
-  },
-  player__progressTime: {
-    fontSize: 13
-  },
-  player__progressWrap: {
-    width: "100%",
-    height: 12,
-    backgroundColor: "var(--mantle)",
-    borderRadius: 6
-  },
-  player__progress: {
-    width: "var(--current-progress)",
-    height: 12,
-    backgroundColor: "var(--blue)",
-    borderRadius: 6
-  },
-})
+const player__progressContainer = css`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  user-select: none;
+  padding-inline: 10px;
+  padding-block: 5px;
+`
+
+const player__progressTime = css`
+  font-size: 13px;
+`
 
 export function PlaylistProgress() {
-  const { player$, data$ } = usePlaylistContext()
+  const { player$, currentTrack$ } = usePlaylistContext()
 
   return (
-    <div {...stylex.attrs(style.player__progressContainer)}>
-      <span {...stylex.attrs(style.player__progressTime)}>
+    <div class={player__progressContainer}>
+      <span class={player__progressTime}>
         {formatSecondsToMMSS(player$.currentProgress$())}
       </span>
       <MediaProgressSlider 
@@ -48,9 +35,9 @@ export function PlaylistProgress() {
           )
         }}
         progress$={getMediaCurrentPercentage(player$.currentProgress$(), player$.totalDuration$())}
-        disabled={!data$()}
+        disabled={!currentTrack$()}
       />
-      <span {...stylex.attrs(style.player__progressTime)}>
+      <span class={player__progressTime}>
         {formatSecondsToMMSS(player$.totalDuration$())}
       </span>
     </div>

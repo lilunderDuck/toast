@@ -391,5 +391,20 @@
       "RESYNC_DURATION",
       "VIEW_BACKGROUND"
     ]
+  },
+  {
+    "type": "enum",
+    "name": "CollectionSectionAction",
+    "members": [
+      "RESYNC_COLLECTION"
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "DividerVariant",
+    "members": [
+      "VERTICAL",
+      "HORIZONTAL"
+    ]
   }
 ]

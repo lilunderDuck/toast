@@ -1,35 +1,39 @@
-import stylex from "@stylexjs/stylex"
 import { createContext, createSignal, ParentProps, useContext, type Accessor, type Component, type Setter } from "solid-js"
+// ...
+import { css } from "molcss"
+// ...
 import { ResizableTextarea } from "~/components"
 import { createToggableInput } from "~/hooks"
-import { useStickyNotesContext } from "../../provider/StickyNotesProvider"
 import type { sticky_notes } from "~/wailsjs/go/models"
+// ...
+import { useStickyNotesContext } from "../../provider/StickyNotesProvider"
 
-const style = stylex.create({
-  block__input: {
-    backgroundColor: "var(--surface0)",
-    color: "var(--text)",
-    outline: "none",
-    width: "100%",
-    padding: 0,
-    paddingInline: 10,
-    borderRadius: 6,
-  },
-  block__readonlyInput: {
-    width: "100%",
-    overflowX: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap"
-  },
-  block__contentInput: {
-    fontSize: 15,
-  },
-  block__contentReadonlyInput: {
-    fontSize: 15,
-    wordBreak: "break-word",
-    whiteSpace: "break-spaces"
-  }
-})
+const block__input = css`
+  background-color: var(--surface0);
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  padding: 0;
+  padding-inline: 10px;
+  border-radius: 6px;
+`
+
+const block__readonlyInput = css`
+  width: 100%;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
+const block__contentInput = css`
+  font-size: 15px;
+`
+
+const block__contentReadonlyInput = css`
+  font-size: 15px;
+  word-break: break-word;
+  white-space: break-spaces;
+`
 
 export interface IStickyNoteContext {
   color$: Accessor<string>
@@ -59,12 +63,12 @@ export function StickyNoteProvider(props: ParentProps<IStickyNoteProviderProps>)
     component$: {
       Input$: (props) => (
         <input
-          {...stylex.attrs(style.block__input)}
+          class={block__input}
           {...props}
         />
       ),
       Readonly$: (props) => (
-        <span {...stylex.attrs(style.block__readonlyInput)} onClick={props.onClick}>
+        <span class={block__readonlyInput} onClick={props.onClick}>
           {props.children}
         </span>
       )
@@ -86,12 +90,12 @@ export function StickyNoteProvider(props: ParentProps<IStickyNoteProviderProps>)
       Input$: (props) => (
         // @ts-ignore
         <ResizableTextarea
-          {...stylex.attrs(style.block__contentInput)}
+          class={block__contentInput}
           {...props}
         />
       ),
       Readonly$: (props) => (
-        <p {...stylex.attrs(style.block__contentReadonlyInput)} onClick={props.onClick}>
+        <p class={block__contentReadonlyInput} onClick={props.onClick}>
           {props.children}
         </p>
       )

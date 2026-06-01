@@ -13,7 +13,6 @@ export * from "./Popover"
 // ...
 export * from "./select"
 export * from "./dialog"
-export * from './charts'
 export * from './radio-group'
 export * from './tabs'
 export * from "./dropdown"

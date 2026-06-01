@@ -6,6 +6,7 @@ import { optimizeCssModules } from "vite-plugin-optimize-css-modules"
 // ... 
 import tsconfig from './tsconfig.json'
 import { getAliasPath, ESBUILD_OPTIONS, OUTPUT_FILENAME, generateConstsTypeThenSave, defineAllConstants, macroPlugin } from "./config"
+import molcss from 'molcss/vite-plugin'
 
 // Make sure to update the code in ./backend/internals/path.go if you're planning
 // to change this variable and vice versa
@@ -25,6 +26,9 @@ export default defineConfig(({ command }) => {
       solidPlugin(),
       stylexPlugin(),
       optimizeCssModules(),
+      molcss({
+        content: 'frontend/**/*.{js,jsx,ts,tsx}',
+      }),
       macroPlugin
     ],
     // Windows 11 workaround: for some goddamn reason, in a windows 10 enviroment, this config

@@ -1,7 +1,6 @@
 import { Match, Show, Switch } from "solid-js"
-import { CLS } from "macro-def"
 // ...
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 // ...
 import { AppTitleBarDraggable } from "~/components"
 // ...
@@ -11,26 +10,26 @@ import Collection from "../pages/Collection"
 import StickyNotes from "../pages/StickyNotes"
 import { JournalHomeTitleBar } from "../components"
 
-const style = stylex.create({
-  titleBar: {
-    position: "fixed",
-    right: 0,
-    gap: 10
-  },
-  titleBar__withSidebar: {
-    width: "calc(100% - 35%)",
-  },
-  titleBar__noSidebar: {
-    width: "100%",
-    paddingInline: 5
-  }
-})
+const titleBar = css`
+  position: fixed;
+  right: 0;
+  gap: 10;
+`
+
+const titleBar__withSidebar = css`
+  width: calc(100% - 35%);
+`
+
+const titleBar__noSidebar = css`
+  width: "100%";
+  padding-inline: 5;
+`
 
 export function JournalHomeMainContent() {
   const { currentPage$, isShowingSidebar$ } = useJournalHomeRootContext()
   return (
     <>
-      <AppTitleBarDraggable class={`${CLS(style.titleBar)} ${isShowingSidebar$() ? CLS(style.titleBar__withSidebar) : CLS(style.titleBar__noSidebar)}`}>
+      <AppTitleBarDraggable class={`${titleBar} ${isShowingSidebar$() ? titleBar__withSidebar : titleBar__noSidebar}`}>
         <Show when={!isShowingSidebar$()}>
           <JournalHomeTitleBar />
         </Show>

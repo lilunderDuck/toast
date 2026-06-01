@@ -78,10 +78,14 @@ export function createSubmitForm<T extends FieldValues>(options: ISubmitFormOpti
   const submitThis: SubmitHandler<T> = async (data, submitEvent) => {
     console.log("Handle form submittion now.")
     setSubmitButtonDisabled(true)
-    try {
+    if (TOAST_DEBUG) {
+      try {
+        await options.onSubmit$(data, submitEvent)
+      } catch (error) {
+        console.error("Submittion error:", error)
+      }
+    } else {
       await options.onSubmit$(data, submitEvent)
-    } catch (error) {
-      console.error("Submittion error:", error)
     }
 
     setSubmitButtonDisabled(false)

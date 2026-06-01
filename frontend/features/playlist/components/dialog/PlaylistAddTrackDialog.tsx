@@ -1,41 +1,43 @@
 import { required } from "@modular-forms/solid"
+import { BsPlus } from "solid-icons/bs"
+import { Show } from "solid-js"
+// ...
+import { css } from "molcss"
+// ...
 import { Button, DialogContent, DialogHeader, FieldInput, Label } from "~/components"
 import { createFileUpload, createSubmitForm, type IBaseLazyDialog, createIconInput } from "~/hooks"
 import type { playlist } from "~/wailsjs/go/models"
-
-import stylex from "@stylexjs/stylex"
-import { BsPlus } from "solid-icons/bs"
-import { Show } from "solid-js"
 import { previewUrl } from "~/api"
 
-const style = stylex.create({
-  dialog: {
-    width: "70%"
-  },
-  dialog__audioFileDialog: {
-    width: "100%",
-    height: "7rem",
-    backgroundColor: "var(--base)",
-    color: "var(--subtext0)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    border: "4px solid transparent",
-    borderRadius: 6,
-    ":hover": {
-      color: "var(--text)",
-      borderColor: "var(--blue)"
-    }
-  },
-  dialog__inputSplitView: {
-    display: "flex",
-    gap: 10,
-    paddingTop: 10
-  },
-  dialog__inputRightView: {
-    width: "100%"
+const dialog = css`
+  width: 70%;
+`
+
+const dialog__audioFileDialog = css`
+  width: 100%;
+  height: 7rem;
+  background-color: var(--base);
+  color: var(--subtext0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 4px solid transparent;
+  border-radius: 6px;
+  &:hover {
+    color: var(--text);
+    border-color: var(--blue);
   }
-})
+`
+
+const dialog__inputSplitView = css`
+  display: flex;
+  gap: 10px;
+  padding-top: 10px;
+`
+
+const dialog__inputRightView = css`
+  width: 100%;
+`
 
 type PlaylistAddTrackSchema = {
   name: string
@@ -93,7 +95,7 @@ export default function PlaylistAddTrackDialog(props: IPlaylistAddTrackDialogPro
   })
 
   return (
-    <DialogContent {...stylex.attrs(style.dialog)}>
+    <DialogContent class={dialog}>
       <DialogHeader>
         Add new track
       </DialogHeader>
@@ -101,7 +103,7 @@ export default function PlaylistAddTrackDialog(props: IPlaylistAddTrackDialogPro
       <Label>Audio file</Label>
       <div
         onClick={openAudioFileDialog}
-        {...stylex.attrs(style.dialog__audioFileDialog)}
+        class={dialog__audioFileDialog}
       >
         <Show when={audioFile()} fallback={
           <BsPlus />
@@ -110,12 +112,12 @@ export default function PlaylistAddTrackDialog(props: IPlaylistAddTrackDialogPro
         </Show>
       </div>
       <Form$>
-        <div {...stylex.attrs(style.dialog__inputSplitView)}>
+        <div class={dialog__inputSplitView}>
           <div>
             <Label>Track icon</Label>
             <IconInput$ />
           </div>
-          <div {...stylex.attrs(style.dialog__inputRightView)}>
+          <div class={dialog__inputRightView}>
             <Field$ name="name" validate={[required("This field is required")]}>
               {(field, inputProps) => <FieldInput
                 {...inputProps}

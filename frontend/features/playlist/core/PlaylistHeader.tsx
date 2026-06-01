@@ -1,6 +1,6 @@
 import { BsPlus, BsThreeDots } from "solid-icons/bs"
 // ...
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 // ...
 import { formatSecondsToMMSS } from "~/utils"
 import { Button, Tooltip } from "~/components"
@@ -9,46 +9,44 @@ import { createLazyLoadedDialog, createLazyLoadedDropdownMenu } from "~/hooks"
 import { playlistIconUrl } from "../api"
 import { usePlaylistContext } from "../provider"
 
-const style = stylex.create({
-  header: {
-    width: "100%",
-    height: "14rem",
-    display: "flex",
-    gap: 15,
-    paddingTop: 35,
-    paddingBottom: 10,
-    marginBottom: 10,
-    backgroundColor: "var(--mantle)",
-    userSelect: "none",
-    position: "relative",
-    background: "center top no-repeat var(--cover-icon-url)",
-    backgroundSize: "cover"
-  },
-  header__titleWrap: {
-    width: "100%",
-    position: "absolute",
-    bottom: 0,
-    background: "linear-gradient(to top, var(--crust) 0%, transparent 100%)",
-    paddingInline: 15,
-    paddingTop: "2.75rem"
-  },
-  header__info: {
-    fontSize: 14
-  },
-  header__moreOptionButton: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    paddingRight: 20,
-    paddingBottom: 15,
-    display: "flex",
-    alignItems: "center",
-    gap: 5
-  }
-})
+const header = css`
+  width: 100%;
+  height: 14rem;
+  display: flex;
+  gap: 15px;
+  background-color: var(--mantle);
+  user-select: none;
+  position: relative;
+  background: center top no-repeat var(--cover-icon-url);
+  background-size: cover;
+`
+
+const header__titleWrap = css`
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  background: linear-gradient(to top, var(--crust) 0%, transparent 100%);
+  padding-inline: 15px;
+  padding-bottom: 10px;
+`
+
+const header__info = css`
+  font-size: 14px;
+`
+
+const header__moreOptionButton = css`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding-right: 20px;
+  padding-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`
 
 export function PlaylistHeader() {
-  const { data$, tracks$, resyncTracksDuration$, addTrack$ } = usePlaylistContext()
+  const { data$, tracks$, addTrack$, resyncTracksDuration$ } = usePlaylistContext()
   const coverIconUrl = () => data$()?.coverIcon ? 
     playlistIconUrl(data$()!.id, data$()!.coverIcon!) :
     ""
@@ -66,7 +64,7 @@ export function PlaylistHeader() {
     () => ({
       onSubmit$(data) {
         addTrack$(data)
-      },
+      }
     })
   )
 
@@ -87,19 +85,19 @@ export function PlaylistHeader() {
             console.warn("case", type, "have not been handled yet.")
             break;
         }
-      },
+      }
     })
   )
 
   return (  
-    <header {...stylex.attrs(style.header)} style={`--cover-icon-url:url("${coverIconUrl()}")`}>
-      <div {...stylex.attrs(style.header__titleWrap)}>
+    <header class={header} style={`--cover-icon-url:url("${coverIconUrl()}")`}>
+      <div class={header__titleWrap}>
         <h1>{data$()?.name}</h1>
-        <span {...stylex.attrs(style.header__info)}>
+        <span class={header__info}>
           {tracks$().length} tracks • Runtime: {formatSecondsToMMSS(data$()?.totalDuration ?? 0)}
         </span>
       </div>
-      <div {...stylex.attrs(style.header__moreOptionButton)}>
+      <div class={header__moreOptionButton}>
         <Tooltip label$="Add track">
           <Button 
             size$={ButtonSize.ICON}

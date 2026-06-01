@@ -1,38 +1,38 @@
 import type { ValidComponent } from "solid-js"
 import { Show, splitProps } from "solid-js"
- 
+// ...
+import { css } from "molcss"
+// ...
 import type { DynamicProps, HandleProps, RootProps } from "@corvu/resizable"
 import ResizablePrimitive from "@corvu/resizable"
-import stylex from "@stylexjs/stylex"
-import { CLS } from "macro-def"
  
-const style = stylex.create({
-  resizable: {
-    display: 'flex'
-  },
-  resizableHandle: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 0,
-    width: 2,
-    backgroundColor: 'transparent',
-    ':hover': {
-      backgroundColor: 'var(--blue10)',
-    }
-  },
-  resiableIconHandle: {
-    display: "flex",
-    zIndex: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: "0.125rem",
-    borderWidth: 1,
-    width: "0.75rem",
-    height: "1rem"
+const resizable = css`
+  display: flex;
+`
+
+const resizable__handle = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  width: 2px;
+  background-color: transparent;
+  &:hover {
+    background-color: var(--blue10);
   }
-})
- 
+`
+
+const resiable__iconHandle = css`
+  display: flex;
+  z-index: 10;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.125rem;
+  border-width: 1px;
+  width: 0.75rem;
+  height: 1rem;
+`
+
 export type ResizableProps<T extends ValidComponent = "div"> = RootProps<T> & { class?: string }
  
 export function Resizable<T extends ValidComponent = "div">(props: DynamicProps<T, ResizableProps<T>>) {
@@ -40,7 +40,7 @@ export function Resizable<T extends ValidComponent = "div">(props: DynamicProps<
   return (
     <ResizablePrimitive
       {...rest}
-      class={`${CLS(style.resizable)} ${props.class ?? ""}`}
+      class={`${resizable} ${props.class ?? ""}`}
     />
   )
 }
@@ -61,10 +61,10 @@ export function ResizableHandle<T extends ValidComponent = "button">(
   return (
     <ResizablePrimitive.Handle
       {...rest}
-      class={`${CLS(style.resizable)} ${props.class ?? ""}`}
+      class={`${resizable} ${props.class ?? ""}`}
     >
       <Show when={props.withHandle}>
-        <div {...stylex.attrs(style.resiableIconHandle)}>
+        <div class={resiable__iconHandle}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

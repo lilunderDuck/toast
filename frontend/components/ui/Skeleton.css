@@ -1,0 +1,5 @@
+@keyframes skeleton__pulseAnimation {
+  50% {
+    opacity: 0.5;
+  }
+}

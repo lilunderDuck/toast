@@ -1,38 +1,20 @@
-import stylex from "@stylexjs/stylex";
 import "./JournalHomeRoot.css"
-import { JournalHomeRootProvider } from "../provider/JournalHomeRootProvider";
-import type { ParentProps } from "solid-js";
-import { SettingProvider } from "~/features/settings";
+import { JournalHomeRootProvider } from "../provider/JournalHomeRootProvider"
+import type { ParentProps } from "solid-js"
+import { css } from "molcss"
 
-const style = stylex.create({
-  home: {
-    width: "100%",
-    height: "100%",
-    display: "flex"
-  },
-  home__titleBar: {
-    position: "fixed",
-    width: 0,
-    top: 0
-  }
-})
+const home = css`
+  width: 100%;
+  height: 100%;
+  display: flex;
+`
 
 export function JournalHomeRoot(props: ParentProps) {
   return (
-    <SettingProvider<ISettingTest> 
-      config$={[]} 
-      data$={{
-        something: 1
-      }} 
-      pages$={{
-        "something": () => <></>
-      }}
-    >
-      <JournalHomeRootProvider>
-        <div {...stylex.attrs(style.home)}>
-          {props.children}
-        </div>
-      </JournalHomeRootProvider>
-    </SettingProvider>
+    <JournalHomeRootProvider>
+      <div class={home}>
+        {props.children}
+      </div>
+    </JournalHomeRootProvider>
   )
 }

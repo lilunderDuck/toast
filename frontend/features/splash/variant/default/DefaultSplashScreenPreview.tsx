@@ -1,48 +1,49 @@
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 import toastIcon from "~/assets/toast.jpg"
 // ...
 import { FourDotsSpinningLoader } from "~/components"
 
-const style = stylex.create({
-  screen: {
-    backgroundColor: "var(--crust)",
-    width: "100%",
-    height: "85%",
-    position: "relative"
-  },
-  screen__iconWrap: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    height: "100%",
-    position: "absolute"
-  },
-  screen__icon: {
-    width: "12rem",
-    height: "12rem",
-    borderRadius: "50%",
-    background: "center center no-repeat var(--icon)",
-    backgroundSize: "contain"
-  },
-  screen__loader: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    margin: 10
-  }
-})
+const screen = css`
+  background-color: var(--crust);
+  width: 100%;
+  height: 85%;
+  position: relative;
+`
+
+const screen__iconWrap = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+`
+
+const screen__icon = css`
+  width: 12rem;
+  height: 12rem;
+  border-radius: 50%;
+  background: center center no-repeat var(--icon);
+  background-size: contain;
+`
+
+const screen__loader = css`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 10px;
+`
 
 export default function DefaultSplashScreen() {
   return (
-    <div {...stylex.attrs(style.screen)}>
-      <div {...stylex.attrs(style.screen__iconWrap)}>
+    <div class={screen}>
+      <div class={screen__iconWrap}>
         <div
-          {...stylex.attrs(style.screen__icon)}
+          class={screen__icon}
           style={`--icon:url('${toastIcon}')`}
         />
       </div>
-      <div {...stylex.attrs(style.screen__loader)}>
+      <div class={screen__loader}>
         <FourDotsSpinningLoader />
       </div>
     </div>

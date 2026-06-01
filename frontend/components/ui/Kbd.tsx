@@ -1,24 +1,23 @@
-import stylex from "@stylexjs/stylex"
 import type { ParentProps } from "solid-js"
+// ...
+import { css } from "molcss"
 
-const style = stylex.create({
-  kbd: {
-    borderStyle: 'solid',
-    borderRadius: '0.375rem',
-    borderColor: 'var(--overlay0)',
-    borderWidth: '1px 1px 3px',
-    backgroundColor: '#131212',
-    paddingInline: '0.4em',
-    fontFamily: 'consolas',
-    fontSize: '0.8em',
-    fontWeight: 'bold',
-    whiteSpace: 'nowrap',
-  }
-})
+const kbd = css`
+  border-style: solid;
+  border-radius: 0.375rem;
+  border-color: var(--overlay0);
+  border-width: 1px 1px 3px;
+  background-color: #131212;
+  padding-inline: 0.4em;
+  font-family: consolas;
+  font-size: 0.8em;
+  font-weight: bold;
+  white-space: nowrap;
+`
 
 export function Kbd(props: ParentProps) {
   return (
-    <kbd {...stylex.attrs(style.kbd)}>
+    <kbd class={kbd}>
       {props.children}
     </kbd>
   )

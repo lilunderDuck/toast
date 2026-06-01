@@ -1,24 +1,22 @@
-import stylex from "@stylexjs/stylex"
-import { CLS } from "macro-def"
 import { createSignal, onMount } from "solid-js"
+// ...
+import { css } from "molcss"
 
-const style = stylex.create({
-  input: {
-    width: '100%',
-    resize: 'none',
-    paddingInline: 10,
-    paddingBlock: 5,
-    border: 'none',
-    backgroundColor: 'var(--base)',
-    color: 'var(--text)',
-    outline: 'none',
-    borderRadius: 7,
-    fontSize: 13,
-    // fontFamily: 'Menlo,Monaco,Consolas,Courier New,monospace',
-    lineHeight: 1.25,
-    overflowY: 'hidden',
-  }
-})
+const input = css`
+  width: 100%;
+  resize: none;
+  padding-inline: 10px;
+  padding-block: 5px;
+  border: none;
+  background-color: var(--base);
+  color: var(--text);
+  outline: none;
+  border-radius: 7px;
+  font-size: 13px;
+  // fontFamily: 'Menlo,Monaco,Consolas,Courier New,monospace',
+  line-height: 1.25;
+  overflow-y: hidden;
+`
 
 export function ResizableTextarea(props: HTMLAttributes<"textarea">) {
   const [height, setHeight] = createSignal<string>('auto')
@@ -27,6 +25,7 @@ export function ResizableTextarea(props: HTMLAttributes<"textarea">) {
   const onSlappingYourKeyboard = (inputEvent: InputEvent) => {
     const current = inputEvent.currentTarget as HTMLTextAreaElement
     updateTextarea(current)
+    // @ts-ignore
     props.onInput?.(inputEvent)
   }
 
@@ -54,7 +53,7 @@ export function ResizableTextarea(props: HTMLAttributes<"textarea">) {
     <textarea
       {...props}
       ref={textareaRef}
-      class={`${CLS(style.input)} ${props.class ?? ""}`}
+      class={`${input} ${props.class ?? ""}`}
       style={`height: ${height()}`}
       onInput={onSlappingYourKeyboard}
     />

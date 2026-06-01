@@ -1,27 +1,28 @@
-import { Button, DialogContent, DialogHeader, FieldInput, HexColorInput, Label } from "~/components";
-import { createSubmitForm, type IBaseLazyDialog } from "~/hooks";
-
-import stylex from "@stylexjs/stylex"
+import { createSignal } from "solid-js"
+import { required } from "@modular-forms/solid"
+// ...
 import "./StickyNoteCreateDialog.css"
-import { required } from "@modular-forms/solid";
-import { createSignal } from "solid-js";
-import { sticky_notes } from "~/wailsjs/go/models";
-import { makeId } from "~/utils";
+import { css } from "molcss"
+// ...
+import { Button, DialogContent, DialogHeader, FieldInput, HexColorInput, Label } from "~/components"
+import { createSubmitForm, type IBaseLazyDialog } from "~/hooks"
+import { sticky_notes } from "~/wailsjs/go/models"
+import { makeId } from "~/utils"
 
-const style = stylex.create({
-  dialog: {
-    width: "70%"
-  },
-  dialog__formSplitView: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1.5fr",
-    gap: 10
-  },
-  dialog__formPanel: {
-    width: "100%",
-    height: "100%"
-  }
-})
+const dialog = css`
+  width: 70%;
+`
+
+const dialog__formSplitView = css`
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 10px;
+`
+
+const dialog__formPanel = css`
+  width: 100%;
+  height: 100%;
+`
 
 interface IStickyNoteCreateDialogProps extends IBaseLazyDialog {
   // define your component props here
@@ -53,14 +54,14 @@ export default function StickyNoteCreateDialog(props: IStickyNoteCreateDialogPro
   })
 
   return (
-    <DialogContent {...stylex.attrs(style.dialog)} showCloseButton$={false}>
+    <DialogContent class={dialog} showCloseButton$={false}>
       <DialogHeader>
         Create sticky note
       </DialogHeader>
 
       <Form$>
-        <div {...stylex.attrs(style.dialog__formSplitView)}>
-          <div {...stylex.attrs(style.dialog__formPanel)} id="stickyNoteDialog__leftPanel">
+        <div class={dialog__formSplitView}>
+          <div class={dialog__formPanel} id="stickyNoteDialog__leftPanel">
             <Field$ name="title" validate={[required("This field is required")]}>
               {(field, inputProps) => <FieldInput
                 {...inputProps}
@@ -78,7 +79,7 @@ export default function StickyNoteCreateDialog(props: IStickyNoteCreateDialogPro
               setColor$={setColor} 
             />
           </div>
-          <div {...stylex.attrs(style.dialog__formPanel)} id="stickyNoteDialog__rightPanel">
+          <div class={dialog__formPanel} id="stickyNoteDialog__rightPanel">
             <Field$ name="content" validate={[required("This field is required")]}>
               {(field, inputProps) => <FieldInput
                 {...inputProps}

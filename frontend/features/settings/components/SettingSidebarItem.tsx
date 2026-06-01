@@ -14,7 +14,7 @@ const style = stylex.create({
     paddingInline: 9,
     paddingBlock: 2,
     borderRadius: 6,
-    backgroundColor: "var(--surface1)",
+    backgroundColor: "var(--surface0)",
     display: "block",
     color: "var(--subtext0)",
     fontSize: 14,

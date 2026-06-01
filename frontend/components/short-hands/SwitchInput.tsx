@@ -1,32 +1,33 @@
-import stylex from "@stylexjs/stylex"
-import "./SwitchInput.css"
 import { createSignal } from "solid-js"
+// ...
+import "./SwitchInput.css"
+import { css } from "molcss"
 
-const style = stylex.create({
-  switch: {
-    position: 'relative',
-    display: 'inline-block',
-    width: 'var(--switch-width)',
-    height: 'var(--switch-height)',
-  },
-  switch__input: {
-    opacity: 0,
-    width: 0,
-    height: 0,
-  },
-  switch__slider: {
-    position: 'absolute',
-    cursor: 'pointer',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'var(--switch-inactive-color)',
-    WebkitTransition: '.4s',
-    transition: '.4s',
-    borderRadius: 'var(--switch-height)'
-  }
-})
+const switch__this = css`
+  position: relative;
+  display: inline-block;
+  width: var(--switch-width);
+  height: var(--switch-height);
+`
+
+const switch__input = css`
+  opacity: 0;
+  width: 0;
+  height: 0;
+`
+
+const switch__slider = css`
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--switch-inactive-color);
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: var(--switch-height);
+`
 
 interface ISwitchInputProps {
   value$?: boolean
@@ -38,9 +39,9 @@ export function SwitchInput(props: ISwitchInputProps) {
   const [state, setState] = createSignal(props.value$ ?? false)
 
   return (
-    <label {...stylex.attrs(style.switch)} data-switch>
+    <label class={switch__this} data-switch>
       <input 
-        {...stylex.attrs(style.switch__input)} 
+        class={switch__input} 
         type="checkbox"
         id="switch__input"
         checked={state()}
@@ -50,7 +51,7 @@ export function SwitchInput(props: ISwitchInputProps) {
         }}
       />
       <span 
-        {...stylex.attrs(style.switch__slider)}
+        class={switch__slider}
         id="switch__slider"
       />
     </label>

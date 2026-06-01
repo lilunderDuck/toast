@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js"
 import { required } from "@modular-forms/solid"
 // ...
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 import __style from "./CreateOrEditJournalDialog.module.css"
 // ...
 import { Button, DialogContent, DialogHeader, FieldInput } from "~/components"
@@ -10,28 +10,16 @@ import type { group } from "~/wailsjs/go/models"
 // ...
 import IconUploadInput from "./IconUploadInput"
 
-const style = stylex.create({
-  inputWrap: {
-    marginTop: 10,
-    gap: 10,
-    display: "flex"
-  },
-  imageInput: {
-    width: '15rem',
-    height: '15rem',
-  },
-  buttonRow: {
-    gap: 10,
-  },
-  uploadZone: {
-    backgroundColor: "var(--base)",
-    cursor: "pointer",
-    borderRadius: 6,
-    ":hover": {
-      border: "2px solid var(--overlay0)"
-    }
-  }
-})
+const dialog__inputWrap = css`
+  margin-top: 10px;
+  gap: 10px;
+  display: flex;
+`
+
+const dialog__imageInput = css`
+  width: 15rem;
+  height: 15rem;
+`
 
 interface ICreateJournalDialogProps extends IBaseLazyDialog {
   prevData$?: group.GroupData
@@ -96,8 +84,8 @@ export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
         {getText()} journal group
       </DialogHeader>
       <Form$>
-        <div {...stylex.attrs(style.inputWrap)}>
-          <div {...stylex.attrs(style.imageInput)} id={__style.imageInput}>
+        <div class={dialog__inputWrap}>
+          <div class={dialog__imageInput} id={__style.imageInput}>
             <IconUploadInput 
               isUploading$={isUploading$}
               uploadComponent$={(props) => <div {...props} onClick={open$} />}

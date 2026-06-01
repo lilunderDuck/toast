@@ -1,29 +1,29 @@
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
+// ...
 import { PlaylistControl, PlaylistCurrentTrackView, PlaylistLoopButton, PlaylistProgress } from "../components"
 
-const style = stylex.create({
-  player: {
-    width: "100%",
-    backgroundColor: "var(--base)",
-    marginTop: 10,
-    position: "fixed",
-    bottom: 0,
-  },
-  player__content: {
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    alignItems: "center",
-    padding: 10,
-    gap: 5
-  }
-})
+const player = css`
+  width: 100%;
+  background-color: var(--base);
+  position: fixed;
+  bottom: 0;
+`
+
+const player__content = css`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  gap: 5px;
+`
 
 export function PlaylistTrackPlayer() {
   return (
-    <div {...stylex.attrs(style.player)}>
+    <div class={player}>
       <PlaylistProgress />
-      <div {...stylex.attrs(style.player__content)}>
+      <div class={player__content}>
         <PlaylistCurrentTrackView />
         <PlaylistControl>
           <PlaylistLoopButton />

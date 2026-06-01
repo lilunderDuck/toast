@@ -1,40 +1,39 @@
-import { A, useNavigate } from "@solidjs/router"
-import { CLS } from "macro-def"
+import { useNavigate } from "@solidjs/router"
 // ...
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 // ...
 import { Tooltip } from "~/components"
 
-const style = stylex.create({
-  item: {
-    width: "9rem",
-    borderRadius: 6,
-    outline: "4px solid transparent",
-    textAlign: "left",
-    padding: 0,
-    margin: 0,
-    backgroundColor: "var(--surface0)",
-    ":hover": {
-      outlineColor: "var(--sapphire)"
-    }
-  },
-  item__name: {
-    fontSize: 14,
-    overflow: "hidden",
-    whiteSpace: "nowrap",
-    textOverflow: "ellipsis",
-    paddingInline: 5,
-    paddingBlock: 8
-  },
-  item__backgroundWrap: {
-    width: "9rem",
-    height: "9rem",
-    background: "center center no-repeat var(--icon-url)",
-    backgroundSize: "cover",
-    borderTopLeftRadius: 6,
-    borderTopRightRadius: 6
+const item = css`
+  width: 9rem;
+  border-radius: 6px;
+  outline: 4px solid transparent;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+  background-color: var(--surface0);
+  &:hover {
+    outline-color: var(--sapphire);
   }
-})
+`
+
+const item__name = css`
+  font-size: 14px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-inline: 5px;
+  padding-block: 8px;
+`
+
+const item__backgroundWrap = css`
+  width: 9rem;
+  height: 9rem;
+  background: center center no-repeat var(--icon-url);
+  background-size: cover;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+`
 
 interface ICollectionItemProps {
   iconUrl$: string
@@ -49,12 +48,12 @@ export function CollectionItem(props: ICollectionItemProps) {
   return (
     <Tooltip label$={props.tooltipLabel$}>
       <button
-        {...stylex.attrs(style.item)}
+        class={item}
         style={`--icon-url:url("${`${props.iconUrl$}`}")`}
         onClick={() => redirect(props.href$)}
       >
-        <div {...stylex.attrs(style.item__backgroundWrap)} />
-        <div {...stylex.attrs(style.item__name)}>
+        <div class={item__backgroundWrap} />
+        <div class={item__name}>
           {props.name$}
         </div>
       </button>

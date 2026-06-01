@@ -1,40 +1,39 @@
-import stylex from "@stylexjs/stylex";
-import { CLS } from "macro-def";
-import { splitProps } from "solid-js";
+import { splitProps } from "solid-js"
+// ...
+import { css } from "molcss"
 
-const style = stylex.create({
-  tag: {
-    borderRadius: 6,
-    textAlign: "left",
-    color: "var(--color)",
-    fontSize: 13,
-    userSelect: "none",
-    width: "fit-content",
-    position: "relative",
-    display: "flex",
-    justifyContent: "center",
-    "::before": {
-      content: '',
-      position: "absolute",
-      width: "100%",
-      height: "100%",
-      backgroundColor: "var(--color)",
-      filter: "opacity(0.7) brightness(0.525)",
-      borderRadius: 6,
-      zIndex: 1
-    }
-  },
-  tag__content: {
-    paddingBlock: 1,
-    paddingInline: 5,
-    // show text after the background, not before the background
-    position: "relative",
-    zIndex: 1,
-    maxWidth: "15rem",
-    overflow: "hidden",
-    textOverflow: "ellipsis"
-  },
-})
+const tag = css`
+  border-radius: 6px;
+  text-align: left;
+  color: var(--color);
+  font-size: 13px;
+  user-select: none;
+  width: fit-content;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color);
+    filter: opacity(0.7) brightness(0.525);
+    border-radius: 6px;
+    z-index: 1
+  }
+`
+
+const tag__content = css`
+  padding-block: 1;
+  padding-inline: 5;
+  // show text after the background, not before the background
+  position: relative;
+  z-index: 1;
+  max-width: 15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
 
 export interface ITagProps extends HTMLAttributes<"span"> {
   color$: string
@@ -46,11 +45,11 @@ export function Tag(props: ITagProps) {
   return (
     <span
       {...itsProps}
-      class={`${CLS(style.tag)} ${props.class ?? ""}`}
+      class={`${tag} ${props.class ?? ""}`}
       style={{ "--color": props.color$ ?? "var(--subtext0)" }}
       data-tag=""
     >
-      <span {...stylex.attrs(style.tag__content)}>
+      <span class={tag__content}>
         {props.children}
       </span>
     </span>

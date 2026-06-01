@@ -1,14 +1,11 @@
-import stylex from "@stylexjs/stylex"
-import { CLS } from "macro-def"
+import { css } from "molcss"
 
-const style = stylex.create({
-  label: {
-    fontSize: 13.5, // sub-pixel perfect 👍
-    fontWeight: "bold",
-    userSelect: "none"
-  }
-})
+const label = css`
+  font-size: 13.5; // sub-pixel perfect 👍
+  font-weight: bold;
+  user-select: none;
+`
 
 export function Label(props: HTMLAttributes<"label">) {
-  return <label {...props} class={`${CLS(style.label)} ${props.class ?? ""}`} />
+  return <label {...props} class={`${label} ${props.class ?? ""}`} />
 }

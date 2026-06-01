@@ -1,44 +1,49 @@
 import type { ParentProps } from "solid-js"
 import type { IconTypes } from "solid-icons"
+import { CgSync } from "solid-icons/cg"
 // ...
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 import "~/styles/shorthand.css"
 // ...
 import { Button, Label, Spacer, Tooltip } from "~/components"
-import { CgSync } from "solid-icons/cg"
 
-const style = stylex.create({
-  section__labelWrap: {
-    width: "100%",
-    paddingInline: 5,
-    paddingBlock: 10,
-    display: "flex",
-    alignItems: "center",
-    gap: 10
-  },
-  section__label: {
-    display: "flex",
-    alignItems: "center",
-    gap: 10
-  },
-  section__tooltipDescription: {
-    color: "var(--subtext0)",
-    fontSize: 13
-  }
-})
+const section__labelWrap = css`
+  width: 100%;
+  padding-inline: 5px;
+  padding-block: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`
 
-type Action = "resync_collection$"
+const section__label = css`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`
 
-export interface ICollectionSectionProps extends IActionHandler<Action> {
+const section__tooltipDescription = css`
+  color: var(--subtext0);
+  font-size: 13px;
+`
+
+const section__itemList = css`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 10rem;
+`
+
+export interface ICollectionSectionProps extends IActionHandler<CollectionSectionAction> {
   label$: string
   icon$: IconTypes
 }
 
 export function CollectionSection(props: ParentProps<ICollectionSectionProps>) {
   return (
-    <section class={`showOnHover`}>
-      <div {...stylex.attrs(style.section__labelWrap)}>
-        <Label {...stylex.attrs(style.section__label)}>
+    <section class="showOnHover">
+      <div class={section__labelWrap}>
+        <Label class={section__label}>
           <props.icon$ />
           {props.label$}
         </Label>
@@ -47,7 +52,7 @@ export function CollectionSection(props: ParentProps<ICollectionSectionProps>) {
           <>
             Resync {props.label$.toLowerCase()}.
             <br />
-            <span {...stylex.attrs(style.section__tooltipDescription)}>
+            <span class={section__tooltipDescription}>
               In case you have missing collection or <br />
               you just added a new collection.
             </span>
@@ -57,14 +62,16 @@ export function CollectionSection(props: ParentProps<ICollectionSectionProps>) {
             size$={ButtonSize.ICON} 
             variant$={ButtonVariant.NO_BACKGROUND}
             class={"showOnHover__hide"}
-            onClick={() => props.action$("resync_collection$")}
+            onClick={() => props.action$(CollectionSectionAction.RESYNC_COLLECTION)}
           >
             <CgSync />
           </Button>
         </Tooltip>
       </div>
 
-      {props.children}
+      <div class={section__itemList}>
+        {props.children}
+      </div>
     </section>
   )
 }

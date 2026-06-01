@@ -1,30 +1,23 @@
-import stylex from "@stylexjs/stylex"
-import "./MediaProgressSlider.css"
 import { createSignal, splitProps } from "solid-js"
+// ...
+import { css } from "molcss"
+// ...
 import { RangeInput } from "./RangeInput"
 
-const style = stylex.create({
-  slider: {
-    width: "100%",
-    position: "relative"
-  },
-  slider__input: {
-    top: -2,
-    width: "100%",  
-  },
-  slider__progress: {
-    width: "var(--slider-progress)",
-    backgroundColor: "var(--blue)",
-    zIndex: 1,
-    borderRadius: 6
-  },
-  slider__buffered: {
-    width: "var(--slider-buffered-progress)",
-    backgroundColor: "var(--surface0)",
-    zIndex: 0,
-    borderRadius: 6
-  }
-})
+const slider = css`
+  width: 100%;
+`
+
+const slider__input = css`
+  width: 100%;
+`
+
+const slider__buffered = css`
+  width: "var(--slider-buffered-progress)";
+  background-color: "var(--surface0)";
+  z-index: 0;
+  border-radius: 6px;
+`
 
 interface ISliderProps {
   progress$: number
@@ -59,15 +52,14 @@ export function MediaProgressSlider(props: ISliderProps) {
     <div 
       id="progressSlider"
       style={`--slider-progress:${getCurrentProgress()}%`} 
-      {...stylex.attrs(style.slider)}
+      class={slider}
     >
-      <div {...stylex.attrs(style.slider__progress)} />
       <div 
-        {...stylex.attrs(style.slider__buffered)} 
+        class={slider__buffered} 
         style={`--slider-buffered-progress:${props.bufferedProgress$}%`}
       />
       <RangeInput
-        {...stylex.attrs(style.slider__input)}
+        class={slider__input}
         min={0}
         max={100}
         step={0.0000001}

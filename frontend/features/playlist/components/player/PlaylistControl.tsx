@@ -1,52 +1,55 @@
 import { BsCaretLeftFill, BsCaretRightFill, BsVolumeMuteFill, BsVolumeUpFill } from "solid-icons/bs"
 import type { ParentProps } from "solid-js"
 // ...
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 // ...
-import { RangeInput, Spacer, Tooltip } from "~/components"
+import { RangeInput, Tooltip } from "~/components"
 // ...
 import { usePlaylistContext } from "../../provider"
 import { PlaylistTogglePlayIcon } from "./PlaylistTogglePlayIcon"
 
-const style = stylex.create({
-  playlistControl__mainControl: {
-    display: "flex",
-    alignItems: "center",
-    gap: 5,
-    flexShrink: 0
-  },
-  playlistControl__otherControl: {
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    gap: 5,
-    width: "28rem",
-  },
-  playlistControl__button: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    color: "var(--overlay2)",
-    ":disabled": {
-      color: "var(--overlay0) !important",
-    },
-    ":hover": {
-      color: "var(--text)",
-    }
-  },
-  playlistControl__bigButton: {
-    width: "3.75rem",
-    height: "3.75rem",
-  },
-  playlistControl__smallButton: {
-    width: "2.75rem",
-    height: "2.75rem",
-  },
-  playlistControl__playButton: {
-    borderRadius: "50%",
-    backgroundColor: "#3d4151",
+const playlistControl__mainControl = css`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+`
+
+const playlistControl__otherControl = css`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+  width: 28rem;
+`
+
+const playlistControl__button = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--overlay2);
+  &:disabled {
+    color: var(--overlay0) !important;
   }
-})
+  &:hover {
+    color: var(--text);
+  }
+`
+
+const playlistControl__bigButton = css`
+  width: 3.75rem;
+  height: 3.75rem;
+`
+
+const playlistControl__smallButton = css`
+  width: 2.75rem;
+  height: 2.75rem;
+`
+
+const playlistControl__playButton = css`
+  border-radius: 50%;
+  background-color: #3d4151;
+`
 
 export function PlaylistControl(props: ParentProps) {
   const { shouldDisableNextBtn$, shouldDisablePrevBtn$, currentTrack$, player$, togglePlayTrack$, goToNextTrackIfCan$, goToPrevTrackIfCan$ } = usePlaylistContext()
@@ -58,11 +61,10 @@ export function PlaylistControl(props: ParentProps) {
 
   return (
     <>
-      <Spacer />
-      <div {...stylex.attrs(style.playlistControl__mainControl)}>
+      <div class={playlistControl__mainControl}>
         <Tooltip label$="Go to previous track">
           <button 
-            {...stylex.attrs(style.playlistControl__bigButton, style.playlistControl__button)}
+            class={`${playlistControl__bigButton} ${playlistControl__button}`}
             disabled={shouldDisablePrevBtn$()}
             onClick={goToPrevTrackIfCan$}
           >
@@ -70,7 +72,7 @@ export function PlaylistControl(props: ParentProps) {
           </button>
         </Tooltip>
         <button 
-          {...stylex.attrs(style.playlistControl__bigButton, style.playlistControl__button, style.playlistControl__playButton)}
+          class={`${playlistControl__bigButton} ${playlistControl__button} ${playlistControl__playButton}`}
           disabled={currentTrack$() == null}
           onClick={() => {
             if (currentTrack$() !== null) {
@@ -83,7 +85,7 @@ export function PlaylistControl(props: ParentProps) {
         </button>
         <Tooltip label$="Go to next track">
           <button 
-            {...stylex.attrs(style.playlistControl__bigButton, style.playlistControl__button)}
+            class={`${playlistControl__bigButton} ${playlistControl__button}`}
             disabled={shouldDisableNextBtn$()}
             onClick={goToNextTrackIfCan$}
           >
@@ -91,12 +93,11 @@ export function PlaylistControl(props: ParentProps) {
           </button>
         </Tooltip>
       </div>
-      <Spacer />
-      <div {...stylex.attrs(style.playlistControl__otherControl)}>
+      <div class={playlistControl__otherControl}>
         {props.children}
         <Tooltip label$={`Click to ${player$.isMuted$() ? "unmute" : "mute"}`}>
           <button 
-            {...stylex.attrs(style.playlistControl__smallButton, style.playlistControl__button)}
+            class={`${playlistControl__smallButton} ${playlistControl__button}`}
             onClick={player$.toggleMute$}
           >
             {player$.isMuted$() ? <BsVolumeMuteFill size="1.2rem" /> : <BsVolumeUpFill size="1.2rem" />}

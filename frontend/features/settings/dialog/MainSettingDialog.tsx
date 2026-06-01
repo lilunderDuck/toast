@@ -1,45 +1,44 @@
 import { createSignal, For, Match, Switch } from "solid-js"
-import { CLS } from "macro-def"
 // ...
 import { DialogContent } from "~/components"
 import type { IBaseLazyDialog } from "~/hooks"
 // ...
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 import "./MainSettingDialog.css"
 import "~/styles/scrollbar.css"
 // ...
 import { SettingSidebarItem } from "../components/SettingSidebarItem"
-import { type ISettingProviderProps, type ISettingSidebarOption, SettingProvider, useSettingContext } from "../provider"
 import { PAGE_COMPONENT, PAGE_SIDEBAR } from "./pages"
 
-const style = stylex.create({
-  dialog: {
-    width: "90%",
-    height: "calc(100% - 10rem)",
-    padding: "0 !important"
-  },
-  dialog__content: {
-    width: "100%",
-    height: "100%",
-    display: "flex"
-  },
-  dialog__sidebar: {
-    width: "15em",
-    flexShrink: 0,
-    paddingInline: 5,
-    paddingBlock: 10
-  },
-  dialog__mainContent: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "var(--base)",
-    paddingInline: 15,
-    paddingTop: 10,
-    paddingBottom: "5rem"
-  }
-})
+const dialog = css`
+  width: 90%;
+  height: calc(100% - 10rem);
+  padding: 0 !important;
+`
 
-interface IMainSettingDialog extends ISettingProviderProps<any>, IBaseLazyDialog {}
+const dialog__content = css`
+  width: 100%;
+  height: 100%;
+  display: flex;
+`
+
+const dialog__sidebar = css`
+  width: 15em;
+  flex-shrink: 0;
+  padding-inline: 5px;
+  padding-block: 10px;
+`
+
+const dialog__mainContent = css`
+  width: 100%;
+  height: 100%;
+  background-color: var(--base);
+  padding-inline: 15px;
+  padding-top: 10px;
+  padding-bottom: 5rem;
+`
+
+interface IMainSettingDialog extends IBaseLazyDialog {}
 
 export default function MainSettingDialog(props: IMainSettingDialog) {
   // a few asserts to make sure the setting doesn't randomly break
@@ -52,9 +51,9 @@ export default function MainSettingDialog(props: IMainSettingDialog) {
   )
 
   return (
-    <DialogContent {...stylex.attrs(style.dialog)}>
-      <div {...stylex.attrs(style.dialog__content)}>
-        <aside class={`${CLS(style.dialog__sidebar)} scrollbar scrollbarVertical invsScrollbar`}>
+    <DialogContent class={dialog}>
+      <div class={dialog__content}>
+        <aside class={`${dialog__sidebar} scrollbar scrollbarVertical invsScrollbar`}>
           <For each={PAGE_SIDEBAR}>
             {it => (
               <SettingSidebarItem 
@@ -66,7 +65,7 @@ export default function MainSettingDialog(props: IMainSettingDialog) {
           </For>
         </aside>
         <main
-          class={`${CLS(style.dialog__mainContent)} scrollbar scrollbarVertical invsScrollbar`}
+          class={`${dialog__mainContent} scrollbar scrollbarVertical invsScrollbar`}
           id="mainContent"
         >
           <Switch>

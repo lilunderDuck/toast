@@ -2,16 +2,14 @@ import { For } from "solid-js"
 // @ts-ignore - used as a directive
 import { dndzone } from "solid-dnd-directive"
 // ...
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 // ...
 import { usePlaylistContext } from "../provider"
 import { PlaylistItem } from "../components"
 
-const style = stylex.create({
-  itemList: {
-    paddingBottom: "10rem",
-  }
-})
+const itemList = css`
+  padding-bottom: 10rem;
+`
 
 export function PlaylistItemList() {
   const { tracks$, loopingState$, _setTracks$, saveTrackData$ } = usePlaylistContext()
@@ -27,7 +25,7 @@ export function PlaylistItemList() {
   
   return (
     <div 
-      {...stylex.attrs(style.itemList)} 
+      class={`${itemList} ${loopingState$() === PlaylistLoopState.REPEAT_ONCE ? "playlist__currentlyLoopingOneTrack" : ""}`}
       use:dndzone={{
         items: tracks$,
         type: "playlist_track$",
@@ -37,7 +35,6 @@ export function PlaylistItemList() {
       }}
       on:consider={considerDragging}
       on:finalize={finalizeDragging}
-      data-loop-current={loopingState$() === PlaylistLoopState.REPEAT_ONCE}
     >
       <For each={tracks$()}>
         {(it, index) => (

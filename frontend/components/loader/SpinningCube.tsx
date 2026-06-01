@@ -1,63 +1,58 @@
-import stylex from "@stylexjs/stylex"
-import type { JSX } from "solid-js"
-import __style from "./SpinningCube.module.css"
-import { CLS } from "macro-def"
+import { css } from "molcss"
+import "./SpinningCube.css"
 
-const spinningAnimation = stylex.keyframes({
-  '0%': {
-    transform: 'rotateX(-20deg) rotateY(20deg)'
-  },
-  '100%': {
-    transform: 'rotateX(-20deg) rotateY(740deg)'
-  }
-})
+const cube__bound = css`
+  width: var(--cube-size);
+  height: var(--cube-size);
+`
 
-const style = stylex.create({
-  cubeBound: {
-    width: 'var(--cube-size)',
-    height: 'var(--cube-size)',
-  },
-  cube: {
-    transformStyle: 'preserve-3d',
-    animation: `${spinningAnimation} 3s linear infinite`,
-    position: 'relative',
-    top: '50%',
-    left: '50%',
-    marginLeft: 'var(--reverse-half-of-the-cube-size)',
-    marginTop: 'var(--reverse-half-of-the-cube-size)',
-  },
-  cubeFace: {
-    position: 'absolute',
-  },
-  top: {
-    transform: 'rotateX(90deg)',
-    marginTop: 'var(--reverse-half-of-the-cube-size)',
-    backgroundColor: 'var(--top-face-color)'
-  },
-  right: {
-    transform: 'rotateY(90deg)',
-    marginLeft: 'var(--half-of-the-cube-size)',
-    backgroundColor: 'var(--right-face-color)'
-  },
-  bottom: {
-    transform: 'rotateX(-90deg)',
-    marginTop: 'var(--half-of-the-cube-size)',
-    backgroundColor: 'var(--bottom-face-color)'
-  },
-  left: {
-    transform: 'rotateY(-90deg)',
-    marginLeft: 'var(--reverse-half-of-the-cube-size)',
-    backgroundColor: 'var(--left-face-color)'
-  },
-  front: {
-    transform: `translateZ(var(--half-of-the-cube-size))`,
-    backgroundColor: 'var(--front-face-color)'
-  },
-  back: {
-    transform: `translateZ(var(--half-of-the-cube-size)) rotateX(180deg)`,
-    backgroundColor: 'var(--back-face-color)'
-  }
-})
+const cube = css`
+  transform-style: preserve-3d;
+  animation: cube__spinning 3s linear infinite;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  margin-left: var(--reverse-half-of-the-cube-size);
+  margin-top: var(--reverse-half-of-the-cube-size);
+`
+
+const cube__face = css`
+  position: absolute;
+`
+
+const cube__top = css`
+  transform: rotateX(90deg);
+  margin-top: var(--reverse-half-of-the-cube-size);
+  background-color: var(--top-face-color);
+`
+
+const cube__right = css`
+  transform: rotateY(90deg);
+  margin-left: var(--half-of-the-cube-size);
+  background-color: var(--right-face-color);
+`
+
+const cube__bottom = css`
+  transform: rotateX(-90deg);
+  margin-top: var(--half-of-the-cube-size);
+  background-color: var(--bottom-face-color);
+`
+
+const cube__left = css`
+  transform: rotateY(-90deg);
+  margin-left: var(--reverse-half-of-the-cube-size);
+  background-color: var(--left-face-color);
+`
+
+const cube__front = css`
+  transform: translateZ(var(--half-of-the-cube-size));
+  background-color: var(--front-face-color);
+`
+
+const cube__back = css`
+  transform: translateZ(var(--half-of-the-cube-size)) rotateX(180deg);
+  background-color: var(--back-face-color);
+`
 
 interface ISpinningCubeProps {
   /**The size of this cube in pixels. Default to `100px` */
@@ -70,22 +65,16 @@ export function SpinningCube(props: ISpinningCubeProps) {
   return (
     <div 
       style={{ '--cube-size': `${getCubeSize()}px` }} 
-      class={`${CLS(style.cubeBound)} ${__style.thisCube}`}
+      class={`${cube__bound} cube__thisCube`}
     >
-      <div {...stylex.attrs(style.cube, style.cubeBound)}>
-        <CubeFace {...stylex.attrs(style.top)} />
-        <CubeFace {...stylex.attrs(style.right)} />
-        <CubeFace {...stylex.attrs(style.bottom)} />
-        <CubeFace {...stylex.attrs(style.left)} />
-        <CubeFace {...stylex.attrs(style.front)} />
-        <CubeFace {...stylex.attrs(style.back)} />
+      <div class={`${cube} ${cube__bound}`}>
+        <div class={`${cube__face} ${cube__bound} ${cube__top}`} />
+        <div class={`${cube__face} ${cube__bound} ${cube__right}`} />
+        <div class={`${cube__face} ${cube__bound} ${cube__bottom}`} />
+        <div class={`${cube__face} ${cube__bound} ${cube__left}`} />
+        <div class={`${cube__face} ${cube__bound} ${cube__front}`} />
+        <div class={`${cube__face} ${cube__bound} ${cube__back}`} />
       </div>
     </div>
-  )
-}
-
-function CubeFace(props: JSX.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div class={`${props.class} ${CLS(style.cubeFace)} ${CLS(style.cubeBound)}`} />
   )
 }

@@ -1,39 +1,37 @@
-import stylex from "@stylexjs/stylex"
 import "../components/PlaylistItem.css"
-import "~/styles/shorthand.css" // explicit import
-import { PlaylistItemListHeaderSeperator } from "../components"
-import { CLS } from "macro-def"
+import "~/styles/shorthand.css"
+import { css } from "molcss"
+// ...
+import { Divider } from "~/components"
 
-const style = stylex.create({
-  header: {
-    paddingInline: 20,
-    paddingBlock: 5,
-    display: "flex",
-    alignItems: "center",
-    gap: 5,
-    borderBottom: "1px solid var(--overlay1)",
-    marginBottom: 10,
-    userSelect: "none"
-  }
-})
+const header = css`
+  padding-inline: 20px;
+  padding-block: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-bottom: 1px solid var(--overlay1);
+  margin-bottom: 10px;
+  user-select: none;
+`
 
 export function PlaylistItemListHeader() {
   return (
-    <header class={`${CLS(style.header)} showOnHover`}>
-      <div id="item__index">
+    <header class={`${header} showOnHover`}>
+      <div class="playlist__trackIndex">
         #
       </div>
-      <div id="item__icon" />
-      <PlaylistItemListHeaderSeperator class="showOnHover__hide" />
-      <div id="item__name">
+      <div class="playlist__trackIcon" />
+      <Divider variant$={DividerVariant.VERTICAL} class="showOnHover__hide" />
+      <div class="playlist__trackName">
         Name
       </div>
-      <PlaylistItemListHeaderSeperator class="showOnHover__hide" />
-      <div id="item__artist">
+      <Divider variant$={DividerVariant.VERTICAL} class="showOnHover__hide" />
+      <div class="playlist__trackArtist">
         Artist
       </div>
-      <PlaylistItemListHeaderSeperator class="showOnHover__hide" />
-      <div id="item__duration">
+      <Divider variant$={DividerVariant.VERTICAL} class="showOnHover__hide" />
+      <div class="playlist__trackDuration">
         Duration
       </div>
     </header>

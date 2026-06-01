@@ -1,26 +1,24 @@
 import { BsPlus } from "solid-icons/bs"
 // ...
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 // ...
 import { createLazyLoadedDialog } from "~/hooks"
 import { useStickyNotesContext } from "../../provider/StickyNotesProvider"
 
-const style = stylex.create({
-  block: {
-    width: "13.5rem",
-    height: "12rem",
-    borderRadius: 6,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "var(--mantle)",
-    color: "var(--subtext0)",
-    ":hover": {
-      backgroundColor: "var(--base)",
-      color: "var(--text)",
-    }
+const block = css`
+  width: 13.5rem;
+  height: 12rem;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--mantle);
+  color: var(--subtext0);
+  &:hover {
+    background-color: var(--base);
+    color: var(--text);
   }
-})
+`
 
 export function StickyNoteCreateButton() {
   const { addStickyNote$ } = useStickyNotesContext()
@@ -36,7 +34,7 @@ export function StickyNoteCreateButton() {
 
   return (
     <>
-      <button {...stylex.attrs(style.block)} onClick={show$}>
+      <button class={block} onClick={show$}>
         <BsPlus size={30} />
       </button>
       <Dialog$ />

@@ -1,19 +1,16 @@
 import { Match, splitProps, Switch } from "solid-js"
 // ...
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 // ...
 import { Spacer } from "../ui"
-import { CLS } from "macro-def"
 
-const style = stylex.create({
-  buttonRow: {
-    gap: 10,
-    marginTop: 10,
-    userSelect: "none",
-    display: "flex",
-    alignItems: "center"
-  }
-})
+const buttonRow = css`
+  gap: 10px;
+  margin-top: 10px;
+  user-select: none;
+  display: flex;
+  align-items: center;
+`
 
 interface IButtonRowProps extends HTMLAttributes<"div"> {
   direction$?: ButtonRowDirection
@@ -23,7 +20,7 @@ export function ButtonRow(props: IButtonRowProps) {
   const [, itsProps] = splitProps(props, ["direction$"])
 
   return (
-    <div {...itsProps} class={`${CLS(style.buttonRow)} ${props.class ?? ""}`}>
+    <div {...itsProps} class={`${buttonRow} ${props.class ?? ""}`}>
       <Switch fallback={
         <>
           <Spacer />

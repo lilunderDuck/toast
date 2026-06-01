@@ -1,21 +1,20 @@
 import { For } from "solid-js"
 // ...
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
+import "../core/JournalHomeRoot.css"
 // ...
 import { StickyNoteBlock, StickyNoteCreateButton, StickyNoteProvider } from "../components"
 import { StickyNotesProvider, useStickyNotesContext } from "../provider/StickyNotesProvider"
 
-const style = stylex.create({
-  note__list: {
-    width: "100%",
-    height: "100%",
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, 13.5rem)",
-    gridTemplateRows: "repeat(auto-fill, 12rem)",
-    gap: 10,
-    marginTop: 10
-  }
-})
+const note__list = css`
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 13.5rem);
+  grid-template-rows: repeat(auto-fill, 12rem);
+  gap: 10px;
+  margin-top: 10px;
+`
 
 export default function StickyNotes() {
   const NoteList = () => {
@@ -33,9 +32,9 @@ export default function StickyNotes() {
 
   return (
     <StickyNotesProvider>
-      <main id="journalHome__mainContent">
+      <main class="journalHome__mainContent">
         <h1>Sticky notes</h1>
-        <div {...stylex.attrs(style.note__list)}>
+        <div class={note__list}>
           <NoteList />
           <StickyNoteCreateButton />
         </div>

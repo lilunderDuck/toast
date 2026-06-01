@@ -1,7 +1,7 @@
 import { BsPencilFill } from "solid-icons/bs"
 // ...
+import { css } from "molcss"
 import './JournalBlock.css'
-import stylex from "@stylexjs/stylex"
 // ...
 import { Button } from "~/components"
 import { type group } from "~/wailsjs/go/models"
@@ -10,59 +10,65 @@ import { createLazyLoadedDialog } from "~/hooks"
 // ...
 import { useJournalHomeContext } from "../../provider/JournalHomeProvider"
 
-const style = stylex.create({
-  block: {
-    width: "100%",
-    position: "relative",
-    display: "flex",
-    paddingInline: 10,
-    paddingBlock: 5,
-    gap: 10,
-    marginBottom: 10,
-    border: "4px solid transparent",
-    backgroundColor: "var(--mantle)",
-    borderRadius: 6,
-    textAlign: "left",
-    ":hover": {
-      borderColor: "var(--sapphire)"
-    }
-  },
-  block__icon: {
-    width: "5rem",
-    height: "5rem",
-    flexShrink: 0,
-    borderRadius: 6
-  },
-  block__noIcon: {
-    backgroundColor: "var(--base)"
-  },
-  block__withIcon: {
-    background: "center center no-repeat var(--img-url)",
-    backgroundSize: "cover"
-  },
-  block__defaultBg: {
-    backgroundColor: "var(--mantle)"
-  },
-  block__editButton: {
-    position: "absolute",
-    transition: "0.25s ease-out",
-    right: 0,
-    marginTop: 10,
-    marginRight: 10,
-  },
-  block__content: {
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    flexDirection: "column"
-  },
-  block__name: {
-  },
-  block__description: {
-    fontSize: 14,
-    marginBottom: 5
+const block = css`
+  width: 100%;
+  position: relative;
+  display: flex;
+  padding-inline: 10px;
+  padding-block: 5px;
+  gap: 10px;
+  margin-bottom: 10px;
+  border: 4px solid transparent;
+  background-color: var(--mantle);
+  border-radius: 6px;
+  text-align: left;
+  &:hover {
+    border-color: var(--sapphire);
   }
-})
+`
+
+const block__icon = css`
+  width: 5rem;
+  height: 5rem;
+  flex-shrink: 0;
+  border-radius: 6px;
+`
+
+const block__noIcon = css`
+  background-color: var(--base);
+`
+
+const block__withIcon = css`
+  background: center center no-repeat var(--img-url);
+  background-size: cover;
+`
+
+const block__defaultBg = css`
+  background-color: var(--mantle);
+`
+
+const block__editButton = css`
+  position: "absolute";
+  transition: "0.25s ease-out";
+  right: 0;
+  margin-top: 10;
+  margin-right: 10;
+`
+
+const block__content = css`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`
+
+const block__name = css`
+`
+
+const block__description = css`
+  font-size: 14px;
+  margin-bottom: 5px;
+`
 
 interface IJournalBlockProps extends group.GroupData {
   // ...
@@ -80,13 +86,14 @@ export function JournalBlock(props: IJournalBlockProps) {
     () => ({
       prevData$: props,
       onSubmit$: (data) => addGroup$(data),
+      // @ts-ignore
       onUpdate$: (data) => editGroup$(data.id, data)
     })
   )
 
   return (
     <button 
-      {...stylex.attrs(style.block)}
+      class={block}
       id="block"
       data-block-has-icon={props.icon !== undefined && props.icon !== ""}
       style={{
@@ -94,23 +101,23 @@ export function JournalBlock(props: IJournalBlockProps) {
       }}
     >
       <div 
-        {...stylex.attrs(style.block__icon, style.block__noIcon)} 
+        class={`${block__icon} ${block__noIcon}`}
         id="block__icon" 
       />
       <div 
-        {...stylex.attrs(style.block__content)}
+        class={block__content}
         onClick={JournalInfoDialog.show$}
       >
-        <h2 {...stylex.attrs(style.block__name)}>
+        <h2 class={block__name}>
           {props.name}
         </h2>
-        <p {...stylex.attrs(style.block__description)}>
+        <p class={block__description}>
           {props.description}
         </p>
       </div>
 
       <Button 
-        {...stylex.attrs(style.block__editButton)} 
+        class={block__editButton} 
         size$={ButtonSize.ICON} 
         id="block__editButton" 
         onClick={EditJournalDialog.show$}

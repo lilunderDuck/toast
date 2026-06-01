@@ -1,24 +1,20 @@
-import stylex from "@stylexjs/stylex";
-import { BsTagsFill } from "solid-icons/bs";
-import { Button, Tooltip } from "~/components";
+import { BsTagsFill } from "solid-icons/bs"
+// ...
+import { css } from "molcss"
+// ...
+import { Button, Tooltip } from "~/components"
 
-const style = stylex.create({
-  button: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
-  }
-})
+const button = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
-interface ITagListButtonProps {
-  // define your component props here
-}
-
-export function TagListButton(props: ITagListButtonProps) {
+export function TagListButton() {
   return (
     <Tooltip label$="See list of tags or create tag">
       <Button 
-        {...stylex.attrs(style.button)} 
+        class={button}
         size$={ButtonSize.ICON}
         variant$={ButtonVariant.NO_BACKGROUND}
       >

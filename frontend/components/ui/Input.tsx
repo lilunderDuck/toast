@@ -1,17 +1,14 @@
-import stylex from "@stylexjs/stylex"
-import { CLS } from "macro-def"
+import { css } from "molcss"
 
-const style = stylex.create({
-  input: {
-    paddingInline: 10,
-    paddingBlock: 6,
-    borderRadius: 6,
-    transition: '0.25s ease-out',
-    outline: 'none',
-    backgroundColor: 'var(--surface0)',
-    width: '100%',
-  }
-})
+const input = css`
+  padding-inline: 10px;
+  padding-block: 6px;
+  border-radius: 6px;
+  transition: 0.25s ease-out;
+  outline: none;
+  background-color: var(--surface0);
+  width: 100%;
+`
 
 export function Input(props: HTMLAttributes<"input">) {
   // because edge is just ignore the damn autocomplete attribute, so we have...
@@ -23,7 +20,7 @@ export function Input(props: HTMLAttributes<"input">) {
     <input 
       {...props} 
       {...disableAutocompleteInEdgeIfNeeds()}
-      class={`${CLS(style.input)} ${props.class}`} 
+      class={`${input} ${props.class}`} 
     />
   )
 }

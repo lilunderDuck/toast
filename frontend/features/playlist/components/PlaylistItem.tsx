@@ -1,5 +1,5 @@
-import stylex from "@stylexjs/stylex"
 import "./PlaylistItem.css"
+import { css } from "molcss"
 // ...
 import type { playlist } from "~/wailsjs/go/models"
 import { Tooltip } from "~/components"
@@ -9,26 +9,30 @@ import { usePlaylistContext } from "../provider"
 import { PlaylistIcon } from "./PlaylistIcon"
 import { PlaylistTogglePlayIcon } from "./player"
 
-const style = stylex.create({
-  item: {
-    paddingInline: 10,
-    paddingBlock: 5,
-    display: "flex",
-    alignItems: "center",
-    gap: 10,
-    width: "100%",
-    ":hover": {
-      backgroundColor: "var(--base)"
-    }
-  },
-  item__index: {
-    marginRight: 5
-  },
-  item__hasIcon: {
-    background: "center center no-repeat var(--icon-url)",
-    backgroundSize: "contain"
+const item = css`
+  padding-inline: 10px;
+  padding-block: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  &:hover {
+    background-color: var(--base);
   }
-})
+`
+
+const item__index = css`
+  margin-right: 5;
+`
+
+const item__playIcon = css`
+  padding-left: 8px;
+  display: none;
+`
+
+const item__trackIndexNumber = css`
+  display: block;
+`
 
 interface IPlaylistItemProps extends playlist.PlaylistTrackData {
   index$: number
@@ -49,32 +53,29 @@ export function PlaylistItem(props: IPlaylistItemProps) {
 
   return (
     <button 
-      {...stylex.attrs(style.item)} 
-      data-current-track={currentTrack$()?.data$.id === props.id}
-      id="item__playlistItem"
+      class={`${item} playlist__trackItem ${currentTrack$()?.data$.id === props.id ? "playlist__currentTrack" : ""}`}
     >
       <Tooltip label$="Play track" tooltipOptions$={{ placement: "right" }}>
         <div 
-          {...stylex.attrs(style.item__index)}
-          id="item__index"
+          class={`${item__index} playlist__trackIndex`}
           onClick={() => togglePlayTrack$(props.index$)}
         >
-          <span id="item__indexNumber">
+          <span class={`${item__trackIndexNumber} playlist__trackIndexNumber`}>
             {props.index$ + 1}
           </span>
-          <span id="item__playIcon">
+          <span class={`${item__playIcon} playlist__trackPlayIcon`}>
             <PlaylistTogglePlayIcon state$={determineState()} />
           </span>
         </div>
       </Tooltip>
       <PlaylistIcon size$="2.5rem" icon$={props.icon} />
-      <div id="item__name">
+      <div class="playlist__trackName">
         {props.name}
       </div>
-      <div id="item__artist">
+      <div class="playlist__trackArtist">
         {props.artist}
       </div>
-      <div id="item__duration">
+      <div class="playlist__trackDuration">
         {formatSecondsToMMSS(props.duration)}
       </div>
     </button>

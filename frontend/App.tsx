@@ -10,7 +10,7 @@ export default function App(props: ParentProps) {
   return (
     <SettingProvider>
       <SplashScreenProvider>
-        <SplashScreen variant$={SplashScreenVariant.DEFAULT} />
+        <SplashScreen />
       </SplashScreenProvider>
       <Toaster />
       <AppTitleBarButton />

@@ -1,31 +1,29 @@
 import { A, useParams } from "@solidjs/router"
+import { BsArrowLeft } from "solid-icons/bs"
 // ...
-import stylex from "@stylexjs/stylex"
 import "~/styles/scrollbar.css"
 import "./[playlistId].css"
+import { css } from "molcss"
 // ...
 import { AppTitleBarDraggable, Button, Tooltip } from "~/components"
 import { PlaylistHeader, PlaylistItemList, PlaylistItemListHeader, PlaylistProvider, PlaylistTrackPlayer } from "~/features/playlist"
-import { BsArrowLeft } from "solid-icons/bs"
-import { CLS } from "macro-def"
 
-const style = stylex.create({
-  page: {
-    width: "100%",
-    height: "100%",
-  },
-  page__titleBar: {
-    paddingInline: 5,
-    position: "fixed"
-  }
-})
+const page = css`
+  width: 100%;
+  height: 100%;
+`
+
+const page__titleBar = css`
+  padding-inline: 5px;
+  position: fixed;
+`
 
 export default function PlaylistPage() {
   const param = useParams()
 
   return (
     <PlaylistProvider playlistId$={param.playlistId!}>
-      <AppTitleBarDraggable {...stylex.attrs(style.page__titleBar)}>
+      <AppTitleBarDraggable class={page__titleBar}>
         <A href="/">
           <Tooltip label$="Go back to home">
             <Button
@@ -38,7 +36,7 @@ export default function PlaylistPage() {
         </A>
       </AppTitleBarDraggable>
       <div 
-        class={`${CLS(style.page)} scrollbar scrollbarVertical invsScrollbar`}
+        class={`${page} scrollbar scrollbarVertical invsScrollbar`}
         id="playlist__page"
       >
         <PlaylistHeader />

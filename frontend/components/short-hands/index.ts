@@ -1,4 +1,3 @@
-export * from './OpenAndCloseButton'
 export * from './FieldInput'
 export * from './Label'
 export * from "./ColorInputs"

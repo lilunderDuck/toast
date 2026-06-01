@@ -3,7 +3,7 @@ import { createContext, createSignal, onMount, ParentProps, useContext, type Acc
 import { arrayObjects } from "~/utils"
 import type { sticky_notes } from "~/wailsjs/go/models"
 import { StickyNotes__getAll, StickyNotes__update } from "~/wailsjs/go/sticky_notes/Exports"
-1
+
 interface IStickyNotesContext {
   deleteStickyNote$(id: sticky_notes.StickyNoteData["id"]): Promise<void>
   addStickyNote$(data: sticky_notes.StickyNoteData): Promise<void>
