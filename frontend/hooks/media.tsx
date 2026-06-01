@@ -1,4 +1,4 @@
-import { createEffect, createSignal } from "solid-js"
+import { createEffect, createSignal, onCleanup } from "solid-js"
 // ...
 import { getMediaCurrentPercentage, getMediaCurrentTimeByPercentage, type HTMLAttributes, type Ref } from "~/utils" // documentation only
 import { MediaProgressSlider } from "~/components" // documentation only
@@ -117,9 +117,10 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
   const changeVolume = (volume: number) => {
     console.assert(volume >= 0 && volume <= 100, "[media player] volume must not be negative and must not over 100. Your current volume is: " + volume)
     console.assert(!isNaN(volume), "[media player] volume is not a number")
+
     mediaRef.volume = volume / 100
-    console.log("[media player] Media volume changed to:", volume)
     setCurentVolume(volume)
+    console.log("[media player] Media volume changed to:", volume)
   }
 
   const changeCurrentTime = (time: number) => {
@@ -132,6 +133,11 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
     setIsMuted(prev => !prev)
     mediaRef.muted = isMuted()
   }
+
+  onCleanup(() => {
+    // @ts-ignore
+    mediaRef = null
+  })
 
   return {
     state$: mediaState,
@@ -148,6 +154,7 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
     isMuted$: isMuted,
     toggleMute$: toggleMute,
     Player$: (props: MediaPlayerProps) => (
+      // @ts-ignore
       <video ref={mediaRef} {...props} {...mediaProps} />
     )
   }

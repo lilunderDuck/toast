@@ -1,8 +1,10 @@
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, Spacer, Tooltip } from "~/components";
 import { OcIssuetracks2 } from "solid-icons/oc"
-import type { IBaseDropdownMenu } from "~/hooks";
 import { createSignal } from "solid-js";
 import { BsImageFill, BsQuestionCircleFill } from "solid-icons/bs";
+// ...
+import type { IBaseDropdownMenu } from "~/hooks";
+import type { IActionHandler } from "~/utils";
 
 interface IPlaylistHeaderMoreOptionDropdownProps extends IBaseDropdownMenu, IActionHandler<PlaylistHeaderDropdownAction> {
   // define your component props here

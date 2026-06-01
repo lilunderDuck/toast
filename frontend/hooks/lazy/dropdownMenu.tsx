@@ -1,8 +1,7 @@
-import { createSignal, type ParentProps, Show } from "solid-js"
+import { createSignal, lazy, type ParentProps, Show } from "solid-js"
 // ...
 import type { LazyComponent } from "./types"
 import { DropdownMenu, DropdownMenuTrigger } from "../../components/ui"
-import { createLazyComponent } from "./utils"
 
 export interface IBaseDropdownMenu {
   close$(): void
@@ -30,7 +29,7 @@ export function createLazyLoadedDropdownMenu<Props extends IBaseDropdownMenu>(
     setIsShowing(false)
   }
 
-  const LazyComponent = createLazyComponent(Component)
+  const LazyComponent = lazy(Component)
 
   return {
     DropdownMenu$(props: ParentProps<IDropdownMenuProps>) {

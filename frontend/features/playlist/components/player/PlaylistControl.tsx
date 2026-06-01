@@ -52,7 +52,7 @@ const playlistControl__playButton = css`
 `
 
 export function PlaylistControl(props: ParentProps) {
-  const { shouldDisableNextBtn$, shouldDisablePrevBtn$, currentTrack$, player$, togglePlayTrack$, goToNextTrackIfCan$, goToPrevTrackIfCan$ } = usePlaylistContext()
+  const { shouldDisableNextBtn$, shouldDisablePrevBtn$, currentTrack$, player$, togglePlayTrack$, goToNextTrack$, goToPrevTrack$ } = usePlaylistContext()
 
   const changeVolume: EventHandler<"input", "onInput"> = (inputEvent) => {
     const newVolume = parseFloat(inputEvent.currentTarget.value)
@@ -66,7 +66,7 @@ export function PlaylistControl(props: ParentProps) {
           <button 
             class={`${playlistControl__bigButton} ${playlistControl__button}`}
             disabled={shouldDisablePrevBtn$()}
-            onClick={goToPrevTrackIfCan$}
+            onClick={goToPrevTrack$}
           >
             <BsCaretLeftFill size="1.2rem" />
           </button>
@@ -87,7 +87,7 @@ export function PlaylistControl(props: ParentProps) {
           <button 
             class={`${playlistControl__bigButton} ${playlistControl__button}`}
             disabled={shouldDisableNextBtn$()}
-            onClick={goToNextTrackIfCan$}
+            onClick={goToNextTrack$}
           >
             <BsCaretRightFill size="1.2rem" />
           </button>

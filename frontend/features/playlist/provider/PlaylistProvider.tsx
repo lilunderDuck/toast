@@ -3,10 +3,10 @@ import { createContext, createSignal, type ParentProps, useContext, type Accesso
 import type { playlist } from "~/wailsjs/go/models"
 import { Playlist_createTrack, Playlist_get, Playlist_getAllTrack, Playlist_resyncTrackDuration, Playlist_updateTrack } from "~/wailsjs/go/playlist/Exports"
 import { arrayObjects } from "~/utils"
-import { createMediaPlayer, type MediaPlayer } from "~/hooks"
+import { createMediaPlayer, useSMTC, type MediaPlayer } from "~/hooks"
 import { toast } from "~/libs/solid-toast"
 // ...
-import { playlistTrackUrl } from "../api"
+import { playlistIconUrl, playlistTrackUrl } from "../api"
 import { playlistDurationResyncToast } from "../components"
 
 interface ICurrentTrackData {
@@ -25,8 +25,8 @@ interface IPlaylistContext {
   saveTrackData$(): Promise<void>
   addTrack$(options: playlist.PlaylistCreateTrackOption): Promise<void>
 
-  goToPrevTrackIfCan$(): void
-  goToNextTrackIfCan$(): void
+  goToPrevTrack$(): void
+  goToNextTrack$(): void
   shouldDisableNextBtn$: Accessor<boolean>
   shouldDisablePrevBtn$: Accessor<boolean>
 
@@ -57,8 +57,16 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
         audioPlayer.play$()
         return
       }
-      goToNextTrackIfCan()
+      
+      goToNextTrack()
     }
+  })
+
+  const { changeMetadata$ } = useSMTC({
+    playHandler$: audioPlayer.play$,
+    pauseHandler$: audioPlayer.pause$,
+    nextTrackHandler$: () => goToNextTrack(),
+    previousTrackHandler$: () => goToPrevTrack()
   })
   
   onMount(async() => {
@@ -101,15 +109,19 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
         data$: track
       })
     }
+
+    changeMetadata$({
+      artist: track.artist,
+      title: track.name,
+      artwork: [
+        { src: playlistIconUrl(props.playlistId$, track.icon) }
+      ]
+    })
     
     audioPlayer.play$()
   }
 
-  const pauseCurrentlyPlayedTrack = () => {
-    audioPlayer.pause$()
-  }
-
-  const goToNextTrackIfCan = () => {
+  const goToNextTrack = () => {
     console.log("Going to next track...")
     console.assert(playlistData(), "playlist data have not been fetched yet")
     
@@ -135,7 +147,7 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
     playTrack(currentIndex + 1)
   }
 
-  const goToPrevTrackIfCan = () => {
+  const goToPrevTrack = () => {
     console.log("Going to previous track...")
     console.assert(playlistData(), "playlist data have not been fetched yet")
     const [, currentIndex] = arrayObjects(playlistTracks()).find$(
@@ -169,7 +181,7 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
     }
 
     if (audioPlayer.state$() === MediaState.PLAYING) {
-      pauseCurrentlyPlayedTrack()
+      audioPlayer.pause$()
     } else {
       playTrack(index)
     }
@@ -199,8 +211,8 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
       togglePlayTrack$: togglePlayTrack,
       currentTrack$: currentTrack,
       resyncTracksDuration$: resyncTracksDuration,
-      goToNextTrackIfCan$: goToNextTrackIfCan,
-      goToPrevTrackIfCan$: goToPrevTrackIfCan,
+      goToNextTrack$: goToNextTrack,
+      goToPrevTrack$: goToPrevTrack,
       shouldDisableNextBtn$: shouldDisableNextBtn,
       shouldDisablePrevBtn$: shouldDisablePrevBtn,
       loopingState$: loopingState, 

@@ -105,7 +105,6 @@ export function Button(props: IButtonProps) {
   return (
     <button
       type="button"
-      disabled={isLoading()}
       {...others}
       class={`${base} ${variantMapping[local.variant$ ?? ButtonVariant.DEFAULT]} ${sizeMapping[local.size$ ?? ButtonSize.DEFAULT]} ${others.class ?? ""}`}
     >

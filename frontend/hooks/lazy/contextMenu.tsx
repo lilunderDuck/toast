@@ -1,8 +1,7 @@
-import { createSignal, Show, type ParentProps } from "solid-js"
+import { createSignal, lazy, Show, type ParentProps } from "solid-js"
 // ...
 import type { LazyComponent } from "./types"
 import { ContextMenu, ContextMenuTrigger } from "../../components/ui"
-import { createLazyComponent } from "./utils"
 
 export interface IBaseContextMenu {
   // ...
@@ -25,7 +24,7 @@ export function createLazyLoadedContextMenu<Props extends IBaseContextMenu>(
   }
 
   const RIGHT_CLICK = 2
-  const LazyComponent = createLazyComponent(Component)
+  const LazyComponent = lazy(Component)
 
   return {
     ContextMenu$(props: ParentProps) {

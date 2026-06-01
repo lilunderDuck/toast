@@ -1,8 +1,7 @@
-import { createSignal, Show } from "solid-js"
+import { createSignal, lazy, Show } from "solid-js"
 // ...
 import type { LazyComponent, LazyComponentProps } from "./types"
 import { Dialog } from "../../components/ui"
-import { createLazyComponent } from "./utils"
 
 type LazyDialogComponent<Props extends {}> = LazyComponentProps<LazyComponent<Props>>
 
@@ -29,7 +28,7 @@ export function createLazyLoadedDialog<Props extends IBaseLazyDialog>(
     console.log('[lazy dialog] closed')
   }
 
-  const LazyComponent = createLazyComponent(Component)
+  const LazyComponent = lazy(Component)
 
   return {
     Dialog$() {
