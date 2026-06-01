@@ -1,11 +1,14 @@
-import { For, lazy, Match, Switch } from "solid-js";
-import { CustomSettingSection } from "../../components";
+import { For, lazy, Match, Switch } from "solid-js"
+// ...
+import { CustomSettingSection } from "../../components"
+import { SplashScreenSelectInput } from "./SplashScreenSelectInput"
+// ...
 import "./SplashScreenPage.css"
-import { SplashScreenSelectInput } from "./SplashScreenSelectInput";
-import { usePersistedSignal } from "~/hooks";
+// ...
+import { usePersistedSignal } from "~/hooks"
 
-const DefaultSplashScreen = lazy(() => import("~/features/splash/variant/default/DefaultSplashScreenPreview"))
-const NeoforgeSplashScreen = lazy(() => import("~/features/splash/variant/mc_neoforge/NeoforgeSplashScreenPreview"))
+const DefaultSplashScreen = lazy(() => import("~/features/splash/preview/DefaultSplashScreenPreview"))
+const NeoforgeSplashScreen = lazy(() => import("~/features/splash/preview/NeoforgeSplashScreenPreview"))
 
 export function SplashScreenPage() {
   const [variant, setVariant] = usePersistedSignal(localStorage, 'splash_variant', SplashScreenVariant.DEFAULT)
@@ -29,6 +32,7 @@ export function SplashScreenPage() {
         ]}>
           {([splashScreenId, SplashScreenComponent]) => (
             <Match when={variant() === splashScreenId}>
+              {/* @ts-ignore */}
               <SplashScreenComponent />
             </Match>
           )}
