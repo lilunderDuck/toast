@@ -23,12 +23,12 @@ export default defineConfig(({ command }) => {
       pagesPlugin({
         dirs: ['./frontend/pages'],
       }),
-      solidPlugin(),
-      stylexPlugin(),
-      optimizeCssModules(),
       molcss({
         content: 'frontend/**/*.{js,jsx,ts,tsx}',
       }),
+      solidPlugin(),
+      stylexPlugin(),
+      optimizeCssModules(),
       macroPlugin
     ],
     // Windows 11 workaround: for some goddamn reason, in a windows 10 enviroment, this config

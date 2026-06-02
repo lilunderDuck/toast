@@ -1,14 +1,14 @@
 import { createSignal, onMount } from "solid-js"
 // ...
 import { css } from "molcss"
-import "./NeoforgeSplashScreen.css"
+import "../variant/mc_neoforge/NeoforgeSplashScreen.css"
 import "~/styles/animation.css"
 import toastIcon from "~/assets/toast.jpg"
 // ...
 import { type backend } from "~/wailsjs/go/models"
 import { GetCurrentAppUsage } from "~/wailsjs/go/backend/App"
 // ...
-import { NeoforgeLogMessage, NeoforgeProgressBar, NeoforgeSpinningFoxIcon } from "./components"
+import { NeoforgeLogMessage, NeoforgeProgressBar, NeoforgeSpinningFoxIcon } from "../variant/mc_neoforge/components"
 
 const screen__content = css`
   background-color: #ef323d;
