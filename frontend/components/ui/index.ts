@@ -14,7 +14,5 @@ export * from "./Popover"
 export * from "./select"
 export * from "./dialog"
 export * from './radio-group'
-export * from './tabs'
 export * from "./dropdown"
 export * from "./context-menu"
-export * from "./slider"

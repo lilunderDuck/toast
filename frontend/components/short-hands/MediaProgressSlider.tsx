@@ -3,6 +3,7 @@ import { createSignal, splitProps } from "solid-js"
 import { css } from "molcss"
 // ...
 import { RangeInput } from "./RangeInput"
+import { DEBUG_INFO } from "macro-def"
 
 const slider = css`
   width: 100%;
@@ -35,13 +36,11 @@ export function MediaProgressSlider(props: ISliderProps) {
     const newValue = parseFloat(inputEvent.currentTarget.value)
     setIsDragging(true)
     setDragProgress(newValue)
-    console.log("changing", newValue)
   }
 
   const updateNewProgress: EventHandler<"input", "onChange"> = () => {
     setIsDragging(false)
     props.onChange$(dragProgress())
-    console.log("updated")
   }
 
   const getCurrentProgress = () => {

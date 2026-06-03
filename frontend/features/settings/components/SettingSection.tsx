@@ -1,48 +1,52 @@
 import { Match, type ParentProps, Show, Switch } from "solid-js"
-import { CLS } from "macro-def"
 // ...
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 // ...
 import { Checkbox, Input, Spacer } from "~/components"
 import type { HTMLAttributes } from "~/utils"
 
-const style = stylex.create({
-  section: {
-    marginTop: 10,
-    ":first-child": {
-      marginTop: 0
-    }
-  },
-  section__content: {
-    display: "flex",
-    flexFlow: "column",
-  },
-  description: {
-    fontSize: 14,
-    color: "var(--subtext0)",
-    paddingRight: "2rem"
-  },
-  section__disabledName: {
-    color: "var(--crust0)",
-  },
-  section__disabledDescription: {
-    color: "var(--gray9)",
-  },
-  section__input: {
-    width: '8rem',
-    paddingBlock: 5
-  },
-  seciton__inputRange: {
-    display: "flex",
-    flexFlow: "column",
-    width: "100%",
-    flexShrink: 0
-  },
-  seciton__inputEverythingElse: {
-    display: "flex",
-    alignItems: "center"
+const section = css`
+  margin-top: 10px;
+  &:first-child {
+    margin-top: 0px;
   }
-})
+`
+
+const section__content = css`
+  display: flex;
+  flex-flow: column;
+`
+
+const description = css`
+  font-size: 14px;
+  color: var(--subtext0);
+  padding-right: 2rem;
+`
+
+const section__disabledName = css`
+  color: var(--crust0);
+`
+
+const section__disabledDescription = css`
+  color: var(--gray9);
+`
+
+const section__input = css`
+  width: 8rem;
+  padding-block: 5px;
+`
+
+const seciton__inputRange = css`
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  flex-shrink: 0;
+`
+
+const seciton__inputEverythingElse = css`
+  display: flex;
+  align-items: center;
+`
 
 type SettingTypeMapping = {
   [SettingType.CHECKBOX]: boolean
@@ -68,18 +72,11 @@ interface ISettingSectionProps<T extends SettingType> {
 }
 
 export function SettingSection<T extends SettingType>(props: ParentProps<ISettingSectionProps<T>>) {
-  const getInputStyle = () => props.type$ === SettingType.RANGE ? 
-    CLS(style.seciton__inputRange) :
-    CLS(style.seciton__inputEverythingElse)
-  // 
-
-  const getNameStyle = () => props.disabled$ ? CLS(style.section__disabledName) : ''
-
   return (
-    <section {...stylex.attrs(style.section)}>
-      <div {...stylex.attrs(style.section__content)}>
-        <div class={getInputStyle()}>
-          <h4 class={getNameStyle()}>
+    <section class={section}>
+      <div class={section__content}>
+        <div class={props.type$ === SettingType.RANGE ? seciton__inputRange : seciton__inputEverythingElse}>
+          <h4 class={props.disabled$ ? section__disabledName : ""}>
             {props.name$}
           </h4>
           <Spacer />
@@ -96,7 +93,7 @@ export function SettingSection<T extends SettingType>(props: ParentProps<ISettin
             }>
               <Input 
                 {...props.options$}
-                {...stylex.attrs(style.section__input)}
+                class={section__input}
                 disabled={props.disabled$} 
                 onInput={(e) => (props as ISettingSectionProps<SettingType.INPUT>).onChange$?.(parseInt(e.currentTarget.value))} 
               />
@@ -104,7 +101,7 @@ export function SettingSection<T extends SettingType>(props: ParentProps<ISettin
           </Switch>
         </div>
         <Show when={props.description$}>
-          <p class={`${CLS(style.description)} ${props.disabled$ ? CLS(style.section__disabledDescription) : ""}`}>
+          <p class={`${description} ${props.disabled$ ? section__disabledDescription : ""}`}>
             {props.description$}
           </p>
         </Show>

@@ -2,20 +2,17 @@ import { type ValidComponent, splitProps } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { ItemLabel, type RadioGroupLabelProps } from "@kobalte/core/radio-group"
 // ...
-import stylex from "@stylexjs/stylex"
-import { CLS } from "macro-def"
+import { css } from "molcss"
 
 interface IRadioGroupLabelProps<T extends ValidComponent = "label"> extends RadioGroupLabelProps<T> {
   class?: string | undefined
 }
 
-const style = stylex.create({
-  itemLabel: {
-    fontSize: "0.875rem",
-    lineHeight: 1,
-    fontWeight: 500
-  }
-})
+const itemLabel = css`
+  font-size: 0.875rem;
+  line-height: 1;
+  font-weight: 500;
+`
 
 export function RadioGroupItemLabel<T extends ValidComponent = "label">(
   props: PolymorphicProps<T, IRadioGroupLabelProps<T>>
@@ -23,7 +20,7 @@ export function RadioGroupItemLabel<T extends ValidComponent = "label">(
   const [local, others] = splitProps(props as IRadioGroupLabelProps, ["class"])
   return (
     <ItemLabel
-      class={`${CLS(style.itemLabel)} ${local.class}`}
+      class={`${itemLabel} ${local.class}`}
       {...others}
     />
   )

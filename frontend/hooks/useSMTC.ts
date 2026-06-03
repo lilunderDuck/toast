@@ -1,3 +1,4 @@
+import { DEBUG_INFO } from "macro-def"
 import { onCleanup } from "solid-js"
 
 /**This is a hook allowing you to 
@@ -16,14 +17,14 @@ export function useSMTC(options: {
 }) {
   console.assert('mediaSession' in navigator, "the current version of webview does not support MediaSession api.")
 
-  console.log("useSMTC(): registered handlers")
+  DEBUG_INFO("useSMTC(): registered handlers")
   navigator.mediaSession.setActionHandler("play", options.playHandler$)
   navigator.mediaSession.setActionHandler("pause", options.pauseHandler$)
   navigator.mediaSession.setActionHandler("nexttrack", options.nextTrackHandler$)
   navigator.mediaSession.setActionHandler("previoustrack", options.previousTrackHandler$)
   
   onCleanup(() => {
-    console.log("useSMTC(): handlers clean up")
+    DEBUG_INFO("useSMTC(): handlers clean up")
     navigator.mediaSession.setActionHandler("play", null)
     navigator.mediaSession.setActionHandler("pause", null)
     navigator.mediaSession.setActionHandler("nexttrack", null)
@@ -34,7 +35,7 @@ export function useSMTC(options: {
   return {
     changeMetadata$(data: MediaMetadataInit) {
       navigator.mediaSession.metadata = new MediaMetadata(data)
-      console.log("useSMTC(): metadata changed to", data)
+      DEBUG_INFO("useSMTC(): metadata changed to", data)
     }
   }
 }

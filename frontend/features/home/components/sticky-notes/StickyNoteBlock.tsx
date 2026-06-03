@@ -42,7 +42,6 @@ export function StickyNoteBlock() {
   )
 
   const stickyNoteActionHandler: IActionHandler<StickyNoteAction>["action$"] = (type) => {
-    console.log("selected:", type)
     switch (type) {
       case "delete_sticky_note$":
         onDelete$()

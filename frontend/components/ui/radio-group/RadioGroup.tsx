@@ -3,15 +3,12 @@ import { splitProps } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { Root, type RadioGroupRootProps } from "@kobalte/core/radio-group"
 // ...
-import stylex from "@stylexjs/stylex"
-import { CLS } from "macro-def"
+import { css } from "molcss"
 
-const style = stylex.create({
-  group: {
-    display: 'grid',
-    gap: '0.5rem'
-  }
-})
+const group = css`
+  display: grid;
+  gap: 0.5rem;
+`
 
 interface IRadioGroupRootProps<T extends ValidComponent = "div"> extends RadioGroupRootProps<T> {
   class?: string
@@ -22,6 +19,6 @@ export function RadioGroup<T extends ValidComponent = "div">(
 ) {
   const [local, others] = splitProps(props as IRadioGroupRootProps, ["class"])
   return (
-    <Root class={`${CLS(style.group)} ${local.class ?? ""}`} {...others} />
+    <Root class={`${group} ${local.class ?? ""}`} {...others} />
   )
 }

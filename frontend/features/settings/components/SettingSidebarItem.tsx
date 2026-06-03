@@ -1,49 +1,50 @@
 import { For } from "solid-js"
 // ...
-import stylex from "@stylexjs/stylex"
 // ...
 import { type ISettingConfig } from "../provider/SettingProvider"
-import { CLS } from "macro-def"
+import { css } from "molcss"
 
-const style = stylex.create({
-  item: {
-    marginBottom: 20
-  },
-  item__label: {
-    marginBottom: 5,
-    paddingInline: 9,
-    paddingBlock: 2,
-    borderRadius: 6,
-    backgroundColor: "var(--surface0)",
-    display: "block",
-    color: "var(--subtext0)",
-    fontSize: 14,
-    height: "100%"
-  },
-  item__button: {
-    paddingInline: 10,
-    paddingBlock: 5,
-    borderRadius: 6,
-    gap: 10,
-    color: "var(--subtext0)",
-    transition: "0.15s ease-out",
-    backgroundColor: "transparent",
-    textAlign: "left",
-    display: "flex",
-    alignItems: "center",
-    width: "100%",
-  },
-  item__buttonInactive: {
-    ":hover": {
-      color: "var(--text)",
-      backgroundColor: "var(--surface0)",
-    }
-  },
-  item__buttonActive: {
-    color: "var(--text)",
-    backgroundColor: "var(--blue)",
+const item = css`
+  margin-bottom: 20px;
+`
+
+const item__label = css`
+  margin-bottom: 5px;
+  padding-inline: 9px;
+  padding-block: 2px;
+  border-radius: 6px;
+  background-color: var(--surface0);
+  display: block;
+  color: var(--subtext0);
+  font-size: 14px;
+  height: 100%;
+`
+
+const item__button = css`
+  padding-inline: 10px;
+  padding-block: 5px;
+  border-radius: 6px;
+  gap: 10px;
+  color: var(--subtext0);
+  transition: 0.15s ease-out;
+  background-color: transparent;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  width: 100%;
+`
+
+const item__buttonInactive = css`
+  &:hover {
+    color: var(--text);
+    background-color: var(--surface0);
   }
-})
+`
+
+const item__buttonActive = css`
+  color: var(--text);
+  background-color: var(--blue);
+`
 
 interface ISettingSidebarItemProps extends ISettingConfig {
   onClick$(item: ISettingConfig["items$"][0]): void
@@ -52,15 +53,15 @@ interface ISettingSidebarItemProps extends ISettingConfig {
 
 export function SettingSidebarItem(props: ISettingSidebarItemProps) {
   return (
-    <section {...stylex.attrs(style.item)}>
-      <label {...stylex.attrs(style.item__label)}>
+    <section class={item}>
+      <label class={item__label}>
         {props.label$}
       </label>
       <For each={props.items$}>
         {item => (
           <button
             onClick={() => props.onClick$(item)}
-            class={`${CLS(style.item__button)} ${props.isCurrentPage$(item) ? CLS(style.item__buttonActive) : CLS(style.item__buttonInactive)}`}
+            class={`${item__button} ${props.isCurrentPage$(item) ? item__buttonActive : item__buttonInactive}`}
           >
             <item.icon$ />
             {item.name$}

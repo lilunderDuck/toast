@@ -1,16 +1,15 @@
 import { type ContextMenuSeparatorProps, Separator } from "@kobalte/core/context-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
-import stylex from "@stylexjs/stylex"
-import { CLS } from "macro-def"
+// ...
+import { css } from "molcss"
+// ...
 import { splitProps, type ValidComponent } from "solid-js"
 
-const style = stylex.create({
-  menuSepartor: {
-    paddingInline: '-0.25rem',
-    paddingBlock: '0.25rem',
-    height: "1px"
-  }
-})
+const menuSepartor = css`
+  padding-inline: -0.25rem;
+  padding-block: 0.25rem;
+  height: 1px;
+`
 
 export interface IContextMenuSeparatorProps<
   T extends ValidComponent = "hr"
@@ -24,7 +23,7 @@ export function ContextMenuSeparator<T extends ValidComponent = "hr">(
   const [, rest] = splitProps(props as IContextMenuSeparatorProps, ["class"])
   return (
     <Separator
-      class={`${CLS(style.menuSepartor)} ${props.class}`}
+      class={`${menuSepartor} ${props.class}`}
       {...rest}
     />
   )

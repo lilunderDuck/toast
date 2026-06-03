@@ -2,16 +2,15 @@ import { splitProps, type ValidComponent } from "solid-js"
 import { Content, Portal, type ContextMenuContentProps } from "@kobalte/core/context-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 
-const style = stylex.create({
-  menuContent: {
-    overflow: "hidden",
-    zIndex: 50,
-    padding: "0.25rem",
-    borderRadius: "0.375rem",
-    backgroundColor: 'var(--base)',
-  }
-})
+const menuContent = css`
+  overflow: hidden;
+  z-index: 50;
+  padding: 0.25rem;
+  border-radius: 0.375rem;
+  background-color: var(--base);
+`
 
 export interface IContextMenuContentProps<T extends ValidComponent = "div"> extends ContextMenuContentProps<T> {
   class?: string | undefined
@@ -24,7 +23,7 @@ export function ContextMenuContent<T extends ValidComponent = "div">(
   return (
     <Portal>
       <Content
-        class={`${stylex.attrs(style.menuContent)} component-context-menu ${props.class ?? ""}`}
+        class={`${menuContent} component-context-menu ${props.class ?? ""}`}
         {...rest}
       />
     </Portal>

@@ -1,16 +1,14 @@
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 // ...
 import { Checkbox, Spacer } from "~/components"
 // ...
 import { RootSettingDescription, RootSettingName, RootSettingSection } from "./RootSettingSection"
-import type { ISettingSectionProps, SettingSectionOptions } from "./types"
+import type { ISettingSectionProps, SettingSectionOptions } from "../provider"
 
-const style = stylex.create({
-  section: {
-    display: "flex",
-    flexFlow: "column",
-  }
-})
+const section = css`
+  display: flex;
+  flex-flow: column;
+`
 
 interface ICheckboxSettingSectionProps extends ISettingSectionProps<boolean> {
   options$?: SettingSectionOptions
@@ -18,7 +16,7 @@ interface ICheckboxSettingSectionProps extends ISettingSectionProps<boolean> {
 
 export function CheckboxSettingSection(props: ICheckboxSettingSectionProps) {
   return (
-    <RootSettingSection {...stylex.attrs(style.section)}>
+    <RootSettingSection class={section}>
       <RootSettingName {...props} inline$={
         <>
           <Spacer />

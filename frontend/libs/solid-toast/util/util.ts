@@ -1,4 +1,4 @@
-import { CLS } from 'macro-def'
+import type { Ref } from '~/utils'
 // ...
 import { setDefaultOpts, defaultOpts, store, dispatch, defaultToasterOptions } from '../core'
 import type { 
@@ -6,9 +6,33 @@ import type {
   Toast, 
 } from './toast'
 // ...
-import stylex from '@stylexjs/stylex'
-// ...
-import type { Ref } from '~/utils'
+import { css } from 'molcss'
+
+const toast__base = css`
+  left: 0;
+  right: 0;
+  display: flex;
+  position: absolute;
+  transition: all 230ms cubic-bezier(.21,1.02,.73,1);
+`
+
+const toast__top = css`
+  top: 0;
+  margin-top: var(--offset);
+`
+
+const toast__bottom = css`
+  bottom: 0;
+  margin-bottom: var(--offset);
+`
+
+const toast__centered = css`
+  justify-content: center;
+`
+
+const toast__right = css`
+  justify-content: flex-end;
+`
 
 export const generateID = (() => {
   let count = 0
@@ -27,30 +51,6 @@ export function mergeContainerOptions(props: IToasterProps) {
   }))
 }
 
-const style = stylex.create({
-  baseToastStyle: {
-    left: 0,
-    right: 0,
-    display: 'flex',
-    position: 'absolute',
-    transition: `all 230ms cubic-bezier(.21,1.02,.73,1)`
-  },
-  top: {
-    top: 0, 
-    marginTop: `var(--offset)`
-  },
-  bottom: {
-    bottom: 0, 
-    marginBottom: `var(--offset)`
-  },
-  centered: {
-    justifyContent: 'center'
-  },
-  right: {
-    justifyContent: 'flex-end'
-  }
-})
-
 function isThisPositionOnTop(position: ToastPosition) {
   return [ToastPosition.TOP_CENTER, ToastPosition.TOP_LEFT, ToastPosition.TOP_RIGHT].includes(position)
 }
@@ -60,13 +60,11 @@ export function getToastWrapperStyles(position: ToastPosition): string {
   const isCentered = [ToastPosition.TOP_CENTER, ToastPosition.BOTTOM_CENTER].includes(position)
   const isRighted = [ToastPosition.BOTTOM_RIGHT, ToastPosition.TOP_RIGHT].includes(position)
   
-  const horizontalPositionStyle = isOnTop ? CLS(style.top) : CLS(style.bottom)
   const verticalPositionStyle = isCentered ?
-    CLS(style.centered) :
-    isRighted ? CLS(style.right) : ""
-  const computedStyle = `${CLS(style.baseToastStyle)} ${horizontalPositionStyle} ${isCentered} ${verticalPositionStyle}`
+    toast__centered :
+    isRighted ? toast__right : ""
 
-  return computedStyle
+  return `${toast__base} ${isOnTop ? toast__top : toast__bottom} ${verticalPositionStyle}`
 }
 
 export const updateToastHeight = (ref: Ref<"div">, toast: Toast) => {

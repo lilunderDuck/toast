@@ -1,16 +1,13 @@
 import { Group, Portal, RadioGroup, Sub, Trigger } from "@kobalte/core/dropdown-menu"
+// ...
+import { css } from "molcss"
 
-import stylex from "@stylexjs/stylex"
-import { CLS } from "macro-def"
-
-const style = stylex.create({
-  dropdown__trigger: {
-    outline: "none"
-  }
-})
+const dropdown__trigger = css`
+  outline: none;
+`
 
 export const DropdownMenuTrigger: typeof Trigger = (props) => {
-  return <Trigger {...props} class={`${CLS(style.dropdown__trigger)} ${props!.class}`} />
+  return <Trigger {...props} class={`${dropdown__trigger} ${props!.class}`} />
 }
 
 export const DropdownMenuPortal = Portal

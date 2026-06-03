@@ -1,41 +1,40 @@
 import { type ParentProps, splitProps, type ValidComponent } from "solid-js"
 import { type DropdownMenuRadioItemProps, ItemIndicator, RadioItem } from "@kobalte/core/dropdown-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
-import stylex from "@stylexjs/stylex"
-import { CLS } from "macro-def"
+import { css } from "molcss"
 
-const style = stylex.create({
-  menuRadioItem: {
-    display: "flex",
-    position: "relative",
-    paddingBlock: '0.375rem',
-    paddingRight: "0.5rem",
-    paddingLeft: "2rem",
-    alignItems: "center",
-    borderRadius: "0.125rem",
-    outlineStyle: "none",
-    fontSize: "0.875rem",
-    lineHeight: "1.25rem",
-    transitionProperty: "color, background-color, border-color, text-decoration-color, fill, stroke",
-    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-    transitionDuration: "300ms",
-    cursor: "default",
-    userSelect: "none"
-  },
-  menuItemIndicator: {
-    display: "flex",
-    position: "absolute",
-    left: "0.5rem",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  icon: {
-    width: 15,
-    height: 15,
-    backgroundColor: 'currentColor',
-    borderRadius: '50%'
-  }
-})
+const menuRadioItem = css`
+  display: flex;
+  position: relative;
+  padding-block: 0.375rem;
+  padding-right: 0.5rem;
+  padding-left: 2rem;
+  align-items: center;
+  border-radius: 0.125rem;
+  outline-style: none;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+  cursor: default;
+  user-select: none;
+`
+
+const menuItemIndicator = css`
+  display: flex;
+  position: absolute;
+  left: 0.5rem;
+  justify-content: center;
+  align-items: center;
+`
+
+const icon = css`
+  width: 15px;
+  height: 15px;
+  background-color: currentColor;
+  border-radius: 50%;
+`
 
 export interface IDropdownMenuRadioItemProps<
   T extends ValidComponent = "div"
@@ -49,11 +48,11 @@ export function DropdownMenuRadioItem<T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IDropdownMenuRadioItemProps, ["class", "children"])
   return (
     <RadioItem
-      class={`${CLS(style.menuRadioItem)} ${props.class ?? ""}`}
+      class={`${menuRadioItem} ${props.class ?? ""}`}
       {...rest}
     >
-      <span {...stylex.attrs(style.menuItemIndicator)}>
-        <ItemIndicator {...stylex.attrs(style.icon)} />
+      <span class={menuItemIndicator}>
+        <ItemIndicator class={icon} />
       </span>
       {props.children}
     </RadioItem>

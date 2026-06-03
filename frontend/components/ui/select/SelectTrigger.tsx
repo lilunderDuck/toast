@@ -1,27 +1,20 @@
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { type SelectTriggerProps, Trigger } from "@kobalte/core/select"
-import stylex from "@stylexjs/stylex"
-import { CLS } from "macro-def"
 import { type JSX, splitProps, type ValidComponent } from "solid-js"
+// ...
+import { css } from "molcss"
 
-const style = stylex.create({
-  trigger: {
-    display: "flex",
-    paddingBlock: 5,
-    paddingInline: "0.75rem",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderRadius: "0.375rem",
-    width: "100%",
-    fontSize: "0.875rem",
-    backgroundColor: "transparent",
-  },
-  icon: {
-    opacity: 0.5,
-    width: 20,
-    height: 20,
-  },
-})
+const trigger = css`
+  display: flex;
+  padding-block: 5px;
+  padding-inline: 0.75rem;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.375rem;
+  width: 100%;
+  font-size: 0.875rem;
+  background-color: transparent;
+`
 
 interface ISelectTriggerProps<T extends ValidComponent = "button"> extends SelectTriggerProps<T> {
   class?: string | undefined
@@ -39,7 +32,7 @@ export function SelectTrigger<T extends ValidComponent = "button">(
   return (
     // @ts-ignore
     <Trigger
-      class={`${CLS(style.trigger)} ${local.class ?? ""}`}
+      class={`${trigger} ${local.class ?? ""}`}
       {...others}
     >
       {local.children}

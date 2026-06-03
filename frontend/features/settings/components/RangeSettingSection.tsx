@@ -5,7 +5,7 @@ import stylex from "@stylexjs/stylex"
 import { Input, Spacer } from "~/components"
 // ...
 import { RootSettingDescription, RootSettingName, RootSettingSection } from "./RootSettingSection"
-import type { ISettingSectionProps, SettingSectionOptions } from "./types"
+import type { ISettingSectionProps, SettingSectionOptions } from "../provider"
 
 const style = stylex.create({
   section: {

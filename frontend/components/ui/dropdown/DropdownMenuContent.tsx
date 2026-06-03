@@ -1,20 +1,17 @@
 import { splitProps, type ValidComponent } from "solid-js"
 import { Content, Portal, type DropdownMenuContentProps } from "@kobalte/core/dropdown-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
-import stylex from "@stylexjs/stylex"
-import { CLS } from "macro-def"
+import { css } from "molcss"
 
-const style = stylex.create({
-  menuContent: {
-    overflow: "hidden",
-    zIndex: 50,
-    paddingInline: 10,
-    paddingBlock: 5,
-    borderRadius: "0.375rem",
-    backgroundColor: 'var(--base)',
-    outline: "none"
-  }
-})
+const menuContent = css`
+  overflow: hidden;
+  z-index: 50;
+  padding-inline: 10px;
+  padding-block: 5px;
+  border-radius: 0.375rem;
+  background-color: var(--base);
+  outline: none;
+`
 
 export interface IDropdownMenuContentProps<T extends ValidComponent = "div"> extends DropdownMenuContentProps<T> {
   class?: string | undefined
@@ -27,7 +24,7 @@ export function DropdownMenuContent<T extends ValidComponent = "div">(
   return (
     <Portal>
       <Content
-        class={`${CLS(style.menuContent)} component-dropdown-menu ${props.class ?? ""}`}
+        class={`${menuContent} component-dropdown-menu ${props.class ?? ""}`}
         {...rest}
       />
     </Portal>

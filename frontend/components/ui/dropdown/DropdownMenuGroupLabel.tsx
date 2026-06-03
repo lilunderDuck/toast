@@ -1,18 +1,15 @@
 import { splitProps, type ValidComponent } from "solid-js"
 import { type DropdownMenuGroupLabelProps, GroupLabel } from "@kobalte/core/dropdown-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
-import stylex from "@stylexjs/stylex"
-import { CLS } from "macro-def"
+import { css } from "molcss"
 
-const style = stylex.create({
-  menuGroupLabel: {
-    paddingBlock: '0.375rem',
-    paddingInline: '0.5rem',
-    fontSize: "0.875rem",
-    lineHeight: "1.25rem",
-    fontWeight: 600
-  },
-})
+const menuGroupLabel = css`
+  padding-block: 0.375rem;
+  padding-inline: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+`
 
 export interface IDropdownMenuGroupLabelProps<T extends ValidComponent = "span"> extends DropdownMenuGroupLabelProps<T> {
   class?: string | undefined
@@ -24,7 +21,7 @@ export function DropdownMenuGroupLabel<T extends ValidComponent = "span">(
   const [, rest] = splitProps(props as IDropdownMenuGroupLabelProps, ["class"])
   return (
     <GroupLabel
-      class={`${CLS(style.menuGroupLabel)} ${props.class ?? ""}`}
+      class={`${menuGroupLabel} ${props.class ?? ""}`}
       {...rest}
     />
   )

@@ -2,87 +2,77 @@ import type { Component, ComponentProps, JSX, ValidComponent } from "solid-js"
 import { Show, splitProps } from "solid-js"
 import { BsX } from "solid-icons/bs"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
-import { CloseButton, Content, Description, Overlay, Portal, Root, Title, useDialogContext, type DialogContentProps, type DialogDescriptionProps, type DialogOverlayProps, type DialogPortalProps, type DialogTitleProps } from "@kobalte/core/dialog"
+import { CloseButton, Content, Overlay, Portal, Root, useDialogContext, type DialogContentProps, type DialogDescriptionProps, type DialogPortalProps, type DialogTitleProps } from "@kobalte/core/dialog"
 // ...
-import stylex from "@stylexjs/stylex"
 import '~/styles/scrollbar.css'
-import { CLS } from "macro-def"
+import { css } from "molcss"
 // ...
 
-const style = stylex.create({
-  portal: {
-    zIndex: 30,
-    width: "100%",
-    height: "100%",
-    position: "fixed",
-    display: "flex",
-    justifyContent: "center",
-    // alignItems: "flex-start",
-    alignItems: "center",
-  },
-  overlay: {
-    position: "fixed",
-    width: "100%",
-    height: "100%",
-    zIndex: 30,
-    backdropFilter: "blur(3px)",
-    backgroundColor: "#11111b8d",
-  },
-  content: {
-    paddingInline: 15,
-    paddingBlock: 10,
-    backgroundColor: "var(--mantle)",
-    position: "relative",
-    outline: "none"
-  },
-  closeButton: {
-    position: "absolute",
-    top: "1rem",
-    right: "1rem",
-    width: 30,
-    height: 30,
-    borderRadius: 6,
-    transitionProperty: "opacity",
-    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-    transitionDuration: "300ms",
-    opacity: 0.7,
-    zIndex: 10,
-    outline: "none",
-    backgroundColor: "var(--surface1)",
-    ":hover": {
-      opacity: 1,
-    },
-  },
-  header: {
-    display: "flex",
-    marginTop: "0.375rem",
-    flexDirection: "column",
-    textAlign: "center",
-    userSelect: "none",
-    "@media (min-width: 640px)": {
-      textAlign: "left",
-    },
-  },
-  footer: {
-    display: "flex",
-    flexDirection: "column-reverse",
-    "@media (min-width: 640px)": {
-      marginLeft: "0.5rem",
-      flexDirection: "row",
-      justifyContent: "flex-end",
-    },
-  },
-  title: {
-    fontSize: "1.125rem",
-    lineHeight: 1,
-    fontWeight: 600,
-    letterSpacing: "-0.025em",
-  },
-  description: {
-    fontSize: "0.875rem",
-    lineHeight: "1.25rem",
-  },
-})
+const dialog__portal = css`
+  z-index: 30;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  // alignItems: flex-start;
+  align-items: center;
+`
+const dialog__overlay = css`
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 30;
+  backdrop-filter: blur(3px);
+  background-color: #11111b8d;
+`
+const dialog__content = css`
+  padding-inline: 15px;
+  padding-block: 10px;
+  background-color: var(--mantle);
+  position: relative;
+  outline: none;
+`
+
+const dialog__closeButton = css`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 30px;
+  height: 30px;
+  border-radius: 6;
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+  opacity: 0.7;
+  z-index: 10;
+  outline: none;
+  background-color: var(--surface1);
+  &:hover {
+    opacity: 1;
+  }
+`
+
+const dialog__footer = css`
+  display: flex;
+  flex-direction: column-reverse;
+  @media (min-width: 640px) {
+    marginLeft: 0.5rem;
+    flexDirection: row;
+    justifyContent: flex-end;
+  }
+`
+const dialog__title = css`
+  font-size: 1.125rem;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+`
+
+const dialog__description = css`
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+`
 
 const Dialog = Root
 
@@ -97,30 +87,17 @@ const DialogPortal: Component<IDialogPortal> = (props) => {
     <Portal {...rest}>
       <Show
         when={props.closeOnClickOutside$ === false}
-        fallback={<DialogOverlay />}
+        fallback={<Overlay
+          class={`${dialog__overlay} component-dialog-overlay`}
+          {...rest}
+        />}
       >
-        <div dont-close {...stylex.attrs(style.overlay)} />
+        <div dont-close class={dialog__overlay} />
       </Show>
-      <div {...stylex.attrs(style.portal)}>
+      <div class={dialog__portal}>
         {props.children}
       </div>
     </Portal>
-  )
-}
-
-interface IDialogOverlayProps<T extends ValidComponent = "div"> extends DialogOverlayProps<T> {
-  class?: string | undefined
-}
-
-const DialogOverlay = <T extends ValidComponent = "div">(
-  props: PolymorphicProps<T, IDialogOverlayProps<T>>,
-) => {
-  const [, rest] = splitProps(props as IDialogOverlayProps, ["class"])
-  return (
-    <Overlay
-      class={`${CLS(style.overlay)} component-dialog-overlay ${props.class ?? ''}`}
-      {...rest}
-    />
   )
 }
 
@@ -146,12 +123,12 @@ const DialogContent = <T extends ValidComponent = "div">(
   return (
     <DialogPortal closeOnClickOutside$={props.closeOnClickOutside$}>
       <Content
-        class={`${CLS(style.content)} component-dialog-content ${props.class ?? ""}`}
+        class={`${dialog__content} component-dialog-content ${props.class ?? ""}`}
         {...rest}
       >
         {props.children}
         <Show when={props.showCloseButton$ ?? true}>
-          <CloseButton {...stylex.attrs(style.closeButton)} onClick={close}>
+          <CloseButton class={dialog__closeButton} onClick={close}>
             <BsX size={40} />
           </CloseButton>
         </Show>
@@ -169,7 +146,7 @@ const DialogHeader: Component<ComponentProps<"h2">> = (props) => {
 const DialogFooter: Component<ComponentProps<"div">> = (props) => {
   const [, rest] = splitProps(props, ["class"])
   return (
-    <div class={`${CLS(style.footer)} ${props.class ?? ""}`} {...rest} />
+    <div class={`${dialog__footer} ${props.class ?? ""}`} {...rest} />
   )
 }
 
@@ -182,8 +159,8 @@ const DialogTitle = <T extends ValidComponent = "h2">(
 ) => {
   const [, rest] = splitProps(props as IDialogTitleProps, ["class"])
   return (
-    <Title
-      class={`${CLS(style.title)} ${props.class ?? ""}`}
+    <h2
+      class={`${dialog__title} ${props.class ?? ""}`}
       {...rest}
     />
   )
@@ -198,8 +175,8 @@ const DialogDescription = <T extends ValidComponent = "p">(
 ) => {
   const [, rest] = splitProps(props as IDialogDescriptionProps, ["class"])
   return (
-    <Description
-      class={`${CLS(style.description)} ${props.class ?? ""}`}
+    <p
+      class={`${dialog__description} ${props.class ?? ""}`}
       {...rest}
     />
   )

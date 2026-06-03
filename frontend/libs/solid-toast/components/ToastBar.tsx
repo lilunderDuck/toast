@@ -1,7 +1,6 @@
 import { createEffect } from 'solid-js'
-import { CLS } from 'macro-def'
 // ...
-import stylex from '@stylexjs/stylex'
+import { css } from 'molcss'
 // ...
 import { 
   getToastYDirection,
@@ -14,28 +13,27 @@ import { ToastIconContainer } from './ToastIconContainer'
 // ...
 import type { Ref } from '~/utils'
 
-const style = stylex.create({
-  toastBar: {
-    display: 'flex',
-    alignItems: 'center',
-    color: 'var(--text)',
-    background: 'var(--surface1)',
-    boxShadow: '0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05)',
-    maxWidth: '350px',
-    pointerEvents: 'auto',
-    padding: '8px 10px',
-    borderRadius: '4px',
-    lineHeight: '1.3',
-    willChange: 'transform',
-  },
-  messageContainer: {
-    flex: '1 1 auto',
-    margin: '4px 10px',
-    whiteSpace: 'pre-line',
-    display: "flex",
-    alignItems: 'center',
-  }
-})
+const toastBar = css`
+  display: flex;
+  align-items: center;
+  color: var(--text);
+  background: var(--surface1);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05);
+  max-width: 350px;
+  pointer-events: auto;
+  padding: 8px 10px;
+  border-radius: 4px;
+  line-height: 1.3;
+  will-change: transform;
+`
+
+const messageContainer = css`
+  flex: 1 1 auto;
+  margin: 4px 10px;
+  white-space: pre-line;
+  display: flex;
+  align-items: center;
+`
 
 export function ToastBar(props: ToastBarProps) {
   let el!: Ref<"div">
@@ -53,11 +51,11 @@ export function ToastBar(props: ToastBarProps) {
   return (
     <div
       ref={el}
-      class={`${props.toast.class} ${CLS(style.toastBar)}`}
+      class={`${props.toast.class} ${toastBar}`}
     >
       <ToastIconContainer {...props.toast} theme={props.toast.iconTheme} />
 
-      <div {...stylex.attrs(style.messageContainer)}>
+      <div class={messageContainer}>
         {resolveValue(props.toast.message, props.toast)}
       </div>
     </div>

@@ -35,7 +35,6 @@ interface ISwitchInputProps {
 }
 
 export function SwitchInput(props: ISwitchInputProps) {
-  console.log("initial switch state:", props.value$)
   const [state, setState] = createSignal(props.value$ ?? false)
 
   return (

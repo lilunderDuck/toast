@@ -5,15 +5,10 @@ import {
   type SelectRootProps
 } from "@kobalte/core/select"
 import "./Select.css"
+// ...
 import type { ParentProps, ValidComponent } from "solid-js"
-import stylex from "@stylexjs/stylex"
-
-const style = stylex.create({
-  this: {
-    backgroundColor: 'var(--surface0)',
-    borderRadius: 6
-  }
-})
+// ...
+import { css } from "molcss"
 
 // Forgot to add these things
 export const SelectValue = Value
@@ -27,7 +22,10 @@ export function Select<
   return (
     <Root 
       {...props} 
-      {...stylex.attrs(style.this)}
+      class={css`
+        background-color: var(--surface0);
+        border-radius: 6px;
+      `}
       id="select" 
     />
   )

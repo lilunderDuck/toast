@@ -1,17 +1,16 @@
 import { splitProps, type ValidComponent } from "solid-js"
 import { type ContextMenuGroupLabelProps, GroupLabel } from "@kobalte/core/context-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
-import stylex from "@stylexjs/stylex"
+// ...
+import { css } from "molcss"
 
-const style = stylex.create({
-  menuGroupLabel: {
-    paddingBlock: '0.375rem',
-    paddingInline: '0.5rem',
-    fontSize: "0.875rem",
-    lineHeight: "1.25rem",
-    fontWeight: 600
-  },
-})
+const menuGroupLabel = css`
+  padding-block: 0.375rem;
+  padding-inline: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+`
 
 export interface IContextMenuGroupLabelProps<T extends ValidComponent = "span"> extends ContextMenuGroupLabelProps<T> {
   class?: string | undefined
@@ -23,7 +22,7 @@ export function ContextMenuGroupLabel<T extends ValidComponent = "span">(
   const [, rest] = splitProps(props as IContextMenuGroupLabelProps, ["class"])
   return (
     <GroupLabel
-      class={`${stylex.attrs(style.menuGroupLabel)} ${props.class ?? ""}`}
+      class={`${menuGroupLabel} ${props.class ?? ""}`}
       {...rest}
     />
   )

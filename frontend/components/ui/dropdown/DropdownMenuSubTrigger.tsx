@@ -1,30 +1,29 @@
 import { type DropdownMenuSubTriggerProps, SubTrigger } from "@kobalte/core/dropdown-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
-import stylex from "@stylexjs/stylex"
 import { type ParentProps, splitProps, type ValidComponent } from "solid-js"
 import { Spacer } from "../Flex"
-import { CLS } from "macro-def"
+import { css } from "molcss"
 
-const style = stylex.create({
-  menuSubContent: {
-    overflow: "hidden",
-    zIndex: 50,
-    padding: "0.25rem",
-    borderRadius: "0.375rem",
-    borderWidth: "1px",
-    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-    fontSize: "0.875rem",
-    userSelect: 'none'
-  },
-  iconWrap: {
-    display: "flex",
-    alignItems: 'center',
-  },
-  icon: {
-    width: 15,
-    height: 15
-  }
-})
+const menuSubContent = css`
+  overflow: hidden;
+  z-index: 50;
+  padding: 0.25rem;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  font-size: 0.875rem;
+  user-select: none;
+`
+
+const iconWrap = css`
+  display: flex;
+  align-items: center;
+`
+
+const icon = css`
+  width: 15;
+  height: 15;
+`
 
 export interface IDropdownMenuSubTriggerProps<
   T extends ValidComponent = "div"
@@ -39,10 +38,10 @@ export function DropdownMenuSubTrigger<T extends ValidComponent = "div">(
   const [, rest] = splitProps(props as IDropdownMenuSubTriggerProps, ["class", "children"])
   return (
     <SubTrigger
-      class={`${CLS(style.menuSubContent)} ${props.class ?? ""}`}
+      class={`${menuSubContent} ${props.class ?? ""}`}
       {...rest}
     >
-      <div {...stylex.attrs(style.iconWrap)}>
+      <div class={iconWrap}>
         {props.children}
         <Spacer />
         <svg
@@ -53,7 +52,7 @@ export function DropdownMenuSubTrigger<T extends ValidComponent = "div">(
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          {...stylex.attrs(style.icon)}
+          class={icon}
         >
           <path d="M9 6l6 6l-6 6" />
         </svg>

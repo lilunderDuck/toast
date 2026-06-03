@@ -3,10 +3,11 @@ import solidPlugin from 'vite-plugin-solid'
 import pagesPlugin from 'vite-plugin-pages'
 import { stylex as stylexPlugin } from "vite-plugin-stylex-dev"
 import { optimizeCssModules } from "vite-plugin-optimize-css-modules"
+import molcss from 'molcss/vite-plugin'
 // ... 
 import tsconfig from './tsconfig.json'
-import { getAliasPath, ESBUILD_OPTIONS, OUTPUT_FILENAME, generateConstsTypeThenSave, defineAllConstants, macroPlugin } from "./config"
-import molcss from 'molcss/vite-plugin'
+import { getAliasPath, ESBUILD_OPTIONS, OUTPUT_FILENAME, generateConstsTypeThenSave, defineAllConstants } from "./config"
+import { macroPlugin } from "./build/scripts/macros.js"
 
 // Make sure to update the code in ./backend/internals/path.go if you're planning
 // to change this variable and vice versa
@@ -29,7 +30,7 @@ export default defineConfig(({ command }) => {
       solidPlugin(),
       stylexPlugin(),
       optimizeCssModules(),
-      macroPlugin
+      macroPlugin("./build/dist/macro_def.d.ts", TOAST_DEBUG)
     ],
     // Windows 11 workaround: for some goddamn reason, in a windows 10 enviroment, this config
     // is fine, but in windows 11, it has this error in wails:

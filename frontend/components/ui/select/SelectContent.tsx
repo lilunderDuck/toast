@@ -2,21 +2,18 @@ import { splitProps, type ValidComponent } from "solid-js"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
 import { Content, Listbox, Portal, type SelectContentProps } from "@kobalte/core/select"
 // ...
-import stylex from "@stylexjs/stylex"
-import __style from "./SelectContent.module.css"
-import { CLS } from "macro-def"
+import "./SelectContent.css"
+import { css } from "molcss"
 
-const style = stylex.create({
-  content: {
-    overflow: "hidden",
-    position: "relative",
-    zIndex: 50,
-    borderRadius: "0.375rem",
-    borderWidth: 1,
-    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-    backgroundColor: 'var(--surface0)',
-  }
-})
+const content = css`
+  overflow: hidden;
+  position: relative;
+  z-index: 50;
+  border-radius: 0.375rem;
+  border-width: 1;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background-color: var(--surface0);
+`
 
 export interface ISelectContentProps<
   T extends ValidComponent = "div"
@@ -31,8 +28,7 @@ export function SelectContent<T extends ValidComponent = "div">(
   return (
     <Portal>
       <Content
-        class={`${CLS(style.content)} ${local.class ?? ""}`}
-        id={__style.content}
+        class={`${content} select__content ${local.class ?? ""}`}
         {...others}
       >
         <Listbox />
