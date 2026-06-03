@@ -4,8 +4,8 @@ import (
 	_ "embed"
 
 	"toast/backend"
+	"toast/backend/core/internals"
 	"toast/backend/debug"
-	"toast/backend/internals"
 	"toast/backend/server"
 
 	"github.com/wailsapp/wails/v2"
