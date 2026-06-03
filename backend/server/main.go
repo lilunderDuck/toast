@@ -5,8 +5,8 @@ package server
 import (
 	"net/http"
 	"strings"
+	"toast/backend/core/internals"
 	"toast/backend/debug"
-	"toast/backend/internals"
 )
 
 var allowedToServeMap = map[string]uint8{

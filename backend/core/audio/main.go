@@ -2,7 +2,7 @@ package audio
 
 import (
 	"fmt"
-	"toast/backend/internals"
+	"toast/backend/core/internals"
 	"toast/backend/utils"
 )
 

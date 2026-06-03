@@ -2,7 +2,7 @@ package playlist
 
 import (
 	"path/filepath"
-	"toast/backend/internals"
+	"toast/backend/core/internals"
 	"toast/backend/utils"
 )
 
