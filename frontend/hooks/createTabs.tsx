@@ -4,7 +4,7 @@ import { dndzone } from "solid-dnd-directive"
 // ...
 import { css } from "molcss"
 // ...
-import { arrayObjects, createEvent, type IEvent } from "~/utils"
+import { arrayObjects, createEvent, type EventHandler, type IEvent } from "~/utils"
 
 const tabList = css`
   display: flex;

@@ -1,3 +1,4 @@
+import { DEBUG_INFO_LABEL } from "macro-def"
 import type { IconTypes } from "solid-icons"
 import { createContext, createEffect, ParentProps, useContext, type Accessor, type Setter } from "solid-js"
 import { usePersistedSignal } from "~/hooks"
@@ -25,6 +26,12 @@ interface IJournalHomeRootProviderProps {
 export function JournalHomeRootProvider(props: ParentProps<IJournalHomeRootProviderProps>) {
   const [currentPage, setCurrentPage] = usePersistedSignal<JournalPageId>(sessionStorage, "home_last_page", "journal_page$")
   const [isShowingSidebar, setIsShowingSidebar] = usePersistedSignal(localStorage, "home_show_sidebar", true)
+
+  if (TOAST_DEBUG) {
+    createEffect(() => {
+      DEBUG_INFO_LABEL("home", "going to page:", currentPage())
+    })
+  }
 
   createEffect(() => {
     const shouldShowSidebar = isShowingSidebar()

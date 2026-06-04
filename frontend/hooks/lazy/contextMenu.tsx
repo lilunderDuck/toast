@@ -2,6 +2,7 @@ import { createSignal, lazy, Show, type ParentProps } from "solid-js"
 // ...
 import type { LazyComponent } from "./types"
 import { ContextMenu, ContextMenuTrigger } from "../../components/ui"
+import { DEBUG_INFO_LABEL } from "macro-def"
 
 export interface IBaseContextMenu {
   // ...
@@ -15,12 +16,12 @@ export function createLazyLoadedContextMenu<Props extends IBaseContextMenu>(
   const [showing, setIsShowing] = createSignal(false)
   const show = () => {
     setIsShowing(true)
-    console.log('[lazy context menu] shown')
+    DEBUG_INFO_LABEL('lazy/ContextMenu', 'shown')
   }
 
   const close = () => {
     setIsShowing(false)
-    console.log('[lazy context menu] closed')
+    DEBUG_INFO_LABEL('lazy/ContextMenu', 'closed')
   }
 
   const RIGHT_CLICK = 2

@@ -2,6 +2,7 @@ import { createEffect, createSignal, onCleanup } from "solid-js"
 // ...
 import { getMediaCurrentPercentage, getMediaCurrentTimeByPercentage, type HTMLAttributes, type Ref } from "~/utils" // documentation only
 import { MediaProgressSlider } from "~/components" // documentation only
+import { DEBUG_ASSERT, DEBUG_INFO_LABEL } from "macro-def"
 
 type MediaPlayerProps = Omit<
   HTMLAttributes<"audio" | "video">,
@@ -40,7 +41,7 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
     }
 
     createEffect(() => {
-      console.debug("[media player] current media state changed to:", stateMapping[mediaState()])
+      DEBUG_INFO_LABEL("media player", "state changed to:", stateMapping[mediaState()])
     })
   }
 
@@ -57,7 +58,7 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
     onCanPlayThrough() {
       setMediaState(MediaState.FINISHED_LOADING)
       setDuration(mediaRef.duration)
-      console.log("[media player] duration:", mediaRef.duration, "seconds")
+      DEBUG_INFO_LABEL("media player", "finished loading, duration:", mediaRef.duration, "seconds")
     },
     onEnded() {
       listener?.onEnded$?.()
@@ -85,13 +86,13 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
   const pause = () => {
     mediaRef.pause()
     setMediaState(MediaState.PAUSED)
-    console.log("[media player] Paused", mediaRef.src)
+    DEBUG_INFO_LABEL("media player", "paused", mediaRef.src)
   }
 
   const changeSource = (src: string) => {
     mediaRef.src = src
     setCurrentProgress(0)
-    console.log("[media player] New audio loaded:", src)
+    DEBUG_INFO_LABEL("media player", "source changed:", src)
   }
 
   const play = () => {
@@ -111,30 +112,32 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
         console.warn(error)
       }
     }, 100)
-    console.log("[media player] Playing", mediaRef.src)
+    DEBUG_INFO_LABEL("media player", "Playing", mediaRef.src)
   }
 
   const changeVolume = (volume: number) => {
-    console.assert(volume >= 0 && volume <= 100, "[media player] volume must not be negative and must not over 100. Your current volume is: " + volume)
-    console.assert(!isNaN(volume), "[media player] volume is not a number")
+    DEBUG_ASSERT(volume >= 0 && volume <= 100, "volume must not be negative and must not over 100. Your current volume is: " + volume)
+    DEBUG_ASSERT(!isNaN(volume), "volume is not a number")
 
     mediaRef.volume = volume / 100
     setCurentVolume(volume)
-    console.log("[media player] Media volume changed to:", volume)
+    DEBUG_INFO_LABEL("media player", "Media volume changed to:", volume)
   }
 
   const changeCurrentTime = (time: number) => {
     setCurrentProgress(time)
     mediaRef.currentTime = time
-    console.log("[media player] current time changed to", time, "seconds")
+    DEBUG_INFO_LABEL("media player", "current time changed to", time, "seconds")
   }
 
   const toggleMute = () => {
     setIsMuted(prev => !prev)
     mediaRef.muted = isMuted()
+    DEBUG_INFO_LABEL("media player", "muted:", isMuted())
   }
 
   onCleanup(() => {
+    DEBUG_INFO_LABEL("media player", "cleaning up...")
     // @ts-ignore
     mediaRef = null
   })

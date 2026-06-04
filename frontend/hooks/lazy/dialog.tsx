@@ -2,6 +2,7 @@ import { createSignal, lazy, Show } from "solid-js"
 // ...
 import type { LazyComponent, LazyComponentProps } from "./types"
 import { Dialog } from "../../components/ui"
+import { DEBUG_INFO_LABEL } from "macro-def"
 
 type LazyDialogComponent<Props extends {}> = LazyComponentProps<LazyComponent<Props>>
 
@@ -19,13 +20,13 @@ export function createLazyLoadedDialog<Props extends IBaseLazyDialog>(
   const show = () => {
     setIsShowing(false)
     setIsShowing(true)
-    console.log('[lazy dialog] shown')
+    DEBUG_INFO_LABEL('lazy/Dialog', 'shown')
     stayLoaded = true
   }
 
   const close = () => {
     setIsShowing(false)
-    console.log('[lazy dialog] closed')
+    DEBUG_INFO_LABEL('lazy/Dialog', 'closed')
   }
 
   const LazyComponent = lazy(Component)

@@ -2,6 +2,7 @@ import { createSignal, lazy, type ParentProps, Show } from "solid-js"
 // ...
 import type { LazyComponent } from "./types"
 import { DropdownMenu, DropdownMenuTrigger } from "../../components/ui"
+import { DEBUG_INFO_LABEL } from "macro-def"
 
 export interface IBaseDropdownMenu {
   close$(): void
@@ -20,12 +21,12 @@ export function createLazyLoadedDropdownMenu<Props extends IBaseDropdownMenu>(
   const [showing, setIsShowing] = createSignal(false)
 
   const show = () => {
-    console.log("[lazy dropdown menu] show")
+    DEBUG_INFO_LABEL("lazy/DropdownMenu", "show")
     setIsShowing(true)
   }
   
   const close = () => {
-    console.log("[lazy dropdown menu] close")
+    DEBUG_INFO_LABEL("lazy/DropdownMenu", "close")
     setIsShowing(false)
   }
 

@@ -8,6 +8,7 @@ import {
   type CreateFileUploadOptions,
   type UploadDialog,
 } from "./types"
+import { DEBUG_ERR_LABEL, DEBUG_INFO_LABEL, DEBUG_WARN_LABEL } from "macro-def"
 
 /**Creates a file upload component based on the provided options.
  *
@@ -47,14 +48,19 @@ export function createFileUpload<T extends FileUploadType.FILE>(
   }
 
   const onClickThis = async() => {
-    if (options.disable$) return
+    if (options.disabled$?.()) {
+      DEBUG_WARN_LABEL("file upload", "refused to open, file upload is disabled.")
+      return
+    }
+
+    DEBUG_INFO_LABEL("file upload", "opening file dialog...")
 
     setIsLoading(true)
     
     try {
       const result = await getFileDialogFn()(dialogOptions$ as frontend.OpenDialogOptions)
       if (result == "" || result.length === 0) {
-        console.warn("User canceled the action.")
+        DEBUG_WARN_LABEL("file upload", "user canceled the action.")
         setIsLoading(false)
         return
       }
@@ -63,13 +69,15 @@ export function createFileUpload<T extends FileUploadType.FILE>(
       setFile(result)
       await onFinish$?.(result)
     } catch (error) {
-      console.error(error)
+      DEBUG_ERR_LABEL("file upload", error)
       setError(error)
       sleep(5_000).then(() => setError(undefined))
     }
 
     setIsLoading(false)
   }
+
+  DEBUG_INFO_LABEL("file upload", "created with options:", options)
 
   return {
     // @ts-ignore

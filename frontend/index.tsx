@@ -3,6 +3,7 @@ import "~/styles/index.css"
 import "~/styles/animation.css"
 import 'molcss/style.css'
 // ...
+import { DEBUG_ASSERT } from "macro-def"
 import { render } from 'solid-js/web'
 import { Router } from '@solidjs/router'
 // ...
@@ -12,7 +13,7 @@ import App from './App'
 
 const root = document.getElementById('root')!
 
-console.assert(
+DEBUG_ASSERT(
   import.meta.env.DEV && (root instanceof HTMLElement),
   '(This error should not have been thrown) Root element not found. Did you forget to add it to your index.html? Or maybe the id attribute got misspelled?'
 )

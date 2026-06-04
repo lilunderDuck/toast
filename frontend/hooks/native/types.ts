@@ -1,4 +1,5 @@
 import type { Accessor, Setter } from "solid-js"
+import type { AnyFunction } from "~/utils"
 // ...
 import type { frontend } from "~/wailsjs/go/models"
 
@@ -31,7 +32,7 @@ export type CreateFileUploadOptions<T extends FileUploadType, FinishFn extends A
    * - a list of selected file if you set the type to `FileUploadType.MULTI_FILE`
    */
   onFinish$?: FinishFn
-  disable$?: boolean
+  disabled$?: Accessor<boolean>
 }
 
 type FileOutputMapping = {

@@ -1,3 +1,4 @@
+import { DEBUG_INFO_LABEL } from "macro-def"
 import { createContext, createSignal, onMount, ParentProps, useContext, type Accessor } from "solid-js"
 // ...
 import { arrayObjects } from "~/utils"
@@ -17,22 +18,26 @@ export function StickyNotesProvider(props: ParentProps) {
   const [allStickyNotes, setAllStickyNotes] = createSignal<sticky_notes.StickyNoteData[]>([])
 
   onMount(async() => {
+    DEBUG_INFO_LABEL("sticky note", "fetching data...")
     setAllStickyNotes(await StickyNotes__getAll())
   })
 
   const deleteStickyNote: IStickyNotesContext["deleteStickyNote$"] = async(stickyNoteId) => {
     const data = setAllStickyNotes(prev => [...arrayObjects(prev).remove$("id", stickyNoteId)])
     StickyNotes__update(data)
+    DEBUG_INFO_LABEL("sticky note", "deleted note with id:", stickyNoteId)
   }
 
   const createStickyNote: IStickyNotesContext["addStickyNote$"] = async(newData) => {
     const data = setAllStickyNotes(prev => [...prev, newData])
     StickyNotes__update(data)
+    DEBUG_INFO_LABEL("sticky note", "created note with data:", newData)
   }
 
   const updateStickyNote: IStickyNotesContext["updateStickyNote$"] = async(id, newData) => {
     const data = setAllStickyNotes(prev => arrayObjects(prev).replace$(it => it.id === id, newData))
     StickyNotes__update(data)
+    DEBUG_INFO_LABEL("sticky note", "updated note", id, "with", newData)
   }
 
   return (

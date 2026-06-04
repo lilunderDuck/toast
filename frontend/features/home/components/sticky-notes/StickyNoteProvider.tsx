@@ -76,11 +76,7 @@ export function StickyNoteProvider(props: ParentProps<IStickyNoteProviderProps>)
     initialContent$() {
       return data().title
     },
-    onDiscard$(originalContent) {
-      console.log("discard:", originalContent)
-    },
     onFinalize$(newContent) {
-      console.log("finalize:", newContent)
       updateData({ title: newContent }) 
     }
   })
@@ -103,17 +99,14 @@ export function StickyNoteProvider(props: ParentProps<IStickyNoteProviderProps>)
     initialContent$() {
       return data().content
     },
-    onDiscard$(originalContent) {
-      console.log("discard:", originalContent)
-    },
     onFinalize$(newContent) {
-      console.log("finalize:", newContent)
       updateData({ content: newContent }) 
     }
   })
 
   const updateData: IStickyNoteContext["updateData$"] = (newData) => {
     setData(prev => ({ ...prev, ...newData }))
+    // @ts-ignore
     updateStickyNote$(props.data$.id, newData)
   }
 

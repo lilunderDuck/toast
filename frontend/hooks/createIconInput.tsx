@@ -6,6 +6,7 @@ import { css } from "molcss"
 import { createFileUpload, SUPPORTED_IMAGE_FILTER, type FileOpenDialogOptions } from "~/hooks"
 import { previewUrl } from "~/api"
 import { SpinningCube, Tooltip } from "~/components"
+import { DEBUG_WARN_LABEL } from "macro-def"
 
 const uploadZone = css`
   cursor: pointer;
@@ -13,8 +14,8 @@ const uploadZone = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: "var(--icon-input-size)";
-  height: "var(--icon-input-size)";
+  width: var(--icon-input-size);
+  height: var(--icon-input-size);
 `
 
 const uploadZone__disabled = css`
@@ -48,6 +49,7 @@ interface IIconInputOptions {
 export function createIconInput(options: IIconInputOptions) {
   const { open$, isUploading$, file$ } = createFileUpload({
     type$: FileUploadType.FILE,
+    disabled$: options.disabled$,
     dialogOptions$: {
       ...options.dialogOptions$,
       Filters: [SUPPORTED_IMAGE_FILTER]

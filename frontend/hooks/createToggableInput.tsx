@@ -1,3 +1,4 @@
+import { DEBUG_WARN_LABEL } from "macro-def"
 import { createSignal, Show, type ParentComponent, type Ref } from "solid-js"
 // ...
 import type { AnyFunction, EventHandler, HTMLTags } from "~/utils"
@@ -38,7 +39,7 @@ export function createInputShortcutHandler<T extends HTMLTags>(
       // ...
 
       if (!isInputOrTextarea) {
-        console.warn([
+        DEBUG_WARN_LABEL("toggable input", [
           "createInputShortcutHandler(): currentTarget is not a <textrea /> or <input /> element.",
           "You might be attach this event listener into a wrong element.\n",
           "But, if you're only using this hook for shortcut handler stuff, that fine, but keep in mind that if you tries to access content of the input, it will be undefined.\n",

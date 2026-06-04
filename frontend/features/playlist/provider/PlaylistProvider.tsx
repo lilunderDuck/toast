@@ -8,6 +8,7 @@ import { toast } from "~/components"
 // ...
 import { playlistIconUrl, playlistTrackUrl } from "../api"
 import { playlistDurationResyncToast } from "../components"
+import { DEBUG_INFO_LABEL } from "macro-def"
 
 interface ICurrentTrackData {
   data$: playlist.PlaylistTrackData
@@ -54,6 +55,7 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
   const audioPlayer = createMediaPlayer("audio", {
     onEnded$() {
       if (loopingState() === PlaylistLoopState.REPEAT_ONCE) {
+        DEBUG_INFO_LABEL("playlist", "loop state has been detect to REPEAT_ONCE, replaying the current track...")
         audioPlayer.play$()
         return
       }
@@ -74,7 +76,8 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
       Playlist_get(props.playlistId$),
       Playlist_getAllTrack(props.playlistId$)
     ])
-
+    
+    DEBUG_INFO_LABEL("playlist", "data retrived, updating...")
     setPlaylistData(data)
     setPlaylistTracks(entries)
   })
@@ -84,23 +87,23 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
     if (trackIndex == 0) {
       setShouldDisablePrevBtn(true)
       setShouldDisableNextBtn(false)
-      console.log("Disabled previous button")
+      DEBUG_INFO_LABEL("playlist", "disabled previous button")
     }
 
     if (trackIndex > 0 && trackIndex < MAX_TRACK) {
       setShouldDisablePrevBtn(false)
       setShouldDisableNextBtn(false)
-      console.log("Both button released")
+      DEBUG_INFO_LABEL("playlist", "both button released")
     }
 
     if (trackIndex == MAX_TRACK) {
       setShouldDisablePrevBtn(false)
       setShouldDisableNextBtn(true)
-      console.log("Disabled next button")
+      DEBUG_INFO_LABEL("playlist", "disabled next button")
     }
 
     const track = playlistTracks()[trackIndex]
-    console.log("Playing track", trackIndex, ", data is:", track)
+    DEBUG_INFO_LABEL("playlist", "Playing track", trackIndex, ", data is:", track)
     if (currentTrack()?.data$?.id !== track.id) {
       audioPlayer.changeSource$(playlistTrackUrl(playlistData()!.id, track.name))
       setCurrentTrack(null)
@@ -122,8 +125,7 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
   }
 
   const goToNextTrack = () => {
-    console.log("Going to next track...")
-    console.assert(playlistData(), "playlist data have not been fetched yet")
+    DEBUG_INFO_LABEL("playlist", "Going to next track...")
     
     // Extra search to find the track current index.
     // Implementation notes: we also have to handle the case when you dragged 
@@ -134,7 +136,7 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
     
     setCurrentTrack(null)
     const nextTrack = playlistTracks()[currentIndex + 1]
-    console.log("Next track is", nextTrack)
+    DEBUG_INFO_LABEL("playlist", "Next track is", nextTrack)
     if (!nextTrack) {
       if (loopingState() !== PlaylistLoopState.REPEAT_PLAYLIST) {
         setShouldDisableNextBtn(true)
@@ -148,15 +150,14 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
   }
 
   const goToPrevTrack = () => {
-    console.log("Going to previous track...")
-    console.assert(playlistData(), "playlist data have not been fetched yet")
+    DEBUG_INFO_LABEL("playlist", "Going to previous track...")
     const [, currentIndex] = arrayObjects(playlistTracks()).find$(
       it => it.id === currentTrack()!.data$.id
     )
 
     setCurrentTrack(null)
     const prevTrack = playlistTracks()[currentIndex - 1]
-    console.log("Prev track is", prevTrack)
+    DEBUG_INFO_LABEL("playlist", "Prev track is", prevTrack)
     if (!prevTrack) {
       setShouldDisablePrevBtn(true)
       return
@@ -166,7 +167,6 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
   }
 
   const resyncTracksDuration = async() => {
-    console.assert(playlistData(), "playlist data have not been fetched yet")
     const updatedData = await toast.promise(Playlist_resyncTrackDuration(playlistData()!.id), playlistDurationResyncToast, {
       position: ToastPosition.TOP_RIGHT
     })
@@ -188,7 +188,7 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
   }
 
   const saveTrackData = async() => {
-    console.log("Playlist track is currently saving...")
+    DEBUG_INFO_LABEL("playlist", "playlist tracks is currently saving...")
     Playlist_updateTrack(props.playlistId$, playlistTracks())
   }
 
