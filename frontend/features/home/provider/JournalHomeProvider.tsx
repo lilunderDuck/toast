@@ -1,6 +1,6 @@
 import { type Accessor, createContext, createSignal, type ParentProps, useContext } from "solid-js"
 // ...
-import type { ToastOptions } from "~/libs/solid-toast/util"
+import type { ToastOptions } from "~/components/util"
 
 interface IJournalHomeContext {
   /**Reactive array of all journal groups. */

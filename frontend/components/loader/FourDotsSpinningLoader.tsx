@@ -28,11 +28,7 @@ const loader = css`
   }
 `
 
-interface IFourDotsSpinningLoaderProps {
-  // ...
-}
-
-export function FourDotsSpinningLoader(props: IFourDotsSpinningLoaderProps) {
+export function FourDotsSpinningLoader() {
   return (
     <div class={loader} />
   )

@@ -2,7 +2,7 @@ import { css } from "molcss"
 // ...
 import { BsCheck2Square } from "solid-icons/bs"
 // ...
-import type { Toast } from "~/libs/solid-toast/util"
+import type { Toast } from "~/components/util"
 
 const toast = css`
   background-color: "var(--surface0)";

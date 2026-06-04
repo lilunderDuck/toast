@@ -2,7 +2,7 @@ import { BsCheck2Square } from "solid-icons/bs"
 // ...
 import stylex from "@stylexjs/stylex"
 // ...
-import type { Toast } from "~/libs/solid-toast/util"
+import type { Toast } from "~/components/util"
 import { css } from "molcss"
 
 const toast = css`

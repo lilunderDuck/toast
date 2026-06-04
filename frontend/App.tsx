@@ -1,7 +1,6 @@
 import { type ParentProps } from 'solid-js'
 // ...
-import { Toaster } from '~/libs/solid-toast'
-import { AppTitleBarButton } from '~/components'
+import { Toaster, AppTitleBarButton } from '~/components'
 // ...
 import { SplashScreen, SplashScreenProvider } from './features/splash'
 import { SettingProvider } from './features/settings'

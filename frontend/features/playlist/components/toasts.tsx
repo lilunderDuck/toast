@@ -1,4 +1,4 @@
-import type { ToastPromiseMessages } from "~/libs/solid-toast/core";
+import type { ToastPromiseMessages } from "~/components/core";
 import type { playlist } from "~/wailsjs/go/models";
 
 export const playlistDurationResyncToast: ToastPromiseMessages<playlist.UpdatedPlaylist> = {

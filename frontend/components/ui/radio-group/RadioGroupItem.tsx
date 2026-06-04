@@ -3,8 +3,6 @@ import { splitProps } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import { Item, ItemControl, ItemIndicator, ItemInput, type RadioGroupItemProps } from "@kobalte/core/radio-group"
 // ...
-import stylex from "@stylexjs/stylex"
-// ...
 import { css } from "molcss"
 
 const item = css`

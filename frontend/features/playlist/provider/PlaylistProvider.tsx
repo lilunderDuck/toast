@@ -4,7 +4,7 @@ import type { playlist } from "~/wailsjs/go/models"
 import { Playlist_createTrack, Playlist_get, Playlist_getAllTrack, Playlist_resyncTrackDuration, Playlist_updateTrack } from "~/wailsjs/go/playlist/Exports"
 import { arrayObjects } from "~/utils"
 import { createMediaPlayer, useSMTC, type MediaPlayer } from "~/hooks"
-import { toast } from "~/libs/solid-toast"
+import { toast } from "~/components"
 // ...
 import { playlistIconUrl, playlistTrackUrl } from "../api"
 import { playlistDurationResyncToast } from "../components"
