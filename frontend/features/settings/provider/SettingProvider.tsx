@@ -2,6 +2,7 @@ import { type Accessor, createContext, createSignal, type JSX, lazy, type Parent
 import { type IconTypes } from "solid-icons"
 import { createStore } from "solid-js/store"
 import { createLazyLoadedDialog } from "~/hooks"
+import { DEBUG_INFO_LABEL } from "macro-def"
 
 export interface ISettingConfig {
   label$: JSX.Element
@@ -49,7 +50,7 @@ export function SettingProvider<T extends {}>(props: ParentProps<ISettingProvide
       // @ts-ignore
       data$: createStore<T>(props.data$),
       setCurrentPage$(value) {
-        console.log("page switch to", value)
+        DEBUG_INFO_LABEL("setting", "switch to page:", value)
         return setCurrentPage(value)
       },
       showSettingDialog$: show$

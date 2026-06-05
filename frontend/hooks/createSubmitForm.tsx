@@ -1,4 +1,5 @@
 import { type FieldValues, createForm, type SubmitHandler, type FieldsStore, type FieldPath } from "@modular-forms/solid"
+import { DEBUG_ERR_LABEL, DEBUG_INFO_LABEL } from "macro-def"
 import { createSignal, type JSX } from "solid-js"
 // ...
 import { Button, ButtonRow } from "~/components"
@@ -77,13 +78,13 @@ export function createSubmitForm<T extends FieldValues>(options: ISubmitFormOpti
   const [submitButtonDisabled, setSubmitButtonDisabled] = createSignal(false)
 
   const submitThis: SubmitHandler<T> = async (data, submitEvent) => {
-    console.log("Handle form submittion now.")
+    DEBUG_INFO_LABEL("form handler", "Handle form submittion now.")
     setSubmitButtonDisabled(true)
     if (TOAST_DEBUG) {
       try {
         await options.onSubmit$(data, submitEvent)
       } catch (error) {
-        console.error("Submittion error:", error)
+        DEBUG_ERR_LABEL("form handler", "Submittion error:", error)
       }
     } else {
       await options.onSubmit$(data, submitEvent)

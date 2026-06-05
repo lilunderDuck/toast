@@ -5,6 +5,7 @@ import { dndzone } from "solid-dnd-directive"
 import { css } from "molcss"
 // ...
 import { arrayObjects, createEvent, type EventHandler, type IEvent } from "~/utils"
+import { DEBUG_INFO_LABEL } from "macro-def"
 
 const tabList = css`
   display: flex;
@@ -44,13 +45,13 @@ export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
 
     currentFocusedTab = tabData
     setFocusedTabId(tabData.id)
-    console.log('[tabs handler] focused tab:', tabData)
+    DEBUG_INFO_LABEL("[tabs handler]", 'focused tab:', tabData)
   }
 
   const updateTab = (tabId: number | string, newData: Partial<T>) => {
     setTabs(prev => [...arrayObjects(prev).replace$(it => it.id === tabId, newData)])
     tabEvent.emit$(TabEvent.UPDATE, tabs())
-    console.log("[tabs handler] updated tab id:", tabId, newData)
+    DEBUG_INFO_LABEL("[tabs handler]", "updated tab id:", tabId, newData)
   }
 
   const considerDragging: EventHandler<"section", "on:consider"> = (dragEvent) => {
@@ -65,20 +66,19 @@ export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
   let currentFocusedTab: T | undefined
   const onClickingTab = (tabId: string) => {
     if (currentFocusedTab?.id === tabId) {
-      return console.log("[tabs handler] already opened tab", tabId)
+      return DEBUG_INFO_LABEL("[tabs handler]", "already opened tab", tabId)
     }
 
     setCurrentFocusedTab(tabId)
-    console.log("[tabs handler] click", tabId)
+    DEBUG_INFO_LABEL("[tabs handler]", "click", tabId)
   }
 
   const setNewTabs = (newTabs: T[]) => {
     if (newTabs.length === 0) {
-      return console.log("[tabs handler] no need to update tabs")
+      return DEBUG_INFO_LABEL("[tabs handler]", "no need to update tabs")
     }
 
-    console.log(
-      "[tabs handler] Tabs data:\n",
+    DEBUG_INFO_LABEL("[tabs handler]", "tabs data:\n",
       "| tabs:", newTabs, "\n",
       "| first tab:", newTabs[0], "\n"
     )
@@ -90,7 +90,7 @@ export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
 
     setTabs(newTabs)
     setCurrentFocusedTab(newTabs[0].id)
-    console.log("[tabs handler] tabs updated")
+    DEBUG_INFO_LABEL("[tabs handler]", "tabs updated")
   }
 
   setNewTabs(initialTabData ?? [])
@@ -108,7 +108,7 @@ export function createTabs<T extends BaseTabData>(initialTabData?: T[]) {
       )
       setTabs(prev => [...prev, data])
       tabEvent.emit$(TabEvent.CREATE, data)
-      console.log("[tabs handler] new tab created:", data)
+      DEBUG_INFO_LABEL("[tabs handler]", "new tab created:", data)
     },
     update$: updateTab,
     setDisable$: setDisabledTab,

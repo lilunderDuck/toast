@@ -76,7 +76,6 @@ export function PlaylistControl(props: ParentProps) {
           disabled={currentTrack$() == null}
           onClick={() => {
             if (currentTrack$() !== null) {
-              console.log("toggle track")
               togglePlayTrack$(currentTrack$()!.currentIndex$)
             }
           }}

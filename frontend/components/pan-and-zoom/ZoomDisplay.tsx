@@ -6,6 +6,7 @@ import { css } from "molcss"
 import type { Ref } from "~/utils"
 // ...
 import { useZoomAndPanContext } from "./ZoomAndPanProvider"
+import { DEBUG_INFO_LABEL } from "macro-def"
 
 const zoomDisplay = css`
   width: 100%;
@@ -98,7 +99,7 @@ export function ZoomDisplay(props: ParentProps) {
       y: newY
     })
 
-    console.log("position:", imagePosition())
+    DEBUG_INFO_LABEL("zoom&pan", "content position:", imagePosition())
   }
 
   const dragStop = () => {
@@ -125,10 +126,7 @@ export function ZoomDisplay(props: ParentProps) {
     >
       <div
         class={zoomDisplay__contentWrap}
-        style={{
-          '--image-scale': internal$.zoomScale$(),
-          'transform': `translate(${imagePosition().x}px, ${imagePosition().y}px)`,
-        }}
+        style={`--image-scale:${internal$.zoomScale$()};transform:translate(${imagePosition().x}px, ${imagePosition().y}px)`}
         ref={draggableRef}
       >
         <div
