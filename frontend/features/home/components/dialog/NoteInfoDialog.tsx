@@ -2,7 +2,7 @@ import { For, Show } from "solid-js"
 import { BsCalendar2Date, BsPencilFill } from "solid-icons/bs"
 import { A } from "@solidjs/router"
 // ...
-import __style from "./JournalInfoDialog.module.css"
+import __style from "./NoteInfoDialog.module.css"
 import { css } from "molcss"
 // ...
 import { Button, ButtonRow, DialogContent, Spacer } from "~/components"
@@ -65,11 +65,11 @@ const dialog__noDesc = css`
   color: var(--subtext0);
 `
 
-interface IJournalInfoDialogProps extends IBaseLazyDialog, group.JournalGroupData {
+interface INoteInfoDialogProps extends IBaseLazyDialog, group.NoteGroupData {
   // 
 }
 
-export default function JournalInfoDialog(props: IJournalInfoDialogProps) {
+export default function NoteInfoDialog(props: INoteInfoDialogProps) {
   const data = [
     { icon$: BsCalendar2Date, name$: "Created", value$: formatDate(goTimeToDate(props.created)) },
     { icon$: BsPencilFill, name$: "Modified", value$: props.modified ? formatDate(goTimeToDate(props.modified)) : props.modified },

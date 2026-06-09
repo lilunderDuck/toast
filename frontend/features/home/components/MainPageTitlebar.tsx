@@ -6,8 +6,8 @@ import toastIcon from "~/assets/toast.jpg"
 // ...
 import { AppTitleBarDraggable, Button } from "~/components"
 // ...
-import { useJournalHomeRootContext } from "../provider/JournalHomeRootProvider"
 import { useSettingContext } from "~/features/settings"
+import { useMainPageContext } from "../provider/MainPageProvider"
 
 const sidebar__titleBar = css`
   gap: 10px;
@@ -22,12 +22,12 @@ const sidebar__titleBarIcon = css`
   margin-left: 10px;
 `
 
-interface IJournalHomeTitleBarProps {
+interface IMainPageTitlebarProps {
   class?: string
 }
 
-export function JournalHomeTitleBar(props: IJournalHomeTitleBarProps) {
-  const { isShowingSidebar$, _setIsShowingSidebar$ } = useJournalHomeRootContext()
+export function MainPageTitlebar(props: IMainPageTitlebarProps) {
+  const { isShowingSidebar$, _setIsShowingSidebar$ } = useMainPageContext()
   const { showSettingDialog$ } = useSettingContext()
   
   return (

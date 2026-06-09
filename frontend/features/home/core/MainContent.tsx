@@ -4,11 +4,11 @@ import { css } from "molcss"
 // ...
 import { AppTitleBarDraggable } from "~/components"
 // ...
-import { useJournalHomeRootContext } from "../provider/JournalHomeRootProvider"
-import Journal from "../pages/Journal"
+import { useMainPageContext } from "../provider/MainPageProvider"
+import Note from "../pages/Note"
 import Collection from "../pages/Collection"
 import StickyNotes from "../pages/StickyNotes"
-import { JournalHomeTitleBar } from "../components"
+import { MainPageTitlebar } from "../components"
 
 const titleBar = css`
   position: fixed;
@@ -25,18 +25,18 @@ const titleBar__noSidebar = css`
   padding-inline: 5;
 `
 
-export function JournalHomeMainContent() {
-  const { currentPage$, isShowingSidebar$ } = useJournalHomeRootContext()
+export function MainContent() {
+  const { currentPage$, isShowingSidebar$ } = useMainPageContext()
   return (
     <>
       <AppTitleBarDraggable class={`${titleBar} ${isShowingSidebar$() ? titleBar__withSidebar : titleBar__noSidebar}`}>
         <Show when={!isShowingSidebar$()}>
-          <JournalHomeTitleBar />
+          <MainPageTitlebar />
         </Show>
       </AppTitleBarDraggable>
       <Switch>
-        <Match when={currentPage$() === "journal_page$"}>
-          <Journal />
+        <Match when={currentPage$() === "notes_page$"}>
+          <Note />
         </Match>
 
         <Match when={currentPage$() === "collection_page$"}>

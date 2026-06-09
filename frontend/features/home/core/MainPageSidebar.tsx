@@ -3,10 +3,10 @@ import { RiMediaPlayList2Fill } from "solid-icons/ri"
 import { For, Show } from "solid-js"
 // ...
 import { css } from "molcss"
-import "./JournalHomeSidebar.css"
+import "./MainPageSidebar.css"
+import { useMainPageContext, type IPageData } from "../provider/MainPageProvider"
+import { MainPageTitlebar } from "../components"
 // ...
-import { useJournalHomeRootContext, type IJournalHomePageData } from "../provider/JournalHomeRootProvider"
-import { JournalHomeTitleBar } from "../components"
 
 const sidebar = css`
   height: 100%;
@@ -36,14 +36,14 @@ const sidebar__titleBar = css`
   margin-bottom: 10px;
 `
 
-export function JournalHomeSidebar() {
-  const { currentPage$, _setCurrentPage$, isShowingSidebar$ } = useJournalHomeRootContext()
+export function MainPageSidebar() {
+  const { currentPage$, _setCurrentPage$, isShowingSidebar$ } = useMainPageContext()
 
-  const SIDEBAR_ITEMS: IJournalHomePageData[] = [
+  const SIDEBAR_ITEMS: IPageData[] = [
     {
-      name$: "Journal",
+      name$: "Notes",
       icon$: FaSolidBookOpenReader,
-      pageId$: "journal_page$"
+      pageId$: "notes_page$"
     },
     {
       name$: "Sticky notes",
@@ -60,7 +60,7 @@ export function JournalHomeSidebar() {
   return (
     <Show when={isShowingSidebar$()}>
       <aside class={`${sidebar} ${isShowingSidebar$() ? sidebar__withSidebar : ''}`}>
-        <JournalHomeTitleBar class={sidebar__titleBar} />
+        <MainPageTitlebar class={sidebar__titleBar} />
         <For each={SIDEBAR_ITEMS}>
           {it => (
             <button 

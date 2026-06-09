@@ -33,7 +33,7 @@ export function GroupEditedToast(props: IGroupEditedToastProps) {
     <div class={toast}>
       <div class={toast__title}>
         <BsCheck2Square />
-        <h4>Journal group edited</h4>
+        <h4>Note group edited</h4>
       </div>
       <div class={toast__description}>
         Successfully updated <code>{props.name$}</code>

@@ -3,28 +3,28 @@ import type { IconTypes } from "solid-icons"
 import { createContext, createEffect, ParentProps, useContext, type Accessor, type Setter } from "solid-js"
 import { usePersistedSignal } from "~/hooks"
 
-type JournalPageId = "journal_page$" | "collection_page$" | "sticky_note_page$"
+type PageId = "notes_page$" | "collection_page$" | "sticky_note_page$"
 
-interface IJournalHomeRootContext {
-  currentPage$: Accessor<JournalPageId>
-  _setCurrentPage$: Setter<JournalPageId>
+interface IMainPageContext {
+  currentPage$: Accessor<PageId>
+  _setCurrentPage$: Setter<PageId>
   isShowingSidebar$: Accessor<boolean>
   _setIsShowingSidebar$: Setter<boolean>
 }
 
-export interface IJournalHomePageData {
+export interface IPageData {
   name$: string
   icon$: IconTypes
-  pageId$: JournalPageId
+  pageId$: PageId
 }
 
-const Context = createContext<IJournalHomeRootContext>()
+const Context = createContext<IMainPageContext>()
 
-interface IJournalHomeRootProviderProps {
+interface IMainPageProviderProps {
 }
 
-export function JournalHomeRootProvider(props: ParentProps<IJournalHomeRootProviderProps>) {
-  const [currentPage, setCurrentPage] = usePersistedSignal<JournalPageId>(sessionStorage, "home_last_page", "journal_page$")
+export function MainPageProvider(props: ParentProps<IMainPageProviderProps>) {
+  const [currentPage, setCurrentPage] = usePersistedSignal<PageId>(sessionStorage, "home_last_page", "notes_page$")
   const [isShowingSidebar, setIsShowingSidebar] = usePersistedSignal(localStorage, "home_show_sidebar", true)
 
   if (TOAST_DEBUG) {
@@ -50,6 +50,6 @@ export function JournalHomeRootProvider(props: ParentProps<IJournalHomeRootProvi
   )
 }
 
-export function useJournalHomeRootContext() {
+export function useMainPageContext() {
   return useContext(Context)!
 }

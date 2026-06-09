@@ -34,7 +34,7 @@ export function GroupAddedToast(props: IGroupAddedToastProps) {
     <div class={toast}>
       <div class={toast__title}>
         <BsCheck2Square />
-        <h4>Journal group added</h4>
+        <h4>Note group added</h4>
       </div>
       <div class={toast__description}>
         Added new group <code>{props.name$}</code>

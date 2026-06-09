@@ -2,7 +2,7 @@ import { createSignal } from "solid-js"
 import { required } from "@modular-forms/solid"
 // ...
 import { css } from "molcss"
-import __style from "./CreateOrEditJournalDialog.module.css"
+import __style from "./CreateOrEditNoteDialog.module.css"
 // ...
 import { Button, DialogContent, DialogHeader, FieldInput } from "~/components"
 import { createSubmitForm, createFileUpload, SUPPORTED_IMAGE_PATTERN, type IBaseLazyDialog } from "~/hooks"
@@ -21,7 +21,7 @@ const dialog__imageInput = css`
   height: 15rem;
 `
 
-interface ICreateJournalDialogProps extends IBaseLazyDialog {
+interface ICreateNoteDialogProps extends IBaseLazyDialog {
   prevData$?: group.GroupData
   onSubmit$?: (data: group.GroupOptions) => any
   onUpdate$?: (data: group.GroupOptions & {
@@ -29,18 +29,18 @@ interface ICreateJournalDialogProps extends IBaseLazyDialog {
   }) => any
 }
 
-type JournalGroupOptionSchema = {
+type NoteGroupOptionSchema = {
   name: string
   description?: string
   icon?: string
 }
 
-export default function CreateJournalDialog(props: ICreateJournalDialogProps) {
+export default function CreateNoteDialog(props: ICreateNoteDialogProps) {
   const [iconPath, setIconPath] = createSignal(props.prevData$?.icon ?? "")
 
   const getText = () => props.prevData$ ? "Edit" : "Create"
 
-  const { Form$, Field$ } = createSubmitForm<JournalGroupOptionSchema>({
+  const { Form$, Field$ } = createSubmitForm<NoteGroupOptionSchema>({
     async onSubmit$(data) {
       if (props.prevData$) {
         const newData = { ...props.prevData$, ...data as group.GroupOptions }

@@ -1,14 +1,14 @@
 import { BsPencilFill } from "solid-icons/bs"
 // ...
 import { css } from "molcss"
-import './JournalBlock.css'
+import './NoteBlock.css'
 // ...
 import { Button } from "~/components"
 import { type group } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 import { createLazyLoadedDialog } from "~/hooks"
 // ...
-import { useJournalHomeContext } from "../../provider/JournalHomeProvider"
+import { useNoteHomeContext } from "../../provider/NoteHomeProvider"
 
 const block = css`
   width: 100%;
@@ -70,19 +70,19 @@ const block__description = css`
   margin-bottom: 5px;
 `
 
-interface IJournalBlockProps extends group.GroupData {
+interface INoteBlockProps extends group.GroupData {
   // ...
 }
 
-export function JournalBlock(props: IJournalBlockProps) {
-  const { addGroup$, editGroup$ } = useJournalHomeContext()
-  const JournalInfoDialog = createLazyLoadedDialog(
-    () => import("../dialog/JournalInfoDialog"),
+export function NoteBlock(props: INoteBlockProps) {
+  const { addGroup$, editGroup$ } = useNoteHomeContext()
+  const NoteInfoDialog = createLazyLoadedDialog(
+    () => import("../dialog/NoteInfoDialog"),
     () => props
   )
 
-  const EditJournalDialog = createLazyLoadedDialog(
-    () => import("../dialog/editing/CreateOrEditJournalDialog"),
+  const EditNoteDialog = createLazyLoadedDialog(
+    () => import("../dialog/editing/CreateOrEditNoteDialog"),
     () => ({
       prevData$: props,
       onSubmit$: (data) => addGroup$(data),
@@ -106,7 +106,7 @@ export function JournalBlock(props: IJournalBlockProps) {
       />
       <div 
         class={block__content}
-        onClick={JournalInfoDialog.show$}
+        onClick={NoteInfoDialog.show$}
       >
         <h2 class={block__name}>
           {props.name}
@@ -120,13 +120,13 @@ export function JournalBlock(props: IJournalBlockProps) {
         class={block__editButton} 
         size$={ButtonSize.ICON} 
         id="block__editButton" 
-        onClick={EditJournalDialog.show$}
+        onClick={EditNoteDialog.show$}
       >
         <BsPencilFill />
       </Button>
       {/* ... */}
-      <JournalInfoDialog.Dialog$ />
-      <EditJournalDialog.Dialog$ />
+      <NoteInfoDialog.Dialog$ />
+      <EditNoteDialog.Dialog$ />
     </button>
   )
 }

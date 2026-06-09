@@ -1,4 +1,4 @@
-export * from "./JournalBlock"
-export * from "./CreateJournalButton"
+export * from "./NoteBlock"
+export * from "./CreateNoteButton"
 export * from "./TagListButton"
-export * from "./TotalJournalText"
+export * from "./TotalNotesText"

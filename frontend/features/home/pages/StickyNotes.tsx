@@ -1,7 +1,7 @@
 import { For } from "solid-js"
 // ...
 import { css } from "molcss"
-import "../core/JournalHomeRoot.css"
+import "../core/MainPageRoot.css"
 // ...
 import { StickyNoteBlock, StickyNoteCreateButton, StickyNoteProvider } from "../components"
 import { StickyNotesProvider, useStickyNotesContext } from "../provider/StickyNotesProvider"

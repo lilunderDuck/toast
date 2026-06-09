@@ -1,3 +1,3 @@
-export * from "./JournalHomeSidebar"
-export * from "./JournalHomeMainContent"
-export * from "./JournalHomeRoot"
+export * from "./MainPageSidebar"
+export * from "./MainContent"
+export * from "./MainPageRoot"

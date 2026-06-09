@@ -1,8 +1,8 @@
 import { type Accessor, createContext, createSignal, type ParentProps, useContext } from "solid-js"
 // ...
-import type { ToastOptions } from "~/components/util"
+import type { ToastOptions } from "~/components/ui/toasts/util"
 
-interface IJournalHomeContext {
+interface INoteHomeContext {
   /**Reactive array of all journal groups. */
   groups$: Accessor<[]>
   /**Asynchronously creates a new journal group and updates the UI.
@@ -16,13 +16,13 @@ interface IJournalHomeContext {
   editGroup$(targetGroupId: string, options: null): Promise<void>
 }
 
-const Context = createContext<IJournalHomeContext>()
+const Context = createContext<INoteHomeContext>()
 
-interface IJournalHomeProviderProps {
+interface INoteHomeProviderProps {
   groups$: []
 }
 
-export function JournalHomeProvider(props: ParentProps<IJournalHomeProviderProps>) {
+export function NoteHomeProvider(props: ParentProps<INoteHomeProviderProps>) {
   const [groups, setGroups] = createSignal(props.groups$)
 
   const toastOptions: ToastOptions = {
@@ -43,6 +43,6 @@ export function JournalHomeProvider(props: ParentProps<IJournalHomeProviderProps
   )
 }
 
-export function useJournalHomeContext() {
+export function useNoteHomeContext() {
   return useContext(Context)!
 }

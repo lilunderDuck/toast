@@ -4,11 +4,11 @@ import { MdOutlineFilter_list_off } from 'solid-icons/md'
 import { PlaceholderView, Spacer } from "~/components"
 // ...
 import { css } from "molcss"
-import "../core/JournalHomeRoot.css"
+import "../core/MainPageRoot.css"
 import "~/styles/scrollbar.css"
 // ...
-import { CreateJournalButton, JournalBlock, TagListButton, TotalJournalText } from "../components"
-import { JournalHomeProvider } from "../provider/JournalHomeProvider"
+import { CreateNoteButton, NoteBlock, TagListButton, TotalNotesText } from "../components"
+import { NoteHomeProvider } from "../provider/NoteHomeProvider"
 
 const section = css`
   overflow-y: auto;
@@ -30,46 +30,46 @@ const section__list = css`
   height: 80vh;
 `
 
-const section__emptyJournalView = css`
+const section__emptyNoteView = css`
   position: absolute;
   top: 0;
   left: 0;
   z-index: -1;
 `
 
-export default function Journal() {
+export default function Note() {
   const [resource] = createResource(async () => {
     return []
   })
 
   return (
-    <JournalHomeProvider groups$={resource() ?? []}>
+    <NoteHomeProvider groups$={resource() ?? []}>
       <main class={`${section} journalHome__mainContent`}>
-        <h1>Jour journal</h1>
+        <h1>Notes collection</h1>
         <header class={section__header}>
-          <CreateJournalButton />
+          <CreateNoteButton />
           <TagListButton />
           <Spacer />
-          <TotalJournalText />
+          <TotalNotesText />
         </header>
         <Show when={!resource.loading}>
           <Show when={resource()!.length == 0} fallback={
             <div class={`${section__list} scrollbar scrollbarVertical`}>
               <For each={resource()}>
                 {/* @ts-ignore */}
-                {it => <JournalBlock {...it} />}
+                {it => <NoteBlock {...it} />}
               </For>
             </div>
           }>
             <PlaceholderView 
               icons$={<MdOutlineFilter_list_off size="4.5rem" />}
-              class={section__emptyJournalView}
+              class={section__emptyNoteView}
             >
               No journal here, try creating a new journal.
             </PlaceholderView>
           </Show>
         </Show>
       </main>
-    </JournalHomeProvider>
+    </NoteHomeProvider>
   )
 }

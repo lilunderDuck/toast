@@ -2,7 +2,7 @@ import { createSignal, For, onCleanup, onMount, Show } from "solid-js"
 import { RiMediaGalleryFill, RiMediaPlayList2Fill } from "solid-icons/ri"
 // ...
 import { css } from "molcss"
-import "../core/JournalHomeRoot.css"
+import "../core/MainPageRoot.css"
 // ...
 import { Playlist_getAll, Playlist_init, Playlist_resyncAll } from "~/wailsjs/go/playlist/Exports"
 import type { playlist } from "~/wailsjs/go/models"
