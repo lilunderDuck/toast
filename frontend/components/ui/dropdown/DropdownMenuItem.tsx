@@ -32,7 +32,7 @@ const menuItem__default = css`
 
 const menuItem__disabled = css`
   cursor: not-allowed;
-  color: var(--crust0);
+  color: var(--overlay1);
 `
 
 export interface IDropdownMenuItemProps<T extends ValidComponent = "div"> extends DropdownMenuItemProps<T> {

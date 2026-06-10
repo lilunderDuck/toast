@@ -1,13 +1,11 @@
 import { type Accessor, createContext, createSignal, type ParentProps, type Signal, useContext } from "solid-js"
 
 interface IZoomAndPanContext {
-  changeDisplayImage$(newImageUrl: string): void
   zoom$(): void
   unzoom$(): void
   reset$(): void
   internal$: {
     zoomScale$: Accessor<number>
-    displayImageUrl$: Accessor<string>
     imagePosition$: Signal<{ x: number, y: number }>
   }
 }
@@ -17,7 +15,6 @@ const Context = createContext<IZoomAndPanContext>()
 export function ZoomAndPanProvider(props: ParentProps) {
   const DEFAULT_ZOOM = 1
   const [scale, setScale] = createSignal(DEFAULT_ZOOM)
-  const [displayImageUrl, setDisplayImageUrl] = createSignal('')
   const [imagePosition, setImagePosition] = createSignal({
     x: null as unknown as number,
     y: null as unknown as number
@@ -34,6 +31,10 @@ export function ZoomAndPanProvider(props: ParentProps) {
         setScale(prev => prev + STEP)
       },
       unzoom$() {
+        if (scale() == 0.5) {
+          return
+        }
+
         setScale(prev => prev - STEP)
 
         if (scale() <= 1) {
@@ -44,13 +45,8 @@ export function ZoomAndPanProvider(props: ParentProps) {
         setScale(DEFAULT_ZOOM)
         resetImagePosition()
       },
-      changeDisplayImage$(newImageUrl) {
-        setDisplayImageUrl(newImageUrl)
-        resetImagePosition()
-      },
       internal$: {
         zoomScale$: scale,
-        displayImageUrl$: displayImageUrl,
         imagePosition$: [imagePosition, setImagePosition]
       }
     }}>

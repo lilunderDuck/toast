@@ -7,7 +7,7 @@ import type { IBaseDropdownMenu } from "~/hooks";
 import type { IActionHandler } from "~/utils";
 
 interface IPlaylistHeaderMoreOptionDropdownProps extends IBaseDropdownMenu, IActionHandler<PlaylistHeaderDropdownAction> {
-  // define your component props here
+  disableViewBackgroundButton$: boolean
 }
 
 export default function PlaylistHeaderMoreOptionDropdown(props: IPlaylistHeaderMoreOptionDropdownProps) {
@@ -22,6 +22,7 @@ export default function PlaylistHeaderMoreOptionDropdown(props: IPlaylistHeaderM
     <DropdownMenuContent>
       <DropdownMenuItem
         onClick={() => props.action$(PlaylistHeaderDropdownAction.VIEW_BACKGROUND)}
+        disabled={props.disableViewBackgroundButton$}
       >
         <BsImageFill />
         <span>View playlist background</span>

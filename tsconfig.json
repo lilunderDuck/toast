@@ -29,5 +29,12 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+    "backend",
+    ".vscode",
+    ".git"
+  ]
 }

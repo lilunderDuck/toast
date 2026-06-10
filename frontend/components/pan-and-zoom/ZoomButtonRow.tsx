@@ -1,4 +1,4 @@
-import { Match, Switch, type ParentProps } from "solid-js"
+import { type ParentProps } from "solid-js"
 import { TbFillZoomCancel, TbFillZoomIn, TbFillZoomOut } from 'solid-icons/tb'
 // ...
 import { Button, Tooltip } from "~/components"
@@ -17,7 +17,12 @@ const style = stylex.create({
     alignItems: 'center',
   },
   scaleText: {
-    minWidth: '3rem'
+    minWidth: '3rem',
+    backgroundColor: "var(--base)",
+    paddingInline: 5,
+    paddingBlock: 4,
+    borderRadius: 6,
+    textAlign: "center"
   },
 })
 
@@ -31,7 +36,6 @@ export function ZoomButtonRow(props: ParentProps) {
           <TbFillZoomCancel size={16} />
         </Button>
       </Tooltip>
-      <div />
       <Tooltip label$="Zoom out">
         <Button size$={ButtonSize.ICON} onClick={unzoom$} disabled={internal$.zoomScale$() === 0}>
           <TbFillZoomOut size={16} />
@@ -43,16 +47,7 @@ export function ZoomButtonRow(props: ParentProps) {
         </Button>
       </Tooltip>
       <span {...stylex.attrs(style.scaleText)}>
-        <Switch fallback={
-          <>{internal$.zoomScale$()}x</>
-        }>
-          <Match when={internal$.zoomScale$() >= 5}>
-            Absurdly large ({internal$.zoomScale$()}x)
-          </Match>
-          <Match when={internal$.zoomScale$() == 0}>
-            *Vanished*
-          </Match>
-        </Switch>
+        {internal$.zoomScale$()}x
       </span>
       {props.children}
     </div>

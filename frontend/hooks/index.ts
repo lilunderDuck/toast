@@ -8,7 +8,7 @@ export * from "./createIconInput"
 export * from "./media"
 export * from "./useDocumentEventListener"
 export * from "./usePersistedSignal"
-export * from "./useSMTC"
+export * from "./createSMTCHandlers"
 // ...
 export * from "./native"
 export * from "./lazy"

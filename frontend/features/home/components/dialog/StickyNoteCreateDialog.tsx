@@ -29,7 +29,12 @@ interface IStickyNoteCreateDialogProps extends IBaseLazyDialog {
   onSubmit$(data: sticky_notes.StickyNoteData): void
 }
 
-type StickyNoteSchema = sticky_notes.StickyNoteData
+type StickyNoteSchema = {
+  title: string;
+  content: string;
+  color: string;
+  id: string;
+} // -> sticky_notes.StickyNoteData
 
 export default function StickyNoteCreateDialog(props: IStickyNoteCreateDialogProps) {
   const [color, setColor] = createSignal("#313244")

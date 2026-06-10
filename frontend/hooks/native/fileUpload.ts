@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js"
+import { createSignal, onCleanup } from "solid-js"
 // ...
 import { sleep } from "~/utils"
 import { OpenDirectoryDialog, OpenFileDialog, OpenMultipleFilesDialog } from "~/wailsjs/go/backend/App"
@@ -23,13 +23,13 @@ export function createFileUpload<T extends FileUploadType.FILE>(
   options: CreateFileUploadOptions<T, (file: string) => any>
 ): UploadDialog<T>
 export function createFileUpload<T extends FileUploadType.DIRECTORY>(
-  options: CreateFileUploadOptions<T, (file: string) => any>
+  options: CreateFileUploadOptions<T, (directory: string) => any>
 ): UploadDialog<T>
 export function createFileUpload<T extends FileUploadType.MULTI_FILE>(
   options: CreateFileUploadOptions<T, (manyFiles: string[]) => any>
 ): UploadDialog<T>
 
-export function createFileUpload<T extends FileUploadType.FILE>(
+export function createFileUpload<T extends FileUploadType>(
   options: CreateFileUploadOptions<FileUploadType, (file: string | string[]) => any>
   //                               ^^^^^^^^^^^^^^
   // Change to T will make typescript angry
@@ -38,6 +38,11 @@ export function createFileUpload<T extends FileUploadType.FILE>(
   const [isLoading, setIsLoading] = createSignal(false)
   const [error, setError] = createSignal()
   const [file, setFile] = createSignal()
+
+  onCleanup(() => {
+    DEBUG_INFO_LABEL("file upload", "cleaning up...")
+    setFile(undefined)
+  })
 
   const getFileDialogFn = () => {
     switch (type$) {

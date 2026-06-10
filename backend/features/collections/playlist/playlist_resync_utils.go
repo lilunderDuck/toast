@@ -76,10 +76,11 @@ func (playlist *Exports) Playlist_resyncAll() ([]PlaylistData, error) {
 		return nil, err
 	}
 
-	playlists := playlist.Playlist_getAll()
 	if debug.DEBUG_MODE {
 		debug.InfoLabel("playlist", "Start updating existing playlist metadata")
 	}
+
+	playlists := []PlaylistData{}
 
 	allPlaylistPath, err := os.ReadDir(playlistRootPath)
 	if err != nil {

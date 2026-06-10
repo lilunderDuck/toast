@@ -25,9 +25,12 @@ const header__titleWrap = css`
   width: 100%;
   position: absolute;
   bottom: 0;
-  background: linear-gradient(to top, var(--crust) 0%, transparent 100%);
   padding-inline: 15px;
   padding-bottom: 10px;
+`
+
+const header__titleWrapHaveBackground = css`
+  background: linear-gradient(to top, var(--crust) 0%, transparent 100%);
 `
 
 const header__info = css`
@@ -71,6 +74,7 @@ export function PlaylistHeader() {
   const TableMoreOptionsDropdownMenu = createLazyLoadedDropdownMenu(
     () => import("../components/dropdown/PlaylistHeaderMoreOptionDropdown"),
     () => ({
+      disableViewBackgroundButton$: data$()?.coverIcon == undefined,
       action$(type) {
         switch (type) {
           case PlaylistHeaderDropdownAction.RESYNC_DURATION:
@@ -91,7 +95,7 @@ export function PlaylistHeader() {
 
   return (  
     <header class={header} style={`--cover-icon-url:url("${coverIconUrl()}")`}>
-      <div class={header__titleWrap}>
+      <div class={`${header__titleWrap} ${data$()?.icon ? header__titleWrapHaveBackground : ""}`}>
         <h1>{data$()?.name}</h1>
         <span class={header__info}>
           {tracks$().length} tracks • Runtime: {formatSecondsToMMSS(data$()?.totalDuration ?? 0)}

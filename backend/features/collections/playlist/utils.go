@@ -6,7 +6,7 @@ import (
 	"toast/backend/utils"
 )
 
-func mergePlaylistData(oldData *PlaylistData, newData PlaylistData) {
+func MergePlaylistData(oldData *PlaylistData, newData PlaylistData) {
 	if newData.CoverIcon != "" {
 		oldData.CoverIcon = newData.CoverIcon
 	}
@@ -43,8 +43,8 @@ func mergePlaylistTrackData(oldData *PlaylistTrackData, newData PlaylistTrackDat
 }
 
 var (
-	playlistRootPath = internals.DATA_FOLDER_PATH + "/collection/playlist"
-	playlistsDbPath  = internals.DATA_FOLDER_PATH + "/collection/playlist/all.db"
+	playlistRootPath = internals.DATA_FOLDER_PATH + "/collections/playlist"
+	playlistsDbPath  = internals.DATA_FOLDER_PATH + "/collections/playlist/all.db"
 )
 
 func getPlaylistPath(id string) string {

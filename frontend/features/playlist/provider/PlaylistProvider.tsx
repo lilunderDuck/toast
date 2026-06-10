@@ -3,7 +3,7 @@ import { createContext, createSignal, type ParentProps, useContext, type Accesso
 import type { playlist } from "~/wailsjs/go/models"
 import { Playlist_createTrack, Playlist_get, Playlist_getAllTrack, Playlist_resyncTrackDuration, Playlist_updateTrack } from "~/wailsjs/go/playlist/Exports"
 import { arrayObjects } from "~/utils"
-import { createMediaPlayer, useSMTC, type MediaPlayer } from "~/hooks"
+import { createMediaPlayer, createSMTCHandlers, type MediaPlayer } from "~/hooks"
 import { toast } from "~/components"
 // ...
 import { playlistIconUrl, playlistTrackUrl } from "../api"
@@ -64,7 +64,7 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
     }
   })
 
-  const { changeMetadata$ } = useSMTC({
+  const { changeMetadata$ } = createSMTCHandlers({
     playHandler$: audioPlayer.play$,
     pauseHandler$: audioPlayer.pause$,
     nextTrackHandler$: () => goToNextTrack(),
@@ -118,7 +118,8 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
       title: track.name,
       artwork: [
         { src: playlistIconUrl(props.playlistId$, track.icon) }
-      ]
+      ],
+      album: playlistData()!.name
     })
     
     audioPlayer.play$()

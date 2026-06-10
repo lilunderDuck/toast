@@ -2,7 +2,7 @@ import type { ParentProps } from "solid-js"
 import { BsThreeDots } from "solid-icons/bs"
 // ...
 import { HoveredHexColorInput } from "~/components"
-import type { IContextBridge } from "~/utils"
+import type { IActionHandler, IContextBridge } from "~/utils"
 import { createLazyLoadedDropdownMenu } from "~/hooks"
 // ...
 import { css } from "molcss"

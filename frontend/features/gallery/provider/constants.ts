@@ -1,0 +1,1 @@
+export const GALLERY_IN_EXTERNAL_MODE = "youre_in_external_mode_dont_panic"

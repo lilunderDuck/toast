@@ -2,8 +2,10 @@ package backend
 
 import (
 	"os"
+	"toast/backend/features/collections"
+	"toast/backend/features/collections/gallery"
+	"toast/backend/features/collections/playlist"
 	"toast/backend/features/misc"
-	"toast/backend/features/playlist"
 	"toast/backend/features/sticky_notes"
 
 	"toast/backend/core/internals"
@@ -21,6 +23,8 @@ func GetAppConfig(icon []byte, appInstance *App) *options.App {
 	binding := []any{
 		appInstance,
 		&misc.Exports{},
+		&collections.Exports{},
+		&gallery.Exports{},
 		&playlist.Exports{},
 		&sticky_notes.Exports{},
 	}
@@ -29,7 +33,7 @@ func GetAppConfig(icon []byte, appInstance *App) *options.App {
 		Title:     WINDOW_TITLE,
 		Frameless: true,
 		Width:     1000,
-		Height:    708,
+		Height:    663,
 		AssetServer: &assetserver.Options{
 			Assets: os.DirFS(internals.RESOURCE_FOLDER_PATH),
 			// Well, my intrusive thoughts *thought* that it'd be better to merge everything into

@@ -53,7 +53,7 @@ const size_icon = css`
 `
 
 const variant_default = css`
-  background-color: var(--surface1);
+  background-color: var(--surface0);
   &:hover {
     background-color: var(--surface2);
   }
@@ -67,7 +67,7 @@ const variant_danger = css`
 `
 
 const variant_noBackground = css`
-  background-color: tranparent;
+  background-color: transparent;
   color: var(--subtext0);
   &:hover {
     background-color: var(--surface1);

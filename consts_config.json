@@ -156,5 +156,15 @@
       "VERTICAL",
       "HORIZONTAL"
     ]
+  },
+  {
+    "type": "enum",
+    "name": "CollectionType",
+    "members": {
+      "PLAYLIST": 0,
+      "GALLERY": 1,
+      "EXTERNAL_SOURCE": 254,
+      "INVALID": 255
+    }
   }
 ]

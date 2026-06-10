@@ -1,3 +1,4 @@
+import { DEBUG_INFO_LABEL } from "macro-def"
 import { onCleanup } from "solid-js"
 
 export function useDocumentEventListener<T extends keyof DocumentEventMap>(
@@ -7,16 +8,10 @@ export function useDocumentEventListener<T extends keyof DocumentEventMap>(
 ) {
   const detach = () => {
     document.removeEventListener(eventName, listener, options)
-    console.log("Detached:", eventName)
+    DEBUG_INFO_LABEL("DocumentEvent", "detached:", eventName)
   }
-
+  
+  document.addEventListener(eventName, listener, options)
   onCleanup(detach)
-
-  return {
-    attach$: () => {
-      document.addEventListener(eventName, listener, options)
-      console.log("Attached:", eventName)
-    },
-    detach$: detach
-  }
+  DEBUG_INFO_LABEL("DocumentEvent", "attached:", eventName)
 }

@@ -1,11 +1,13 @@
-import type { ParentProps } from "solid-js"
+import { For, Show, type JSX, type ParentProps } from "solid-js"
 import type { IconTypes } from "solid-icons"
-import { CgSync } from "solid-icons/cg"
+import { BsInfoCircleFill } from "solid-icons/bs"
 // ...
 import { css } from "molcss"
 import "~/styles/shorthand.css"
 // ...
-import { Button, Label, Spacer, Tooltip } from "~/components"
+import { Label, Spacer, Tooltip } from "~/components"
+import type { IActionHandler } from "~/utils"
+import type { collections } from "~/wailsjs/go/models"
 
 const section__labelWrap = css`
   width: 100%;
@@ -22,10 +24,10 @@ const section__label = css`
   gap: 10px;
 `
 
-const section__tooltipDescription = css`
-  color: var(--subtext0);
-  font-size: 13px;
-`
+// const section__tooltipDescription = css`
+//   color: var(--subtext0);
+//   font-size: 13px;
+// `
 
 const section__itemList = css`
   display: flex;
@@ -37,18 +39,30 @@ const section__itemList = css`
 export interface ICollectionSectionProps extends IActionHandler<CollectionSectionAction> {
   label$: string
   icon$: IconTypes
+  description$?: JSX.Element
 }
 
 export function CollectionSection(props: ParentProps<ICollectionSectionProps>) {
   return (
     <section class="showOnHover">
       <div class={section__labelWrap}>
-        <Label class={section__label}>
-          <props.icon$ />
-          {props.label$}
-        </Label>
+        <Show when={props.description$} fallback={
+          <Label class={section__label}>
+            <props.icon$ />
+            {props.label$}
+          </Label>
+        }>
+          <Label class={section__label}>
+            <props.icon$ />
+            {props.label$}
+
+            <Tooltip label$={props.description$}>
+              <BsInfoCircleFill class="showOnHover__hide" />
+            </Tooltip>
+          </Label>
+        </Show>
         <Spacer />
-        <Tooltip label$={(
+        {/* <Tooltip label$={(
           <>
             Resync {props.label$.toLowerCase()}.
             <br />
@@ -58,15 +72,15 @@ export function CollectionSection(props: ParentProps<ICollectionSectionProps>) {
             </span>
           </>
         )}>
-          <Button 
-            size$={ButtonSize.ICON} 
+          <Button
+            size$={ButtonSize.ICON}
             variant$={ButtonVariant.NO_BACKGROUND}
-            class={"showOnHover__hide"}
+            class="showOnHover__hide"
             onClick={() => props.action$(CollectionSectionAction.RESYNC_COLLECTION)}
           >
             <CgSync />
           </Button>
-        </Tooltip>
+        </Tooltip> */}
       </div>
 
       <div class={section__itemList}>
