@@ -1,8 +1,11 @@
 import { useParams, useSearchParams } from "@solidjs/router";
+// ...
 import { css } from "molcss";
+import "./[galleryId].css"
 // ...
 import { ZoomAndPanProvider, ZoomDisplay } from "~/components";
-import { GalleryCurrentItem, GalleryItemDisplay, GalleryNav, GalleryProvider } from "~/features/gallery";
+import { GalleryItemDisplay, GalleryNav, GalleryProvider } from "~/features/gallery";
+import { useBodyClass } from "~/hooks";
 
 const gallery__page = css`
   width: 100%;
@@ -14,6 +17,8 @@ export default function GalleryPage() {
   const param = useParams()
   const [searchParam] = useSearchParams<{ directory?: string }>()
 
+  useBodyClass("galleryPage__active")
+
   return (
     <ZoomAndPanProvider>
       <GalleryProvider
@@ -22,7 +27,6 @@ export default function GalleryPage() {
       >
         <main class={gallery__page}>
           <GalleryNav />
-          <GalleryCurrentItem />
           <ZoomDisplay>
             <GalleryItemDisplay />
           </ZoomDisplay>

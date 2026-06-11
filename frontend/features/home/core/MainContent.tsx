@@ -13,7 +13,7 @@ import { MainPageTitlebar } from "../components"
 const titleBar = css`
   position: fixed;
   right: 0;
-  gap: 10;
+  gap: 10px;
 `
 
 const titleBar__withSidebar = css`
@@ -21,8 +21,8 @@ const titleBar__withSidebar = css`
 `
 
 const titleBar__noSidebar = css`
-  width: "100%";
-  padding-inline: 5;
+  width: 100%;
+  padding-inline: 5px;
 `
 
 export function MainContent() {

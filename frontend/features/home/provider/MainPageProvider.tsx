@@ -35,7 +35,11 @@ export function MainPageProvider(props: ParentProps<IMainPageProviderProps>) {
 
   createEffect(() => {
     const shouldShowSidebar = isShowingSidebar()
-    document.body.setAttribute("data-journal-home-show-sidebar", `${shouldShowSidebar}`)
+    if (shouldShowSidebar) {
+      document.body.classList.remove('journalHome__sidebar_hidden')
+    } else {
+      document.body.classList.add('journalHome__sidebar_hidden')
+    }
   })
 
   return (

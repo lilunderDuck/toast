@@ -23,7 +23,6 @@ const titleBar = css`
 
 const titleBar__button = css`
   outline: none;
-  background-color: transparent;
   width: var(--title-bar-thiccness);
   height: var(--title-bar-thiccness);
   display: flex;
@@ -31,6 +30,10 @@ const titleBar__button = css`
   align-items: center;
   color: var(--subtext0);
   border-radius: 0 !important;
+`
+
+const titleBar__firstbutton = css`
+  border-bottom-left-radius: 6px;
 `
 
 const titleBar__otherButton = css`
@@ -53,8 +56,8 @@ export function AppTitleBarButton() {
   const [isFullscreen, toggleFullscreen] = useToggle()
 
   return (
-    <div class={titleBar} id={__style.buttonRow}>
-      <div class={titleBar__otherButton}>
+    <div class={`${titleBar} appTitleBarButtonRow`} id={__style.buttonRow}>
+      <div class={`${titleBar__otherButton} ${titleBar__firstbutton} appTitleBarButtonRow__buttonWrapper`}>
         <button 
           class={titleBar__button}
           onClick={WindowMinimise}
@@ -62,7 +65,7 @@ export function AppTitleBarButton() {
           <img class="icon" src={minimizeIcon} draggable="false" />
         </button>
       </div>
-      <div class={titleBar__otherButton}>
+      <div class={`${titleBar__otherButton} appTitleBarButtonRow__buttonWrapper`}>
         <button
           class={titleBar__button}
           onClick={() => {
@@ -73,7 +76,7 @@ export function AppTitleBarButton() {
           <img class="icon" src={isFullscreen() ? restoreIcon : maximizeIcon} draggable="false" />
         </button>
       </div>
-      <div class={titleBar__closeButton}>
+      <div class={`${titleBar__closeButton} appTitleBarButtonRow__buttonWrapper`}>
         <button 
           class={titleBar__button}
           onClick={WindowClose}

@@ -9,6 +9,7 @@ export * from "./media"
 export * from "./useDocumentEventListener"
 export * from "./usePersistedSignal"
 export * from "./createSMTCHandlers"
+export * from "./useBodyClass"
 // ...
 export * from "./native"
 export * from "./lazy"
