@@ -132,7 +132,7 @@ func MoveFile(sourcePath string, destPath string) error {
 // Copies a file from a source to a destination.
 // It handles cases where the destination directory does not exist and ensures
 // a destination file with the same name is not overwritten by creating a new, unique name.
-func CopyFile(source, destinationPath string) error {
+func CopyFile(source, destinationPath string) (outFilePath string, copyError error) {
 	if debug.DEBUG_MODE {
 		debug.InfoLabelf("file", "Coping file.\nsource:\t%s\ndest:\t%s", source, destinationPath)
 	}
@@ -142,7 +142,7 @@ func CopyFile(source, destinationPath string) error {
 		if debug.DEBUG_MODE {
 			debug.ErrLabel("file", err)
 		}
-		return err
+		return "", err
 	}
 	defer sourceFile.Close()
 
@@ -164,7 +164,7 @@ func CopyFile(source, destinationPath string) error {
 				debug.ErrLabel("file", err)
 			}
 
-			return err
+			return "", err
 		}
 	}
 
@@ -173,7 +173,7 @@ func CopyFile(source, destinationPath string) error {
 		if debug.DEBUG_MODE {
 			debug.ErrLabel("file", err)
 		}
-		return err
+		return "", err
 	}
 	defer destinationFile.Close()
 
@@ -184,5 +184,5 @@ func CopyFile(source, destinationPath string) error {
 		}
 	}
 
-	return err
+	return destinationFilePath, err
 }

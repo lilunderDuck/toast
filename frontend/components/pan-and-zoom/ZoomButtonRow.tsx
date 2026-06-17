@@ -32,17 +32,31 @@ export function ZoomButtonRow(props: ParentProps) {
   return (
     <div {...stylex.attrs(style.wholeThing)}>
       <Tooltip label$="Reset to default zoom">
-        <Button size$={ButtonSize.ICON} onClick={reset$} disabled={internal$.zoomScale$() === 1}>
+        <Button 
+          size$={ButtonSize.ICON} 
+          variant$={ButtonVariant.NO_BACKGROUND} 
+          onClick={reset$} 
+          disabled={internal$.zoomScale$() === 1}
+        >
           <TbFillZoomCancel size={16} />
         </Button>
       </Tooltip>
       <Tooltip label$="Zoom out">
-        <Button size$={ButtonSize.ICON} onClick={unzoom$} disabled={internal$.zoomScale$() === 0}>
+        <Button 
+          size$={ButtonSize.ICON} 
+          variant$={ButtonVariant.NO_BACKGROUND} 
+          onClick={unzoom$} 
+          disabled={internal$.zoomScale$() === 0}
+        >
           <TbFillZoomOut size={16} />
         </Button>
       </Tooltip>
       <Tooltip label$="Zoom in">
-        <Button size$={ButtonSize.ICON} onClick={zoom$}>
+        <Button 
+          size$={ButtonSize.ICON} 
+          variant$={ButtonVariant.NO_BACKGROUND} 
+          onClick={zoom$}
+        >
           <TbFillZoomIn size={16} />
         </Button>
       </Tooltip>

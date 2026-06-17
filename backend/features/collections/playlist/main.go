@@ -1,40 +1,20 @@
 package playlist
 
 import (
-	"errors"
 	"toast/backend/db"
-	"toast/backend/debug"
+	"toast/backend/utils"
 )
 
 type Exports struct {
 	database *db.Instance
 }
 
-func (playlist *Exports) Playlist_init() {
-	if debug.DEBUG_MODE {
-		debug.InfoLabelf("playlist", "init")
-	}
-	instance, _ := db.Open(playlistsDbPath)
-	playlist.database = instance
-}
-
-func (playlist *Exports) Playlist_cleanup() {
-	if debug.DEBUG_MODE {
-		debug.InfoLabelf("playlist", "cleaning up...")
-	}
-	db.Close(playlistsDbPath)
-	playlist.database = nil
-}
-
-func (e *Exports) ensureDatabaseOpen() error {
-	if e.database == nil {
-		if debug.DEBUG_MODE {
-			debug.WarnLabel("playlist", "Database already closed!!! Attempting to re-init...")
-		}
-		e.Playlist_init()
-		if e.database == nil {
-			return errors.New("failed to restore database")
-		}
-	}
-	return nil
+func IsValidStructure(targetPath string) bool {
+	hasMetadataFiles :=
+		utils.IsFileExist(targetPath+"/entries.json") &&
+			utils.IsFileExist(targetPath+"/meta.json")
+	isPlaylistFolderStructure :=
+		utils.IsDirectoryExist(targetPath+"/icons") &&
+			utils.IsDirectoryExist(targetPath+"/tracks")
+	return hasMetadataFiles && isPlaylistFolderStructure
 }

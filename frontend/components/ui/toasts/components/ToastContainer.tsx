@@ -10,6 +10,7 @@ import {
 } from '../util'
 import { ToastBar } from './ToastBar'
 import __style from './Toaster.module.css'
+import type { Ref } from '~/utils'
 
 export const ToastContainer: Component<ToastContainerProps> = (props) => {
   const calculatePosition = () => {
@@ -35,9 +36,7 @@ export const ToastContainer: Component<ToastContainerProps> = (props) => {
   return (
     <div
       ref={el}
-      style={{
-        '--offset': positionStyle().offset
-      }}
+      style={`--offset:${positionStyle().offset}px`}
       class={`${props.toast.visible ? `${__style['sldt-active']} component-toast-visible` : 'component-toast-hidden'} ${positionStyle().class}`}
       onMouseEnter={() =>
         dispatch({

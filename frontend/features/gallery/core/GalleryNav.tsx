@@ -1,11 +1,11 @@
 import { css } from "molcss"
-import { BsArrowLeft, BsCaretLeftFill, BsCaretRightFill } from "solid-icons/bs"
+import { BsArrowLeft, BsCaretLeftFill, BsCaretRightFill, BsInfoCircleFill } from "solid-icons/bs"
 import { useGalleryContext } from "../provider"
-import { AppTitleBarDraggable, Button, ZoomButtonRow } from "~/components"
+import { AppTitleBarDraggable, Button, Tooltip, ZoomButtonRow } from "~/components"
 import { useNavigate } from "@solidjs/router"
 import { createEffect, Show } from "solid-js"
 import "./GalleryNav.css"
-import { useBodyClass, useBodyToggableClass } from "~/hooks"
+import { createLazyLoadedDialog, useBodyToggableClass } from "~/hooks"
 
 const nav__buttonNotInReducedMode = css`
   opacity: 0.2;
@@ -52,11 +52,8 @@ const nav__titleBarHidden = css`
   opacity: 0;
 `
 
-const nav__goBackToHomeButton = css`
-`
-
 export function GalleryNav() {
-  const { goToNextItem$, goToPrevItem$, shouldDisableNextBtn$, shouldDisablePrevBtn$, allControlsHidden$, currentItem$ } = useGalleryContext()
+  const { goToNextItem$, goToPrevItem$, shouldDisableNextBtn$, shouldDisablePrevBtn$, allControlsHidden$, currentItem$, currentItemIndex$, entries$ } = useGalleryContext()
   const redirect = useNavigate()
 
   const toggleClass = useBodyToggableClass("galleryPage__reducedMode")
@@ -65,17 +62,38 @@ export function GalleryNav() {
     toggleClass(allControlsHidden$())
   })
 
+  const GalleryCurrentItemInfoDialog = createLazyLoadedDialog(
+    () => import("../components/dialog/GalleryCurrentItemInfoDialog"),
+    () => ({
+      currentItemIndex$: currentItemIndex$(),
+      currentItem$: currentItem$()!,
+      totalItems$: entries$().length,
+    })
+  )
+
+
   return (
     <>
       <AppTitleBarDraggable class={`${nav__titleBar} ${allControlsHidden$() ? nav__titleBarHidden : ''}`}>
-        <Button size$={ButtonSize.ICON} variant$={ButtonVariant.NO_BACKGROUND} class={nav__goBackToHomeButton} onClick={() => redirect("/")}>
+        <Button 
+          size$={ButtonSize.ICON} 
+          variant$={ButtonVariant.NO_BACKGROUND} 
+          onClick={() => redirect("/")}
+        >
           <BsArrowLeft size={16} />
         </Button>
         <Show when={currentItem$()?.type !== 1}>
-          <Show when={!allControlsHidden$()}>
-            <ZoomButtonRow />
-          </Show>
+          <ZoomButtonRow />
         </Show>
+        <Tooltip label$="View information">
+          <Button 
+            size$={ButtonSize.ICON} 
+            variant$={ButtonVariant.NO_BACKGROUND} 
+            onClick={GalleryCurrentItemInfoDialog.show$}
+          >
+            <BsInfoCircleFill size={16} />
+          </Button>
+        </Tooltip>
       </AppTitleBarDraggable>
       <button class={`${nav__button} ${nav__leftButton} ${allControlsHidden$() ? nav__buttonInReducedMode : nav__buttonNotInReducedMode}`} disabled={shouldDisablePrevBtn$()} onClick={goToPrevItem$}>
         <BsCaretLeftFill size={30} />
@@ -83,6 +101,8 @@ export function GalleryNav() {
       <button class={`${nav__button} ${nav__rightButton} ${allControlsHidden$() ? nav__buttonInReducedMode : nav__buttonNotInReducedMode}`} disabled={shouldDisableNextBtn$()} onClick={goToNextItem$}>
         <BsCaretRightFill size={30} />
       </button>
+
+      <GalleryCurrentItemInfoDialog.Dialog$ />
     </>
   )
 }

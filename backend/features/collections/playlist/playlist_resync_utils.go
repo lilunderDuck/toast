@@ -72,10 +72,6 @@ func (playlist *Exports) Playlist_resyncTrackDuration(playlistId string) (*Updat
 }
 
 func (playlist *Exports) Playlist_resyncAll() ([]PlaylistData, error) {
-	if err := playlist.ensureDatabaseOpen(); err != nil {
-		return nil, err
-	}
-
 	if debug.DEBUG_MODE {
 		debug.InfoLabel("playlist", "Start updating existing playlist metadata")
 	}

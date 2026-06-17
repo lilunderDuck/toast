@@ -143,9 +143,9 @@
   },
   {
     "type": "enum",
-    "name": "CollectionSectionAction",
+    "name": "CollectionExternalSectionAction",
     "members": [
-      "RESYNC_COLLECTION"
+      "CHECK_FOR_AVAILABILITY"
     ]
   },
   {

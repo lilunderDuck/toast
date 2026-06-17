@@ -75,3 +75,5 @@ export interface IActionHandler<T> {
    */
   action$(type: T): any
 }
+
+export type ActionHandlerFn<T> = IActionHandler<T>["action$"]

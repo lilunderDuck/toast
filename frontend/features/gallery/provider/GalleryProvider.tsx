@@ -14,6 +14,7 @@ interface IGalleryContext {
   goToNextItem$(): void
   goToPrevItem$(): void
   currentItem$: Accessor<gallery.GalleryItemData | undefined>
+  currentItemIndex$: Accessor<number>
 
   shouldDisableNextBtn$: Accessor<boolean>
   shouldDisablePrevBtn$: Accessor<boolean>
@@ -80,7 +81,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   }
 
   const updateButtonsState = () => {
-    setShouldDisableNextBtn(currentItemIndex() + 1 === entries().length)
+    setShouldDisableNextBtn(currentItemIndex() === entries().length - 1)
     setShouldDisablePrevBtn(currentItemIndex() === 0)
   }
 
@@ -143,6 +144,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
       goToNextItem$: goToNextItem,
       goToPrevItem$: goToPrevItem,
       currentItem$: currentItem,
+      currentItemIndex$: currentItemIndex,
       shouldDisableNextBtn$: shouldDisableNextBtn,
       shouldDisablePrevBtn$: shouldDisablePrevBtn,
       allControlsHidden$: allControlsHidden,

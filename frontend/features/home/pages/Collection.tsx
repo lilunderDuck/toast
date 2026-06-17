@@ -1,7 +1,7 @@
 import { createSignal, For, onMount, Show } from "solid-js"
+import { DEBUG_ASSERT, DEBUG_INFO_LABEL } from "macro-def"
 import { RiMediaGalleryFill, RiMediaPlayList2Fill } from "solid-icons/ri"
 import { FaSolidExternalLinkAlt } from "solid-icons/fa"
-import { MdRoundWarning } from "solid-icons/md"
 import { BsPlus } from "solid-icons/bs"
 // ...
 import { css } from "molcss"
@@ -9,11 +9,12 @@ import "../core/MainPageRoot.css"
 // ...
 import type { collections } from "~/wailsjs/go/models"
 import { playlistIconUrl } from "~/features/playlist/api"
-import { Collections_getAll } from "~/wailsjs/go/collections/Exports"
+import { Collections_checkExternalAvailability, Collections_getAll } from "~/wailsjs/go/collections/Exports"
 import { createLazyLoadedDialog } from "~/hooks"
-import { COLLECTION_TYPE_MAGIC_MAPPING, COLLECTION_TYPE_NAME_MAPPING, previewUrl } from "~/api"
+import { ASSETS_SERVER_URL, COLLECTION_TYPE_MAGIC_MAPPING, COLLECTION_TYPE_NAME_MAPPING } from "~/api"
+import type { ActionHandlerFn } from "~/utils"
 // ...
-import { CollectionCreateButton, CollectionItem, CollectionSection } from "../components"
+import { CollectionCreateButton, CollectionExternalSectionButtonRow, CollectionExternalSectionDescription, CollectionItem, CollectionSection } from "../components"
 
 const collection = css`
   width: 100%;
@@ -25,30 +26,39 @@ const collection__extraSpaces = css`
   height: 10rem;
 `
 
-const collection__externalSourcesNoteWrap = css`
-  padding-top: 15px;
-`
-
-const collection__externalSourcesNote = css`
-  color: var(--peach);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-`
-
 export default function Collection() {
   const [collections, setCollections] = createSignal<collections.CollectionsData | null>(null)
+  const [collectionAvailableMap, setCollectionAvailableMap] = createSignal<Record<string, boolean> | null>(null)
+
   onMount(async() => {
+    await checkIfAvailable()
     setCollections(await Collections_getAll())
+    DEBUG_INFO_LABEL("home", "collection data fetched", collections())
   })
+
+  const checkIfAvailable = async() => {
+    setCollectionAvailableMap(await Collections_checkExternalAvailability())
+    DEBUG_INFO_LABEL("home", "checked all external collections availability, result:", collectionAvailableMap())
+    DEBUG_ASSERT(collectionAvailableMap(), "available map returns an invalid type: null")
+  }
+
+  const sectionActionHandler: ActionHandlerFn<CollectionExternalSectionAction> = (type) => {
+    switch (type) {
+      case CollectionExternalSectionAction.CHECK_FOR_AVAILABILITY:
+        checkIfAvailable()
+      break;
+    }
+  }
 
   const OpenExternalCollectionDialog = createLazyLoadedDialog(
     () => import("../components/dialog/OpenExternalCollectionDialog")
   )
 
   const externalCollectionUrl = (data: collections.CollectionExternalSourceData) =>
-    `/collection/${COLLECTION_TYPE_NAME_MAPPING[data.type]}/${COLLECTION_TYPE_MAGIC_MAPPING[data.type]}?directory=${encodeURI(data.collectionPath)}` as const
+    `/collection/${COLLECTION_TYPE_NAME_MAPPING[data.type as CollectionType]}/${COLLECTION_TYPE_MAGIC_MAPPING[data.type as CollectionType]}?directory=${encodeURI(data.collectionPath)}` as const
   // ...
+
+  const iconUrl = (iconFileName: string) => `${ASSETS_SERVER_URL}/local-assets/cache/${iconFileName}` as const
 
   return (
     <main class={`${collection} journalHome__mainContent scrollbar scrollbarVertical invsScrollbar`}>
@@ -56,7 +66,6 @@ export default function Collection() {
       <CollectionSection
         icon$={RiMediaPlayList2Fill} 
         label$="Playlist" 
-        action$={() => {}}
       >
         <Show when={collections()?.playlists}>
           <For each={collections()!.playlists}>
@@ -76,7 +85,6 @@ export default function Collection() {
       <CollectionSection
         icon$={RiMediaGalleryFill} 
         label$="Gallery" 
-        action$={() => {}}
       >
         <Show when={collections()?.galleries}>
           <For each={collections()?.galleries}>
@@ -96,29 +104,18 @@ export default function Collection() {
       <CollectionSection
         icon$={FaSolidExternalLinkAlt} 
         label$="External sources" 
-        description$={<>
-          Collections opened outside the app will be saved here. 
-          
-          <p class={collection__externalSourcesNoteWrap}>
-            <span class={collection__externalSourcesNote}>
-              <MdRoundWarning />
-              Note:
-            </span> 
-            If a collection is moved or renamed on your drive, 
-            <br />
-            you have to re-imported it.
-          </p>
-        </>}
-        action$={() => {}}
+        description$={<CollectionExternalSectionDescription />}
+        labelTools$={<CollectionExternalSectionButtonRow action$={sectionActionHandler} />}
       >
         <Show when={collections()?.externalSources}>
           <For each={collections()?.externalSources}>
             {it => (
               <CollectionItem 
                 href$={externalCollectionUrl(it)}
-                iconUrl$={previewUrl(it.icon)}
+                iconUrl$={iconUrl(it.icon)}
                 name$={it.name}
                 tooltipLabel$={it.name}
+                isAvailable$={collectionAvailableMap()![it.id]}
               />
             )}
           </For>

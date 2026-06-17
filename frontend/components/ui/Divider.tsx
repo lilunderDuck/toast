@@ -1,9 +1,9 @@
 import { css } from "molcss"
 
 const divider = css`
-  padding-block: 5px;
   width: 100%;
   background-color: var(--divider-color);
+  border-radius: 6px;
 `
 
 const divider__lineHorizontal = css`

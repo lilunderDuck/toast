@@ -43,7 +43,8 @@ func (playlist *Exports) Playlist_createTrack(id string, option PlaylistCreateTr
 		// ...
 
 		if !isInsideThisPlaylistFolder {
-			if err := utils.CopyFile(option.IconPath, trackIconPath); err != nil {
+			_, err := utils.CopyFile(option.IconPath, trackIconPath)
+			if err != nil {
 				if debug.DEBUG_MODE {
 					debug.ErrLabel("playlist", err)
 				}
@@ -54,7 +55,8 @@ func (playlist *Exports) Playlist_createTrack(id string, option PlaylistCreateTr
 	}
 
 	trackPath := getTrackPath(id, "")
-	if err := utils.CopyFile(option.TrackPath, trackPath); err != nil {
+	_, err := utils.CopyFile(option.TrackPath, trackPath)
+	if err != nil {
 		if debug.DEBUG_MODE {
 			debug.ErrLabel("playlist", err)
 		}

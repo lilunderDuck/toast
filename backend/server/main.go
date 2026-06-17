@@ -11,7 +11,7 @@ import (
 
 var allowedToServeMap = map[string]uint8{
 	"data":  http.StatusAccepted,
-	"media": http.StatusAccepted,
+	"cache": http.StatusAccepted,
 }
 
 // Start the local journal assets server.

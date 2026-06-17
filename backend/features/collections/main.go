@@ -1,7 +1,10 @@
 package collections
 
 import (
+	"path/filepath"
+	"toast/backend/core/internals"
 	"toast/backend/debug"
+	"toast/backend/features/collections/gallery"
 	"toast/backend/features/collections/playlist"
 	"toast/backend/utils"
 )
@@ -71,21 +74,73 @@ const (
 )
 
 func (*Exports) Collections_judgeTypeByPath(targetPath string) CollectionType {
-	hasMetadataFiles :=
-		utils.IsFileExist(targetPath+"/entries.json") &&
-			utils.IsFileExist(targetPath+"/meta.json")
-	isPlaylistFolderStructure :=
-		utils.IsDirectoryExist(targetPath+"/icons") &&
-			utils.IsDirectoryExist(targetPath+"/tracks")
-	if hasMetadataFiles && isPlaylistFolderStructure {
+	if playlist.IsValidStructure(targetPath) {
 		return COLLECTION_TYPE__PLAYLIST
 	}
 
-	isGalleryFolderStructure := utils.IsDirectoryExist(targetPath + "/entry")
-
-	if hasMetadataFiles && isGalleryFolderStructure {
+	if gallery.IsValidStructure(targetPath) {
 		return COLLECTION_TYPE__GALLERY
 	}
 
 	return COLLECTION_TYPE__INVALID
+}
+
+func (*Exports) Collections_createExternal(targetPath string) (*CollectionExternalSourceData, error) {
+	data := CollectionExternalSourceData{
+		CollectionPath: targetPath,
+	}
+
+	cachedIconPath := ""
+
+	if gallery.IsValidStructure(targetPath) {
+		galleryData, err := gallery.ReadMetadata(targetPath)
+		if err != nil {
+			return nil, err
+		}
+
+		cachedIconPath, err = utils.CopyFile(
+			filepath.Join(targetPath, galleryData.Icon),
+			internals.CACHE_FOLDER_PATH,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		data.Id = galleryData.Id
+		data.Name = galleryData.Name
+		data.Type = COLLECTION_TYPE__GALLERY
+		data.Icon = filepath.Base(cachedIconPath)
+	}
+
+	return &data, nil
+}
+
+type CollectionExternalAvailabilityMap map[string]bool
+
+func (this *Exports) Collections_checkExternalAvailability() (*CollectionExternalAvailabilityMap, error) {
+	data, err := this.Collections_getAll()
+	if err != nil {
+		return nil, err
+	}
+
+	result := make(CollectionExternalAvailabilityMap)
+	if len(data.ExternalSources) == 0 {
+		return &result, nil
+	}
+
+	for _, externalCollection := range data.ExternalSources {
+		isAvailable := utils.IsDirectoryExist(externalCollection.CollectionPath)
+		if debug.DEBUG_MODE {
+			debug.InfoLabelf("collections", "Is %s available?: %t", debug.FormatPath(externalCollection.CollectionPath), isAvailable)
+		}
+
+		result[externalCollection.Id] = isAvailable
+	}
+
+	return &result, nil
+}
+
+func (this *Exports) Collections_isExternalCollectionAvailable(path string) bool {
+	return utils.IsDirectoryExist(path)
 }

@@ -33,6 +33,13 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
   const [currentVolume, setCurentVolume] = createSignal(100)
   const [isMuted, setIsMuted] = createSignal(false)
 
+  // flag to make sure that the media player does not update
+  // if we call changeCurrentTime(newTime, false /* don't update */)
+  //
+  // this is because if we have a slider and you try to drag it, the
+  // current time will be flickering between the updated time and the current progress.
+  let shouldUpdateCurrentTime = true
+
   if (TOAST_DEBUG) {
     const stateMapping: Record<MediaState, string> = {
       [MediaState.COMPLETED]: 'MediaState.COMPLETED',
@@ -86,7 +93,11 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
     onTimeUpdate() {
       const currentMediaTime = mediaRef.currentTime
 
-      setCurrentProgress(currentMediaTime)
+      if (shouldUpdateCurrentTime) {
+        setCurrentProgress(currentMediaTime)
+      } else {
+        DEBUG_INFO_LABEL("media player", "current time won't be updated, ")
+      }
 
       const duration = mediaRef.duration
       const buffered = mediaRef.buffered
@@ -171,6 +182,7 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
 
   const changeCurrentTime = (time: number, update = true) => {
     setCurrentProgress(time)
+    shouldUpdateCurrentTime = update
     if (update) {
       mediaRef.currentTime = time
       DEBUG_INFO_LABEL("media player", "current time changed to", time, "seconds")

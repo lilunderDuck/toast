@@ -1,8 +1,11 @@
 import { useNavigate } from "@solidjs/router"
+import { DEBUG_INFO_LABEL, DEBUG_WARN_LABEL } from "macro-def"
 // ...
 import { css } from "molcss"
 // ...
-import { Tooltip } from "~/components"
+import { toast, Tooltip } from "~/components"
+// ...
+import { CollectionNotAvailableToast } from "../toast"
 
 const item = css`
   width: 9rem;
@@ -15,6 +18,10 @@ const item = css`
   &:hover {
     outline-color: var(--sapphire);
   }
+`
+
+const item__notAvailable = css`
+  opacity: 0.5;
 `
 
 const item__name = css`
@@ -40,17 +47,32 @@ interface ICollectionItemProps {
   href$: string
   tooltipLabel$: string
   name$: string
+  isAvailable$?: boolean
 }
 
 export function CollectionItem(props: ICollectionItemProps) {
   const redirect = useNavigate()
 
+  const redirectIfCan = () => {
+    if (props.isAvailable$) {
+      DEBUG_INFO_LABEL("home", `fast redirect to:`, props.href$)
+      redirect(props.href$)
+      return
+    }
+
+    DEBUG_WARN_LABEL("home", `refused to redirect, collection "${props.name$}" is not available now.\n\nnote: Did you forget to set the isAvailable$ props? if so, don't forget to put isAvailable$ into <CollectionItem /> component.`)
+    toast.custom(CollectionNotAvailableToast, {
+      position: ToastPosition.BOTTOM_RIGHT
+    })
+  }
+
   return (
     <Tooltip label$={props.tooltipLabel$}>
       <button
-        class={item}
-        style={`--icon-url:url("${`${props.iconUrl$}`}")`}
-        onClick={() => redirect(props.href$)}
+        class={`${item} ${!props.isAvailable$ ? item__notAvailable : ""}`}
+        style={`--icon-url:url("${props.iconUrl$}")`}
+        onClick={redirectIfCan}
+        aria-disabled={!props.isAvailable$}
       >
         <div class={item__backgroundWrap} />
         <div class={item__name}>
