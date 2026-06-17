@@ -102,7 +102,6 @@
     "name": "MediaState",
     "members": [
       "LOADING",
-      "FINISHED_LOADING",
       "PLAYING",
       "PAUSED",
       "ERROR",

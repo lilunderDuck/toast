@@ -8,3 +8,13 @@
   --front-face-color: #ff78d0;
   --back-face-color: #ff5e81;
 }
+
+@keyframes cube__spinningAnimation {
+  0% {
+    transform: rotateX(-20deg) rotateY(20deg);
+  }
+
+  100% {
+    transform: rotateX(-20deg) rotateY(740deg);
+  }
+}

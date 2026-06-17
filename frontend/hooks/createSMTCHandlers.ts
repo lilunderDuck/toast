@@ -1,4 +1,4 @@
-import { DEBUG_INFO_LABEL } from "macro-def"
+import { DEBUG_ASSERT, DEBUG_INFO_LABEL } from "macro-def"
 import { onCleanup } from "solid-js"
 
 /**This is a hook allowing you to 
@@ -15,7 +15,7 @@ export function createSMTCHandlers(options: {
   nextTrackHandler$: MediaSessionActionHandler
   previousTrackHandler$: MediaSessionActionHandler
 }) {
-  console.assert('mediaSession' in navigator, "the current version of webview does not support MediaSession api.")
+  DEBUG_ASSERT('mediaSession' in navigator, "the current version of webview does not support MediaSession api.")
 
   DEBUG_INFO_LABEL("SMTC", "registered handlers")
   navigator.mediaSession.setActionHandler("play", options.playHandler$)

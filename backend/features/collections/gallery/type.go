@@ -8,7 +8,15 @@ type GalleryData struct {
 }
 
 type GalleryItemData struct {
-	FileName    string `json:"fileName"`
-	Id          string `json:"id"`
-	Description string `json:"description,omitempty"`
+	FileName    string                     `json:"fileName"`
+	Id          string                     `json:"id"`
+	Name        string                     `json:"name,omitempty"`
+	Type        byte                       `json:"type"`
+	Description string                     `json:"description,omitempty"`
+	Subtitles   []GalleryVideoSubtitleData `json:"subtitles,omitempty"`
+}
+
+type GalleryVideoSubtitleData struct {
+	Lang     string `json:"lang,omitempty"`
+	FileName string `json:"fileName"`
 }

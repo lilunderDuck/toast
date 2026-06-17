@@ -8,7 +8,7 @@ const cube__bound = css`
 
 const cube = css`
   transform-style: preserve-3d;
-  animation: cube__spinning 3s linear infinite;
+  animation: cube__spinningAnimation 3s linear infinite;
   position: relative;
   top: 50%;
   left: 50%;

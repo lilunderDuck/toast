@@ -13,6 +13,11 @@ const placeholderView = css`
   user-select: none;
 `
 
+const placeholderView__text = css`
+  max-width: 50%;
+  text-align: center;
+`
+
 interface IPlaceholderViewProps {
   icons$: JSX.Element
   class?: string
@@ -24,7 +29,9 @@ export function PlaceholderView(props: ParentProps<IPlaceholderViewProps>) {
       <span>
         {props.icons$}
       </span>
-      <div>{props.children}</div>
+      <p class={placeholderView__text}>
+        {props.children}
+      </p>
     </div>
   )
 }

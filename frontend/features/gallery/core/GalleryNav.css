@@ -1,0 +1,7 @@
+.galleryPage__reducedMode .appTitleBarButtonRow__buttonWrapper {
+  opacity: 0;
+}
+
+.galleryPage__reducedMode .appTitleBarButtonRow:hover .appTitleBarButtonRow__buttonWrapper {
+  opacity: 1;
+}

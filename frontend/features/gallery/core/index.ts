@@ -1,2 +1,2 @@
 export * from "./GalleryNav"
-export * from "./GalleryCurrentItem"
+export * from "./GalleryItemDisplay"
