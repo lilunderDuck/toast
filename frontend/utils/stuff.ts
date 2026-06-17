@@ -51,12 +51,3 @@ export function formatDate(date: Date) {
 export function formatSecondsToMMSS(seconds: number) {
   return new Date(seconds * 1000).toISOString().substr(11, 8)
 }
-
-export function getMediaCurrentPercentage(currentProgressInSeconds: number, mediaTotalDuration: number) {
-  const progress = (currentProgressInSeconds / mediaTotalDuration) * 100
-  return isNaN(progress) ? 0 : progress
-}
-
-export function getMediaCurrentTimeByPercentage(inPercentage: number, mediaTotalDuration: number) {
-  return mediaTotalDuration * (inPercentage / 100)
-}

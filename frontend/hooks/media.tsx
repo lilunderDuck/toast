@@ -1,6 +1,6 @@
 import { createEffect, createSignal, onCleanup } from "solid-js"
 // ...
-import { getMediaCurrentPercentage, getMediaCurrentTimeByPercentage, type HTMLAttributes, type Ref } from "~/utils" // documentation only
+import { type HTMLAttributes, type Ref } from "~/utils" // documentation only
 import { MediaProgressSlider } from "~/components" // documentation only
 import { DEBUG_ASSERT, DEBUG_ERR_LABEL, DEBUG_INFO_LABEL } from "macro-def"
 

@@ -3,7 +3,7 @@ import { BsPauseFill, BsPlayFill } from "solid-icons/bs"
 import { useVideoContext } from "./Video"
 import { Show } from "solid-js"
 import { MediaProgressSlider } from "../short-hands"
-import { formatSecondsToMMSS, getMediaCurrentPercentage, getMediaCurrentTimeByPercentage } from "~/utils"
+import { formatSecondsToMMSS } from "~/utils"
 import { DEBUG_INFO_LABEL } from "macro-def"
 
 const videoControls = css`
@@ -43,7 +43,7 @@ const videoControls__time = css`
 
 export default function VideoControls() {
   const { videoPlayer$ } = useVideoContext()
-  const { state$, play$, pause$, bufferedProgress$, currentProgress$, totalDuration$, changeCurrentTime$ } = videoPlayer$
+  const { state$, play$, pause$, currentProgress$, totalDuration$ } = videoPlayer$
 
   const togglePlayVideo = () => {
     if (state$() === MediaState.PLAYING) {
@@ -72,16 +72,7 @@ export default function VideoControls() {
       <div class={videoControls__time}>
         {formatSecondsToMMSS(currentProgress$())}
       </div>
-      <MediaProgressSlider 
-        bufferedProgress$={bufferedProgress$()} 
-        progress$={getMediaCurrentPercentage(currentProgress$(), totalDuration$())}
-        onChange$={(progress) => {
-          changeCurrentTime$(getMediaCurrentTimeByPercentage(progress, totalDuration$()), true)
-        }}
-        onSliding$={(progress) => {
-          changeCurrentTime$(getMediaCurrentTimeByPercentage(progress, totalDuration$()), false)
-        }}
-      />
+      <MediaProgressSlider player$={videoPlayer$} />
       <div class={videoControls__time}>
         {formatSecondsToMMSS(totalDuration$())}
       </div>

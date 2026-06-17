@@ -1,6 +1,6 @@
 import { css } from "molcss"
 // ...
-import { formatSecondsToMMSS, getMediaCurrentPercentage, getMediaCurrentTimeByPercentage } from "~/utils"
+import { formatSecondsToMMSS } from "~/utils"
 import { MediaProgressSlider } from "~/components"
 // ...
 import { usePlaylistContext } from "../../provider"
@@ -28,13 +28,7 @@ export function PlaylistProgress() {
         {formatSecondsToMMSS(player$.currentProgress$())}
       </span>
       <MediaProgressSlider 
-        bufferedProgress$={player$.bufferedProgress$()}
-        onChange$={(percent) => {
-          player$.changeCurrentTime$(
-            getMediaCurrentTimeByPercentage(percent, player$.totalDuration$())
-          )
-        }}
-        progress$={getMediaCurrentPercentage(player$.currentProgress$(), player$.totalDuration$())}
+        player$={player$}
         disabled={!currentTrack$()}
       />
       <span class={player__progressTime}>
