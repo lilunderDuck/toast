@@ -2,7 +2,7 @@ import { createEffect, createSignal, onCleanup } from "solid-js"
 // ...
 import { type HTMLAttributes, type Ref } from "~/utils" // documentation only
 import { MediaProgressSlider } from "~/components" // documentation only
-import { DEBUG_ASSERT, DEBUG_ERR_LABEL, DEBUG_INFO_LABEL } from "macro-def"
+import { DEBUG_ASSERT, DEBUG_ERR_LABEL, DEBUG_INFO_LABEL, DEBUG_WARN_LABEL } from "macro-def"
 
 type MediaPlayerProps = Omit<
   HTMLAttributes<"audio" | "video">,
@@ -17,12 +17,19 @@ interface IMediaPlayerListener {
 // oh god, how many time do I have to look at my mess here...
 // I think I'm going insane
 
-/**
- * @param type 
- * @param listener
- * @see {@link MediaProgressSlider} - Helper component to handle seeking and stuff
- * @see {@link getMediaCurrentPercentage}
- * @see {@link getMediaCurrentTimeByPercentage}
+const ERROR_MESSAGE_MAPPING: Record<MediaNetworkState, string> = {
+  [MediaNetworkState.NETWORK_EMPTY]: "NETWORK_EMPTY: there's no data yet.",
+  [MediaNetworkState.NETWORK_IDLE]: "NETWORK_IDLE: the audio/video is currently not using the network.",
+  [MediaNetworkState.NETWORK_LOADING]: "NETWORK_LOADING: current audio/video is still loading.",
+  [MediaNetworkState.NETWORK_NO_SOURCE]: "NETWORK_NO_SOURCE: The audio/video is corrupted or in a unsupported format, or the src is not found.",
+}
+
+/**A hook for that abstracts raw HTML5 `<audio>` and `<video>` elements and handles 
+ * media event states and a lot of black magic.
+ * @param type      the type of media element, can be `"audio"` or `"video"`
+ * @param listener  optional event listener to listen to some events, see {@link IMediaPlayerListener}
+ * @see {@link MediaProgressSlider} - helper component to see the current progress of 
+ * the media player and handle seeking.
  * @returns 
  */
 export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IMediaPlayerListener>) {
@@ -32,6 +39,8 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
   const [currentProgress, setCurrentProgress] = createSignal(0)
   const [currentVolume, setCurentVolume] = createSignal(100)
   const [isMuted, setIsMuted] = createSignal(false)
+
+  DEBUG_ASSERT(type == "audio" || type == "video", "invalid media player type:", type)
 
   // flag to make sure that the media player does not update
   // if we call changeCurrentTime(newTime, false /* don't update */)
@@ -79,15 +88,12 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
       setMediaState(MediaState.COMPLETED)
     },
     onError() {
-      DEBUG_ASSERT(mediaRef, "accessing mediaRef too early!!")
+      DEBUG_ASSERT(mediaRef, "NullPointerException: accessing mediaRef too early!!")
       DEBUG_ERR_LABEL("media player", "ERROR DURING MOD, I mean... VIDEO... LOADING\n", "networkState:", mediaRef.networkState)
 
-      switch (mediaRef.networkState) {
-        case 3: // MEDIA_ERR_DECODE
-          detailErrorMessage = `MEDIA_ERR_DECODE: The audio/video is corrupted or in a unsupported format`
-        break;
-      }
-      
+      detailErrorMessage = ERROR_MESSAGE_MAPPING[mediaRef.networkState as MediaNetworkState]
+      DEBUG_ASSERT(detailErrorMessage, "could not get the detail error message for networkState", mediaRef.networkState, ", case is not being handled or invalid.")
+
       setMediaState(MediaState.ERROR)
     },
     onTimeUpdate() {
@@ -96,7 +102,7 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
       if (shouldUpdateCurrentTime) {
         setCurrentProgress(currentMediaTime)
       } else {
-        DEBUG_INFO_LABEL("media player", "current time won't be updated, ")
+        DEBUG_INFO_LABEL("media player", "current time won't be updated")
       }
 
       const duration = mediaRef.duration
@@ -162,7 +168,7 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
       DEBUG_INFO_LABEL("media player", "playing", mediaRef.src)
     } catch (error: any) {
       if (error.name === "AbortError") {
-        DEBUG_INFO_LABEL("media player", "play request safely aborted by a newer load request.")
+        DEBUG_WARN_LABEL("media player", "play request safely aborted by a newer load request.")
         return
       }
 
@@ -172,7 +178,7 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
 
   const changeVolume = (volume: number) => {
     DEBUG_ASSERT(!isNaN(volume), "volume is not a number")
-    DEBUG_ASSERT(volume >= 0 && volume <= 100, "volume must not be negative and must not over 100. Your current volume is: " + volume)
+    DEBUG_ASSERT(volume >= 0 && volume <= 100, "volume must not be negative and must not over 100. Your current volume is:", volume)
 
     mediaRef.volume = volume / 100
     setCurentVolume(volume)
@@ -202,20 +208,58 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
   })
 
   return {
+    /**The current state of the media player. All possible state can be:
+     * ```
+     * MediaState.LOADING
+     * MediaState.PLAYING
+     * MediaState.PAUSED
+     * MediaState.ERROR
+     * MediaState.COMPLETED
+     * ```
+     */
     state$: mediaState,
+    /**The total length of the current media file in seconds. */
     totalDuration$: duration,
+    /**The buffered (downloaded) **in percentage** of the media file, from `0` to `100`. */
     bufferedProgress$: buffered,
+    /**The current playback timestamp of the media file in seconds. */
     currentProgress$: currentProgress,
+    /**Changes the current playback timestamp.
+     * @param time    the new timestamp in seconds.
+     * @param update  set to `false` during slider dragging to temporarily prevent updating current media time.
+     */
     changeCurrentTime$: changeCurrentTime,
+    /**Pauses the current media player */
     pause$: pause,
+    /**Plays/Resumes media playback */
     play$: play,
+    /**Sets the media volume.
+     * @param volume A value from `0` (muted) to `100` (full volume).
+     */
     setVolume$: changeVolume,
+    /**Switches the media player source URL and resets current progress.
+     * @param src the URL of the new audio or video file.
+     */
     changeSource$: changeSource,
+    /**Gets the direct underlying HTML5 `<audio>` or `<video>` element reference. */
     ref$: () => mediaRef,
+    /**Gets the current volume level. */
     volume$: currentVolume,
+    /**Reactive boolean indicating whether the player is currently muted. */
     isMuted$: isMuted,
+    /**Toggles the media player to be muted. */
     toggleMute$: toggleMute,
+    /**Gets the detailed error message if `state$` enters `MediaState.ERROR` state.*/
     errorMessage$: () => detailErrorMessage,
+    /**The SolidJS JSX Component wrapper. Automatically handles DOM references and binding event listeners.
+     * @example
+     * ```tsx
+     * const player = createMediaPlayer("video")
+     * // ... do something with the player ...
+     * 
+     * <player.Player$ src="video.mp4" class="my-video-style" />
+     * ```
+     */
     Player$: (props: MediaPlayerProps) => (
       type == "audio" ?
         // @ts-ignore

@@ -42,7 +42,7 @@ export default function Note() {
 
   return (
     <main class={`${section} journalHome__mainContent`}>
-      <h1>Notes collection</h1>
+      <h1>Notes</h1>
       <header class={section__header}>
         <CreateNoteButton />
         <TagListButton />
@@ -62,7 +62,7 @@ export default function Note() {
             icons$={<MdOutlineFilter_list_off size="4.5rem" />}
             class={section__emptyNoteView}
           >
-            No journal here, try creating a new journal.
+            No notes here, try creating a new note.
           </PlaceholderView>
         </Show>
       </Show>
