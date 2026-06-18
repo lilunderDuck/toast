@@ -17,28 +17,21 @@ const note__list = css`
 `
 
 export default function StickyNotes() {
-  const NoteList = () => {
-    const { data$ } = useStickyNotesContext()
-    return (
-      <For each={data$()}>
-        {it => (
-          <StickyNoteProvider data$={it}>
-            <StickyNoteBlock />
-          </StickyNoteProvider>
-        )}
-      </For>
-    )
-  }
+  const { data$ } = useStickyNotesContext()
 
   return (
-    <StickyNotesProvider>
-      <main class="journalHome__mainContent">
-        <h1>Sticky notes</h1>
-        <div class={note__list}>
-          <NoteList />
-          <StickyNoteCreateButton />
-        </div>
-      </main>
-    </StickyNotesProvider>
+    <main class="journalHome__mainContent">
+      <h1>Sticky notes</h1>
+      <div class={note__list}>
+        <For each={data$()}>
+          {it => (
+            <StickyNoteProvider data$={it}>
+              <StickyNoteBlock />
+            </StickyNoteProvider>
+          )}
+        </For>
+        <StickyNoteCreateButton />
+      </div>
+    </main>
   )
 }

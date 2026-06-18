@@ -1,5 +1,4 @@
-import { createSignal, For, onMount, Show } from "solid-js"
-import { DEBUG_ASSERT, DEBUG_INFO_LABEL } from "macro-def"
+import { For, Show } from "solid-js"
 import { RiMediaGalleryFill, RiMediaPlayList2Fill } from "solid-icons/ri"
 import { FaSolidExternalLinkAlt } from "solid-icons/fa"
 import { BsPlus } from "solid-icons/bs"
@@ -9,12 +8,12 @@ import "../core/MainPageRoot.css"
 // ...
 import type { collections } from "~/wailsjs/go/models"
 import { playlistIconUrl } from "~/features/playlist/api"
-import { Collections_checkExternalAvailability, Collections_getAll } from "~/wailsjs/go/collections/Exports"
 import { createLazyLoadedDialog } from "~/hooks"
 import { ASSETS_SERVER_URL, COLLECTION_TYPE_MAGIC_MAPPING, COLLECTION_TYPE_NAME_MAPPING } from "~/api"
 import type { ActionHandlerFn } from "~/utils"
 // ...
 import { CollectionCreateButton, CollectionExternalSectionButtonRow, CollectionExternalSectionDescription, CollectionItem, CollectionSection } from "../components"
+import { useCollectionPageContext } from "../provider/CollectionPageProvider"
 
 const collection = css`
   width: 100%;
@@ -27,31 +26,22 @@ const collection__extraSpaces = css`
 `
 
 export default function Collection() {
-  const [collections, setCollections] = createSignal<collections.CollectionsData | null>(null)
-  const [collectionAvailableMap, setCollectionAvailableMap] = createSignal<Record<string, boolean> | null>(null)
-
-  onMount(async() => {
-    await checkIfAvailable()
-    setCollections(await Collections_getAll())
-    DEBUG_INFO_LABEL("home", "collection data fetched", collections())
-  })
-
-  const checkIfAvailable = async() => {
-    setCollectionAvailableMap(await Collections_checkExternalAvailability())
-    DEBUG_INFO_LABEL("home", "checked all external collections availability, result:", collectionAvailableMap())
-    DEBUG_ASSERT(collectionAvailableMap(), "available map returns an invalid type: null")
-  }
+  const context = useCollectionPageContext()
+  const { collections$, collectionAvailableMap$, checkIfExternalCollectionAvailable$ } = context
 
   const sectionActionHandler: ActionHandlerFn<CollectionExternalSectionAction> = (type) => {
     switch (type) {
       case CollectionExternalSectionAction.CHECK_FOR_AVAILABILITY:
-        checkIfAvailable()
+        checkIfExternalCollectionAvailable$()
       break;
     }
   }
 
   const OpenExternalCollectionDialog = createLazyLoadedDialog(
-    () => import("../components/dialog/OpenExternalCollectionDialog")
+    () => import("../components/dialog/OpenExternalCollectionDialog"),
+    () => ({
+      context$: context
+    })
   )
 
   const externalCollectionUrl = (data: collections.CollectionExternalSourceData) =>
@@ -67,8 +57,8 @@ export default function Collection() {
         icon$={RiMediaPlayList2Fill} 
         label$="Playlist" 
       >
-        <Show when={collections()?.playlists}>
-          <For each={collections()!.playlists}>
+        <Show when={collections$?.playlists}>
+          <For each={collections$!.playlists}>
             {it => (
               <CollectionItem 
                 href$={`/collection/playlist/${it.id}`}
@@ -86,8 +76,8 @@ export default function Collection() {
         icon$={RiMediaGalleryFill} 
         label$="Gallery" 
       >
-        <Show when={collections()?.galleries}>
-          <For each={collections()?.galleries}>
+        <Show when={collections$?.galleries}>
+          <For each={collections$?.galleries}>
             {it => (
               <CollectionItem 
                 href$={`/collection/playlist/${it.id}`}
@@ -107,15 +97,15 @@ export default function Collection() {
         description$={<CollectionExternalSectionDescription />}
         labelTools$={<CollectionExternalSectionButtonRow action$={sectionActionHandler} />}
       >
-        <Show when={collections()?.externalSources}>
-          <For each={collections()?.externalSources}>
+        <Show when={collections$?.externalSources}>
+          <For each={collections$?.externalSources}>
             {it => (
               <CollectionItem 
                 href$={externalCollectionUrl(it)}
                 iconUrl$={iconUrl(it.icon)}
                 name$={it.name}
                 tooltipLabel$={it.name}
-                isAvailable$={collectionAvailableMap()![it.id]}
+                isAvailable$={collectionAvailableMap$()![it.id]}
               />
             )}
           </For>

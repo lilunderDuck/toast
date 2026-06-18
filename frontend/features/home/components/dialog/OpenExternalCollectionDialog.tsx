@@ -4,7 +4,7 @@ import { useNavigate } from "@solidjs/router"
 // ...
 import { Button, ButtonRow, DialogContent, DialogHeader, Label } from "~/components"
 import { createFileUpload, type IBaseLazyDialog } from "~/hooks"
-import { Collections_judgeTypeByPath } from "~/wailsjs/go/collections/Exports"
+import { Collections_createExternal, Collections_judgeTypeByPath } from "~/wailsjs/go/collections/Exports"
 import { Gallery_getByPath } from "~/wailsjs/go/gallery/Exports"
 import { getExternalGalleryIconUrl } from "~/features/gallery"
 import type { gallery } from "~/wailsjs/go/models"
@@ -13,6 +13,8 @@ import { GALLERY_IN_EXTERNAL_MODE } from "~/features/gallery/provider/constants"
 import { css } from "molcss"
 // ...
 import { CollectionItem } from "../collection"
+import type { IContextBridge } from "~/utils"
+import type { ICollectionPageContext } from "../../provider/CollectionPageProvider"
 
 const dialog = css`
   width: 55%;
@@ -44,12 +46,15 @@ type DisplayedCollection = {
   data$: gallery.GalleryData
 }
 
-interface IStickyNoteFullViewDialogProps extends IBaseLazyDialog {
+interface IStickyNoteFullViewDialogProps extends IBaseLazyDialog, IContextBridge<ICollectionPageContext> {
 }
 
 export default function OpenExternalCollectionDialog(props: IStickyNoteFullViewDialogProps) {
   const [displayedCollection, setDisplayedCollection] = createSignal<DisplayedCollection>()
   const redirect = useNavigate()
+
+  DEBUG_ASSERT(props.context$, "context is undefined")
+  const { collections$, setCollections$ } = props.context$!
 
   const { open$ } = createFileUpload({
     type$: FileUploadType.DIRECTORY,
@@ -68,10 +73,9 @@ export default function OpenExternalCollectionDialog(props: IStickyNoteFullViewD
         directoryOpened$: directory.replaceAll("\\", "/")
       } as DisplayedCollection
 
-      DEBUG_INFO_LABEL("collections", `Directory opened: \n${directory}`)
-      DEBUG_INFO_LABEL("collections", `collection type judged:`, collectionType)
-
+      DEBUG_INFO_LABEL("collections", `Directory opened: "${directory}", with type:`, collectionType)
       DEBUG_INFO_LABEL("collections", `fetching metadata...`)
+
       switch (collectionType) {
         case 1:
           displayData.data$ = await Gallery_getByPath(directory)
@@ -82,8 +86,12 @@ export default function OpenExternalCollectionDialog(props: IStickyNoteFullViewD
     },
   })
 
-  const goToCollection = () => {
+  const goToCollection = async() => {
     DEBUG_ASSERT(displayedCollection() !== undefined, "you're calling redirect too soon!!")
+
+    const externalSourceData = await Collections_createExternal(displayedCollection()!.directoryOpened$)
+    setCollections$('externalSources', collections$!.externalSources.length, externalSourceData)
+
     redirect(`/collection/gallery/${GALLERY_IN_EXTERNAL_MODE}?directory=${displayedCollection()!.directoryOpened$}`)
     props.close$()
   }
@@ -110,6 +118,7 @@ export default function OpenExternalCollectionDialog(props: IStickyNoteFullViewD
           <div class={dialog__choosenCollectionWrap} onClick={open$}>
             <CollectionItem
               href$=""
+              isAvailable$={true}
               name$={displayedCollection()!.data$.name}
               tooltipLabel$={displayedCollection()!.data$.name}
               iconUrl$={getExternalGalleryIconUrl(

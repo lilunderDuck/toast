@@ -1,4 +1,4 @@
-import { createResource, For, Show } from "solid-js"
+import { For, Show } from "solid-js"
 import { MdOutlineFilter_list_off } from 'solid-icons/md'
 // ...
 import { PlaceholderView, Spacer } from "~/components"
@@ -8,7 +8,7 @@ import "../core/MainPageRoot.css"
 import "~/styles/scrollbar.css"
 // ...
 import { CreateNoteButton, NoteBlock, TagListButton, TotalNotesText } from "../components"
-import { NoteHomeProvider } from "../provider/NoteHomeProvider"
+import { useNoteHomeContext } from "../provider/NoteHomeProvider"
 
 const section = css`
   overflow-y: auto;
@@ -38,38 +38,34 @@ const section__emptyNoteView = css`
 `
 
 export default function Note() {
-  const [resource] = createResource(async () => {
-    return []
-  })
+  const { resource$ } = useNoteHomeContext()
 
   return (
-    <NoteHomeProvider groups$={resource() ?? []}>
-      <main class={`${section} journalHome__mainContent`}>
-        <h1>Notes collection</h1>
-        <header class={section__header}>
-          <CreateNoteButton />
-          <TagListButton />
-          <Spacer />
-          <TotalNotesText />
-        </header>
-        <Show when={!resource.loading}>
-          <Show when={resource()!.length == 0} fallback={
-            <div class={`${section__list} scrollbar scrollbarVertical`}>
-              <For each={resource()}>
-                {/* @ts-ignore */}
-                {it => <NoteBlock {...it} />}
-              </For>
-            </div>
-          }>
-            <PlaceholderView 
-              icons$={<MdOutlineFilter_list_off size="4.5rem" />}
-              class={section__emptyNoteView}
-            >
-              No journal here, try creating a new journal.
-            </PlaceholderView>
-          </Show>
+    <main class={`${section} journalHome__mainContent`}>
+      <h1>Notes collection</h1>
+      <header class={section__header}>
+        <CreateNoteButton />
+        <TagListButton />
+        <Spacer />
+        <TotalNotesText />
+      </header>
+      <Show when={!resource$.loading}>
+        <Show when={resource$()!.length == 0} fallback={
+          <div class={`${section__list} scrollbar scrollbarVertical`}>
+            <For each={resource$()}>
+              {/* @ts-ignore */}
+              {it => <NoteBlock {...it} />}
+            </For>
+          </div>
+        }>
+          <PlaceholderView 
+            icons$={<MdOutlineFilter_list_off size="4.5rem" />}
+            class={section__emptyNoteView}
+          >
+            No journal here, try creating a new journal.
+          </PlaceholderView>
         </Show>
-      </main>
-    </NoteHomeProvider>
+      </Show>
+    </main>
   )
 }

@@ -5,6 +5,9 @@ import { css } from "molcss"
 import { AppTitleBarDraggable } from "~/components"
 // ...
 import { useMainPageContext } from "../provider/MainPageProvider"
+import { CollectionPageProvider } from "../provider/CollectionPageProvider"
+import { NoteHomeProvider } from "../provider/NoteHomeProvider"
+import { StickyNotesProvider } from "../provider/StickyNotesProvider"
 import Note from "../pages/Note"
 import Collection from "../pages/Collection"
 import StickyNotes from "../pages/StickyNotes"
@@ -36,15 +39,21 @@ export function MainContent() {
       </AppTitleBarDraggable>
       <Switch>
         <Match when={currentPage$() === "notes_page$"}>
-          <Note />
+          <NoteHomeProvider>
+            <Note />
+          </NoteHomeProvider>
         </Match>
 
         <Match when={currentPage$() === "collection_page$"}>
-          <Collection />
+          <CollectionPageProvider>
+            <Collection />
+          </CollectionPageProvider>
         </Match>
 
         <Match when={currentPage$() === "sticky_note_page$"}>
-          <StickyNotes />
+          <StickyNotesProvider>
+            <StickyNotes />
+          </StickyNotesProvider>
         </Match>
       </Switch>
     </>

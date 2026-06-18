@@ -51,3 +51,11 @@ export function formatDate(date: Date) {
 export function formatSecondsToMMSS(seconds: number) {
   return new Date(seconds * 1000).toISOString().substr(11, 8)
 }
+
+export function wrapFn<T extends AnyFunction>(originalFn: T, sideEffectFn: (newValue: ReturnType<T>) => any): () => ReturnType<T> {
+  return (...args) => {
+    const returnValue = originalFn(...args)
+    sideEffectFn(returnValue)
+    return returnValue
+  }
+}

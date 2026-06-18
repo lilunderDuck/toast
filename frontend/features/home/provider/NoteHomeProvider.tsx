@@ -1,4 +1,4 @@
-import { type Accessor, createContext, createSignal, type ParentProps, useContext } from "solid-js"
+import { type Accessor, createContext, createResource, createSignal, type ParentProps, type Resource, useContext } from "solid-js"
 // ...
 import type { ToastOptions } from "~/components/ui/toasts/util"
 
@@ -14,16 +14,20 @@ interface INoteHomeContext {
    * @param options The new options for the journal group.
    */
   editGroup$(targetGroupId: string, options: null): Promise<void>
+  resource$: Resource<never[]>
 }
 
 const Context = createContext<INoteHomeContext>()
 
 interface INoteHomeProviderProps {
-  groups$: []
 }
 
 export function NoteHomeProvider(props: ParentProps<INoteHomeProviderProps>) {
-  const [groups, setGroups] = createSignal(props.groups$)
+  const [groups, setGroups] = createSignal([])
+
+  const [resource] = createResource(async () => {
+    return []
+  })
 
   const toastOptions: ToastOptions = {
     duration: 5_000,
@@ -33,6 +37,7 @@ export function NoteHomeProvider(props: ParentProps<INoteHomeProviderProps>) {
   return (
     <Context.Provider value={{
       groups$: groups,
+      resource$: resource,
       async addGroup$(data) {
       },
       async editGroup$(targetGroupId, options) {

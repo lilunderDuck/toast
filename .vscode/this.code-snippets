@@ -15,28 +15,6 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// }
-	"stylex's style declaration": {
-		"scope": "javascriptreact,typescriptreact",
-		"prefix": "stylex",
-		"body": [
-			"import stylex from \"@stylexjs/stylex\"",
-			"",
-			"const style = stylex.create({",
-			"  ${1:name}: {",
-			"    ${2:some_style}",
-			"  }",
-			"})"
-		],
-		"description": "stylex's style declaration"
-	},
-	"apply stylex styles": {
-		"scope": "javascriptreact,typescriptreact",
-		"prefix": "stylexattr",
-		"body": [
-			"{...stylex.attrs(style.${1:insert_name_here})}"
-		],
-		"description": "apply stylex styles"
-	},
 	"Solidjs's <Contexts.Provider /> component": {
 		"scope": "javascriptreact,typescriptreact",
 		"prefix": "ctx",
@@ -50,10 +28,10 @@
 			"const Context = createContext<I${1:insert_name}Context>()",
 			"",
 			"interface I${1:insert_name}ProviderProps {",
-			"\t${3:// insert your context props here}",
+			"\t${3:// insert your provider props here}",
 			"}",
 			"",
-			"export function ${1:insert_name}Provider(props: ParentProps) {",
+			"export function ${1:insert_name}Provider(props: ParentProps<I${1:insert_name}ProviderProps>) {",
 			"\treturn (",
 			"\t\t<Context.Provider value={${4:some_value}}>",
 			"\t\t\t{props.children}",
