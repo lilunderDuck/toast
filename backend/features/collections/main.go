@@ -99,7 +99,7 @@ func (*Exports) Collections_createExternal(targetPath string) (*CollectionExtern
 		}
 
 		cachedIconPath, err = utils.CopyFile(
-			filepath.Join(targetPath, galleryData.Icon),
+			filepath.Join(targetPath, "icons", galleryData.Icon),
 			internals.CACHE_FOLDER_PATH,
 		)
 

@@ -13,6 +13,7 @@ const slider = css`
 
 const slider__input = css`
   width: 100%;
+  cursor: pointer;
 `
 
 const slider__buffered = css`

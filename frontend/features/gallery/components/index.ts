@@ -1,1 +1,1 @@
-export * from "./GalleryReduceModeToast"
+export * from "./toast"

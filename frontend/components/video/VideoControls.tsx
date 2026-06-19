@@ -31,6 +31,13 @@ const videoControls__button = css`
   width: 30px;
   height: 30px;
   padding: 0;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    background-color: var(--surface0);
+  }
 `
 
 const videoControls__time = css`

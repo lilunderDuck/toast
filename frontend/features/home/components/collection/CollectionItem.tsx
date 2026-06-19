@@ -3,9 +3,9 @@ import { DEBUG_INFO_LABEL, DEBUG_WARN_LABEL } from "macro-def"
 // ...
 import { css } from "molcss"
 // ...
-import { toast, Tooltip } from "~/components"
+import { Tooltip } from "~/components"
 // ...
-import { CollectionNotAvailableToast } from "../toast"
+import { showCollectionNotAvailableToast } from "../toast"
 
 const item = css`
   width: 9rem;
@@ -61,9 +61,7 @@ export function CollectionItem(props: ICollectionItemProps) {
     }
 
     DEBUG_WARN_LABEL("home", `refused to redirect, collection "${props.name$}" is not available now.\n\nnote: Did you forget to set the isAvailable$ props? if so, don't forget to put isAvailable$ into <CollectionItem /> component.`)
-    toast.custom(CollectionNotAvailableToast, {
-      position: ToastPosition.BOTTOM_RIGHT
-    })
+    showCollectionNotAvailableToast()
   }
 
   return (

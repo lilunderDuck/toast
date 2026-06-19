@@ -1,12 +1,14 @@
 import { DEBUG_ASSERT, DEBUG_INFO_LABEL, DEBUG_WARN_LABEL } from "macro-def"
 import { createContext, createSignal, onMount, ParentProps, useContext, type Accessor } from "solid-js"
+// ...
 import { useDocumentEventListener, usePersistedSignal } from "~/hooks"
-import { GALLERY_IN_EXTERNAL_MODE } from "./constants"
-import { Gallery_getEntryByPath } from "~/wailsjs/go/gallery/Exports"
 import type { gallery } from "~/wailsjs/go/models"
-import { toast, useZoomAndPanContext } from "~/components"
+import { Gallery_getEntryByPath } from "~/wailsjs/go/gallery/Exports"
+import { useZoomAndPanContext } from "~/components"
 import type { AnyNoArgsFunction } from "~/utils"
-import { GalleryReduceModeToast } from "../components"
+// ...
+import { GALLERY_IN_EXTERNAL_MODE } from "./constants"
+import { showGalleryReduceModeToast } from "../components"
 
 interface IGalleryContext {
   entries$: Accessor<gallery.GalleryItemData[]>
@@ -54,7 +56,6 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
     if (currentItemIndex() + 1 === entries().length) {
       return
     }
-
 
     setCurrentItemIndex(prev => prev + 1)
     updateCurrentItem()
@@ -108,10 +109,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
 
   const toggleReducedMode = () => {
     setAllControlsHidden(prev => !prev)
-
-    toast.custom(() => <GalleryReduceModeToast isInReduceMode$={allControlsHidden()} />, {
-      position: ToastPosition.BOTTOM_CENTER
-    })
+    showGalleryReduceModeToast(allControlsHidden())
   }
 
   const keyMapping: Record<string, AnyNoArgsFunction> = {
