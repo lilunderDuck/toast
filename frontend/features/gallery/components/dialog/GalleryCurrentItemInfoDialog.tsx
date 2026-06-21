@@ -3,7 +3,7 @@ import { css } from "molcss"
 import { RiDesignAlignItemHorizontalCenterFill, RiSystemProgress1Fill } from "solid-icons/ri"
 import { Show } from "solid-js"
 import { Button, ButtonRow, DialogContent, Label } from "~/components"
-import type { IBaseLazyDialog } from "~/hooks"
+import type { IBaseLazyComponent } from "~/hooks"
 import type { gallery } from "~/wailsjs/go/models"
 
 const dialog__content = css`
@@ -50,7 +50,7 @@ const dialog__label = css`
   padding-block: 5px;
 `
 
-interface IGalleryCurrentItemInfoDialogProps extends IBaseLazyDialog {
+interface IGalleryCurrentItemInfoDialogProps extends IBaseLazyComponent {
   currentItem$: gallery.GalleryItemData
   totalItems$: number
   currentItemIndex$: number

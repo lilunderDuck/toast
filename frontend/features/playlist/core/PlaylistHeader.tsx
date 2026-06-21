@@ -4,7 +4,7 @@ import { css } from "molcss"
 // ...
 import { formatSecondsToMMSS } from "~/utils"
 import { Button, Tooltip } from "~/components"
-import { createLazyLoadedDialog, createLazyLoadedDropdownMenu } from "~/hooks"
+import { createLazyComponent } from "~/hooks"
 // ...
 import { playlistIconUrl } from "../api"
 import { usePlaylistContext } from "../provider"
@@ -55,14 +55,16 @@ export function PlaylistHeader() {
     ""
   // ...
 
-  const ImageFullviewDialog = createLazyLoadedDialog(
+  const ImageFullviewDialog = createLazyComponent(
+    LazyComponentType.DIALOG,
     () => import("~/components/dialog/ImageFullviewDialogContent"),
     () => ({
       imageSrc$: coverIconUrl()
     })
   )
 
-  const PlaylistAddTrackDialog = createLazyLoadedDialog(
+  const PlaylistAddTrackDialog = createLazyComponent(
+    LazyComponentType.DIALOG,
     () => import("../components/dialog/PlaylistAddTrackDialog"),
     () => ({
       onSubmit$(data) {
@@ -71,7 +73,8 @@ export function PlaylistHeader() {
     })
   )
 
-  const TableMoreOptionsDropdownMenu = createLazyLoadedDropdownMenu(
+  const TableMoreOptionsDropdownMenu = createLazyComponent(
+    LazyComponentType.DROPDOWN_MENU,
     () => import("../components/dropdown/PlaylistHeaderMoreOptionDropdown"),
     () => ({
       disableViewBackgroundButton$: data$()?.coverIcon == undefined,
@@ -111,7 +114,7 @@ export function PlaylistHeader() {
             <BsPlus />
           </Button>
         </Tooltip>
-        <TableMoreOptionsDropdownMenu.DropdownMenu$>
+        <TableMoreOptionsDropdownMenu.Component$>
           <Tooltip label$="More options">
             <Button
               size$={ButtonSize.ICON}
@@ -120,11 +123,11 @@ export function PlaylistHeader() {
               <BsThreeDots />
             </Button>
           </Tooltip>
-        </TableMoreOptionsDropdownMenu.DropdownMenu$>
+        </TableMoreOptionsDropdownMenu.Component$>
       </div>
 
-      <ImageFullviewDialog.Dialog$ />
-      <PlaylistAddTrackDialog.Dialog$ />
+      <ImageFullviewDialog.Component$ />
+      <PlaylistAddTrackDialog.Component$ />
     </header>
   )
 }

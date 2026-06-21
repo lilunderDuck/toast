@@ -1,11 +1,14 @@
-import { css } from "molcss"
 import { BsArrowLeft, BsCaretLeftFill, BsCaretRightFill, BsInfoCircleFill } from "solid-icons/bs"
-import { useGalleryContext } from "../provider"
-import { AppTitleBarDraggable, Button, Tooltip, ZoomButtonRow } from "~/components"
 import { useNavigate } from "@solidjs/router"
 import { createEffect, Show } from "solid-js"
+// ...
+import { css } from "molcss"
 import "./GalleryNav.css"
-import { createLazyLoadedDialog, useBodyToggableClass } from "~/hooks"
+// ...
+import { useGalleryContext } from "../provider"
+// ...
+import { AppTitleBarDraggable, Button, Tooltip, ZoomButtonRow } from "~/components"
+import { createLazyComponent, useBodyToggableClass } from "~/hooks"
 
 const nav__buttonNotInReducedMode = css`
   opacity: 0.2;
@@ -62,7 +65,8 @@ export function GalleryNav() {
     toggleClass(allControlsHidden$())
   })
 
-  const GalleryCurrentItemInfoDialog = createLazyLoadedDialog(
+  const GalleryCurrentItemInfoDialog = createLazyComponent(
+    LazyComponentType.DIALOG,
     () => import("../components/dialog/GalleryCurrentItemInfoDialog"),
     () => ({
       currentItemIndex$: currentItemIndex$(),
@@ -102,7 +106,7 @@ export function GalleryNav() {
         <BsCaretRightFill size={30} />
       </button>
 
-      <GalleryCurrentItemInfoDialog.Dialog$ />
+      <GalleryCurrentItemInfoDialog.Component$ />
     </>
   )
 }

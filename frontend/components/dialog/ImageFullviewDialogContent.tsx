@@ -3,7 +3,7 @@ import { BsX } from "solid-icons/bs"
 import { css } from "molcss"
 // ...
 import { ZoomAndPanProvider, ZoomButtonRow, ZoomDisplay } from "~/components"
-import type { IBaseLazyDialog } from "~/hooks"
+import type { IBaseLazyComponent } from "~/hooks"
 // ...
 import { Button, DialogContent, Tooltip } from "../ui"
 
@@ -24,7 +24,7 @@ const dialog__zoomButtonRow = css`
   z-index: 20;
 `
 
-interface IImageFullviewDialogContentProps extends IBaseLazyDialog {
+interface IImageFullviewDialogContentProps extends IBaseLazyComponent {
   imageSrc$: string
 }
 

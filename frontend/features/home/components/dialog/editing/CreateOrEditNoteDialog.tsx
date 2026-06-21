@@ -5,7 +5,7 @@ import { css } from "molcss"
 import __style from "./CreateOrEditNoteDialog.module.css"
 // ...
 import { Button, DialogContent, DialogHeader, FieldInput } from "~/components"
-import { createSubmitForm, createFileUpload, SUPPORTED_IMAGE_PATTERN, type IBaseLazyDialog } from "~/hooks"
+import { createSubmitForm, createFileUpload, SUPPORTED_IMAGE_PATTERN, type IBaseLazyComponent } from "~/hooks"
 import type { group } from "~/wailsjs/go/models"
 // ...
 import IconUploadInput from "./IconUploadInput"
@@ -21,7 +21,7 @@ const dialog__imageInput = css`
   height: 15rem;
 `
 
-interface ICreateNoteDialogProps extends IBaseLazyDialog {
+interface ICreateNoteDialogProps extends IBaseLazyComponent {
   prevData$?: group.GroupData
   onSubmit$?: (data: group.GroupOptions) => any
   onUpdate$?: (data: group.GroupOptions & {

@@ -16,15 +16,13 @@
     "vite": "^6.4.2",
     "vite-plugin-optimize-css-modules": "^1.2.0",
     "vite-plugin-pages": "^0.32.4",
-    "vite-plugin-solid": "^2.11.6",
-    "vite-plugin-stylex-dev": "0.7.3"
+    "vite-plugin-solid": "^2.11.6"
   },
   "dependencies": {
     "@corvu/resizable": "^0.2.5",
     "@kobalte/core": "^0.13.10",
     "@modular-forms/solid": "^0.25.1",
     "@solidjs/router": "^0.15.1",
-    "@stylexjs/stylex": "0.7.5",
     "lowlight": "^3.3.0",
     "molcss": "^0.2.5",
     "solid-colorful": "^0.0.2",

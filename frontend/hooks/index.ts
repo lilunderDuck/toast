@@ -10,6 +10,6 @@ export * from "./useDocumentEventListener"
 export * from "./usePersistedSignal"
 export * from "./createSMTCHandlers"
 export * from "./useBodyClass"
+export * from "./createLazyComponent"
 // ...
 export * from "./native"
-export * from "./lazy"

@@ -1,10 +1,9 @@
 import { For } from "solid-js"
 // ...
 import { css } from "molcss"
-import "../core/MainPageRoot.css"
 // ...
 import { StickyNoteBlock, StickyNoteCreateButton, StickyNoteProvider } from "../components"
-import { StickyNotesProvider, useStickyNotesContext } from "../provider/StickyNotesProvider"
+import { useStickyNotesContext } from "../provider/StickyNotesProvider"
 
 const note__list = css`
   width: 100%;
@@ -16,7 +15,7 @@ const note__list = css`
   margin-top: 10px;
 `
 
-export default function StickyNotes() {
+export function StickyNotesPage() {
   const { data$ } = useStickyNotesContext()
 
   return (

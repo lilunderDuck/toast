@@ -1,14 +1,12 @@
 import type { Accessor, JSX, Setter } from "solid-js"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components"
 
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 
-const style = stylex.create({
-  splashScreenInput__description: {
-    fontSize: 14,
-    color: "var(--subtext0)"
-  }
-})
+const splashScreenInput__description = css`
+  font-size: 14px;
+  color: var(--subtext0);
+`
 
 export const SPLASH_NAME_MAPPING: Record<SplashScreenVariant, {
   name$: string
@@ -42,7 +40,7 @@ export function SplashScreenSelectInput(props: ISplashScreenSelectInputProps) {
       itemComponent={(props) => (
         <SelectItem item={props.item}>
           <span>{SPLASH_NAME_MAPPING[props.item.rawValue].name$}</span>
-          <p {...stylex.attrs(style.splashScreenInput__description)}>
+          <p class={splashScreenInput__description}>
             {SPLASH_NAME_MAPPING[props.item.rawValue].description$}
           </p>
         </SelectItem>

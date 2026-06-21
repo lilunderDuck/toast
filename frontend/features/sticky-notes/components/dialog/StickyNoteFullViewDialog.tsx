@@ -1,12 +1,14 @@
 import { BsX } from "solid-icons/bs"
 // ...
 import { DialogContent } from "~/components"
-import type { IBaseLazyDialog } from "~/hooks"
+import type { IBaseLazyComponent } from "~/hooks"
 import type { IActionHandler, IContextBridge } from "~/utils"
 // ...
 import { css } from "molcss"
 // ...
-import { StickyNoteTitle, type IStickyNoteContext, type StickyNoteAction } from "../sticky-notes"
+import type { StickyNoteAction } from "../types"
+import type { IStickyNoteContext } from "../StickyNoteProvider"
+import { StickyNoteTitle } from "../StickyNoteTitle"
 
 const dialog = css`
   position: relative;
@@ -43,7 +45,7 @@ const dialog__someSpacesBellow = css`
   padding: 3px;
 `
 
-interface IStickyNoteFullViewDialogProps extends IBaseLazyDialog, IActionHandler<StickyNoteAction>, IContextBridge<IStickyNoteContext> {
+interface IStickyNoteFullViewDialogProps extends IBaseLazyComponent, IActionHandler<StickyNoteAction>, IContextBridge<IStickyNoteContext> {
 }
 
 export default function StickyNoteFullViewDialog(props: IStickyNoteFullViewDialogProps) {

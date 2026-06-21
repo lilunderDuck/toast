@@ -6,7 +6,7 @@ import { ResizableTextarea } from "~/components"
 import { createToggableInput } from "~/hooks"
 import type { sticky_notes } from "~/wailsjs/go/models"
 // ...
-import { useStickyNotesContext } from "../../provider/StickyNotesProvider"
+import { useStickyNotesContext } from "../provider/StickyNotesProvider"
 
 const block__input = css`
   background-color: var(--surface0);

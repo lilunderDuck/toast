@@ -4,11 +4,10 @@ import { FaSolidExternalLinkAlt } from "solid-icons/fa"
 import { BsPlus } from "solid-icons/bs"
 // ...
 import { css } from "molcss"
-import "../core/MainPageRoot.css"
 // ...
 import type { collections } from "~/wailsjs/go/models"
 import { playlistIconUrl } from "~/features/playlist/api"
-import { createLazyLoadedDialog } from "~/hooks"
+import { createLazyComponent } from "~/hooks"
 import { ASSETS_SERVER_URL, COLLECTION_TYPE_MAGIC_MAPPING, COLLECTION_TYPE_NAME_MAPPING } from "~/api"
 import type { ActionHandlerFn } from "~/utils"
 // ...
@@ -25,7 +24,7 @@ const collection__extraSpaces = css`
   height: 10rem;
 `
 
-export default function Collection() {
+export function CollectionPage() {
   const context = useCollectionPageContext()
   const { collections$, collectionAvailableMap$, checkIfExternalCollectionAvailable$ } = context
 
@@ -37,7 +36,8 @@ export default function Collection() {
     }
   }
 
-  const OpenExternalCollectionDialog = createLazyLoadedDialog(
+  const OpenExternalCollectionDialog = createLazyComponent(
+    LazyComponentType.DIALOG,
     () => import("../components/dialog/OpenExternalCollectionDialog"),
     () => ({
       context$: context
@@ -118,7 +118,7 @@ export default function Collection() {
 
       <div class={collection__extraSpaces} />
 
-      <OpenExternalCollectionDialog.Dialog$ />
+      <OpenExternalCollectionDialog.Component$ />
     </main>
   )
 }

@@ -1,13 +1,14 @@
 import { FaSolidTrashCan } from "solid-icons/fa"
 import { OcScreenfull2 } from "solid-icons/oc"
+import { Show } from "solid-js"
 // ...
 import { DropdownMenuContent, DropdownMenuItem } from "~/components"
-import type { IBaseDropdownMenu } from "~/hooks"
+import type { IBaseLazyComponent } from "~/hooks"
+import type { IActionHandler } from "~/utils"
 // ...
-import type { StickyNoteAction } from "../sticky-notes/types"
-import { Show } from "solid-js"
+import type { StickyNoteAction } from "../types"
 
-interface IStickyNoteMoreOptionDropdownProps extends IBaseDropdownMenu, IActionHandler<StickyNoteAction> {
+interface IStickyNoteMoreOptionDropdownProps extends IBaseLazyComponent, IActionHandler<StickyNoteAction> {
   shouldShowOpenFullviewOptions$?: boolean
 }
 

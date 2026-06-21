@@ -1,19 +1,17 @@
-import stylex from '@stylexjs/stylex'
 import { 
   type IconProps 
 } from '../util'
 import { MainCircle, SecondaryCircle } from './IconCircle'
+import { css } from 'molcss'
 
-const style = stylex.create({
-  error: {
-    overflow: 'visible'
-  }
-})
+const errorIcon = css`
+  overflow: visible;
+`
 
 export function Error(props: IconProps) {
   const fill = props.primary || '#FF3B30';
   return (
-    <svg {...stylex.attrs(style.error)} viewBox="0 0 32 32" width="1.25rem" height="1.25rem">
+    <svg class={errorIcon} viewBox="0 0 32 32" width="1.25rem" height="1.25rem">
       <MainCircle fill={fill} />
       <SecondaryCircle fill={fill} />
       <path

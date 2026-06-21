@@ -6,7 +6,7 @@ import './NoteBlock.css'
 import { Button } from "~/components"
 import { type group } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
-import { createLazyLoadedDialog } from "~/hooks"
+import { createLazyComponent } from "~/hooks"
 // ...
 import { useNoteHomeContext } from "../../provider/NoteHomeProvider"
 
@@ -76,12 +76,14 @@ interface INoteBlockProps extends group.GroupData {
 
 export function NoteBlock(props: INoteBlockProps) {
   const { addGroup$, editGroup$ } = useNoteHomeContext()
-  const NoteInfoDialog = createLazyLoadedDialog(
+  const NoteInfoDialog = createLazyComponent(
+    LazyComponentType.DIALOG,
     () => import("../dialog/NoteInfoDialog"),
     () => props
   )
 
-  const EditNoteDialog = createLazyLoadedDialog(
+  const EditNoteDialog = createLazyComponent(
+    LazyComponentType.DIALOG,
     () => import("../dialog/editing/CreateOrEditNoteDialog"),
     () => ({
       prevData$: props,
@@ -125,8 +127,8 @@ export function NoteBlock(props: INoteBlockProps) {
         <BsPencilFill />
       </Button>
       {/* ... */}
-      <NoteInfoDialog.Dialog$ />
-      <EditNoteDialog.Dialog$ />
+      <NoteInfoDialog.Component$ />
+      <EditNoteDialog.Component$ />
     </button>
   )
 }

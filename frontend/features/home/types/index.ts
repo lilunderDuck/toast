@@ -1,3 +1,0 @@
-interface ISettingTest {
-  something: number
-}

@@ -1,21 +1,19 @@
 import { Match, Switch } from "solid-js"
 // ...
-import stylex from "@stylexjs/stylex"
+import { css } from "molcss"
 // ...
 import type { IconTheme, Renderable } from "../util"
 import { Error, Loader, Success } from '.'
 
-const style = stylex.create({
-  iconContainer: {
-    flexShrink: 0,
-    minWidth: 20,
-    minHeight: 20,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-  }
-})
+const iconContainer = css`
+  flex-shrink: 0;
+  min-width: 20px;
+  min-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+`
 
 interface IIconContainerProps {
   icon?: Renderable
@@ -25,7 +23,7 @@ interface IIconContainerProps {
 
 export function ToastIconContainer(props: IIconContainerProps) {
   return (
-    <div {...props} {...stylex.attrs(style.iconContainer)}>
+    <div {...props} class={iconContainer}>
       <Switch>
         <Match when={props.icon}>
           {props.icon}

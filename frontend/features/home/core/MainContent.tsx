@@ -3,14 +3,12 @@ import { Match, Show, Switch } from "solid-js"
 import { css } from "molcss"
 // ...
 import { AppTitleBarDraggable } from "~/components"
+import { CollectionPageProvider, CollectionPage } from "~/features/collections"
+import { StickyNotesPage, StickyNotesProvider } from "~/features/sticky-notes"
 // ...
 import { useMainPageContext } from "../provider/MainPageProvider"
-import { CollectionPageProvider } from "../provider/CollectionPageProvider"
 import { NoteHomeProvider } from "../provider/NoteHomeProvider"
-import { StickyNotesProvider } from "../provider/StickyNotesProvider"
 import Note from "../pages/Note"
-import Collection from "../pages/Collection"
-import StickyNotes from "../pages/StickyNotes"
 import { MainPageTitlebar } from "../components"
 
 const titleBar = css`
@@ -46,13 +44,13 @@ export function MainContent() {
 
         <Match when={currentPage$() === "collection_page$"}>
           <CollectionPageProvider>
-            <Collection />
+            <CollectionPage />
           </CollectionPageProvider>
         </Match>
 
         <Match when={currentPage$() === "sticky_note_page$"}>
           <StickyNotesProvider>
-            <StickyNotes />
+            <StickyNotesPage />
           </StickyNotesProvider>
         </Match>
       </Switch>

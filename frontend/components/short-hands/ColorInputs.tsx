@@ -11,8 +11,8 @@ import type { HoverCardRootProps } from "@kobalte/core/hover-card"
 const colorInput = css`
   margin-top: 10px;
   gap: 15px;
-  display: "flex";
-  align-items: 'center';
+  display: flex;
+  align-items: center;
 `
 
 const colorInput__input = css`

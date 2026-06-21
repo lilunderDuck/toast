@@ -5,17 +5,17 @@ import "./StickyNoteCreateDialog.css"
 import { css } from "molcss"
 // ...
 import { Button, DialogContent, DialogHeader, FieldInput, HexColorInput, Label } from "~/components"
-import { createSubmitForm, type IBaseLazyDialog } from "~/hooks"
+import { createSubmitForm, type IBaseLazyComponent } from "~/hooks"
 import { sticky_notes } from "~/wailsjs/go/models"
 import { makeId } from "~/utils"
 
 const dialog = css`
-  width: 70%;
+  width: 80%;
 `
 
 const dialog__formSplitView = css`
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
 `
 
@@ -24,7 +24,20 @@ const dialog__formPanel = css`
   height: 100%;
 `
 
-interface IStickyNoteCreateDialogProps extends IBaseLazyDialog {
+const dialog__textarea = css`
+  height: 93.5%;
+  width: 100%;
+  background-color: var(--surface0);
+  border-radius: 6px;
+  resize: none;
+  padding-inline: 10px;
+  padding-inline: 5px;
+  &::placeholder {
+    color: var(--overlay2);
+  }
+`
+
+interface IStickyNoteCreateDialogProps extends IBaseLazyComponent {
   // define your component props here
   onSubmit$(data: sticky_notes.StickyNoteData): void
 }
@@ -66,7 +79,7 @@ export default function StickyNoteCreateDialog(props: IStickyNoteCreateDialogPro
 
       <Form$>
         <div class={dialog__formSplitView}>
-          <div class={dialog__formPanel} id="stickyNoteDialog__leftPanel">
+          <div class={dialog__formPanel}>
             <Field$ name="title" validate={[required("This field is required")]}>
               {(field, inputProps) => <FieldInput
                 {...inputProps}
@@ -84,16 +97,17 @@ export default function StickyNoteCreateDialog(props: IStickyNoteCreateDialogPro
               setColor$={setColor} 
             />
           </div>
-          <div class={dialog__formPanel} id="stickyNoteDialog__rightPanel">
+          <div class={dialog__formPanel}>
             <Field$ name="content" validate={[required("This field is required")]}>
-              {(field, inputProps) => <FieldInput
-                {...inputProps}
-                placeholder="Anything inside here, you can use markdown syntax in here too."
-                label="Content"
-                multiline={true}
-                error={field.error}
-                value={field.value}
-              />}
+              {(field, inputProps) => <>
+                <Label>Content</Label>
+                <textarea
+                  {...inputProps}
+                  class={dialog__textarea}
+                  placeholder="Anything inside here, you can use markdown syntax in here too."
+                  value={field.value}
+                />
+              </>}
             </Field$>
           </div>
         </div>

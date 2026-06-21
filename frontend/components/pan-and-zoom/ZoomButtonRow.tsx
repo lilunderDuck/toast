@@ -6,31 +6,31 @@ import { Button, Tooltip } from "~/components"
 import stylex from "@stylexjs/stylex"
 // ...
 import { useZoomAndPanContext } from "./ZoomAndPanProvider"
+import { css } from "molcss"
 
-const style = stylex.create({
-  wholeThing: {
-    gap: 10,
-    userSelect: "none",
-    paddingInline: 10,
-    paddingBlock: 5,
-    display: "flex",
-    alignItems: 'center',
-  },
-  scaleText: {
-    minWidth: '3rem',
-    backgroundColor: "var(--base)",
-    paddingInline: 5,
-    paddingBlock: 4,
-    borderRadius: 6,
-    textAlign: "center"
-  },
-})
+const buttonRow__root = css`
+  gap: 10px;
+  user-select: none;
+  padding-inline: 10px;
+  padding-block: 5px;
+  display: flex;
+  align-items: center;
+`
+
+const buttonRow__scaleText = css`
+  min-width: 3rem;
+  background-color: var(--base);
+  padding-inline: 5;
+  padding-block: 4;
+  border-radius: 6;
+  text-align: center;
+`
 
 export function ZoomButtonRow(props: ParentProps) {
   const { unzoom$, zoom$, reset$, internal$ } = useZoomAndPanContext()
 
   return (
-    <div {...stylex.attrs(style.wholeThing)}>
+    <div class={buttonRow__root}>
       <Tooltip label$="Reset to default zoom">
         <Button 
           size$={ButtonSize.ICON} 
@@ -60,7 +60,7 @@ export function ZoomButtonRow(props: ParentProps) {
           <TbFillZoomIn size={16} />
         </Button>
       </Tooltip>
-      <span {...stylex.attrs(style.scaleText)}>
+      <span class={buttonRow__scaleText}>
         {internal$.zoomScale$()}x
       </span>
       {props.children}

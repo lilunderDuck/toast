@@ -9,7 +9,7 @@ import { Button, ButtonRow, DialogContent, Spacer } from "~/components"
 import { type group } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 import { formatDate, goTimeToDate } from "~/utils"
-import type { IBaseLazyDialog } from "~/hooks"
+import type { IBaseLazyComponent } from "~/hooks"
 
 const dialog = css`
   min-width: 35rem;
@@ -65,7 +65,7 @@ const dialog__noDesc = css`
   color: var(--subtext0);
 `
 
-interface INoteInfoDialogProps extends IBaseLazyDialog, group.NoteGroupData {
+interface INoteInfoDialogProps extends IBaseLazyComponent, group.NoteGroupData {
   // 
 }
 

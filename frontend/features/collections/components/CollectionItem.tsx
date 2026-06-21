@@ -5,7 +5,7 @@ import { css } from "molcss"
 // ...
 import { Tooltip } from "~/components"
 // ...
-import { showCollectionNotAvailableToast } from "../toast"
+import { showCollectionNotAvailableToast } from "./toast"
 
 const item = css`
   width: 9rem;

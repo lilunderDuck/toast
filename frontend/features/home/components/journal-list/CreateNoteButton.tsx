@@ -3,7 +3,7 @@ import { BsPlus } from "solid-icons/bs"
 import { css } from "molcss"
 // ...
 import { Button, Tooltip } from "~/components"
-import { createLazyLoadedDialog } from "~/hooks"
+import { createLazyComponent } from "~/hooks"
 // ...
 import { useNoteHomeContext } from "../../provider/NoteHomeProvider"
 
@@ -15,7 +15,8 @@ const button = css`
 
 export function CreateNoteButton() {
   const { addGroup$ } = useNoteHomeContext()
-  const CreateNoteDialog = createLazyLoadedDialog(
+  const CreateNoteDialog = createLazyComponent(
+    LazyComponentType.DIALOG,
     () => import("../dialog/editing/CreateOrEditNoteDialog"),
     () => ({
       onSubmit$: addGroup$
@@ -34,7 +35,7 @@ export function CreateNoteButton() {
           <BsPlus size={20} />
         </Button>
       </Tooltip>
-      <CreateNoteDialog.Dialog$ />
+      <CreateNoteDialog.Component$ />
     </>
   )
 }

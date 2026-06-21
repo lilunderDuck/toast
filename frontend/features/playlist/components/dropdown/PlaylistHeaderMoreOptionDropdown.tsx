@@ -3,10 +3,10 @@ import { OcIssuetracks2 } from "solid-icons/oc"
 import { createSignal } from "solid-js";
 import { BsImageFill, BsQuestionCircleFill } from "solid-icons/bs";
 // ...
-import type { IBaseDropdownMenu } from "~/hooks";
+import type { IBaseLazyComponent } from "~/hooks";
 import type { IActionHandler } from "~/utils";
 
-interface IPlaylistHeaderMoreOptionDropdownProps extends IBaseDropdownMenu, IActionHandler<PlaylistHeaderDropdownAction> {
+interface IPlaylistHeaderMoreOptionDropdownProps extends IBaseLazyComponent, IActionHandler<PlaylistHeaderDropdownAction> {
   disableViewBackgroundButton$: boolean
 }
 

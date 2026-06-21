@@ -175,5 +175,14 @@
       "NETWORK_LOADING": 2,
       "NETWORK_NO_SOURCE": 3
     }
+  },
+  {
+    "type": "enum",
+    "name": "LazyComponentType",
+    "members": [
+      "DIALOG",
+      "DROPDOWN_MENU",
+      "CONTEXT_MENU"
+    ]
   }
 ]

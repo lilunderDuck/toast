@@ -1,5 +1,4 @@
 export * from "./NumberSettingSection"
-export * from "./RangeSettingSection"
 export * from "./CustomSettingSection"
 export * from "./CheckboxSettingSection"
 export * from "./SubSetting"

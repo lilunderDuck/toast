@@ -6,6 +6,7 @@ import { CloseButton, Content, Overlay, Portal, Root, useDialogContext, type Dia
 // ...
 import '~/styles/scrollbar.css'
 import { css } from "molcss"
+import { AppTitleBarDraggable } from "~/components/window"
 // ...
 
 const dialog__portal = css`
@@ -74,6 +75,12 @@ const dialog__description = css`
   line-height: 1.25rem;
 `
 
+const dialog__contentTitleBar = css`
+  position: fixed;
+  top: 0;
+  left: 0;
+`
+
 const Dialog = Root
 
 interface IDialogPortal extends DialogPortalProps {
@@ -85,15 +92,11 @@ const DialogPortal: Component<IDialogPortal> = (props) => {
 
   return (
     <Portal {...rest}>
-      <Show
-        when={props.closeOnClickOutside$ === false}
-        fallback={<Overlay
-          class={`${dialog__overlay} component-dialog-overlay`}
-          {...rest}
-        />}
-      >
-        <div dont-close class={dialog__overlay} />
-      </Show>
+      <Overlay
+        class={`${dialog__overlay} component-dialog-overlay`}
+        {...rest}
+      />
+      <AppTitleBarDraggable class={dialog__contentTitleBar} />
       <div class={dialog__portal}>
         {props.children}
       </div>

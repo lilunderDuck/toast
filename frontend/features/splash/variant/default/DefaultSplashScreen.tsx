@@ -62,7 +62,6 @@ export default function DefaultSplashScreen() {
           style={`--icon:url('${toastIcon}')`}
         />
       </div>
-      {/* <div {...stylex.attrs(style.screen__progressBar)} /> */}
       <div class={screen__loader}>
         <FourDotsSpinningLoader />
       </div>

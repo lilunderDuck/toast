@@ -1,19 +1,17 @@
-import stylex from '@stylexjs/stylex'
 import { 
   type IconProps 
 } from '../util'
 import { MainCircle, SecondaryCircle } from './IconCircle'
+import { css } from 'molcss'
 
-const style = stylex.create({
-  success: {
-    overflow: 'visible'
-  }
-})
+const loaderIcon = css`
+  overflow: visible;
+`
 
 export function Success(props: IconProps) {
   const fill = props.primary || '#34C759';
   return (
-    <svg {...stylex.attrs(style.success)} viewBox="0 0 32 32" width="1.25rem" height="1.25rem">
+    <svg class={loaderIcon} viewBox="0 0 32 32" width="1.25rem" height="1.25rem">
       <MainCircle fill={fill} />
       <SecondaryCircle fill={fill} begin="350ms" />
       <path

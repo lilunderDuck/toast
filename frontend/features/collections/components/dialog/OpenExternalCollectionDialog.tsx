@@ -3,17 +3,17 @@ import { createSignal, onCleanup, Show } from "solid-js"
 import { useNavigate } from "@solidjs/router"
 // ...
 import { Button, ButtonRow, DialogContent, DialogHeader, Label } from "~/components"
-import { createFileUpload, type IBaseLazyDialog } from "~/hooks"
+import { createFileUpload, type IBaseLazyComponent } from "~/hooks"
 import { Collections_createExternal, Collections_judgeTypeByPath } from "~/wailsjs/go/collections/Exports"
 import { Gallery_getByPath } from "~/wailsjs/go/gallery/Exports"
 import { getExternalGalleryIconUrl } from "~/features/gallery"
 import type { gallery } from "~/wailsjs/go/models"
 import { GALLERY_IN_EXTERNAL_MODE } from "~/features/gallery/provider/constants"
+import type { IContextBridge } from "~/utils"
 // ...
 import { css } from "molcss"
 // ...
-import { CollectionItem } from "../collection"
-import type { IContextBridge } from "~/utils"
+import { CollectionItem } from "../CollectionItem"
 import type { ICollectionPageContext } from "../../provider/CollectionPageProvider"
 
 const dialog = css`
@@ -46,7 +46,7 @@ type DisplayedCollection = {
   data$: gallery.GalleryData
 }
 
-interface IStickyNoteFullViewDialogProps extends IBaseLazyDialog, IContextBridge<ICollectionPageContext> {
+interface IStickyNoteFullViewDialogProps extends IBaseLazyComponent, IContextBridge<ICollectionPageContext> {
 }
 
 export default function OpenExternalCollectionDialog(props: IStickyNoteFullViewDialogProps) {

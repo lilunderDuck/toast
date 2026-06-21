@@ -9,20 +9,18 @@ import {
 import { store, createTimers } from '../util'
 import { ToastContainer } from './ToastContainer'
 // ...
-import stylex from '@stylexjs/stylex'
+import { css } from 'molcss'
 
-const style = stylex.create({
-  toaster: {
-    position: 'fixed',
-    zIndex: 9999,
-    top: 16,
-    bottom: 16,
-    left: 16,
-    right: 16,
-    pointerEvents: 'none',
-    userSelect: 'none'
-  }
-})
+const toaster = css`
+  position: fixed;
+  z-index: 9999;
+  top: 16px;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  pointer-events: none;
+  user-select: none;
+`
 
 export function Toaster(props: IToasterProps) {
   createEffect(() => {
@@ -39,7 +37,7 @@ export function Toaster(props: IToasterProps) {
 
   return (
     <Portal>
-      <div {...stylex.attrs(style.toaster)}>
+      <div class={toaster}>
         <For each={store.toasts}>
           {(toast) => <ToastContainer toast={toast as Toast} />}
         </For>

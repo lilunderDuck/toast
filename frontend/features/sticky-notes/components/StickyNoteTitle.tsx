@@ -3,7 +3,7 @@ import { BsThreeDots } from "solid-icons/bs"
 // ...
 import { HoveredHexColorInput } from "~/components"
 import type { IActionHandler, IContextBridge } from "~/utils"
-import { createLazyLoadedDropdownMenu } from "~/hooks"
+import { createLazyComponent } from "~/hooks"
 // ...
 import { css } from "molcss"
 // ...
@@ -49,8 +49,9 @@ export function StickyNoteTitle(props: ParentProps<IStickyNoteTitleProps>) {
     TitleInput$,
   } = useStickyNoteContext() ?? props.context$!
 
-  const { DropdownMenu$ } = createLazyLoadedDropdownMenu(
-    () => import("../dropdown/StickyNoteMoreOptionDropdown"),
+  const StickyNoteMoreOptionDropdown = createLazyComponent(
+    LazyComponentType.DROPDOWN_MENU,
+    () => import("./dropdown/StickyNoteMoreOptionDropdown"),
     () => ({
       action$: props.action$,
       shouldShowOpenFullviewOptions$: props.shouldShowOpenFullviewOptions$
@@ -61,11 +62,11 @@ export function StickyNoteTitle(props: ParentProps<IStickyNoteTitleProps>) {
     <h3 class={block__header}>
       <TitleInput$ />
       <div class={`${block__buttonRow} showOnHover__hide`}>
-        <DropdownMenu$ onOpen$={setButtonRowShouldAlwaysShow$}>
+        <StickyNoteMoreOptionDropdown.Component$ onOpen$={setButtonRowShouldAlwaysShow$}>
           <button class={block__button}>
             <BsThreeDots />
           </button>
-        </DropdownMenu$>
+        </StickyNoteMoreOptionDropdown.Component$>
         <HoveredHexColorInput
           color$={color$}
           setColor$={setColor$}

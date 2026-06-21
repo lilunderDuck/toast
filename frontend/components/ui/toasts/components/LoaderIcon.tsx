@@ -1,15 +1,13 @@
-import stylex from '@stylexjs/stylex'
+import { css } from 'molcss'
 import type { IconProps } from '../util'
 
-const style = stylex.create({
-  loader: {
-    overflow: 'visible'
-  }
-})
+const loaderIcon = css`
+  overflow: visible;
+`
 
 export function Loader(props: IconProps) {
   return (
-    <svg {...stylex.attrs(style.loader)} viewBox="0 0 32 32" width="1.25rem" height="1.25rem">
+    <svg class={loaderIcon} viewBox="0 0 32 32" width="1.25rem" height="1.25rem">
       <path
         fill="none"
         stroke={props.primary || '#E5E7EB'}

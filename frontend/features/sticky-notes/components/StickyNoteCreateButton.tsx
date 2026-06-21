@@ -2,8 +2,8 @@ import { BsPlus } from "solid-icons/bs"
 // ...
 import { css } from "molcss"
 // ...
-import { createLazyLoadedDialog } from "~/hooks"
-import { useStickyNotesContext } from "../../provider/StickyNotesProvider"
+import { createLazyComponent } from "~/hooks"
+import { useStickyNotesContext } from "../provider/StickyNotesProvider"
 
 const block = css`
   width: 13.5rem;
@@ -23,8 +23,9 @@ const block = css`
 export function StickyNoteCreateButton() {
   const { addStickyNote$ } = useStickyNotesContext()
 
-  const { Dialog$, show$ } = createLazyLoadedDialog(
-    () => import("../dialog/StickyNoteCreateDialog"),
+  const StickyNoteCreateDialog = createLazyComponent(
+    LazyComponentType.DIALOG,
+    () => import("./dialog/StickyNoteCreateDialog"),
     () => ({
       onSubmit$(data) {
         addStickyNote$(data)
@@ -34,10 +35,10 @@ export function StickyNoteCreateButton() {
 
   return (
     <>
-      <button class={block} onClick={show$}>
+      <button class={block} onClick={StickyNoteCreateDialog.show$}>
         <BsPlus size={30} />
       </button>
-      <Dialog$ />
+      <StickyNoteCreateDialog.Component$ />
     </>
   )
 }

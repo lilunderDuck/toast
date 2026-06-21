@@ -5,7 +5,7 @@ import { Show } from "solid-js"
 import { css } from "molcss"
 // ...
 import { Button, DialogContent, DialogHeader, FieldInput, Label } from "~/components"
-import { createFileUpload, createSubmitForm, type IBaseLazyDialog, createIconInput } from "~/hooks"
+import { createFileUpload, createSubmitForm, type IBaseLazyComponent, createIconInput } from "~/hooks"
 import type { playlist } from "~/wailsjs/go/models"
 import { previewUrl } from "~/api"
 
@@ -46,7 +46,7 @@ type PlaylistAddTrackSchema = {
   trackPath: string
 } // playlist.PlaylistCreateTrackOption
 
-interface IPlaylistAddTrackDialogProps extends IBaseLazyDialog {
+interface IPlaylistAddTrackDialogProps extends IBaseLazyComponent {
   onSubmit$(data: playlist.PlaylistCreateTrackOption): any
 }
 

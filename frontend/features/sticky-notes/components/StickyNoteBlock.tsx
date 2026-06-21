@@ -1,7 +1,8 @@
 import "~/styles/shorthand.css"
 import { css } from "molcss"
 // ...
-import { createLazyLoadedDialog } from "~/hooks"
+import { createLazyComponent } from "~/hooks"
+import type { IActionHandler } from "~/utils"
 // ...
 import type { StickyNoteAction } from "./types"
 import { StickyNoteTitle } from "./StickyNoteTitle"
@@ -33,8 +34,9 @@ export function StickyNoteBlock() {
   const context = useStickyNoteContext()
   const { color$, buttonRowShouldAlwaysShow$, ContentInput$, onDelete$ } = context
 
-  const { Dialog$, show$: showFullViewDialog, close$ } = createLazyLoadedDialog(
-    () => import("../dialog/StickyNoteFullViewDialog"),
+  const StickyNoteFullViewDialog = createLazyComponent(
+    LazyComponentType.DIALOG,
+    () => import("./dialog/StickyNoteFullViewDialog"),
     () => ({
       action$: stickyNoteActionHandler,
       context$: context
@@ -45,11 +47,11 @@ export function StickyNoteBlock() {
     switch (type) {
       case "delete_sticky_note$":
         onDelete$()
-        close$()
+        StickyNoteFullViewDialog.close$()
       break
       
       case "open_sticky_note_in_fullview$":
-        showFullViewDialog()
+        StickyNoteFullViewDialog.show$()
       break
     }
   }
@@ -62,7 +64,7 @@ export function StickyNoteBlock() {
       <StickyNoteTitle action$={stickyNoteActionHandler} />
       <ContentInput$ />
 
-      <Dialog$ />
+      <StickyNoteFullViewDialog.Component$ />
     </div>
   )
 }

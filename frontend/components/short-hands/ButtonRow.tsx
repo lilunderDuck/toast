@@ -8,7 +8,7 @@ import { Spacer } from "../ui"
 
 const buttonRow = css`
   gap: 10px;
-  margin-top: 10px;
+  padding-top: 10px;
   user-select: none;
   display: flex;
   align-items: center;

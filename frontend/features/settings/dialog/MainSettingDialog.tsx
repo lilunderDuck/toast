@@ -1,7 +1,7 @@
 import { createSignal, For, Match, Switch } from "solid-js"
 // ...
 import { DialogContent } from "~/components"
-import type { IBaseLazyDialog } from "~/hooks"
+import type { IBaseLazyComponent } from "~/hooks"
 // ...
 import { css } from "molcss"
 import "./MainSettingDialog.css"
@@ -38,7 +38,7 @@ const dialog__mainContent = css`
   padding-bottom: 5rem;
 `
 
-interface IMainSettingDialog extends IBaseLazyDialog {}
+interface IMainSettingDialog extends IBaseLazyComponent {}
 
 export default function MainSettingDialog(props: IMainSettingDialog) {
   // a few asserts to make sure the setting doesn't randomly break
