@@ -4,8 +4,6 @@ import { DEBUG_ASSERT, DEBUG_INFO_LABEL } from "macro-def"
 // ...
 import { css } from "molcss"
 // ...
-import type { gallery } from "~/wailsjs/go/models"
-// ...
 import { SpinningCube } from "../loader"
 import { PlaceholderView } from "../short-hands"
 import { useVideoContext, type IVideoProps } from "./Video"
@@ -44,7 +42,7 @@ const video__layerErrorMessage = css`
 `
 
 export function VideoContent(props: IVideoProps) {
-  const { videoPlayer$ } = useVideoContext()
+  const { videoPlayer$, setIsInPictureInPicture$ } = useVideoContext()
   const { Player$, state$, errorMessage$, changeSource$ } = videoPlayer$
 
   createEffect(() => {
@@ -64,6 +62,8 @@ export function VideoContent(props: IVideoProps) {
         crossorigin="anonymous"
         src={props.src$}
         class={video__thisVideoElement}
+        onEnterPictureInPicture={() => setIsInPictureInPicture$(true)}
+        onLeavePictureInPicture={() => setIsInPictureInPicture$(false)}
       >
         <Show when={props.subtitles$}>
           <For each={props.subtitles$}>

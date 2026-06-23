@@ -1,4 +1,4 @@
-import { For, Show } from "solid-js"
+import { For, Match, Show, Switch } from "solid-js"
 import { MdOutlineFilter_list_off } from 'solid-icons/md'
 // ...
 import { Input, PlaceholderView, Spacer } from "~/components"
@@ -42,7 +42,7 @@ const section__emptyNoteView = css`
 `
 
 export default function NotePage() {
-  const { resource$ } = useNoteHomeContext()
+  const { resource$, view$ } = useNoteHomeContext()
 
   return (
     <main class={`${section} journalHome__mainContent`}>
@@ -54,23 +54,31 @@ export default function NotePage() {
         <Input placeholder="Search notes" />
         <TotalNotesText />
       </header>
-      <Show when={!resource$.loading}>
-        <Show when={resource$()!.length == 0} fallback={
-          <div class={`${section__list} scrollbar scrollbarVertical`}>
-            <For each={resource$()}>
-              {/* @ts-ignore */}
-              {it => <NoteBlock {...it} />}
-            </For>
-          </div>
-        }>
-          <PlaceholderView 
-            icons$={<MdOutlineFilter_list_off size="4.5rem" />}
-            class={section__emptyNoteView}
-          >
-            No notes here, try creating a new note.
-          </PlaceholderView>
-        </Show>
-      </Show>
+      <div class={`${section__list} scrollbar scrollbarVertical`}>
+        <Switch>
+          <Match when={view$() === NotePageViewType.NOTE}>
+            <Show when={!resource$.loading}>
+              <Show when={resource$()!.length == 0} fallback={
+                <For each={resource$()}>
+                  {/* @ts-ignore */}
+                  {it => <NoteBlock {...it} />}
+                </For>
+              }>
+                <PlaceholderView
+                  icons$={<MdOutlineFilter_list_off size="4.5rem" />}
+                  class={section__emptyNoteView}
+                >
+                  No notes here, try creating a new note.
+                </PlaceholderView>
+              </Show>
+            </Show>
+          </Match>
+
+          <Match when={view$() === NotePageViewType.DAILY}>
+            <></>
+          </Match>
+        </Switch>
+      </div>
     </main>
   )
 }

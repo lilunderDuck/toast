@@ -1,13 +1,15 @@
-import type { Component, ComponentProps, JSX, ValidComponent } from "solid-js"
+import type { JSX } from "solid-js"
 import { Show, splitProps } from "solid-js"
-import { BsX } from "solid-icons/bs"
-import type { PolymorphicProps } from "@kobalte/core/polymorphic"
-import { CloseButton, Content, Overlay, Portal, Root, useDialogContext, type DialogContentProps, type DialogDescriptionProps, type DialogPortalProps, type DialogTitleProps } from "@kobalte/core/dialog"
+import { Portal } from "solid-js/web"
 // ...
 import '~/styles/scrollbar.css'
 import { css } from "molcss"
-import { AppTitleBarDraggable } from "~/components/window"
 // ...
+import { AppTitleBarDraggable } from "~/components/window"
+import type { HTMLAttributes } from "~/utils"
+// ...
+import type { IDialogPortalProps } from "./types"
+import { useDialogContext } from "./DialogContext"
 
 const dialog__portal = css`
   z-index: 30;
@@ -19,6 +21,7 @@ const dialog__portal = css`
   // alignItems: flex-start;
   align-items: center;
 `
+
 const dialog__overlay = css`
   position: fixed;
   width: 100%;
@@ -27,6 +30,7 @@ const dialog__overlay = css`
   backdrop-filter: blur(3px);
   background-color: #11111b8d;
 `
+
 const dialog__content = css`
   padding-inline: 15px;
   padding-block: 10px;
@@ -41,7 +45,7 @@ const dialog__closeButton = css`
   right: 1rem;
   width: 30px;
   height: 30px;
-  border-radius: 6;
+  border-radius: 6px;
   transition-property: opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
@@ -58,9 +62,9 @@ const dialog__footer = css`
   display: flex;
   flex-direction: column-reverse;
   @media (min-width: 640px) {
-    marginLeft: 0.5rem;
-    flexDirection: row;
-    justifyContent: flex-end;
+    margin-left: 0.5rem;
+    flex-direction: row;
+    justify-content: flex-end;
   }
 `
 const dialog__title = css`
@@ -81,40 +85,33 @@ const dialog__contentTitleBar = css`
   left: 0;
 `
 
-const Dialog = Root
-
-interface IDialogPortal extends DialogPortalProps {
-  closeOnClickOutside$?: boolean
-}
-
-const DialogPortal: Component<IDialogPortal> = (props) => {
+function DialogPortal(props: IDialogPortalProps) {
+  const context = useDialogContext();
   const [, rest] = splitProps(props, ["children", "closeOnClickOutside$"])
 
   return (
-    <Portal {...rest}>
-      <Overlay
-        class={`${dialog__overlay} component-dialog-overlay`}
-        {...rest}
-      />
-      <AppTitleBarDraggable class={dialog__contentTitleBar} />
-      <div class={dialog__portal}>
-        {props.children}
-      </div>
-    </Portal>
+    <Show when={context.contentPresent$() || context.overlayPresent$()}>
+			<Portal {...rest}>
+        <AppTitleBarDraggable class={dialog__contentTitleBar} />
+        <dialog closedby={props.closeOnClickOutside$ ? "none" : "any"}>
+          {props.children}
+        </dialog>
+        <div class={dialog__portal}>
+        </div>
+      </Portal>
+		</Show>
   )
 }
 
-interface IDialogContentProps<T extends ValidComponent = "div"> extends DialogContentProps<T> {
+interface IDialogContentProps extends HTMLAttributes<"div"> {
   class?: string | undefined
   children?: JSX.Element
   closeOnClickOutside$?: boolean
   showCloseButton$?: boolean
 }
 
-const DialogContent = <T extends ValidComponent = "div">(
-  props: PolymorphicProps<T, IDialogContentProps<T>>,
-) => {
-  const { close } = useDialogContext()
+function DialogContent(props: IDialogContentProps) {
+  const { close$ } = useDialogContext()
 
   const [, rest] = splitProps(props as IDialogContentProps, [
     "class",
@@ -125,68 +122,54 @@ const DialogContent = <T extends ValidComponent = "div">(
 
   return (
     <DialogPortal closeOnClickOutside$={props.closeOnClickOutside$}>
-      <Content
+      <div
         class={`${dialog__content} component-dialog-content ${props.class ?? ""}`}
         {...rest}
       >
         {props.children}
         <Show when={props.showCloseButton$ ?? true}>
-          <CloseButton class={dialog__closeButton} onClick={close}>
+          {/* <CloseButton class={dialog__closeButton} onClick={close$}>
             <BsX size={40} />
-          </CloseButton>
+          </CloseButton> */}
+          <></>
         </Show>
-      </Content>
+      </div>
     </DialogPortal>
   )
 }
 
-const DialogHeader: Component<ComponentProps<"h2">> = (props) => {
+function DialogHeader(props: HTMLAttributes<"h2">) {
   return (
     <h2 {...props} />
   )
 }
 
-const DialogFooter: Component<ComponentProps<"div">> = (props) => {
+function DialogFooter(props: HTMLAttributes<"div">) {
   const [, rest] = splitProps(props, ["class"])
   return (
     <div class={`${dialog__footer} ${props.class ?? ""}`} {...rest} />
   )
 }
 
-interface IDialogTitleProps<T extends ValidComponent = "h2"> extends DialogTitleProps<T> {
-  class?: string | undefined
-}
-
-const DialogTitle = <T extends ValidComponent = "h2">(
-  props: PolymorphicProps<T, IDialogTitleProps<T>>,
-) => {
-  const [, rest] = splitProps(props as IDialogTitleProps, ["class"])
+function DialogTitle(props: HTMLAttributes<"h2">) {
   return (
     <h2
       class={`${dialog__title} ${props.class ?? ""}`}
-      {...rest}
+      {...props}
     />
   )
 }
 
-interface IDialogDescriptionProps<T extends ValidComponent = "p"> extends DialogDescriptionProps<T> {
-  class?: string | undefined
-}
-
-const DialogDescription = <T extends ValidComponent = "p">(
-  props: PolymorphicProps<T, IDialogDescriptionProps<T>>,
-) => {
-  const [, rest] = splitProps(props as IDialogDescriptionProps, ["class"])
+function DialogDescription(props: HTMLAttributes<"p">) {
   return (
     <p
       class={`${dialog__description} ${props.class ?? ""}`}
-      {...rest}
+      {...props}
     />
   )
 }
 
 export {
-  Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,

@@ -4,8 +4,8 @@ import { type HTMLAttributes, type Ref } from "~/utils" // documentation only
 import { MediaProgressSlider } from "~/components" // documentation only
 import { DEBUG_ASSERT, DEBUG_ERR_LABEL, DEBUG_INFO_LABEL, DEBUG_WARN_LABEL } from "macro-def"
 
-type MediaPlayerProps = Omit<
-  HTMLAttributes<"audio" | "video">,
+type MediaPlayerProps<T extends "audio" | "video"> = Omit<
+  HTMLAttributes<T>,
   "onProgress" | "onPlaying" | "onCanPlayThrough" | "onEnded" | "onTimeUpdate" |
   "ref" | "preload"
 >
@@ -32,7 +32,7 @@ const ERROR_MESSAGE_MAPPING: Record<MediaNetworkState, string> = {
  * the media player and handle seeking.
  * @returns 
  */
-export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IMediaPlayerListener>) {
+export function createMediaPlayer<T extends "audio" | "video">(type: T, listener?: Partial<IMediaPlayerListener>) {
   const [mediaState, setMediaState] = createSignal(MediaState.LOADING)
   const [duration, setDuration] = createSignal(0)
   const [buffered, setBuffered] = createSignal(0)
@@ -63,9 +63,9 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
     })
   }
 
-  let mediaRef!: Ref<"audio" | "video">
+  let mediaRef!: Ref<T>
   let detailErrorMessage = ""
-  const mediaProps: HTMLAttributes<"audio" | "video"> = {
+  const mediaProps: HTMLAttributes<T> = {
     preload: "metadata",
     onLoadedData() {
       setMediaState(MediaState.LOADING)
@@ -89,7 +89,7 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
     },
     onError() {
       DEBUG_ASSERT(mediaRef, "NullPointerException: accessing mediaRef too early!!")
-      DEBUG_ERR_LABEL("media player", "ERROR DURING MOD, I mean... VIDEO... LOADING\n", "networkState:", mediaRef.networkState)
+      DEBUG_ERR_LABEL("media player", `ERROR DURING MOD, I mean... ${type}... LOADING\n`, "networkState:", mediaRef.networkState)
 
       detailErrorMessage = ERROR_MESSAGE_MAPPING[mediaRef.networkState as MediaNetworkState]
       DEBUG_ASSERT(detailErrorMessage, "could not get the detail error message for networkState", mediaRef.networkState, ", case is not being handled or invalid.")
@@ -260,7 +260,7 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
      * <player.Player$ src="video.mp4" class="my-video-style" />
      * ```
      */
-    Player$: (props: MediaPlayerProps) => (
+    Player$: (props: MediaPlayerProps<T>) => (
       type == "audio" ?
         // @ts-ignore
         <audio ref={mediaRef} {...props} {...mediaProps} /> :
@@ -270,4 +270,4 @@ export function createMediaPlayer(type: "audio" | "video", listener?: Partial<IM
   }
 }
 
-export type MediaPlayer = ReturnType<typeof createMediaPlayer>
+export type MediaPlayer<T extends "audio" | "video"> = ReturnType<typeof createMediaPlayer<T>>

@@ -1,10 +1,15 @@
-import { css } from "molcss"
 import { BsPauseFill, BsPlayFill } from "solid-icons/bs"
-import { useVideoContext } from "./Video"
 import { Show } from "solid-js"
-import { MediaProgressSlider } from "../short-hands"
-import { formatSecondsToMMSS } from "~/utils"
 import { DEBUG_INFO_LABEL } from "macro-def"
+import { RiMediaPictureInPictureFill } from "solid-icons/ri"
+// ...
+import { css } from "molcss"
+// ...
+import { formatSecondsToMMSS } from "~/utils"
+// ...
+import { useVideoContext } from "./Video"
+import { MediaProgressSlider } from "../short-hands"
+import { Tooltip } from "../ui"
 
 const videoControls = css`
   width: 100%;
@@ -50,8 +55,8 @@ const videoControls__time = css`
 `
 
 export default function VideoControls() {
-  const { videoPlayer$ } = useVideoContext()
-  const { state$, play$, pause$, currentProgress$, totalDuration$ } = videoPlayer$
+  const { videoPlayer$, isInPictureInPicture$ } = useVideoContext()
+  const { state$, play$, pause$, currentProgress$, totalDuration$, ref$ } = videoPlayer$
 
   const togglePlayVideo = () => {
     if (state$() === MediaState.PLAYING) {
@@ -64,6 +69,11 @@ export default function VideoControls() {
   }
 
   const shouldControlsAlwaysShow = () => state$() === MediaState.PAUSED
+
+  const openPictureInPicture = () => {
+    ref$()!.requestPictureInPicture()
+    DEBUG_INFO_LABEL("video", "entering picture in picture...")
+  }
 
   return (
     <div class={`${videoControls} ${shouldControlsAlwaysShow() ? '' : videoControls__showOnHover}`}>
@@ -84,6 +94,14 @@ export default function VideoControls() {
       <div class={videoControls__time}>
         {formatSecondsToMMSS(totalDuration$())}
       </div>
+      <Tooltip label$={`${isInPictureInPicture$() ? "Leave" : "Open"} picture-in-picture`}>
+        <button 
+          class={videoControls__button}
+          onClick={openPictureInPicture}
+        >
+          <RiMediaPictureInPictureFill />
+        </button>
+      </Tooltip>
     </div>
   )
 }

@@ -1,11 +1,13 @@
-import { createContext, ParentProps, useContext } from "solid-js"
+import { createContext, createSignal, ParentProps, useContext, type Accessor, type Setter } from "solid-js"
 import { createMediaPlayer, useDocumentEventListener, type MediaPlayer } from "~/hooks"
 import { VideoContent } from "./VideoContent"
 import type { gallery } from "~/wailsjs/go/models"
 import { DEBUG_INFO_LABEL } from "macro-def"
 
 interface IVideoContext {
-  videoPlayer$: MediaPlayer
+  videoPlayer$: MediaPlayer<"video">
+  isInPictureInPicture$: Accessor<boolean>
+  setIsInPictureInPicture$: Setter<boolean>
 }
 
 const Context = createContext<IVideoContext>()
@@ -19,6 +21,7 @@ export interface IVideoProps {
 
 export function Video(props: ParentProps<IVideoProps>) {
   const videoPlayer = createMediaPlayer("video")
+  const [isInPictureInPicture, setIsInPictureInPicture] = createSignal(false)
 
   if (props.enableKeyboardShotcuts$) {
     useDocumentEventListener("keyup", (keyboardEvent) => {
@@ -34,7 +37,9 @@ export function Video(props: ParentProps<IVideoProps>) {
 
   return (
     <Context.Provider value={{ 
-      videoPlayer$: videoPlayer
+      videoPlayer$: videoPlayer,
+      isInPictureInPicture$: isInPictureInPicture, 
+      setIsInPictureInPicture$: setIsInPictureInPicture
     }}>
       <VideoContent {...props} />
     </Context.Provider>
