@@ -3,7 +3,7 @@ import type { VoidComponent } from "solid-js"
 // ...
 import type { ISettingSidebarOption } from "../provider"
 import { SplashScreenPage } from "../pages/appearance"
-import { AdvancePage } from "../pages/advance/AdvancePage"
+import { AdvancePage } from "../pages/advance"
 
 export const PAGE_SIDEBAR: ISettingSidebarOption[] = [
   {

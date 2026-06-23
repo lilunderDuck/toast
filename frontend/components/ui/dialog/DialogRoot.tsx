@@ -1,11 +1,10 @@
-import { type ParentProps } from "solid-js";
+import { createEffect, createSignal, type ParentProps } from "solid-js";
 // ...
 import {
   DialogContext, 
   type DialogContextValue
 } from "./DialogContext";
-// ...
-import { createDisclosureState } from "~/hooks";
+import { DEBUG_INFO_LABEL } from "macro-def";
 
 export interface DialogRootOptions {
 	/** The controlled open state of the dialog. */
@@ -34,19 +33,18 @@ export interface DialogRootOptions {
  * A dialog is a window overlaid on either the primary window or another dialog window.
  */
 export function Dialog(props: ParentProps<Partial<DialogRootOptions>>) {
-	const disclosureState = createDisclosureState({
-		open$: () => props.open$,
-		defaultOpen$: () => props.defaultOpen$,
-		onOpenChange$: (isOpen) => props.onOpenChange$?.(isOpen),
-	});
+	const [isDialogOpen, setIsDialogOpen] = createSignal((props.open$ || props.defaultOpen$) ?? false)
 
-	// const shouldMount = () => mergedProps.forceMount$ || disclosureState.isOpen$();
+	createEffect(() => {
+		setIsDialogOpen(props.open$ ?? false)
+		DEBUG_INFO_LABEL("Dialog", "open state changed to", props.open$)
+	})
 
 	const context: DialogContextValue = {
-		isOpen$: disclosureState.isOpen$,
-		// preventScroll$: () => mergedProps.preventScroll$ ?? context.modal$(),
-		close$: disclosureState.close$,
-		toggle$: disclosureState.toggle$,
+		isOpen$: isDialogOpen,
+		close$() {
+			setIsDialogOpen(false)
+		}
 	};
 
 	return (

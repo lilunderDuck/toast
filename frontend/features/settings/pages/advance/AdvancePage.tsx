@@ -1,5 +1,5 @@
 import { Button } from "~/components";
-import { CustomSettingSection } from "../../components";
+import { CheckboxSettingSection, CustomSettingSection } from "../../components";
 
 export function AdvancePage() {
   return (

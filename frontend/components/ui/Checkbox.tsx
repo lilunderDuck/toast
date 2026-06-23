@@ -1,45 +1,76 @@
-import type { ValidComponent } from "solid-js"
-import { splitProps } from "solid-js"
-import { BsCheck } from "solid-icons/bs"
-// ...
-import { Root, Input, Control, Indicator, type CheckboxRootProps } from "@kobalte/core/checkbox"
-import type { PolymorphicProps } from "@kobalte/core/polymorphic"
-// ...
+import { DEBUG_ASSERT } from "macro-def"
 import { css } from "molcss"
+import type { HTMLAttributes } from "~/utils"
 
-const checkbox = css`
-  display: flex;
-  margin-left: 0.5rem;
-`
+// Adapted from: https://stackblitz.com/edit/custom-checkbox-css?file=style.css
 
-const checkbox__control = css`
-  width: 20px;
-  height: 20px;
-  border-radius: 0.125rem;
-  background-color: var(--surface0);
-  border: 1px solid var(--base);
+const checkbox__input = css`
+  position: relative;
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  appearance: none;
+  border: none;
   cursor: pointer;
-  display: flex;
-  place-items: center;
-  border-width: 1px;
+  background-color: transparent;
+  
+  &:checked:before {
+    background-color: var(--blue);
+    border: 2px solid var(--blue);
+  }
+  
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border: 2px solid var(--surface2);
+    border-radius: 6px;
+    background-color: transparent;
+  }
+
+  &:checked:after {
+    width: 0.75rem;
+    height: 0.375rem;
+    border-color: var(--crust);
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    transform: rotate(-45deg);
+    transform-origin: 1.125rem -0.0625rem;
+    border-bottom: 0.125rem solid transparent;
+    border-left: 0.125rem solid transparent;
+  }
 `
 
-interface ICheckboxRootProps<T extends ValidComponent = "div"> extends CheckboxRootProps<T> {
-  class?: string | undefined
+interface ICheckboxProps extends Omit<HTMLAttributes<"input">, "value" | "onChange"> {
+  value?: boolean
+  onChange?: (state: boolean) => any
 }
 
-export function Checkbox<T extends ValidComponent = "div">(
-  props: PolymorphicProps<T, ICheckboxRootProps<T>>
-) {
-  const [local, others] = splitProps(props as ICheckboxRootProps, ["class"])
+export function Checkbox(props: ICheckboxProps) {
   return (
-    <Root {...others} class={`${checkbox} ${local.class ?? ""}`}>
-      <Input class="peer" />
-      <Control class={checkbox__control}>
-        <Indicator>
-          <BsCheck />
-        </Indicator>
-      </Control>
-    </Root>
+    <input
+      {...props}
+      type="checkbox"
+      class={checkbox__input}
+      value={`${props.value ?? false}`}
+      onChange={(changeEvent) => {
+        const newValue = changeEvent.currentTarget.value
+        DEBUG_ASSERT(
+          newValue === "true" ||
+          newValue === "false",
+          `Expected stringified boolean, got: "${newValue}"`
+        )
+
+        props.onChange?.(JSON.parse(newValue) as boolean)
+      }}
+    />
   )
 }

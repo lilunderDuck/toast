@@ -1,5 +1,5 @@
 import { type MaybeAccessor, access } from "@kobalte/utils"
-import type { Accessor } from "solid-js"
+import { createSignal, type Accessor } from "solid-js"
 
 import { createControllableBooleanSignal } from "./createControlableSignal"
 
@@ -32,11 +32,7 @@ export interface CreateDisclosureStateResult {
 export function createDisclosureState(
 	props: CreateDisclosureStateProps = {},
 ): CreateDisclosureStateResult {
-	const [isOpen, setIsOpen] = createControllableBooleanSignal({
-		value: () => access(props.open$),
-		defaultValue: () => !!access(props.defaultOpen$),
-		onChange: (value) => props.onOpenChange$?.(value),
-	})
+	const [isOpen, setIsOpen] = createSignal((props.open$ || props.defaultOpen$) ?? false)
 
 	const open = () => {
 		setIsOpen(true)

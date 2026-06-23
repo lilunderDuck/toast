@@ -12,9 +12,8 @@ export const DIALOG_INTL_TRANSLATIONS = {
 export type DialogIntlTranslations = typeof DIALOG_INTL_TRANSLATIONS;
 
 export interface DialogContextValue {
-	isOpen$: Accessor<boolean>;
-	close$: () => void;
-	toggle$: () => void;
+	isOpen$: Accessor<boolean>
+	close$: () => void
 }
 
 export const DialogContext = createContext<DialogContextValue>();

@@ -42,7 +42,7 @@ const item__buttonInactive = css`
 `
 
 const item__buttonActive = css`
-  color: var(--text);
+  color: var(--crust);
   background-color: var(--blue);
 `
 
