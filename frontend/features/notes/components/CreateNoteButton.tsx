@@ -5,7 +5,7 @@ import { css } from "molcss"
 import { Button, Tooltip } from "~/components"
 import { createLazyComponent } from "~/hooks"
 // ...
-import { useNoteHomeContext } from "../../provider/NoteHomeProvider"
+import { useNoteHomeContext } from "../provider"
 
 const button = css`
   display: flex;
@@ -17,7 +17,7 @@ export function CreateNoteButton() {
   const { addGroup$ } = useNoteHomeContext()
   const CreateNoteDialog = createLazyComponent(
     LazyComponentType.DIALOG,
-    () => import("../dialog/editing/CreateOrEditNoteDialog"),
+    () => import("./dialog/editing/CreateOrEditNoteDialog"),
     () => ({
       onSubmit$: addGroup$
     })

@@ -6,7 +6,7 @@ import { DropdownMenuContent, DropdownMenuItem } from "~/components"
 import type { IBaseLazyComponent } from "~/hooks"
 import type { IActionHandler } from "~/utils"
 // ...
-import type { StickyNoteAction } from "../types"
+import type { StickyNoteAction } from "../../provider/types"
 
 interface IStickyNoteMoreOptionDropdownProps extends IBaseLazyComponent, IActionHandler<StickyNoteAction> {
   shouldShowOpenFullviewOptions$?: boolean

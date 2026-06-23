@@ -4,9 +4,9 @@ import { css } from "molcss"
 import { createLazyComponent } from "~/hooks"
 import type { IActionHandler } from "~/utils"
 // ...
-import type { StickyNoteAction } from "./types"
+import type { StickyNoteAction } from "../provider/types"
 import { StickyNoteTitle } from "./StickyNoteTitle"
-import { useStickyNoteContext } from "./StickyNoteProvider"
+import { useStickyNoteBlockContext } from "./StickyNoteBlockProvider"
 
 const block = css`
   width: 13.5rem;
@@ -31,7 +31,7 @@ const block = css`
 `
 
 export function StickyNoteBlock() {
-  const context = useStickyNoteContext()
+  const context = useStickyNoteBlockContext()
   const { color$, buttonRowShouldAlwaysShow$, ContentInput$, onDelete$ } = context
 
   const StickyNoteFullViewDialog = createLazyComponent(

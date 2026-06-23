@@ -7,15 +7,16 @@ import { createToggableInput } from "~/hooks"
 import type { sticky_notes } from "~/wailsjs/go/models"
 // ...
 import { useStickyNotesContext } from "../provider/StickyNotesProvider"
+import { debounce, wrapFn } from "~/utils"
 
 const block__input = css`
   background-color: var(--surface0);
   color: var(--text);
-  outline: none;
   width: 100%;
   padding: 0;
   padding-inline: 10px;
   border-radius: 6px;
+  outline: 2px solid var(--overlay1);
 `
 
 const block__readonlyInput = css`
@@ -26,37 +27,35 @@ const block__readonlyInput = css`
 `
 
 const block__contentInput = css`
-  font-size: 15px;
+  font-size: 16px;
+  outline: 2px solid var(--overlay1);
 `
 
 const block__contentReadonlyInput = css`
-  font-size: 15px;
+  font-size: 16px;
   word-break: break-word;
   white-space: break-spaces;
 `
 
-export interface IStickyNoteContext {
+export interface IStickyNoteBlockContext {
   color$: Accessor<string>
   setColor$: Setter<string>
   buttonRowShouldAlwaysShow$: Accessor<boolean>
   setButtonRowShouldAlwaysShow$: Setter<boolean>
-  data$: Accessor<sticky_notes.StickyNoteData>
-  updateData$: (newData: Partial<sticky_notes.StickyNoteData>) => void
   TitleInput$: Component
   ContentInput$: Component
   onDelete$(): any
 }
 
-const Context = createContext<IStickyNoteContext>()
+const Context = createContext<IStickyNoteBlockContext>()
 
-interface IStickyNoteProviderProps {
+interface IStickyNoteBlockProviderProps {
   data$: sticky_notes.StickyNoteData
 }
 
-export function StickyNoteProvider(props: ParentProps<IStickyNoteProviderProps>) {
+export function StickyNoteBlockProvider(props: ParentProps<IStickyNoteBlockProviderProps>) {
   const { deleteStickyNote$, updateStickyNote$ } = useStickyNotesContext()
   const [color, setColor] = createSignal(props.data$.color)
-  const [data, setData] = createSignal<IStickyNoteProviderProps["data$"]>(props.data$)
   const [buttonRowShouldAlwaysShow, setButtonRowShouldAlwaysShow] = createSignal(false)
 
   const { Input$: TitleInput } = createToggableInput({
@@ -73,11 +72,9 @@ export function StickyNoteProvider(props: ParentProps<IStickyNoteProviderProps>)
         </span>
       )
     },
-    initialContent$() {
-      return data().title
-    },
+    initialContent$: () => props.data$.title,
     onFinalize$(newContent) {
-      updateData({ title: newContent }) 
+      updateStickyNote$(props.data$.id, { title: newContent }) 
     }
   })
 
@@ -96,28 +93,22 @@ export function StickyNoteProvider(props: ParentProps<IStickyNoteProviderProps>)
         </p>
       )
     },
-    initialContent$() {
-      return data().content
-    },
+    initialContent$: () => props.data$.content,
     onFinalize$(newContent) {
-      updateData({ content: newContent }) 
+      updateStickyNote$(props.data$.id, { content: newContent }) 
     }
   })
 
-  const updateData: IStickyNoteContext["updateData$"] = (newData) => {
-    setData(prev => ({ ...prev, ...newData }))
-    // @ts-ignore
-    updateStickyNote$(props.data$.id, newData)
-  }
+  const updateColorDebouced = debounce((newColor: string) => {
+    updateStickyNote$(props.data$.id, { color: newColor })
+  }, 500)
 
   return (
     <Context.Provider value={{
       color$: color,
-      setColor$: setColor,
+      setColor$: wrapFn(setColor, updateColorDebouced),
       buttonRowShouldAlwaysShow$: buttonRowShouldAlwaysShow,
       setButtonRowShouldAlwaysShow$: setButtonRowShouldAlwaysShow,
-      data$: data,
-      updateData$: updateData,
       TitleInput$: TitleInput,
       ContentInput$: ContentInput,
       onDelete$() {
@@ -129,6 +120,6 @@ export function StickyNoteProvider(props: ParentProps<IStickyNoteProviderProps>)
   )
 }
 
-export function useStickyNoteContext() {
+export function useStickyNoteBlockContext() {
   return useContext(Context)!
 }

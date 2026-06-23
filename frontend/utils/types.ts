@@ -2,7 +2,7 @@ import type { JSX } from "solid-js"
 import type { SetStoreFunction } from "solid-js/store"
 
 export interface IContextBridge<T> {
-  context$?: T
+  context$: T
 }
 
 export type HTMLTags = keyof HTMLElementTagNameMap

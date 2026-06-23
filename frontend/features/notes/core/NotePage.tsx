@@ -1,14 +1,14 @@
 import { For, Show } from "solid-js"
 import { MdOutlineFilter_list_off } from 'solid-icons/md'
 // ...
-import { PlaceholderView, Spacer } from "~/components"
+import { Input, PlaceholderView, Spacer } from "~/components"
 // ...
 import { css } from "molcss"
-import "../core/MainPageRoot.css"
 import "~/styles/scrollbar.css"
+import "./NotePage.css"
 // ...
-import { CreateNoteButton, NoteBlock, TagListButton, TotalNotesText } from "../components"
-import { useNoteHomeContext } from "../provider/NoteHomeProvider"
+import { useNoteHomeContext } from "../provider"
+import { CreateNoteButton, TagListButton, TotalNotesText } from "../components"
 
 const section = css`
   overflow-y: auto;
@@ -21,9 +21,13 @@ const section__header = css`
   padding-inline: 10px;
   padding-block: 5px;
   display: flex;
+  align-items: center;
   gap: 10px;
   margin-bottom: 15px;
   user-select: none;
+  & > div {
+    flex-shrink: 0;
+  }
 `
 
 const section__list = css`
@@ -37,7 +41,7 @@ const section__emptyNoteView = css`
   z-index: -1;
 `
 
-export default function Note() {
+export default function NotePage() {
   const { resource$ } = useNoteHomeContext()
 
   return (
@@ -47,6 +51,7 @@ export default function Note() {
         <CreateNoteButton />
         <TagListButton />
         <Spacer />
+        <Input placeholder="Search notes" />
         <TotalNotesText />
       </header>
       <Show when={!resource$.loading}>

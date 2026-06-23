@@ -7,8 +7,8 @@ import { createLazyComponent } from "~/hooks"
 // ...
 import { css } from "molcss"
 // ...
-import type { StickyNoteAction } from "./types"
-import { useStickyNoteContext, type IStickyNoteContext } from "./StickyNoteProvider"
+import type { StickyNoteAction } from "../provider/types"
+import { useStickyNoteBlockContext, type IStickyNoteBlockContext } from "./StickyNoteBlockProvider"
 
 const block__buttonRow = css`
   display: flex;
@@ -37,7 +37,7 @@ const block__header = css`
   gap: 5px;
 `
 
-export interface IStickyNoteTitleProps extends IActionHandler<StickyNoteAction>, IContextBridge<IStickyNoteContext> {
+export interface IStickyNoteTitleProps extends IActionHandler<StickyNoteAction>, IContextBridge<IStickyNoteBlockContext> {
   shouldShowOpenFullviewOptions$?: boolean
 }
 
@@ -47,7 +47,7 @@ export function StickyNoteTitle(props: ParentProps<IStickyNoteTitleProps>) {
     setColor$,
     setButtonRowShouldAlwaysShow$,
     TitleInput$,
-  } = useStickyNoteContext() ?? props.context$!
+  } = useStickyNoteBlockContext() ?? props.context$!
 
   const StickyNoteMoreOptionDropdown = createLazyComponent(
     LazyComponentType.DROPDOWN_MENU,
@@ -70,7 +70,6 @@ export function StickyNoteTitle(props: ParentProps<IStickyNoteTitleProps>) {
         <HoveredHexColorInput
           color$={color$}
           setColor$={setColor$}
-          onReset$={() => {}}
           onOpen$={setButtonRowShouldAlwaysShow$}
         />
         {props.children}

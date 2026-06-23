@@ -24,7 +24,7 @@ const collection__extraSpaces = css`
   height: 10rem;
 `
 
-export function CollectionPage() {
+export default function CollectionPage() {
   const context = useCollectionPageContext()
   const { collections$, collectionAvailableMap$, checkIfExternalCollectionAvailable$ } = context
 

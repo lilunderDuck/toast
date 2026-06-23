@@ -1,1 +1,1 @@
-export * from "./StickyNotesPage"
+export { default } from "./StickyNotesPage"

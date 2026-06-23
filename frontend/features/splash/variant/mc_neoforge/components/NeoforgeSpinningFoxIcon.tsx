@@ -1,4 +1,3 @@
-import stylex from "@stylexjs/stylex"
 import { css } from "molcss"
 import "./NeoforgeSpinningFoxIcon.css"
 // ...

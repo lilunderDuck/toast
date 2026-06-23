@@ -184,5 +184,13 @@
       "DROPDOWN_MENU",
       "CONTEXT_MENU"
     ]
+  },
+  {
+    "type": "enum",
+    "name": "NotePageViewType",
+    "members": [
+      "NOTE",
+      "DAILY"
+    ]
   }
 ]

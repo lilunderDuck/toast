@@ -8,7 +8,7 @@ import { StickyNotes__getAll, StickyNotes__update } from "~/wailsjs/go/sticky_no
 interface IStickyNotesContext {
   deleteStickyNote$(id: sticky_notes.StickyNoteData["id"]): Promise<void>
   addStickyNote$(data: sticky_notes.StickyNoteData): Promise<void>
-  updateStickyNote$(id: sticky_notes.StickyNoteData["id"], newData: sticky_notes.StickyNoteData): Promise<void>
+  updateStickyNote$(id: sticky_notes.StickyNoteData["id"], newData: Partial<sticky_notes.StickyNoteData>): Promise<void>
   data$: Accessor<sticky_notes.StickyNoteData[]>
 }
 

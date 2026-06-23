@@ -1,1 +1,1 @@
-export * from "./CollectionPage"
+export { default } from "./CollectionPage"

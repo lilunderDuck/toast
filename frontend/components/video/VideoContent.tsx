@@ -1,6 +1,6 @@
-import { For, Show } from "solid-js"
+import { createEffect, For, Show } from "solid-js"
 import { BiSolidError } from "solid-icons/bi"
-import { DEBUG_ASSERT } from "macro-def"
+import { DEBUG_ASSERT, DEBUG_INFO_LABEL } from "macro-def"
 // ...
 import { css } from "molcss"
 // ...
@@ -8,7 +8,7 @@ import type { gallery } from "~/wailsjs/go/models"
 // ...
 import { SpinningCube } from "../loader"
 import { PlaceholderView } from "../short-hands"
-import { useVideoContext } from "./Video"
+import { useVideoContext, type IVideoProps } from "./Video"
 import VideoControls from "./VideoControls"
 
 const video__root = css`
@@ -43,15 +43,14 @@ const video__layerErrorMessage = css`
   flex-direction: column;
 `
 
-export interface IVideoContentProps {
-  src$: string
-  subtitleUrlRoot$?: string
-  subtitles$?: gallery.GalleryVideoSubtitleData[]
-}
-
-export function VideoContent(props: IVideoContentProps) {
+export function VideoContent(props: IVideoProps) {
   const { videoPlayer$ } = useVideoContext()
   const { Player$, state$, errorMessage$, changeSource$ } = videoPlayer$
+
+  createEffect(() => {
+    changeSource$(props.src$)
+    DEBUG_INFO_LABEL("video", "source changed")
+  })
 
   if (TOAST_DEBUG) {
     if (props.subtitles$) {
@@ -79,13 +78,17 @@ export function VideoContent(props: IVideoContentProps) {
           </For>
         </Show>
       </Player$>
-      <VideoControls />
+
+      <Show when={![MediaState.LOADING, MediaState.ERROR].includes(state$())}>
+        <VideoControls />
+      </Show>
 
       <Show when={state$() == MediaState.LOADING}>
         <div class={video__layer}>
           <SpinningCube cubeSize$={40} />
         </div>
       </Show>
+
       <Show when={state$() == MediaState.ERROR}>
         <PlaceholderView 
           icons$={<BiSolidError size={60} />}

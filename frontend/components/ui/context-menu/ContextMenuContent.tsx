@@ -1,7 +1,6 @@
 import { splitProps, type ValidComponent } from "solid-js"
 import { Content, Portal, type ContextMenuContentProps } from "@kobalte/core/context-menu"
 import { type PolymorphicProps } from "@kobalte/core/polymorphic"
-import stylex from "@stylexjs/stylex"
 import { css } from "molcss"
 
 const menuContent = css`

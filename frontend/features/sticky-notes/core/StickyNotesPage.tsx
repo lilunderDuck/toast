@@ -2,7 +2,7 @@ import { For } from "solid-js"
 // ...
 import { css } from "molcss"
 // ...
-import { StickyNoteBlock, StickyNoteCreateButton, StickyNoteProvider } from "../components"
+import { StickyNoteBlock, StickyNoteCreateButton, StickyNoteBlockProvider } from "../components"
 import { useStickyNotesContext } from "../provider/StickyNotesProvider"
 
 const note__list = css`
@@ -15,7 +15,7 @@ const note__list = css`
   margin-top: 10px;
 `
 
-export function StickyNotesPage() {
+export default function StickyNotesPage() {
   const { data$ } = useStickyNotesContext()
 
   return (
@@ -24,9 +24,9 @@ export function StickyNotesPage() {
       <div class={note__list}>
         <For each={data$()}>
           {it => (
-            <StickyNoteProvider data$={it}>
+            <StickyNoteBlockProvider data$={it}>
               <StickyNoteBlock />
-            </StickyNoteProvider>
+            </StickyNoteBlockProvider>
           )}
         </For>
         <StickyNoteCreateButton />

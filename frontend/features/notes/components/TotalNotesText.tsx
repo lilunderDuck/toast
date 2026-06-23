@@ -1,6 +1,6 @@
 import { css } from "molcss"
 // ...
-import { useNoteHomeContext } from "../../provider/NoteHomeProvider"
+import { useNoteHomeContext } from "../provider"
 
 const text__count = css`
   color: var(--blue);

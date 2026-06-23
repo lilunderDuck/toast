@@ -46,6 +46,7 @@ export function GalleryItemDisplay() {
               src$={itemUrl(currentItem$()!.fileName)} 
               subtitleUrlRoot$={itemUrl('')} 
               subtitles$={currentItem$()?.subtitles ?? []}
+              enableKeyboardShotcuts$={true}
             />
           </div>
         </Match>

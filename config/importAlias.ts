@@ -23,6 +23,12 @@ export function getAliasPath(config: typeof tsconfig, basePath: string) {
   const alias: Record<string, string> = {}
   
   for (let [pathAlias, acturalPath] of Object.entries(configuredPath)) {
+    console.log(pathAlias, '\twill be resolved to', acturalPath)
+    if (!pathAlias.startsWith("~")) {
+      console.log("skipping", pathAlias)
+      continue
+    }
+
     if (acturalPath.length > 1) {
       throw new Error('panic: alias path should not have more than 1 actural path')
     }
@@ -34,7 +40,6 @@ export function getAliasPath(config: typeof tsconfig, basePath: string) {
     alias[pathAlias] = acturalPath.join('')
 
     // Just gonna console log it out in case it returns some weird result
-    console.log(pathAlias, '\twill be resolved to', acturalPath)
   }
 
   return alias

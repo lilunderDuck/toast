@@ -1,8 +1,6 @@
-import { type Accessor, createContext, createResource, createSignal, type ParentProps, type Resource, useContext } from "solid-js"
-// ...
-import type { ToastOptions } from "~/components/ui/toasts/util"
+import { type Accessor, createContext, createResource, createSignal, type ParentProps, type Resource, type Setter, useContext } from "solid-js"
 
-interface INoteHomeContext {
+interface INotePageContext {
   /**Reactive array of all journal groups. */
   groups$: Accessor<[]>
   /**Asynchronously creates a new journal group and updates the UI.
@@ -15,29 +13,26 @@ interface INoteHomeContext {
    */
   editGroup$(targetGroupId: string, options: null): Promise<void>
   resource$: Resource<never[]>
+
+  view$: Accessor<NotePageViewType>
+  setView$: Setter<NotePageViewType>
 }
 
-const Context = createContext<INoteHomeContext>()
+const Context = createContext<INotePageContext>()
 
-interface INoteHomeProviderProps {
+interface INotePageProviderProps {
 }
 
-export function NoteHomeProvider(props: ParentProps<INoteHomeProviderProps>) {
-  const [groups, setGroups] = createSignal([])
-
-  const [resource] = createResource(async () => {
-    return []
-  })
-
-  const toastOptions: ToastOptions = {
-    duration: 5_000,
-    position: ToastPosition.TOP_RIGHT
-  }
+export function NotePageProvider(props: ParentProps<INotePageProviderProps>) {
+  const [groups, setGroups] = createSignal([] as [])
+  const [view, setView] = createSignal<NotePageViewType>(NotePageViewType.NOTE)
 
   return (
     <Context.Provider value={{
       groups$: groups,
-      resource$: resource,
+      view$: view,
+      setView$: setView,
+      resource$: createResource(() => true)[0],
       async addGroup$(data) {
       },
       async editGroup$(targetGroupId, options) {

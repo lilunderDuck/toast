@@ -5,8 +5,8 @@ import { css } from "molcss"
 import toastIcon from "~/assets/toast.jpg"
 // ...
 import { AppTitleBarDraggable, Button } from "~/components"
-// ...
 import { useSettingContext } from "~/features/settings"
+// ...
 import { useMainPageContext } from "../provider/MainPageProvider"
 
 const sidebar__titleBar = css`

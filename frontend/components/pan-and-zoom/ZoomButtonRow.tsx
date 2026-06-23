@@ -3,8 +3,6 @@ import { TbFillZoomCancel, TbFillZoomIn, TbFillZoomOut } from 'solid-icons/tb'
 // ...
 import { Button, Tooltip } from "~/components"
 // ...
-import stylex from "@stylexjs/stylex"
-// ...
 import { useZoomAndPanContext } from "./ZoomAndPanProvider"
 import { css } from "molcss"
 
@@ -20,9 +18,9 @@ const buttonRow__root = css`
 const buttonRow__scaleText = css`
   min-width: 3rem;
   background-color: var(--base);
-  padding-inline: 5;
-  padding-block: 4;
-  border-radius: 6;
+  padding-inline: 5px;
+  padding-block: 4px;
+  border-radius: 6px;
   text-align: center;
 `
 

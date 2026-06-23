@@ -1,14 +1,13 @@
-import { Match, Show, Switch } from "solid-js"
+import { lazy, Match, Show, Switch } from "solid-js"
 // ...
 import { css } from "molcss"
 // ...
 import { AppTitleBarDraggable } from "~/components"
-import { CollectionPageProvider, CollectionPage } from "~/features/collections"
-import { StickyNotesPage, StickyNotesProvider } from "~/features/sticky-notes"
+import { CollectionPageProvider } from "~/features/collections"
+import { StickyNotesProvider } from "~/features/sticky-notes"
+import { NotePageProvider } from "~/features/notes"
 // ...
 import { useMainPageContext } from "../provider/MainPageProvider"
-import { NoteHomeProvider } from "../provider/NoteHomeProvider"
-import Note from "../pages/Note"
 import { MainPageTitlebar } from "../components"
 
 const titleBar = css`
@@ -26,6 +25,10 @@ const titleBar__noSidebar = css`
   padding-inline: 5px;
 `
 
+const NotePage = lazy(() => import("~/features/notes"))
+const CollectionPage = lazy(() => import("~/features/collections"))
+const StickyNotesPage = lazy(() => import("~/features/sticky-notes"))
+
 export function MainContent() {
   const { currentPage$, isShowingSidebar$ } = useMainPageContext()
   return (
@@ -37,9 +40,9 @@ export function MainContent() {
       </AppTitleBarDraggable>
       <Switch>
         <Match when={currentPage$() === "notes_page$"}>
-          <NoteHomeProvider>
-            <Note />
-          </NoteHomeProvider>
+          <NotePageProvider>
+            <NotePage />
+          </NotePageProvider>
         </Match>
 
         <Match when={currentPage$() === "collection_page$"}>

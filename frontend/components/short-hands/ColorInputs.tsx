@@ -1,12 +1,11 @@
 import type { Accessor, Setter } from "solid-js"
 import { HexColorPicker, HexColorInput as _HexColorInput } from 'solid-colorful'
-import { BsX } from "solid-icons/bs"
+import type { HoverCardRootProps } from "@kobalte/core/hover-card"
 // ...
 import { css } from "molcss"
 import "./ColorInputs.css"
 // ...
-import { Tooltip, HoverCard, HoverCardTrigger, HoverCardContent } from "../ui"
-import type { HoverCardRootProps } from "@kobalte/core/hover-card"
+import { HoverCard, HoverCardTrigger, HoverCardContent } from "../ui"
 
 const colorInput = css`
   margin-top: 10px;
@@ -40,26 +39,15 @@ const colorInput__colorPreview = css`
   }
 `
 
-const colorInput__resetButton = css`
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  background-color: var(--surface0);
-  color: var(--subtext0);
-  &:hover {
-    background-color: var(--surface1);
-    color: var(--text);
-  }
-`
-
 const colorInput__popoverCardContent = css`
   width: 15rem;
+  padding-inline: 10px;
+  padding-block: 15px;
 `
 
 interface IHexColorInputProps {
   color$: Accessor<string>
   setColor$: Setter<string>
-  onReset$?: () => void
   class?: string
 }
 
@@ -73,22 +61,7 @@ export function HexColorInput(props: IHexColorInputProps) {
           onChange={props.setColor$}
           class={colorInput__input}
         />
-        <div>
-          <Tooltip label$="Reset color">
-            <button 
-              class={colorInput__resetButton}
-              onClick={() => {
-                props.setColor$("#000000")
-                props.onReset$?.()
-              }} 
-            >
-              <BsX size={20} />
-            </button>
-          </Tooltip>
-        </div>
-        <div class={colorInput__colorPreview} style={{
-          '--color': props.color$()
-        }} />
+        <div class={colorInput__colorPreview} style={`--color:${props.color$()}`} />
       </div>
     </div>
   )

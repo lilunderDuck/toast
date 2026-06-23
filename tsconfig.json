@@ -13,7 +13,8 @@
       "@types/node"
     ],
     "paths": {
-      "~/*": ["./frontend/*"]
+      "~/*": ["./frontend/*"],
+      "solid-colorful": ["./node_modules/solid-colorful/types/index.d.ts"]
     },
     
     "allowImportingTsExtensions": true,

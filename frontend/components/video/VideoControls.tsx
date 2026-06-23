@@ -9,7 +9,8 @@ import { DEBUG_INFO_LABEL } from "macro-def"
 const videoControls = css`
   width: 100%;
   padding-inline: 20px;
-  padding-block: 5px;
+  padding-top: 5px;
+  padding-bottom: 10px;
   display: flex;
   align-items: center;
   gap: 10px;

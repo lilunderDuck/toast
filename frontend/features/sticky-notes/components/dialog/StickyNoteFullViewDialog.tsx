@@ -1,14 +1,14 @@
 import { BsX } from "solid-icons/bs"
 // ...
-import { DialogContent } from "~/components"
+import { Button, ButtonRow, DialogContent } from "~/components"
 import type { IBaseLazyComponent } from "~/hooks"
 import type { IActionHandler, IContextBridge } from "~/utils"
 // ...
 import { css } from "molcss"
 // ...
-import type { StickyNoteAction } from "../types"
-import type { IStickyNoteContext } from "../StickyNoteProvider"
+import type { StickyNoteAction } from "../../provider/types"
 import { StickyNoteTitle } from "../StickyNoteTitle"
+import type { IStickyNoteBlockContext } from "../StickyNoteBlockProvider"
 
 const dialog = css`
   position: relative;
@@ -23,7 +23,7 @@ const dialog__background = css`
   left: 0;
   z-index: -1;
   opacity: 0.25;
-  background-color: "var(--sticky-note-background-color)";
+  background-color: var(--sticky-note-background-color);
   border-radius: 6px;
 `
 
@@ -45,7 +45,7 @@ const dialog__someSpacesBellow = css`
   padding: 3px;
 `
 
-interface IStickyNoteFullViewDialogProps extends IBaseLazyComponent, IActionHandler<StickyNoteAction>, IContextBridge<IStickyNoteContext> {
+interface IStickyNoteFullViewDialogProps extends IBaseLazyComponent, IActionHandler<StickyNoteAction>, IContextBridge<IStickyNoteBlockContext> {
 }
 
 export default function StickyNoteFullViewDialog(props: IStickyNoteFullViewDialogProps) {
@@ -68,6 +68,15 @@ export default function StickyNoteFullViewDialog(props: IStickyNoteFullViewDialo
       <div class={dialog__someSpacesBellow} />
       {/* @ts-ignore */}
       <props.context$.ContentInput$ />
+
+      <ButtonRow>
+        <Button
+          size$={ButtonSize.SMALL}
+          onClick={props.close$}
+        >
+          Close
+        </Button>
+      </ButtonRow>
     </DialogContent>
   )
 }

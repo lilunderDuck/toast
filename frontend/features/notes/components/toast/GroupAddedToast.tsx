@@ -1,8 +1,5 @@
 import { BsCheck2Square } from "solid-icons/bs"
 // ...
-import stylex from "@stylexjs/stylex"
-// ...
-import type { Toast } from "~/components/util"
 import { css } from "molcss"
 
 const toast = css`
@@ -25,7 +22,7 @@ const toast__description = css`
   color: var(--subtext0);
 `
 
-interface IGroupAddedToastProps extends Toast {
+interface IGroupAddedToastProps {
   name$: string
 }
 

@@ -8,7 +8,7 @@ import { type group } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 import { createLazyComponent } from "~/hooks"
 // ...
-import { useNoteHomeContext } from "../../provider/NoteHomeProvider"
+import { useNoteHomeContext } from "../provider"
 
 const block = css`
   width: 100%;
@@ -78,13 +78,13 @@ export function NoteBlock(props: INoteBlockProps) {
   const { addGroup$, editGroup$ } = useNoteHomeContext()
   const NoteInfoDialog = createLazyComponent(
     LazyComponentType.DIALOG,
-    () => import("../dialog/NoteInfoDialog"),
+    () => import("./dialog/NoteInfoDialog"),
     () => props
   )
 
   const EditNoteDialog = createLazyComponent(
     LazyComponentType.DIALOG,
-    () => import("../dialog/editing/CreateOrEditNoteDialog"),
+    () => import("./dialog/editing/CreateOrEditNoteDialog"),
     () => ({
       prevData$: props,
       onSubmit$: (data) => addGroup$(data),
