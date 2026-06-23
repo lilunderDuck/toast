@@ -1,18 +1,13 @@
-import { mergeDefaultProps } from "@kobalte/utils";
-import { type ParentProps, createSignal, createUniqueId } from "solid-js";
+import { type ParentProps } from "solid-js";
+// ...
 import {
-	DIALOG_INTL_TRANSLATIONS,
-	type DialogIntlTranslations,
   DialogContext, 
   type DialogContextValue
 } from "./DialogContext";
-import { createDisclosureState, createPresence, createRegisterId } from "~/hooks";
-import { makeId } from "~/utils";
+// ...
+import { createDisclosureState } from "~/hooks";
 
 export interface DialogRootOptions {
-	/** The localized strings of the component. */
-	translations$: DialogIntlTranslations;
-
 	/** The controlled open state of the dialog. */
 	open$: boolean;
 
@@ -25,23 +20,6 @@ export interface DialogRootOptions {
 	/** Event handler called when the open state of the dialog changes. */
 	onOpenChange$: (isOpen: boolean) => void;
 
-	/**
-	 * A unique identifier for the component.
-	 * The id is used to generate id attributes for nested components.
-	 * If no id prop is provided, a generated id will be used.
-	 */
-	id$: string;
-
-	/**
-	 * Whether the dialog should be the only visible content for screen readers.
-	 * When set to `true`:
-	 * - interaction with outside elements will be disabled.
-	 * - scroll will be locked.
-	 * - focus will be locked inside the dialog content.
-	 * - elements outside the dialog content will not be visible for screen readers.
-	 */
-	modal$: boolean;
-
 	/** Whether the scroll should be locked even if the dialog is not modal. */
 	preventScroll$: boolean;
 
@@ -52,76 +30,28 @@ export interface DialogRootOptions {
 	forceMount$: boolean;
 }
 
-export interface DialogRootProps extends ParentProps<DialogRootOptions> {}
-
 /**
  * A dialog is a window overlaid on either the primary window or another dialog window.
  */
-export function Dialog(props: DialogRootProps) {
-	const defaultId = `dialog-${createUniqueId()}`;
-
-	const mergedProps = mergeDefaultProps(
-		{
-			id$: defaultId,
-			modal$: true,
-			translations$: DIALOG_INTL_TRANSLATIONS,
-		},
-		props,
-	);
-
-	const [contentId, setContentId] = createSignal<string>();
-	const [titleId, setTitleId] = createSignal<string>();
-	const [descriptionId, setDescriptionId] = createSignal<string>();
-
-	const [overlayRef, setOverlayRef] = createSignal<HTMLElement>();
-	const [contentRef, setContentRef] = createSignal<HTMLElement>();
-	const [triggerRef, setTriggerRef] = createSignal<HTMLElement>();
-
+export function Dialog(props: ParentProps<Partial<DialogRootOptions>>) {
 	const disclosureState = createDisclosureState({
-		open: () => mergedProps.open$,
-		defaultOpen: () => mergedProps.defaultOpen$,
-		onOpenChange: (isOpen) => mergedProps.onOpenChange$?.(isOpen),
+		open$: () => props.open$,
+		defaultOpen$: () => props.defaultOpen$,
+		onOpenChange$: (isOpen) => props.onOpenChange$?.(isOpen),
 	});
 
-	const shouldMount = () => mergedProps.forceMount$ || disclosureState.isOpen();
-
-	const { present$: overlayPresent } = createPresence({
-		show$: shouldMount,
-		element$: () => overlayRef() ?? null,
-	});
-
-	const { present$: contentPresent } = createPresence({
-		show$: shouldMount,
-		element$: () => contentRef() ?? null,
-	});
+	// const shouldMount = () => mergedProps.forceMount$ || disclosureState.isOpen$();
 
 	const context: DialogContextValue = {
-		translations$: () => mergedProps.translations$ ?? DIALOG_INTL_TRANSLATIONS,
-		isOpen$: disclosureState.isOpen,
-		modal$: () => mergedProps.modal$ ?? true,
-		preventScroll$: () => mergedProps.preventScroll$ ?? context.modal$(),
-		contentId$: contentId,
-		titleId$: titleId,
-		descriptionId$: descriptionId,
-		triggerRef$: triggerRef,
-		overlayRef$: overlayRef,
-		setOverlayRef$: setOverlayRef,
-		contentRef$: contentRef,
-		setContentRef$: setContentRef,
-		overlayPresent$: overlayPresent,
-		contentPresent$: contentPresent,
-		close$: disclosureState.close,
-		toggle$: disclosureState.toggle,
-		setTriggerRef$: setTriggerRef,
-		generateId$: () => makeId(5),
-		registerContentId$: createRegisterId(setContentId),
-		registerTitleId$: createRegisterId(setTitleId),
-		registerDescriptionId$: createRegisterId(setDescriptionId),
+		isOpen$: disclosureState.isOpen$,
+		// preventScroll$: () => mergedProps.preventScroll$ ?? context.modal$(),
+		close$: disclosureState.close$,
+		toggle$: disclosureState.toggle$,
 	};
 
 	return (
 		<DialogContext.Provider value={context}>
-			{mergedProps.children}
+			{props.children}
 		</DialogContext.Provider>
 	);
 }

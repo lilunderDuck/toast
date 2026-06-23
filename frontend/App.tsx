@@ -4,6 +4,7 @@ import { Toaster, AppTitleBarButton } from '~/components'
 // ...
 import { SplashScreen, SplashScreenProvider } from './features/splash'
 import { SettingProvider } from './features/settings'
+import { Portal } from 'solid-js/web'
 
 export default function App(props: ParentProps) {
   return (
@@ -12,7 +13,9 @@ export default function App(props: ParentProps) {
         <SplashScreen />
       </SplashScreenProvider>
       <Toaster />
-      <AppTitleBarButton />
+      <Portal>
+        <AppTitleBarButton />
+      </Portal>
       {props.children}
     </SettingProvider>
   )

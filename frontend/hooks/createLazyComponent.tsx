@@ -64,7 +64,7 @@ export function createLazyComponent<Props extends IBaseLazyComponent, Type exten
     case LazyComponentType.DIALOG: return {
       Component$: () => (
         <Show when={stayLoaded || showing()}>
-          <Dialog preventScroll={false} modal={true} open={showing()}>
+          <Dialog preventScroll$={false} open$={showing()}>
             <LazyComponent {...itsProps() as Props} close$={close} />
           </Dialog>
         </Show>

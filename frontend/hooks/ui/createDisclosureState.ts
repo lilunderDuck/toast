@@ -1,34 +1,28 @@
-import { type MaybeAccessor, access } from "@kobalte/utils";
-import type { Accessor } from "solid-js";
+import { type MaybeAccessor, access } from "@kobalte/utils"
+import type { Accessor } from "solid-js"
 
-import { createControllableBooleanSignal } from "./createControlableSignal";
+import { createControllableBooleanSignal } from "./createControlableSignal"
 
 export interface CreateDisclosureStateProps {
 	/** The value to be used, in controlled mode. */
-	open?: MaybeAccessor<boolean | undefined>;
-
+	open$?: MaybeAccessor<boolean | undefined>
 	/** The initial value to be used, in uncontrolled mode. */
-	defaultOpen?: MaybeAccessor<boolean | undefined>;
-
+	defaultOpen$?: MaybeAccessor<boolean | undefined>
 	/** A function that will be called when the `isOpen` state changes. */
-	onOpenChange?: (isOpen: boolean) => void;
+	onOpenChange$?: (isOpen: boolean) => void
 }
 
 export interface CreateDisclosureStateResult {
 	/** The open state. */
-	isOpen: Accessor<boolean>;
-
+	isOpen$: Accessor<boolean>
 	/** A setter function to manually set the open state. */
-	setIsOpen: (next: boolean | ((prev: boolean) => boolean)) => void;
-
+	setIsOpen$: (next: boolean | ((prev: boolean) => boolean)) => void
 	/** A function to set the `isOpen` state to `true`. */
-	open: () => void;
-
+	open$: () => void
 	/** A function to set the `isOpen` state to `false`. */
-	close: () => void;
-
+	close$: () => void
 	/** A function to toggle the `isOpen` state between `true` and `false`. */
-	toggle: () => void;
+	toggle$: () => void
 }
 
 /**
@@ -39,28 +33,28 @@ export function createDisclosureState(
 	props: CreateDisclosureStateProps = {},
 ): CreateDisclosureStateResult {
 	const [isOpen, setIsOpen] = createControllableBooleanSignal({
-		value: () => access(props.open),
-		defaultValue: () => !!access(props.defaultOpen),
-		onChange: (value) => props.onOpenChange?.(value),
-	});
+		value: () => access(props.open$),
+		defaultValue: () => !!access(props.defaultOpen$),
+		onChange: (value) => props.onOpenChange$?.(value),
+	})
 
 	const open = () => {
-		setIsOpen(true);
-	};
+		setIsOpen(true)
+	}
 
 	const close = () => {
-		setIsOpen(false);
-	};
+		setIsOpen(false)
+	}
 
 	const toggle = () => {
-		isOpen() ? close() : open();
-	};
+		isOpen() ? close() : open()
+	}
 
 	return {
-		isOpen,
-		setIsOpen,
-		open,
-		close,
-		toggle,
-	};
+		isOpen$: isOpen,
+		setIsOpen$: setIsOpen,
+		open$: open,
+		close$: close,
+		toggle$: toggle,
+	}
 }

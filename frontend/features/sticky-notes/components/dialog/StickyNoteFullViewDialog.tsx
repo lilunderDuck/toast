@@ -55,7 +55,6 @@ export default function StickyNoteFullViewDialog(props: IStickyNoteFullViewDialo
       style={`--sticky-note-background-color:${props.context$!.color$()}`}
       showCloseButton$={false}
     >
-      <div class={dialog__background} />
       <StickyNoteTitle 
         action$={props.action$}
         context$={props.context$}
@@ -68,6 +67,8 @@ export default function StickyNoteFullViewDialog(props: IStickyNoteFullViewDialo
       <div class={dialog__someSpacesBellow} />
       {/* @ts-ignore */}
       <props.context$.ContentInput$ />
+
+      <div class={dialog__background} />
 
       <ButtonRow>
         <Button

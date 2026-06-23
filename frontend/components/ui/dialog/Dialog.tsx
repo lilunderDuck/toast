@@ -10,25 +10,20 @@ import type { HTMLAttributes } from "~/utils"
 // ...
 import type { IDialogPortalProps } from "./types"
 import { useDialogContext } from "./DialogContext"
+import { BsX } from "solid-icons/bs"
 
-const dialog__portal = css`
+const dialog__this = css`
   z-index: 30;
   width: 100%;
   height: 100%;
   position: fixed;
+  padding: 0;
+  background-color: #11111b8d;
+  backdrop-filter: blur(3px);
+  color: var(--text);
   display: flex;
   justify-content: center;
-  // alignItems: flex-start;
   align-items: center;
-`
-
-const dialog__overlay = css`
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  z-index: 30;
-  backdrop-filter: blur(3px);
-  background-color: #11111b8d;
 `
 
 const dialog__content = css`
@@ -37,6 +32,7 @@ const dialog__content = css`
   background-color: var(--mantle);
   position: relative;
   outline: none;
+  border-radius: 6px;
 `
 
 const dialog__closeButton = css`
@@ -83,6 +79,7 @@ const dialog__contentTitleBar = css`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 35;
 `
 
 function DialogPortal(props: IDialogPortalProps) {
@@ -90,14 +87,12 @@ function DialogPortal(props: IDialogPortalProps) {
   const [, rest] = splitProps(props, ["children", "closeOnClickOutside$"])
 
   return (
-    <Show when={context.contentPresent$() || context.overlayPresent$()}>
+    <Show when={context.isOpen$()}>
 			<Portal {...rest}>
-        <AppTitleBarDraggable class={dialog__contentTitleBar} />
-        <dialog closedby={props.closeOnClickOutside$ ? "none" : "any"}>
+        <dialog class={dialog__this} open={context.isOpen$()} closedby={props.closeOnClickOutside$ ? "none" : "any"}>
           {props.children}
         </dialog>
-        <div class={dialog__portal}>
-        </div>
+        <AppTitleBarDraggable class={dialog__contentTitleBar} />
       </Portal>
 		</Show>
   )
@@ -128,9 +123,9 @@ function DialogContent(props: IDialogContentProps) {
       >
         {props.children}
         <Show when={props.showCloseButton$ ?? true}>
-          {/* <CloseButton class={dialog__closeButton} onClick={close$}>
+          <button class={dialog__closeButton} onClick={close$}>
             <BsX size={40} />
-          </CloseButton> */}
+          </button>
           <></>
         </Show>
       </div>
