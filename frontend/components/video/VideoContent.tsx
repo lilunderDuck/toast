@@ -25,6 +25,7 @@ const video__thisVideoElement = css`
   will-change: transform;
   backface-visibility: hidden;
   background-color: var(--crust);
+  width: 100%;
 `
 
 const video__layer = css`
