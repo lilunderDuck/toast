@@ -53,7 +53,7 @@ func StartServer() {
 		debug.InfoLabel("assets", "One server comin' right up")
 	}
 
-	err := http.ListenAndServe(":8000", server)
+	err := http.ListenAndServe(":34116", server)
 	if debug.DEBUG_MODE {
 		if err != nil {
 			debug.WarnLabelf("assets", "Server already been opened.\n%s", err.Error())
