@@ -1,4 +1,12 @@
 {
   "targetDir": "./build/out/bin/resource",
-  "preset": ["propsEndWithDollarSign"]
+  "preset": [
+    "propsEndWithDollarSign", 
+    {
+      "name": "predefinedNames",
+      "mangle": [
+        
+      ]
+    }
+  ]
 }

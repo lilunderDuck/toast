@@ -2,6 +2,7 @@ package backend
 
 import (
 	"os"
+	"toast/backend/features/app_storage"
 	"toast/backend/features/collections"
 	"toast/backend/features/collections/gallery"
 	"toast/backend/features/collections/playlist"
@@ -27,6 +28,7 @@ func GetAppConfig(icon []byte, appInstance *App) *options.App {
 		&gallery.Exports{},
 		&playlist.Exports{},
 		&sticky_notes.Exports{},
+		&app_storage.Exports{},
 	}
 
 	return &options.App{

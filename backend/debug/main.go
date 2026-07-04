@@ -26,8 +26,8 @@ func ErrLabel(label string, detail error) {
 	fmt.Printf("%s %s | %s\n", formatLabel(label), LOG_LABEL_ERROR, formatContent(detail.Error()))
 }
 
-func FatalLabel(label string, detail error) {
-	fmt.Printf("%s %s | %s\n", formatLabel(label), LOG_LABEL_FATAL, formatContent(detail.Error()))
+func FatalLabel(label string, detail string) {
+	fmt.Printf("%s %s | %s\n", formatLabel(label), LOG_LABEL_FATAL, formatContent(detail))
 	os.Exit(1)
 }
 

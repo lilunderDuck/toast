@@ -6,6 +6,7 @@ import (
 	"time"
 	"toast/backend/db"
 	"toast/backend/debug"
+	"toast/backend/features/app_storage"
 
 	"github.com/shirou/gopsutil/cpu"
 	wails_runtime "github.com/wailsapp/wails/v2/pkg/runtime"
@@ -35,6 +36,7 @@ func (a App) domReady(ctx context.Context) {
 // Returning true will cause the application to continue, false will continue shutdown as normal.
 func (a *App) beforeClose(ctx context.Context) (prevent bool) {
 	db.CloseAll()
+	app_storage.OnShutdown()
 	return false
 }
 

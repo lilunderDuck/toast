@@ -1,7 +1,7 @@
 import { DEBUG_ASSERT, DEBUG_INFO_LABEL, DEBUG_WARN_LABEL } from "macro-def"
-import { createContext, createSignal, onMount, ParentProps, useContext, type Accessor } from "solid-js"
+import { createContext, createSignal, onCleanup, onMount, ParentProps, useContext, type Accessor } from "solid-js"
 // ...
-import { useDocumentEventListener, usePersistedSignal } from "~/hooks"
+import { useDocumentEventListener } from "~/hooks"
 import type { gallery } from "~/wailsjs/go/models"
 import { Gallery_getEntryByPath } from "~/wailsjs/go/gallery/Exports"
 import { useZoomAndPanContext } from "~/components"
@@ -9,6 +9,7 @@ import type { AnyNoArgsFunction } from "~/utils"
 // ...
 import { GALLERY_IN_EXTERNAL_MODE } from "./constants"
 import { showGalleryReduceModeToast } from "../components"
+import { AppStorage_Get, AppStorage_Set } from "~/wailsjs/go/app_storage/Exports"
 
 interface IGalleryContext {
   entries$: Accessor<gallery.GalleryItemData[]>
@@ -47,9 +48,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   const [allControlsHidden, setAllControlsHidden] = createSignal(false)
   
   const isExternal = props.galleryId$ === GALLERY_IN_EXTERNAL_MODE
-  const [currentItemIndex, setCurrentItemIndex] = usePersistedSignal(localStorage, isExternal ? props.directory$! : `gallery_${props.galleryId$}`, 0)
-
-  DEBUG_INFO_LABEL("gallery", "previously saved gallery item index is:", currentItemIndex())
+  const [currentItemIndex, setCurrentItemIndex] = createSignal(0)
 
   const goToNextItem = () => {
     updateButtonsState()
@@ -86,25 +85,43 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
     setShouldDisablePrevBtn(currentItemIndex() === 0)
   }
 
-  onMount(async() => {
-    DEBUG_INFO_LABEL("gallery", "start fetching...")
-    if (isExternal) {
-      DEBUG_INFO_LABEL("gallery", "you've said the magic word, opening gallery in external mode...")
-      DEBUG_ASSERT(props.directory$, "gallery opened in external mode requires an additional prop: directory$. Currently, it is ", typeof props.directory$)
+  const GALLERY_STORAGE_KEY = isExternal ? props.directory$! : `gallery_${props.galleryId$}`
 
-      const entries = await Gallery_getEntryByPath(props.directory$!)
-      setEntries(entries)
+  onMount(async() => {
+    DEBUG_INFO_LABEL("gallery", "fast fetching: fetch", GALLERY_STORAGE_KEY)
+    if (TOAST_DEBUG) {
+      if (isExternal) {
+        DEBUG_INFO_LABEL("gallery", "you've said the magic word, opening gallery in external mode...")
+        DEBUG_ASSERT(props.directory$, "gallery opened in external mode requires an additional prop: directory$. Currently, it is ", typeof props.directory$)
+      }
     }
 
-    const currentItem = currentItemIndex() + 1
-    const isInBound = currentItem <= entries().length && currentItem > 0
-    if (!isInBound) {
-      DEBUG_WARN_LABEL("gallery", "item that previously saved is not in bound, setting it back to 0 (the first item in the gallery)")
-      setCurrentItemIndex(0)
+    const [rawLastGalleryItem, galleryEntries] = await Promise.all([
+      AppStorage_Get(GALLERY_STORAGE_KEY),
+      Gallery_getEntryByPath(props.directory$!)
+    ])
+
+    setEntries(galleryEntries)
+
+    const lastGalleryItemIndex = parseInt(rawLastGalleryItem)
+    if (!isNaN(lastGalleryItemIndex)) {
+      const currentItem = lastGalleryItemIndex + 1
+      const isInBound = currentItem <= entries().length && currentItem > 0
+      if (!isInBound) {
+        DEBUG_WARN_LABEL("gallery", "item that previously saved is not in bound:", currentItem, "between", 0, "and", entries().length - 1, ", setting it back to 0 (the first item in the gallery)")
+        setCurrentItemIndex(0)
+      } else {
+        setCurrentItemIndex(lastGalleryItemIndex)
+      }
     }
     
     updateButtonsState()
     updateCurrentItem()
+  })
+
+  onCleanup(() => {
+    DEBUG_INFO_LABEL("gallery", "saving current item index, last item is at index", currentItemIndex(), currentItem())
+    AppStorage_Set(GALLERY_STORAGE_KEY, `${currentItemIndex()}`)
   })
 
   const toggleReducedMode = () => {

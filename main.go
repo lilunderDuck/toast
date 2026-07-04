@@ -26,7 +26,7 @@ func main() {
 
 		err := wails.Run(backend.GetAppConfig(icon, app))
 		if err != nil {
-			debug.FatalLabel("app", err)
+			debug.FatalLabel("app", err.Error())
 		}
 	} else {
 		wails.Run(backend.GetAppConfig(icon, app))
