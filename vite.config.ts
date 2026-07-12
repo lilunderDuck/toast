@@ -10,7 +10,7 @@ import { macroPlugin } from "./build/scripts/macros.js"
 
 // Make sure to update the code in ./backend/internals/path.go if you're planning
 // to change this variable and vice versa
-const BUILD_SAVED_PATH = "./build/out/bin/resource"
+const BUILD_SAVED_PATH = "./build/dist/app"
 
 export default defineConfig(({ command }) => {
   const TOAST_DEBUG = command !== "build"

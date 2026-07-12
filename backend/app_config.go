@@ -1,7 +1,7 @@
 package backend
 
 import (
-	"os"
+	"embed"
 	"toast/backend/features/app_storage"
 	"toast/backend/features/collections"
 	"toast/backend/features/collections/gallery"
@@ -18,7 +18,7 @@ import (
 )
 
 // Everything related to wails's config basically.
-func GetAppConfig(icon []byte, appInstance *App) *options.App {
+func GetAppConfig(icon []byte, appInstance *App, assets embed.FS) *options.App {
 	const WINDOW_TITLE = "Toast making machine"
 
 	binding := []any{
@@ -37,7 +37,7 @@ func GetAppConfig(icon []byte, appInstance *App) *options.App {
 		Width:     1000,
 		Height:    663,
 		AssetServer: &assetserver.Options{
-			Assets: os.DirFS(internals.RESOURCE_FOLDER_PATH),
+			Assets: assets,
 			// Well, my intrusive thoughts *thought* that it'd be better to merge everything into
 			// one single server, instead of ones for the assets, and other for journal and stuff.
 			//

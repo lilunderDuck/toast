@@ -5,7 +5,6 @@ import { Input, PlaceholderView, Spacer } from "~/components"
 import { scrollbar, scrollbar__vertical } from "~/styles"
 // ...
 import { css } from "molcss"
-import "./NotePage.css"
 // ...
 import { useNoteHomeContext } from "../provider"
 import { CreateNoteButton, TagListButton, TotalNotesText } from "../components"

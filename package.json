@@ -13,7 +13,7 @@
   "devDependencies": {
     "@types/node": "^24.0.14",
     "escodegen": "^2.1.0",
-    "vite": "^6.4.2",
+    "vite": "^8.1.4",
     "vite-plugin-optimize-css-modules": "^1.2.0",
     "vite-plugin-pages": "^0.32.4",
     "vite-plugin-solid": "^2.11.6"
