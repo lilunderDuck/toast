@@ -6,10 +6,10 @@ import type { gallery } from "~/wailsjs/go/models"
 import { Gallery_getEntryByPath } from "~/wailsjs/go/gallery/Exports"
 import { useZoomAndPanContext } from "~/components"
 import type { AnyNoArgsFunction } from "~/utils"
+import { AppStorage_Get, AppStorage_Set } from "~/wailsjs/go/app_storage/Exports"
 // ...
 import { GALLERY_IN_EXTERNAL_MODE } from "./constants"
 import { showGalleryReduceModeToast } from "../components"
-import { AppStorage_Get, AppStorage_Set } from "~/wailsjs/go/app_storage/Exports"
 
 interface IGalleryContext {
   entries$: Accessor<gallery.GalleryItemData[]>
@@ -51,23 +51,15 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   const [currentItemIndex, setCurrentItemIndex] = createSignal(0)
 
   const goToNextItem = () => {
-    updateButtonsState()
-    if (currentItemIndex() + 1 === entries().length) {
-      return
-    }
-
     setCurrentItemIndex(prev => prev + 1)
     updateCurrentItem()
+    updateButtonsState()
   }
 
   const goToPrevItem = () => {
-    updateButtonsState()
-    if (currentItemIndex() === 0) {
-      return
-    }
-
     setCurrentItemIndex(prev => prev - 1)
     updateCurrentItem()
+    updateButtonsState()
   }
 
   const updateCurrentItem = () => {
@@ -81,8 +73,9 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   }
 
   const updateButtonsState = () => {
-    setShouldDisableNextBtn(currentItemIndex() === entries().length - 1)
+    setShouldDisableNextBtn(entries()[currentItemIndex() + 1] === undefined)
     setShouldDisablePrevBtn(currentItemIndex() === 0)
+    DEBUG_INFO_LABEL("gallery", "prev and next button disabled state is:", shouldDisablePrevBtn(), shouldDisableNextBtn())
   }
 
   const GALLERY_STORAGE_KEY = isExternal ? props.directory$! : `gallery_${props.galleryId$}`
@@ -131,9 +124,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
 
   const keyMapping: Record<string, AnyNoArgsFunction> = {
     "a": goToPrevItem,
-    "arrowleft": goToPrevItem,
     "d": goToNextItem,
-    "arrowright": goToNextItem,
     "e": zoom$,
     "q": unzoom$,
     "r": toggleReducedMode

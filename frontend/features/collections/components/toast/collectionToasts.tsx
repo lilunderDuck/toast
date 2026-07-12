@@ -14,7 +14,7 @@ const toast__description = css`
 `
 
 export function showCollectionNotAvailableToast() {
-  toast.custom(() => (
+  toast.custom$(() => (
     <div class={toast__root}>
       <h3>Collection is not avaliable</h3>
       <div class={toast__description}>

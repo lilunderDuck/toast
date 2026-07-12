@@ -1,1 +1,1 @@
-export * from "./CollectionNotAvailableToast"
+export * from "./collectionToasts"

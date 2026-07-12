@@ -1,5 +1,5 @@
 import type { JSX } from "solid-js"
-import { splitProps } from "solid-js"
+import { Show, splitProps } from "solid-js"
 
 import {
   Root,
@@ -48,21 +48,23 @@ export function Tooltip(props: ITooltipProps) {
   ])
 
   return (
-    <Root openDelay={0} closeDelay={0} gutter={4} {...local.tooltipOptions$}>
-      <Trigger
-        as="div"
-        class={tooltip__trigger}
-      >
-        {local.children}
-      </Trigger>  
-      <Portal>
-        <Content
-          {...others}
-          class={`${tooltip} component-tooltip ${others.class ?? ""}`}
+    <Show when={props.label$} fallback={local.children}>
+      <Root openDelay={0} closeDelay={0} gutter={4} {...local.tooltipOptions$}>
+        <Trigger
+          as="div"
+          class={tooltip__trigger}
         >
-          {local.label$}
-        </Content>
-      </Portal>
-    </Root>
+          {local.children}
+        </Trigger>  
+        <Portal>
+          <Content
+            {...others}
+            class={`${tooltip} component-tooltip ${others.class ?? ""}`}
+          >
+            {local.label$}
+          </Content>
+        </Portal>
+      </Root>
+    </Show>
   )
 }

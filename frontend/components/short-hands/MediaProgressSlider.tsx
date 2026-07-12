@@ -25,7 +25,7 @@ const slider__buffered = css`
 
 interface IMediaProgressSlider {
   disabled?: boolean
-  player$: MediaPlayer
+  player$: MediaPlayer<"video" | "audio">
 }
 
 /**A component that renders the current progress of a video/audio and handles seeking. 

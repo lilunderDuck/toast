@@ -6,7 +6,6 @@ import { css } from "molcss"
 import type { Ref } from "~/utils"
 // ...
 import { useZoomAndPanContext } from "./ZoomAndPanProvider"
-import { DEBUG_INFO_LABEL } from "macro-def"
 
 const zoomDisplay = css`
   width: 100%;

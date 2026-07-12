@@ -71,10 +71,10 @@ function createToastCreator(type?: ToastType): ToastHandler {
 
 export const toast = (message: Message, opts?: ToastOptions) => createToastCreator(ToastType.BLANK)(message, opts)
 
-toast.error = createToastCreator(ToastType.ERROR)
-toast.success = createToastCreator(ToastType.SUCCESS)
-toast.loading = createToastCreator(ToastType.LOADING)
-toast.custom = createToastCreator(ToastType.CUSTOM)
+toast.error$ = createToastCreator(ToastType.ERROR)
+toast.success$ = createToastCreator(ToastType.SUCCESS)
+toast.loading$ = createToastCreator(ToastType.LOADING)
+toast.custom$ = createToastCreator(ToastType.CUSTOM)
 
 toast.dismiss = (toastId?: string) => {
   dispatch({
@@ -94,17 +94,17 @@ toast.promise = <T>(
   msgs: ToastPromiseMessages<T>,
   opts?: ToastOptions
 ) => {
-  const id = toast.loading(msgs.loading, { ...opts, duration: 2000, })
+  const id = toast.loading$(msgs.loading, { ...opts, duration: 2000, })
 
   const options: ToastOptions = { id, ...opts }
 
   promise
     .then((p) => {
-      toast.success(resolveValue(msgs.success, p), options)
+      toast.success$(resolveValue(msgs.success, p), options)
       return p
     })
     .catch((e) => {
-      toast.error(resolveValue(msgs.error, e), options)
+      toast.error$(resolveValue(msgs.error, e), options)
     })
   // 
 

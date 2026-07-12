@@ -9,7 +9,8 @@ import type { collections } from "~/wailsjs/go/models"
 import { playlistIconUrl } from "~/features/playlist/api"
 import { createLazyComponent } from "~/hooks"
 import { ASSETS_SERVER_URL, COLLECTION_TYPE_MAGIC_MAPPING, COLLECTION_TYPE_NAME_MAPPING } from "~/api"
-import type { ActionHandlerFn } from "~/utils"
+import type { ActionHandlerFn, EventHandler } from "~/utils"
+import { Input } from "~/components"
 // ...
 import { CollectionCreateButton, CollectionExternalSectionButtonRow, CollectionExternalSectionDescription, CollectionItem, CollectionSection } from "../components"
 import { useCollectionPageContext } from "../provider/CollectionPageProvider"
@@ -26,7 +27,7 @@ const collection__extraSpaces = css`
 
 export default function CollectionPage() {
   const context = useCollectionPageContext()
-  const { collections$, collectionAvailableMap$, checkIfExternalCollectionAvailable$ } = context
+  const { collections$, collectionAvailableMap$, checkIfExternalCollectionAvailable$, searchByName$ } = context
 
   const sectionActionHandler: ActionHandlerFn<CollectionExternalSectionAction> = (type) => {
     switch (type) {
@@ -50,15 +51,25 @@ export default function CollectionPage() {
 
   const iconUrl = (iconFileName: string) => `${ASSETS_SERVER_URL}/local-assets/cache/${iconFileName}` as const
 
+  const searchHandler: EventHandler<"input", "onInput"> = (inputEvent) => {
+    searchByName$(inputEvent.currentTarget.value)
+  }
+
   return (
     <main class={`${collection} journalHome__mainContent scrollbar scrollbarVertical invsScrollbar`}>
       <h1>Collection</h1>
+
+      <Input 
+        placeholder="Search collection"
+        onInput={searchHandler}
+      />
+
       <CollectionSection
         icon$={RiMediaPlayList2Fill} 
         label$="Playlist" 
       >
-        <Show when={collections$?.playlists}>
-          <For each={collections$!.playlists}>
+        <Show when={collections$()?.playlists}>
+          <For each={collections$()!.playlists}>
             {it => (
               <CollectionItem 
                 href$={`/collection/playlist/${it.id}`}
@@ -76,8 +87,8 @@ export default function CollectionPage() {
         icon$={RiMediaGalleryFill} 
         label$="Gallery" 
       >
-        <Show when={collections$?.galleries}>
-          <For each={collections$?.galleries}>
+        <Show when={collections$()?.galleries}>
+          <For each={collections$()?.galleries}>
             {it => (
               <CollectionItem 
                 href$={`/collection/playlist/${it.id}`}
@@ -97,8 +108,8 @@ export default function CollectionPage() {
         description$={<CollectionExternalSectionDescription />}
         labelTools$={<CollectionExternalSectionButtonRow action$={sectionActionHandler} />}
       >
-        <Show when={collections$?.externalSources}>
-          <For each={collections$?.externalSources}>
+        <Show when={collections$()?.externalSources}>
+          <For each={collections$()?.externalSources}>
             {it => (
               <CollectionItem 
                 href$={externalCollectionUrl(it)}
@@ -113,6 +124,7 @@ export default function CollectionPage() {
         <CollectionCreateButton 
           icon$={<FaSolidExternalLinkAlt />} 
           onClick$={OpenExternalCollectionDialog.show$}
+          tooltipLabel$="Import collections"
         />
       </CollectionSection>
 

@@ -2,13 +2,13 @@ import { DEBUG_ASSERT, DEBUG_ERR_LABEL, DEBUG_INFO_LABEL } from "macro-def"
 import { createSignal, onCleanup, Show } from "solid-js"
 import { useNavigate } from "@solidjs/router"
 // ...
-import { Button, ButtonRow, DialogContent, DialogHeader, Label } from "~/components"
-import { createFileUpload, type IBaseLazyComponent } from "~/hooks"
-import { Collections_createExternal, Collections_judgeTypeByPath } from "~/wailsjs/go/collections/Exports"
 import { Gallery_getByPath } from "~/wailsjs/go/gallery/Exports"
+import { Collections_createExternal, Collections_judgeTypeByPath } from "~/wailsjs/go/collections/Exports"
+import type { collections, gallery } from "~/wailsjs/go/models"
 import { getExternalGalleryIconUrl } from "~/features/gallery"
-import type { gallery } from "~/wailsjs/go/models"
 import { GALLERY_IN_EXTERNAL_MODE } from "~/features/gallery/provider/constants"
+import { Button, ButtonRow, DialogContent, Label } from "~/components"
+import { createFileUpload, type IBaseLazyComponent } from "~/hooks"
 import type { IContextBridge } from "~/utils"
 // ...
 import { css } from "molcss"
@@ -17,7 +17,8 @@ import { CollectionItem } from "../CollectionItem"
 import type { ICollectionPageContext } from "../../provider/CollectionPageProvider"
 
 const dialog = css`
-  width: 55%;
+  width: 65%;
+  user-select: none;
 `
 
 const dialog__choosenCollectionWrap = css`
@@ -29,6 +30,7 @@ const dialog__choosenCollectionWrap = css`
   min-height: 10rem;
   border-radius: 6px;
   margin-top: 10px;
+  padding-block: 10px;
 `
 
 const dialog__chooseCollectionButton = css`
@@ -38,6 +40,14 @@ const dialog__chooseCollectionButton = css`
     border-color: var(--blue);
     color: var(--text);
   }
+`
+
+const dialog__section = css`
+  padding-bottom: 15px;
+`
+
+const dialog__descriptionText = css`
+  padding-bottom: 5px;
 `
 
 type DisplayedCollection = {
@@ -54,7 +64,7 @@ export default function OpenExternalCollectionDialog(props: IStickyNoteFullViewD
   const redirect = useNavigate()
 
   DEBUG_ASSERT(props.context$, "context is undefined")
-  const { collections$, setCollections$ } = props.context$!
+  const { updateCollections$ } = props.context$!
 
   const { open$ } = createFileUpload({
     type$: FileUploadType.DIRECTORY,
@@ -86,11 +96,17 @@ export default function OpenExternalCollectionDialog(props: IStickyNoteFullViewD
     },
   })
 
-  const goToCollection = async() => {
+  const goToCollection = async () => {
     DEBUG_ASSERT(displayedCollection() !== undefined, "you're calling redirect too soon!!")
 
     const externalSourceData = await Collections_createExternal(displayedCollection()!.directoryOpened$)
-    setCollections$('externalSources', collections$!.externalSources.length, externalSourceData)
+    updateCollections$(prev => {
+      prev.externalSources.push(externalSourceData)
+      return {
+        ...prev,
+        externalSources: prev.externalSources
+      } as collections.CollectionsData
+    })
 
     redirect(`/collection/gallery/${GALLERY_IN_EXTERNAL_MODE}?directory=${displayedCollection()!.directoryOpened$}`)
     props.close$()
@@ -103,12 +119,17 @@ export default function OpenExternalCollectionDialog(props: IStickyNoteFullViewD
       class={dialog}
       showCloseButton$={false}
     >
-      <DialogHeader>
+      <h2>
         Open external collection.
-      </DialogHeader>
-      <a>What is this?</a>
+      </h2>
+      <section class={dialog__section}>
+        <p class={dialog__descriptionText}>
+          Open collections stored outside the default app directory (e.g., on an external drive).
+        </p>
+        <p><b>Warning:</b> Moving or renaming the collection on your drive will break the connection, requiring a reimport/update.</p>
+      </section>
 
-      <section>
+      <section class={dialog__section}>
         <Label>Choosen collection</Label>
         <Show when={displayedCollection()} fallback={
           <button class={`${dialog__choosenCollectionWrap} ${dialog__chooseCollectionButton}`} onClick={open$}>
@@ -134,9 +155,9 @@ export default function OpenExternalCollectionDialog(props: IStickyNoteFullViewD
         <Button size$={ButtonSize.SMALL} onClick={props.close$}>
           Close
         </Button>
-        <Button 
-          size$={ButtonSize.SMALL} 
-          variant$={ButtonVariant.SECONDARY} 
+        <Button
+          size$={ButtonSize.SMALL}
+          variant$={ButtonVariant.SECONDARY}
           onClick={goToCollection}
           disabled={!displayedCollection()}
         >

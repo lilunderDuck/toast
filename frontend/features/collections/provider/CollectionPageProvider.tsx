@@ -1,15 +1,18 @@
 import { DEBUG_ASSERT, DEBUG_INFO_LABEL } from "macro-def"
-import { createContext, createSignal, onMount, ParentProps, useContext, type Accessor } from "solid-js"
-import { createStore, type SetStoreFunction } from "solid-js/store"
+import { createContext, createSignal, onMount, ParentProps, useContext, type Accessor, type Setter } from "solid-js"
+// ...
+import { type SetStoreFunction } from "solid-js/store"
+// ...
 import { wrapFn } from "~/utils"
 import { Collections_checkExternalAvailability, Collections_getAll, Collections_update } from "~/wailsjs/go/collections/Exports"
 import type { collections } from "~/wailsjs/go/models"
 
 export interface ICollectionPageContext {
-  collections$: collections.CollectionsData | null
-  setCollections$: SetStoreFunction<collections.CollectionsData>
+  collections$: Accessor<collections.CollectionsData | null>
+  updateCollections$: Setter<collections.CollectionsData>
   collectionAvailableMap$: Accessor<Record<string, boolean> | null>
   checkIfExternalCollectionAvailable$(): Promise<void>
+  searchByName$(name: string): void
 }
 
 const Context = createContext<ICollectionPageContext>()
@@ -20,13 +23,19 @@ interface ICollectionPageProviderProps {
 
 export function CollectionPageProvider(props: ParentProps<ICollectionPageProviderProps>) {
   // @ts-ignore - initilize store with a null value
-  const [collections, setCollections] = createStore<collections.CollectionsData>(null)
+  const [collections, setCollections] = createSignal<collections.CollectionsData>(null)
   const [collectionAvailableMap, setCollectionAvailableMap] = createSignal<Record<string, boolean> | null>(null)
 
   onMount(async() => {
     await checkIfAvailable()
-    setCollections(await Collections_getAll())
-    DEBUG_INFO_LABEL("home", "collection data fetched", collections)
+    const collectionsData = await Collections_getAll()
+
+    DEBUG_ASSERT(Array.isArray(collectionsData.galleries), "collectionsData.galleries is not an array, thing might break!")
+    DEBUG_ASSERT(Array.isArray(collectionsData.playlists), "collectionsData.playlists is not an array, thing might break!")
+    DEBUG_ASSERT(Array.isArray(collectionsData.externalSources), "collectionsData.externalSources is not an array, thing might break!")
+
+    setCollections(collectionsData)
+    DEBUG_INFO_LABEL("home", "collection data fetched", collections())
   })
 
   const checkIfAvailable = async() => {
@@ -36,20 +45,38 @@ export function CollectionPageProvider(props: ParentProps<ICollectionPageProvide
   }
 
   const setCollectionsWrap: SetStoreFunction<collections.CollectionsData> = wrapFn(setCollections, () => {
-    Collections_update(collections)
+    Collections_update(collections())
   })
-  
-  // (...args: any[]) => {
-  //   setCollections(...args)
-  //   Collections_update(collections)
-  // }
 
+  let cachedCollections!: collections.CollectionsData | undefined
+  const searchByName = (name: string) => {
+    if (!cachedCollections) {
+      cachedCollections = collections()
+    }
+
+    if (name === "") {
+      setCollections(cachedCollections)
+      cachedCollections = undefined
+      return
+    }
+
+    DEBUG_INFO_LABEL("collection", "data", collections())
+
+    setCollections(it => ({
+      galleries: it.galleries.filter(it => it.name.toLowerCase().includes(name.toLowerCase())),
+      playlists: it.playlists.filter(it => it.name.toLowerCase().includes(name.toLowerCase())),
+      externalSources: it.externalSources.filter(it => it.name.toLowerCase().includes(name.toLowerCase())),
+    } as collections.CollectionsData))
+    DEBUG_INFO_LABEL("collection", "search result:", collections())
+  }
+  
   return (
     <Context.Provider value={{
       collections$: collections,
-      setCollections$: setCollectionsWrap,
+      updateCollections$: setCollectionsWrap,
       collectionAvailableMap$: collectionAvailableMap,
-      checkIfExternalCollectionAvailable$: checkIfAvailable
+      checkIfExternalCollectionAvailable$: checkIfAvailable,
+      searchByName$: searchByName
     }}>
       {props.children}
     </Context.Provider>

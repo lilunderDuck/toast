@@ -1,5 +1,6 @@
 import { css } from "molcss"
 import type { JSX } from "solid-js"
+import { Tooltip } from "~/components"
 
 const button = css`
   width: 9rem;
@@ -22,12 +23,15 @@ const button = css`
 interface ICollectionCreateButtonProps {
   onClick$?: () => void
   icon$: JSX.Element
+  tooltipLabel$?: string
 }
 
 export function CollectionCreateButton(props: ICollectionCreateButtonProps) {
   return (
-    <button class={button} onClick={props.onClick$}>
-      {props.icon$}
-    </button>
+    <Tooltip label$={props.tooltipLabel$}>
+      <button class={button} onClick={props.onClick$}>
+        {props.icon$}
+      </button>
+    </Tooltip>
   )
 }
