@@ -10,6 +10,7 @@ import { AppStorage_Get, AppStorage_Set } from "~/wailsjs/go/app_storage/Exports
 // ...
 import { GALLERY_IN_EXTERNAL_MODE } from "./constants"
 import { showGalleryReduceModeToast } from "../components"
+import { EventsOn } from "~/wailsjs/runtime/runtime"
 
 interface IGalleryContext {
   entries$: Accessor<gallery.GalleryItemData[]>
@@ -78,6 +79,16 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
     DEBUG_INFO_LABEL("gallery", "prev and next button disabled state is:", shouldDisablePrevBtn(), shouldDisableNextBtn())
   }
 
+  const beforeClosing = () => {
+    DEBUG_INFO_LABEL("gallery", "saving current item index, last item is at index", currentItemIndex(), currentItem())
+    AppStorage_Set(GALLERY_STORAGE_KEY, `${currentItemIndex()}`)
+  }
+
+  const toggleReducedMode = () => {
+    setAllControlsHidden(prev => !prev)
+    showGalleryReduceModeToast(allControlsHidden())
+  }
+
   const GALLERY_STORAGE_KEY = isExternal ? props.directory$! : `gallery_${props.galleryId$}`
 
   onMount(async() => {
@@ -112,15 +123,9 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
     updateCurrentItem()
   })
 
-  onCleanup(() => {
-    DEBUG_INFO_LABEL("gallery", "saving current item index, last item is at index", currentItemIndex(), currentItem())
-    AppStorage_Set(GALLERY_STORAGE_KEY, `${currentItemIndex()}`)
-  })
+  onCleanup(beforeClosing)
 
-  const toggleReducedMode = () => {
-    setAllControlsHidden(prev => !prev)
-    showGalleryReduceModeToast(allControlsHidden())
-  }
+  EventsOn('before_closing', beforeClosing)
 
   const keyMapping: Record<string, AnyNoArgsFunction> = {
     "a": goToPrevItem,

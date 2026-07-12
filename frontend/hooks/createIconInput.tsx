@@ -6,7 +6,6 @@ import { css } from "molcss"
 import { createFileUpload, SUPPORTED_IMAGE_FILTER, type FileOpenDialogOptions } from "~/hooks"
 import { previewUrl } from "~/api"
 import { SpinningCube, Tooltip } from "~/components"
-import { DEBUG_WARN_LABEL } from "macro-def"
 
 const uploadZone = css`
   cursor: pointer;
