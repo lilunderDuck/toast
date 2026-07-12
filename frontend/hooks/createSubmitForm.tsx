@@ -124,7 +124,7 @@ export function createSubmitForm<T extends FieldValues>(options: ISubmitFormOpti
     Form$: (props: Parameters<FormComponent<T>>[0]) => (
       <Form {...props} onSubmit={submitThis} ref={formRef}>
         {props.children}
-        <div class={css`display: flex; justify-content: flex-end; gap: 10px;`}>
+        <div class={css`display: flex; justify-content: flex-end; gap: 10px; padding-top: 10px;`}>
           {options.buttonRow$}
           <Button
             type="submit"

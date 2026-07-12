@@ -2,12 +2,12 @@ import { createContext, createSignal, ParentProps, useContext, type Accessor, ty
 // ...
 import { css } from "molcss"
 // ...
-import { ResizableTextarea } from "~/components"
 import { createToggableInput } from "~/hooks"
 import type { sticky_notes } from "~/wailsjs/go/models"
+import { debounce, wrapFn } from "~/utils"
+import { scrollbar, scrollbar__invs, scrollbar__vertical } from "~/styles"
 // ...
 import { useStickyNotesContext } from "../provider/StickyNotesProvider"
-import { debounce, wrapFn } from "~/utils"
 
 const block__input = css`
   background-color: var(--surface0);
@@ -29,12 +29,19 @@ const block__readonlyInput = css`
 const block__contentInput = css`
   font-size: 16px;
   outline: 2px solid var(--overlay1);
+  max-height: calc(100% - 35px);
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  background-color: var(--surface0);
 `
 
 const block__contentReadonlyInput = css`
   font-size: 16px;
   word-break: break-word;
   white-space: break-spaces;
+  overflow: hidden;
+  height: calc(100% - 35px);
 `
 
 export interface IStickyNoteBlockContext {
@@ -82,8 +89,8 @@ export function StickyNoteBlockProvider(props: ParentProps<IStickyNoteBlockProvi
     component$: {
       Input$: (props) => (
         // @ts-ignore
-        <ResizableTextarea
-          class={block__contentInput}
+        <textarea
+          class={`${block__contentInput} ${scrollbar} ${scrollbar__vertical} ${scrollbar__invs}`}
           {...props}
         />
       ),

@@ -99,7 +99,7 @@ export default function GalleryCurrentItemInfoDialog(props: IGalleryCurrentItemI
         <p>{props.currentItemIndex$ + 1} of {props.totalItems$} items ({Math.round(progressPercent())}%)</p>
       </section>
 
-      <div class={css`display: flex; justify-content: flex-end; gap: 10px;`}>
+      <div class={css`display: flex; justify-content: flex-end; gap: 10px; padding-top: 10px;`}>
         <Button variant$={ButtonVariant.SECONDARY} onClick={props.close$}>
           Close
         </Button>

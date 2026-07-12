@@ -112,7 +112,7 @@ export default function NoteInfoDialog(props: INoteInfoDialogProps) {
 
         <Spacer />
 
-        <div class={css`display: flex; justify-content: flex-end; gap: 10px;`}>
+        <div class={css`display: flex; justify-content: flex-end; gap: 10px; padding-top: 10px;`}>
           <Button variant$={ButtonVariant.DANGER}>
             Close
           </Button>

@@ -70,7 +70,7 @@ export default function StickyNoteFullViewDialog(props: IStickyNoteFullViewDialo
 
       <div class={dialog__background} />
 
-      <div class={css`display: flex; justify-content: flex-end; gap: 10px;`}>
+      <div class={css`display: flex; justify-content: flex-end; gap: 10px; padding-top: 10px;`}>
         <Button onClick={props.close$}>
           Close
         </Button>
