@@ -3,7 +3,7 @@ export const COLLECTION_TYPE_NAME_REGISTRY = {
   [CollectionType.PLAYLIST]: "playlist"
 } as Record<CollectionType, string>
 
-export const COLLECTION_TYPE_MAGIC_ROUTE_REGISTRY = {
+export const COLLECTION_TYPE_MAGIC_ROUTE_NAME_REGISTRY = {
   [CollectionType.GALLERY]: "gallery_ex",
   [CollectionType.PLAYLIST]: "playlist_ex"
 } as Record<CollectionType, string>

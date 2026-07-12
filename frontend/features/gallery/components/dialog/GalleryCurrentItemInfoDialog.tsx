@@ -1,8 +1,10 @@
 import { DEBUG_ASSERT } from "macro-def"
-import { css } from "molcss"
 import { RiDesignAlignItemHorizontalCenterFill, RiSystemProgress1Fill } from "solid-icons/ri"
 import { Show } from "solid-js"
-import { Button, ButtonRow, DialogContent, Label } from "~/components"
+// ...
+import { css } from "molcss"
+// ...
+import { Button, DialogContent, Label } from "~/components"
 import type { IBaseLazyComponent } from "~/hooks"
 import type { gallery } from "~/wailsjs/go/models"
 
@@ -97,11 +99,11 @@ export default function GalleryCurrentItemInfoDialog(props: IGalleryCurrentItemI
         <p>{props.currentItemIndex$ + 1} of {props.totalItems$} items ({Math.round(progressPercent())}%)</p>
       </section>
 
-      <ButtonRow>
+      <div class={css`display: flex; justify-content: flex-end; gap: 10px;`}>
         <Button variant$={ButtonVariant.SECONDARY} onClick={props.close$}>
           Close
         </Button>
-      </ButtonRow>
+      </div>
     </DialogContent>
   )
 }

@@ -1,6 +1,7 @@
 import type { JSX } from "solid-js"
 import { Show, splitProps } from "solid-js"
 import { Portal } from "solid-js/web"
+import { BsX } from "solid-icons/bs"
 // ...
 import { css } from "molcss"
 // ...
@@ -9,7 +10,6 @@ import type { HTMLAttributes } from "~/utils"
 // ...
 import type { IDialogPortalProps } from "./types"
 import { useDialogContext } from "./DialogContext"
-import { BsX } from "solid-icons/bs"
 
 const dialog__this = css`
   z-index: 30;

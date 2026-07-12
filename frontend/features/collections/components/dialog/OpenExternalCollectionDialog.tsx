@@ -6,10 +6,10 @@ import { Gallery_getByPath } from "~/wailsjs/go/gallery/Exports"
 import { Collections_createExternal, Collections_judgeTypeByPath } from "~/wailsjs/go/collections/Exports"
 import type { collections, gallery } from "~/wailsjs/go/models"
 import { getExternalGalleryIconUrl } from "~/features/gallery"
-import { GALLERY_IN_EXTERNAL_MODE } from "~/features/gallery/provider/constants"
-import { Button, ButtonRow, DialogContent, Label } from "~/components"
+import { Button, DialogContent, Label } from "~/components"
 import { createFileUpload, type IBaseLazyComponent } from "~/hooks"
 import type { IContextBridge } from "~/utils"
+import { COLLECTION_TYPE_MAGIC_ROUTE_NAME_REGISTRY } from "~/api"
 // ...
 import { css } from "molcss"
 // ...
@@ -108,7 +108,7 @@ export default function OpenExternalCollectionDialog(props: IStickyNoteFullViewD
       } as collections.CollectionsData
     })
 
-    redirect(`/collection/gallery/${GALLERY_IN_EXTERNAL_MODE}?directory=${displayedCollection()!.directoryOpened$}`)
+    redirect(`/collection/gallery/${COLLECTION_TYPE_MAGIC_ROUTE_NAME_REGISTRY[CollectionType.GALLERY]}?directory=${displayedCollection()!.directoryOpened$}`)
     props.close$()
   }
 
@@ -151,7 +151,7 @@ export default function OpenExternalCollectionDialog(props: IStickyNoteFullViewD
         </Show>
       </section>
 
-      <ButtonRow>
+      <div class={css`display: flex; justify-content: flex-end; gap: 10px;`}>
         <Button onClick={props.close$}>
           Close
         </Button>
@@ -162,7 +162,7 @@ export default function OpenExternalCollectionDialog(props: IStickyNoteFullViewD
         >
           Open
         </Button>
-      </ButtonRow>
+      </div>
     </DialogContent>
   )
 }

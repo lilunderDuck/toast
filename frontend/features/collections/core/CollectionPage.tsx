@@ -8,7 +8,7 @@ import { css } from "molcss"
 import type { collections } from "~/wailsjs/go/models"
 import { playlistIconUrl } from "~/features/playlist/api"
 import { createLazyComponent } from "~/hooks"
-import { ASSETS_SERVER_URL, COLLECTION_TYPE_MAGIC_ROUTE_REGISTRY, COLLECTION_TYPE_NAME_REGISTRY } from "~/api"
+import { ASSETS_SERVER_URL, COLLECTION_TYPE_MAGIC_ROUTE_NAME_REGISTRY, COLLECTION_TYPE_NAME_REGISTRY } from "~/api"
 import type { ActionHandlerFn, EventHandler } from "~/utils"
 import { Input } from "~/components"
 import { scrollbar, scrollbar__invs, scrollbar__vertical } from "~/styles"
@@ -42,7 +42,7 @@ export default function CollectionPage() {
 
   const externalCollectionUrl = (data: collections.CollectionExternalSourceData) => {
     const typeName = COLLECTION_TYPE_NAME_REGISTRY[data.type as CollectionType]
-    const magicRoute = COLLECTION_TYPE_MAGIC_ROUTE_REGISTRY[data.type as CollectionType]
+    const magicRoute = COLLECTION_TYPE_MAGIC_ROUTE_NAME_REGISTRY[data.type as CollectionType]
     return `/collection/${typeName}/${magicRoute}?directory=${encodeURI(data.collectionPath)}` as const
   }
   // ...

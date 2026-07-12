@@ -1,6 +1,6 @@
 import { BsX } from "solid-icons/bs"
 // ...
-import { Button, ButtonRow, DialogContent } from "~/components"
+import { Button, DialogContent } from "~/components"
 import type { IBaseLazyComponent } from "~/hooks"
 import type { IActionHandler, IContextBridge } from "~/utils"
 // ...
@@ -70,11 +70,11 @@ export default function StickyNoteFullViewDialog(props: IStickyNoteFullViewDialo
 
       <div class={dialog__background} />
 
-      <ButtonRow>
+      <div class={css`display: flex; justify-content: flex-end; gap: 10px;`}>
         <Button onClick={props.close$}>
           Close
         </Button>
-      </ButtonRow>
+      </div>
     </DialogContent>
   )
 }

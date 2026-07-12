@@ -1,14 +1,13 @@
-import __style from "./AppTitleBar.module.css"
 import minimizeIcon from "~/assets/icons/min-w-10.png"
 import maximizeIcon from "~/assets/icons/max-w-10.png"
 import restoreIcon from "~/assets/icons/restore-w-10.png"
 import closeIcon from "~/assets/icons/close-w-20.png"
+import "./AppTitleBar.css"
+import { css } from "molcss"
 // ...
 import { WindowFullscreen, WindowMinimise, WindowUnfullscreen } from "~/wailsjs/runtime/runtime"
 import { WindowClose } from "~/wailsjs/go/backend/App"
 import { useToggle } from "~/hooks"
-// ...
-import { css } from "molcss"
 
 const titleBar = css`
   display: flex;
@@ -36,6 +35,11 @@ const titleBar__firstbutton = css`
   border-bottom-left-radius: 6px;
 `
 
+const titleBar__iconImg = css`
+  width: calc(var(--title-bar-thiccness) - 22px);
+  height: calc(var(--title-bar-thiccness) - 22px);
+`
+
 const titleBar__otherButton = css`
   padding-inline: var(--title-bar-button-padding);
   &:hover {
@@ -54,13 +58,13 @@ export function AppTitleBarButton() {
   const [isFullscreen, toggleFullscreen] = useToggle()
 
   return (
-    <div class={`${titleBar} appTitleBarButtonRow`} id={__style.buttonRow}>
+    <div class={`${titleBar} appTitleBarButtonRow`}>
       <div class={`${titleBar__otherButton} ${titleBar__firstbutton} appTitleBarButtonRow__buttonWrapper`}>
         <button 
           class={titleBar__button}
           onClick={WindowMinimise}
         >
-          <img class="icon" src={minimizeIcon} draggable="false" />
+          <img class={titleBar__iconImg} src={minimizeIcon} draggable="false" />
         </button>
       </div>
       <div class={`${titleBar__otherButton} appTitleBarButtonRow__buttonWrapper`}>
@@ -71,7 +75,7 @@ export function AppTitleBarButton() {
             isFullscreen() ? WindowFullscreen() : WindowUnfullscreen()
           }}
         >
-          <img class="icon" src={isFullscreen() ? restoreIcon : maximizeIcon} draggable="false" />
+          <img class={titleBar__iconImg} src={isFullscreen() ? restoreIcon : maximizeIcon} draggable="false" />
         </button>
       </div>
       <div class={`${titleBar__closeButton} appTitleBarButtonRow__buttonWrapper`}>
@@ -79,7 +83,7 @@ export function AppTitleBarButton() {
           class={titleBar__button}
           onClick={WindowClose}
         >
-          <img class="icon" src={closeIcon} draggable="false" />
+          <img class={titleBar__iconImg} src={closeIcon} draggable="false" />
         </button>
       </div>
     </div>

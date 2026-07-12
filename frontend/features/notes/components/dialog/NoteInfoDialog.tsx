@@ -5,7 +5,7 @@ import { A } from "@solidjs/router"
 import __style from "./NoteInfoDialog.module.css"
 import { css } from "molcss"
 // ...
-import { Button, ButtonRow, DialogContent, Spacer } from "~/components"
+import { Button, DialogContent, Spacer } from "~/components"
 import { type group } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 import { formatDate, goTimeToDate } from "~/utils"
@@ -112,14 +112,14 @@ export default function NoteInfoDialog(props: INoteInfoDialogProps) {
 
         <Spacer />
 
-        <ButtonRow>
+        <div class={css`display: flex; justify-content: flex-end; gap: 10px;`}>
           <Button variant$={ButtonVariant.DANGER}>
             Close
           </Button>
           <A href={`/journal/${props.id}`}>
             <Button>Open</Button>
           </A>
-        </ButtonRow>
+        </div>
       </main>
 
       <Show when={props.icon}>

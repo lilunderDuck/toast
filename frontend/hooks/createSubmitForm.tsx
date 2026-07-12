@@ -2,7 +2,9 @@ import { type FieldValues, createForm, type SubmitHandler, type FieldsStore, typ
 import { DEBUG_ERR_LABEL, DEBUG_INFO_LABEL } from "macro-def"
 import { createSignal, type JSX } from "solid-js"
 // ...
-import { Button, ButtonRow } from "~/components"
+import { css } from "molcss"
+// ...
+import { Button } from "~/components"
 import type { FieldInput } from "~/components"
 import type { Ref } from "~/utils"
 
@@ -122,7 +124,7 @@ export function createSubmitForm<T extends FieldValues>(options: ISubmitFormOpti
     Form$: (props: Parameters<FormComponent<T>>[0]) => (
       <Form {...props} onSubmit={submitThis} ref={formRef}>
         {props.children}
-        <ButtonRow>
+        <div class={css`display: flex; justify-content: flex-end; gap: 10px;`}>
           {options.buttonRow$}
           <Button
             type="submit"
@@ -130,7 +132,7 @@ export function createSubmitForm<T extends FieldValues>(options: ISubmitFormOpti
           >
             {options.submitButtonText$}
           </Button>
-        </ButtonRow>
+        </div>
       </Form>
     )
   }
