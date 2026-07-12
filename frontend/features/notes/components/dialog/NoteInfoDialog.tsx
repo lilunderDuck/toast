@@ -113,11 +113,11 @@ export default function NoteInfoDialog(props: INoteInfoDialogProps) {
         <Spacer />
 
         <ButtonRow>
-          <Button size$={ButtonSize.SMALL} variant$={ButtonVariant.DANGER}>
+          <Button variant$={ButtonVariant.DANGER}>
             Close
           </Button>
           <A href={`/journal/${props.id}`}>
-            <Button size$={ButtonSize.SMALL}>Open</Button>
+            <Button>Open</Button>
           </A>
         </ButtonRow>
       </main>

@@ -98,7 +98,7 @@ export default function GalleryCurrentItemInfoDialog(props: IGalleryCurrentItemI
       </section>
 
       <ButtonRow>
-        <Button size$={ButtonSize.SMALL} variant$={ButtonVariant.SECONDARY} onClick={props.close$}>
+        <Button variant$={ButtonVariant.SECONDARY} onClick={props.close$}>
           Close
         </Button>
       </ButtonRow>

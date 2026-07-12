@@ -38,18 +38,8 @@ const block__noIcon = css`
   background-color: var(--base);
 `
 
-const block__withIcon = css`
-  background: center center no-repeat var(--img-url);
-  background-size: cover;
-`
-
-const block__defaultBg = css`
-  background-color: var(--mantle);
-`
-
 const block__editButton = css`
   position: "absolute";
-  transition: "0.25s ease-out";
   right: 0;
   margin-top: 10;
   margin-right: 10;

@@ -89,7 +89,6 @@ input, button, textarea, select {
 /* If you try to reset the button styles, some rules won't be applied anymore for some reason */
 button {
   cursor: pointer;
-  transition: 0.15s ease-out;
   background-color: transparent;
   border-radius: 0.325rem;
   color: currentColor;

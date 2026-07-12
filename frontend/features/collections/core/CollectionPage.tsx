@@ -8,18 +8,13 @@ import { css } from "molcss"
 import type { collections } from "~/wailsjs/go/models"
 import { playlistIconUrl } from "~/features/playlist/api"
 import { createLazyComponent } from "~/hooks"
-import { ASSETS_SERVER_URL, COLLECTION_TYPE_MAGIC_MAPPING, COLLECTION_TYPE_NAME_MAPPING } from "~/api"
+import { ASSETS_SERVER_URL, COLLECTION_TYPE_MAGIC_ROUTE_REGISTRY, COLLECTION_TYPE_NAME_REGISTRY } from "~/api"
 import type { ActionHandlerFn, EventHandler } from "~/utils"
 import { Input } from "~/components"
+import { scrollbar, scrollbar__invs, scrollbar__vertical } from "~/styles"
 // ...
 import { CollectionCreateButton, CollectionExternalSectionButtonRow, CollectionExternalSectionDescription, CollectionItem, CollectionSection } from "../components"
 import { useCollectionPageContext } from "../provider/CollectionPageProvider"
-
-const collection = css`
-  width: 100%;
-  height: 100%;
-  user-select: none;
-`
 
 const collection__extraSpaces = css`
   height: 10rem;
@@ -45,8 +40,11 @@ export default function CollectionPage() {
     })
   )
 
-  const externalCollectionUrl = (data: collections.CollectionExternalSourceData) =>
-    `/collection/${COLLECTION_TYPE_NAME_MAPPING[data.type as CollectionType]}/${COLLECTION_TYPE_MAGIC_MAPPING[data.type as CollectionType]}?directory=${encodeURI(data.collectionPath)}` as const
+  const externalCollectionUrl = (data: collections.CollectionExternalSourceData) => {
+    const typeName = COLLECTION_TYPE_NAME_REGISTRY[data.type as CollectionType]
+    const magicRoute = COLLECTION_TYPE_MAGIC_ROUTE_REGISTRY[data.type as CollectionType]
+    return `/collection/${typeName}/${magicRoute}?directory=${encodeURI(data.collectionPath)}` as const
+  }
   // ...
 
   const iconUrl = (iconFileName: string) => `${ASSETS_SERVER_URL}/local-assets/cache/${iconFileName}` as const
@@ -56,7 +54,7 @@ export default function CollectionPage() {
   }
 
   return (
-    <main class={`${collection} journalHome__mainContent scrollbar scrollbarVertical invsScrollbar`}>
+    <main class={`journalHome__mainContent ${scrollbar} ${scrollbar__vertical} ${scrollbar__invs}`}>
       <h1>Collection</h1>
 
       <Input 

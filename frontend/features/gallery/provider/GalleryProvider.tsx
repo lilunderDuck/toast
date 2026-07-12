@@ -7,10 +7,8 @@ import { Gallery_getEntryByPath } from "~/wailsjs/go/gallery/Exports"
 import { useZoomAndPanContext } from "~/components"
 import type { AnyNoArgsFunction } from "~/utils"
 import { AppStorage_Get, AppStorage_Set } from "~/wailsjs/go/app_storage/Exports"
-// ...
-import { GALLERY_IN_EXTERNAL_MODE } from "./constants"
-import { showGalleryReduceModeToast } from "../components"
 import { EventsOn } from "~/wailsjs/runtime/runtime"
+import { COLLECTION_TYPE_MAGIC_ROUTE_REGISTRY } from "~/api"
 
 interface IGalleryContext {
   entries$: Accessor<gallery.GalleryItemData[]>
@@ -48,7 +46,7 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
   const { zoom$, unzoom$ } = useZoomAndPanContext()
   const [allControlsHidden, setAllControlsHidden] = createSignal(false)
   
-  const isExternal = props.galleryId$ === GALLERY_IN_EXTERNAL_MODE
+  const isExternal = props.galleryId$ === COLLECTION_TYPE_MAGIC_ROUTE_REGISTRY[CollectionType.GALLERY]
   const [currentItemIndex, setCurrentItemIndex] = createSignal(0)
 
   const goToNextItem = () => {
@@ -86,7 +84,6 @@ export function GalleryProvider(props: ParentProps<IGalleryProviderProps>) {
 
   const toggleReducedMode = () => {
     setAllControlsHidden(prev => !prev)
-    showGalleryReduceModeToast(allControlsHidden())
   }
 
   const GALLERY_STORAGE_KEY = isExternal ? props.directory$! : `gallery_${props.galleryId$}`

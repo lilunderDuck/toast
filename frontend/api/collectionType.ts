@@ -1,9 +1,9 @@
-export const COLLECTION_TYPE_NAME_MAPPING = {
+export const COLLECTION_TYPE_NAME_REGISTRY = {
   [CollectionType.GALLERY]: "gallery",
   [CollectionType.PLAYLIST]: "playlist"
 } as Record<CollectionType, string>
 
-export const COLLECTION_TYPE_MAGIC_MAPPING = {
-  [CollectionType.GALLERY]: "youre_in_external_mode_dont_panic",
-  [CollectionType.PLAYLIST]: "the_answer_to_everything_is_42_non_inclusive"
+export const COLLECTION_TYPE_MAGIC_ROUTE_REGISTRY = {
+  [CollectionType.GALLERY]: "gallery_ex",
+  [CollectionType.PLAYLIST]: "playlist_ex"
 } as Record<CollectionType, string>

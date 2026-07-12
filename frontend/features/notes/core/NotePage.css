@@ -2,7 +2,6 @@
 #list [data-block] {
   cursor: pointer;
   background-color: var(--mantle);
-  transition: all 0.15s ease-out;
 }
 
 #list [data-block]::before:not(button) {

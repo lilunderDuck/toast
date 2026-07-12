@@ -32,7 +32,6 @@ const colorInput__colorPreview = css`
   background-color: var(--color);
   border-radius: 50%;
   flex-shrink: 0;
-  transition: outline-color 0.25s ease-out;
   outline: 2px solid transparent;
   &:hover {
     outline-color: var(--overlay1);

@@ -22,14 +22,9 @@ const tooltip = css`
   border-width: 1;
   font-size: 0.875rem;
   line-height: 1.2rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   background-color: var(--mantle);
   border: 1px solid var(--surface1);
   user-select: none;
-`
-
-const tooltip__trigger = css`
-  width: fit-content;
 `
 
 export interface ITooltipOptions {
@@ -49,10 +44,10 @@ export function Tooltip(props: ITooltipProps) {
 
   return (
     <Show when={props.label$} fallback={local.children}>
-      <Root openDelay={0} closeDelay={0} gutter={4} {...local.tooltipOptions$}>
+      <Root openDelay={400} closeDelay={0} gutter={4} {...local.tooltipOptions$}>
         <Trigger
           as="div"
-          class={tooltip__trigger}
+          class={css`width: fit-content;`}
         >
           {local.children}
         </Trigger>  

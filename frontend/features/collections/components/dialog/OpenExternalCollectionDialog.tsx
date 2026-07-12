@@ -152,11 +152,10 @@ export default function OpenExternalCollectionDialog(props: IStickyNoteFullViewD
       </section>
 
       <ButtonRow>
-        <Button size$={ButtonSize.SMALL} onClick={props.close$}>
+        <Button onClick={props.close$}>
           Close
         </Button>
         <Button
-          size$={ButtonSize.SMALL}
           variant$={ButtonVariant.SECONDARY}
           onClick={goToCollection}
           disabled={!displayedCollection()}

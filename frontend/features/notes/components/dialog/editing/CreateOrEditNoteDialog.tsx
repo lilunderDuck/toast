@@ -4,7 +4,7 @@ import { required } from "@modular-forms/solid"
 import { css } from "molcss"
 import __style from "./CreateOrEditNoteDialog.module.css"
 // ...
-import { Button, DialogContent, DialogHeader, FieldInput } from "~/components"
+import { Button, DialogContent, FieldInput } from "~/components"
 import { createSubmitForm, createFileUpload, SUPPORTED_IMAGE_PATTERN, type IBaseLazyComponent } from "~/hooks"
 import type { group } from "~/wailsjs/go/models"
 // ...
@@ -56,7 +56,6 @@ export default function CreateNoteDialog(props: ICreateNoteDialogProps) {
     submitButtonText$: getText(),
     buttonRow$: (
       <Button
-        size$={ButtonSize.SMALL}
         variant$={ButtonVariant.DANGER}
         onClick={props.close$}
       >
@@ -80,9 +79,9 @@ export default function CreateNoteDialog(props: ICreateNoteDialogProps) {
 
   return (
     <DialogContent>
-      <DialogHeader>
+      <h2>
         {getText()} journal group
-      </DialogHeader>
+      </h2>
       <Form$>
         <div class={dialog__inputWrap}>
           <div class={dialog__imageInput} id={__style.imageInput}>

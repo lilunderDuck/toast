@@ -24,8 +24,6 @@ const switch__slider = css`
   right: 0;
   bottom: 0;
   background-color: var(--switch-inactive-color);
-  -webkit-transition: .4s;
-  transition: .4s;
   border-radius: var(--switch-height);
 `
 

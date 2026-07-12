@@ -38,7 +38,6 @@ const titleBar__firstbutton = css`
 
 const titleBar__otherButton = css`
   padding-inline: var(--title-bar-button-padding);
-  transition: 0.15s ease-out;
   &:hover {
     background-color: var(--surface0);
   }
@@ -46,7 +45,6 @@ const titleBar__otherButton = css`
 
 const titleBar__closeButton = css`
   padding-inline: var(--title-bar-button-padding);
-  transition: 0.15s ease-out;
   &:hover {
     background-color: #ff4747;
   }

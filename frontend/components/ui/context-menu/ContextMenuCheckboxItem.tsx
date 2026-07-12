@@ -22,9 +22,6 @@ const menuCheckboxItem = css`
   outline-style: none;
   font-size: 0.875rem;
   line-height: 1.25rem;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
   cursor: default;
   user-select: none;
 `

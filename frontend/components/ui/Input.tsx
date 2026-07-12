@@ -6,7 +6,6 @@ const input = css`
   padding-inline: 10px;
   padding-block: 6px;
   border-radius: 6px;
-  transition: 0.25s ease-out;
   outline: none;
   background-color: var(--surface0);
   width: 100%;

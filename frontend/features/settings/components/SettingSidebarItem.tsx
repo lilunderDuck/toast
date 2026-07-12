@@ -26,7 +26,6 @@ const item__button = css`
   border-radius: 6px;
   gap: 10px;
   color: var(--subtext0);
-  transition: 0.15s ease-out;
   background-color: transparent;
   text-align: left;
   display: flex;

@@ -71,10 +71,7 @@ export default function StickyNoteFullViewDialog(props: IStickyNoteFullViewDialo
       <div class={dialog__background} />
 
       <ButtonRow>
-        <Button
-          size$={ButtonSize.SMALL}
-          onClick={props.close$}
-        >
+        <Button onClick={props.close$}>
           Close
         </Button>
       </ButtonRow>

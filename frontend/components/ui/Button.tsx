@@ -12,76 +12,41 @@ const base = css`
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
   outline: none;
-  color: var(--subtext0);
-  &:hover {
-    color: var(--text);
-  }
-`
-
-const size_default = css`
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  height: 2.5rem;
-`
-
-const size_small = css`
-  padding-inline: 0.65rem;
-  padding-block: 0.275rem;
-  border-radius: 0.275rem;
-`
-
-const size_large = css`
-  padding-left: 2rem;
-  padding-right: 2rem;
-  border-radius: 0.375rem;
-  height: 2.75rem;
-`
-
-const size_icon = css`
-  padding-inline: 0.375rem;
-  padding-block: 0.375rem;
-  color: var(--subtext0);
-  &:hover {
-    color: 'var(--text)'
-  }
 `
 
 const variantMapping: Record<ButtonVariant, string> = {
   [ButtonVariant.DEFAULT]: css`
     background-color: var(--surface0);
-    &:hover {
+    color: var(--subtext0);
+    &:not(:disabled):hover {
       background-color: var(--surface2);
+      color: var(--text);
     }
   `,
   [ButtonVariant.DANGER]: css`
     background-color: #aa3e5c;
-    &:hover {
+    &:not(:disabled):hover {
       background-color: #cc5576;
     }
   `,
   [ButtonVariant.NO_BACKGROUND]: css`
     background-color: transparent;
     color: var(--subtext0);
-    &:hover {
+    &:not(:disabled):hover {
       background-color: var(--surface1);
       color: var(--text);
     }
   `,
-  [ButtonVariant.UNSET]: "",
   [ButtonVariant.SECONDARY]: css`
     background-color: #46a4cf;
     color: var(--surface0);
-    &:hover {
+    &:not(:disabled):hover {
       background-color: #74c7ec;
       color: var(--crust);
     }
   `,
+  [ButtonVariant.UNSET]: "",
   [ButtonVariant.OUTLINE]: "",
   [ButtonVariant.GHOST]: "",
   [ButtonVariant.LINK]: ""
@@ -92,10 +57,32 @@ const variantMapping: Record<ButtonVariant, string> = {
 // ghost: "hover:bg-accent hover:text-accent-foreground",
 // link: "text-primary underline-offset-4 hover:underline"
 const sizeMapping: Record<ButtonSize, string> = {
-  [ButtonSize.DEFAULT]: size_default,
-  [ButtonSize.SMALL]: size_small,
-  [ButtonSize.LARGE]: size_large,
-  [ButtonSize.ICON]: size_icon,
+  [ButtonSize.DEFAULT]: css`
+    /* padding-top: 0.5rem; */
+    /* padding-bottom: 0.5rem; */
+    /* padding-left: 1rem; */
+    /* padding-right: 1rem; */
+    /* height: 2.5rem; */
+    padding-inline: 0.65rem;
+    padding-block: 0.275rem;
+    border-radius: 0.275rem;
+  `,
+  // [ButtonSize.SMALL]: css`
+  // `,
+  [ButtonSize.LARGE]: css`
+    padding-left: 2rem;
+    padding-right: 2rem;
+    border-radius: 0.375rem;
+    height: 2.75rem;
+  `,
+  [ButtonSize.ICON]: css`
+    padding-inline: 0.375rem;
+    padding-block: 0.375rem;
+    color: var(--subtext0);
+    &:not(:disabled):hover {
+      color: var(--text);
+    }
+  `,
   [ButtonSize.UNSET]: ""
 }
 
@@ -106,12 +93,15 @@ export interface IButtonProps extends HTMLAttributes<"button"> {
 
 export function Button(props: IButtonProps) {
   const [local, others] = splitProps(props, ["variant$", "size$"])
+  
+  const buttonVariant = variantMapping[local.variant$ ?? ButtonVariant.DEFAULT]
+  const buttonSize = sizeMapping[local.size$ ?? ButtonSize.DEFAULT]
 
   return (
     <button
       type="button"
       {...others}
-      class={`${base} ${variantMapping[local.variant$ ?? ButtonVariant.DEFAULT]} ${sizeMapping[local.size$ ?? ButtonSize.DEFAULT]} ${others.class ?? ""}`}
+      class={`${base} ${buttonVariant} ${buttonSize} ${others.class ?? ""}`}
     >
       {props.children}
     </button>

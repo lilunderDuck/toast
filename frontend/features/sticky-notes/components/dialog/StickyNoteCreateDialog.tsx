@@ -4,7 +4,7 @@ import { required } from "@modular-forms/solid"
 import "./StickyNoteCreateDialog.css"
 import { css } from "molcss"
 // ...
-import { Button, DialogContent, DialogHeader, FieldInput, HexColorInput, Label } from "~/components"
+import { Button, DialogContent, FieldInput, HexColorInput, Label } from "~/components"
 import { createSubmitForm, type IBaseLazyComponent } from "~/hooks"
 import { sticky_notes } from "~/wailsjs/go/models"
 import { makeId } from "~/utils"
@@ -65,7 +65,7 @@ export default function StickyNoteCreateDialog(props: IStickyNoteCreateDialogPro
     },
     submitButtonText$: "Create",
     buttonRow$: (
-      <Button size$={ButtonSize.SMALL} variant$={ButtonVariant.DANGER} onClick={props.close$}>
+      <Button variant$={ButtonVariant.DANGER} onClick={props.close$}>
         Discard
       </Button>
     )
@@ -73,9 +73,9 @@ export default function StickyNoteCreateDialog(props: IStickyNoteCreateDialogPro
 
   return (
     <DialogContent class={dialog} showCloseButton$={false}>
-      <DialogHeader>
+      <h2>
         Create sticky note
-      </DialogHeader>
+      </h2>
 
       <Form$>
         <div class={dialog__formSplitView}>

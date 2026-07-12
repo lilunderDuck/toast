@@ -26,7 +26,6 @@ const videoControls = css`
 
 const videoControls__showOnHover = css`
   opacity: 0;
-  transition: 0.15s ease-out;
   will-change: opacity;
   &:hover {
     opacity: 1;

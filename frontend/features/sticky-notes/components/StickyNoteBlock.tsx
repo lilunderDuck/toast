@@ -12,7 +12,6 @@ const block = css`
   width: 13.5rem;
   height: 12rem;
   border-radius: 6px;
-  transition: 0.15s ease-out;
   position: relative;
   padding-inline: 10px;
   padding-block: 5px;

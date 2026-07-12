@@ -2,9 +2,9 @@ import { For, Match, Show, Switch } from "solid-js"
 import { MdOutlineFilter_list_off } from 'solid-icons/md'
 // ...
 import { Input, PlaceholderView, Spacer } from "~/components"
+import { scrollbar, scrollbar__vertical } from "~/styles"
 // ...
 import { css } from "molcss"
-import "~/styles/scrollbar.css"
 import "./NotePage.css"
 // ...
 import { useNoteHomeContext } from "../provider"
@@ -54,7 +54,7 @@ export default function NotePage() {
         <Input placeholder="Search notes" />
         <TotalNotesText />
       </header>
-      <div class={`${section__list} scrollbar scrollbarVertical`}>
+      <div class={`${section__list} ${scrollbar} ${scrollbar__vertical}`}>
         <Switch>
           <Match when={view$() === NotePageViewType.NOTE}>
             <Show when={!resource$.loading}>

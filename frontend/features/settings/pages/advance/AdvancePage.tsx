@@ -1,5 +1,6 @@
-import { Button } from "~/components";
-import { CheckboxSettingSection, CustomSettingSection } from "../../components";
+import { Button } from "~/components"
+// ...
+import { CustomSettingSection } from "../../components"
 
 export function AdvancePage() {
   return (
@@ -8,7 +9,7 @@ export function AdvancePage() {
         name$="Open dev tools"
         description$="Open deverloper tools (if you want to mess around)"
       >
-        <Button size$={ButtonSize.SMALL}>
+        <Button>
           Open
         </Button>
       </CustomSettingSection>

@@ -2,10 +2,10 @@ import { createSignal, For, Match, Switch } from "solid-js"
 // ...
 import { DialogContent } from "~/components"
 import type { IBaseLazyComponent } from "~/hooks"
+import { scrollbar, scrollbar__invs, scrollbar__vertical } from "~/styles"
 // ...
 import { css } from "molcss"
 import "./MainSettingDialog.css"
-import "~/styles/scrollbar.css"
 // ...
 import { SettingSidebarItem } from "../components/SettingSidebarItem"
 import { PAGE_COMPONENT, PAGE_SIDEBAR } from "./pages"
@@ -53,7 +53,7 @@ export default function MainSettingDialog(props: IMainSettingDialog) {
   return (
     <DialogContent class={dialog}>
       <div class={dialog__content}>
-        <aside class={`${dialog__sidebar} scrollbar scrollbarVertical invsScrollbar`}>
+        <aside class={`${dialog__sidebar} ${scrollbar} ${scrollbar__vertical} ${scrollbar__invs}`}>
           <For each={PAGE_SIDEBAR}>
             {it => (
               <SettingSidebarItem 
@@ -65,7 +65,7 @@ export default function MainSettingDialog(props: IMainSettingDialog) {
           </For>
         </aside>
         <main
-          class={`${dialog__mainContent} scrollbar scrollbarVertical invsScrollbar`}
+          class={`${dialog__mainContent} ${scrollbar} ${scrollbar__vertical} ${scrollbar__invs}`}
           id="mainContent"
         >
           <Switch>

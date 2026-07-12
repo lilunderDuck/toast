@@ -26,12 +26,12 @@ const nav__button = css`
   top: 50%;
   transform: translate(0, -50%);
   color: var(--overlay1);
-  &:hover {
+  &:not(:disabled):hover {
     opacity: 1;
     color: var(--text);
   }
 
-  &:hover > div {
+  &:not(:disabled):hover > div {
     background-color: var(--base);
   }
 `
@@ -54,7 +54,6 @@ const nav__titleBar = css`
   padding-left: 10px;
   height: auto !important;
   gap: 10px;
-  transition: 0.15s ease-out;
 `
 
 const nav__titleBarHidden = css`
@@ -64,7 +63,6 @@ const nav__titleBarHidden = css`
 const nav__buttonIconWrapper = css`
   padding: 5px;
   border-radius: 6px;
-  transition: 0.15s ease-out;
 `
 
 export function GalleryNav() {

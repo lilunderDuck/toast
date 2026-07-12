@@ -4,7 +4,7 @@ import { Show } from "solid-js"
 // ...
 import { css } from "molcss"
 // ...
-import { Button, DialogContent, DialogHeader, FieldInput, Label } from "~/components"
+import { Button, DialogContent, FieldInput, Label } from "~/components"
 import { createFileUpload, createSubmitForm, type IBaseLazyComponent, createIconInput } from "~/hooks"
 import type { playlist } from "~/wailsjs/go/models"
 import { previewUrl } from "~/api"
@@ -88,7 +88,7 @@ export default function PlaylistAddTrackDialog(props: IPlaylistAddTrackDialogPro
     },
     submitButtonText$: "Add",
     buttonRow$: (
-      <Button size$={ButtonSize.SMALL} variant$={ButtonVariant.DANGER} onClick={props.close$}>
+      <Button variant$={ButtonVariant.DANGER} onClick={props.close$}>
         Discard
       </Button>
     )
@@ -96,9 +96,9 @@ export default function PlaylistAddTrackDialog(props: IPlaylistAddTrackDialogPro
 
   return (
     <DialogContent class={dialog}>
-      <DialogHeader>
+      <h2>
         Add new track
-      </DialogHeader>
+      </h2>
       
       <Label>Audio file</Label>
       <div
