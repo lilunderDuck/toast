@@ -2,9 +2,13 @@ package app_storage
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"strconv"
 	"sync"
+	"toast/backend/debug"
+
+	"github.com/elliotchance/orderedmap/v2"
 )
 
 type GDStore struct {
@@ -34,15 +38,19 @@ type GDStore struct {
 
 	file   *os.File
 	writer *bufio.Writer
-	data   map[string][]byte
+	data   *orderedmap.OrderedMap[string, []byte]
 	mux    sync.RWMutex
 }
 
 // New creates a new GDStore
 func New(filePath string) *GDStore {
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("gdscore", "opening %s", debug.FormatPath(filePath))
+	}
+
 	store := &GDStore{
 		FilePath:    filePath,
-		data:        make(map[string][]byte),
+		data:        orderedmap.NewOrderedMap[string, []byte](),
 		persistence: true,
 	}
 	err := store.loadFromDisk()
@@ -75,14 +83,22 @@ func (store *GDStore) WithPersistence(persistence bool) *GDStore {
 // The bool is particularly useful if you want to differentiate between a key that has a nil value, and a
 // key that doesn't exist
 func (store *GDStore) Get(key string) (value []byte, ok bool) {
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("gdscore", "get value with key: %s", key)
+	}
+
 	store.mux.RLock()
-	value, ok = store.data[key]
+	value, ok = store.data.Get(key)
 	store.mux.RUnlock()
 	return
 }
 
 // GetString does the same thing as Get, but converts the value to a string
 func (store *GDStore) GetString(key string) (valueAsString string, ok bool) {
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("gdscore", "get string with key: %s", key)
+	}
+
 	var value []byte
 	value, ok = store.Get(key)
 	if ok {
@@ -93,6 +109,10 @@ func (store *GDStore) GetString(key string) (valueAsString string, ok bool) {
 
 // GetInt does the same thing as Get, but converts the value to an int
 func (store *GDStore) GetInt(key string) (valueAsInt int, ok bool, err error) {
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("gdscore", "get int with key: %s", key)
+	}
+
 	var value string
 	value, ok = store.GetString(key)
 	if ok {
@@ -103,59 +123,71 @@ func (store *GDStore) GetInt(key string) (valueAsInt int, ok bool, err error) {
 
 // Put creates an entry or updates the value of an existing key
 func (store *GDStore) Put(key string, value []byte) error {
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("gdscore", "set: %s = %.20s", key, value)
+	}
+
 	store.mux.Lock()
 	defer store.mux.Unlock()
-	store.data[key] = value
+	store.data.Set(key, value)
 	return store.appendEntryToFile(newEntry(ActionPut, key, value))
 }
 
 // PutAll creates or updates a map of entries
 func (store *GDStore) PutAll(entries map[string][]byte) error {
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("gdscore", "putting all values...")
+	}
+
 	store.mux.Lock()
 	defer store.mux.Unlock()
 	for key, value := range entries {
-		store.data[key] = value
+		store.data.Set(key, value)
 	}
 	return store.appendEntriesToFile(newBulkEntries(ActionPut, entries))
 }
 
 // Delete removes a key from the store
 func (store *GDStore) Delete(key string) error {
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("gdscore", "delete value with key: %s", key)
+	}
+
 	store.mux.Lock()
 	defer store.mux.Unlock()
-	delete(store.data, key)
+	didDelete := store.data.Delete(key)
+	if !didDelete {
+		return fmt.Errorf("failed to delete")
+	}
 	return store.appendEntryToFile(newEntry(ActionDelete, key, nil))
 }
 
 // Count returns the total number of entries in the store
 func (store *GDStore) Count() int {
 	store.mux.RLock()
-	length := len(store.data)
+	length := store.data.Len()
 	store.mux.RUnlock()
 	return length
 }
 
 // Keys returns a list of all keys
 func (store *GDStore) Keys() []string {
-	store.mux.Lock()
-	keys := make([]string, len(store.data))
-	i := 0
-	for k := range store.data {
-		keys[i] = k
-		i++
-	}
-	store.mux.Unlock()
-	return keys
+	store.mux.RLock()
+	defer store.mux.RUnlock()
+
+	keys := store.data.Keys()
+
+	copiedKeys := make([]string, len(keys))
+	copy(copiedKeys, keys)
+	return copiedKeys
 }
 
 // Values returns a list of all values
 func (store *GDStore) Values() [][]byte {
 	store.mux.Lock()
-	values := make([][]byte, len(store.data))
-	i := 0
-	for _, v := range store.data {
-		values[i] = v
-		i++
+	values := make([][]byte, 0, store.data.Len())
+	for el := store.data.Front(); el != nil; el = el.Next() {
+		values = append(values, el.Value)
 	}
 	store.mux.Unlock()
 	return values

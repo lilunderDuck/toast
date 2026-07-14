@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+
+	"github.com/elliotchance/orderedmap/v2"
 )
 
 // Close closes the store's file if it isn't already closed. Will also flush to buffer if useBuffer is true.
@@ -62,12 +64,20 @@ func (store *GDStore) Consolidate() error {
 	// Close store AFTER appending all entries to the new file (hence defer)
 	// to make sure all the data is definitely in the new file
 	defer store.Close()
-	return store.appendEntriesToFile(newBulkEntries(ActionPut, store.data))
+
+	// Manually construct the entries slice in correct insertion order
+	var orderedEntries []*Entry
+	for _, key := range store.data.Keys() {
+		val, _ := store.data.Get(key)
+		orderedEntries = append(orderedEntries, newEntry(ActionPut, key, val))
+	}
+
+	return store.appendEntriesToFile(orderedEntries)
 }
 
 // loadFromDisk loads the store from the disk and consolidates the entries, or creates an empty file if there is no file
 func (store *GDStore) loadFromDisk() error {
-	store.data = make(map[string][]byte)
+	store.data = orderedmap.NewOrderedMap[string, []byte]()
 	if !store.persistence {
 		return nil
 	}
@@ -91,12 +101,19 @@ func (store *GDStore) loadFromDisk() error {
 		if err != nil {
 			continue
 		}
-		if entry.Action == ActionPut {
-			store.data[entry.Key] = entry.Value
-		} else if entry.Action == ActionDelete {
-			delete(store.data, entry.Key)
+
+		switch entry.Action {
+		case ActionPut:
+			store.data.Set(entry.Key, entry.Value)
+		case ActionDelete:
+			store.data.Delete(entry.Key)
 		}
 	}
+
+	if err := scanner.Err(); err != nil {
+		return fmt.Errorf("failed during scanning: %w", err)
+	}
+
 	_ = file.Close()
 	return store.Consolidate()
 }

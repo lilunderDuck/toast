@@ -55,12 +55,9 @@ func newEntryFromLine(line string) (*Entry, error) {
 	if len(elements) != 3 {
 		return nil, ErrBadLine
 	}
-	keyAsBytes := elements[1]
-	key := string(keyAsBytes)
-	value := elements[2]
 	return &Entry{
 		Action: Action(elements[0]),
-		Key:    key,
-		Value:  []byte(value),
+		Key:    elements[1],
+		Value:  []byte(elements[2]),
 	}, nil
 }
