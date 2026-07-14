@@ -1,4 +1,4 @@
-package app_storage
+package db
 
 import (
 	"errors"
@@ -24,7 +24,7 @@ type Entry struct {
 	Value  []byte
 }
 
-const ENTRY_SEPERATOR = "\u25A0"
+const ENTRY_SEPERATOR = "■"
 
 func (e *Entry) toLine() []byte {
 	return fmt.Appendf(nil, "%s%s%s%s%s\n", e.Action, ENTRY_SEPERATOR, e.Key, ENTRY_SEPERATOR, e.Value)

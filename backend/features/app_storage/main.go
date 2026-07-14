@@ -2,14 +2,15 @@ package app_storage
 
 import (
 	"toast/backend/core/internals"
+	"toast/backend/db"
 	"toast/backend/debug"
 )
 
 type Exports struct {
-	db *GDStore
+	db *db.GDStore
 }
 
-var internalAppDb *GDStore = nil
+var internalAppDb *db.GDStore = nil
 
 func OnShutdown() {
 	if internalAppDb == nil {
@@ -23,7 +24,7 @@ func OnShutdown() {
 
 func (storage *Exports) ensureOpened() {
 	if storage.db == nil {
-		storage.db = New(internals.DATA_FOLDER_PATH + "/app_storage.db")
+		storage.db = db.New(internals.DATA_FOLDER_PATH + "/app_storage.db")
 		internalAppDb = storage.db
 	}
 }

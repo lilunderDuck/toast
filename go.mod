@@ -33,13 +33,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/samber/lo v1.49.1 // indirect
-	github.com/tidwall/btree v1.4.2 // indirect
-	github.com/tidwall/gjson v1.14.3 // indirect
-	github.com/tidwall/grect v0.1.4 // indirect
-	github.com/tidwall/match v1.1.1 // indirect
-	github.com/tidwall/pretty v1.2.0 // indirect
-	github.com/tidwall/rtred v0.1.2 // indirect
-	github.com/tidwall/tinyqueue v0.1.1 // indirect
 	github.com/tklauser/go-sysconf v0.4.0 // indirect
 	github.com/tklauser/numcpus v0.12.0 // indirect
 	github.com/tkrajina/go-reflector v0.5.8 // indirect
@@ -54,5 +47,4 @@ require (
 	github.com/elliotchance/orderedmap/v2 v2.7.0
 	github.com/matoous/go-nanoid/v2 v2.1.0
 	github.com/shirou/gopsutil v3.21.11+incompatible
-	github.com/tidwall/buntdb v1.3.2
 )

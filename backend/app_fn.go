@@ -4,7 +4,6 @@ import (
 	"context"
 	"runtime"
 	"time"
-	"toast/backend/db"
 	"toast/backend/debug"
 	"toast/backend/features/app_storage"
 
@@ -39,7 +38,6 @@ func (a *App) beforeClose(ctx context.Context) (prevent bool) {
 		debug.InfoLabelf("app", "closing app now...")
 	}
 
-	db.CloseAll()
 	app_storage.OnShutdown()
 	wails_runtime.EventsEmit(ctx, "before_closing")
 	return false

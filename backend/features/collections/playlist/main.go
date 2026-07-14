@@ -1,12 +1,11 @@
 package playlist
 
 import (
-	"toast/backend/db"
+	// "toast/backend/db"
 	"toast/backend/utils"
 )
 
 type Exports struct {
-	database *db.Instance
 }
 
 func IsValidStructure(targetPath string) bool {

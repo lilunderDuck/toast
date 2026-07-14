@@ -1,132 +1,194 @@
-// This is a wrapper for the key-value store.
-// It simplifies common operations like opening, closing, and managing a single instance
-// of a database based on a given path.
 package db
 
 import (
+	"bufio"
 	"fmt"
-	"path/filepath"
-	"strings"
+	"os"
+	"strconv"
+	"sync"
 	"toast/backend/debug"
 
-	"github.com/tidwall/buntdb"
+	"github.com/elliotchance/orderedmap/v2"
 )
 
-// A function type used to perform a batch of
-// database operations on a given instance.
-type batchFn func(db *Instance)
+type GDStore struct {
+	// FilePath is the path to the file used to persist
+	FilePath string
 
-// A wrapper struct that holds the internal database instance.
-type Instance struct {
-	internal *buntdb.DB
-	name     string
+	// useBuffer lets the user define if GDStore should use a buffer, or write directly to the file.
+	//
+	// Writing to a buffer is much faster, but failure to close to the store (GDStore.Close()) will
+	// result in a buffer that hasn't been flushed, meaning some entries may be lost.
+	// You can manually flush the buffer by using GDStore.Flush().
+	//
+	// In contrast, writing to the file without a buffer is slower, but more reliable if your
+	// application is prone to suddenly crashing
+	//
+	// Defaults to false
+	useBuffer bool
+
+	// persistence lets the user set whether to persist data to the file or not. Meant to be used for testing without
+	// having to clean up the file.
+	//
+	// (default) If set to true, data is available both in-memory and persisted to the file found at FilePath.
+	// If set to false, data is available only in-memory, and upon destruction, all data will be lost.
+	//
+	// Defaults to true
+	persistence bool
+
+	file   *os.File
+	writer *bufio.Writer
+	data   *orderedmap.OrderedMap[string, []byte]
+	mux    sync.RWMutex
 }
 
-// Closes the underlying database. It should be called when
-// the database is no longer needed to release resources.
-func (db *Instance) Close() error {
-	err := db.internal.Shrink()
+// New creates a new GDStore
+func New(filePath string) *GDStore {
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("gdscore", "opening %s", debug.FormatPath(filePath))
+	}
+
+	store := &GDStore{
+		FilePath:    filePath,
+		data:        orderedmap.NewOrderedMap[string, []byte](),
+		persistence: true,
+	}
+	err := store.loadFromDisk()
 	if err != nil {
-		if debug.DEBUG_MODE {
-			debug.ErrLabelf("db/json", "%s %v", debugFormatDatabaseName(db.name), err)
-		}
-		return err
+		panic(err)
 	}
-
-	if debug.DEBUG_MODE {
-		debug.InfoLabelf("db/json", "%s closing database...", debugFormatDatabaseName(db.name))
-	}
-	return db.internal.Close()
+	return store
 }
 
-// A map used to track and store the instances of currently opened database instance,
-// with the database path as the key.
+// WithBuffer sets GDStore's useBuffer parameter to the value passed as parameter
 //
-// Notes: this is **not** thread safe
-var (
-	globalInstance = map[string]*Instance{}
-)
-
-// Opens a database at the specified file path.
-// Returns the database instance.
-//
-// If the database for the given path is already open, it returns the existing instance.
-func Open(path string) (*Instance, error) {
-	if debug.DEBUG_MODE {
-		debug.InfoLabelf("db/json", "Opening: %s", debug.FormatPath(path))
-	}
-
-	if instance := GetInstance(path); instance != nil {
-		return instance, nil
-	}
-
-	db, err := buntdb.Open(path)
-	if err != nil {
-		if debug.DEBUG_MODE {
-			if strings.Contains(err.Error(), "invalid database") {
-				iHaveMessedUp := []string{
-					"Well, if the code reached this point, then I have to safely say",
-					"to you that we've messed up... quite good, to the point that the",
-					"database just refuse to open. Isn't that lovely?",
-					"",
-					"At least it's not in a *binary format*, so it's not really the end",
-					"of the world, basically.",
-					"",
-					"Also, how did you get here? Did you build this app in debug mode?",
-				}
-				debug.ErrLabelf("db/json", "%s", strings.Join(iHaveMessedUp, "\n"))
-			}
-			debug.ErrLabel("db/json", err)
-		}
-
-		return nil, err
-	}
-
-	instance := &Instance{internal: db}
-	if debug.DEBUG_MODE {
-		filePath, fileName := filepath.Split(path)
-		instance.name = fmt.Sprintf("%s/%s", filepath.Base(filePath), fileName)
-		debug.InfoLabelf("db/json", "%s opened to mess with the data", debugFormatDatabaseName(instance.name))
-	}
-
-	globalInstance[path] = instance
-	return instance, nil
+// The default value for useBuffer is false
+func (store *GDStore) WithBuffer(useBuffer bool) *GDStore {
+	store.useBuffer = useBuffer
+	return store
 }
 
-// Closes the instance at the specified path and removes it
-// from the global map.
-func Close(path string) {
-	globalInstance[path].Close()
-	delete(globalInstance, path)
+// WithPersistence sets GDStore's persistence parameter to the value passed as parameter
+//
+// # The ability to set persistence to false is there mainly for testing purposes
+//
+// The default value for persistence is true
+func (store *GDStore) WithPersistence(persistence bool) *GDStore {
+	store.persistence = persistence
+	return store
 }
 
-// Closes all opened instances and clears the global singleton map.
-func CloseAll() {
-	for path, instance := range globalInstance {
-		instance.Close()
-		delete(globalInstance, path)
-	}
-}
-
-// Gets an existing instance for the given path.
+// Get returns the value of a key as well as a bool that indicates whether an entry exists for that key.
 //
-// If an instance is not found, it attempts to open a new one.
-//
-// Note: while this function attempts to handle a missing instance,
-// it is better to call [Open()] explicitly to handle errors.
-func GetInstance(path string) *Instance {
-	instance, ok := globalInstance[path]
-	if !ok {
-		if debug.DEBUG_MODE {
-			debug.InfoLabelf("db/json", "No instance found: %s", debug.FormatPath(path))
-		}
-
-		return nil
-	}
-
+// The bool is particularly useful if you want to differentiate between a key that has a nil value, and a
+// key that doesn't exist
+func (store *GDStore) Get(key string) (value []byte, ok bool) {
 	if debug.DEBUG_MODE {
-		debug.InfoLabelf("db/json", "Existing instance found: %s", debug.FormatPath(path))
+		debug.InfoLabelf("gdscore", "get value with key: %s", key)
 	}
 
-	return instance
+	store.mux.RLock()
+	value, ok = store.data.Get(key)
+	store.mux.RUnlock()
+	return
+}
+
+// GetString does the same thing as Get, but converts the value to a string
+func (store *GDStore) GetString(key string) (valueAsString string, ok bool) {
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("gdscore", "get string with key: %s", key)
+	}
+
+	var value []byte
+	value, ok = store.Get(key)
+	if ok {
+		valueAsString = string(value)
+	}
+	return
+}
+
+// GetInt does the same thing as Get, but converts the value to an int
+func (store *GDStore) GetInt(key string) (valueAsInt int, ok bool, err error) {
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("gdscore", "get int with key: %s", key)
+	}
+
+	var value string
+	value, ok = store.GetString(key)
+	if ok {
+		valueAsInt, err = strconv.Atoi(value)
+	}
+	return
+}
+
+// Put creates an entry or updates the value of an existing key
+func (store *GDStore) Put(key string, value []byte) error {
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("gdscore", "set: %s = %.20s", key, value)
+	}
+
+	store.mux.Lock()
+	defer store.mux.Unlock()
+	store.data.Set(key, value)
+	return store.appendEntryToFile(newEntry(ActionPut, key, value))
+}
+
+// PutAll creates or updates a map of entries
+func (store *GDStore) PutAll(entries map[string][]byte) error {
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("gdscore", "putting all values...")
+	}
+
+	store.mux.Lock()
+	defer store.mux.Unlock()
+	for key, value := range entries {
+		store.data.Set(key, value)
+	}
+	return store.appendEntriesToFile(newBulkEntries(ActionPut, entries))
+}
+
+// Delete removes a key from the store
+func (store *GDStore) Delete(key string) error {
+	if debug.DEBUG_MODE {
+		debug.InfoLabelf("gdscore", "delete value with key: %s", key)
+	}
+
+	store.mux.Lock()
+	defer store.mux.Unlock()
+	didDelete := store.data.Delete(key)
+	if !didDelete {
+		return fmt.Errorf("failed to delete")
+	}
+	return store.appendEntryToFile(newEntry(ActionDelete, key, nil))
+}
+
+// Count returns the total number of entries in the store
+func (store *GDStore) Count() int {
+	store.mux.RLock()
+	length := store.data.Len()
+	store.mux.RUnlock()
+	return length
+}
+
+// Keys returns a list of all keys
+func (store *GDStore) Keys() []string {
+	store.mux.RLock()
+	defer store.mux.RUnlock()
+
+	keys := store.data.Keys()
+
+	copiedKeys := make([]string, len(keys))
+	copy(copiedKeys, keys)
+	return copiedKeys
+}
+
+// Values returns a list of all values
+func (store *GDStore) Values() [][]byte {
+	store.mux.RLock()
+	values := make([][]byte, 0, store.data.Len())
+	for el := store.data.Front(); el != nil; el = el.Next() {
+		values = append(values, el.Value)
+	}
+	store.mux.RUnlock()
+	return values
 }

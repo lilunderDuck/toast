@@ -25,10 +25,10 @@ func (playlist *Exports) Playlist_create(data PlaylistData) error {
 		debug.InfoLabel("playlist", "creating playlist...")
 	}
 
-	err := playlist.database.Set(data.Id, utils.StringifyJson(data))
-	if err != nil {
-		return err
-	}
+	// err := playlist.database.Set(data.Id, utils.StringifyJson(data))
+	// if err != nil {
+	// 	return err
+	// }
 
 	utils.CreateDirectory(getPlaylistPath(data.Id))
 	utils.CreateDirectory(getTrackIconPath(data.Id, ""))
@@ -36,7 +36,8 @@ func (playlist *Exports) Playlist_create(data PlaylistData) error {
 	utils.WriteJsonFile(getPlaylistMetadataFilePath(data.Id), data)
 	utils.WriteJsonFile(getPlaylistEntriesFilePath(data.Id), []PlaylistTrackData{})
 
-	return err
+	// return err
+	return nil
 }
 
 func (playlist *Exports) Playlist_update(id string, newData PlaylistData) error {
@@ -45,21 +46,21 @@ func (playlist *Exports) Playlist_update(id string, newData PlaylistData) error 
 	}
 
 	mergedData := PlaylistData{}
-	err := playlist.database.Update(id, func(oldRawData string) (string, error) {
-		data, err := utils.ParseJsonString[PlaylistData](oldRawData)
-		if err != nil {
-			return "", err
-		}
+	// err := playlist.database.Update(id, func(oldRawData string) (string, error) {
+	// 	data, err := utils.ParseJsonString[PlaylistData](oldRawData)
+	// 	if err != nil {
+	// 		return "", err
+	// 	}
 
-		MergePlaylistData(&data, newData)
+	// 	MergePlaylistData(&data, newData)
 
-		mergedData = data
-		return utils.StringifyJson(data), nil
-	})
+	// 	mergedData = data
+	// 	return utils.StringifyJson(data), nil
+	// })
 
-	if err != nil {
-		return err
-	}
+	// if err != nil {
+	// 	return err
+	// }
 
 	return writePlaylistMetadataFile(id, mergedData)
 }

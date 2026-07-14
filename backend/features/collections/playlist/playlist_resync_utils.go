@@ -5,7 +5,7 @@ import (
 	"os"
 	"toast/backend/core/audio"
 	"toast/backend/debug"
-	"toast/backend/utils"
+	// "toast/backend/utils"
 )
 
 func (playlist *Exports) Playlist_resyncTrackDuration(playlistId string) (*UpdatedPlaylist, error) {
@@ -115,11 +115,11 @@ func (playlist *Exports) Playlist_resyncAll() ([]PlaylistData, error) {
 			metadata.Id = playlistId
 		}
 
-		if playlist.database.Has(playlistId) {
-			playlist.Playlist_update(playlistId, metadata)
-		} else {
-			playlist.database.Set(playlistId, utils.StringifyJson(metadata))
-		}
+		// if playlist.database.Has(playlistId) {
+		// 	playlist.Playlist_update(playlistId, metadata)
+		// } else {
+		// 	playlist.database.Set(playlistId, utils.StringifyJson(metadata))
+		// }
 	}
 
 	return playlists, nil

@@ -1,4 +1,4 @@
-package app_storage
+package db
 
 import (
 	"bufio"
