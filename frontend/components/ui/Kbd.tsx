@@ -10,7 +10,6 @@ const kbd = css`
   background-color: #131212;
   padding-inline: 0.4em;
   font-family: consolas;
-  font-size: 0.8em;
   font-weight: bold;
   white-space: nowrap;
 `

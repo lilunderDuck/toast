@@ -16,9 +16,6 @@ const videoControls = css`
   padding-inline: 20px;
   padding-top: 5px;
   padding-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
   position: absolute;
   bottom: 0;
   user-select: none;
@@ -53,6 +50,16 @@ const videoControls__time = css`
   background-color: var(--mantle);
 `
 
+const videoControls__controlsWrapper = css`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`
+
+const videoControls__progressSlider = css`
+  margin-bottom: 5px;
+`
+
 export default function VideoControls() {
   const { videoPlayer$, isInPictureInPicture$ } = useVideoContext()
   const { state$, play$, pause$, currentProgress$, totalDuration$, ref$ } = videoPlayer$
@@ -76,31 +83,33 @@ export default function VideoControls() {
 
   return (
     <div class={`${videoControls} ${shouldControlsAlwaysShow() ? '' : videoControls__showOnHover}`}>
-      <button 
-        onClick={togglePlayVideo}
-        class={videoControls__button}
-      >
-        <Show when={state$() === MediaState.PLAYING} fallback={
-          <BsPauseFill />
-        }>
-          <BsPlayFill />
-        </Show>
-      </button>
-      <div class={videoControls__time}>
-        {formatSecondsToMMSS(currentProgress$())}
-      </div>
-      <MediaProgressSlider player$={videoPlayer$} />
-      <div class={videoControls__time}>
-        {formatSecondsToMMSS(totalDuration$())}
-      </div>
-      <Tooltip label$={`${isInPictureInPicture$() ? "Leave" : "Open"} picture-in-picture`}>
+      <MediaProgressSlider 
+        player$={videoPlayer$} 
+        class$={videoControls__progressSlider}
+      />
+      <div class={videoControls__controlsWrapper}>
         <button 
+          onClick={togglePlayVideo}
           class={videoControls__button}
-          onClick={openPictureInPicture}
         >
-          <RiMediaPictureInPictureFill />
+          <Show when={state$() === MediaState.PLAYING} fallback={
+            <BsPauseFill />
+          }>
+            <BsPlayFill />
+          </Show>
         </button>
-      </Tooltip>
+        <div class={videoControls__time}>
+          {formatSecondsToMMSS(currentProgress$())} / {formatSecondsToMMSS(totalDuration$())}
+        </div>
+        <Tooltip label$={`${isInPictureInPicture$() ? "Leave" : "Open"} picture-in-picture`}>
+          <button 
+            class={videoControls__button}
+            onClick={openPictureInPicture}
+          >
+            <RiMediaPictureInPictureFill />
+          </button>
+        </Tooltip>
+      </div>
     </div>
   )
 }

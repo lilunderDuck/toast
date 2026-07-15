@@ -7,7 +7,7 @@ import "./GalleryNav.css"
 // ...
 import { useGalleryContext } from "../provider"
 // ...
-import { AppTitleBarDraggable, Button, Tooltip, ZoomButtonRow } from "~/components"
+import { AppTitleBarDraggable, Button, Kbd, Tooltip, ZoomButtonRow } from "~/components"
 import { createLazyComponent, useBodyToggableClass } from "~/hooks"
 
 const nav__buttonNotInReducedMode = css`
@@ -50,8 +50,8 @@ const nav__rightButton = css`
 
 const nav__titleBar = css`
   position: fixed;
-  padding-top: 5px;
-  padding-left: 10px;
+  padding-top: 10px;
+  padding-inline: 25px;
   height: auto !important;
   gap: 10px;
 `
@@ -63,6 +63,13 @@ const nav__titleBarHidden = css`
 const nav__buttonIconWrapper = css`
   padding: 5px;
   border-radius: 6px;
+`
+
+const nav__currentItem = css`
+  padding-inline: 10px;
+  padding-block: 4px;
+  border-radius: 6px;
+  background-color: var(--surface0);
 `
 
 export function GalleryNav() {
@@ -89,18 +96,21 @@ export function GalleryNav() {
     <>
       <AppTitleBarDraggable class={`${nav__titleBar} ${allControlsHidden$() ? nav__titleBarHidden : ''}`}>
         <Button 
-          size$={ButtonSize.ICON} 
+          size$={ButtonSize.ICON_LARGE} 
           variant$={ButtonVariant.NO_BACKGROUND} 
           onClick={() => redirect("/")}
         >
           <BsArrowLeft size={16} />
         </Button>
+        <div class={nav__currentItem}>
+          {currentItemIndex$() + 1} / {entries$().length}
+        </div>
         <Show when={currentItem$()?.type !== 1}>
           <ZoomButtonRow />
         </Show>
         <Tooltip label$="View information">
           <Button 
-            size$={ButtonSize.ICON} 
+            size$={ButtonSize.ICON_LARGE} 
             variant$={ButtonVariant.NO_BACKGROUND} 
             onClick={GalleryCurrentItemInfoDialog.show$}
           >
@@ -113,18 +123,32 @@ export function GalleryNav() {
         disabled={shouldDisablePrevBtn$()} 
         onClick={goToPrevItem$}
       >
-        <div class={nav__buttonIconWrapper}>
-          <BsCaretLeftFill size={25} />
-        </div>
+        <Tooltip label$={(
+          <>
+            <div>Go to previous item</div>
+            <Kbd>A</Kbd>
+          </>
+        )}>
+          <div class={nav__buttonIconWrapper}>
+            <BsCaretLeftFill size={25} />
+          </div>
+        </Tooltip>
       </button>
       <button 
         class={`${nav__button} ${nav__rightButton} ${allControlsHidden$() ? nav__buttonInReducedMode : nav__buttonNotInReducedMode}`} 
         disabled={shouldDisableNextBtn$()} 
         onClick={goToNextItem$}
       >
-        <div class={nav__buttonIconWrapper}>
-          <BsCaretRightFill size={25} />
-        </div>
+        <Tooltip label$={(
+          <>
+            <div>Go to next item</div>
+            <Kbd>D</Kbd>
+          </>
+        )}>
+          <div class={nav__buttonIconWrapper}>
+            <BsCaretRightFill size={25} />
+          </div>
+        </Tooltip>
       </button>
 
       <GalleryCurrentItemInfoDialog.Component$ />

@@ -20,7 +20,6 @@ const tooltip = css`
   padding-block: 0.175rem;
   border-radius: 0.375rem;
   border-width: 1;
-  font-size: 0.875rem;
   line-height: 1.2rem;
   background-color: var(--mantle);
   border: 1px solid var(--surface1);

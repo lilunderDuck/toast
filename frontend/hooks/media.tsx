@@ -187,6 +187,11 @@ export function createMediaPlayer<T extends "audio" | "video">(type: T, listener
   }
 
   const changeCurrentTime = (time: number, update = true) => {
+    if (time < 0) {
+      DEBUG_WARN_LABEL("media player", "provided a negative time", time, "seconds, falling back to", 0, "second.")
+      time = 0
+    }
+
     setCurrentProgress(time)
     shouldUpdateCurrentTime = update
     if (update) {

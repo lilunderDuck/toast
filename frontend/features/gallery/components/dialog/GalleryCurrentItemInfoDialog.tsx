@@ -1,5 +1,5 @@
 import { DEBUG_ASSERT } from "macro-def"
-import { RiDesignAlignItemHorizontalCenterFill, RiSystemProgress1Fill } from "solid-icons/ri"
+import { RiDesignAlignItemHorizontalCenterFill } from "solid-icons/ri"
 import { Show } from "solid-js"
 // ...
 import { css } from "molcss"
@@ -27,24 +27,6 @@ const dialog__infoValue = css`
   word-break: break-word;
 `
 
-const dialog__progressSection = css`
-  margin-top: 10px;
-`
-
-const dialog__progressWrap = css`
-  width: 100%;
-  height: 5px;
-  border-radius: 6px;
-  background-color: var(--surface0);
-`
-
-const dialog__progress = css`
-  width: var(--gallery-current-progress);
-  height: 5px;
-  border-radius: 6px;
-  background-color: var(--mauve);
-`
-
 const dialog__label = css`
   display: flex;
   align-items: center;
@@ -60,8 +42,6 @@ interface IGalleryCurrentItemInfoDialogProps extends IBaseLazyComponent {
 
 export default function GalleryCurrentItemInfoDialog(props: IGalleryCurrentItemInfoDialogProps) {
   DEBUG_ASSERT(props.currentItem$, "accessing currentItem$ too early!! (maybe there's some problem while loading)")
-
-  const progressPercent = () => (props.currentItemIndex$ + 1) / props.totalItems$ * 100
 
   return (
     <DialogContent class={dialog__content} showCloseButton$={false}>
@@ -82,21 +62,6 @@ export default function GalleryCurrentItemInfoDialog(props: IGalleryCurrentItemI
         <div class={dialog__infoValue}>
           <code>{props.currentItem$.fileName}</code>
         </div>
-        <div>Item id</div>
-        <div class={dialog__infoValue}>
-          <code>{props.currentItem$.id}</code>
-        </div>
-      </section>
-      
-      <Label class={dialog__label}>
-        <RiSystemProgress1Fill />
-        Current progress
-      </Label>
-      <section class={dialog__progressSection}>
-        <div class={dialog__progressWrap} style={`--gallery-current-progress:${progressPercent()}%`}>
-          <div class={dialog__progress} />
-        </div>
-        <p>{props.currentItemIndex$ + 1} of {props.totalItems$} items ({Math.round(progressPercent())}%)</p>
       </section>
 
       <div class={css`display: flex; justify-content: flex-end; gap: 10px; padding-top: 10px;`}>

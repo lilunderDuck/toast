@@ -1,8 +1,12 @@
 import { Match, Show, Switch } from "solid-js"
+// ...
+import { css } from "molcss"
+// ...
+import { ZoomDisplay } from "~/components"
+// ...
 import { getExternalGalleryEntryUrl, getGalleryEntryUrl } from "../api"
 import { useGalleryContext } from "../provider"
-import { css } from "molcss"
-import { Video, ZoomDisplay } from "~/components"
+import { Video } from "../components"
 
 const item__image = css`
   height: 100%;
@@ -12,11 +16,12 @@ const item__image = css`
 `
 
 const item__video = css`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) translateZ(0);
   width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 `
 
 export function GalleryItemDisplay() {

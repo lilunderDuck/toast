@@ -57,6 +57,7 @@
       "SMALL",
       "LARGE",
       "ICON",
+      "ICON_LARGE",
       "UNSET"
     ]
   },
