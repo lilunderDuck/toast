@@ -75,7 +75,8 @@ export default function PlaylistAddTrackDialog(props: IPlaylistAddTrackDialogPro
     dialogOptions$: {
       Title: "Please choose an image file as the icon for the track.",
     },
-    inputSize$: "10rem",
+    inputHeight$: "10rem",
+    inputWidth$: "10rem",
     disabled$: shouldDisable
   })
 

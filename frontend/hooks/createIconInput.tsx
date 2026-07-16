@@ -6,39 +6,40 @@ import { css } from "molcss"
 import { createFileUpload, SUPPORTED_IMAGE_FILTER, type FileOpenDialogOptions } from "~/hooks"
 import { previewUrl } from "~/api"
 import { SpinningCube, Tooltip } from "~/components"
+import { DEBUG_WARN_LABEL } from "macro-def"
 
-const uploadZone = css`
+export const uploadZone__root = css`
   cursor: pointer;
   border-radius: 6px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: var(--icon-input-size);
-  height: var(--icon-input-size);
-`
+  width: var(--icon-input-width);
+  height: var(--icon-input-height);
+  &[data-upload-zone-disabled=true] {
+    cursor: not-allowed;
+  }
 
-const uploadZone__disabled = css`
-  cursor: not-allowed;
-`
+  &[data-upload-zone-disabled=false] {
+    border: 4px solid transparent;
+    &:hover {
+      border-color: var(--blue);
+    }
+  }
 
-const uploadZone__allowed = css`
-  border: 4px solid transparent;
-  &:hover {
-    border-color: var(--blue);
+  &[data-upload-zone-has-image=true] {
+    background: center center no-repeat var(--icon-input-img-url);
+    background-size: cover;
+  }
+
+  &[data-upload-zone-has-image=false] {
+    background-color: var(--base);
   }
 `
 
-const uploadZone__withImage = css`
-  background: center center no-repeat var(--icon-input-img-url);
-  background-size: cover;
-`
-
-const uploadZone__noImage = css`
-  background-color: var(--base);
-`
-
 interface IIconInputOptions {
-  inputSize$: string
+  inputWidth$?: string
+  inputHeight$?: string
   tooltipLabel$?: JSX.Element
   initialIconUrl$?: () => string
   dialogOptions$: Omit<FileOpenDialogOptions, "Filters">
@@ -59,7 +60,15 @@ export function createIconInput(options: IIconInputOptions) {
   const hasNoIcon = () => !file$()
   const iconPreviewUrl = () => previewUrl(file$()!)
 
-  const inputClasses = () => `${uploadZone} ${isDisabled() ? uploadZone__disabled : uploadZone__allowed} ${hasNoIcon() ? uploadZone__noImage : uploadZone__withImage}`
+  if (TOAST_DEBUG) {
+    if (!options.inputWidth$) {
+      DEBUG_WARN_LABEL("createIconInput()", "make sure to specify the inputWidth$ too")
+    }
+
+    if (!options.inputHeight$) {
+      DEBUG_WARN_LABEL("createIconInput()", "make sure to specify the inputHeight$ too")
+    }
+  }
 
   return {
     file$: file$,
@@ -68,12 +77,14 @@ export function createIconInput(options: IIconInputOptions) {
       <Tooltip label$={options.tooltipLabel$ ?? "Click to choose an image."}>
         <div 
           onClick={open$}
-          class={inputClasses()}
-          style={`--icon-input-img-url:url('${file$() ? iconPreviewUrl() : options.initialIconUrl$?.()}');--icon-input-size:${options.inputSize$}`}
+          class={uploadZone__root}
+          data-upload-zone-disabled={isDisabled()}
+          data-upload-zone-has-image={!hasNoIcon()}
+          style={`--icon-input-img-url:url('${file$() ? iconPreviewUrl() : options.initialIconUrl$?.()}');--icon-input-width:${options.inputWidth$};--icon-input-height:${options.inputHeight$}`}
         >
           <Show when={hasNoIcon()}>
             <Show when={isUploading$()} fallback={
-              <BsPlus size={20} />
+              <BsPlus size={30} />
             }>
               <SpinningCube cubeSize$={20} />
             </Show>

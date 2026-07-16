@@ -11,10 +11,6 @@ export interface IBaseLazyComponent {
   close$(): void
 }
 
-export interface IBaseLazyToast {
-
-} 
-
 type LazyComponentProps<C extends TargetedLazyComponent<any>> = Awaited<ReturnType<C>>["default"]
 
 type TargetedLazyComponentPropsRef<Props extends {}> = () => Omit<Parameters<
@@ -116,12 +112,4 @@ export function createLazyComponent<Props extends IBaseLazyComponent, Type exten
       DEBUG_ERR_LABEL("LazyComponent", "case", type, "is not being handled or invalid type.")
     break
   }
-}
-
-export async function showLazyToast<Props extends IBaseLazyToast, R extends any>(thisToastImport: Promise<{
-  default(props: Props): R
-}>, props?: Props) {
-  DEBUG_INFO_LABEL('LazyComponent/toasts', 'showing toast...')
-  // @ts-ignore - pass nothing to default()
-  return (await thisToastImport).default(props)
 }

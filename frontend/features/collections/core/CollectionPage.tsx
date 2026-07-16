@@ -53,6 +53,18 @@ export default function CollectionPage() {
     searchByName$(inputEvent.currentTarget.value)
   }
 
+  const CreatePlaylistDialog = createLazyComponent(
+    LazyComponentType.DIALOG,
+    () => import("../components/dialog/CreatePlaylistDialog"),
+    () => ({})
+  )
+
+  const CreateGalleryDialog = createLazyComponent(
+    LazyComponentType.DIALOG,
+    () => import("../components/dialog/CreatePlaylistDialog"),
+    () => ({})
+  )
+
   return (
     <main class={`journalHome__mainContent ${scrollbar} ${scrollbar__vertical} ${scrollbar__invs}`}>
       <h1>Collection</h1>
@@ -78,7 +90,10 @@ export default function CollectionPage() {
             )}
           </For>
         </Show>
-        <CollectionCreateButton icon$={<BsPlus size={30} />} />
+        <CollectionCreateButton 
+          icon$={<BsPlus size={30} />} 
+          onClick$={CreatePlaylistDialog.show$}
+        />
       </CollectionSection>
 
       <CollectionSection
@@ -97,7 +112,10 @@ export default function CollectionPage() {
             )}
           </For>
         </Show>
-        <CollectionCreateButton icon$={<BsPlus size={30} />} />
+        <CollectionCreateButton 
+          icon$={<BsPlus size={30} />} 
+          onClick$={CreateGalleryDialog.show$}
+        />
       </CollectionSection>
 
       <CollectionSection
@@ -128,6 +146,7 @@ export default function CollectionPage() {
       <div class={collection__extraSpaces} />
 
       <OpenExternalCollectionDialog.Component$ />
+      <CreatePlaylistDialog.Component$ />
     </main>
   )
 }

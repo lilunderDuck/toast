@@ -103,7 +103,7 @@ input:focus {
 }
 
 ::placeholder {
-  color: var(--overlay1);
+  color: var(--overlay2);
 }
 
 /* Avoid text overflows */

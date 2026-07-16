@@ -10,6 +10,7 @@ export * from "./Tag"
 export * from "./Tooltip"
 export * from "./Skeleton"
 export * from "./Popover"
+export * from "./Tab"
 // ...
 export * from "./select"
 export * from "./dialog"

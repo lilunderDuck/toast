@@ -9,5 +9,6 @@ export * from "./usePersistedSignal"
 export * from "./createSMTCHandlers"
 export * from "./useBodyClass"
 export * from "./createLazyComponent"
+export * from "./createToastRegistry"
 // ...
 export * from "./native"

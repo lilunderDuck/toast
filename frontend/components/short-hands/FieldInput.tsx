@@ -5,6 +5,7 @@ import { css } from 'molcss'
 import './FieldInput.css'
 // ...
 import { Label } from './Label'
+import { Tooltip } from '../ui'
 
 export type TextFieldInputRef = HTMLInputElement | HTMLTextAreaElement
 
@@ -33,14 +34,21 @@ const input = css`
   background-color: var(--surface0);
   width: 100%;
   resize: none;
-  &::placeholder {
-    color: var(--subtext1);
-  }
+  margin-bottom: 10px;
 `
 
 const input__error = css`
   color: var(--red);
   font-size: 14px;
+`
+
+const input__label = css`
+  display: flex;
+  gap: 10px;
+`
+
+const input__requiredIndicator = css`
+  color: var(--red);
 `
 
 export function FieldInput(props: TextFieldProps) {
@@ -54,10 +62,16 @@ export function FieldInput(props: TextFieldProps) {
     <Kobalte.Root
       {...rootProps}
       validationState={props.error ? 'invalid' : 'valid'}
-      id="fieldInput"
     >
       <Show when={props.label}>
-        <Label>{props.label}</Label>
+        <Label class={input__label}>
+          {props.label}
+          <Show when={props.required}>
+            <Tooltip label$="This is required">
+              <span class={input__requiredIndicator}>*</span>
+            </Tooltip>
+          </Show>
+        </Label>
       </Show>
       <Show
         when={props.multiline}

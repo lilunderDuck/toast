@@ -17,8 +17,7 @@ const dialog__this = css`
   height: 100%;
   position: fixed;
   padding: 0;
-  background-color: #11111b8d;
-  backdrop-filter: blur(3px);
+  background-color: #11111bb9;
   color: var(--text);
   display: flex;
   justify-content: center;
@@ -30,8 +29,8 @@ const dialog__content = css`
   padding-block: 10px;
   background-color: var(--mantle);
   position: relative;
-  outline: none;
   border-radius: 6px;
+  user-select: none;
 `
 
 const dialog__closeButton = css`

@@ -9,9 +9,7 @@ const base = css`
   justify-content: center;
   align-items: center;
   border-radius: 0.375rem;
-  font-size: 0.875rem;
   line-height: 1.25rem;
-  font-weight: 500;
   outline: none;
 `
 

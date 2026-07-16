@@ -2,6 +2,7 @@ import { DEBUG_ASSERT, DEBUG_INFO_LABEL } from "macro-def"
 import { createContext, createSignal, onMount, ParentProps, useContext, type Accessor, type Setter } from "solid-js"
 // ...
 import { type SetStoreFunction } from "solid-js/store"
+import { createToastRegistry, type IToastRegistry } from "~/hooks"
 // ...
 import { wrapFn } from "~/utils"
 import { Collections_checkExternalAvailability, Collections_getAll, Collections_update } from "~/wailsjs/go/collections/Exports"
@@ -9,12 +10,18 @@ import type { collections } from "~/wailsjs/go/models"
 
 export type CollectionExternalAvailabilityMap = Record<string, boolean>
 
+type CollectionPageToastRegistry = {
+  InvalidPlaylistToast$: Promise<typeof import("../components/toast/InvalidPlaylistToast")>
+  CollectionNotAvaliableToast$: Promise<typeof import("../components/toast/CollectionNotAvaliableToast")>
+}
+
 export interface ICollectionPageContext {
   collections$: Accessor<collections.CollectionsData | null>
   updateCollections$: Setter<collections.CollectionsData>
   collectionAvailableMap$: Accessor<CollectionExternalAvailabilityMap | null>
   checkIfExternalCollectionAvailable$(): Promise<void>
   searchByName$(name: string): void
+  readonly toastRegistry$: IToastRegistry<CollectionPageToastRegistry>
 }
 
 const Context = createContext<ICollectionPageContext>()
@@ -71,6 +78,11 @@ export function CollectionPageProvider(props: ParentProps<ICollectionPageProvide
     } as collections.CollectionsData))
     DEBUG_INFO_LABEL("collection", "search result:", collections())
   }
+
+  const toastRegistry = createToastRegistry({
+    InvalidPlaylistToast$: import("../components/toast/InvalidPlaylistToast"),
+    CollectionNotAvaliableToast$: import("../components/toast/CollectionNotAvaliableToast")
+  })
   
   return (
     <Context.Provider value={{
@@ -78,7 +90,8 @@ export function CollectionPageProvider(props: ParentProps<ICollectionPageProvide
       updateCollections$: setCollectionsWrap,
       collectionAvailableMap$: collectionAvailableMap,
       checkIfExternalCollectionAvailable$: checkIfAvailable,
-      searchByName$: searchByName
+      searchByName$: searchByName,
+      toastRegistry$: toastRegistry
     }}>
       {props.children}
     </Context.Provider>

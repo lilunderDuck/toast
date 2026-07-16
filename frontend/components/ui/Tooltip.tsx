@@ -44,10 +44,7 @@ export function Tooltip(props: ITooltipProps) {
   return (
     <Show when={props.label$} fallback={local.children}>
       <Root openDelay={400} closeDelay={0} gutter={4} {...local.tooltipOptions$}>
-        <Trigger
-          as="div"
-          class={css`width: fit-content;`}
-        >
+        <Trigger as="div">
           {local.children}
         </Trigger>  
         <Portal>

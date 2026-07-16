@@ -4,8 +4,7 @@ import { DEBUG_INFO_LABEL, DEBUG_WARN_LABEL } from "macro-def"
 import { css } from "molcss"
 // ...
 import { Tooltip } from "~/components"
-// ...
-import { showLazyToast } from "~/hooks"
+import { useCollectionPageContext } from "../provider"
 
 const item = css`
   width: 9rem;
@@ -51,6 +50,8 @@ interface ICollectionItemProps {
 }
 
 export function CollectionItem(props: ICollectionItemProps) {
+  const { toastRegistry$ } = useCollectionPageContext()
+
   const redirect = useNavigate()
 
   const redirectIfCan = async() => {
@@ -61,7 +62,7 @@ export function CollectionItem(props: ICollectionItemProps) {
     }
 
     DEBUG_WARN_LABEL("home", `refused to redirect, collection "${props.name$}" is not available now.\n\nnote: Did you forget to set the isAvailable$ props? if so, don't forget to put isAvailable$ into <CollectionItem /> component.`)
-    showLazyToast(import("./toast/CollectionNotAvaliableToast"))
+    toastRegistry$.show$("CollectionNotAvaliableToast$")
   }
 
   return (
