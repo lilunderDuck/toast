@@ -1,10 +1,11 @@
 package gallery
 
 type GalleryData struct {
-	Name string `json:"name"`
-	Icon string `json:"icon,omitempty"`
-	Id   string `json:"id"`
-	Type byte   `json:"type"`
+	Name        string `json:"name"`
+	Icon        string `json:"icon,omitempty"`
+	Id          string `json:"id"`
+	Type        byte   `json:"type"`
+	Description string `json:"description"`
 }
 
 type GalleryItemData struct {

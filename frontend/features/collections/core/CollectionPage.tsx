@@ -61,7 +61,7 @@ export default function CollectionPage() {
 
   const CreateGalleryDialog = createLazyComponent(
     LazyComponentType.DIALOG,
-    () => import("../components/dialog/CreatePlaylistDialog"),
+    () => import("../components/dialog/CreateGalleryDialog"),
     () => ({})
   )
 
@@ -147,6 +147,7 @@ export default function CollectionPage() {
 
       <OpenExternalCollectionDialog.Component$ />
       <CreatePlaylistDialog.Component$ />
+      <CreateGalleryDialog.Component$ />
     </main>
   )
 }
