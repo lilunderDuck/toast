@@ -7,10 +7,12 @@ import { wrapFn } from "~/utils"
 import { Collections_checkExternalAvailability, Collections_getAll, Collections_update } from "~/wailsjs/go/collections/Exports"
 import type { collections } from "~/wailsjs/go/models"
 
+export type CollectionExternalAvailabilityMap = Record<string, boolean>
+
 export interface ICollectionPageContext {
   collections$: Accessor<collections.CollectionsData | null>
   updateCollections$: Setter<collections.CollectionsData>
-  collectionAvailableMap$: Accessor<Record<string, boolean> | null>
+  collectionAvailableMap$: Accessor<CollectionExternalAvailabilityMap | null>
   checkIfExternalCollectionAvailable$(): Promise<void>
   searchByName$(name: string): void
 }
@@ -24,7 +26,7 @@ interface ICollectionPageProviderProps {
 export function CollectionPageProvider(props: ParentProps<ICollectionPageProviderProps>) {
   // @ts-ignore - initilize store with a null value
   const [collections, setCollections] = createSignal<collections.CollectionsData>(null)
-  const [collectionAvailableMap, setCollectionAvailableMap] = createSignal<Record<string, boolean> | null>(null)
+  const [collectionAvailableMap, setCollectionAvailableMap] = createSignal<CollectionExternalAvailabilityMap | null>(null)
 
   onMount(async() => {
     await checkIfAvailable()

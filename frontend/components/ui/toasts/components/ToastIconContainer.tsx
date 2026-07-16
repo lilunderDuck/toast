@@ -16,26 +16,26 @@ const iconContainer = css`
 `
 
 interface IIconContainerProps {
-  icon?: Renderable
-  theme?: IconTheme
-  type: ToastType
+  icon$?: Renderable
+  theme$?: IconTheme
+  type$: ToastType
 }
 
 export function ToastIconContainer(props: IIconContainerProps) {
   return (
     <div {...props} class={iconContainer}>
       <Switch>
-        <Match when={props.icon}>
-          {props.icon}
+        <Match when={props.icon$}>
+          {props.icon$}
         </Match>
-        <Match when={props.type === ToastType.LOADING}>
-          <Loader {...props.theme} />
+        <Match when={props.type$ === ToastType.LOADING}>
+          <Loader {...props.theme$} />
         </Match>
-        <Match when={props.type === ToastType.SUCCESS}>
-          <Success {...props.theme} />
+        <Match when={props.type$ === ToastType.SUCCESS}>
+          <Success {...props.theme$} />
         </Match>
-        <Match when={props.type === ToastType.ERROR}>
-          <Error {...props.theme} />
+        <Match when={props.type$ === ToastType.ERROR}>
+          <Error {...props.theme$} />
         </Match>
       </Switch>
     </div>

@@ -126,7 +126,7 @@ export default function OpenExternalCollectionDialog(props: IStickyNoteFullViewD
         <p class={dialog__descriptionText}>
           Open collections stored outside the default app directory (e.g., on an external drive).
         </p>
-        <p><b>Warning:</b> Moving or renaming the collection on your drive will break the connection, requiring a reimport/update.</p>
+        <p><b>Warning:</b> Moving or renaming the collection on your drive will break the connection, you need to reimport/update.</p>
       </section>
 
       <section class={dialog__section}>

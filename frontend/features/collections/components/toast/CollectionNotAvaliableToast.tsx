@@ -1,19 +1,20 @@
 import { css } from "molcss"
 import { toast } from "~/components"
+import type { IBaseLazyToast } from "~/hooks"
 
 const toast__root = css`
   padding-block: 5px;
   padding-inline: 10px;
   width: 18rem;
   border-radius: 6px;
-  background-color: #b58f3e;
+  background-color: var(--surface0);
 `
 
 const toast__description = css`
   font-size: 14px;
 `
 
-export function showCollectionNotAvailableToast() {
+export default function showCollectionNotAvaliableToast(_: IBaseLazyToast) {
   toast.custom$(() => (
     <div class={toast__root}>
       <h3>Collection is not avaliable</h3>
@@ -22,6 +23,6 @@ export function showCollectionNotAvailableToast() {
       </div>
     </div>
   ), {
-    position: ToastPosition.BOTTOM_RIGHT
+    position$: ToastPosition.BOTTOM_RIGHT
   })
 }

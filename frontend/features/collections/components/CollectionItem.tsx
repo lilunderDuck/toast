@@ -5,7 +5,7 @@ import { css } from "molcss"
 // ...
 import { Tooltip } from "~/components"
 // ...
-import { showCollectionNotAvailableToast } from "./toast"
+import { showLazyToast } from "~/hooks"
 
 const item = css`
   width: 9rem;
@@ -53,7 +53,7 @@ interface ICollectionItemProps {
 export function CollectionItem(props: ICollectionItemProps) {
   const redirect = useNavigate()
 
-  const redirectIfCan = () => {
+  const redirectIfCan = async() => {
     if (props.isAvailable$) {
       DEBUG_INFO_LABEL("home", `fast redirect to:`, props.href$)
       redirect(props.href$)
@@ -61,7 +61,7 @@ export function CollectionItem(props: ICollectionItemProps) {
     }
 
     DEBUG_WARN_LABEL("home", `refused to redirect, collection "${props.name$}" is not available now.\n\nnote: Did you forget to set the isAvailable$ props? if so, don't forget to put isAvailable$ into <CollectionItem /> component.`)
-    showCollectionNotAvailableToast()
+    showLazyToast(import("./toast/CollectionNotAvaliableToast"))
   }
 
   return (

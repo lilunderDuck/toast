@@ -14,13 +14,13 @@ import type { Ref } from '~/utils'
 
 export const ToastContainer: Component<ToastContainerProps> = (props) => {
   const calculatePosition = () => {
-    const position = props.toast.position || defaultToastOptions.position
-    const offset = getWrapperYAxisOffset(props.toast, position)
+    const position = props.toast$.position$ || defaultToastOptions.position$
+    const offset = getWrapperYAxisOffset(props.toast$, position)
     const positionStyle = getToastWrapperStyles(position)
 
     return {
-      class: positionStyle,
-      offset
+      class$: positionStyle,
+      offset$: offset
     }
   }
 
@@ -29,15 +29,15 @@ export const ToastContainer: Component<ToastContainerProps> = (props) => {
   let el!: Ref<"div">
   onMount(() => {
     if (el) {
-      updateToastHeight(el, props.toast)
+      updateToastHeight(el, props.toast$)
     }
   })
 
   return (
     <div
       ref={el}
-      style={`--offset:${positionStyle().offset}px`}
-      class={`${props.toast.visible ? `${__style['sldt-active']} component-toast-visible` : 'component-toast-hidden'} ${positionStyle().class}`}
+      style={`--offset:${positionStyle().offset$}px`}
+      class={`${props.toast$.visible$ ? `${__style['sldt-active']} component-toast-visible` : 'component-toast-hidden'} ${positionStyle().class$}`}
       onMouseEnter={() =>
         dispatch({
           type: ToastActionType.START_PAUSE,
@@ -51,10 +51,10 @@ export const ToastContainer: Component<ToastContainerProps> = (props) => {
         })
       }
     >
-      {props.toast.type === ToastType.CUSTOM ? (
-        resolveValue(props.toast.message, props.toast)
+      {props.toast$.type$ === ToastType.CUSTOM ? (
+        resolveValue(props.toast$.message$, props.toast$)
       ) : (
-        <ToastBar toast={props.toast} position={props.toast.position || defaultToastOptions.position} />
+        <ToastBar toast$={props.toast$} position$={props.toast$.position$ || defaultToastOptions.position$} />
       )}
     </div>
   );

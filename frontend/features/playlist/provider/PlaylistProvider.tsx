@@ -33,7 +33,7 @@ interface IPlaylistContext {
 
   loopingState$: Accessor<PlaylistLoopState>
   setLoopingState$: Setter<PlaylistLoopState>
-  player$: MediaPlayer
+  player$: MediaPlayer<"audio">
 }
 
 const Context = createContext<IPlaylistContext>()
@@ -168,8 +168,8 @@ export function PlaylistProvider(props: ParentProps<IPlaylistProviderProps>) {
   }
 
   const resyncTracksDuration = async() => {
-    const updatedData = await toast.promise(Playlist_resyncTrackDuration(playlistData()!.id), playlistDurationResyncToast, {
-      position: ToastPosition.TOP_RIGHT
+    const updatedData = await toast.promise$(Playlist_resyncTrackDuration(playlistData()!.id), playlistDurationResyncToast, {
+      position$: ToastPosition.TOP_RIGHT
     })
     setPlaylistData(updatedData.metadata)
     setPlaylistTracks(updatedData.tracks)

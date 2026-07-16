@@ -23,48 +23,48 @@ export const [defaultOpts, setDefaultOpts] = createSignal<IToasterProps>(default
 
 export const createToast = (message: Message, type: ToastType = ToastType.BLANK, options: ToastOptions): Toast => {
   const toastPosition = 
-    options.position || 
-    defaultOpts().toastOptions?.position || 
-    defaultOpts().position || 
-    defaultToastOptions.position
+    options.position$ || 
+    defaultOpts().toastOptions$?.position$ || 
+    defaultOpts().position$ || 
+    defaultToastOptions.position$
   // ...
 
   const toastDuration = 
-    options.duration || 
-    defaultOpts().toastOptions?.duration || 
+    options.duration$ || 
+    defaultOpts().toastOptions$?.duration$ || 
     defaultTimeouts[type]
   // ...
 
   const toastStyle = {
-    ...defaultToastOptions.style,
-    ...defaultOpts().toastOptions?.style,
-    ...options.style
+    ...defaultToastOptions.style$,
+    ...defaultOpts().toastOptions$?.style$,
+    ...options.style$
   }
 
   return {
     ...defaultToastOptions,
-    ...defaultOpts().toastOptions,
+    ...defaultOpts().toastOptions$,
     ...options,
-    type,
-    message,
-    pauseDuration: 0,
-    createdAt: Date.now(),
-    visible: true,
-    id: options.id || generateID(),
-    paused: false,
-    style: toastStyle,
-    duration: toastDuration,
-    position: toastPosition,
+    type$: type,
+    message$: message,
+    pauseDuration$: 0,
+    createdAt$: Date.now(),
+    visible$: true,
+    id$: options.id$ || generateID(),
+    paused$: false,
+    style$: toastStyle,
+    duration$: toastDuration,
+    position$: toastPosition,
   }
 }
 
 function createToastCreator(type?: ToastType): ToastHandler {
   return (message: Message, options: ToastOptions = {}) => (
     createRoot(() => {
-      const existingToast = store.toasts.find((t) => t.id === options.id) as Toast
-      const toast = createToast(message, type, { ...existingToast, duration: undefined, ...options })
+      const existingToast = store.toasts$.find((t) => t.id$ === options.id$) as Toast
+      const toast = createToast(message, type, { ...existingToast, duration$: undefined, ...options })
       dispatch({ type: ToastActionType.UPSERT_TOAST, toast })
-      return toast.id
+      return toast.id$
     })
   )
 }
@@ -89,14 +89,14 @@ export type ToastPromiseMessages<T> = {
   error: ValueOrFunction<Renderable, any>
 }
 
-toast.promise = <T>(
+toast.promise$ = <T>(
   promise: Promise<T>,
   msgs: ToastPromiseMessages<T>,
   opts?: ToastOptions
 ) => {
-  const id = toast.loading$(msgs.loading, { ...opts, duration: 2000, })
+  const id = toast.loading$(msgs.loading, { ...opts, duration$: 3000, })
 
-  const options: ToastOptions = { id, ...opts }
+  const options: ToastOptions = { id$: id, ...opts }
 
   promise
     .then((p) => {

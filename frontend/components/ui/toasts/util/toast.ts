@@ -19,31 +19,31 @@ export interface IconTheme {
 }
 
 export interface Toast {
-  type: ToastType;
-  id: string;
-  message: ValueOrFunction<Renderable, Toast>;
-  icon?: Renderable;
-  duration?: number;
-  pauseDuration: number;
-  paused: boolean;
-  position?: ToastPosition;
+  type$: ToastType;
+  id$: string;
+  message$: ValueOrFunction<Renderable, Toast>;
+  icon$?: Renderable;
+  duration$?: number;
+  pauseDuration$: number;
+  paused$: boolean;
+  position$?: ToastPosition;
 
-  style?: JSX.CSSProperties;
-  class?: string;
+  style$?: JSX.CSSProperties;
+  class$?: string;
 
-  iconTheme?: IconTheme;
+  iconTheme$?: IconTheme;
 
-  createdAt: number;
-  updatedAt?: number;
-  visible: boolean;
-  height?: number;
-  unmountDelay: number;
+  createdAt$: number;
+  updatedAt$?: number;
+  visible$: boolean;
+  height$?: number;
+  unmountDelay$: number;
 }
 
 export type ToastOptions = Partial<
   Pick<
     Toast,
-    'id' | 'icon' | 'duration' | 'class' | 'style' | 'position' | 'unmountDelay' | 'iconTheme'
+    'id$' | 'icon$' | 'duration$' | 'class$' | 'style$' | 'position$' | 'unmountDelay$' | 'iconTheme$'
   >
 >
 
@@ -54,20 +54,20 @@ export type Message = ValueOrFunction<Renderable, Toast>;
 export type ToastHandler = (message: Message, options?: ToastOptions) => string;
 
 export interface IToasterProps {
-  position?: ToastPosition;
-  toastOptions?: ToastOptions;
-  gutter?: number;
-  containerStyle?: JSX.CSSProperties;
-  containerClassName?: string;
+  position$?: ToastPosition;
+  toastOptions$?: ToastOptions;
+  gutter$?: number;
+  containerStyle$?: JSX.CSSProperties;
+  containerClassName$?: string;
 }
 
 export interface ToastContainerProps {
-  toast: Toast;
+  toast$: Toast;
 }
 
 export interface ToastBarProps {
-  toast: Toast;
-  position: ToastPosition;
+  toast$: Toast;
+  position$: ToastPosition;
 }
 
 export type IconProps = Partial<IconTheme>;

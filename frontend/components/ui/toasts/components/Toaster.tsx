@@ -38,8 +38,8 @@ export function Toaster(props: IToasterProps) {
   return (
     <Portal>
       <div class={toaster}>
-        <For each={store.toasts}>
-          {(toast) => <ToastContainer toast={toast as Toast} />}
+        <For each={store.toasts$}>
+          {(toast) => <ToastContainer toast$={toast as Toast} />}
         </For>
       </div>
     </Portal>

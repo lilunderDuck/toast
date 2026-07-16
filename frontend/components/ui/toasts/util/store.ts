@@ -31,6 +31,6 @@ export type Action =
     };
 // ...
 export interface State {
-  toasts: Toast[];
-  pausedAt: number | undefined;
+  toasts$: Toast[];
+  pausedAt$: number | undefined;
 }

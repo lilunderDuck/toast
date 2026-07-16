@@ -41,12 +41,12 @@ export const generateID = (() => {
 
 export function mergeContainerOptions(props: IToasterProps) {
   setDefaultOpts((s) => ({
-    containerClassName: props.containerClassName ?? s.containerClassName,
-    containerStyle: props.containerStyle ?? s.containerStyle,
-    gutter: props.gutter ?? s.gutter,
-    position: props.position ?? s.position,
-    toastOptions: {
-      ...props.toastOptions,
+    containerClassName$: props.containerClassName$ ?? s.containerClassName$,
+    containerStyle$: props.containerStyle$ ?? s.containerStyle$,
+    gutter$: props.gutter$ ?? s.gutter$,
+    position$: props.position$ ?? s.position$,
+    toastOptions$: {
+      ...props.toastOptions$,
     },
   }))
 }
@@ -69,26 +69,26 @@ export function getToastWrapperStyles(position: ToastPosition): string {
 
 export const updateToastHeight = (ref: Ref<"div">, toast: Toast) => {
   const boundingRect = ref.getBoundingClientRect()
-  if (boundingRect.height !== toast.height) {
+  if (boundingRect.height !== toast.height$) {
     dispatch({
       type: ToastActionType.UPDATE_TOAST,
-      toast: { id: toast.id, height: boundingRect.height },
+      toast: { id$: toast.id$, height$: boundingRect.height },
     })
   }
 }
 
 export const getWrapperYAxisOffset = (toast: Toast, position: ToastPosition): number => {
-  const { toasts } = store
-  const gutter = defaultOpts().gutter || defaultToasterOptions.gutter || 8
-  const relevantToasts = toasts.filter((t) => (t.position || position) === position && t.height)
-  const toastIndex = relevantToasts.findIndex((t) => t.id === toast.id)
-  const toastsBefore = relevantToasts.filter((toast, i) => i < toastIndex && toast.visible).length
-  const offset = relevantToasts.slice(0, toastsBefore).reduce((acc, t) => acc + gutter + (t.height || 0), 0)
+  const { toasts$ } = store
+  const gutter = defaultOpts().gutter$ || defaultToasterOptions.gutter$ || 8
+  const relevantToasts = toasts$.filter((t) => (t.position$ || position) === position && t.height$)
+  const toastIndex = relevantToasts.findIndex((t) => t.id$ === toast.id$)
+  const toastsBefore = relevantToasts.filter((toast, i) => i < toastIndex && toast.visible$).length
+  const offset = relevantToasts.slice(0, toastsBefore).reduce((acc, t) => acc + gutter + (t.height$ || 0), 0)
   return offset
 }
 
 export const getToastYDirection = (toast: Toast, defaultPos: ToastPosition) => {
-  const position = toast.position || defaultPos
+  const position = toast.position$ || defaultPos
   const top = isThisPositionOnTop(position)
   return top ? 1 : -1
 }

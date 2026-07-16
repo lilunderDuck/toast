@@ -13,7 +13,7 @@ import type { ActionHandlerFn, EventHandler } from "~/utils"
 import { Input } from "~/components"
 import { scrollbar, scrollbar__invs, scrollbar__vertical } from "~/styles"
 // ...
-import { CollectionCreateButton, CollectionExternalSectionButtonRow, CollectionExternalSectionDescription, CollectionItem, CollectionSection } from "../components"
+import { CollectionCreateButton, CollectionExternalSectionButtonRow, CollectionItem, CollectionSection } from "../components"
 import { useCollectionPageContext } from "../provider/CollectionPageProvider"
 
 const collection__extraSpaces = css`
@@ -103,7 +103,6 @@ export default function CollectionPage() {
       <CollectionSection
         icon$={FaSolidExternalLinkAlt} 
         label$="External sources" 
-        description$={<CollectionExternalSectionDescription />}
         labelTools$={<CollectionExternalSectionButtonRow action$={sectionActionHandler} />}
       >
         <Show when={collections$()?.externalSources}>

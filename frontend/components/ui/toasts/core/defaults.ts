@@ -9,20 +9,20 @@ export const defaultTimeouts: ToastTimeouts = {
 };
 
 export const defaultToastOptions: Required<ToastOptions> = {
-  id: '',
-  icon: '',
-  unmountDelay: 500,
-  duration: 3000,
-  class: '',
-  style: {},
-  position: ToastPosition.TOP_RIGHT,
-  iconTheme: {},
+  id$: '',
+  icon$: '',
+  unmountDelay$: 500,
+  duration$: 3000,
+  class$: '',
+  style$: {},
+  position$: ToastPosition.TOP_RIGHT,
+  iconTheme$: {},
 };
 
 export const defaultToasterOptions: IToasterProps = {
-  position: ToastPosition.TOP_RIGHT,
-  toastOptions: defaultToastOptions,
-  gutter: 8,
-  containerStyle: {},
-  containerClassName: '',
+  position$: ToastPosition.TOP_RIGHT,
+  toastOptions$: defaultToastOptions,
+  gutter$: 8,
+  containerStyle$: {},
+  containerClassName$: '',
 }

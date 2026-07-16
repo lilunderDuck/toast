@@ -17,7 +17,7 @@ const toastBar = css`
   display: flex;
   align-items: center;
   color: var(--text);
-  background: var(--surface1);
+  background: var(--surface0);
   max-width: 350px;
   pointer-events: auto;
   padding: 8px 10px;
@@ -39,8 +39,8 @@ export function ToastBar(props: ToastBarProps) {
 
   createEffect(() => {
     if (!el) return
-    const direction = getToastYDirection(props.toast, props.position)
-    if (props.toast.visible) {
+    const direction = getToastYDirection(props.toast$, props.position$)
+    if (props.toast$.visible$) {
       return animateToastOnVisible(el, direction)
     }
 
@@ -50,12 +50,12 @@ export function ToastBar(props: ToastBarProps) {
   return (
     <div
       ref={el}
-      class={`${props.toast.class} ${toastBar}`}
+      class={`${props.toast$.class$} ${toastBar}`}
     >
-      <ToastIconContainer {...props.toast} theme={props.toast.iconTheme} />
+      <ToastIconContainer {...props.toast$} theme$={props.toast$.iconTheme$} />
 
       <div class={messageContainer}>
-        {resolveValue(props.toast.message, props.toast)}
+        {resolveValue(props.toast$.message$, props.toast$)}
       </div>
     </div>
   )
