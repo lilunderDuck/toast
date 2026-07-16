@@ -38,7 +38,6 @@ export function createMediaPlayer<T extends "audio" | "video">(type: T, listener
   const [buffered, setBuffered] = createSignal(0)
   const [currentProgress, setCurrentProgress] = createSignal(0)
   const [currentVolume, setCurentVolume] = createSignal(100)
-  const [isMuted, setIsMuted] = createSignal(false)
 
   DEBUG_ASSERT(type == "audio" || type == "video", "invalid media player type:", type)
 
@@ -200,8 +199,10 @@ export function createMediaPlayer<T extends "audio" | "video">(type: T, listener
     }
   }
 
+  const isMuted = () => currentVolume() === 0
+
   const toggleMute = () => {
-    setIsMuted(prev => !prev)
+    setCurentVolume(isMuted() ? 100 : 0)
     mediaRef.muted = isMuted()
     DEBUG_INFO_LABEL("media player", "muted:", isMuted())
   }

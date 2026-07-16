@@ -2,15 +2,15 @@ import { BsPauseFill, BsPlayFill } from "solid-icons/bs"
 import { Show } from "solid-js"
 import { DEBUG_INFO_LABEL } from "macro-def"
 import { RiMediaPictureInPictureFill } from "solid-icons/ri"
+import { FaSolidVolumeHigh, FaSolidVolumeMute } from "solid-icons/fa"
 // ...
 import { css } from "molcss"
 import "~/styles/shorthand.css"
 // ...
 import { formatSecondsToMMSS, type EventHandler } from "~/utils"
+import { Button, MediaProgressSlider, RangeInput, Spacer, Tooltip } from "~/components"
 // ...
 import { useVideoContext } from "./Video"
-import { Button, MediaProgressSlider, RangeInput, Spacer, Tooltip } from "~/components"
-import { FaSolidVolumeHigh, FaSolidVolumeMute } from "solid-icons/fa"
 
 const videoControls = css`
   width: 100%;
@@ -73,7 +73,7 @@ const videoControls__volumeWrap = css`
 
 export default function VideoControls() {
   const { videoPlayer$, isInPictureInPicture$ } = useVideoContext()
-  const { state$, play$, pause$, currentProgress$, totalDuration$, ref$, volume$, setVolume$ } = videoPlayer$
+  const { state$, play$, pause$, currentProgress$, totalDuration$, ref$, volume$, setVolume$, toggleMute$, isMuted$ } = videoPlayer$
 
   const togglePlayVideo = () => {
     if (state$() === MediaState.PLAYING) {
@@ -96,8 +96,6 @@ export default function VideoControls() {
     const newVolume = parseFloat(inputEvent.currentTarget.value)
     setVolume$(newVolume)
   }
-
-  const toggleVolume = () => setVolume$(volume$() === 0 ? 100 : 0)
 
   return (
     <div class={`${videoControls} ${shouldControlsAlwaysShow() ? '' : videoControls__showOnHover}`}>
@@ -128,12 +126,12 @@ export default function VideoControls() {
             size$={ButtonSize.ICON_LARGE}
             variant$={ButtonVariant.UNSET}
             class={videoControls__button}
-            onClick={toggleVolume}
+            onClick={toggleMute$}
           >
-            <Show when={volume$() !== 0} fallback={
-              <FaSolidVolumeMute size={25} />
-            }>
+            <Show when={isMuted$()} fallback={
               <FaSolidVolumeHigh size={25} />
+            }>
+              <FaSolidVolumeMute size={25} />
             </Show>
           </Button>
           <RangeInput 
