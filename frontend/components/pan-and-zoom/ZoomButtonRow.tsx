@@ -1,13 +1,14 @@
 import { type ParentProps } from "solid-js"
 import { TbFillZoomCancel, TbFillZoomIn, TbFillZoomOut } from 'solid-icons/tb'
 // ...
+import { css } from "molcss"
+// ...
 import { Button, Tooltip } from "~/components"
 // ...
 import { useZoomAndPanContext } from "./ZoomAndPanProvider"
-import { css } from "molcss"
 
 const buttonRow__root = css`
-  gap: 10px;
+  gap: 5px;
   user-select: none;
   padding-inline: 10px;
   padding-block: 5px;
@@ -31,7 +32,7 @@ export function ZoomButtonRow(props: ParentProps) {
     <div class={buttonRow__root}>
       <Tooltip label$="Reset to default zoom">
         <Button 
-          size$={ButtonSize.ICON} 
+          size$={ButtonSize.ICON_LARGE} 
           variant$={ButtonVariant.NO_BACKGROUND} 
           onClick={reset$} 
           disabled={internal$.zoomScale$() === 1}
@@ -41,7 +42,7 @@ export function ZoomButtonRow(props: ParentProps) {
       </Tooltip>
       <Tooltip label$="Zoom out">
         <Button 
-          size$={ButtonSize.ICON} 
+          size$={ButtonSize.ICON_LARGE} 
           variant$={ButtonVariant.NO_BACKGROUND} 
           onClick={unzoom$} 
           disabled={internal$.zoomScale$() === 0}
@@ -51,7 +52,7 @@ export function ZoomButtonRow(props: ParentProps) {
       </Tooltip>
       <Tooltip label$="Zoom in">
         <Button 
-          size$={ButtonSize.ICON} 
+          size$={ButtonSize.ICON_LARGE} 
           variant$={ButtonVariant.NO_BACKGROUND} 
           onClick={zoom$}
         >

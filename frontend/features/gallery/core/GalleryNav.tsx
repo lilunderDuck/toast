@@ -69,7 +69,7 @@ const nav__currentItem = css`
   padding-inline: 10px;
   padding-block: 4px;
   border-radius: 6px;
-  background-color: var(--surface0);
+  background-color: var(--base);
 `
 
 export function GalleryNav() {
@@ -102,12 +102,12 @@ export function GalleryNav() {
         >
           <BsArrowLeft size={16} />
         </Button>
-        <div class={nav__currentItem}>
-          {currentItemIndex$() + 1} / {entries$().length}
-        </div>
         <Show when={currentItem$()?.type !== 1}>
           <ZoomButtonRow />
         </Show>
+        <div class={nav__currentItem}>
+          {currentItemIndex$() + 1} / {entries$().length}
+        </div>
         <Tooltip label$="View information">
           <Button 
             size$={ButtonSize.ICON_LARGE} 
@@ -128,7 +128,9 @@ export function GalleryNav() {
             <div>Go to previous item</div>
             <Kbd>A</Kbd>
           </>
-        )}>
+        )} tooltipOptions$={{
+          placement: "right"
+        }}>
           <div class={nav__buttonIconWrapper}>
             <BsCaretLeftFill size={25} />
           </div>
@@ -144,7 +146,9 @@ export function GalleryNav() {
             <div>Go to next item</div>
             <Kbd>D</Kbd>
           </>
-        )}>
+        )} tooltipOptions$={{
+          placement: "left"
+        }}>
           <div class={nav__buttonIconWrapper}>
             <BsCaretRightFill size={25} />
           </div>
