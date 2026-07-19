@@ -8,6 +8,7 @@ import { css } from "molcss"
 // ...
 import { useNoteHomeContext } from "../provider"
 import { CreateNoteButton, TagListButton, TotalNotesText } from "../components"
+import { FaSolidBox } from "solid-icons/fa"
 
 const section = css`
   overflow-y: auto;
@@ -64,7 +65,7 @@ export default function NotePage() {
                 </For>
               }>
                 <PlaceholderView
-                  icons$={<MdOutlineFilter_list_off size="4.5rem" />}
+                  icons$={<FaSolidBox size="4.5rem" />}
                   class={section__emptyNoteView}
                 >
                   No notes here, try creating a new note.

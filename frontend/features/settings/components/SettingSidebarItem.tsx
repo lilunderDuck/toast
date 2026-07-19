@@ -25,7 +25,6 @@ const item__button = css`
   padding-block: 5px;
   border-radius: 6px;
   gap: 10px;
-  color: var(--subtext0);
   background-color: transparent;
   text-align: left;
   display: flex;
@@ -34,6 +33,7 @@ const item__button = css`
 `
 
 const item__buttonInactive = css`
+  color: var(--subtext0);
   &:hover {
     color: var(--text);
     background-color: var(--surface0);
@@ -42,7 +42,7 @@ const item__buttonInactive = css`
 
 const item__buttonActive = css`
   color: var(--crust);
-  background-color: var(--blue);
+  background-color: var(--sapphire);
 `
 
 interface ISettingSidebarItemProps extends ISettingConfig {

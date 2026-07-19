@@ -32,7 +32,7 @@ export function NotePageProvider(props: ParentProps<INotePageProviderProps>) {
       groups$: groups,
       view$: view,
       setView$: setView,
-      resource$: createResource(() => true)[0],
+      resource$: createResource(() => [])[0],
       async addGroup$(data) {
       },
       async editGroup$(targetGroupId, options) {
