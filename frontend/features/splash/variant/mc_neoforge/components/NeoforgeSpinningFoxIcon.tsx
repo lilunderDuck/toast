@@ -7,18 +7,20 @@ const spinningFox = css`
   width: 256px;
   height: 150px;
   position: absolute;
-  bottom: 0;
-  right: -30;
+  bottom: 17px;
+  right: -30px;
   background-image: var(--sprite-url);
   background-repeat: no-repeat;
   background-size: 100% auto;
+  image-rendering: crisp-edges;
 `
 
 const spinningFox__version = css`
   position: absolute;
   bottom: 0;
   right: 0;
-  padding: 5;
+  padding-right: 10px;
+  padding-bottom: 15px;
 `
 
 export function NeoforgeSpinningFoxIcon() {

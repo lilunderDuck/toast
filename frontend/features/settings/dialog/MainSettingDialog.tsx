@@ -1,4 +1,5 @@
-import { createSignal, For, Match, Switch } from "solid-js"
+import { createSignal, For, Match, Switch, type VoidComponent } from "solid-js"
+import { FaBrandsUnsplash, FaSolidBox } from "solid-icons/fa"
 // ...
 import { DialogContent } from "~/components"
 import type { IBaseLazyComponent } from "~/hooks"
@@ -7,11 +8,14 @@ import { scrollbar, scrollbar__invs, scrollbar__vertical } from "~/styles"
 import { css } from "molcss"
 import "./MainSettingDialog.css"
 // ...
-import { SettingSidebarItem } from "../components/SettingSidebarItem"
-import { PAGE_COMPONENT, PAGE_SIDEBAR } from "./pages"
+import type { ISettingSidebarOption } from "../provider"
+import { SettingSidebarItem } from "../components"
+// ...
+import { SplashScreenPage } from "../pages/appearance"
+import { AdvancePage } from "../pages/advance"
 
 const dialog = css`
-  width: 90%;
+  width: 80%;
   height: calc(100% - 10rem);
   padding: 0 !important;
 `
@@ -40,7 +44,28 @@ const dialog__mainContent = css`
 
 interface IMainSettingDialog extends IBaseLazyComponent {}
 
-export default function MainSettingDialog(props: IMainSettingDialog) {
+export default function MainSettingDialog(_: IMainSettingDialog) {
+  const PAGE_SIDEBAR: ISettingSidebarOption[] = [
+    {
+      label$: "Appearance",
+      items$: [
+        { pageId$: "appearance_splash_screen$", name$: "Splash screen", icon$: FaBrandsUnsplash },
+      ]
+    },
+    {
+      label$: "Advance",
+      items$: [
+        { pageId$: "advance_settings$", name$: "Advance settings", icon$: FaSolidBox },
+      ]
+    }
+  ]
+  
+  const PAGE_COMPONENT: [string, VoidComponent][] = [
+    ["appearance_splash_screen$",          SplashScreenPage],
+    // ...
+    ["advance_settings$",                  AdvancePage]
+  ]
+
   // a few asserts to make sure the setting doesn't randomly break
   console.assert(PAGE_SIDEBAR.length > 0, "No items on the sidebar.")
   console.assert(PAGE_SIDEBAR[0].items$.length > 0, "Empty sub content.")

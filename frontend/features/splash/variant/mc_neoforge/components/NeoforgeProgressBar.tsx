@@ -12,7 +12,7 @@ const progressBar = css`
 const progressBar__wrap = css`
   border: 3px solid #ffffff;
   width: 100%;
-  height: 20px;
+  height: 27px;
   padding: 2px;
 `
 
@@ -20,7 +20,7 @@ const progressBar__progress = css`
   width: var(--progress-bar-current-progress);
   height: -webkit-fill-available;
   background-color: #ffffff;
-  transition: width 0.2s ease-out;
+  transition: .5s ease-out;
 `
 
 const progressBar__progressInfiniteWrap = css`
@@ -29,7 +29,7 @@ const progressBar__progressInfiniteWrap = css`
 
 const progressBar__progressInfinite = css`
   position: absolute;
-  width: 20;
+  width: 20px;
   height: calc(100% - 4px);
   background-color: #ffffff;
 `

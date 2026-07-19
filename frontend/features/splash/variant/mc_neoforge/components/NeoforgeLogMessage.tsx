@@ -10,16 +10,16 @@ const messageLog = css`
   position: absolute;
   bottom: 0;
   padding-left: 10px;
-  padding-bottom: 5px;
+  padding-bottom: 15px;
 `
 
 const messageLog__line = css`
-  font-size: 14px;
   opacity: 1;
-  max-height: 20px;
-  transition: opacity 0.5s ease, max-height 0.5s ease, transform 0.3s ease;
+  transition: opacity 2s ease, max-height 0.5s ease, transform 0.3s ease;
   transform: translateY(0);
-  margin-bottom: 5;
+  &:not(:last-child) {
+    margin-bottom: 5px;
+  }
 `
 
 const messageLog__lineFading = css`

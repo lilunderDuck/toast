@@ -79,7 +79,7 @@ export default function NeoforgeSplashScreenPreview() {
       <div class={screen__progressBar}>
         <NeoforgeProgressBar
           isInfiniteLoading$={true}
-          label$="Scanning mod cannidate"
+          label$="Scanning breadcrumbs cannidate"
         />
       </div>
       <NeoforgeLogMessage messages$={() => [

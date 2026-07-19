@@ -8,26 +8,26 @@ const splashScreenInput__description = css`
   color: var(--subtext0);
 `
 
-export const SPLASH_NAME_MAPPING: Record<SplashScreenVariant, {
-  name$: string
-  description$: JSX.Element
-}> = {
-  [SplashScreenVariant.DEFAULT]: {
-    name$: "Default splash screen",
-    description$: "The default Toast splash screen."
-  },
-  [SplashScreenVariant.MC_NEOFORGE]: {
-    name$: "NeoForge early loading screen",
-    description$: <>The red background screen that <a href="https://neoforged.net/">NeoForge</a> showes when it starts to load some mods.</>
-  }
-}
-
 interface ISplashScreenSelectInputProps {
   value$: Accessor<SplashScreenVariant>
   onChange$: Setter<SplashScreenVariant>
 }
 
 export function SplashScreenSelectInput(props: ISplashScreenSelectInputProps) {
+  const SPLASH_NAME_REGISTRY: Record<SplashScreenVariant, {
+    name$: string
+    description$: JSX.Element
+  }> = {
+    [SplashScreenVariant.DEFAULT]: {
+      name$: "Default splash screen",
+      description$: "The default Toast splash screen."
+    },
+    [SplashScreenVariant.MC_NEOFORGE]: {
+      name$: "(Neo)Forge-like early loading screen",
+      description$: "The red screen that (Neo)Forge shows when it starts to load some mods."
+    }
+  }
+
   return (
     <Select 
       value={props.value$()}
@@ -39,9 +39,9 @@ export function SplashScreenSelectInput(props: ISplashScreenSelectInputProps) {
       placeholder="Select a variant"
       itemComponent={(props) => (
         <SelectItem item={props.item}>
-          <span>{SPLASH_NAME_MAPPING[props.item.rawValue].name$}</span>
+          <span>{SPLASH_NAME_REGISTRY[props.item.rawValue].name$}</span>
           <p class={splashScreenInput__description}>
-            {SPLASH_NAME_MAPPING[props.item.rawValue].description$}
+            {SPLASH_NAME_REGISTRY[props.item.rawValue].description$}
           </p>
         </SelectItem>
       )}
@@ -49,7 +49,7 @@ export function SplashScreenSelectInput(props: ISplashScreenSelectInputProps) {
     >
       <SelectTrigger>
         <SelectValue<SplashScreenVariant>>
-          {(state) => SPLASH_NAME_MAPPING[state.selectedOption()].name$}
+          {(state) => SPLASH_NAME_REGISTRY[state.selectedOption()].name$}
         </SelectValue>
       </SelectTrigger>
       <SelectContent />

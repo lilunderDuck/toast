@@ -15,7 +15,6 @@ const item = css`
   border-radius: 0.125rem;
   outline-style: none;
   width: 100%;
-  font-size: 0.875rem;
   line-height: 1.25rem;
   cursor: default;
   user-select: none;

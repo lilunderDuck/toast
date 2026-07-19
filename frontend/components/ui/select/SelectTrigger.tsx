@@ -12,7 +12,6 @@ const trigger = css`
   align-items: center;
   border-radius: 0.375rem;
   width: 100%;
-  font-size: 0.875rem;
   background-color: transparent;
 `
 

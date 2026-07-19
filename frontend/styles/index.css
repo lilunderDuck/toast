@@ -120,7 +120,7 @@ a {
 }
 
 a:not([data-link-no-color]) {
-  color: var(--blue10);
+  color: var(--sapphire);
 }
 
 a:not([data-link-no-color]):hover {
