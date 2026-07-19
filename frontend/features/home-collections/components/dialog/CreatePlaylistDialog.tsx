@@ -42,7 +42,7 @@ export default function CreatePlaylistDialog(props: ICreatePlaylistDialogProps) 
 
   const PlaylistErrorHintDialog = createLazyComponent(
     LazyComponentType.DIALOG,
-    () => import("../dialog/PlaylistErrorHintDialog"),
+    () => import("./PlaylistErrorHintDialog"),
     () => ({})
   )
 

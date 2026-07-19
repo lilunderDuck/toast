@@ -3,8 +3,8 @@ import { lazy, Match, Show, Switch } from "solid-js"
 import { css } from "molcss"
 // ...
 import { AppTitleBarDraggable } from "~/components"
-import { CollectionPageProvider } from "~/features/collections"
-import { StickyNotesProvider } from "~/features/sticky-notes"
+import { CollectionPageProvider } from "~/features/home-collections"
+import { StickyNotesProvider } from "~/features/home-sticky-notes"
 import { NotePageProvider } from "~/features/notes"
 // ...
 import { useMainPageContext } from "../provider/MainPageProvider"
@@ -26,8 +26,8 @@ const titleBar__noSidebar = css`
 `
 
 const NotePage = lazy(() => import("~/features/notes"))
-const CollectionPage = lazy(() => import("~/features/collections"))
-const StickyNotesPage = lazy(() => import("~/features/sticky-notes"))
+const CollectionPage = lazy(() => import("~/features/home-collections"))
+const StickyNotesPage = lazy(() => import("~/features/home-sticky-notes"))
 
 export function MainContent() {
   const { currentPage$, isShowingSidebar$ } = useMainPageContext()
