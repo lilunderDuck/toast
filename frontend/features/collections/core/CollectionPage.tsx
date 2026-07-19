@@ -15,9 +15,10 @@ import { scrollbar, scrollbar__invs, scrollbar__vertical } from "~/styles"
 // ...
 import { CollectionCreateButton, CollectionExternalSectionButtonRow, CollectionItem, CollectionSection } from "../components"
 import { useCollectionPageContext } from "../provider/CollectionPageProvider"
+import { BiSolidPlaylist } from "solid-icons/bi"
 
 const collection__extraSpaces = css`
-  height: 10rem;
+  padding-bottom: 10rem;
 `
 
 export default function CollectionPage() {
@@ -83,9 +84,10 @@ export default function CollectionPage() {
             {it => (
               <CollectionItem 
                 href$={`/collection/playlist/${it.id}`}
-                iconUrl$={playlistIconUrl(it.id, it.icon ?? "")}
+                iconUrl$={it.icon ? playlistIconUrl(it.id, it.icon!) : it.icon}
                 name$={it.name}
                 tooltipLabel$={it.name}
+                placeholderIcon$={<BiSolidPlaylist />}
               />
             )}
           </For>
@@ -105,9 +107,10 @@ export default function CollectionPage() {
             {it => (
               <CollectionItem 
                 href$={`/collection/playlist/${it.id}`}
-                iconUrl$={playlistIconUrl(it.id, it.icon ?? "")}
+                iconUrl$={it.icon ? playlistIconUrl(it.id, it.icon ?? "") : it.icon}
                 name$={it.name}
                 tooltipLabel$={it.name}
+                placeholderIcon$={<RiMediaGalleryFill />}
               />
             )}
           </For>
@@ -122,6 +125,7 @@ export default function CollectionPage() {
         icon$={FaSolidExternalLinkAlt} 
         label$="External sources" 
         labelTools$={<CollectionExternalSectionButtonRow action$={sectionActionHandler} />}
+        class$={collection__extraSpaces}
       >
         <Show when={collections$()?.externalSources}>
           <For each={collections$()?.externalSources}>
@@ -142,8 +146,6 @@ export default function CollectionPage() {
           tooltipLabel$="Import collections"
         />
       </CollectionSection>
-
-      <div class={collection__extraSpaces} />
 
       <OpenExternalCollectionDialog.Component$ />
       <CreatePlaylistDialog.Component$ />

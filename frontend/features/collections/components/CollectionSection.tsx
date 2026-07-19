@@ -40,11 +40,12 @@ export interface ICollectionSectionProps {
   icon$: IconTypes
   description$?: JSX.Element
   labelTools$?: JSX.Element
+  class$?: string
 }
 
 export function CollectionSection(props: ParentProps<ICollectionSectionProps>) {
   return (
-    <section class="showOnHover">
+    <section class={`showOnHover ${props.class$ ?? ''}`}>
       <div class={section__labelWrap}>
         <Show when={props.description$} fallback={
           <Label class={section__label}>

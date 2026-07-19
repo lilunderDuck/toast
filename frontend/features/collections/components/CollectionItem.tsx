@@ -1,3 +1,5 @@
+import { Show, type JSX } from "solid-js"
+// ...
 import { useNavigate } from "@solidjs/router"
 import { DEBUG_INFO_LABEL, DEBUG_WARN_LABEL } from "macro-def"
 // ...
@@ -35,18 +37,29 @@ const item__name = css`
 const item__backgroundWrap = css`
   width: 9rem;
   height: 9rem;
-  background: center center no-repeat var(--icon-url);
-  background-size: cover;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 `
 
+const item__backgroundWrapNoBg = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const item__backgroundWrapHasBg = css`
+  background: center center no-repeat var(--icon-url);
+  background-size: cover;
+`
+
 interface ICollectionItemProps {
-  iconUrl$: string
+  iconUrl$?: string
   href$: string
   tooltipLabel$: string
   name$: string
   isAvailable$?: boolean
+  tags$?: []
+  placeholderIcon$?: JSX.Element
 }
 
 export function CollectionItem(props: ICollectionItemProps) {
@@ -65,15 +78,21 @@ export function CollectionItem(props: ICollectionItemProps) {
     toastRegistry$.show$("CollectionNotAvaliableToast$")
   }
 
+  const hasIcon = () => props.iconUrl$ !== undefined
+
   return (
     <Tooltip label$={props.tooltipLabel$}>
       <button
         class={`${item} ${!props.isAvailable$ ? item__notAvailable : ""}`}
-        style={`--icon-url:url("${props.iconUrl$}")`}
         onClick={redirectIfCan}
-        aria-disabled={!props.isAvailable$}
+        disabled={!props.isAvailable$}
+        style={`--icon-url:url('${props.iconUrl$}')`}
       >
-        <div class={item__backgroundWrap} />
+        <div class={`${item__backgroundWrap} ${hasIcon() ? item__backgroundWrapHasBg : item__backgroundWrapNoBg}`}>
+          <Show when={!hasIcon()}>
+            {props.placeholderIcon$}
+          </Show>
+        </div>
         <div class={item__name}>
           {props.name$}
         </div>
