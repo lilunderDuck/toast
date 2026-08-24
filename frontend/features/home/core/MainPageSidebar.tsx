@@ -1,5 +1,4 @@
 import { FaSolidBookOpenReader, FaSolidNoteSticky } from "solid-icons/fa"
-import { RiMediaPlayList2Fill } from "solid-icons/ri"
 import { For, Show } from "solid-js"
 // ...
 import { css } from "molcss"
@@ -49,12 +48,7 @@ export function MainPageSidebar() {
       name$: "Sticky notes",
       icon$: FaSolidNoteSticky,
       pageId$: "sticky_note_page$"
-    },
-    {
-      name$: "Collection",
-      icon$: RiMediaPlayList2Fill,
-      pageId$: "collection_page$"
-    },
+    }
   ]
 
   return (

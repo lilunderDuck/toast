@@ -21,6 +21,7 @@
   "dependencies": {
     "@corvu/resizable": "^0.2.5",
     "@kobalte/core": "^0.13.10",
+    "@milkdown/crepe": "^7.22.1",
     "@modular-forms/solid": "^0.25.1",
     "@solidjs/router": "^0.15.1",
     "lowlight": "^3.3.0",

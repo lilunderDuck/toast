@@ -1,6 +1,0 @@
-export * from "./NumberSettingSection"
-export * from "./CustomSettingSection"
-export * from "./CheckboxSettingSection"
-export * from "./SubSetting"
-export * from "./SettingSection"
-export * from "./SettingSidebarItem"

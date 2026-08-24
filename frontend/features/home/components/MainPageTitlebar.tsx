@@ -11,6 +11,7 @@ import { useMainPageContext } from "../provider/MainPageProvider"
 
 const sidebar__titleBar = css`
   gap: 10px;
+  padding-left: 10px;
 `
 
 const sidebar__titleBarIcon = css`
@@ -32,10 +33,6 @@ export function MainPageTitlebar(props: IMainPageTitlebarProps) {
   
   return (
     <AppTitleBarDraggable class={`${sidebar__titleBar} ${props.class ?? ""}`}>
-      <div
-        class={sidebar__titleBarIcon}
-        style={`--icon:url("${toastIcon}")`}
-      />
       <Button 
         size$={ButtonSize.ICON}
         variant$={ButtonVariant.NO_BACKGROUND}
@@ -47,13 +44,13 @@ export function MainPageTitlebar(props: IMainPageTitlebarProps) {
           <BsLayoutSidebarInset />
         </Show>
       </Button>
-      <Button
+      {/* <Button
         size$={ButtonSize.ICON}
         variant$={ButtonVariant.NO_BACKGROUND}
         onClick={showSettingDialog$}
       >
         <BsGearFill />
-      </Button>
+      </Button> */}
     </AppTitleBarDraggable>
   )
 }
