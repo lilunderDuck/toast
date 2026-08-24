@@ -1,7 +1,7 @@
 {
   "name": "toast",
   "version": "1.0.0",
-  "description": "",
+  "description": "completely normal app which did survive some deverlopment hell that tracks my life and stuff and so on.",
   "type": "module",
   "scripts": {
     "start": "vite",
