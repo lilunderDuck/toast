@@ -26,7 +26,7 @@ const buttonRow__scaleText = css`
 `
 
 export function ZoomButtonRow(props: ParentProps) {
-  const { unzoom$, zoom$, reset$, internal$ } = useZoomAndPanContext()
+  const { unzoom$, zoom$, reset$, zoomScale$ } = useZoomAndPanContext()
 
   return (
     <div class={buttonRow__root}>
@@ -35,7 +35,7 @@ export function ZoomButtonRow(props: ParentProps) {
           size$={ButtonSize.ICON_LARGE} 
           variant$={ButtonVariant.NO_BACKGROUND} 
           onClick={reset$} 
-          disabled={internal$.zoomScale$() === 1}
+          disabled={zoomScale$() === 1}
         >
           <TbFillZoomCancel size={16} />
         </Button>
@@ -45,7 +45,7 @@ export function ZoomButtonRow(props: ParentProps) {
           size$={ButtonSize.ICON_LARGE} 
           variant$={ButtonVariant.NO_BACKGROUND} 
           onClick={unzoom$} 
-          disabled={internal$.zoomScale$() === 0}
+          disabled={zoomScale$() === 0}
         >
           <TbFillZoomOut size={16} />
         </Button>
@@ -60,7 +60,7 @@ export function ZoomButtonRow(props: ParentProps) {
         </Button>
       </Tooltip>
       <span class={buttonRow__scaleText}>
-        {internal$.zoomScale$()}x
+        {zoomScale$()}x
       </span>
       {props.children}
     </div>

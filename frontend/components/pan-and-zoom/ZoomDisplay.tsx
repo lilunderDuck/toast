@@ -38,9 +38,7 @@ const zoomDisplay__limitContentHeight = css`
 `
 
 export function ZoomDisplay(props: ParentProps) {
-  const { internal$ } = useZoomAndPanContext()
-
-  const [imagePosition, setImagePosition] = internal$.imagePosition$
+  const { imageXPos$, imageYPos$, _setImageXPos$, _setImageYPos$, zoomScale$ } = useZoomAndPanContext()
 
   // Adapted from https://www.w3schools.com/howto/howto_js_draggable.asp
   // slightly modified from https://gist.github.com/stephanbogner/75de4e84687ae6065fb0a4d81917543e
@@ -50,7 +48,7 @@ export function ZoomDisplay(props: ParentProps) {
 
   let dragStartMouseX = 0, dragStartMouseY = 0, diffX = 0, diffY = 0, positionX = 0, positionY = 0
   const dragStart = (e: MouseEvent) => {
-    if (internal$.zoomScale$() <= 1) {
+    if (zoomScale$() <= 1) {
       dragStartMouseX = 0
       dragStartMouseY = 0
       diffX = 0
@@ -99,10 +97,8 @@ export function ZoomDisplay(props: ParentProps) {
     //   }))
     // }
 
-    setImagePosition({
-      x: newX,
-      y: newY
-    })
+    _setImageXPos$(newX)
+    _setImageYPos$(newY)
   }
 
   const dragStop = () => {
@@ -129,11 +125,11 @@ export function ZoomDisplay(props: ParentProps) {
     >
       <div
         class={zoomDisplay__contentWrap}
-        style={`--image-scale:${internal$.zoomScale$()};transform:translate(${imagePosition().x}px, ${imagePosition().y}px)`}
+        style={`--image-scale:${zoomScale$()};transform:translate(${imageXPos$()}px,${imageYPos$()}px)`}
         ref={draggableRef}
       >
         <div
-          class={`${zoomDisplay__content} ${internal$.zoomScale$() <= 1 ? zoomDisplay__limitContentHeight : ""}`}
+          class={`${zoomDisplay__content} ${zoomScale$() <= 1 ? zoomDisplay__limitContentHeight : ""}`}
           id={__style.display}
           ref={imgRef}
         >

@@ -1,13 +1,14 @@
-import { type Accessor, createContext, createSignal, type ParentProps, type Signal, useContext } from "solid-js"
+import { type Accessor, createContext, createSignal, type ParentProps, type Setter, useContext } from "solid-js"
 
 interface IZoomAndPanContext {
   zoom$(): void
   unzoom$(): void
   reset$(): void
-  internal$: {
-    zoomScale$: Accessor<number>
-    imagePosition$: Signal<{ x: number, y: number }>
-  }
+  zoomScale$: Accessor<number>
+  imageXPos$: Accessor<number>
+  _setImageXPos$: Setter<number>
+  imageYPos$: Accessor<number>
+  _setImageYPos$: Setter<number>
 }
 
 const Context = createContext<IZoomAndPanContext>()
@@ -15,14 +16,14 @@ const Context = createContext<IZoomAndPanContext>()
 export function ZoomAndPanProvider(props: ParentProps) {
   const DEFAULT_ZOOM = 1
   const [scale, setScale] = createSignal(DEFAULT_ZOOM)
-  const [imagePosition, setImagePosition] = createSignal({
-    x: null as unknown as number,
-    y: null as unknown as number
-  })
+
+  const [imageXPos, setImageXPos] = createSignal(0)
+  const [imageYPos, setImageYPos] = createSignal(0)
   
   const STEP = 0.5
   const resetImagePosition = () => {
-    setImagePosition({ x: 0, y: 0 })
+    setImageXPos(0)
+    setImageYPos(0)
   }
 
   return (
@@ -45,10 +46,11 @@ export function ZoomAndPanProvider(props: ParentProps) {
         setScale(DEFAULT_ZOOM)
         resetImagePosition()
       },
-      internal$: {
-        zoomScale$: scale,
-        imagePosition$: [imagePosition, setImagePosition]
-      }
+      zoomScale$: scale,
+      imageXPos$: imageXPos,
+      imageYPos$: imageYPos,
+      _setImageXPos$: setImageXPos,
+      _setImageYPos$: setImageYPos,
     }}>
       {props.children}
     </Context.Provider>

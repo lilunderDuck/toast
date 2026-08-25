@@ -82,8 +82,8 @@ const sizeMapping: Record<ButtonSize, string> = {
     }
   `,
   [ButtonSize.ICON_LARGE]: css`
-    padding-inline: 0.575rem;
-    padding-block: 0.575rem;
+    padding-inline: 1.375rem;
+    padding-block: 1.375rem;
     color: var(--subtext0);
     &:not(:disabled):hover {
       color: var(--text);
