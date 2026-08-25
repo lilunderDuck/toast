@@ -1,0 +1,7 @@
+.note__root #note__moreOptionsButton {
+  opacity: 0;
+}
+
+.note__root:hover #note__moreOptionsButton {
+  opacity: 1;
+}

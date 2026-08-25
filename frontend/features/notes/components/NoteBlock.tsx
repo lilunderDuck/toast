@@ -4,11 +4,12 @@ import { css } from "molcss"
 import './NoteBlock.css'
 // ...
 import { Button } from "~/components"
-import { type group } from "~/wailsjs/go/models"
+import { note } from "~/wailsjs/go/models"
 import { ASSETS_SERVER_URL } from "~/api"
 import { createLazyComponent } from "~/hooks"
 // ...
 import { useNoteHomeContext } from "../provider"
+import { BiSolidNote } from "solid-icons/bi"
 
 const block = css`
   width: 100%;
@@ -36,6 +37,9 @@ const block__icon = css`
 
 const block__noIcon = css`
   background-color: var(--base);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const block__editButton = css`
@@ -60,7 +64,7 @@ const block__description = css`
   margin-bottom: 5px;
 `
 
-interface INoteBlockProps extends group.GroupData {
+interface INoteBlockProps extends note.NoteGroup {
   // ...
 }
 
@@ -95,7 +99,9 @@ export function NoteBlock(props: INoteBlockProps) {
       <div 
         class={`${block__icon} ${block__noIcon}`}
         id="block__icon" 
-      />
+      >
+        <BiSolidNote size={40} />
+      </div>
       <div 
         class={block__content}
         onClick={NoteInfoDialog.show$}

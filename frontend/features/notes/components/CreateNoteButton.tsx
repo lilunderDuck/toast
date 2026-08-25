@@ -25,7 +25,7 @@ export function CreateNoteButton() {
 
   return (
     <>
-      <Tooltip label$="Create new jounal groups">
+      <Tooltip label$="Create new note folder">
         <Button 
           class={button} 
           onClick={CreateNoteDialog.show$}

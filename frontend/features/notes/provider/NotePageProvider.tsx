@@ -1,8 +1,9 @@
-import { type Accessor, createContext, createResource, createSignal, type ParentProps, type Resource, type Setter, useContext } from "solid-js"
+import { type Accessor, createContext, createResource, createSignal, type ParentProps, type Resource, useContext } from "solid-js"
+import type { note } from "~/wailsjs/go/models"
 
 interface INotePageContext {
   /**Reactive array of all journal groups. */
-  groups$: Accessor<[]>
+  groups$: Accessor<note.NoteGroup[]>
   /**Asynchronously creates a new journal group and updates the UI.
    * @param data Options for the new journal group.
    */
@@ -12,10 +13,7 @@ interface INotePageContext {
    * @param options The new options for the journal group.
    */
   editGroup$(targetGroupId: string, options: null): Promise<void>
-  resource$: Resource<never[]>
-
-  view$: Accessor<NotePageViewType>
-  setView$: Setter<NotePageViewType>
+  resource$: Resource<note.NoteGroup[]>
 }
 
 const Context = createContext<INotePageContext>()
@@ -24,15 +22,18 @@ interface INotePageProviderProps {
 }
 
 export function NotePageProvider(props: ParentProps<INotePageProviderProps>) {
-  const [groups, setGroups] = createSignal([] as [])
-  const [view, setView] = createSignal<NotePageViewType>(NotePageViewType.NOTE)
+  const [groups, setGroups] = createSignal([
+    {
+      name: "test",
+      id: "test_id",
+      description: "some description"
+    }
+  ] as note.NoteGroup[])
 
   return (
     <Context.Provider value={{
       groups$: groups,
-      view$: view,
-      setView$: setView,
-      resource$: createResource(() => [])[0],
+      resource$: createResource(async() => groups())[0],
       async addGroup$(data) {
       },
       async editGroup$(targetGroupId, options) {

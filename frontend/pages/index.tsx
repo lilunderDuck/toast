@@ -1,8 +1,7 @@
 import { css } from "molcss"
 // ...
 import { AppTitleBarDraggable } from "~/components"
-import { NotePageProvider } from "~/features/notes"
-import NotePage from "~/features/notes/page/NotePage"
+import { NoteList, NotePageProvider, NoteTopHeaderBar } from "~/features/notes"
 
 const home = css`
   width: 100%;
@@ -11,8 +10,6 @@ const home = css`
 `
 
 const home__titleBar = css`
-  position: fixed;
-  right: 0;
   gap: 10px;
   width: 100%;
   padding-inline: 5px;
@@ -20,11 +17,12 @@ const home__titleBar = css`
 
 export default function Home() {
   return (
-    <div class={home}>
-      <AppTitleBarDraggable class={home__titleBar} />
-      <NotePageProvider>
-        <NotePage />
-      </NotePageProvider>
-    </div>
+    <NotePageProvider>
+      <div class={home}>
+        <AppTitleBarDraggable class={home__titleBar} />
+        <NoteTopHeaderBar />
+        <NoteList />
+      </div>
+    </NotePageProvider>
   )
 }

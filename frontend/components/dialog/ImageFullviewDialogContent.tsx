@@ -7,7 +7,6 @@ import type { IBaseLazyComponent } from "~/hooks"
 // ...
 import { Button, DialogContent, Tooltip } from "../ui"
 
-
 const dialog = css`
   width: 100%;
   height: 100%;
@@ -22,6 +21,8 @@ const dialog__image = css`
 const dialog__zoomButtonRow = css`
   position: absolute;
   z-index: 20;
+  margin-top: 1rem;
+  margin-left: 20px;
 `
 
 interface IImageFullviewDialogContentProps extends IBaseLazyComponent {

@@ -6,7 +6,7 @@ import (
 	"toast/backend/features/collections"
 	"toast/backend/features/collections/gallery"
 	"toast/backend/features/collections/playlist"
-	"toast/backend/features/misc"
+	"toast/backend/features/note"
 	"toast/backend/features/sticky_notes"
 
 	"toast/backend/core/internals"
@@ -23,12 +23,12 @@ func GetAppConfig(icon []byte, appInstance *App, assets embed.FS) *options.App {
 
 	binding := []any{
 		appInstance,
-		&misc.Exports{},
 		&collections.Exports{},
 		&gallery.Exports{},
 		&playlist.Exports{},
 		&sticky_notes.Exports{},
 		&app_storage.Exports{},
+		&note.Exports{},
 	}
 
 	return &options.App{
