@@ -1,6 +1,7 @@
 import { type ParentProps } from 'solid-js'
 // ...
 import { Toaster, AppTitleBarButton } from '~/components'
+import { GlobalProvider } from '~/features/home'
 // ...
 import { Portal } from 'solid-js/web'
 
@@ -11,7 +12,9 @@ export default function App(props: ParentProps) {
       <Portal>
         <AppTitleBarButton />
       </Portal>
-      {props.children}
+      <GlobalProvider>
+        {props.children}
+      </GlobalProvider>
     </>
   )
 }

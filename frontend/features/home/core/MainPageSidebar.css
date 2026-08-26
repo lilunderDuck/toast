@@ -1,9 +1,0 @@
-#homeSidebar__item:hover {
-  background-color: var(--surface0);
-  color: var(--text);
-}
-
-#homeSidebar__itemActive {
-  background-color: var(--sapphire);
-  color: var(--crust);
-}
