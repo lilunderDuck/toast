@@ -1,19 +1,6 @@
 module toast
 
-go 1.25.0
-
-require github.com/wailsapp/wails/v2 v2.12.0
-
-require (
-	github.com/leaanthony/slicer v1.6.0 // indirect
-	github.com/mattn/go-isatty v0.0.22 // indirect
-	golang.org/x/crypto v0.52.0 // indirect
-	golang.org/x/net v0.55.0 // indirect
-	golang.org/x/sys v0.45.0 // indirect
-	golang.org/x/text v0.37.0 // indirect
-)
-
-require github.com/wailsapp/mimetype v1.4.1 // indirect
+go 1.27.0
 
 require (
 	git.sr.ht/~jackmordaunt/go-toast/v2 v2.0.3 // indirect
@@ -27,8 +14,10 @@ require (
 	github.com/labstack/gommon v0.5.0 // indirect
 	github.com/leaanthony/go-ansi-parser v1.6.1 // indirect
 	github.com/leaanthony/gosod v1.0.4 // indirect
+	github.com/leaanthony/slicer v1.6.0 // indirect
 	github.com/leaanthony/u v1.1.1 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
+	github.com/mattn/go-isatty v0.0.22 // indirect
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
@@ -39,7 +28,12 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/wailsapp/go-webview2 v1.0.22 // indirect
+	github.com/wailsapp/mimetype v1.4.1 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
+	golang.org/x/crypto v0.55.0 // indirect
+	golang.org/x/net v0.58.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/text v0.41.0 // indirect
 )
 
 require (
@@ -47,4 +41,5 @@ require (
 	github.com/elliotchance/orderedmap/v2 v2.7.0
 	github.com/matoous/go-nanoid/v2 v2.1.0
 	github.com/shirou/gopsutil v3.21.11+incompatible
+	github.com/wailsapp/wails/v2 v2.15.0
 )
